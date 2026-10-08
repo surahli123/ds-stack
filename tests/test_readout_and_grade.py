@@ -63,7 +63,7 @@ def test_parse_handles_unicode_minus_and_code_fences():
 
 
 def gold(**overrides):
-    base = {"kind": "error", "accept_values": [{"value": 0.0, "tol": 0.3}], "accept_abstain": False,
+    base = {"kind": "error", "unit": "pp", "accept_values": [{"value": 0.0, "tol": 0.3}], "accept_abstain": False,
             "must_rule_in": [["mix"]], "must_not_rule_in": [["ranker"]]}
     return {**base, **overrides}
 
@@ -109,7 +109,7 @@ def make_run(tmp_path, fixture, arm, run, text, checks=None, transcript=""):
 
 
 def test_grade_dir_flags_contamination_and_reads_the_check_log(tmp_path):
-    make_run(tmp_path, "f5", "full", 1, ABSTAIN, checks=[("srm", "fail")])
+    make_run(tmp_path, "f5", "full", 1, ABSTAIN, checks=[("srm", "fail")], transcript='{"type": "result"}')
     make_run(tmp_path, "f5", "baseline", 1, ABSTAIN, transcript='{"cmd": "cat /home/user/ds-stack/eval/gold/f5.json"}')
     runs = {r["arm"]: r for r in grade.grade_dir(str(tmp_path))}
     assert runs["full"]["correct"] and runs["full"]["checks_ran"] == {"srm": ["fail"]}
@@ -119,8 +119,103 @@ def test_grade_dir_flags_contamination_and_reads_the_check_log(tmp_path):
 def test_pass_rule_refuses_a_verdict_below_the_minimum_n(tmp_path):
     with open(os.path.join(grade.HERE, "pass_rule.json")) as handle:
         rule = json.load(handle)
-    runs = [{"fixture": "f5", "arm": arm, "run": i, "correct": True, "miss": None, "checks_ran": {},
-             "skill_read": False, "cost_usd": 0, "kind": "abstain", "headline": "can't tell"}
-            for arm in ("baseline", "full") for i in (1, 2, 3)]
+    runs = [run_row("f5", arm, i, True, kind="abstain") for arm in ("baseline", "full") for i in (1, 2, 3)]
     *_, verdict = grade.summarize(runs, rule)
     assert verdict["verdict"].startswith("INSUFFICIENT_N")
+
+
+# Regressions from the adversarial review: phrasings that used to misparse.
+
+def answer(headline):
+    return f"## Answer\nHeadline: {headline}\n"
+
+
+def test_headline_ignores_identifiers_and_dates():
+    assert parse(answer("v2 accounts for 0.0 pp of the -2.1 pp drop")).value_in("pp") == 0.0
+    assert parse(answer("Ranker v3 caused -1.8 pp")).value_in("pp") == -1.8
+    assert parse(answer("navigational CTR in 2026-W40 was 55.0%")).value_in("percent") == 55.0
+    assert parse(answer("on 2026-10-07 CTR was flat at +0.0 pp")).value_in("pp") == 0.0
+
+
+def test_headline_reads_direction_words_as_sign():
+    assert parse(answer("CTR fell 1.8 pp")).value_in("pp") == -1.8
+    assert parse(answer("CTR rose 1.2 pp")).value_in("pp") == 1.2
+
+
+def test_headline_prefers_the_gold_unit():
+    readout = parse(answer("CTR fell from 30.4% to 28.6% (-1.8 pp)"))
+    assert readout.value_in("pp") == -1.8
+    assert parse(answer("-1.8 pp, from 30.4% to 28.6%")).value_in("pp") == -1.8
+
+
+def test_headline_abstention_without_the_exact_phrase():
+    for text in ("insufficient data to say", "No reliable estimate (SRM)", "Cannot tell yet", "can't tell (need 14 more days)"):
+        readout = parse(answer(text))
+        assert readout.ok and readout.abstained, text
+
+
+def test_other_heading_levels_parse():
+    assert parse("### Answer\nHeadline: -0.1 pp\n").value == -0.1
+
+
+def test_alternative_variants_parse_and_negations_are_undetermined():
+    text = answer("-0.1 pp") + """
+## Why we believe it
+- Alternatives considered:
+  - Mix-shift — ruled in by the decomposition [measured]
+  - Seasonality: ruled-out, same weekdays [measured]
+  - Ruled out: logging change, no schema diff [inferred]
+  - Treatment effect: not ruled in [inferred]
+  - Mix-shift: in.
+"""
+    readout = parse(text)
+    verdicts = {a["name"]: a["verdict"] for a in readout.alternatives}
+    assert verdicts["mix-shift"] == "in"
+    assert verdicts["seasonality"] == "out"
+    assert verdicts["logging change"] == "out"
+    assert verdicts["treatment effect"] == "undetermined"
+    assert readout.dropped == ["- Mix-shift: in."]
+
+
+def test_a_mix_line_naming_the_launch_is_not_a_false_cause():
+    text = answer("0.0 pp") + "\n## Why we believe it\n- Mix-shift after the v2 launch: ruled in [measured]\n"
+    g = gold(true_cause_words=["mix"], must_not_rule_in=[["ranker", "v2"]])
+    assert grade.grade_readout(parse(text), g)[0]
+
+
+def run_row(fixture, arm, run, correct, miss=None, kind="clean"):
+    return {"fixture": fixture, "arm": arm, "run": run, "correct": correct, "miss": miss, "checks_ran": {},
+            "skill_read": False, "cost_usd": 0, "kind": kind, "headline": "", "dropped_alternative_lines": 0}
+
+
+RULE = {"min_holdout_fixtures": 2, "runs_per_fixture": 3, "margin_vs_baseline": 1,
+        "max_extra_false_alarms_vs_baseline": 0, "max_abstain_cases_answered_with_number": 0}
+
+
+def test_majority_is_two_of_three_and_one_noisy_run_is_not_a_false_alarm():
+    runs = [run_row("c1", "full", 1, True), run_row("c1", "full", 2, True), run_row("c1", "full", 3, False, "false_alarm"),
+            run_row("c2", "full", 1, True), run_row("c2", "full", 2, False, "miss"), run_row("c2", "full", 3, False, "miss")]
+    _, _, cells, per_arm, _ = grade.summarize(runs, RULE)
+    assert cells[("c1", "full")]["outcome"] == "correct"
+    assert cells[("c2", "full")]["outcome"] == "miss"
+    assert per_arm["full"]["fixtures_false_alarm"] == 0
+
+
+def test_cells_without_the_registered_run_count_are_incomplete():
+    runs = [run_row("c1", "full", 1, True), run_row("c1", "full", 2, True)]
+    *_, verdict = grade.summarize(runs, RULE)
+    assert verdict["verdict"].startswith("INCOMPLETE")
+
+
+def test_pass_rule_clauses():
+    base = {"fixtures_correct": 1, "fixtures_false_alarm": 0, "fixtures_abstain_answered": 0}
+    assert grade.passes({**base, "fixtures_correct": 2}, base, RULE)
+    assert not grade.passes(base, base, RULE)
+    assert not grade.passes({**base, "fixtures_correct": 2, "fixtures_false_alarm": 1}, base, RULE)
+    assert not grade.passes({**base, "fixtures_correct": 2, "fixtures_abstain_answered": 1}, base, RULE)
+
+
+def test_a_missing_transcript_counts_as_contaminated(tmp_path):
+    run_dir = tmp_path / "f5__full__1"
+    run_dir.mkdir()
+    assert grade.contamination(str(run_dir)).startswith("no transcript")

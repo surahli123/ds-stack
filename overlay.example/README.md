@@ -26,7 +26,7 @@ git config core.hooksPath .githooks                 # in this repo: enables the 
 **runner.json.** Settings for the guarded query runner. A warehouse adapter must keep the same contract as `safety/guarded_query.py`:
 - writes only to tables that start with `scratch_prefix`, plus a per-run suffix
 - one statement per call
-- results of at most `max_rows` rows, so only aggregates reach the conversation (search logs are untrusted text and can carry prompt injection)
+- results of at most `max_rows` rows, `max_cell_chars` per text cell and `max_result_chars` in total, so only aggregates reach the conversation (search logs are untrusted text and can carry prompt injection). The caps reduce raw-text exposure but don't remove it. The structural fix is a warehouse view without free-text columns, granted to the agent's role
 - a time cap, plus a bytes-scanned cap where the warehouse supports one
 - read-only credentials outside scratch, enforced by the warehouse, not only by the runner
 

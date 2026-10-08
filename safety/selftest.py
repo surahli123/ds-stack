@@ -21,9 +21,9 @@ def selftest(conn, scratch_prefix, run=gq.run):
 
     # Judge outcomes, not exception types: a statement the database itself
     # rejects did not run, which is what the envelope needs.
-    def expect_blocked(label, sql):
+    def expect_blocked(label, sql, **limits):
         try:
-            run(conn, sql, scratch_prefix=scratch_prefix, max_rows=10)
+            run(conn, sql, scratch_prefix=scratch_prefix, max_rows=10, **limits)
         except Exception:
             results.append((label, True))
         else:
@@ -39,6 +39,10 @@ def selftest(conn, scratch_prefix, run=gq.run):
     expect_blocked("write outside scratch is blocked", "CREATE TABLE prod_copy AS SELECT 1 AS x")
     expect_blocked("second statement is blocked", "SELECT 1; DROP TABLE events")
     expect_blocked("raw-row dump is blocked", "WITH RECURSIVE n(i) AS (SELECT 1 UNION ALL SELECT i + 1 FROM n WHERE i < 50) SELECT i FROM n")
+    expect_blocked("raw text in one cell is blocked", "SELECT printf('%.500c', 'x')")
+    expect_blocked("index on a non-scratch table is blocked", f"CREATE INDEX {scratch_prefix}idx ON sqlite_master(name)")
+    expect_blocked("slow query is aborted", "WITH RECURSIVE n(i) AS (SELECT 1 UNION ALL SELECT i + 1 FROM n WHERE i < 3000000) "
+                   "SELECT COUNT(*) FROM n", max_seconds=0.05)
     expect_allowed("aggregate read is allowed", "SELECT COUNT(*) FROM sqlite_master")
     expect_allowed("scratch write is allowed", f"CREATE TABLE IF NOT EXISTS {scratch_prefix}selftest AS SELECT 1 AS x")
     return results

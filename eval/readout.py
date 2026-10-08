@@ -1,29 +1,45 @@
 """Parse a ds-mode readout into fields a script can grade.
 
 The readout format lives in skills/ds-mode/SKILL.md. Parsing is tolerant of
-markdown decoration (bold, backticks, code fences) but strict about the parts
-that carry the answer: an `## Answer` section with a `Headline:` line.
+markdown decoration and of common phrasings, and reports what it could not
+read instead of guessing:
+
+- the headline yields every (number, unit) candidate; the grader picks the one
+  in the gold unit. Numbers glued to letters (v2, W40) and dates are ignored.
+- a headline with no number and words like "can't tell" or "insufficient" is an
+  abstention.
+- alternative lines match "ruled in/out" anywhere; "not ruled in/out" reads as
+  undetermined. Bullet lines in that list that match neither are kept in
+  `dropped` so the summary can report parse loss per arm.
 """
 
 import re
 from dataclasses import dataclass, field
 
-NUMBER = r"[-+−]?\d+(?:\.\d+)?"
-ABSTAIN = re.compile(r"^(can['’]?t|cannot|can not)\s+tell", re.I)
-HEADLINE = re.compile(r"^\s*headline\s*:\s*(.+?)\s*$", re.I | re.M)
-ALTERNATIVE = re.compile(r"^\s*[-*]\s*(.+?)\s*:\s*ruled\s+(in|out)\b(.*)$", re.I)
+NUMBER = r"(?<![\w.\-−])([-+−]?\d+(?:\.\d+)?)"
+UNIT = r"\s*(pp\b|percentage[\s-]points?\b|points?\b|%|percent\b)"
+DATE = re.compile(r"\b\d{4}-\d{2}(?:-\d{2})?\b|\b\d{4}-W\d{2}\b", re.I)
+ABSTAIN_WORDS = re.compile(r"can['’]?t|cannot|can not|unable|unknown|insufficient|not enough|"
+                           r"no reliable|indeterminate|undetermined|inconclusive|not possible", re.I)
+NEGATIVE_WORDS = re.compile(r"\b(fell|fall|drop(?:ped)?|decreas\w*|declin\w*|down|lower|loss|lost|reduc\w*)\b", re.I)
+HEADING = re.compile(r"^#{1,4}\s+(.+?)\s*#*\s*$", re.M)
+HEADLINE = re.compile(r"^\s*[-*]?\s*headline\s*:\s*(.+?)\s*$", re.I | re.M)
+VERDICT = re.compile(r"\b(not\s+)?ruled[\s-]*(in|out)\b", re.I)
+NAME_SPLIT = re.compile(r"\s*(?::|—|–|\s-\s)\s*")
 CHECK = re.compile(r"^\s*[-*]\s*([a-z_]+)\s*:\s*(pass|fail|could[ _]not[ _]run|skipped)\b", re.I)
 LABEL = re.compile(r"\[(measured|inferred|guess)\]", re.I)
-INTERVAL = re.compile(rf"({NUMBER})\s*(?:to|,|–|—|\.\.\.?)\s*({NUMBER})", re.I)
+INTERVAL = re.compile(r"([-+−]?\d+(?:\.\d+)?)\s*%?\s*(?:to|,|–|—|\.\.\.?)\s*([-+−]?\d+(?:\.\d+)?)", re.I)
+UNIT_NAMES = {"pp": "pp", "%": "percent", "percent": "percent"}
 
 
 @dataclass
 class Readout:
     headline: str = ""
     abstained: bool = False
-    value: float | None = None
+    candidates: list = field(default_factory=list)
     interval: tuple | None = None
     alternatives: list = field(default_factory=list)
+    dropped: list = field(default_factory=list)
     checks: dict = field(default_factory=dict)
     sections: dict = field(default_factory=dict)
     errors: list = field(default_factory=list)
@@ -32,19 +48,55 @@ class Readout:
     def ok(self):
         return not self.errors
 
+    @property
+    def value(self):
+        return self.candidates[0][0] if self.candidates else None
+
+    def value_in(self, unit):
+        """First headline number in `unit` ('pp' or 'percent'), else the first number."""
+        for number, found in self.candidates:
+            if found == unit:
+                return number
+        return self.value
+
 
 def _clean(text):
     text = re.sub(r"^```[a-z]*\s*$", "", text, flags=re.M)
-    return text.replace("**", "").replace("`", "").replace("−", "-")
+    return text.replace("**", "").replace("__", "").replace("`", "").replace("−", "-")
 
 
 def _sections(text):
-    parts = re.split(r"^##\s+(.+?)\s*$", text, flags=re.M)
+    parts = HEADING.split(text)
     return {parts[i].strip().lower(): parts[i + 1] for i in range(1, len(parts) - 1, 2)}
 
 
-def _numbers(text):
-    return [float(n.replace("−", "-")) for n in re.findall(NUMBER, text)]
+def _unit(raw):
+    raw = raw.lower().strip()
+    if raw.startswith("percentage") or raw.startswith("point") or raw == "pp":
+        return "pp"
+    return UNIT_NAMES.get(raw, raw)
+
+
+def _numbers_with_units(text, negative):
+    found = []
+    for match in re.finditer(NUMBER + f"(?:{UNIT})?", text, re.I):
+        raw, unit = match.group(1), match.group(2)
+        value = float(raw)
+        if negative and raw[0] not in "+-":
+            value = -value
+        found.append((value, _unit(unit) if unit else None))
+    return found
+
+
+def _candidates(headline):
+    """Order: numbers with a unit before the parenthesis, then with a unit inside
+    it (an interval or a restatement), then unitless numbers before it."""
+    text = DATE.sub(" ", headline)
+    head, _, paren = text.partition("(")
+    negative = bool(NEGATIVE_WORDS.search(head))
+    in_head = _numbers_with_units(head, negative)
+    in_paren = [c for c in _numbers_with_units(paren, negative) if c[1]]
+    return [c for c in in_head if c[1]] + in_paren + [c for c in in_head if not c[1]]
 
 
 def parse(text):
@@ -53,7 +105,7 @@ def parse(text):
     out.sections = _sections(cleaned)
     answer = next((body for name, body in out.sections.items() if name.startswith("answer")), None)
     if answer is None:
-        out.errors.append("no '## Answer' section")
+        out.errors.append("no Answer section")
         return out
     match = HEADLINE.search(answer)
     if not match:
@@ -61,33 +113,49 @@ def parse(text):
         return out
 
     out.headline = match.group(1)
-    if ABSTAIN.match(out.headline):
-        out.abstained = True
-    else:
-        head, _, rest = out.headline.partition("(")
-        values = _numbers(head)
-        if not values:
-            out.errors.append(f"headline has no number: {out.headline!r}")
+    out.candidates = _candidates(out.headline)
+    if not out.candidates:
+        if ABSTAIN_WORDS.search(out.headline):
+            out.abstained = True
         else:
-            out.value = values[0]
-        bounds = INTERVAL.search(rest)
+            out.errors.append(f"headline has neither a number nor an abstention: {out.headline!r}")
+    elif re.match(r"^\s*(can['’]?t|cannot|can not)\s+tell", out.headline, re.I):
+        out.abstained = True
+    if "(" in out.headline:
+        bounds = INTERVAL.search(DATE.sub(" ", out.headline.split("(", 1)[1]))
         if bounds:
-            low, high = (float(b.replace("−", "-")) for b in bounds.groups())
+            low, high = (float(b) for b in bounds.groups())
             out.interval = (min(low, high), max(low, high))
 
     why = next((body for name, body in out.sections.items() if name.startswith("why")), "")
+    in_alternatives = False
     for line in why.splitlines():
-        alt = ALTERNATIVE.match(line)
-        if alt:
-            label = LABEL.search(alt.group(3))
-            out.alternatives.append({
-                "name": alt.group(1).strip().lower(),
-                "verdict": alt.group(2).lower(),
-                "label": label.group(1).lower() if label else None,
-            })
+        stripped = line.strip()
+        if re.match(r"^[-*]\s*alternatives considered", stripped, re.I):
+            in_alternatives = True
+            continue
+        if re.match(r"^[-*]\s*checks run", stripped, re.I):
+            in_alternatives = False
             continue
         check = CHECK.match(line)
-        if check:
-            status = check.group(2).lower().replace(" ", "_")
-            out.checks[check.group(1).lower()] = status
+        if check and not in_alternatives:
+            out.checks[check.group(1).lower()] = check.group(2).lower().replace(" ", "_")
+            continue
+        if not re.match(r"^[-*]\s+\S", stripped):
+            continue
+        body = re.sub(r"^[-*]\s*", "", stripped)
+        verdict = VERDICT.search(body)
+        if verdict:
+            before = body[:verdict.start()].strip()
+            subject = before or re.sub(r"^\s*(?::|by)?\s*", "", body[verdict.end():]).split(",")[0]
+            name = NAME_SPLIT.split(subject.strip(), maxsplit=1)[0].strip().lower()
+            label = LABEL.search(stripped)
+            out.alternatives.append({
+                "name": name,
+                "line": body.lower(),
+                "verdict": "undetermined" if verdict.group(1) else verdict.group(2).lower(),
+                "label": label.group(1).lower() if label else None,
+            })
+        elif in_alternatives:
+            out.dropped.append(stripped)
     return out

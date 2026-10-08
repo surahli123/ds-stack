@@ -78,7 +78,7 @@ def run_job(job, model, out_dir, timeout):
     config = os.path.join(job_root, "config")
     os.makedirs(config)
     env = {k: os.environ[k] for k in PASSTHROUGH_ENV if k in os.environ}
-    env.update(HOME=config, CLAUDE_CONFIG_DIR=config)
+    env.update(HOME=config, CLAUDE_CONFIG_DIR=config, DS_CHECKS_LOG=os.path.join(work, ".ds-checks.log"))
     cmd = ["claude", "-p", build_prompt(fixture), "--model", model, "--output-format", "stream-json",
            "--verbose", "--allowedTools", "Bash,Read,Write,Edit,Glob,Grep", "--max-turns", "60"]
     started = time.time()

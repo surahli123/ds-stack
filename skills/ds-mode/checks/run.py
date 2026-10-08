@@ -28,10 +28,10 @@ USAGE = {
                '{"left_rows": 1000, "joined_rows": 1000, "relationship": "many_to_one", "join": "left", '
                '"right_rows": 1000, "right_distinct_keys": 1000}'),
     "mix_shift": ("when a rate moved: how much is segment mix vs within-segment change?",
-                  '{"segments": [{"name": "desktop", "before": {"n": 600, "k": 216}, '
-                  '"after": {"n": 450, "k": 162}}, ...]}  (n = denominator, k = numerator)'),
+                  '{"segments": [{"name": "web", "before": {"n": 800, "k": 240}, '
+                  '"after": {"n": 820, "k": 250}}, ...]}  (n = denominator, k = numerator)'),
     "srm": ("before reading any experiment lift: is the assignment split as planned?",
-            '{"observed": [50000, 47600], "expected_ratio": [0.5, 0.5]}'),
+            '{"observed": [10120, 9880], "expected_ratio": [0.5, 0.5]}'),
 }
 
 

@@ -1,8 +1,9 @@
 """Shared result format and run log for every check.
 
 Every check returns a Result. `emit` prints it as one JSON line and appends it
-to .ds-checks.log in the working directory, so whether a check ran can be read
-from the log instead of trusted from the agent's own report.
+to .ds-checks.log in the working directory (or to $DS_CHECKS_LOG when set), so
+whether a check ran can be read from the log instead of trusted from the
+agent's own report.
 """
 
 import json
@@ -45,7 +46,7 @@ def require(spec, key, kind):
 def emit(result, log_dir=None):
     payload = asdict(result)
     print(json.dumps(payload, sort_keys=True))
-    log_path = os.path.join(log_dir or os.getcwd(), LOG_NAME)
+    log_path = os.environ.get("DS_CHECKS_LOG") or os.path.join(log_dir or os.getcwd(), LOG_NAME)
     with open(log_path, "a") as log:
         log.write(json.dumps({"ts": round(time.time(), 3), **payload}, sort_keys=True) + "\n")
     return EXIT_CODES[result.status]

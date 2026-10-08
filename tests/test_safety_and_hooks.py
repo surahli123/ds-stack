@@ -32,6 +32,9 @@ def conn():
     "PRAGMA writable_schema = 1",
     "WITH x AS (DELETE FROM events RETURNING *) SELECT * FROM x",
     "/* sneaky */ DELETE FROM events -- comment",
+    "SELECT 1 -- /*\n; DROP TABLE events -- */",
+    "EXPLAIN DELETE FROM events",
+    "CREATE INDEX scratch_t_idx ON events(id)",
 ])
 def test_guard_blocks_writes_outside_scratch(conn, sql):
     with pytest.raises(gq.Blocked):
@@ -44,6 +47,17 @@ def test_guard_allows_aggregates_and_scratch_writes(conn):
         (v, 72 if v < 3 else 71) for v in range(7)]
     gq.run(conn, "CREATE TABLE scratch_t_summary AS SELECT v, COUNT(*) AS n FROM events GROUP BY v", scratch_prefix="scratch_t_")
     assert conn.execute("SELECT COUNT(*) FROM scratch_t_summary").fetchone()[0] == 7
+
+
+def test_guard_allows_semicolons_inside_string_literals(conn):
+    assert gq.run(conn, "SELECT ';' AS sep, COUNT(*) FROM events", scratch_prefix="scratch_t_") == [(";", 500)]
+
+
+def test_guard_refuses_raw_text_packed_into_one_cell(conn):
+    conn.execute("CREATE TABLE logs (txt TEXT)")
+    conn.executemany("INSERT INTO logs VALUES (?)", [(f"user query number {i}",) for i in range(100)])
+    with pytest.raises(gq.Blocked):
+        gq.run(conn, "SELECT group_concat(txt, char(10)) FROM logs", scratch_prefix="scratch_t_")
 
 
 def test_guard_refuses_raw_row_dumps(conn):
@@ -123,3 +137,53 @@ def test_hook_fails_closed_without_a_denylist(repo):
 
 def test_hook_opt_out_is_explicit(repo):
     assert commit(repo, "anything\n", hook_env(DS_DENYLIST="none")).returncode == 0
+
+
+def push(repo, stdin, env):
+    return subprocess.run([os.path.join(ROOT, "hooks", "denylist-check.sh"), "push"], cwd=repo, env=env,
+                          input=stdin, capture_output=True, text=True)
+
+
+def sha(repo, ref="HEAD"):
+    return git(repo, "rev-parse", ref).stdout.strip()
+
+
+def test_push_scans_every_commit_not_the_net_diff(repo, tmp_path):
+    denylist = tmp_path / "denylist.txt"
+    denylist.write_text("ProjectFalcon\n")
+    env = hook_env(DS_DENYLIST=str(denylist))
+    commit(repo, "base\n", env)
+    base = sha(repo)
+    commit(repo, "projectfalcon numbers\n", hook_env(DS_DENYLIST="none"))
+    commit(repo, "clean again\n", hook_env(DS_DENYLIST="none"))
+    head = sha(repo)
+    result = push(repo, f"refs/heads/work {head} refs/heads/work {base}\n", env)
+    assert result.returncode != 0 and "blocked" in result.stderr
+    new_branch = push(repo, f"refs/heads/work {head} refs/heads/work {'0' * 40}\n", env)
+    assert new_branch.returncode != 0
+
+
+def test_push_fails_closed_on_an_unknown_remote_sha(repo, tmp_path):
+    denylist = tmp_path / "denylist.txt"
+    denylist.write_text("ProjectFalcon\n")
+    env = hook_env(DS_DENYLIST=str(denylist))
+    commit(repo, "base\n", env)
+    result = push(repo, f"refs/heads/work {sha(repo)} refs/heads/work {'1' * 40}\n", env)
+    assert result.returncode != 0
+
+
+def test_hook_scans_binary_files_and_paths(repo, tmp_path):
+    denylist = tmp_path / "denylist.txt"
+    denylist.write_text("secret_table\nProjectFalcon\n")
+    env = hook_env(DS_DENYLIST=str(denylist))
+    db = repo / "data.db"
+    c = sqlite3.connect(db)
+    c.execute("CREATE TABLE secret_table (x INTEGER)")
+    c.commit()
+    c.close()
+    git(repo, "add", "data.db", env=env)
+    assert git(repo, "commit", "-q", "-m", "db", env=env, check=False).returncode != 0
+    git(repo, "rm", "-q", "--cached", "data.db", env=env)
+    (repo / "ProjectFalcon-notes.md").write_text("clean content\n")
+    git(repo, "add", "ProjectFalcon-notes.md", env=env)
+    assert git(repo, "commit", "-q", "-m", "path", env=env, check=False).returncode != 0

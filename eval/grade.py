@@ -3,23 +3,25 @@
 
     python3 eval/grade.py eval/results/<run>
 
-Mechanics are graded by code: the headline number against gold, abstention,
+Mechanics are graded by code: the headline number in the gold unit, abstention,
 and which alternatives were ruled in. Whether checks ran comes from each run's
-.ds-checks.log, not from the readout. Writes summary.md and summary.json.
+.ds-checks.log, not from the readout. Every pass-rule input is counted per
+fixture by majority vote, never per run. Writes summary.md and summary.json.
 """
 
 import json
 import os
 import sys
-from collections import defaultdict
+from collections import Counter, defaultdict
 
 HERE = os.path.dirname(os.path.abspath(__file__))
+ROOT = os.path.dirname(HERE)
 sys.path.insert(0, HERE)
 
 from readout import parse  # noqa: E402
 
 ARMS = ("baseline", "checks", "full")
-CONTAMINATION_MARKERS = ("ds-stack/eval", "/gold/", "make_fixtures", "pass_rule")
+CONTAMINATION_MARKERS = (ROOT, "/home/user/notes", "make_fixtures", "pass_rule", "/gold/")
 
 
 def load_gold(fixture):
@@ -27,9 +29,10 @@ def load_gold(fixture):
         return json.load(handle)
 
 
-def _ruled_in(readout, words):
+def _ruled_in(readout, words, unless=()):
     return [a["name"] for a in readout.alternatives
-            if a["verdict"] == "in" and any(w in a["name"] for w in words)]
+            if a["verdict"] == "in" and any(w in a["name"] for w in words)
+            and not any(u in a["name"] for u in unless)]
 
 
 def grade_readout(readout, gold):
@@ -40,17 +43,19 @@ def grade_readout(readout, gold):
         if gold["accept_abstain"]:
             return True, "abstained (accepted)", None
         return False, "abstained on a case with a valid answer", "false_alarm" if gold["kind"] == "clean" else "miss"
+    value = readout.value_in(gold["unit"])
     if gold["kind"] == "abstain" and not gold["accept_values"]:
-        return False, f"answered {readout.value:g} where the right answer is can't tell", "answered_abstain_case"
-    if not any(abs(readout.value - v["value"]) <= v["tol"] for v in gold["accept_values"]):
+        return False, f"answered {value:g} where the right answer is can't tell", "answered_abstain_case"
+    if not any(abs(value - v["value"]) <= v["tol"] for v in gold["accept_values"]):
         targets = ", ".join(f"{v['value']:g}±{v['tol']:g}" for v in gold["accept_values"])
         miss = "answered_abstain_case" if gold["kind"] == "abstain" else "miss"
-        return False, f"headline {readout.value:g} outside {targets}", miss
+        return False, f"headline {value:g} outside {targets}", miss
+    true_words = gold.get("true_cause_words", [])
     for words in gold["must_rule_in"]:
         if not _ruled_in(readout, words):
             return False, f"true cause not ruled in (expected one of {words[:3]})", "miss"
     for words in gold["must_not_rule_in"]:
-        hits = _ruled_in(readout, words)
+        hits = _ruled_in(readout, words, unless=true_words)
         if hits:
             return False, f"ruled in a false cause: {hits[0]!r}", "false_alarm" if gold["kind"] == "clean" else "miss"
     return True, "number within tolerance; causes consistent with gold", None
@@ -71,13 +76,17 @@ def checks_that_ran(run_dir):
     return ran
 
 
-def contaminated(run_dir):
+def contamination(run_dir):
+    """None if clean, else the reason. A missing transcript is not clean."""
     path = os.path.join(run_dir, "transcript.jsonl")
-    if not os.path.exists(path):
-        return False
+    if not os.path.exists(path) or os.path.getsize(path) == 0:
+        return "no transcript, so isolation can't be verified"
     with open(path) as handle:
         text = handle.read()
-    return any(marker in text for marker in CONTAMINATION_MARKERS)
+    for marker in CONTAMINATION_MARKERS:
+        if marker in text:
+            return f"touched the eval or notes tree ({marker})"
+    return None
 
 
 def skill_read(run_dir):
@@ -104,12 +113,29 @@ def grade_dir(results_dir):
             readout = parse(handle.read())
         gold = load_gold(meta["fixture"])
         correct, reason, miss = grade_readout(readout, gold)
-        tainted = contaminated(run_dir)
-        runs.append({**meta, "correct": correct and not tainted, "reason": reason if not tainted else "contaminated: touched eval files",
-                     "miss": miss if not tainted else "contaminated", "headline": readout.headline,
+        tainted = contamination(run_dir)
+        if tainted:
+            correct, reason, miss = False, "contaminated: " + tainted, "contaminated"
+        runs.append({**meta, "correct": correct, "reason": reason, "miss": miss, "headline": readout.headline,
+                     "dropped_alternative_lines": len(readout.dropped),
                      "checks_ran": checks_that_ran(run_dir), "skill_read": skill_read(run_dir),
                      "kind": gold["kind"]})
     return runs
+
+
+def majority_needed(rule):
+    return rule["runs_per_fixture"] // 2 + 1
+
+
+def cell_outcome(group, rule):
+    """Majority outcome of one fixture x arm cell: 'correct', a miss kind, or 'incomplete'."""
+    if len(group) != rule["runs_per_fixture"]:
+        return "incomplete"
+    if sum(r["correct"] for r in group) >= majority_needed(rule):
+        return "correct"
+    misses = Counter(r["miss"] for r in group if not r["correct"])
+    kind, count = misses.most_common(1)[0]
+    return kind if count >= majority_needed(rule) else "miss"
 
 
 def summarize(runs, rule):
@@ -118,52 +144,64 @@ def summarize(runs, rule):
         by_cell[(run["fixture"], run["arm"])].append(run)
     fixtures = sorted({r["fixture"] for r in runs})
     arms = [a for a in ARMS if any(r["arm"] == a for r in runs)]
-    cells = {}
-    for (fixture, arm), group in by_cell.items():
-        wins = sum(r["correct"] for r in group)
-        cells[(fixture, arm)] = {"correct_runs": wins, "runs": len(group),
-                                 "majority_correct": wins >= rule["majority"] and len(group) >= rule["majority"]}
+    cells = {key: {"outcome": cell_outcome(group, rule), "correct_runs": sum(r["correct"] for r in group),
+                   "runs": len(group)} for key, group in by_cell.items()}
 
     per_arm = {}
     for arm in arms:
         arm_runs = [r for r in runs if r["arm"] == arm]
+        outcomes = [cells[(f, arm)]["outcome"] for f in fixtures if (f, arm) in cells]
         per_arm[arm] = {
-            "fixtures_correct": sum(cells[(f, arm)]["majority_correct"] for f in fixtures if (f, arm) in cells),
+            "fixtures_correct": outcomes.count("correct"),
+            "fixtures_false_alarm": outcomes.count("false_alarm"),
+            "fixtures_abstain_answered": outcomes.count("answered_abstain_case"),
+            "fixtures_incomplete": outcomes.count("incomplete"),
             "runs_correct": sum(r["correct"] for r in arm_runs),
             "runs": len(arm_runs),
-            "false_alarms": sum(r["miss"] == "false_alarm" for r in arm_runs),
-            "abstain_cases_answered": sum(r["miss"] == "answered_abstain_case" for r in arm_runs),
-            "unparseable": sum(r["miss"] == "unparseable" for r in arm_runs),
-            "contaminated": sum(r["miss"] == "contaminated" for r in arm_runs),
+            "runs_unparseable": sum(r["miss"] == "unparseable" for r in arm_runs),
+            "runs_contaminated": sum(r["miss"] == "contaminated" for r in arm_runs),
+            "dropped_alternative_lines": sum(r["dropped_alternative_lines"] for r in arm_runs),
             "runs_with_any_check": sum(bool(r["checks_ran"]) for r in arm_runs),
             "runs_reading_skill": sum(r["skill_read"] for r in arm_runs),
-            "cost_usd": round(sum(r["cost_usd"] or 0 for r in arm_runs), 2),
+            "cost_usd": round(sum(r.get("cost_usd") or 0 for r in arm_runs), 2),
         }
 
     verdict = {"n_fixtures": len(fixtures), "min_required": rule["min_holdout_fixtures"]}
     if "full" in per_arm and "baseline" in per_arm:
-        full, base = per_arm["full"], per_arm["baseline"]
-        would_pass = (full["fixtures_correct"] - base["fixtures_correct"] >= rule["margin_vs_baseline"]
-                      and full["false_alarms"] - base["false_alarms"] <= rule["max_extra_false_alarms_vs_baseline"]
-                      and full["abstain_cases_answered"] <= rule["max_abstain_cases_answered_with_number"])
-        verdict["rule_outcome_if_n_were_enough"] = "PASS" if would_pass else "FAIL"
-    verdict["verdict"] = ("INSUFFICIENT_N (smoke test, not a decision)" if len(fixtures) < rule["min_holdout_fixtures"]
-                          else verdict.get("rule_outcome_if_n_were_enough", "INCOMPLETE"))
+        verdict["rule_outcome_if_n_were_enough"] = "PASS" if passes(per_arm["full"], per_arm["baseline"], rule) else "FAIL"
+    if any(p["fixtures_incomplete"] for p in per_arm.values()):
+        verdict["verdict"] = "INCOMPLETE (some cells lack the pre-registered run count)"
+    elif len(fixtures) < rule["min_holdout_fixtures"]:
+        verdict["verdict"] = "INSUFFICIENT_N (smoke test, not a decision)"
+    else:
+        verdict["verdict"] = verdict.get("rule_outcome_if_n_were_enough", "INCOMPLETE")
     return fixtures, arms, cells, per_arm, verdict
 
 
+def passes(full, base, rule):
+    return (full["fixtures_correct"] - base["fixtures_correct"] >= rule["margin_vs_baseline"]
+            and full["fixtures_false_alarm"] - base["fixtures_false_alarm"] <= rule["max_extra_false_alarms_vs_baseline"]
+            and full["fixtures_abstain_answered"] <= rule["max_abstain_cases_answered_with_number"])
+
+
 def render(results_dir, runs, fixtures, arms, cells, per_arm, verdict):
-    lines = [f"# Eval summary: {os.path.basename(results_dir)}", "",
-             f"**Verdict:** {verdict['verdict']}. {verdict['n_fixtures']} fixtures; the pass rule needs "
-             f"{verdict['min_required']}. Rule outcome at this n: {verdict.get('rule_outcome_if_n_were_enough', 'n/a')}.", "",
-             "## Fixtures correct by majority vote", "",
-             "| Fixture | Kind | " + " | ".join(arms) + " |", "|---|---|" + "---|" * len(arms)]
+    lines = [f"# Eval summary: {os.path.basename(results_dir)}", ""]
+    if not runs:
+        return "\n".join(lines + ["No runs found."]) + "\n"
+    lines += [f"**Verdict:** {verdict['verdict']}. {verdict['n_fixtures']} fixtures; the pass rule needs "
+              f"{verdict['min_required']}. Rule outcome at this n: {verdict.get('rule_outcome_if_n_were_enough', 'n/a')}.", "",
+              "## Fixtures by majority vote", "",
+              "| Fixture | Kind | " + " | ".join(arms) + " |", "|---|---|" + "---|" * len(arms)]
     kinds = {r["fixture"]: r["kind"] for r in runs}
     for fixture in fixtures:
         row = [fixture, kinds[fixture]]
         for arm in arms:
             cell = cells.get((fixture, arm))
-            row.append(f"{'✓' if cell['majority_correct'] else '✗'} {cell['correct_runs']}/{cell['runs']}" if cell else "—")
+            if not cell:
+                row.append("—")
+                continue
+            mark = "✓" if cell["outcome"] == "correct" else f"✗ {cell['outcome']}"
+            row.append(f"{mark} ({cell['correct_runs']}/{cell['runs']})")
         lines.append("| " + " | ".join(row) + " |")
     lines += ["", "## Per arm", "", "| Metric | " + " | ".join(arms) + " |", "|---|" + "---|" * len(arms)]
     for metric in next(iter(per_arm.values())).keys():
@@ -171,7 +209,7 @@ def render(results_dir, runs, fixtures, arms, cells, per_arm, verdict):
     lines += ["", "## Every run", "", "| Run | Correct | Headline | Reason | Checks that ran |", "|---|---|---|---|---|"]
     for run in sorted(runs, key=lambda r: (r["fixture"], ARMS.index(r["arm"]), r["run"])):
         ran = ", ".join(f"{k}:{'/'.join(v)}" for k, v in run["checks_ran"].items()) or "none"
-        headline = run["headline"].replace("|", "/")[:60]
+        headline = run["headline"].replace("|", "/")[:70]
         lines.append(f"| {run['fixture']} {run['arm']} #{run['run']} | {'✓' if run['correct'] else '✗'} | {headline} | {run['reason']} | {ran} |")
     return "\n".join(lines) + "\n"
 

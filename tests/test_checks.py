@@ -48,6 +48,11 @@ def test_mix_shift_flags_offsetting_effects():
     assert result.status == FAIL
 
 
+def test_mix_shift_does_not_flag_noise_on_a_flat_metric():
+    result = mix_shift.run({"segments": [seg("a", 100000, 30000, 100010, 30003), seg("b", 100000, 20000, 99990, 19998)]})
+    assert result.status == PASS and abs(result.details["delta_pp"]) < 0.01
+
+
 def test_mix_shift_cannot_run_on_bad_specs():
     assert mix_shift.run({"segments": [seg("only", 10, 1, 10, 2)]}).status == COULD_NOT_RUN
     assert mix_shift.run({"segments": [seg("a", 10, 11, 10, 2), seg("b", 10, 1, 10, 1)]}).status == COULD_NOT_RUN
@@ -85,6 +90,12 @@ def test_fanout_fails_when_left_join_loses_rows():
 def test_fanout_inner_join_drop_passes_unless_over_limit():
     assert fanout.run({"left_rows": 1000, "joined_rows": 990, "join": "inner"}).status == PASS
     assert fanout.run({"left_rows": 1000, "joined_rows": 900, "join": "inner", "max_drop_fraction": 0.05}).status == FAIL
+
+
+def test_fanout_one_to_one_needs_unique_left_keys():
+    spec = {"left_rows": 1000, "joined_rows": 1000, "relationship": "one_to_one", "left_distinct_keys": 990}
+    assert fanout.run(spec).status == FAIL
+    assert fanout.run({**spec, "relationship": "many_to_one"}).status == PASS
 
 
 def test_fanout_passes_a_clean_join():
@@ -158,6 +169,10 @@ def test_completeness_flags_double_loads_only_when_asked():
 
 def test_completeness_cannot_run_without_enough_history():
     assert completeness.run({"series": series(24, 24), "target": "2026-10-03"}).status == COULD_NOT_RUN
+    assert completeness.run({"series": series(24, 24, 24), "target": "2026-10-03"}).status == COULD_NOT_RUN
+
+
+def test_completeness_rejects_duplicate_periods():
     assert completeness.run({"series": series(24, 24, 24, 24) + series(1)[:1], "target": "2026-10-04"}).status == COULD_NOT_RUN
 
 
@@ -169,6 +184,15 @@ def test_completeness_catches_the_planted_f4_mistake_from_the_warehouse():
 
 
 # CLI and run log
+
+def test_cli_log_follows_DS_CHECKS_LOG(tmp_path):
+    log = tmp_path / "pinned.log"
+    sub = tmp_path / "elsewhere"
+    sub.mkdir()
+    subprocess.run([sys.executable, os.path.join(CHECKS_DIR, "run.py"), "srm", "--json", '{"observed": [10, 10], "expected_ratio": [0.5, 0.5]}'],
+                   cwd=sub, env={**os.environ, "DS_CHECKS_LOG": str(log)}, capture_output=True, check=True)
+    assert log.exists() and not (sub / ".ds-checks.log").exists()
+
 
 def test_cli_logs_every_run_and_uses_exit_codes(tmp_path):
     runner = os.path.join(CHECKS_DIR, "run.py")

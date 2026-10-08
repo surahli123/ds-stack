@@ -6,6 +6,6 @@
   "must_not_rule_in": [],
   "must_rule_in": [],
   "naive_answer_pp": 1.2,
-  "planted": "assignment is about 51.2/48.8 against a planned 50/50 (sample ratio mismatch), so the lift is not trustworthy",
+  "planted": "assignment is about 51.2/48.8 against a planned 50/50 on every day and in total (sample ratio mismatch), so the lift is not trustworthy",
   "unit": "pp"
 }

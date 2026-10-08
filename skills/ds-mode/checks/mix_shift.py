@@ -7,13 +7,16 @@ the overall change:
           + sum_s (w_after - w_before) * (r_after + r_before) / 2   # mix effect
 
 Fails when mix accounts for at least `threshold` of the movement, measured as
-|mix| / (|mix| + |rate|) so offsetting effects (Simpson's paradox) still show.
+|mix| / (|mix| + |rate|) so offsetting effects (Simpson's paradox) still show,
+and the mix effect is at least `min_effect_pp` percentage points (default 0.1),
+so a flat metric's noise is not flagged.
 """
 
 from _common import COULD_NOT_RUN, FAIL, PASS, Result, SpecError, require
 
 NAME = "mix_shift"
 DEFAULT_THRESHOLD = 0.3
+DEFAULT_MIN_EFFECT_PP = 0.1
 
 
 def _counts(segment, side):
@@ -77,6 +80,7 @@ def run(spec):
         if len(segments) < 2:
             raise SpecError("needs at least 2 segments to separate mix from rate")
         threshold = float(spec.get("threshold", DEFAULT_THRESHOLD))
+        min_effect_pp = float(spec.get("min_effect_pp", DEFAULT_MIN_EFFECT_PP))
         parts = decompose(segments)
     except (SpecError, TypeError, ValueError) as err:
         return Result(NAME, COULD_NOT_RUN, f"could not run: {err}")
@@ -92,12 +96,13 @@ def run(spec):
         "mix_effect_pp": round(100 * mix, 4),
         "mix_share": round(share, 4),
         "threshold": threshold,
+        "min_effect_pp": min_effect_pp,
         "segments": parts["segments"],
     }
     summary = (
         f"overall change {100 * parts['delta']:+.2f} pp = within-segment {100 * rate:+.2f} pp "
         f"+ mix {100 * mix:+.2f} pp (mix share {share:.0%})"
     )
-    if share >= threshold:
+    if share >= threshold and abs(100 * mix) >= min_effect_pp:
         return Result(NAME, FAIL, "mix-shift: " + summary, details)
     return Result(NAME, PASS, summary, details)

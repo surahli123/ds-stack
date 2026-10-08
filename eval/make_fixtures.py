@@ -99,6 +99,7 @@ def make_mix_shift():
         "accept_abstain": False,
         "must_rule_in": [MIX_WORDS],
         "must_not_rule_in": [RANKER_WORDS],
+        "true_cause_words": MIX_WORDS,
         "naive_answer_pp": round(overall[1] - overall[0], 3),
     })
 
@@ -120,6 +121,7 @@ def make_clean_control():
         "accept_abstain": False,
         "must_rule_in": [],
         "must_not_rule_in": [MIX_WORDS],
+        "true_cause_words": RANKER_WORDS + ["within"],
     })
 
 
@@ -211,10 +213,10 @@ def make_srm():
     folder, conn = fresh_db("f5")
     conn.execute("CREATE TABLE experiment_daily (date TEXT, experiment TEXT, arm TEXT, users INTEGER, searches INTEGER, clicks INTEGER)")
     dates = days("2026-09-17", 14)
-    arms = {"control": (3571, 0.300), "treatment": (3400, 0.312)}
+    arms = {"control": (35710, 0.300), "treatment": (34000, 0.312)}
     for i, day in enumerate(dates):
         for arm, (users, ctr) in arms.items():
-            day_users = users + (i % 3) - 1
+            day_users = users + 10 * ((i % 3) - 1)
             searches = day_users * 6
             conn.execute("INSERT INTO experiment_daily VALUES (?, 'ranker_boost', ?, ?, ?, ?)",
                          (day, arm, day_users, searches, round(searches * ctr * DAY_CTR[i % 7])))
@@ -226,7 +228,7 @@ Did treatment improve CTR? Give the lift in percentage points; it goes into the 
 """)
     write_gold("f5", {
         "kind": "abstain",
-        "planted": "assignment is about 51.2/48.8 against a planned 50/50 (sample ratio mismatch), so the lift is not trustworthy",
+        "planted": "assignment is about 51.2/48.8 against a planned 50/50 on every day and in total (sample ratio mismatch), so the lift is not trustworthy",
         "unit": "pp",
         "accept_values": [],
         "accept_abstain": True,

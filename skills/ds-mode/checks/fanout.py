@@ -1,7 +1,8 @@
 """Catch joins that silently add or lose rows.
 
 Pass the row counts around a join. Fails when the right side has duplicate keys
-for a join meant to be many-to-one or one-to-one, when the join added rows, or
+for a join meant to be many-to-one or one-to-one, when the left side has
+duplicate keys for a one-to-one join, when the join added rows, or
 when a left join lost rows. An inner join that drops rows passes with the drop
 reported, unless it exceeds `max_drop_fraction`.
 """
@@ -30,6 +31,9 @@ def run(spec):
         if right_rows is not None:
             right_rows = require(spec, "right_rows", int)
             right_keys = require(spec, "right_distinct_keys", int)
+        left_keys = spec.get("left_distinct_keys")
+        if left_keys is not None:
+            left_keys = require(spec, "left_distinct_keys", int)
         max_drop = spec.get("max_drop_fraction")
     except (SpecError, TypeError, ValueError) as err:
         return Result(NAME, COULD_NOT_RUN, f"could not run: {err}")
@@ -44,6 +48,9 @@ def run(spec):
                 f"right side has {right_rows - right_keys} duplicate-key rows "
                 f"({right_rows} rows for {right_keys} keys); dedupe or filter before joining"
             )
+    if relationship == "one_to_one" and left_keys is not None and left_rows > left_keys:
+        details["left_distinct_keys"] = left_keys
+        problems.append(f"left side has {left_rows - left_keys} duplicate-key rows for a one-to-one join")
     if joined_rows > left_rows:
         problems.append(f"join added {joined_rows - left_rows} rows (fan-out)")
     dropped = left_rows - joined_rows if joined_rows < left_rows else 0

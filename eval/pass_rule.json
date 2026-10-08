@@ -1,8 +1,7 @@
 {
-  "_note": "Pre-registered before any run. Change only before a new run, never after seeing results.",
+  "_note": "Pre-registered before any real run. Change only before a new run, never after seeing results. Every input is counted per fixture by majority over runs_per_fixture runs.",
   "min_holdout_fixtures": 15,
   "runs_per_fixture": 3,
-  "majority": 2,
   "margin_vs_baseline": 4,
   "max_extra_false_alarms_vs_baseline": 0,
   "max_abstain_cases_answered_with_number": 0

@@ -28,5 +28,13 @@
   ],
   "naive_answer_pp": -2.102,
   "planted": "mobile traffic share rose 40% -> 55%; within-platform CTR unchanged, so the drop is mix-shift and v2's effect is ~0",
+  "true_cause_words": [
+    "mix",
+    "composition",
+    "platform share",
+    "traffic share",
+    "share shift",
+    "simpson"
+  ],
   "unit": "pp"
 }

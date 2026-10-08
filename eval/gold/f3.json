@@ -20,5 +20,12 @@
   ],
   "must_rule_in": [],
   "planted": "nothing: platform mix is stable and desktop CTR fell after v3, so the whole drop is within-segment",
+  "true_cause_words": [
+    "ranker",
+    "v2",
+    "v3",
+    "model",
+    "within"
+  ],
   "unit": "pp"
 }
