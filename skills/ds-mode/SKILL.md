@@ -36,8 +36,9 @@ Run each check as `python3 <dir of this SKILL.md>/checks/run.py <check> --json '
 | `srm` | before reading any experiment lift |
 
 - Report every check that applies, with its status. If you skip one, say why.
-- A failed check must change the answer, or the readout must show with evidence why it doesn't.
-- If a check that applies could not run, or failed and you can't resolve it, the headline is `can't tell`. Say what is missing and what would settle it.
+- A **failed** check must change the answer, or the readout must show with evidence why it doesn't. If you can't resolve it, the headline is `can't tell`. Say what is missing and what would settle it.
+- A check that **could not run** because of how you called it (wrong spec, wrong grain) gets fixed and rerun.
+- A check that could not run because the data can't support it at all (for example, `completeness` with no earlier periods to compare against) does not by itself mean `can't tell`. Answer, report the check as could not run, and put the gap in the caveats. Abstain only if that gap could plausibly change the answer.
 - Copy check output exactly; never edit it.
 
 On a live warehouse, send every query through the overlay's guarded runner, and keep raw rows out of the conversation.

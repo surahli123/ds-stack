@@ -50,7 +50,24 @@ make grade RUN=eval/results/<dir>
 
 ## Honest status
 
-- The fixtures are **synthetic** and number 5. The pass rule needs at least 15 held-out fixtures before it will issue a verdict, so every eval here reports `INSUFFICIENT_N`. That makes it a smoke test of the harness, not proof that v0 works.
-- Three of the four checks are **provisional**. They need real incidents from the wrong-number archive (plan Stage 1) before they count as evidenced.
-- The method in `SKILL.md` is a **draft** based on the owner's earlier search-metric work. The owner replaces it with their own first five moves (plan Stage 2).
+**Smoke eval, 2026-10-08.** 5 synthetic cases, 3 setups, 3 runs each, Sonnet, clean profiles. Summaries are in `eval/results/*/summary.md`. Transcripts stay local because they are bulky; a regrade without them fails closed as unverifiable.
+
+| Round | Baseline | Checks only | Full ds-mode |
+|---|---|---|---|
+| 1 | 5/5 cases (15/15 runs) | 5/5 (14/15) | 4/5 (13/15) |
+| 2, after the abstain-rule fix | same runs as round 1 | same runs as round 1 | 5/5 (15/15) |
+
+What it shows:
+
+- **The harness works end to end.** Checks run and are logged in every checks-only and full run, the grader reads the logs, and no run was contaminated or unparseable.
+- **These cases are too easy.** Plain prompting got every case right, so its miss rate is 0%, far below the 30–40% band the calibration rule asks for. They can't tell the setups apart. Real incidents from the wrong-number archive should be harder.
+- **v0 had a real bug, and round 1 found it.** In round 1, a rule told the agent to say "can't tell" whenever a check couldn't run. On the join case, `completeness` had no history to compare against, so the agent withheld a correct 55.0% in 2 of 3 runs. The rule now separates three cases: a failed check, a check called wrongly, and data that can't support a check. Round 2 was rerun on the same cases, so it confirms the fix but is not evidence that the fix generalizes.
+- **The readout format may be doing most of the work.** Every setup got the format, including its "alternatives" and "checks run" prompts. A setup without the format would measure how much the format alone adds.
+- The full setup costs about 40% more per run than the baseline.
+
+Other caveats:
+
+- Three of the four checks are **provisional** until real incidents back them (plan Stage 1).
+- The method in `SKILL.md` is a **draft**. The owner replaces it with their own first five moves (plan Stage 2).
 - The skill has not yet been smoke-loaded in Cursor or Codex.
+- Below 15 held-out cases, the pre-registered rule refuses to give a verdict (`INSUFFICIENT_N`).
