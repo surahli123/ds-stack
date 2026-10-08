@@ -1,0 +1,27 @@
+{
+  "_rule": "A check is 'evidenced' only with at least 2 real incidents behind it. Everything else is 'provisional' and must be backed by the Stage 1 wrong-number archive or removed.",
+  "completeness": {
+    "status": "provisional",
+    "incidents": 0,
+    "evidence": [],
+    "proven_on": "synthetic fixture only (tests/test_checks.py); prove on a real past incident before promoting"
+  },
+  "fanout": {
+    "status": "provisional",
+    "incidents": 1,
+    "evidence": ["KDD Cup data-agent work: JOIN fixes were among the code fixes that moved accuracy"],
+    "proven_on": "synthetic fixture only (tests/test_checks.py); needs a second real incident"
+  },
+  "mix_shift": {
+    "status": "evidenced",
+    "incidents": 2,
+    "evidence": ["Search-metric diagnostics project: roughly 30-40% of investigated metric moves were mix-shift (many incidents; counted conservatively as 2)"],
+    "proven_on": "synthetic fixture only (tests/test_checks.py); replay a real past incident on the machine where it happened"
+  },
+  "srm": {
+    "status": "provisional",
+    "incidents": 0,
+    "evidence": [],
+    "proven_on": "synthetic fixture only (tests/test_checks.py); prove on a real past incident before promoting"
+  }
+}

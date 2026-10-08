@@ -1,0 +1,32 @@
+{
+  "accept_abstain": false,
+  "accept_values": [
+    {
+      "tol": 0.3,
+      "value": 0.0
+    }
+  ],
+  "id": "f1",
+  "kind": "error",
+  "must_not_rule_in": [
+    [
+      "ranker",
+      "v2",
+      "v3",
+      "model"
+    ]
+  ],
+  "must_rule_in": [
+    [
+      "mix",
+      "composition",
+      "platform share",
+      "traffic share",
+      "share shift",
+      "simpson"
+    ]
+  ],
+  "naive_answer_pp": -2.102,
+  "planted": "mobile traffic share rose 40% -> 55%; within-platform CTR unchanged, so the drop is mix-shift and v2's effect is ~0",
+  "unit": "pp"
+}

@@ -1,0 +1,7 @@
+{
+  "scratch_prefix": "scratch_dsmode_",
+  "per_run_suffix": true,
+  "max_rows": 200,
+  "max_seconds": 120,
+  "max_bytes_scanned": 50000000000
+}

@@ -1,0 +1,3 @@
+# One term per line. Case-insensitive substring match. Examples only:
+# project-codename
+# internal_metric_table_name

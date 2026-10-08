@@ -1,0 +1,16 @@
+{
+  "accept_abstain": false,
+  "accept_values": [
+    {
+      "tol": 0.3,
+      "value": 54.98
+    }
+  ],
+  "id": "f2",
+  "kind": "error",
+  "must_not_rule_in": [],
+  "must_rule_in": [],
+  "naive_answer_percent": 44.986,
+  "planted": "300 queries were relabeled; old label rows remain (is_current = 0), so a join without the current-label filter counts stale labels",
+  "unit": "percent"
+}

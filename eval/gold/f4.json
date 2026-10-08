@@ -1,0 +1,16 @@
+{
+  "accept_abstain": true,
+  "accept_values": [
+    {
+      "tol": 0.3,
+      "value": 0.0
+    }
+  ],
+  "id": "f4",
+  "kind": "abstain",
+  "must_not_rule_in": [],
+  "must_rule_in": [],
+  "naive_answer_pp": -2.833,
+  "planted": "2026-10-07 has only hours 0-9 loaded; early hours have lower CTR, so the full-day comparison shows a fake drop",
+  "unit": "pp"
+}

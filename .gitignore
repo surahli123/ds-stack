@@ -1,0 +1,4 @@
+__pycache__/
+.pytest_cache/
+.ds-checks.log
+eval/results/*/transcript.jsonl
