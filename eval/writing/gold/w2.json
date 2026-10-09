@@ -1,0 +1,56 @@
+{
+  "type": "memo",
+  "reader_role": "Morgan, the eval lead who must approve or reject the labeling approach and its budget",
+  "facts": [
+    {
+      "key": "answer",
+      "name": "recommend the hybrid (option C)",
+      "all_of": [
+        [
+          "option c",
+          "hybrid"
+        ]
+      ]
+    },
+    {
+      "key": "decision",
+      "name": "approve the budget by Oct 20",
+      "all_of": [
+        [
+          "approve",
+          "sign-off",
+          "sign off",
+          "approval"
+        ],
+        [
+          "oct 20",
+          "october 20",
+          "10-20",
+          "20 oct",
+          "10/20"
+        ]
+      ]
+    },
+    {
+      "key": "number",
+      "name": "about $18k per quarter",
+      "all_of": [
+        [
+          "18k",
+          "18,000",
+          "$18",
+          "18 k"
+        ]
+      ]
+    },
+    {
+      "key": "caveat",
+      "name": "judge drift",
+      "all_of": [
+        [
+          "drift"
+        ]
+      ]
+    }
+  ]
+}

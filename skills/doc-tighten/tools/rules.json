@@ -1,0 +1,92 @@
+{
+  "_source": "Counts come from 119 agent-written docs in the owner's notes repo (2026-10-09 analysis), plus the owner's DS editing guide (ai-writing-suite notes/ai-editing-guide-for-ds.md). A rule without evidence does not belong here.",
+  "D1": {
+    "name": "answer first",
+    "severity": "fail",
+    "evidence": "76/119 docs open with method, sources or status; 67/119 have no summary label in the first 12 lines; 9/11 plans have none",
+    "note": "Not applied to type 'reference' (lookup pages have no single answer)."
+  },
+  "D2": {
+    "name": "bold density",
+    "severity": "fail",
+    "threshold": 2.0,
+    "evidence": "64/119 docs have 3 or more bold spans per 100 words (median 3.2, p90 5.4)"
+  },
+  "D3": {
+    "name": "bold-label bullets",
+    "severity": "warn",
+    "threshold": 0.4,
+    "evidence": "69/119 docs open at least 40% of their bullets with a bold label"
+  },
+  "D4": {
+    "name": "all-caps emphasis",
+    "severity": "warn",
+    "threshold": 3,
+    "evidence": "63/119 docs use 3 or more all-caps emphasis words such as NOT or ONLY"
+  },
+  "D5": {
+    "name": "log drift",
+    "severity": "fail",
+    "evidence": "13/119 docs (6 handovers) accumulate dated DONE lines, strikethrough and stale status lines"
+  },
+  "D6": {
+    "name": "same point restated",
+    "severity": "warn",
+    "threshold": 0.45,
+    "min_section_words": 40,
+    "evidence": "27/119 docs have two sections whose content words overlap by at least 45% (reports 10/35)"
+  },
+  "D7": {
+    "name": "process stands in for results",
+    "severity": "warn",
+    "verified_badges": 3,
+    "evidence": "33/119 docs open with 2 or more metadata fields; 69/119 carry 'verified' badges; workflow ids and /tmp paths appear"
+  },
+  "D8": {
+    "name": "inline clutter",
+    "severity": "warn",
+    "code_per_100": 8,
+    "ids_per_100": 3,
+    "arrows": 10,
+    "evidence": "29/119 docs have 8 or more inline-code spans per 100 words; 9/119 have 3 or more ID codes per 100 words; 46/119 use 10 or more arrows"
+  },
+  "D9": {
+    "name": "prose in tables",
+    "severity": "fail",
+    "max_cell_words": 25,
+    "evidence": "19/119 docs have table cells over 25 words; two plans shipped empty template tables"
+  },
+  "D10": {
+    "name": "unclear reader",
+    "severity": "warn",
+    "evidence": "25/119 docs address 'you' and refer to 'the user/owner' (5/8 designs)"
+  },
+  "D11": {
+    "name": "thinking out loud",
+    "severity": "warn",
+    "evidence": "15/119 docs keep thinking-out-loud asides or self-praise"
+  },
+  "D12": {
+    "name": "length budget",
+    "severity": "fail",
+    "evidence": "median 718 words, p90 1687; one audit is 78% appendix restating its body; a three-doc plan set ran to 6,882 words",
+    "budgets": {
+      "readout": 600,
+      "memo": 900,
+      "plan": 900,
+      "handover": 500,
+      "other": 1200,
+      "reference": 1200
+    }
+  },
+  "D13": {
+    "name": "unsupported stat or causal words",
+    "severity": "warn",
+    "evidence": "DS editing guide: accepting 'statistically significant', 'causal' or 'drives' unchecked is an anti-pattern because the writer may not know the test design"
+  },
+  "D14": {
+    "name": "hedges in the answer",
+    "severity": "warn",
+    "evidence": "DS editing guide: about one hedge per claim, none in the TL;DR"
+  }
+}

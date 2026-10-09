@@ -1,0 +1,22 @@
+{
+  "name": "ds-stack",
+  "version": "0.2.0",
+  "description": "Data-science skills that make agent work trustworthy: check scripts and a fixed readout for analyses (ds-mode), and structure, format, concision and reader tests for documents (ds-doc, doc-tighten, cold-read).",
+  "author": {
+    "name": "surahli123"
+  },
+  "homepage": "https://github.com/surahli123/ds-stack",
+  "repository": "https://github.com/surahli123/ds-stack",
+  "license": "MIT",
+  "keywords": [
+    "data-science",
+    "analysis",
+    "experiments",
+    "metrics",
+    "writing",
+    "docs"
+  ],
+  "displayName": "ds-stack",
+  "category": "developer-tools",
+  "skills": "./skills/"
+}

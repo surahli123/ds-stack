@@ -1,0 +1,24 @@
+{
+  "$schema": "https://json.schemastore.org/claude-code-marketplace.json",
+  "name": "ds-stack",
+  "description": "Data-science skills that make agent work trustworthy: check scripts and a fixed readout for analyses (ds-mode), and structure, format, concision and reader tests for documents (ds-doc, doc-tighten, cold-read).",
+  "owner": {
+    "name": "surahli123"
+  },
+  "plugins": [
+    {
+      "name": "ds-stack",
+      "source": "./",
+      "description": "Data-science skills that make agent work trustworthy: check scripts and a fixed readout for analyses (ds-mode), and structure, format, concision and reader tests for documents (ds-doc, doc-tighten, cold-read).",
+      "category": "productivity",
+      "keywords": [
+        "data-science",
+        "analysis",
+        "experiments",
+        "metrics",
+        "writing",
+        "docs"
+      ]
+    }
+  ]
+}

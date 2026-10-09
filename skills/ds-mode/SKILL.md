@@ -14,15 +14,15 @@ You own the number and the inference. A number that passes every check but answe
 
 ## Method
 
-This is a draft. The owner replaces it with their own first moves.
+This is a draft, to be replaced with the analyst's own first moves.
 
-1. **Restate** the question in one sentence and name the decision it feeds. Treat the requester's guess about the cause as one alternative, not the premise.
-2. **Check the data before the question.** Make sure every period you use is complete (`completeness`). After any join, compare row counts before and after (`fanout`).
-3. **Size, then decompose.**
+1. Restate the question in one sentence and name the decision it feeds. Treat the requester's guess about the cause as one alternative, not the premise.
+2. Check the data before the question. Make sure every period you use is complete (`completeness`). After any join, compare row counts before and after (`fanout`).
+3. Size, then decompose.
    - When a rate moved, split the change by the segments whose mix could have shifted (platform, country, traffic source) and run `mix_shift`.
    - For an experiment, run `srm` on the assignment counts before you read any lift.
-4. **Rule each alternative in or out with evidence.** Always consider mix-shift, seasonality and day of week, data completeness, logging or definition changes, and the requester's cause. Label each conclusion measured, inferred or guess.
-5. **Write the readout below** as your final reply.
+4. Rule each alternative in or out with evidence. Always consider mix-shift, seasonality and day of week, data completeness, logging or definition changes, and the requester's cause. Label each conclusion measured, inferred or guess.
+5. Write the readout below as your final reply.
 
 ## Checks
 
@@ -36,8 +36,8 @@ Run each check as `python3 <dir of this SKILL.md>/checks/run.py <check> --json '
 | `srm` | before reading any experiment lift |
 
 - Report every check that applies, with its status. If you skip one, say why.
-- A **failed** check must change the answer, or the readout must show with evidence why it doesn't. If you can't resolve it, the headline is `can't tell`. Say what is missing and what would settle it.
-- A check that **could not run** because of how you called it (wrong spec, wrong grain) gets fixed and rerun.
+- A failed check must change the answer, or the readout must show with evidence why it doesn't. If you can't resolve it, the headline is `can't tell`. Say what is missing and what would settle it.
+- A check that could not run because of how you called it (wrong spec, wrong grain) gets fixed and rerun.
 - A check that could not run because the data can't support it at all (for example, `completeness` with no earlier periods to compare against) does not by itself mean `can't tell`. Answer, report the check as could not run, and put the gap in the caveats. Abstain only if that gap could plausibly change the answer.
 - Copy check output exactly; never edit it.
 
@@ -65,6 +65,8 @@ Headline: <signed number> <unit> [(<interval>)]   or   Headline: can't tell
 - <short list>
 ```
 
-- **measured** means computed from data in this session.
-- **inferred** means it follows from measured facts by reasoning.
-- **guess** means neither.
+- measured means computed from data in this session.
+- inferred means it follows from measured facts by reasoning.
+- guess means neither.
+
+When this readout grows into a document for other people (a readout, memo, plan or handover), write it with the `ds-doc` skill.

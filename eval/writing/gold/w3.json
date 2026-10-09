@@ -1,0 +1,69 @@
+{
+  "type": "handover",
+  "reader_role": "the teammate who picks up this pipeline fix tomorrow",
+  "facts": [
+    {
+      "key": "answer",
+      "name": "daily job failing since the schema rename",
+      "all_of": [
+        [
+          "fail",
+          "broken",
+          "failing",
+          "down"
+        ],
+        [
+          "schema",
+          "client_ts",
+          "client_timestamp",
+          "column",
+          "rename"
+        ]
+      ]
+    },
+    {
+      "key": "decision",
+      "name": "finish load_events.py writer, then rerun Oct 6-8",
+      "all_of": [
+        [
+          "load_events",
+          "writer"
+        ],
+        [
+          "rerun",
+          "re-run",
+          "run again",
+          "reprocess",
+          "backfill"
+        ]
+      ]
+    },
+    {
+      "key": "number",
+      "name": "Oct 6-8 missing",
+      "all_of": [
+        [
+          "oct 6",
+          "october 6",
+          "10-06",
+          "6-8",
+          "6\u20138",
+          "oct 6-8",
+          "6 to 8"
+        ]
+      ]
+    },
+    {
+      "key": "caveat",
+      "name": "blocked on prod bucket access",
+      "all_of": [
+        [
+          "access",
+          "bucket",
+          "dp-4412",
+          "permission"
+        ]
+      ]
+    }
+  ]
+}

@@ -1,0 +1,70 @@
+{
+  "type": "readout",
+  "reader_role": "Dana, the PM who owns the ranker v2 launch and must decide by Thursday whether to roll it back",
+  "facts": [
+    {
+      "key": "answer",
+      "name": "the drop is mix, not v2",
+      "all_of": [
+        [
+          "mix",
+          "mobile",
+          "traffic",
+          "platform share",
+          "composition",
+          "not the ranker",
+          "not v2",
+          "isn't v2",
+          "not caused by"
+        ]
+      ]
+    },
+    {
+      "key": "decision",
+      "name": "don't roll back",
+      "all_of": [
+        [
+          "not roll back",
+          "don't roll back",
+          "do not roll back",
+          "no rollback",
+          "keep v2",
+          "keep ranker",
+          "keep the ranker",
+          "not to roll back",
+          "shouldn't roll back",
+          "should not roll back",
+          "keep it"
+        ]
+      ]
+    },
+    {
+      "key": "number",
+      "name": "-2.1 pp",
+      "all_of": [
+        [
+          "2.1"
+        ]
+      ]
+    },
+    {
+      "key": "caveat",
+      "name": "no holdout, before/after only",
+      "all_of": [
+        [
+          "holdout",
+          "no control",
+          "before and after",
+          "before/after",
+          "before-and-after",
+          "not randomized",
+          "no experiment",
+          "observational",
+          "everyone at once",
+          "all traffic at once",
+          "all at once"
+        ]
+      ]
+    }
+  ]
+}

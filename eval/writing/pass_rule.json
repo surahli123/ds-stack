@@ -1,0 +1,8 @@
+{
+  "_note": "Pre-registered before any writing run. Change only before a new run.",
+  "min_tasks": 10,
+  "runs_per_task": 3,
+  "skim_margin": 0.2,
+  "full_margin": 0.0,
+  "max_lint_fails_full_arm": 0
+}

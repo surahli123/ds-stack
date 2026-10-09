@@ -1,0 +1,20 @@
+{
+  "name": "ds-stack",
+  "interface": {
+    "displayName": "ds-stack"
+  },
+  "plugins": [
+    {
+      "name": "ds-stack",
+      "source": {
+        "source": "local",
+        "path": "./"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Productivity"
+    }
+  ]
+}
