@@ -1,73 +1,74 @@
 # ds-stack
 
-A small, pstack-style plugin for data-science work. It doesn't make agents faster. It makes their numbers more trustworthy: before an agent reports a number, scripts check the mechanics, the agent rules alternative explanations in or out with evidence, and it writes a readout a person can act on.
+A pstack-style plugin for data-science work. It makes an agent's number trustworthy and its document readable. Scripts check the mechanics of an analysis. The agent rules alternative explanations in or out with evidence. Every analysis ends in a fixed readout, and every document goes through a structure, format and reader test.
 
-> If you want to go fast, go deep first. — poteto, [pstack](https://github.com/cursor/plugins/tree/main/pstack)
+> If you want to go fast, go deep first. (poteto, [pstack](https://github.com/cursor/plugins/tree/main/pstack))
 
-This repo is v0 of the plan in the owner's notes (`ds-stack-brainstorm-design-v2-2026-10-08.md`). It holds only the **generic core**. Company facts live in a private overlay outside any repo (see [`overlay.example/`](overlay.example/README.md)).
+This repo holds only the generic core. Company facts live in a private overlay outside any repo (see [`overlay.example/`](overlay.example/README.md)).
 
-## What's in it
+## Skills
 
-| Path | What it is | Portable? |
+| Skill | Fixes | Enforced by |
 |---|---|---|
-| `skills/ds-mode/SKILL.md` | The thin method skill: restate, check the data, size and decompose, rule alternatives in or out, write the readout | Yes: plain SKILL.md |
-| `skills/ds-mode/checks/` | Four check scripts on aggregates, using only the Python standard library: `completeness`, `fanout`, `mix_shift`, `srm` | Yes: Python 3.10+, no dependencies |
-| `skills/ds-mode/checks/registry.json` | The evidence behind each check. Only `mix_shift` is "evidenced" so far; the others are provisional until real incidents back them | n/a |
-| `safety/` | The reference guarded query runner and its startup self-test (the safety envelope) | The contract is portable; adapters live in the overlay |
-| `hooks/`, `.githooks/` | A pre-commit and pre-push hook that blocks terms from the overlay's denylist. It is fail-closed | git + bash |
-| `eval/` | Seeded synthetic fixtures with gold answers, a three-arm runner (`claude -p` in clean profiles), a script grader, and the pre-registered pass rule | Claude Code CLI |
-| `tests/` | Unit tests. Each check must fail on its planted mistake | pytest |
+| `ds-mode` | Analyses: checks the data, decomposes a movement, rules alternatives in or out, writes the readout | Four check scripts that log every run |
+| `ds-doc` | Doc structure and narrative: doc type, the spine (reader, decision, one-sentence answer, takeaways), answer-first drafting, DS claim rules | A step checklist; skipped steps stay visible |
+| `doc-tighten` | Format and concision: answer placement, bold, log drift, tables, clutter, length budget | `doc_lint.py`, 14 rules |
+| `cold-read` | Whether the doc works: a fresh reader must recover the answer and decision from a skim, and every takeaway from a full read | `skim_view.py` and fixed reader prompts |
 
-## Install the skill
+Each lint rule is tied to a count from 119 agent-written docs, or to the DS editing guide in ai-writing-suite (`tools/rules.json`). On that corpus, 76 docs open with method or status before any answer, 64 lean on bold, 27 restate points in new words, and 13 turn into logs. The lint's answer-first rule flags 77 of the 119.
 
-Copy the one folder `skills/ds-mode/` to wherever your tool looks for skills:
+Word-level polish is not duplicated here. If ai-writing-suite is installed, `ds-doc` hands off to its `comms-polish` skill.
 
-| Tool | Location | Status |
+## Install
+
+Install the whole plugin:
+
+```bash
+claude plugin marketplace add surahli123/ds-stack && claude plugin install ds-stack@ds-stack
+codex plugin marketplace add surahli123/ds-stack && codex plugin add ds-stack
+```
+
+For Cursor, the `.cursor-plugin/plugin.json` manifest points at `skills/`. To install a single skill instead, copy its folder from `skills/` into your tool's skills directory. The skills are plain SKILL.md files with standard-library Python tools.
+
+Status by tool: in Claude Code the plugin validates, installs, and exposes all four skills (`ds-stack:ds-mode`, `ds-doc`, `doc-tighten`, `cold-read`), and both evals ran there. Codex and Cursor have not been smoke-tested yet.
+
+## Results so far
+
+Both evals use synthetic tasks, 3 runs per setup, Sonnet as the agent, and clean profiles. Both report `INSUFFICIENT_N`, because the pre-registered rules need more tasks before they give a verdict.
+
+**Analysis eval** (5 cases; `eval/results/`). Plain prompting got all 5 cases right, and so did the checks-only and full setups after a fix. Round 1 found a real bug: the skill told the agent to abstain whenever a check couldn't run, so it withheld a correct answer on a case with only one week of data. The rule now separates a failed check, a check called wrongly, and data that can't support a check.
+
+**Writing eval** (3 tasks: a readout, a memo, a handover; `eval/writing/results/`).
+
+| Metric | Plain prompting | ds-doc |
 |---|---|---|
-| Claude Code | `~/.claude/skills/ds-mode/` or `<project>/.claude/skills/ds-mode/` | tested here in the three-arm eval |
-| Cursor | `~/.cursor/skills/ds-mode/` or `<project>/.cursor/skills/ds-mode/` | not yet smoke-loaded |
-| Codex | your Codex skills folder | not yet smoke-loaded |
+| Fresh reader, skim (answer, decision, number) | 0.96 | 0.89 |
+| Fresh reader, full read (all takeaways) | 0.89 | 0.94 |
+| Docs with no lint fail | 2 of 9 | 9 of 9 |
+| Mean words | 423 | 356 |
+| Cost per run | $0.055 | $0.080 |
 
-Then type `/ds-mode <your question>`, or let the skill's description trigger it.
+- The skills fix format and length. Plain prompting failed the lint on 7 of 9 docs, mostly on bold and bold-label bullets. The ds-doc docs are 16% shorter.
+- No comprehension gain is shown. Readers already understood the plain docs. The one skim gap is a grading artifact: the reader prompt asked a handover for its conclusion rather than its current state. That prompt is now fixed.
+- Agents skipped the in-loop cold read even when told to, but said so in their reply.
 
-## How a run works
-
-1. The agent restates the question and names the decision it feeds.
-2. It computes aggregates, then runs the checks that apply, for example `python3 checks/run.py mix_shift --json '{...}'`. Each check prints one JSON line and appends it to `.ds-checks.log`, so a grader reads what actually ran instead of trusting the agent's report.
-3. A failed check must change the answer, or the readout must show why it doesn't. A check that applies but can't run means the headline is `can't tell`.
-4. The final reply is the fixed readout: Answer (with a `Headline:` line), what it means for the decision, the alternatives ruled in or out with measured, inferred or guess labels, the checks run, and the caveats.
+What the evals show: short tasks written from clean notes are too easy, both for analysis and for writing. The corpus failures came from long, multi-session docs written mid-work. The next eval should rewrite real bloated docs and measure a fresh reader before and after, using cases built from real incidents.
 
 ## Develop
 
 ```bash
-make test        # unit tests
-make selftest    # safety envelope
-make hooks       # enable the denylist hook (needs DS_OVERLAY_DIR or DS_DENYLIST)
-make fixtures    # regenerate fixtures and gold (deterministic)
-make eval        # 5 fixtures x 3 arms x 3 runs via claude -p (uses model credits)
-make grade RUN=eval/results/<dir>
+make test                               # unit tests
+make lint-doc DOC=doc.md TYPE=readout   # lint one document
+make selftest                           # safety envelope
+make hooks                              # denylist hook (needs DS_OVERLAY_DIR or DS_DENYLIST)
+make eval && make grade RUN=eval/results/<dir>                       # analysis eval
+make writing-eval && make writing-grade RUN=eval/writing/results/<dir>   # writing eval
 ```
 
-## Honest status
+Transcripts stay local because they are bulky. A regrade without them fails closed as unverifiable.
 
-**Smoke eval, 2026-10-08.** 5 synthetic cases, 3 setups, 3 runs each, Sonnet, clean profiles. Summaries are in `eval/results/*/summary.md`. Transcripts stay local because they are bulky; a regrade without them fails closed as unverifiable.
+## Other caveats
 
-| Round | Baseline | Checks only | Full ds-mode |
-|---|---|---|---|
-| 1 | 5/5 cases (15/15 runs) | 5/5 (14/15) | 4/5 (13/15) |
-| 2, after the abstain-rule fix | same runs as round 1 | same runs as round 1 | 5/5 (15/15) |
-
-What it shows:
-
-- **The harness works end to end.** Checks run and are logged in every checks-only and full run, the grader reads the logs, and no run was contaminated or unparseable.
-- **These cases are too easy.** Plain prompting got every case right, so its miss rate is 0%, far below the 30–40% band the calibration rule asks for. They can't tell the setups apart. Real incidents from the wrong-number archive should be harder.
-- **v0 had a real bug, and round 1 found it.** In round 1, a rule told the agent to say "can't tell" whenever a check couldn't run. On the join case, `completeness` had no history to compare against, so the agent withheld a correct 55.0% in 2 of 3 runs. The rule now separates three cases: a failed check, a check called wrongly, and data that can't support a check. Round 2 was rerun on the same cases, so it confirms the fix but is not evidence that the fix generalizes.
-- **The readout format may be doing most of the work.** Every setup got the format, including its "alternatives" and "checks run" prompts. A setup without the format would measure how much the format alone adds.
-- The full setup costs about 40% more per run than the baseline.
-
-Other caveats:
-
-- Three of the four checks are **provisional** until real incidents back them (plan Stage 1).
-- The method in `SKILL.md` is a **draft**. The owner replaces it with their own first five moves (plan Stage 2).
-- The skill has not yet been smoke-loaded in Cursor or Codex.
-- Below 15 held-out cases, the pre-registered rule refuses to give a verdict (`INSUFFICIENT_N`).
+- Three of the four analysis checks are provisional until real incidents back them.
+- The method in `ds-mode` is a draft, to be replaced with the analyst's own first five moves.
+- The lint thresholds come from one person's corpus. Expect to tune them after a few weeks of use.

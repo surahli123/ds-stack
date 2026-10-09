@@ -1,0 +1,3 @@
+1. **Answer:** Don't roll back v2. The overall CTR drop comes from a shift in traffic toward mobile, since CTR held flat within each platform.
+2. **Decision:** Decide no rollback by Thursday. Confirm the cause of the mobile traffic jump with Growth, but that doesn't block the decision.
+3. **Number:** Overall CTR fell 2.1 pp (30.4% to 28.3%).

@@ -1,0 +1,3 @@
+1. **Answer:** The daily load_events.py job has failed since Oct 6 because upstream renamed `client_ts` to `client_timestamp`. The fix is in progress on `fix/event-schema-mapping`, and events_daily is missing Oct 6-8.
+2. **Decision:** Finish updating load_events.py to use the schema mapping, then test against prod data (blocked on prod access) and rerun for Oct 6-8.
+3. **Number:** 3 days (Oct 6-8) of missing data in events_daily.

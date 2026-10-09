@@ -1,0 +1,3 @@
+1. **Answer:** Finish the writer in `load_events.py` on `fix/event-schema-mapping` so it reads the column mapping from `config/event_schema.yaml`. Then test on prod data, merge, and rerun the job.
+2. **Decision:** Do the writer change first. The prod test is listed as blocked, but the text doesn't say why, so that needs checking before the test can run.
+3. **Number:** 3 days (Oct 6, 7 and 8) of missing data in `events_daily`.

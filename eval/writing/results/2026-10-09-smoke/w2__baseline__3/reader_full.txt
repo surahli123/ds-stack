@@ -1,0 +1,11 @@
+1. **Answer:** The memo recommends Option C, a hybrid. An LLM judge labels non-EU queries, humans label all EU queries, and humans label a 15% calibration sample to catch judge drift. It also recommends cancelling the vendor renewal by Oct 20.
+
+2. **Decision:** I would approve Option C conditionally. Before the Oct 20 cancellation, the author needs to confirm the calibration sample size and the EU traffic share, since the $18k estimate depends on both. Approval should also require the 0.65 kappa fallback rule and a caveat that judge scores are for ranker comparison only, not absolute quality reporting.
+
+3. **Number:** $18k per quarter (USD), against about $60k per quarter for human-only labeling. That is a saving of about $42k per quarter.
+
+4. **Caveat:** The judge's drift. In the pilot, kappa fell from 0.74 to 0.61 after a provider model update. The monthly calibration check is the only safeguard, and the memo's 0.65 fallback threshold is the trigger for it. Kappa 0.74 also supports ranker comparison, not absolute quality numbers for leadership.
+
+5. **Lost:** I had to reread the calibration sample size. The memo says 15% and "about 900 labels per month," but 15% of 6,000 quarterly labels is 900 per quarter, or about 300 per month. The memo's own open-items section flags this. The EU traffic share is also unclear, so I can't check the $18k figure.
+
+6. **Question:** Is the monthly calibration sample about 300 labels (900 per quarter) or 900 per month, and what share of queries is EU? The $18k estimate depends on both.

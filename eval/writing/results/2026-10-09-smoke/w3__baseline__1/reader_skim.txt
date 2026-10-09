@@ -1,0 +1,3 @@
+1. **Answer:** The daily job fails with `KeyError 'client_ts'` because upstream renamed the column to `client_timestamp` on Oct 6. The fix is half done on `fix/event-schema-mapping`, and it's blocked on prod bucket access (DP-4412).
+2. **Decision:** Get DP-4412 resolved so the fix can be finished, then complete the writer side of `load_events.py`. Don't fix this by aliasing the column in SQL, since the document says that doesn't work.
+3. **Number:** 3 days (Oct 6–8) of missing `events_daily` data.

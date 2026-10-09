@@ -1,0 +1,10 @@
+{
+  "task": "w3",
+  "arm": "baseline",
+  "run": 2,
+  "model": "sonnet",
+  "exit": 0,
+  "seconds": 11.7,
+  "cost_usd": 0.04924320000000001,
+  "turns": 3
+}

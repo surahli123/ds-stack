@@ -1,0 +1,3 @@
+1. **Answer:** Don't roll back ranker v2. The 2.1 pp CTR drop (30.4% to 28.3%) comes from a shift toward mobile, which has lower CTR; CTR within each platform did not change.
+2. **Decision:** Don't roll back by Thursday. If you need to know whether v2 itself is responsible, run a 5% holdout for two weeks, since a rollback would be another before/after comparison.
+3. **Number:** 2.1 percentage points, the overall CTR drop. The mix shift explains it, so the decision rests on it being fully explained by mobile growing from 40% to 55% of searches.

@@ -1,0 +1,3 @@
+1. **Answer:** Don't roll back ranker v2. Within each platform CTR didn't move, and the overall drop comes from mobile's share of searches rising from 40% to 55%, where CTR is lower.
+2. **Decision:** Keep v2 and don't roll back by Thursday. Growth should confirm what drove the mobile jump, and if you want certainty about v2 itself, run a 5% holdout for two weeks.
+3. **Number:** Overall CTR fell 2.1 pp (30.4% to 28.3%).

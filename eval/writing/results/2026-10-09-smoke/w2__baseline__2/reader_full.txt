@@ -1,0 +1,11 @@
+1. **Answer:** The document recommends option C, a hybrid. An LLM judge labels non-EU queries, humans label all EU queries, and humans label a 15% calibration sample to detect drift. It estimates about $18k per quarter, versus about $60k for the current vendor.
+
+2. **Decision:** Don't sign off yet. Approve only after the budget arithmetic, the fallback cost, and the EU volume are confirmed. Cancelling the vendor renewal before Oct 31 removes the fallback, so confirm that the vendor can be re-engaged on short notice first.
+
+3. **Number:** The most important number is the **$18k per quarter** budget, in US dollars. The memo's own figures conflict on the calibration sample: the notes say about 900 labels per month, but 15% of 6,000 per quarter is about 900 per quarter, or about 300 per month.
+
+4. **Caveat:** The biggest risk is **judge drift**. The pilot's kappa fell from 0.74 to 0.61 after a provider model update. The mitigation is a monthly kappa check on the human sample, with a fallback to humans if kappa falls below 0.65. The memo also says the judge is good enough for comparing rankers but not for reporting absolute quality to leadership.
+
+5. **Lost:** I had to reread the budget section. The ~900 per month figure does not match the 15% of 6,000 arithmetic. The memo does not say what share of queries is EU, what a fallback month costs, or whether the $18k covers fallback. The memo also does not say whether a vendor can be re-engaged quickly.
+
+6. **Question:** For the author: does the $18k per quarter assume a 300 or 900 label-per-month calibration sample, and does it include the human cost of any fallback month?

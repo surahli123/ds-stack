@@ -1,0 +1,6 @@
+1. **Answer:** Don't roll back v2. The 2.1 pp CTR drop (30.4% to 28.3%) came from mobile's share of searches rising from 40% to 55%. CTR within each platform didn't change.
+2. **Decision:** Don't roll back by Thursday. Ask Growth to confirm what drove the mobile traffic jump. The document recommends a 5% holdout for two weeks if you need certainty about v2 itself.
+3. **Number:** The within-platform effect is -0.0001 pp and the mix effect is -2.10 pp, so the drop is essentially all mix. The headline figure is the 2.1 pp overall CTR drop.
+4. **Caveat:** The comparison is before/after only, with no holdout, because v2 went to 100% at once. A v2 effect under about 0.3 pp would be invisible. Long clicks and reformulation rate were not properly checked, so a v2 regression there would be missed.
+5. **Lost:** The long-clicks sentence ("looked flat in a quick check that was not done properly") left me unsure whether that metric was analyzed at all. The document also calls mobile's lower rate a conversion difference, but every figure it gives is CTR. The mobile cause is also explicitly unconfirmed ("a lead, not a finding (guess)").
+6. **Question:** Did mobile's share already start rising before v2 reached 100% on Sep 28, or did it begin only after? If it started with v2's rollout, the "mix, not v2" conclusion gets much weaker.

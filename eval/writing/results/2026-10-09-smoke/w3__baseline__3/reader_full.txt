@@ -1,0 +1,11 @@
+1. **Answer:** The fix for the `client_ts` → `client_timestamp` rename is half done. The reader side and mapping are updated, but the writer side still uses the old name. Testing against prod is blocked on access ticket DP-4412. Oct 6–8 need a rerun after the fix merges.
+
+2. **Decision:** Check DP-4412 first, since it was still pending on Oct 8 and today is Oct 9. If it's still open, chase data platform, because testing depends on it. Meanwhile, finish the writer side so it uses the mapping, and don't merge until it's tested on prod data. After the merge, rerun Oct 6, 7 and 8, then tell Sam.
+
+3. **Number:** 3 days (Oct 6, 7 and 8) of missing data in `events_daily`. This is the number that matters, because the CTR dashboard shows a fake drop for those days.
+
+4. **Caveat:** The fix hasn't been tested against prod data, and the writer side is unfinished. Merging before both are done risks shipping a broken fix. The document also doesn't say whether the Oct 9 run has failed too.
+
+5. **Lost:** The document doesn't say what the writer side does or why it matters, so I couldn't tell how much work is left there. It's also unclear whether Sam was told about the backfill finishing or only about the fake drop.
+
+6. **Question:** What does the writer side write, and does merging depend on finishing it? Also, did the Oct 9 daily run fail the same way?

@@ -1,0 +1,3 @@
+1. **Answer:** Don't roll back v2. The document attributes the CTR drop to a shift toward mobile traffic, not to worse platform performance (desktop and mobile CTR are flat).
+2. **Decision:** Hold off on the rollback and find out why mobile share jumped from 40% to 55%, since that is the open item that would confirm the explanation.
+3. **Number:** Overall CTR fell 2.1 percentage points (30.4% to 28.3%).

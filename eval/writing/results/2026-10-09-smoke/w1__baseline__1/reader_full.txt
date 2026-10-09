@@ -1,0 +1,11 @@
+1. **Answer:** Don't roll back v2 on this evidence. The overall CTR drop (30.4% to 28.3%) comes from mobile's rising share of searches (40% to 55%), since CTR within each platform did not move.
+
+2. **Decision:** Keep v2 and don't roll back by Thursday. Next steps are to get Growth to confirm whether the mobile jump was temporary (the app store feature is unconfirmed), and to check long clicks and reformulation rate properly. If you need certainty about v2 itself, run a 5% holdout for two weeks.
+
+3. **Number:** The within-platform effect, -0.0001 pp. It is effectively zero, which is what supports the conclusion. The mix effect of -2.10 pp accounts for the whole drop.
+
+4. **Caveat:** CTR is the only metric checked. A ranker can hurt result quality without moving CTR, and long clicks and reformulation were not properly analyzed. The analysis is also before/after only, with no holdout, so it cannot separate v2 from other changes that week.
+
+5. **Lost:** Nowhere. The headline figures use the table's CTR definition, not the dashboard's, which is about 0.5 pp different. The document says to use the dashboard definition when quoting numbers elsewhere, so I'd check which one a Thursday discussion will use.
+
+6. **Question:** What were long-click and reformulation rates for week 1 versus week 2, calculated properly?

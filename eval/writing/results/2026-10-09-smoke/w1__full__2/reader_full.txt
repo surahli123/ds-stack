@@ -1,0 +1,11 @@
+1. **Answer:** Don't roll back ranker v2. The overall CTR drop (30.4% to 28.3%) comes from a shift in platform mix toward mobile, which has lower CTR. CTR within each platform did not change.
+
+2. **Decision:** Keep v2 and don't roll back by Thursday. Ask Growth what caused mobile's share to rise from 40% to 55% (the document suggests an app store feature, but it's unconfirmed). If Dana wants certainty about v2 itself, run a 5% holdout for two weeks.
+
+3. **Number:** The within-platform effect, -0.0001 percentage points, is the number that matters most. It shows v2 didn't move CTR inside either platform. The mix effect of -2.10 pp accounts for the whole drop.
+
+4. **Caveat:** There's no holdout, because v2 went to everyone at once. The before-and-after comparison can't rule out a v2 effect smaller than about 0.3 pp. Long clicks and reformulation rate were not properly checked.
+
+5. **Lost:** Two things were unclear. The long-clicks check is described as "looked flat in a quick check that was not done properly," with no numbers, so I couldn't tell what was checked. The 0.3 pp detection threshold is stated without a derivation: unclear. The arithmetic checks out (0.6×36 + 0.4×22 = 30.4; 0.45×36 + 0.55×22 = 28.3), so I didn't have to reread anything else.
+
+6. **Question:** Can you share the long-click and reformulation numbers, before and after v2, since the one check you ran was not done properly?

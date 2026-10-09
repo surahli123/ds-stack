@@ -1,0 +1,11 @@
+1. **Answer:** The document recommends option C, a hybrid. An LLM judge labels non-EU queries, and humans label all EU queries plus a monthly 15% calibration sample. It costs about $18k per quarter, down from about $60k, and turnaround for non-EU queries drops from 3 weeks to 2 days.
+
+2. **Decision:** Approve or reject option C and its budget by Oct 20. If approved, cancel the vendor renewal or renegotiate it to the reduced scope before Oct 31. Before cancelling, confirm that legal clears non-EU markets and that human capacity exists for EU labels and a fallback month.
+
+3. **Number:** About $18k per quarter, which is the budget being approved. The quality figure that matters most is Cohen's kappa of 0.74 (pilot, 1,200 labels), against a 0.65 fallback threshold.
+
+4. **Caveat:** Judge drift. The pilot's kappa fell to 0.61 after a provider model update, and drift is only checked monthly. The cost of a fallback month is not estimated, and the 900-label calibration sample has no computed precision.
+
+5. **Lost:** The budget doesn't reconcile with the volume. Today's rate is about $10 per label ($60k / 6,000). The 900 calibration labels are described as monthly, but 6,000 labels is per quarter. At $10 each, 900 labels a month is about $27k a quarter, which already exceeds the $18k budget before any EU labels. The 900 figure may be per quarter, but the document doesn't say. The 0.71 rater agreement is also a figure quoted from a meeting, not a measured result.
+
+6. **Question:** Is the 900-label calibration sample per month or per quarter, and does the $18k include the human labels for EU queries and the calibration sample at today's roughly $10 per label?

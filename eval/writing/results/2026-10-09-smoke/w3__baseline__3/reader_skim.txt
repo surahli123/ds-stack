@@ -1,0 +1,3 @@
+1. **Answer:** The job load_events.py fails because upstream renamed client_ts to client_timestamp on Oct 6. The fix is half done: the mapping is updated, but the writer side still uses client_ts.
+2. **Decision:** First check whether DP-4412 is resolved. Then finish the writer side on fix/event-schema-mapping, merge it, and rerun Oct 6-8. Don't alias the column in SQL.
+3. **Number:** 3 days (Oct 6-8) of events_daily data are missing, in days.

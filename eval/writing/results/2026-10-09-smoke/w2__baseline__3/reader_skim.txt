@@ -1,0 +1,3 @@
+1. Answer: The memo recommends approving Option C (hybrid labeling) at about $18k/quarter and cancelling the vendor renewal by Oct 20.
+2. Decision: Approve Option C and the renewal cancellation, but first confirm the calibration sample size, which the memo gives as both 15% and about 900 labels/month.
+3. Number: About $18k per quarter (USD), down from about $60k per quarter with human raters.

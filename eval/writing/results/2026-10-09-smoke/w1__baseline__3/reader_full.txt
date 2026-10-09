@@ -1,0 +1,11 @@
+1. **Answer:** Don't roll back ranker v2. The 2.1 pp CTR drop (30.4% to 28.3%) comes almost entirely from mobile's share of searches rising from 40% to 55%. Mobile CTR is lower than desktop, and within each platform CTR was flat.
+
+2. **Decision:** Don't roll back by Thursday. Ask Growth to confirm what drove the mobile traffic increase. If you want certainty about v2 itself, run a two-week 5% holdout. The long-click and reformulation checks are optional and low cost.
+
+3. **Number:** The within-platform CTR change of about 0.0001 pp matters most, because it's what supports "v2 didn't make results worse." The blended 2.1 pp drop is the figure at stake. I checked the blend arithmetic: 0.6×36% + 0.4×22% = 30.4%, and 0.45×36% + 0.55×22% = 28.3%, so the mix explanation is internally consistent.
+
+4. **Caveat:** There was no holdout. v2 went to everyone at once, so this is a before/after comparison, and any effect under roughly 0.3 pp would be invisible. The document also only examined CTR; long clicks were checked informally and reformulation rate wasn't checked.
+
+5. **Lost:** Nowhere in the argument. I was unsure which CTR definition the headline figures use. The dashboard and the underlying table differ by about 0.5 pp in level, and the document doesn't say which basis the 30.4% and 28.3% are on.
+
+6. **Question:** What caused mobile's share of searches to rise from 40% to 55%, and is that rise independent of v2? That's the one open link in the explanation, and it determines whether the mix shift can be treated as unrelated to the launch.

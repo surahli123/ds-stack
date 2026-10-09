@@ -1,0 +1,3 @@
+1. **Answer:** The job fails with `KeyError: 'client_ts'` because upstream renamed the column to `client_timestamp` on Oct 6. The fix is to finish the writer side on `fix/event-schema-mapping` so it reads the mapping from `config/event_schema.yaml`.
+2. **Decision:** Finish the writer change, but first restore prod-bucket access, which expired Oct 8, before testing on prod data. The Next step text cuts off after "and", so confirm the remaining merge steps with the author.
+3. **Number:** 3 days. `events_daily` has no data for Oct 6, 7 and 8.

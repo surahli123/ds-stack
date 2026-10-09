@@ -1,0 +1,10 @@
+{
+  "task": "w2",
+  "arm": "full",
+  "run": 3,
+  "model": "sonnet",
+  "exit": 0,
+  "seconds": 17.3,
+  "cost_usd": 0.0818514,
+  "turns": 6
+}

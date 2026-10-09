@@ -1,0 +1,11 @@
+1. **Answer:** Finish the `client_timestamp` fix on `fix/event-schema-mapping`. Make the writer in `load_events.py` read the column mapping from `config/event_schema.yaml` instead of the hardcoded `client_ts`. Then test on prod data, merge, rerun Oct 6-8, and tell Sam so the CTR dashboard stops showing a false drop.
+
+2. **Decision:** Do step 1 now: change the writer to use the YAML mapping. Don't retry SQL aliasing, since the raw parquet files carry the new name and the reader takes a fixed list. Step 2 is blocked on DP-4412, the renewal of the expired `prod-events` access, so the fix can't be verified on prod until that lands.
+
+3. **Number:** 3 days (Oct 6, 7 and 8) of missing `events_daily` data.
+
+4. **Caveat:** The fix can't be tested against prod data until access is renewed under DP-4412. Access expired Oct 8, and today is Oct 9. Until the rerun, the CTR dashboard shows a false drop.
+
+5. **Lost:** Nowhere in particular. Two points were unclear: whether the reader-side changes are already committed on the branch, and whether the Oct 6-8 rerun itself needs prod access. The document doesn't say.
+
+6. **Question:** Does the rerun for Oct 6-8 need `prod-events` access, and if it does, can it run before DP-4412 is resolved?

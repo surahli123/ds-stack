@@ -1,0 +1,11 @@
+1. **Answer:** Approve option C, the hybrid. An LLM judge labels every query it is allowed to. Humans label a monthly calibration sample and all EU queries. The document estimates about $18k/quarter, down from about $60k/quarter.
+
+2. **Decision:** Approve conditionally, before Oct 20. The vendor cancellation depends on this sign-off. First, confirm whether the calibration sample is 900 labels per quarter or per month. If it is per month, the $18k estimate is probably too low and needs recosting before I sign.
+
+3. **Number:** $18k per quarter. This is the estimate the decision rests on, and it is not a quote. The sample size behind it is inconsistent: 15% of 6,000 quarterly labels is 900 per quarter, not per month.
+
+4. **Caveat:** Judge drift. The pilot's kappa fell from 0.74 to 0.61 after a provider model update, and the proposed fallback threshold is 0.65. The fallback cost is not estimated, and the agreement and kappa figures come from one 1,200-label pilot. EU queries stay on human raters with the slower turnaround, and the 2-day figure covers non-EU only.
+
+5. **Lost:** I had to reread the sample-size line. "15% calibration sample" and "about 900 labels" per month do not match 6,000 labels per quarter. The EU share of volume is also unclear, so I can't tell how much human labeling option C really needs.
+
+6. **Question:** Is the calibration sample 900 labels per quarter or per month, and what share of the 6,000 quarterly queries is EU?

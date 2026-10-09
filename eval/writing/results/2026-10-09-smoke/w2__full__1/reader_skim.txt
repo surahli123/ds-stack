@@ -1,0 +1,3 @@
+1. **Answer:** The document recommends approving option C, an LLM judge with human calibration, which cuts label cost from about $60k to about $18k per quarter and cuts non-EU turnaround from 3 weeks to 2 days.
+2. **Decision:** Approve or reject option C and its budget by Oct 20. The recommendation is to approve, because the vendor renewal must be cancelled before Oct 31 and cancelling is only safe after approval.
+3. **Number:** $18k per quarter (USD/quarter), the budget being approved.

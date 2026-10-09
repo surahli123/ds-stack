@@ -1,0 +1,13 @@
+1. **Answer:** Upstream renamed `client_ts` to `client_timestamp` on Oct 6, so `load_events.py` fails with `KeyError`. The fix is to finish the writer side on `fix/event-schema-mapping` so it reads the mapping from `config/event_schema.yaml`. Then test on prod, merge, and rerun for Oct 6–8. Don't alias the column in SQL.
+
+2. **Decision:** First, check whether you have current access to the `prod-events` bucket. The author's access expired Oct 8, and renewal is pending in DP-4412. If you don't have access, you can finish the code but can't test on prod. When the rerun lands, tell Sam, since the CTR dashboard shows a false drop until then.
+
+3. **Number:** 3 days (Oct 6, 7, 8) missing from `events_daily`.
+
+4. **Caveat:** Prod testing depends on access that is currently blocked. Until the rerun, the dashboard shows a fake drop. The document doesn't say how the rerun will be checked beyond the September row-count match.
+
+5. **Lost:** Slightly. The handover says the reader side is updated and the writer still uses the old name, but the job fails on `client_ts`, and the "Next step" section then talks about the writer. The reader/writer split isn't defined clearly.
+
+6. **Question:** Does the Oct 6–8 rerun need your own prod access, or can someone with current access run it, and what is the status of DP-4412?
+
+I haven't checked the branch or the access. This directory isn't a git repository, so I can't confirm the branch state from here.

@@ -1,0 +1,11 @@
+1. **Answer:** The memo recommends option C: an LLM judge labels non-EU queries, humans label all EU queries, and humans label a 15% monthly calibration sample to check the judge for drift. It estimates about $18k per quarter (down from about $60k) and 2-day turnaround for non-EU queries.
+
+2. **Decision:** Approve or reject option C by Oct 20, since the vendor renewal cancellation before Oct 31 depends on it. Before approving, ask for the EU query share and its cost breakdown, because the $18k estimate doesn't show how EU volume enters it.
+
+3. **Number:** About $18k per quarter (versus about $60k today).
+
+4. **Caveat:** Judge drift. In the pilot, judge-human kappa fell from 0.74 to 0.61 after a provider model update. The 0.65 monthly threshold that triggers human labels was set in the meeting and is not derived from data. The 0.74 figure also comes from a single 1,200-label pilot.
+
+5. **Lost:** I had to reread the cost section. The $18k figure is not broken down, and the notes don't say how the EU share affects it or the EU turnaround.
+
+6. **Question:** What share of the roughly 6,000 quarterly labels are EU queries, and how does that share feed into the $18k estimate?

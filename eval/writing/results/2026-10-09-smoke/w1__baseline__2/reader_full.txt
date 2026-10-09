@@ -1,0 +1,11 @@
+1. **Answer:** Don't roll back v2. The overall CTR drop (30.4% → 28.3%) comes from more traffic moving to mobile, which has lower CTR. CTR within each platform didn't change.
+
+2. **Decision:** Dana should decide not to roll back v2. The doc also suggests a follow-up decision on whether to run a two-week 5% holdout. Growth needs to confirm what caused the mobile jump, and Analysis needs to check long clicks and reformulation by platform.
+
+3. **Number:** The within-platform effect of **-0.0001 pp** matters most. It shows that ranking quality didn't move CTR, and it's the basis for not rolling back. The -2.10 pp mix effect explains the drop.
+
+4. **Caveat:** The biggest named risk is that the cause of the mobile jump is unconfirmed. If v2 caused it, the conclusion changes. The analysis is also before/after only, with no holdout, so effects under about 0.3 pp can't be seen. It checks CTR only, so a quality problem could hide behind flat CTR.
+
+5. **Lost:** Mostly nowhere. The metric-definition caveat was less clear to me: the doc says the dashboard figures differ by about 0.5 pp and that the drop is the same under both, but it doesn't restate the numbers on the dashboard basis. The doc doesn't say what the dashboard's exact figures are, so that's **unclear**.
+
+6. **Question:** Did v2 itself cause the rise in mobile share from 40% to 55%, or did an external app store feature do it?

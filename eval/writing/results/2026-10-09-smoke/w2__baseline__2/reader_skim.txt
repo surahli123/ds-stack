@@ -1,0 +1,3 @@
+1. **Answer:** The memo recommends approving option C (hybrid) at about $18k per quarter, replacing the current ~$60k per quarter vendor spend for a saving of about $42k per quarter.
+2. **Decision:** Approve option C by Oct 20, 2026, then cancel the vendor renewal before Oct 31.
+3. **Number:** $18k per quarter (budget). The memo's "15% sample is ~900 labels per month" open item doesn't reconcile with the ~6,000 labels per quarter need, so check it before relying on the budget.

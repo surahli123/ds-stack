@@ -1,0 +1,11 @@
+1. **Answer:** Don't roll back ranker v2. Overall CTR fell 2.1 pp (30.4% to 28.3%), but CTR within each platform did not move. The drop comes from mobile's share of searches rising from 40% to 55%, and mobile has lower CTR.
+
+2. **Decision:** No rollback is needed by Thursday on this evidence. Before Thursday, check long clicks and reformulation rate if time allows, since those are where a quality problem would show. Ask Growth to confirm the cause of the mobile jump. If you need certainty about v2's effect, run a 5% holdout for two weeks.
+
+3. **Number:** Within-platform CTR change of -0.0001 pp (unit: percentage points). This is the number that supports "no rollback." Its limit is that the data can't detect a v2 effect smaller than about 0.3 pp.
+
+4. **Caveat:** No holdout. v2 launched to everyone at once, so this is a before/after comparison. It shows the drop coincided with the traffic shift, but it does not show v2 had no effect.
+
+5. **Lost:** Two spots were unclear. "Long clicks looked flat in a quick check that was not done properly" doesn't say whether long clicks are actually flat. The Answer section also says the decision is "inferred from the measurements below," so the recommendation is a judgment rather than a direct result. The CTR definition difference (dashboard vs. `search_daily`) is noted as not changing the drop, but the document doesn't say whether the 0.5 pp level gap matters for any threshold.
+
+6. **Question:** Could ranker v2 itself have pushed more searches to mobile, or was the week's app store feature the only cause of the mobile jump? If v2 drove the mix shift, the mix explanation doesn't clear it.

@@ -1,0 +1,646 @@
+{
+  "verdict": {
+    "n_tasks": 3,
+    "min_required": 10,
+    "rule_outcome_if_n_were_enough": "FAIL",
+    "verdict": "INSUFFICIENT_N (smoke test, not a decision)"
+  },
+  "per_arm": {
+    "baseline": {
+      "runs": 9,
+      "docs_written": 9,
+      "skim_score": 0.963,
+      "full_score": 0.889,
+      "docs_with_no_lint_fail": 2,
+      "mean_lint_fails": 0.78,
+      "mean_words": 423,
+      "contaminated": 0,
+      "cost_usd": 0.49
+    },
+    "full": {
+      "runs": 9,
+      "docs_written": 9,
+      "skim_score": 0.889,
+      "full_score": 0.944,
+      "docs_with_no_lint_fail": 9,
+      "mean_lint_fails": 0.0,
+      "mean_words": 356,
+      "contaminated": 0,
+      "cost_usd": 0.72
+    }
+  },
+  "by_task": {
+    "w1": {
+      "baseline": {
+        "skim": 1.0,
+        "full": 1.0,
+        "words": [
+          403,
+          504,
+          411
+        ],
+        "lint_fails": [
+          1,
+          1,
+          1
+        ]
+      },
+      "full": {
+        "skim": 1.0,
+        "full": 1.0,
+        "words": [
+          352,
+          374,
+          309
+        ],
+        "lint_fails": [
+          0,
+          0,
+          0
+        ]
+      }
+    },
+    "w2": {
+      "baseline": {
+        "skim": 1.0,
+        "full": 0.92,
+        "words": [
+          497,
+          554,
+          492
+        ],
+        "lint_fails": [
+          1,
+          1,
+          1
+        ]
+      },
+      "full": {
+        "skim": 1.0,
+        "full": 1.0,
+        "words": [
+          551,
+          498,
+          466
+        ],
+        "lint_fails": [
+          0,
+          0,
+          0
+        ]
+      }
+    },
+    "w3": {
+      "baseline": {
+        "skim": 0.89,
+        "full": 0.75,
+        "words": [
+          282,
+          339,
+          325
+        ],
+        "lint_fails": [
+          0,
+          0,
+          1
+        ]
+      },
+      "full": {
+        "skim": 0.67,
+        "full": 0.83,
+        "words": [
+          221,
+          217,
+          217
+        ],
+        "lint_fails": [
+          0,
+          0,
+          0
+        ]
+      }
+    }
+  },
+  "runs": [
+    {
+      "task": "w1",
+      "arm": "baseline",
+      "run": 1,
+      "model": "sonnet",
+      "exit": 0,
+      "seconds": 17.9,
+      "cost_usd": 0.0581016,
+      "turns": 3,
+      "doc": true,
+      "skim": 1.0,
+      "full": 1.0,
+      "lint_fails": 1,
+      "words": 403,
+      "contaminated": null,
+      "lint_rules": [
+        "D2",
+        "D3"
+      ],
+      "skim_got": [
+        "the drop is mix, not v2",
+        "don't roll back",
+        "-2.1 pp"
+      ],
+      "full_got": [
+        "the drop is mix, not v2",
+        "don't roll back",
+        "-2.1 pp",
+        "no holdout, before/after only"
+      ]
+    },
+    {
+      "task": "w1",
+      "arm": "baseline",
+      "run": 2,
+      "model": "sonnet",
+      "exit": 0,
+      "seconds": 17.8,
+      "cost_usd": 0.05819219999999999,
+      "turns": 3,
+      "doc": true,
+      "skim": 1.0,
+      "full": 1.0,
+      "lint_fails": 1,
+      "words": 504,
+      "contaminated": null,
+      "lint_rules": [
+        "D2",
+        "D3"
+      ],
+      "skim_got": [
+        "the drop is mix, not v2",
+        "don't roll back",
+        "-2.1 pp"
+      ],
+      "full_got": [
+        "the drop is mix, not v2",
+        "don't roll back",
+        "-2.1 pp",
+        "no holdout, before/after only"
+      ]
+    },
+    {
+      "task": "w1",
+      "arm": "baseline",
+      "run": 3,
+      "model": "sonnet",
+      "exit": 0,
+      "seconds": 16.5,
+      "cost_usd": 0.0557194,
+      "turns": 3,
+      "doc": true,
+      "skim": 1.0,
+      "full": 1.0,
+      "lint_fails": 1,
+      "words": 411,
+      "contaminated": null,
+      "lint_rules": [
+        "D2",
+        "D3"
+      ],
+      "skim_got": [
+        "the drop is mix, not v2",
+        "don't roll back",
+        "-2.1 pp"
+      ],
+      "full_got": [
+        "the drop is mix, not v2",
+        "don't roll back",
+        "-2.1 pp",
+        "no holdout, before/after only"
+      ]
+    },
+    {
+      "task": "w1",
+      "arm": "full",
+      "run": 1,
+      "model": "sonnet",
+      "exit": 0,
+      "seconds": 20.2,
+      "cost_usd": 0.0829134,
+      "turns": 6,
+      "doc": true,
+      "skim": 1.0,
+      "full": 1.0,
+      "lint_fails": 0,
+      "words": 352,
+      "contaminated": null,
+      "lint_rules": [],
+      "skim_got": [
+        "the drop is mix, not v2",
+        "don't roll back",
+        "-2.1 pp"
+      ],
+      "full_got": [
+        "the drop is mix, not v2",
+        "don't roll back",
+        "-2.1 pp",
+        "no holdout, before/after only"
+      ]
+    },
+    {
+      "task": "w1",
+      "arm": "full",
+      "run": 2,
+      "model": "sonnet",
+      "exit": 0,
+      "seconds": 21.4,
+      "cost_usd": 0.09170200000000002,
+      "turns": 7,
+      "doc": true,
+      "skim": 1.0,
+      "full": 1.0,
+      "lint_fails": 0,
+      "words": 374,
+      "contaminated": null,
+      "lint_rules": [
+        "D13"
+      ],
+      "skim_got": [
+        "the drop is mix, not v2",
+        "don't roll back",
+        "-2.1 pp"
+      ],
+      "full_got": [
+        "the drop is mix, not v2",
+        "don't roll back",
+        "-2.1 pp",
+        "no holdout, before/after only"
+      ]
+    },
+    {
+      "task": "w1",
+      "arm": "full",
+      "run": 3,
+      "model": "sonnet",
+      "exit": 0,
+      "seconds": 18.5,
+      "cost_usd": 0.08028640000000001,
+      "turns": 6,
+      "doc": true,
+      "skim": 1.0,
+      "full": 1.0,
+      "lint_fails": 0,
+      "words": 309,
+      "contaminated": null,
+      "lint_rules": [],
+      "skim_got": [
+        "the drop is mix, not v2",
+        "don't roll back",
+        "-2.1 pp"
+      ],
+      "full_got": [
+        "the drop is mix, not v2",
+        "don't roll back",
+        "-2.1 pp",
+        "no holdout, before/after only"
+      ]
+    },
+    {
+      "task": "w2",
+      "arm": "baseline",
+      "run": 1,
+      "model": "sonnet",
+      "exit": 0,
+      "seconds": 14.3,
+      "cost_usd": 0.0571034,
+      "turns": 3,
+      "doc": true,
+      "skim": 1.0,
+      "full": 1.0,
+      "lint_fails": 1,
+      "words": 497,
+      "contaminated": null,
+      "lint_rules": [
+        "D13",
+        "D2",
+        "D3"
+      ],
+      "skim_got": [
+        "recommend the hybrid (option C)",
+        "approve the budget by Oct 20",
+        "about $18k per quarter"
+      ],
+      "full_got": [
+        "recommend the hybrid (option C)",
+        "approve the budget by Oct 20",
+        "about $18k per quarter",
+        "judge drift"
+      ]
+    },
+    {
+      "task": "w2",
+      "arm": "baseline",
+      "run": 2,
+      "model": "sonnet",
+      "exit": 0,
+      "seconds": 15.8,
+      "cost_usd": 0.058790800000000004,
+      "turns": 3,
+      "doc": true,
+      "skim": 1.0,
+      "full": 0.75,
+      "lint_fails": 1,
+      "words": 554,
+      "contaminated": null,
+      "lint_rules": [
+        "D13",
+        "D2",
+        "D3"
+      ],
+      "skim_got": [
+        "recommend the hybrid (option C)",
+        "approve the budget by Oct 20",
+        "about $18k per quarter"
+      ],
+      "full_got": [
+        "recommend the hybrid (option C)",
+        "about $18k per quarter",
+        "judge drift"
+      ]
+    },
+    {
+      "task": "w2",
+      "arm": "baseline",
+      "run": 3,
+      "model": "sonnet",
+      "exit": 0,
+      "seconds": 14.8,
+      "cost_usd": 0.0574972,
+      "turns": 3,
+      "doc": true,
+      "skim": 1.0,
+      "full": 1.0,
+      "lint_fails": 1,
+      "words": 492,
+      "contaminated": null,
+      "lint_rules": [
+        "D2"
+      ],
+      "skim_got": [
+        "recommend the hybrid (option C)",
+        "approve the budget by Oct 20",
+        "about $18k per quarter"
+      ],
+      "full_got": [
+        "recommend the hybrid (option C)",
+        "approve the budget by Oct 20",
+        "about $18k per quarter",
+        "judge drift"
+      ]
+    },
+    {
+      "task": "w2",
+      "arm": "full",
+      "run": 1,
+      "model": "sonnet",
+      "exit": 0,
+      "seconds": 22.5,
+      "cost_usd": 0.0895214,
+      "turns": 6,
+      "doc": true,
+      "skim": 1.0,
+      "full": 1.0,
+      "lint_fails": 0,
+      "words": 551,
+      "contaminated": null,
+      "lint_rules": [
+        "D3"
+      ],
+      "skim_got": [
+        "recommend the hybrid (option C)",
+        "approve the budget by Oct 20",
+        "about $18k per quarter"
+      ],
+      "full_got": [
+        "recommend the hybrid (option C)",
+        "approve the budget by Oct 20",
+        "about $18k per quarter",
+        "judge drift"
+      ]
+    },
+    {
+      "task": "w2",
+      "arm": "full",
+      "run": 2,
+      "model": "sonnet",
+      "exit": 0,
+      "seconds": 18.0,
+      "cost_usd": 0.08611320000000001,
+      "turns": 6,
+      "doc": true,
+      "skim": 1.0,
+      "full": 1.0,
+      "lint_fails": 0,
+      "words": 498,
+      "contaminated": null,
+      "lint_rules": [],
+      "skim_got": [
+        "recommend the hybrid (option C)",
+        "approve the budget by Oct 20",
+        "about $18k per quarter"
+      ],
+      "full_got": [
+        "recommend the hybrid (option C)",
+        "approve the budget by Oct 20",
+        "about $18k per quarter",
+        "judge drift"
+      ]
+    },
+    {
+      "task": "w2",
+      "arm": "full",
+      "run": 3,
+      "model": "sonnet",
+      "exit": 0,
+      "seconds": 17.3,
+      "cost_usd": 0.0818514,
+      "turns": 6,
+      "doc": true,
+      "skim": 1.0,
+      "full": 1.0,
+      "lint_fails": 0,
+      "words": 466,
+      "contaminated": null,
+      "lint_rules": [],
+      "skim_got": [
+        "recommend the hybrid (option C)",
+        "approve the budget by Oct 20",
+        "about $18k per quarter"
+      ],
+      "full_got": [
+        "recommend the hybrid (option C)",
+        "approve the budget by Oct 20",
+        "about $18k per quarter",
+        "judge drift"
+      ]
+    },
+    {
+      "task": "w3",
+      "arm": "baseline",
+      "run": 1,
+      "model": "sonnet",
+      "exit": 0,
+      "seconds": 9.8,
+      "cost_usd": 0.04775580000000001,
+      "turns": 3,
+      "doc": true,
+      "skim": 0.667,
+      "full": 1.0,
+      "lint_fails": 0,
+      "words": 282,
+      "contaminated": null,
+      "lint_rules": [],
+      "skim_got": [
+        "daily job failing since the schema rename",
+        "Oct 6-8 missing"
+      ],
+      "full_got": [
+        "daily job failing since the schema rename",
+        "finish load_events.py writer, then rerun Oct 6-8",
+        "Oct 6-8 missing",
+        "blocked on prod bucket access"
+      ]
+    },
+    {
+      "task": "w3",
+      "arm": "baseline",
+      "run": 2,
+      "model": "sonnet",
+      "exit": 0,
+      "seconds": 11.7,
+      "cost_usd": 0.04924320000000001,
+      "turns": 3,
+      "doc": true,
+      "skim": 1.0,
+      "full": 0.75,
+      "lint_fails": 0,
+      "words": 339,
+      "contaminated": null,
+      "lint_rules": [],
+      "skim_got": [
+        "daily job failing since the schema rename",
+        "finish load_events.py writer, then rerun Oct 6-8",
+        "Oct 6-8 missing"
+      ],
+      "full_got": [
+        "finish load_events.py writer, then rerun Oct 6-8",
+        "Oct 6-8 missing",
+        "blocked on prod bucket access"
+      ]
+    },
+    {
+      "task": "w3",
+      "arm": "baseline",
+      "run": 3,
+      "model": "sonnet",
+      "exit": 0,
+      "seconds": 10.4,
+      "cost_usd": 0.0497256,
+      "turns": 3,
+      "doc": true,
+      "skim": 1.0,
+      "full": 0.5,
+      "lint_fails": 1,
+      "words": 325,
+      "contaminated": null,
+      "lint_rules": [
+        "D2",
+        "D3"
+      ],
+      "skim_got": [
+        "daily job failing since the schema rename",
+        "finish load_events.py writer, then rerun Oct 6-8",
+        "Oct 6-8 missing"
+      ],
+      "full_got": [
+        "finish load_events.py writer, then rerun Oct 6-8",
+        "Oct 6-8 missing"
+      ]
+    },
+    {
+      "task": "w3",
+      "arm": "full",
+      "run": 1,
+      "model": "sonnet",
+      "exit": 0,
+      "seconds": 13.3,
+      "cost_usd": 0.0696416,
+      "turns": 6,
+      "doc": true,
+      "skim": 0.667,
+      "full": 0.75,
+      "lint_fails": 0,
+      "words": 221,
+      "contaminated": null,
+      "lint_rules": [],
+      "skim_got": [
+        "finish load_events.py writer, then rerun Oct 6-8",
+        "Oct 6-8 missing"
+      ],
+      "full_got": [
+        "finish load_events.py writer, then rerun Oct 6-8",
+        "Oct 6-8 missing",
+        "blocked on prod bucket access"
+      ]
+    },
+    {
+      "task": "w3",
+      "arm": "full",
+      "run": 2,
+      "model": "sonnet",
+      "exit": 0,
+      "seconds": 12.3,
+      "cost_usd": 0.069979,
+      "turns": 6,
+      "doc": true,
+      "skim": 0.667,
+      "full": 0.75,
+      "lint_fails": 0,
+      "words": 217,
+      "contaminated": null,
+      "lint_rules": [],
+      "skim_got": [
+        "finish load_events.py writer, then rerun Oct 6-8",
+        "Oct 6-8 missing"
+      ],
+      "full_got": [
+        "finish load_events.py writer, then rerun Oct 6-8",
+        "Oct 6-8 missing",
+        "blocked on prod bucket access"
+      ]
+    },
+    {
+      "task": "w3",
+      "arm": "full",
+      "run": 3,
+      "model": "sonnet",
+      "exit": 0,
+      "seconds": 11.3,
+      "cost_usd": 0.06891560000000001,
+      "turns": 6,
+      "doc": true,
+      "skim": 0.667,
+      "full": 1.0,
+      "lint_fails": 0,
+      "words": 217,
+      "contaminated": null,
+      "lint_rules": [],
+      "skim_got": [
+        "daily job failing since the schema rename",
+        "Oct 6-8 missing"
+      ],
+      "full_got": [
+        "daily job failing since the schema rename",
+        "finish load_events.py writer, then rerun Oct 6-8",
+        "Oct 6-8 missing",
+        "blocked on prod bucket access"
+      ]
+    }
+  ]
+}

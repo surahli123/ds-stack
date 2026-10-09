@@ -1,0 +1,3 @@
+1. **Answer:** Don't roll back ranker v2. The document attributes the CTR drop almost entirely to a shift in traffic toward mobile, not to how v2 ranks. It can't fully rule out a v2 effect because there was no holdout.
+2. **Decision:** Keep v2 live and have Growth confirm what drove the mobile traffic increase, such as an app store feature.
+3. **Number:** Overall search CTR fell 2.1 percentage points, from 30.4% to 28.3%.

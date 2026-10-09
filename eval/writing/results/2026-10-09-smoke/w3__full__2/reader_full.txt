@@ -1,0 +1,11 @@
+1. **Answer:** Finish the writer in `load_events.py` on `fix/event-schema-mapping` so it reads column names from `config/event_schema.yaml` instead of the hardcoded list. Then test on prod data, merge, and rerun the job for Oct 6, 7 and 8. Don't alias the column in SQL, because the raw parquet files already use the new name.
+
+2. **Decision:** Finish the writer change now, since it doesn't depend on the blocker. Then either test on prod with my own access if I have it, or wait for DP-4412 to be resolved. After the rerun, tell Sam, the CTR dashboard owner, so the fake drop for Oct 6–8 gets cleared.
+
+3. **Number:** 3 days (Oct 6, 7 and 8) of missing `events_daily` data. The job has been failing since Oct 6.
+
+4. **Caveat:** The prod test is blocked because my access to the prod-events bucket expired, and renewal is pending in DP-4412. Until the rerun, the CTR dashboard shows a false drop for those three days.
+
+5. **Lost:** Mostly nowhere. The one thing that confused me is that the document says the reader side is done, but also that the reader's fixed list still has the old name. It's unclear which of those is the current state. The reader/writer terminology is also loose: I took "writer" to mean the code that writes to `events_daily`, but the doc doesn't define it.
+
+6. **Question:** Once the writer reads from the YAML, is the fixed schema list in the reader still needed, or can it be removed? The doc doesn't say.
