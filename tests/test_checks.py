@@ -10,7 +10,7 @@ import completeness
 import fanout
 import mix_shift
 import srm
-from _common import COULD_NOT_RUN, FAIL, PASS
+from _common import COULD_NOT_RUN, FAIL, FLAG, PASS
 from conftest import ROOT
 
 CHECKS_DIR = os.path.join(ROOT, "skills", "ds-mode", "checks")
@@ -23,9 +23,9 @@ def seg(name, nb, kb, na, ka):
 
 # mix_shift
 
-def test_mix_shift_fails_when_mix_explains_the_move():
-    result = mix_shift.run({"segments": [seg("desktop", 600, 216, 450, 162), seg("mobile", 400, 88, 550, 121)]})
-    assert result.status == FAIL
+def test_mix_shift_flags_when_mix_explains_the_move():
+    result = mix_shift.run({"segments": [seg("desktop", 60000, 21600, 45000, 16200), seg("mobile", 40000, 8800, 55000, 12100)]})
+    assert result.status == FLAG
     assert abs(result.details["rate_effect_pp"]) < 1e-9
     assert result.details["delta_pp"] == result.details["mix_effect_pp"]
 
@@ -44,8 +44,8 @@ def test_mix_shift_effects_sum_to_the_overall_change():
 
 def test_mix_shift_flags_offsetting_effects():
     # Overall CTR flat, but only because a mix shift hides a real within-segment drop (Simpson).
-    result = mix_shift.run({"segments": [seg("desktop", 500, 180, 700, 238), seg("mobile", 500, 110, 300, 52)]})
-    assert result.status == FAIL
+    result = mix_shift.run({"segments": [seg("desktop", 50000, 18000, 70000, 23800), seg("mobile", 50000, 11000, 30000, 5200)]})
+    assert result.status == FLAG
 
 
 def test_mix_shift_does_not_flag_noise_on_a_flat_metric():
@@ -68,7 +68,7 @@ def test_mix_shift_catches_the_planted_f1_mistake_from_the_warehouse():
     for platform, before, n, k in rows:
         parts.setdefault(platform, {"name": platform})["before" if before else "after"] = {"n": n, "k": k}
     result = mix_shift.run({"segments": list(parts.values())})
-    assert result.status == FAIL
+    assert result.status == FLAG
     assert abs(result.details["rate_effect_pp"]) < 0.05
 
 
@@ -150,30 +150,30 @@ def test_srm_catches_the_planted_f5_mistake_from_the_warehouse():
 # completeness
 
 def series(*rows):
-    return [{"period": f"2026-10-0{i + 1}", "rows": r} for i, r in enumerate(rows)]
+    return [{"period": f"p{i + 1:02d}", "rows": r} for i, r in enumerate(rows)]
 
 
 def test_completeness_fails_on_a_partial_period():
-    assert completeness.run({"series": series(24, 24, 24, 24, 10), "target": "2026-10-05"}).status == FAIL
+    assert completeness.run({"series": series(24, 24, 24, 24, 10), "target": "p05"}).status == FAIL
 
 
 def test_completeness_fails_on_a_missing_period():
-    assert completeness.run({"series": series(24, 24, 24, 24), "target": "2026-10-05"}).status == FAIL
+    assert completeness.run({"series": series(24, 24, 24, 24), "target": "p05"}).status == FAIL
 
 
 def test_completeness_flags_double_loads_only_when_asked():
-    spec = {"series": series(24, 24, 24, 24, 48), "target": "2026-10-05"}
+    spec = {"series": series(24, 24, 24, 24, 48), "target": "p05"}
     assert completeness.run(spec).status == PASS
     assert completeness.run({**spec, "max_ratio": 1.5}).status == FAIL
 
 
 def test_completeness_cannot_run_without_enough_history():
-    assert completeness.run({"series": series(24, 24), "target": "2026-10-03"}).status == COULD_NOT_RUN
-    assert completeness.run({"series": series(24, 24, 24), "target": "2026-10-03"}).status == COULD_NOT_RUN
+    assert completeness.run({"series": series(24, 24), "target": "p03"}).status == COULD_NOT_RUN
+    assert completeness.run({"series": series(24, 24, 24), "target": "p03"}).status == COULD_NOT_RUN
 
 
 def test_completeness_rejects_duplicate_periods():
-    assert completeness.run({"series": series(24, 24, 24, 24) + series(1)[:1], "target": "2026-10-04"}).status == COULD_NOT_RUN
+    assert completeness.run({"series": series(24, 24, 24, 24) + series(1)[:1], "target": "p04"}).status == COULD_NOT_RUN
 
 
 def test_completeness_catches_the_planted_f4_mistake_from_the_warehouse():
@@ -215,3 +215,55 @@ def test_registry_covers_every_check_and_enforces_the_evidence_rule():
         assert entry["status"] in ("evidenced", "provisional")
         if entry["status"] == "evidenced":
             assert entry["incidents"] >= 2 and entry["evidence"], name
+
+
+# Regressions from the real-case review.
+
+def test_mix_shift_stays_quiet_on_noise():
+    import random
+    rng = random.Random(7)
+    flags = 0
+    for _ in range(200):
+        segs = []
+        for name, p in (("a", 0.30), ("b", 0.20)):
+            nb, na = int(1000 * rng.uniform(0.9, 1.1)), int(1000 * rng.uniform(0.9, 1.1))
+            segs.append(seg(name, nb, sum(rng.random() < p for _ in range(nb)), na, sum(rng.random() < p for _ in range(na))))
+        flags += mix_shift.run({"segments": segs}).status == FLAG
+    assert flags / 200 < 0.05
+
+
+def test_mix_shift_catches_berkeley_1973_and_reports_intervals():
+    ucb = {"A": (825, 512, 108, 89), "B": (560, 353, 25, 17), "C": (325, 120, 593, 202),
+           "D": (417, 138, 375, 131), "E": (191, 53, 393, 94), "F": (373, 22, 341, 24)}
+    result = mix_shift.run({"segments": [seg(d, *v) for d, v in ucb.items()]})
+    assert result.status == FLAG
+    lo, hi = result.details["rate_effect_ci95_pp"]
+    assert lo < result.details["rate_effect_pp"] < hi and lo > 0
+
+
+def test_mix_shift_segment_terms_are_readable():
+    kidney = [seg("small", 87, 81, 270, 234), seg("large", 263, 192, 80, 55)]
+    result = mix_shift.run({"segments": kidney})
+    terms = [s["mix_effect_pp"] for s in result.details["segments"]]
+    assert result.status == FLAG and all(0 < t < 10 for t in terms)
+    assert abs(sum(terms) - result.details["mix_effect_pp"]) < 1e-3
+
+
+def test_completeness_compares_the_same_weekday():
+    from datetime import date, timedelta
+    start = date(2026, 9, 7)
+    rows = [{"period": (start + timedelta(days=i)).isoformat(), "rows": 60 if (start + timedelta(days=i)).weekday() >= 5 else 100}
+            for i in range(27)]
+    saturday = next(r for r in reversed(rows) if date.fromisoformat(r["period"]).weekday() == 5)
+    assert completeness.run({"series": rows, "target": saturday["period"]}).status == PASS
+    assert completeness.run({"series": rows, "target": saturday["period"], "same_weekday": False}).status == FAIL
+
+
+def test_completeness_sorts_dates_as_dates_and_fails_a_15_percent_gap():
+    rows = [{"period": f"2026-09-{d:02d}", "rows": 100} for d in range(1, 30)] + [{"period": "2026-09-30", "rows": 85}]
+    assert completeness.run({"series": rows, "target": "2026-09-30"}).status == FAIL
+
+
+def test_fanout_catches_duplicates_hidden_by_drops():
+    spec = {"left_rows": 1000, "joined_rows": 1000, "join": "inner", "matched_left_rows": 950}
+    assert fanout.run(spec).status == FAIL

@@ -48,7 +48,8 @@ Job: let the next person (or agent) continue without rereading the history. Budg
 1. Current state: One or two sentences: what works, what doesn't, what is mid-flight.
 2. Next step: The single next action, with the command or file to start from.
 3. Blockers and open questions.
-4. Where things are: Paths, branches and links: only the ones the next person will open.
+4. Tried and dropped: each approach that didn't work, with the one-line reason, so the next person doesn't retry it. Write "None" if nothing was dropped.
+5. Where things are: Paths, branches and links: only the ones the next person will open.
 
 How handovers go wrong: they turn into logs, with dated DONE lines, struck-through items and a status line the body contradicts (6 of 30 handovers). They also fill up with undefined ID codes and session artifacts.
 

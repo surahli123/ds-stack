@@ -219,3 +219,39 @@ def test_a_missing_transcript_counts_as_contaminated(tmp_path):
     run_dir = tmp_path / "f5__full__1"
     run_dir.mkdir()
     assert grade.contamination(str(run_dir)).startswith("no transcript")
+
+
+CURRENT_FORMAT = """## Answer
+Headline: -2.1 pp (95% CI -2.6 to -1.6)
+CTR fell 2.1 pp; about 70% of it is mobile's growing share.
+
+## What it means for the rollback decision
+The interval excludes the 0.5 pp the rollback needs, so don't roll back.
+
+## Why we believe it
+- Alternatives considered:
+  - Mix-shift: ruled in by mix_shift [measured]
+- Checks run:
+  - mix_shift: flag mix-dominant: overall change -2.10 pp
+  - completeness: could not run no earlier periods
+
+## Caveats, and what would change the answer
+- None material.
+
+## Provenance
+- Metric: CTR, from metrics.json
+- Data: search_daily, through 2026-10-07
+- Queries and checks: .ds-checks.log
+"""
+
+
+def test_the_skill_readout_format_parses_with_flag_and_provenance():
+    readout = parse(CURRENT_FORMAT)
+    assert readout.ok and readout.value == -2.1 and readout.interval == (-2.6, -1.6)
+    assert readout.checks == {"mix_shift": "flag", "completeness": "could_not_run"}
+    assert "provenance" in readout.sections and len(readout.alternatives) == 1
+
+
+def test_no_interval_with_a_reason_keeps_the_number():
+    readout = parse("## Answer\nHeadline: +3.4% (no interval: a single total from the dashboard)\n")
+    assert readout.ok and readout.value == 3.4 and readout.interval is None

@@ -5,6 +5,10 @@ for a join meant to be many-to-one or one-to-one, when the left side has
 duplicate keys for a one-to-one join, when the join added rows, or
 when a left join lost rows. An inner join that drops rows passes with the drop
 reported, unless it exceeds `max_drop_fraction`.
+
+Row counts alone miss a fan-out that dropped rows cancel out. Pass
+`matched_left_rows` (left rows with at least one match) to catch it: a
+many-to-one or one-to-one join can't return more rows than that.
 """
 
 from _common import COULD_NOT_RUN, FAIL, PASS, Result, SpecError, require
@@ -34,6 +38,11 @@ def run(spec):
         left_keys = spec.get("left_distinct_keys")
         if left_keys is not None:
             left_keys = require(spec, "left_distinct_keys", int)
+        matched = spec.get("matched_left_rows")
+        if matched is not None:
+            matched = require(spec, "matched_left_rows", int)
+            if matched > left_rows:
+                raise SpecError("'matched_left_rows' can't exceed 'left_rows'")
         max_drop = spec.get("max_drop_fraction")
     except (SpecError, TypeError, ValueError) as err:
         return Result(NAME, COULD_NOT_RUN, f"could not run: {err}")
@@ -53,6 +62,12 @@ def run(spec):
         problems.append(f"left side has {left_rows - left_keys} duplicate-key rows for a one-to-one join")
     if joined_rows > left_rows:
         problems.append(f"join added {joined_rows - left_rows} rows (fan-out)")
+    elif matched is not None:
+        expected = matched if join == "inner" else left_rows
+        details["matched_left_rows"] = matched
+        if joined_rows > expected:
+            problems.append(f"join returned {joined_rows} rows for {expected} expected; "
+                            "a fan-out is hidden by dropped rows")
     dropped = left_rows - joined_rows if joined_rows < left_rows else 0
     if dropped:
         fraction = dropped / left_rows

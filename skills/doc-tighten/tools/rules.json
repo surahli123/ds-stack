@@ -4,7 +4,7 @@
     "name": "answer first",
     "severity": "fail",
     "evidence": "76/119 docs open with method, sources or status; 67/119 have no summary label in the first 12 lines; 9/11 plans have none",
-    "note": "Not applied to type 'reference' (lookup pages have no single answer)."
+    "note": "Not applied to type 'reference'. Passes a labelled answer, or an H1 or first paragraph that states a claim or recommendation (a verb like keep/approve/failing or a quantity in pp or %)."
   },
   "D2": {
     "name": "bold density",
@@ -32,9 +32,10 @@
   "D6": {
     "name": "same point restated",
     "severity": "warn",
-    "threshold": 0.45,
+    "threshold": 0.4,
     "min_section_words": 40,
-    "evidence": "27/119 docs have two sections whose content words overlap by at least 45% (reports 10/35)"
+    "evidence": "27/119 docs have two sections whose content words overlap by at least 45% (reports 10/35)",
+    "note": "Also flags headings that announce a repeat (restated, recap, again). Threshold lowered from 0.45 after a real 'restated' section scored 0.44."
   },
   "D7": {
     "name": "process stands in for results",
@@ -77,7 +78,8 @@
       "handover": 500,
       "other": 1200,
       "reference": 1200
-    }
+    },
+    "note": "Appendix words count at half weight, so renaming a section 'Appendix' doesn't evade the budget."
   },
   "D13": {
     "name": "unsupported stat or causal words",

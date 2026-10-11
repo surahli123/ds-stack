@@ -4,7 +4,8 @@ description: >-
   Use before sending or handing off any document, to prove it works for its
   reader: a fresh reader with no context gets the doc and must recover the
   answer, the decision and the key takeaways, first from a skim and then from
-  a full read. The doc is fixed until they do. Also runs on /cold-read.
+  a full read, graded by a script against the spine. The doc is fixed until
+  they do. Also runs on /cold-read.
 ---
 
 # cold-read
@@ -13,40 +14,25 @@ A doc passes when its reader gets the point, not when its author likes it. This 
 
 ## 1. Write the answer key first
 
-You need the spine from `ds-doc`:
-- the reader's role
-- the answer in one sentence
-- the decision
-- the three takeaways
+The key is `spine.json` from `ds-doc`: the reader's role, the answer in one sentence, the decision and three takeaways. If you have none, write it now from what you meant to say. Do not derive it from the doc, or the test can't fail.
 
-If you have no spine, write the key now from what you meant to say. Do not derive it from the doc, or the test can't fail.
-
-## 2. Build the skim view
+## 2. Run it
 
 ```
-python3 <dir of this SKILL.md>/tools/skim_view.py <doc.md>
+python3 <dir of this SKILL.md>/tools/cold_read.py doc.md --spine spine.json
 ```
 
-This prints the first 120 words, then every heading with the first sentence of its section. That is roughly what a busy reader sees.
-
-## 3. Ask a fresh reader
-
-Use a reader that hasn't seen your work: a new subagent, or another model run in a clean context. A different model family is better, because it doesn't share your blind spots. Give it the reader's role and the text, and nothing else: not the spine, not the source notes, not this skill.
-
-Use the prompts in `references/reader-prompts.md`:
-
-1. **Skim pass.** The skim view only. Ask for the answer, the decision, and the number that matters most.
-2. **Full pass.** The whole doc. Ask the same questions, then where they had to reread or got lost, and what they would ask the author.
-
-## 4. Grade against the key
-
-Mark each item got, partly or missed.
+The script builds the skim view (the first 120 words, then each heading with its section's first sentence). It sends the skim and the full doc to a fresh reader, using `claude -p` with no tools and none of your context, with the prompts in `references/reader-prompts.md`. Then it grades the answers against the spine. The script does the grading, not you. Items that share too few words with the key go to a separate grader call. It prints one line per item and a verdict, for example "cold-read: skim 2/2, full 3/3 - pass", and writes `cold_read.json` next to the doc.
 
 | Pass | Passes when |
 |---|---|
 | Skim | The reader states the answer and the decision |
-| Full | The reader gets all three takeaways, and every "got lost" spot is fixed or answered in the doc |
+| Full | The reader recovers all three takeaways |
 
-When a reader misses something, fix the doc, not the reader. Usually the fix is moving the answer up, renaming a heading to state its claim, or cutting the section that buried the point. Rerun after each fix. After three failed rounds, stop and report what the reader keeps missing; the spine itself may be wrong.
+Without the `claude` CLI (for example in Cursor or Codex), run with `--prompts-only`. Send each prompt to a fresh subagent with nothing else, save the replies as `{"skim": "...", "full": "..."}`, and grade with `--replies replies.json`. A reader from a different model family than the author is better, because it doesn't share the author's blind spots.
 
-Report the result in one line: "cold-read: skim 2/2, full 3/3".
+## 3. Fix the doc, not the reader
+
+When the reader misses something, the fix is usually one of these: move the answer up, rename a heading so it states its claim, or cut the section that buried the point. Rerun after each fix. Read the reader's "got lost" line even on a pass; it finds problems the grading can't, like two baselines with no word on which one counts. After three failed rounds, stop and report what the reader keeps missing. The spine itself may be wrong.
+
+A fresh model reader is a screen, not a certificate. For a high-stakes doc, also ask one real reader to state the decision after reading only the first screen.

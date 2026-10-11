@@ -12,11 +12,12 @@ import time
 from dataclasses import asdict, dataclass, field
 
 PASS = "pass"
+FLAG = "flag"
 FAIL = "fail"
 COULD_NOT_RUN = "could_not_run"
 
 LOG_NAME = ".ds-checks.log"
-EXIT_CODES = {PASS: 0, FAIL: 1, COULD_NOT_RUN: 2}
+EXIT_CODES = {PASS: 0, FLAG: 1, FAIL: 1, COULD_NOT_RUN: 2}
 
 
 @dataclass

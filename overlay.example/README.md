@@ -21,7 +21,7 @@ git config core.hooksPath .githooks                 # in this repo: enables the 
 
 **denylist.txt.** One term per line; `#` starts a comment. Use it for project codenames, internal metric and table names, and team names. Matching is case-insensitive substring. The pre-commit and pre-push hooks block any added line that contains a term. With no denylist configured the hooks block everything (fail-closed). A machine that never holds work material can opt out explicitly with `DS_DENYLIST=none`.
 
-**metrics.json.** Each metric needs a name, numerator, denominator, filters and an owner. The agent reads this file so that "CTR" means the dashboard's CTR and not one it invented. Keep it as definitions only, with no data.
+**metrics.json.** Each metric needs a name, numerator, denominator, filters, grain, source and an owner. Add `verified` (when and how the definition was reconciled with the dashboard) and `pitfalls` (traps a newcomer falls into). The agent reads this file so that "CTR" means the dashboard's CTR and not one it invented. Write each entry yourself and verify it against data. Don't let an agent draft it, because a wrong definition here becomes every later answer. Keep it as definitions only, with no data.
 
 **runner.json.** Settings for the guarded query runner. A warehouse adapter must keep the same contract as `safety/guarded_query.py`:
 - writes only to tables that start with `scratch_prefix`, plus a per-run suffix

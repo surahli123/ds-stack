@@ -2,6 +2,7 @@
 """Lint a markdown doc for the structure, format and length failures agents repeat.
 
     python3 doc_lint.py doc.md --type readout|memo|plan|handover|reference|other [--json]
+    python3 doc_lint.py doc.md --spine spine.json     # type comes from the spine
 
 Every rule traces to a failure counted in 119 agent-written docs (see
 rules.json next to this file). Rules marked "fail" exit 1; "warn" rules are
@@ -28,18 +29,28 @@ STOPWORDS = set("""a an the and or but if then else of to in on at by for with f
 this that these those it its it's we you your our they their them he she his her not no yes can could should would will
 may might must do does did done have has had into than so such also just more most less least very about over under
 up down out off all any each every some other which who whom whose what when where why how there here i me my""".split())
-STAT_WORDS = re.compile(r"\b(statistically significant|significant(?:ly)?|causal(?:ly)?|caused|causes|drives|driven by|prove[sd]? that|definitively)\b", re.I)
-STAT_SUPPORT = re.compile(r"\b(p\s*[<=>]|p-value|confidence interval|\bci\b|95%|a/b|experiment|randomi[sz]ed|holdout|control group|test)\b", re.I)
+STAT_WORDS = re.compile(r"\b(statistically significant|significant(?:ly)?|causal(?:ly)?|caused|drives|driven by|prove[sd]? that|definitively)\b", re.I)
+STAT_SUPPORT = re.compile(r"(\bp\s*[<=>]|\bp-value|confidence interval|\b95% ci\b|\bci\b|\ba/b test|\bab test|\bt-test|\bz-test|chi-square|"
+                          r"\bexperiment|\brandomi[sz]ed|\bholdout|\bcontrol group|difference-in-differences|\bregression discontinuity)", re.I)
+ANSWER_LIKE = re.compile(r"\b(keep|recommend\w*|should|don't|do not|approve\w*|roll(?:ing)? back|ship|stop|choose|cancel|launch|kill|"
+                         r"adopt|retire|merge|blocked|failing|fails|broken|is live|shipped|works|done|decided)\b|"
+                         r"[-+\u2212]?\d+(?:\.\d+)?\s*(?:pp\b|%|percentage points?\b|x\b)", re.I)
+METHOD_START = re.compile(r"^\W*(data sources?|method(?:ology)?|background|context|approach|scope|this (?:doc|document|note|page)|"
+                          r"we (?:pulled|ran|looked|started)|i (?:ran|pulled|looked|started))\b", re.I)
+RESTATED_HEADING = re.compile(r"\b(restated|recap|again|in summary|to summari[sz]e)\b", re.I)
+COMMON_CODES = re.compile(r"^(?:Q[1-4]|H[1-6]|P[0-4]|V\d+)$")
 HEDGES = re.compile(r"\b(might|may|could|possibly|likely|suggests?|appears?|seems?|perhaps|probably)\b", re.I)
 THINKING = re.compile(r"\b(on second thought|hmm|wait,|to be honest|honest caveat|worth noting|it'?s worth|earned its keep|"
                       r"as (?:mentioned|noted) (?:above|earlier)|needless to say)\b|,\s*restated\b", re.I)
 FIRST_PERSON_PROCESS = re.compile(r"\bI (ran|did|checked|read|looked|found|wrote|used|tried|spent|went|started|noticed|verified)\b")
 METADATA = re.compile(r"^\s*(?:[-*]\s*)?\**(status|owner|date|author|workflow|session|tokens?|model|branch|commit|created|updated|"
                       r"last updated|sources?|grounding|reviewers?)\**\s*:", re.I)
-AGENT_ARTIFACTS = re.compile(r"\bwf_[0-9a-f]{4,}|/private/tmp/|(?<![\w/])/tmp/\S+|\b\d+(?:\.\d+)?[MK] tokens\b|\bsession_[0-9A-Za-z]{8,}")
+AGENT_ARTIFACTS = re.compile(r"\bwf_[0-9a-f]{4,}|/private/tmp/|/tmp/(?:claude-\d+|ds-runs|tmp\.[A-Za-z0-9]+|[0-9a-f]{8,})\S*|"
+                             r"\b\d+(?:\.\d+)?[MK] tokens\b|\bsession_[0-9A-Za-z]{8,}")
+VERIFIED_BADGE = re.compile(r"\(verified\)|\u2713\s*verified|\u2705\s*verified|\bverified:\s|\*\*verified\b|\bverified\s*\u2713", re.I)
 ID_CODES = re.compile(r"(?<![\w/.-])[A-Z]{1,2}#?\d{1,3}(?:[-–]\d{1,3})?(?![\w%])")
-LOG_LINE = re.compile(r"\b(DONE|RESOLVED|FIXED|UPDATED?|SHIPPED|CLOSED)\b[^\n]{0,30}\d{4}-\d{2}-\d{2}|~~[^~]+~~")
-LOG_HEADING = re.compile(r"(execution record|changelog|change log|activity log|history|update log|progress log)", re.I)
+LOG_LINE = re.compile(r"\b(DONE|RESOLVED|FIXED|UPDATED?|SHIPPED|CLOSED|EXECUTED|RECONCILED|COMPLETED|MERGED)\b[^\n]{0,30}\d{4}-\d{2}-\d{2}|~~[^~]+~~")
+LOG_HEADING = re.compile(r"(execution record|changelog|change log|activity log|history|update log|progress log|what (?:actually )?happened)", re.I)
 
 
 @dataclass
@@ -73,6 +84,10 @@ class Doc:
                          if i not in self.code for m in [re.match(r"^(#{1,6})\s+(.*)$", line)] if m]
         appendix = next((i for i, _, t in self.headings if re.match(r"(appendix|annex)\b", t, re.I)), len(self.lines))
         self.body_end = appendix
+
+    def appendix_word_count(self):
+        return sum(len(self.words(line)) for i, line in enumerate(self.lines[self.body_end:], self.body_end)
+                   if i not in self.code and not re.match(r"^#{1,6}\s", line))
 
     def prose_lines(self, end=None):
         end = self.body_end if end is None else end
@@ -110,6 +125,27 @@ class Doc:
         return out
 
 
+def answer_like_opening(doc):
+    """Line of an H1 or first paragraph that states a claim or recommendation, else None."""
+    seen = 0
+    for i, line in enumerate(doc.lines[:doc.body_end]):
+        if i in doc.code or not line.strip() or METADATA.match(line):
+            continue
+        text = re.sub(r"^#{1,6}\s+", "", line)
+        if METHOD_START.match(text):
+            return None
+        if ANSWER_LIKE.search(text):
+            return i
+        seen += len(doc.words(line))
+        if seen > 60:
+            return None
+    return None
+
+
+def strip_quoted(line):
+    return re.sub(r"`[^`]*`|\"[^\"\n]*\"|\u201c[^\u201d\n]*\u201d", " ", line)
+
+
 def check(text, doc_type="other", rules=None):
     rules = rules or load_rules()
     doc = Doc(text)
@@ -137,6 +173,8 @@ def check(text, doc_type="other", rules=None):
         seen += len(doc.words(line))
         if seen > 150:
             break
+    if located is None:
+        located = answer_like_opening(doc)
     if located is None and doc_type != "reference":
         add("D1", 0, f"no labelled answer{' or status' if doc_type == 'handover' else ''} in the first 150 words; "
                      "open with the answer, decision or ask, then the evidence")
@@ -150,7 +188,7 @@ def check(text, doc_type="other", rules=None):
     labelled = [i for i, line in bullets if re.match(r"^\s*(?:[-*+]|\d+\.)\s+\*\*[^*]+\*\*", line)]
     if len(bullets) >= 5 and len(labelled) / len(bullets) >= rules["D3"]["threshold"]:
         add("D3", labelled[0], f"{len(labelled)} of {len(bullets)} bullets open with a bold label; write sentences, or a table if it is data")
-    caps = [(i, w) for i, line in prose for w in re.findall(r"\b[A-Z][A-Z']{1,}\b", line) if w in EMPHASIS_CAPS]
+    caps = [(i, w) for i, line in prose for w in re.findall(r"\b[A-Z][A-Z']{1,}\b", strip_quoted(line)) if w in EMPHASIS_CAPS]
     if len(caps) >= rules["D4"]["threshold"]:
         add("D4", caps[0][0], f"{len(caps)} all-caps emphasis words ({', '.join(sorted({w for _, w in caps})[:5])}); say why it matters instead")
 
@@ -166,6 +204,10 @@ def check(text, doc_type="other", rules=None):
     # D6 the same point restated: content-word overlap between sections.
     def content(text):
         return {w.lower() for w in doc.words(text) if w.lower() not in STOPWORDS and len(w) > 2}
+    for i, _, title in doc.headings:
+        if RESTATED_HEADING.search(title):
+            add("D6", i, f"heading '{title[:40]}' announces a repeat; say each point once, where it belongs")
+            break
     secs = [(start, title, content(text)) for start, title, text in doc.sections()]
     secs = [s for s in secs if len(s[2]) >= rules["D6"]["min_section_words"]]
     for a in range(len(secs)):
@@ -180,7 +222,7 @@ def check(text, doc_type="other", rules=None):
     meta = [i for i, line in enumerate(doc.lines[:12]) if METADATA.match(line)]
     if len(meta) >= 2:
         add("D7", meta[0], f"{len(meta)} metadata fields open the doc; the reader needs the answer first, provenance last")
-    verified = [i for i, line in prose if re.search(r"\bverified\b|✓", line, re.I)]
+    verified = [i for i, line in prose if VERIFIED_BADGE.search(line)]
     if len(verified) >= rules["D7"]["verified_badges"]:
         add("D7", verified[0], f"{len(verified)} 'verified' badges; state the evidence once, in the evidence section")
     narration = [i for i, line in prose if FIRST_PERSON_PROCESS.search(line)]
@@ -192,9 +234,11 @@ def check(text, doc_type="other", rules=None):
 
     # D8 inline clutter: code spans, undefined ID codes, arrows.
     code_spans = sum(len(re.findall(r"`[^`\n]+`", line)) for _, line in prose)
-    if code_spans * per100 > rules["D8"]["code_per_100"]:
+    if doc_type != "handover" and code_spans * per100 > rules["D8"]["code_per_100"]:
         add("D8", 0, f"{code_spans * per100:.1f} inline-code spans per 100 words; keep code font for real names the reader will type")
-    ids = [(i, m.group(0)) for i, line in prose for m in ID_CODES.finditer(re.sub(r"`[^`]*`", " ", line))]
+    defined = {m.group(1) for m in re.finditer(r"(?:^|\|)\s*[-*]?\s*\**([A-Z]{1,2}#?\d{1,3})\**\s*(?:[:(=\u2014\u2013|]|\s-\s)", text, re.M)}
+    ids = [(i, m.group(0)) for i, line in prose for m in ID_CODES.finditer(re.sub(r"`[^`]*`", " ", line))
+           if m.group(0) not in defined and not COMMON_CODES.match(m.group(0).split("-")[0].split("\u2013")[0])]
     if len(ids) * per100 >= rules["D8"]["ids_per_100"]:
         add("D8", ids[0][0], f"{len(ids)} ID codes such as {', '.join(sorted({c for _, c in ids})[:4])}; use names, or define each code once")
     arrows = sum(line.count("→") + line.count("->") + line.count("=>") for _, line in prose)
@@ -228,10 +272,15 @@ def check(text, doc_type="other", rules=None):
     if thinking:
         add("D11", thinking[0], "thinking out loud or self-praise left in; delete it or state the conclusion")
 
-    # D12 length budget for the doc type (appendix excluded).
+    # D12 length budget for the doc type. The appendix counts at half weight, so
+    # renaming a section "Appendix" doesn't make its words free.
     budget = BUDGETS.get(doc_type, BUDGETS["other"])
-    if words_total > budget:
-        add("D12", 0, f"{words_total} words in the body; the {doc_type} budget is {budget}. Cut repetition and process first, then move detail to an appendix")
+    appendix_words = doc.appendix_word_count()
+    weighted = words_total + appendix_words // 2
+    if weighted > budget:
+        extra = f" + {appendix_words} appendix words at half weight" if appendix_words else ""
+        add("D12", 0, f"{words_total} body words{extra} = {weighted}; the {doc_type} budget is {budget}. "
+                      "Cut repetition and process first, then move detail to an appendix")
 
     # D13 statistical and causal words without support nearby (DS editing guide).
     for i, line in prose:
@@ -253,14 +302,26 @@ def check(text, doc_type="other", rules=None):
 def main(argv=None):
     parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     parser.add_argument("path")
-    parser.add_argument("--type", default="other", choices=sorted(BUDGETS))
+    parser.add_argument("--type", choices=sorted(BUDGETS))
+    parser.add_argument("--spine", help="spine.json written by ds-doc; its 'type' sets --type")
     parser.add_argument("--json", action="store_true")
     args = parser.parse_args(argv)
     try:
         with open(args.path, encoding="utf-8") as handle:
             text = handle.read()
-    except OSError as err:
+        if args.spine:
+            with open(args.spine, encoding="utf-8") as handle:
+                spine_type = json.load(handle).get("type")
+            if args.type and spine_type and args.type != spine_type:
+                print(f"doc_lint: --type {args.type} contradicts the spine's type {spine_type}", file=sys.stderr)
+                return 2
+            args.type = args.type or spine_type
+    except (OSError, ValueError) as err:
         print(f"doc_lint: {err}", file=sys.stderr)
+        return 2
+    args.type = args.type or "other"
+    if args.type not in BUDGETS:
+        print(f"doc_lint: unknown type {args.type!r}", file=sys.stderr)
         return 2
     findings, words = check(text, args.type)
     fails = [f for f in findings if f.severity == "fail"]

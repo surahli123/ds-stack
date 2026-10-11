@@ -6,7 +6,9 @@
     python3 checks/run.py --list
 
 Prints one JSON line and appends it to .ds-checks.log in the working directory.
-Exit code: 0 pass, 1 fail, 2 could not run, 3 usage error.
+Statuses: pass; flag (a finding the answer must report, not a data defect);
+fail (a data or query defect); could_not_run.
+Exit code: 0 pass, 1 flag or fail, 2 could not run, 3 usage error.
 """
 
 import argparse
@@ -26,7 +28,7 @@ USAGE = {
                      '{"series": [{"period": "2026-10-01", "rows": 100}, ...], "target": "2026-10-07"}'),
     "fanout": ("after any join: did it add or lose rows?",
                '{"left_rows": 1000, "joined_rows": 1000, "relationship": "many_to_one", "join": "left", '
-               '"right_rows": 1000, "right_distinct_keys": 1000}'),
+               '"right_rows": 1000, "right_distinct_keys": 1000, "matched_left_rows": 1000}'),
     "mix_shift": ("when a rate moved: how much is segment mix vs within-segment change?",
                   '{"segments": [{"name": "web", "before": {"n": 800, "k": 240}, '
                   '"after": {"n": 820, "k": 250}}, ...]}  (n = denominator, k = numerator)'),

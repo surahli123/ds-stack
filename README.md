@@ -10,10 +10,10 @@ This repo holds only the generic core. Company facts live in a private overlay o
 
 | Skill | Fixes | Enforced by |
 |---|---|---|
-| `ds-mode` | Analyses: checks the data, decomposes a movement, rules alternatives in or out, writes the readout | Four check scripts that log every run |
+| `ds-mode` | Analyses: pins the metric definition, checks the data, decomposes a movement, rules alternatives in or out, writes the readout with an interval and provenance | Four check scripts that log every run; a readout format the eval parser reads |
 | `ds-doc` | Doc structure and narrative: doc type, the spine (reader, decision, one-sentence answer, takeaways), answer-first drafting, DS claim rules | A step checklist; skipped steps stay visible |
 | `doc-tighten` | Format and concision: answer placement, bold, log drift, tables, clutter, length budget | `doc_lint.py`, 14 rules |
-| `cold-read` | Whether the doc works: a fresh reader must recover the answer and decision from a skim, and every takeaway from a full read | `skim_view.py` and fixed reader prompts |
+| `cold-read` | Whether the doc works: a fresh reader must recover the answer and decision from a skim, and every takeaway from a full read | `cold_read.py`: a fresh `claude -p` reader, graded by script against `spine.json` |
 
 Each lint rule is tied to a count from 119 agent-written docs, or to the DS editing guide in ai-writing-suite (`tools/rules.json`). On that corpus, 76 docs open with method or status before any answer, 64 lean on bold, 27 restate points in new words, and 13 turn into logs. The lint's answer-first rule flags 77 of the 119.
 
@@ -52,7 +52,44 @@ Both evals use synthetic tasks, 3 runs per setup, Sonnet as the agent, and clean
 - No comprehension gain is shown. Readers already understood the plain docs. The one skim gap is a grading artifact: the reader prompt asked a handover for its conclusion rather than its current state. That prompt is now fixed.
 - Agents skipped the in-loop cold read even when told to, but said so in their reply.
 
-What the evals show: short tasks written from clean notes are too easy, both for analysis and for writing. The corpus failures came from long, multi-session docs written mid-work. The next eval should rewrite real bloated docs and measure a fresh reader before and after, using cases built from real incidents.
+What the evals show: short tasks written from clean notes are too easy, both for analysis and for writing. The corpus failures came from long, multi-session docs written mid-work.
+
+## Real-case review (2026-10-10)
+
+An independent reviewer ran the skills on 10 real notes docs and on two public Simpson's-paradox datasets (Berkeley admissions, kidney stones), disguised so the agent couldn't recall the answer.
+
+| Finding | Change made |
+|---|---|
+| ds-mode got 6 of 6 answers right but reported an interval in 0 of 3 runs; plain prompting did in 2 of 3 | The readout requires an interval, or `(no interval: <reason>)`; `mix_shift` reports a 95% CI for the overall and within-segment change |
+| `mix_shift` fired on 12-27% of cases with no real change | A noise floor of 2 standard errors; 0 of the null cases fire now |
+| `mix_shift` called a real Simpson's paradox a `fail`, so agents had to explain it wasn't a data defect | New status `flag`: a finding the answer must report |
+| Per-segment mix effects were uninterpretable (+47 and -37 pp on a +4.6 pp total) | Deviation form: each segment's mix term now reads on its own |
+| `completeness` failed a normal Saturday and passed an 85% load | Same-weekday baseline; default threshold 90% |
+| `fanout` missed duplicate keys cancelled by dropped rows | Optional `matched_left_rows` catches it |
+| ds-doc rewrites: 36% shorter, lint-clean on 7 of 10 (plain prompting 0 of 10); spine written and cold read run in 0 of 5 | `spine.json` comes before the draft; `cold_read.py` grades the reader by script |
+| Lint precision on 24 hand-checked findings was 0.67 | Nine false-positive patterns and five misses fixed; about 0.88 on the same set, which is optimistic because the fixes were tuned on it |
+
+Fresh readers understood originals and rewrites alike, so the review shows no comprehension gain from ds-doc. It shows the docs get shorter and cleaner without losing the answer. Rewrites did drop facts the next reader needs: a status line saying the plan was already executed, and a handover's list of attacks already tried. The doc types now keep both.
+
+## What the research changed
+
+A review of data-agent benchmarks, vendor guidance and practitioner write-ups (October 2026) found three levers, in order of measured effect:
+
+1. Curated, data-verified metric definitions (+26 to +36 points on hard DABStep tasks).
+2. Execute-and-verify loops with independent review (+2 to +6 points on SQL benchmarks).
+3. An explicit right to abstain, which no mainstream benchmark scores.
+
+The skills now act on all three:
+
+- ds-mode pins the metric from the overlay's `metrics.json` before querying, and labels any definition it had to state itself `[guess]`. It asks when a question has two readings that give different numbers.
+- The readout carries a provenance section, and allows "caused" only for a randomized test or another design that identifies the cause.
+- `metrics.json` entries now carry `grain`, `source`, `verified` and `pitfalls`, and are written by a person, never drafted by an agent.
+
+Still open:
+
+- an independent reviewer before the readout is sent
+- answerability cases in the eval, scored +1 right, 0 abstain, minus a penalty wrong
+- an eval with real past errors that crosses definitions in context with checks on and off
 
 ## Develop
 
@@ -71,4 +108,6 @@ Transcripts stay local because they are bulky. A regrade without them fails clos
 
 - Three of the four analysis checks are provisional until real incidents back them.
 - The method in `ds-mode` is a draft, to be replaced with the analyst's own first five moves.
+- `mix_shift` intervals assume independent units. Sessions clustered within users make them too narrow.
+- A model reader in `cold-read` is a screen, not a certificate.
 - The lint thresholds come from one person's corpus. Expect to tune them after a few weeks of use.

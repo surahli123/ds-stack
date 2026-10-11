@@ -3,7 +3,11 @@
     "numerator": "clicks on results",
     "denominator": "searches with at least one result shown",
     "filters": ["exclude internal traffic", "exclude bots"],
+    "grain": "search",
+    "source": "the table or view the dashboard reads",
     "owner": "search analytics",
+    "verified": "2026-10-01: matched the dashboard to 0.1 pp on one week",
+    "pitfalls": ["a search with zero results shown is not in the denominator"],
     "note": "example definition; replace with your dashboard's"
   }
 }

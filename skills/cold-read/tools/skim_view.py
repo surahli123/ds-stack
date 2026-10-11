@@ -16,9 +16,19 @@ def strip_markup(text):
     return re.sub(r"^\s*(?:[-*+]|\d+\.)\s+", "", text)
 
 
+ABBREVIATIONS = ("e.g.", "i.e.", "vs.", "etc.", "approx.", "incl.", "cf.", "fig.", "no.")
+
+
 def first_sentence(text):
-    match = re.search(r"(.+?[.!?])(?:\s|$)", text)
-    return (match.group(1) if match else text).strip()
+    """The text up to the first sentence end, ignoring abbreviations and decimals."""
+    text = text.strip()
+    for match in re.finditer(r"[.!?](?=\s+[A-Z(\"']|\s*$)", text):
+        end = match.end()
+        word = text[:end].split()[-1].lower() if text[:end].split() else ""
+        if word in ABBREVIATIONS:
+            continue
+        return text[:end].strip()
+    return text
 
 
 def skim(text, limit=120):

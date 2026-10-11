@@ -100,9 +100,10 @@ def test_length_budget_by_type():
     assert "D12" not in rules(long, "other")
 
 
-def test_appendix_is_outside_the_budget():
-    text = CLEAN + "\n## Appendix\n" + ("Raw detail line for reference. " * 200) + "\n"
-    assert "D12" not in rules(text, "readout")
+def test_appendix_counts_at_half_weight():
+    small = CLEAN + "\n## Appendix\n" + ("Raw detail line for reference. " * 40) + "\n"
+    huge = CLEAN + "\n## Appendix\n" + ("Raw detail line for reference. " * 200) + "\n"
+    assert "D12" not in rules(small, "readout") and "D12" in rules(huge, "readout")
 
 
 def test_unsupported_causal_language_warns_and_supported_does_not():
@@ -158,3 +159,70 @@ def test_skim_view_shows_the_opening_and_each_section_lead():
     assert len(opening.split()) <= 13
     assert "## Answer\n  Keep ranker v2." in outline
     assert "## Caveats\n  This is a before and after comparison" in outline
+
+
+# Regressions from the real-case review (false positives and misses on real notes docs).
+
+def test_claim_heading_counts_as_answer_first():
+    doc = ("# Keep ranker v2: the drop is mobile mix\n\nThe 2.1 pp CTR drop comes from more mobile traffic, not the ranker.\n\n"
+           "## Mix explains the whole drop\nWithin-platform CTR did not move.\n")
+    assert "D1" not in rules(doc, "readout")
+
+
+def test_status_h1_counts_for_a_handover():
+    assert "D1" not in rules("# Hook rewrite shipped and verified, zero open findings\n\nDetails follow.\n", "handover")
+
+
+def test_method_first_opening_still_fails():
+    doc = "# Audit\n\nData sources: we pulled 14 days of hook logs and read 30 transcripts in full before writing anything.\n"
+    assert "D1" in rules(doc, "readout")
+
+
+def test_quoted_and_code_caps_are_not_emphasis():
+    doc = CLEAN + '\nThe hook greps for `DONE` and `NEVER`. The guidance says "MUST", "NEVER" and "ALWAYS".\n'
+    assert "D4" not in rules(doc)
+
+
+def test_real_log_paths_and_checklist_wording_are_not_artifacts():
+    doc = CLEAN + "\nErrors go to /tmp/cc-hook-errors.log. Each item was re-verified against source. Criteria were verified twice.\n"
+    assert "D7" not in rules(doc)
+    assert "D7" in rules(CLEAN + "\nSee /tmp/claude-0/session/x.md and wf_943d3676.\n")
+
+
+def test_handover_paths_are_not_code_clutter():
+    paths = " ".join(f"`src/module_{i}.py`" for i in range(20))
+    doc = "# Handover\n\n## Current state\nThe job is failing. Open these: " + paths + "\n"
+    assert "D8" not in rules(doc, "handover")
+
+
+def test_causes_as_a_noun_is_not_a_stat_claim():
+    assert "D13" not in rules(CLEAN + "\nWe listed the root causes and the likely causes of drift.\n")
+
+
+def test_a_test_word_alone_does_not_excuse_causal_claims():
+    assert "D13" in rules(CLEAN + "\nWe ran the unit test suite and the new ranker drives engagement.\n")
+
+
+def test_restated_heading_and_executed_status_are_caught():
+    assert "D6" in rules(CLEAN + "\n## Biggest problem, restated\nSame as the answer.\n")
+    assert "D5" in rules(CLEAN + "\nStatus: EXECUTED 2026-08-11\n")
+    assert "D5" in rules(CLEAN + "\n## Appendix: what actually happened\nWe did things.\n")
+
+
+def test_common_and_defined_codes_are_not_flagged():
+    doc = CLEAN + "\n| Code | Meaning |\n|---|---|\n| D1 | answer first |\n| D2 | bold |\n| D3 | labels |\n\nIn Q3 we fix D1, D2 and D3 (P0, H1).\n"
+    assert "D8" not in rules(doc)
+
+
+def test_cli_takes_the_type_from_the_spine(tmp_path):
+    doc, spine = tmp_path / "doc.md", tmp_path / "spine.json"
+    doc.write_text(CLEAN + "\n## More\n" + ("Extra sentence about the analysis that adds words. " * 80) + "\n")
+    spine.write_text('{"type": "readout"}')
+    assert subprocess.run([sys.executable, LINT, str(doc), "--spine", str(spine)], capture_output=True).returncode == 1
+    assert subprocess.run([sys.executable, LINT, str(doc), "--spine", str(spine), "--type", "memo"], capture_output=True).returncode == 2
+
+
+def test_skim_view_keeps_abbreviations_and_versions_inside_a_sentence():
+    import skim_view
+    assert skim_view.first_sentence("Run v1.2 of the gate, e.g. on staging, before the launch. Then ship.") == \
+        "Run v1.2 of the gate, e.g. on staging, before the launch."
