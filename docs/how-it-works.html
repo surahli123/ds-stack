@@ -187,14 +187,14 @@ This data gives no reason to roll back v2 on CTR grounds. It also can't show tha
   - mix_shift: <span class="in">fail</span>. The change is driven by mix, not by within-segment rates.
   - completeness: <span class="out">pass</span>. 2026-10-04 is fully loaded.
   - srm: skipped. There was no randomized split.</pre>
-      <p class="muted">Checks-only setup, Sonnet, on the mix-shift case. The PM's guess (v2 caused the drop) arrived as the premise, and the readout ruled it out with a measured within-platform comparison.</p>
+      <p class="muted">Checks-only setup, Sonnet, on the mix-shift case, run before the <code>flag</code> status existed; <code>mix_shift</code> now reports this case as flag, not fail. The PM's guess (v2 caused the drop) arrived as the premise, and the readout ruled it out with a measured within-platform comparison.</p>
     </div>
   </section>
 
   <section>
     <span class="eyebrow">The checks</span>
     <h2>Four scripts, one evidence rule</h2>
-    <p>Each check takes aggregates as JSON and returns pass, fail or could-not-run. A check counts as <em>evidenced</em> only with at least two real incidents behind it; the rest stay provisional until the wrong-number archive backs them or they get removed.</p>
+    <p>Each check takes aggregates as JSON and returns pass, flag, fail or could-not-run. A flag is a finding the answer must report, such as a Simpson's paradox; a fail is a data or query defect. A check counts as <em>evidenced</em> only with at least two real incidents behind it; the rest stay provisional until the wrong-number archive backs them or they get removed.</p>
     <div class="table-wrap"><table>
       <thead><tr><th>Check</th><th>Catches</th><th>Run it when</th><th>Evidence</th></tr></thead>
       <tbody>
@@ -289,7 +289,7 @@ This data gives no reason to roll back v2 on CTR grounds. It also can't show tha
       <tbody>
         <tr><td class="mono">ds-doc</td><td>Structure and narrative: doc type, the spine (reader, decision, one-sentence answer, takeaways), answer-first drafting, DS claim rules</td><td>A step checklist; skipped steps stay visible</td></tr>
         <tr><td class="mono">doc-tighten</td><td>Format and concision: answer placement, bold, log drift, tables, clutter, length budget</td><td><code>doc_lint.py</code>, 14 rules tied to corpus counts</td></tr>
-        <tr><td class="mono">cold-read</td><td>Whether the doc works: a fresh reader recovers the answer and decision from a skim, and every takeaway from a full read</td><td><code>skim_view.py</code> and fixed reader prompts</td></tr>
+        <tr><td class="mono">cold-read</td><td>Whether the doc works: a fresh reader recovers the answer and decision from a skim, and every takeaway from a full read</td><td><code>cold_read.py</code>: a fresh reader, graded by script against <code>spine.json</code></td></tr>
       </tbody>
     </table></div>
     <h3>Writing eval: 3 tasks, 3 runs each, fresh reader graded by script</h3>
@@ -303,7 +303,28 @@ This data gives no reason to roll back v2 on CTR grounds. It also can't show tha
         <tr><td>Cost per run</td><td class="mono">$0.055</td><td class="mono">$0.080</td></tr>
       </tbody>
     </table></div>
-    <p>The skills fixed format and length. They showed no comprehension gain, because readers already understood the plain docs; the one skim gap is a grading artifact, now fixed. Short tasks from clean notes are too easy here too. The next test should rewrite real bloated docs from your notes and measure a fresh reader before and after.</p>
+    <p>The skills fixed format and length. They showed no comprehension gain, because readers already understood the plain docs; the one skim gap is a grading artifact, now fixed. Short tasks from clean notes are too easy here too.</p>
+  </section>
+
+  <section>
+    <span class="eyebrow">Real cases</span>
+    <h2>An independent review on real docs and real data</h2>
+    <p>A reviewer ran the skills on 10 real docs from your notes and on two public Simpson's-paradox datasets (Berkeley admissions, kidney stones), disguised so the agent couldn't recall the answer. Every finding below was fixed and is covered by a test.</p>
+    <div class="table-wrap"><table>
+      <thead><tr><th>Finding</th><th>Change</th></tr></thead>
+      <tbody>
+        <tr><td>ds-mode got 6 of 6 answers right but gave an interval in 0 of 3 runs</td><td>Interval required in the headline; on a re-run, 3 of 3 give one</td></tr>
+        <tr><td><code>mix_shift</code> fired on 12–27% of cases with no real change</td><td>Noise floor of 2 standard errors; 0 null cases fire</td></tr>
+        <tr><td>A real Simpson's paradox came back as <code>fail</code></td><td>New <code>flag</code> status: a finding, not a defect</td></tr>
+        <tr><td><code>completeness</code> failed a normal Saturday and passed an 85% load</td><td>Same-weekday baseline; threshold 90%</td></tr>
+        <tr><td><code>fanout</code> missed duplicates cancelled by dropped rows</td><td><code>matched_left_rows</code> catches it</td></tr>
+        <tr><td>ds-doc rewrites were 36% shorter and lint-clean on 7 of 10 (plain 0 of 10), but no agent wrote a spine or ran the cold read</td><td><code>spine.json</code> before the draft; <code>cold_read.py</code> grades by script</td></tr>
+        <tr><td>Lint precision 0.67 on 24 hand-checked findings</td><td>About 0.88 on the same set (optimistic: tuned on it)</td></tr>
+      </tbody>
+    </table></div>
+    <h3>What the research changed</h3>
+    <p>Across benchmarks and vendor guidance, the largest measured lever is curated, data-verified metric definitions (+26 to +36 points on hard DABStep tasks). Execute-and-verify loops add 2 to 6 points, and no mainstream benchmark scores abstention. So ds-mode now pins the metric from <code>metrics.json</code> before querying, asks when two readings give different numbers, ends with provenance, and allows "caused" only with a design that identifies the cause.</p>
+    <p class="note">Still open: an independent reviewer before a readout is sent, answerability cases in the eval, and an eval built from your real past errors that crosses definitions in context with checks on and off.</p>
   </section>
 
   <section>
@@ -311,7 +332,7 @@ This data gives no reason to roll back v2 on CTR grounds. It also can't show tha
     <h2>What happens on your machines</h2>
     <ol class="steps">
       <li><b>Stage 0.</b> On the work laptop, create the overlay outside any repo, fill in the denylist, and enable the hook. Decide adopt or retire for each of your existing DS tools.</li>
-      <li><b>Stage 1.</b> Write the wrong-number archive: at least 10 incidents, kept on the machine where they happened.</li>
+      <li><b>Stage 1.</b> Write the wrong-number archive: at least 10 incidents, kept on the machine where they happened. Write and verify <code>metrics.json</code> entries for the metrics you report most; don't let an agent draft them.</li>
       <li><b>Stage 2.</b> Replace the draft method in <code>SKILL.md</code> with your own first five moves on a metric drop.</li>
       <li><b>Stage 3.</b> Back each provisional check with real incidents, or delete it.</li>
       <li><b>Stages 5–6.</b> Build at least 15 held-out cases from your incidents, run the three setups, then use v0 on real work for 2–4 weeks, logging catches, false alarms and minutes.</li>

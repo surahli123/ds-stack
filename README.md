@@ -50,7 +50,6 @@ Both evals use synthetic tasks, 3 runs per setup, Sonnet as the agent, and clean
 
 - The skills fix format and length. Plain prompting failed the lint on 7 of 9 docs, mostly on bold and bold-label bullets. The ds-doc docs are 16% shorter.
 - No comprehension gain is shown. Readers already understood the plain docs. The one skim gap is a grading artifact: the reader prompt asked a handover for its conclusion rather than its current state. That prompt is now fixed.
-- Agents skipped the in-loop cold read even when told to, but said so in their reply.
 
 What the evals show: short tasks written from clean notes are too easy, both for analysis and for writing. The corpus failures came from long, multi-session docs written mid-work.
 
@@ -69,7 +68,9 @@ An independent reviewer ran the skills on 10 real notes docs and on two public S
 | ds-doc rewrites: 36% shorter, lint-clean on 7 of 10 (plain prompting 0 of 10); spine written and cold read run in 0 of 5 | `spine.json` comes before the draft; `cold_read.py` grades the reader by script |
 | Lint precision on 24 hand-checked findings was 0.67 | Nine false-positive patterns and five misses fixed; about 0.88 on the same set, which is optimistic because the fixes were tuned on it |
 
-Fresh readers understood originals and rewrites alike, so the review shows no comprehension gain from ds-doc. It shows the docs get shorter and cleaner without losing the answer. Rewrites did drop facts the next reader needs: a status line saying the plan was already executed, and a handover's list of attacks already tried. The doc types now keep both.
+A re-run of the three ds-mode cases after the fixes: all 3 correct, all 3 with a 95% interval and `mix_shift` as `flag`, and each ended with provenance labelling the metric `[guess]`, as no `metrics.json` was given.
+
+Fresh readers understood originals and rewrites alike: ds-doc made docs shorter and cleaner without losing the answer, with no comprehension gain. Rewrites did drop facts the next reader needs: a status line saying the plan was already executed, and a handover's list of attacks already tried. The doc types now keep both.
 
 ## What the research changed
 
