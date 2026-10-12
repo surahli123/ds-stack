@@ -2,3 +2,5 @@ __pycache__/
 .pytest_cache/
 .ds-checks.log
 eval/results/*/transcript.jsonl
+eval/experiment/results/*/*/transcript.jsonl
+eval/experiment/results/*/*/gold_spine.json
