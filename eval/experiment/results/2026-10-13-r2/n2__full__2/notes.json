@@ -1,0 +1,7 @@
+{"why_it_moved":[
+{"text":"Successful Search Rate - Tail Queries rose 3.1% and survived the false-discovery correction, while the overall rate barely moved.","label":"measured"},
+{"text":"The new ranker may help rare queries only, which are too small a share of traffic to lift the overall rate.","label":"inferred"}],
+"would_change":[
+"A pre-exposure comparison of Successful Search Rate showing the arms were not matched before exposure began would make this result unreliable.",
+"A daily series by days since first exposure would let the novelty check run; it could not run here."],
+"analyst_view":null}

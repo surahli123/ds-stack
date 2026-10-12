@@ -1,0 +1,25 @@
+{
+ "why_it_moved": [
+  {
+   "text": "Queries per User rose 2.4% while Reformulation Rate rose 5.1% and Successful Search Rate moved -0.35%.",
+   "label": "measured"
+  },
+  {
+   "text": "Users may be searching again because the first results miss, which would raise query volume without better results.",
+   "label": "inferred"
+  },
+  {
+   "text": "No segment cuts were read, so which queries drive the rise is not known.",
+   "label": "guess"
+  }
+ ],
+ "would_change": [
+  "A pre-exposure comparison on Queries per User would fill the check that could not run.",
+  "A daily series by days since first exposure would show whether the lift is fading.",
+  "The owner confirming Queries per User, not Successful Search Rate, as the primary would settle which bar applies."
+ ],
+ "analyst_view": {
+  "call": "escalate",
+  "reason": "The config hypothesis is more successful searches, but the registered primary is query volume. Queries rose while reformulations rose and successful searches did not improve, which can mean worse results, not more engagement."
+ }
+}

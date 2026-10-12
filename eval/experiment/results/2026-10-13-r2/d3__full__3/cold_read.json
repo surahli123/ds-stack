@@ -1,0 +1,53 @@
+{
+  "pass": true,
+  "skim": "2/2",
+  "full": "3/3",
+  "items": [
+    {
+      "pass": "skim",
+      "item": "answer",
+      "key": "Don't ship: Abandonment Rate rose 2.20% (+1.50% to +2.90%), the wrong way and past its 1.00% margin.",
+      "reader": "The document concludes don't ship. Ranker v7 raised Abandonment Rate by 2.20% (95% interval +1.50% to +2.90%), past its 1.00% guardrail margin, while Successful Search Rate rose 1.24%. The test has finished (day 14 of 14, 1,000,000 users per arm). Agree not to launch. The owner decides whether to iterate; a rerun would reopen the call only if Abandonment Rate comes back within its 1.00% margin.",
+      "got": true,
+      "how": "overlap 85%"
+    },
+    {
+      "pass": "skim",
+      "item": "decision",
+      "key": "Agree not to launch; the owner decides whether to iterate.",
+      "reader": "Agree not to launch. The owner decides whether to iterate; a rerun would reopen the call only if Abandonment Rate comes back within its 1.00% margin. The document concludes don't ship. Ranker v7 raised Abandonment Rate by 2.20% (95% interval +1.50% to +2.90%), past its 1.00% guardrail margin, while Successful Search Rate rose 1.24%. The test has finished (day 14 of 14, 1,000,000 users per arm).",
+      "got": true,
+      "how": "overlap 100%"
+    },
+    {
+      "pass": "full",
+      "item": "takeaway 1",
+      "key": "Abandonment Rate +2.20% (+1.50% to +2.90%) against at most 1.00% higher.",
+      "reader": "The document recommends not launching Ranker v7. Abandonment Rate, a guardrail, rose 2.20% (95% interval +1.50% to +2.90%), past its at-most-1.00% margin. The primary metric, Successful Search Rate, rose 1.24%, and the other three guardrails are within margin. The test ran to day 14 of 14 with 1,000,000 users per arm. Current state: the test is finished and the call is \"don't ship,\" pending the owner's decision on whether to iterate. Agree not to launch. The owner decides whether to iterate. The call reopens only if a rerun keeps Abandonment Rate at or below +1.00%. A registered explanation that the metric's definition changed between arms would send it to triage instead. Abandonment Rate +2.20% (interval +1.50% to +2.90%) against a bar of at most +1.00%. The unit is percent change versus control. The document doesn't say whether that is relative or absolute. The harm may sit in head queries (Abandonment Rate +1.55%), while the tail-query drop (\u22120.38%) is too small to trust. The document also doesn't explain why clicks and abandonment both rise, and no per-query data was provided. The pre-period and novelty checks were not run.",
+      "got": true,
+      "how": "overlap 88%"
+    },
+    {
+      "pass": "full",
+      "item": "takeaway 2",
+      "key": "Agree not to launch; the owner decides whether to iterate.",
+      "reader": "The document recommends not launching Ranker v7. Abandonment Rate, a guardrail, rose 2.20% (95% interval +1.50% to +2.90%), past its at-most-1.00% margin. The primary metric, Successful Search Rate, rose 1.24%, and the other three guardrails are within margin. The test ran to day 14 of 14 with 1,000,000 users per arm. Current state: the test is finished and the call is \"don't ship,\" pending the owner's decision on whether to iterate. Agree not to launch. The owner decides whether to iterate. The call reopens only if a rerun keeps Abandonment Rate at or below +1.00%. A registered explanation that the metric's definition changed between arms would send it to triage instead. Abandonment Rate +2.20% (interval +1.50% to +2.90%) against a bar of at most +1.00%. The unit is percent change versus control. The document doesn't say whether that is relative or absolute. The harm may sit in head queries (Abandonment Rate +1.55%), while the tail-query drop (\u22120.38%) is too small to trust. The document also doesn't explain why clicks and abandonment both rise, and no per-query data was provided. The pre-period and novelty checks were not run.",
+      "got": true,
+      "how": "overlap 100%"
+    },
+    {
+      "pass": "full",
+      "item": "takeaway 3",
+      "key": "Could reverse it: only a version that keeps Abandonment Rate at at most 1.00% higher.",
+      "reader": "The document recommends not launching Ranker v7. Abandonment Rate, a guardrail, rose 2.20% (95% interval +1.50% to +2.90%), past its at-most-1.00% margin. The primary metric, Successful Search Rate, rose 1.24%, and the other three guardrails are within margin. The test ran to day 14 of 14 with 1,000,000 users per arm. Current state: the test is finished and the call is \"don't ship,\" pending the owner's decision on whether to iterate. Agree not to launch. The owner decides whether to iterate. The call reopens only if a rerun keeps Abandonment Rate at or below +1.00%. A registered explanation that the metric's definition changed between arms would send it to triage instead. Abandonment Rate +2.20% (interval +1.50% to +2.90%) against a bar of at most +1.00%. The unit is percent change versus control. The document doesn't say whether that is relative or absolute. The harm may sit in head queries (Abandonment Rate +1.55%), while the tail-query drop (\u22120.38%) is too small to trust. The document also doesn't explain why clicks and abandonment both rise, and no per-query data was provided. The pre-period and novelty checks were not run.",
+      "got": true,
+      "how": "overlap 62%"
+    }
+  ],
+  "lost": "I had to reread the call taxonomy. \"Don't ship\" isn't one of the four calls it defines (Can't tell, Keep running, No effect found, Escalate), and the escalate rule covers harm *inside* a margin, not a breach. It's unclear which call this decision maps to.",
+  "question": "Can you share the head-versus-tail split of Abandonment Rate with confidence intervals, so we know whether the harm is concentrated in head queries?",
+  "replies": {
+    "skim": "1. Answer: The document concludes don't ship. Ranker v7 raised Abandonment Rate by 2.20% (95% interval +1.50% to +2.90%), past its 1.00% guardrail margin, while Successful Search Rate rose 1.24%. The test has finished (day 14 of 14, 1,000,000 users per arm).\n\n2. Decision: Agree not to launch. The owner decides whether to iterate; a rerun would reopen the call only if Abandonment Rate comes back within its 1.00% margin.\n\n3. Number: +2.20% change in Abandonment Rate (guardrail), against a limit of at most +1.00%.\n",
+    "full": "1. **Answer:** The document recommends not launching Ranker v7. Abandonment Rate, a guardrail, rose 2.20% (95% interval +1.50% to +2.90%), past its at-most-1.00% margin. The primary metric, Successful Search Rate, rose 1.24%, and the other three guardrails are within margin. The test ran to day 14 of 14 with 1,000,000 users per arm. Current state: the test is finished and the call is \"don't ship,\" pending the owner's decision on whether to iterate.\n\n2. **Decision:** Agree not to launch. The owner decides whether to iterate. The call reopens only if a rerun keeps Abandonment Rate at or below +1.00%. A registered explanation that the metric's definition changed between arms would send it to triage instead.\n\n3. **Number:** Abandonment Rate +2.20% (interval +1.50% to +2.90%) against a bar of at most +1.00%. The unit is percent change versus control. The document doesn't say whether that is relative or absolute.\n\n4. **Caveat:** The harm may sit in head queries (Abandonment Rate +1.55%), while the tail-query drop (\u22120.38%) is too small to trust. The document also doesn't explain why clicks and abandonment both rise, and no per-query data was provided. The pre-period and novelty checks were not run.\n\n5. **Lost:** I had to reread the call taxonomy. \"Don't ship\" isn't one of the four calls it defines (Can't tell, Keep running, No effect found, Escalate), and the escalate rule covers harm *inside* a margin, not a breach. It's unclear which call this decision maps to.\n\n6. **Question:** Can you share the head-versus-tail split of Abandonment Rate with confidence intervals, so we know whether the harm is concentrated in head queries?\n"
+  }
+}

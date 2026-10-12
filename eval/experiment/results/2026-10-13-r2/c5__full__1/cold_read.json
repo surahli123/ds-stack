@@ -1,0 +1,53 @@
+{
+  "pass": true,
+  "skim": "2/2",
+  "full": "3/3",
+  "items": [
+    {
+      "pass": "skim",
+      "item": "answer",
+      "key": "Can't tell, decided by config edits.",
+      "reader": "Can't tell. The test was edited mid-flight on 2026-09-16 (allocation 20% \u2192 10%), so the results mix pre- and post-edit days and can't support a launch call. The current state is that the test is complete (14 of 14 days) but needs a fix and rerun. Agree to fix the config edit and rerun the test, with no launch decision from this data. The rerun should either cover only the days after the 2026-09-16 change or be a fresh test at a fixed allocation that runs the full 14 days.",
+      "got": true,
+      "how": "overlap 50%"
+    },
+    {
+      "pass": "skim",
+      "item": "decision",
+      "key": "Agree to fix the test and rerun; no launch decision from this data.",
+      "reader": "Agree to fix the config edit and rerun the test, with no launch decision from this data. The rerun should either cover only the days after the 2026-09-16 change or be a fresh test at a fixed allocation that runs the full 14 days. Can't tell. The test was edited mid-flight on 2026-09-16 (allocation 20% \u2192 10%), so the results mix pre- and post-edit days and can't support a launch call. The current state is that the test is complete (14 of 14 days) but needs a fix and rerun.",
+      "got": true,
+      "how": "overlap 100%"
+    },
+    {
+      "pass": "full",
+      "item": "takeaway 1",
+      "key": "The test was edited mid-flight on 2026-09-16 (Allocation changed from 20% to 10%) and the results include days before and after",
+      "reader": "The document concludes **\"Can't tell.\"** The test is finished (day 14 of 14, about 1M users per arm), but its allocation was changed mid-flight on 2026-09-16 (20% to 10%), and the results mix days before and after the change. The current state is a completed test with no valid launch read. Agree to fix the test and rerun it. Make no launch decision from this data. The rerun should be either post-change days only, reaching 14 days, or a fresh test at a fixed allocation. Successful Search Rate, primary metric: **+0.81%** relative change (95% interval +0.41% to +1.21%), against a bar of at least +0.50%. The document calls this \"better,\" but that verdict is not reliable given the edit. The allocation edit may have changed who was in each arm, so the comparison may not be valid. The document also names these gaps: no segment cuts (so the mechanism is unknown), no pre-exposure comparison between arms, no novelty check, and no daily effect series to show whether the lift is fading.",
+      "got": true,
+      "how": "overlap 85%"
+    },
+    {
+      "pass": "full",
+      "item": "takeaway 2",
+      "key": "Agree to fix the test and rerun; no launch decision from this data.",
+      "reader": "The document concludes **\"Can't tell.\"** The test is finished (day 14 of 14, about 1M users per arm), but its allocation was changed mid-flight on 2026-09-16 (20% to 10%), and the results mix days before and after the change. The current state is a completed test with no valid launch read. Agree to fix the test and rerun it. Make no launch decision from this data. The rerun should be either post-change days only, reaching 14 days, or a fresh test at a fixed allocation. Successful Search Rate, primary metric: **+0.81%** relative change (95% interval +0.41% to +1.21%), against a bar of at least +0.50%. The document calls this \"better,\" but that verdict is not reliable given the edit. The allocation edit may have changed who was in each arm, so the comparison may not be valid. The document also names these gaps: no segment cuts (so the mechanism is unknown), no pre-exposure comparison between arms, no novelty check, and no daily effect series to show whether the lift is fading.",
+      "got": true,
+      "how": "overlap 100%"
+    },
+    {
+      "pass": "full",
+      "item": "takeaway 3",
+      "key": "Could reverse it: fixing the config edits problem and rerunning.",
+      "reader": "The document concludes **\"Can't tell.\"** The test is finished (day 14 of 14, about 1M users per arm), but its allocation was changed mid-flight on 2026-09-16 (20% to 10%), and the results mix days before and after the change. The current state is a completed test with no valid launch read. Agree to fix the test and rerun it. Make no launch decision from this data. The rerun should be either post-change days only, reaching 14 days, or a fresh test at a fixed allocation. Successful Search Rate, primary metric: **+0.81%** relative change (95% interval +0.41% to +1.21%), against a bar of at least +0.50%. The document calls this \"better,\" but that verdict is not reliable given the edit. The allocation edit may have changed who was in each arm, so the comparison may not be valid. The document also names these gaps: no segment cuts (so the mechanism is unknown), no pre-exposure comparison between arms, no novelty check, and no daily effect series to show whether the lift is fading.",
+      "got": true,
+      "how": "overlap 0%; grader: same fact"
+    }
+  ],
+  "lost": "Mostly nowhere. The one confusion is the table's \"better\" verdict sitting beside a \"Can't tell\" decision. The document does clarify that the decision overrides the verdict. Also unclear: how many of the 14 days fall after the 2026-09-16 change.",
+  "question": "How much of the data (how many days and users) falls after the 2026-09-16 allocation change, and does the +0.81% lift still clear the 0.50% bar when computed on those post-change days alone?",
+  "replies": {
+    "skim": "1. Answer: Can't tell. The test was edited mid-flight on 2026-09-16 (allocation 20% \u2192 10%), so the results mix pre- and post-edit days and can't support a launch call. The current state is that the test is complete (14 of 14 days) but needs a fix and rerun.\n\n2. Decision: Agree to fix the config edit and rerun the test, with no launch decision from this data. The rerun should either cover only the days after the 2026-09-16 change or be a fresh test at a fixed allocation that runs the full 14 days.\n\n3. Number: +0.81% (95% interval +0.41% to +1.21%) lift in Successful Search Rate, a primary metric, against a 0.50% bar. This is not usable for a launch call until the rerun.\n",
+    "full": "1. **Answer:** The document concludes **\"Can't tell.\"** The test is finished (day 14 of 14, about 1M users per arm), but its allocation was changed mid-flight on 2026-09-16 (20% to 10%), and the results mix days before and after the change. The current state is a completed test with no valid launch read.\n\n2. **Decision:** Agree to fix the test and rerun it. Make no launch decision from this data. The rerun should be either post-change days only, reaching 14 days, or a fresh test at a fixed allocation.\n\n3. **Number:** Successful Search Rate, primary metric: **+0.81%** relative change (95% interval +0.41% to +1.21%), against a bar of at least +0.50%. The document calls this \"better,\" but that verdict is not reliable given the edit.\n\n4. **Caveat:** The allocation edit may have changed who was in each arm, so the comparison may not be valid. The document also names these gaps: no segment cuts (so the mechanism is unknown), no pre-exposure comparison between arms, no novelty check, and no daily effect series to show whether the lift is fading.\n\n5. **Lost:** Mostly nowhere. The one confusion is the table's \"better\" verdict sitting beside a \"Can't tell\" decision. The document does clarify that the decision overrides the verdict. Also unclear: how many of the 14 days fall after the 2026-09-16 change.\n\n6. **Question:** How much of the data (how many days and users) falls after the 2026-09-16 allocation change, and does the +0.81% lift still clear the 0.50% bar when computed on those post-change days alone?\n"
+  }
+}

@@ -1,0 +1,53 @@
+{
+  "pass": false,
+  "skim": "2/2",
+  "full": "2/3",
+  "items": [
+    {
+      "pass": "skim",
+      "item": "answer",
+      "key": "Ship: Successful Search Rate rose 0.81% (+0.41% to +1.21%), which clears the 0.50% bar and every guardrail held.",
+      "reader": "Ship. Ranker v7 raised Successful Search Rate by 0.81% (95% interval +0.41% to +1.21%), clearing the 0.50% bar with all guardrails held. The pre-period check was not run, so the lift could be void. Approve the launch to all traffic, but first run the pre-exposure comparison (pre period, Successful Search Rate, both arms). If the arms already differed before exposure, withdraw the lift and hold the launch.",
+      "got": true,
+      "how": "overlap 71%"
+    },
+    {
+      "pass": "skim",
+      "item": "decision",
+      "key": "Approve the launch to all traffic.",
+      "reader": "Approve the launch to all traffic, but first run the pre-exposure comparison (pre period, Successful Search Rate, both arms). If the arms already differed before exposure, withdraw the lift and hold the launch. Ship. Ranker v7 raised Successful Search Rate by 0.81% (95% interval +0.41% to +1.21%), clearing the 0.50% bar with all guardrails held. The pre-period check was not run, so the lift could be void.",
+      "got": true,
+      "how": "overlap 100%"
+    },
+    {
+      "pass": "full",
+      "item": "takeaway 1",
+      "key": "Successful Search Rate +0.81% (+0.41% to +1.21%) against at least 0.50% higher.",
+      "reader": "The document recommends shipping Ranker v7 to all traffic. The test is complete: day 14 of 14, with 1,000,000 users per arm. Successful Search Rate rose 0.81% (95% interval +0.41% to +1.21%), clearing the 0.50% bar, and the four guardrails held. The pre-period and novelty checks were not run. Approve the launch, but I would first ask for the pre-period comparison and the days-since-exposure novelty series. Either one could void the lift, and both are cheap to run on data already collected. If they can't be run before launch, ship with monitoring and a rollback plan. +0.81% change in Successful Search Rate (relative, in percent), with interval +0.41% to +1.21%. The interval's lower end is still above the 0.50% bar only in part; the bar is cleared by the point estimate, not by the whole interval. That makes the margin thinner than the headline suggests. The biggest named risk is that the lift is not verified as real or durable. The pre-period balance is unchecked, the novelty effect is unchecked, and the lift is spread thinly across segments with no clear gain in any one. Reformulation Rate rose 0.96%, and +1.70% on informational queries, which may mean users are re-searching. The mechanism is a guess.",
+      "got": true,
+      "how": "overlap 70%"
+    },
+    {
+      "pass": "full",
+      "item": "takeaway 2",
+      "key": "Approve the launch to all traffic.",
+      "reader": "The document recommends shipping Ranker v7 to all traffic. The test is complete: day 14 of 14, with 1,000,000 users per arm. Successful Search Rate rose 0.81% (95% interval +0.41% to +1.21%), clearing the 0.50% bar, and the four guardrails held. The pre-period and novelty checks were not run. Approve the launch, but I would first ask for the pre-period comparison and the days-since-exposure novelty series. Either one could void the lift, and both are cheap to run on data already collected. If they can't be run before launch, ship with monitoring and a rollback plan. +0.81% change in Successful Search Rate (relative, in percent), with interval +0.41% to +1.21%. The interval's lower end is still above the 0.50% bar only in part; the bar is cleared by the point estimate, not by the whole interval. That makes the margin thinner than the headline suggests. The biggest named risk is that the lift is not verified as real or durable. The pre-period balance is unchecked, the novelty effect is unchecked, and the lift is spread thinly across segments with no clear gain in any one. Reformulation Rate rose 0.96%, and +1.70% on informational queries, which may mean users are re-searching. The mechanism is a guess.",
+      "got": true,
+      "how": "overlap 100%"
+    },
+    {
+      "pass": "full",
+      "item": "takeaway 3",
+      "key": "Could reverse it: pre period could not be checked: no pre-period interval or platform check.",
+      "reader": "The document recommends shipping Ranker v7 to all traffic. The test is complete: day 14 of 14, with 1,000,000 users per arm. Successful Search Rate rose 0.81% (95% interval +0.41% to +1.21%), clearing the 0.50% bar, and the four guardrails held. The pre-period and novelty checks were not run. Approve the launch, but I would first ask for the pre-period comparison and the days-since-exposure novelty series. Either one could void the lift, and both are cheap to run on data already collected. If they can't be run before launch, ship with monitoring and a rollback plan. +0.81% change in Successful Search Rate (relative, in percent), with interval +0.41% to +1.21%. The interval's lower end is still above the 0.50% bar only in part; the bar is cleared by the point estimate, not by the whole interval. That makes the margin thinner than the headline suggests. The biggest named risk is that the lift is not verified as real or durable. The pre-period balance is unchecked, the novelty effect is unchecked, and the lift is spread thinly across segments with no clear gain in any one. Reformulation Rate rose 0.96%, and +1.70% on informational queries, which may mean users are re-searching. The mechanism is a guess.",
+      "got": false,
+      "how": "overlap 25%"
+    }
+  ],
+  "lost": "",
+  "question": "Can you run the pre-period balance check and the novelty series before we approve, and did the Reformulation Rate rise (+0.96%, informational +1.70%) get included in the 52-metric FDR correction, given the appendix says no secondary metric moved?",
+  "replies": {
+    "skim": "1. Answer: Ship. Ranker v7 raised Successful Search Rate by 0.81% (95% interval +0.41% to +1.21%), clearing the 0.50% bar with all guardrails held. The pre-period check was not run, so the lift could be void.\n\n2. Decision: Approve the launch to all traffic, but first run the pre-exposure comparison (pre period, Successful Search Rate, both arms). If the arms already differed before exposure, withdraw the lift and hold the launch.\n\n3. Number: +0.81% (Successful Search Rate, relative change in percent, 95% CI +0.41% to +1.21%).\n",
+    "full": "1. **Answer:** The document recommends shipping Ranker v7 to all traffic. The test is complete: day 14 of 14, with 1,000,000 users per arm. Successful Search Rate rose 0.81% (95% interval +0.41% to +1.21%), clearing the 0.50% bar, and the four guardrails held. The pre-period and novelty checks were not run.\n\n2. **Decision:** Approve the launch, but I would first ask for the pre-period comparison and the days-since-exposure novelty series. Either one could void the lift, and both are cheap to run on data already collected. If they can't be run before launch, ship with monitoring and a rollback plan.\n\n3. **Number:** +0.81% change in Successful Search Rate (relative, in percent), with interval +0.41% to +1.21%. The interval's lower end is still above the 0.50% bar only in part; the bar is cleared by the point estimate, not by the whole interval. That makes the margin thinner than the headline suggests.\n\n4. **Caveat:** The biggest named risk is that the lift is not verified as real or durable. The pre-period balance is unchecked, the novelty effect is unchecked, and the lift is spread thinly across segments with no clear gain in any one. Reformulation Rate rose 0.96%, and +1.70% on informational queries, which may mean users are re-searching. The mechanism is a guess.\n\n5. **Lost:**\n   - The \"Could reverse it\" line sits under the headline and reads like a verdict, not a risk. I had to reread it to see it was a caveat.\n   - The appendix says none of the 52 secondary metrics moved after correction, yet Reformulation Rate rose 0.96% and the informational slice rose 1.70%. I couldn't tell whether that is a contradiction or whether those numbers were excluded from the correction.\n   - It is unclear whether \"+0.81%\" is relative or percentage points.\n   - It is unclear whether the reformulation rise changes the call. The \"What would change the call\" section says it would only if it keeps rising in a longer run.\n\n6. **Question:** Can you run the pre-period balance check and the novelty series before we approve, and did the Reformulation Rate rise (+0.96%, informational +1.70%) get included in the 52-metric FDR correction, given the appendix says no secondary metric moved?\n"
+  }
+}

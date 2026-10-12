@@ -1,0 +1,8 @@
+{"why_it_moved":[
+{"text":"Successful Search Rate was already higher in the test arm before exposure by nearly as much as the +0.81% seen after, so the lift may be a head start rather than the ranker.","label":"measured"},
+{"text":"The head start suggests the arms were not comparable at assignment, for example a skewed user mix.","label":"guess"}],
+"would_change":[
+"A pre-exposure comparison that is clean, or a documented cause of the head start, would let the +0.81% be read as the ranker's effect.",
+"A rerun with fresh assignment, or an analysis that adjusts for each user's pre-test behaviour, would give a fair comparison.",
+"A daily series by days since first exposure would show whether the lift holds up."],
+"analyst_view":null}

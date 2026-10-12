@@ -1,0 +1,53 @@
+{
+  "pass": false,
+  "skim": "2/2",
+  "full": "2/3",
+  "items": [
+    {
+      "pass": "skim",
+      "item": "answer",
+      "key": "Escalate: Successful Search Rate improved but Long Click Rate is undetermined, +0.12% (-0.48% to +0.72%); the test needs every primary to improve.",
+      "reader": "The document recommends Escalate. Successful Search Rate improved (+0.81%), but Long Click Rate is unclear (+0.12%, 95% interval \u22120.48% to +0.72%) against a bar of at least +0.50%, so the test does not clear its both-primaries requirement. Handover state: the test ran to completion (day 14 of 14, 1,000,000 users per arm), and the pre-period check was not done. Decide the trade-off at triage: launch on the Successful Search Rate gain despite the unclear Long Click Rate, or hold for more data. The pre-period check is missing, so that gap should be closed before the call.",
+      "got": true,
+      "how": "overlap 69%"
+    },
+    {
+      "pass": "skim",
+      "item": "decision",
+      "key": "Decide the trade-off at triage.",
+      "reader": "Decide the trade-off at triage: launch on the Successful Search Rate gain despite the unclear Long Click Rate, or hold for more data. The pre-period check is missing, so that gap should be closed before the call. The document recommends Escalate. Successful Search Rate improved (+0.81%), but Long Click Rate is unclear (+0.12%, 95% interval \u22120.48% to +0.72%) against a bar of at least +0.50%, so the test does not clear its both-primaries requirement. Handover state: the test ran to completion (day 14 of 14, 1,000,000 users per arm), and the pre-period check was not done.",
+      "got": true,
+      "how": "overlap 100%"
+    },
+    {
+      "pass": "full",
+      "item": "takeaway 1",
+      "key": "Long Click Rate +0.12% (-0.48% to +0.72%) against at least 0.50% higher.",
+      "reader": "The document recommends Escalate, which it defines as a trade-off for triage. The test has not passed. Successful Search Rate improved (+0.81%, 95% interval +0.41% to +1.21%). Long Click Rate did not clear its bar (+0.12%, interval -0.48% to +0.72%, bar at least +0.50%). The test ran its full 14 days with 1,000,000 users per arm, above the planned 900,000. The pre-period and novelty checks were not run. Decide whether to accept the Successful Search gain while Long Click Rate remains unclear, or to keep running or rerun the test. The document does not recommend either option. \"Decide the trade-off at triage\" is the only instruction given. Long Click Rate change, +0.12% (relative %), against the +0.50% bar. Its interval includes zero and also the bar, so the data cannot tell whether the metric improved enough. The document says the pre-period comparison could not be checked, so it cannot show the two arms were alike before exposure. That is the main named risk. Novelty effects are also unchecked.",
+      "got": true,
+      "how": "overlap 90%"
+    },
+    {
+      "pass": "full",
+      "item": "takeaway 2",
+      "key": "Successful Search Rate +0.81% (+0.41% to +1.21%) against at least 0.50% higher.",
+      "reader": "The document recommends Escalate, which it defines as a trade-off for triage. The test has not passed. Successful Search Rate improved (+0.81%, 95% interval +0.41% to +1.21%). Long Click Rate did not clear its bar (+0.12%, interval -0.48% to +0.72%, bar at least +0.50%). The test ran its full 14 days with 1,000,000 users per arm, above the planned 900,000. The pre-period and novelty checks were not run. Decide whether to accept the Successful Search gain while Long Click Rate remains unclear, or to keep running or rerun the test. The document does not recommend either option. \"Decide the trade-off at triage\" is the only instruction given. Long Click Rate change, +0.12% (relative %), against the +0.50% bar. Its interval includes zero and also the bar, so the data cannot tell whether the metric improved enough. The document says the pre-period comparison could not be checked, so it cannot show the two arms were alike before exposure. That is the main named risk. Novelty effects are also unchecked.",
+      "got": true,
+      "how": "overlap 90%"
+    },
+    {
+      "pass": "full",
+      "item": "takeaway 3",
+      "key": "Could reverse it: pre period could not be checked: no pre-period interval or platform check.",
+      "reader": "The document recommends Escalate, which it defines as a trade-off for triage. The test has not passed. Successful Search Rate improved (+0.81%, 95% interval +0.41% to +1.21%). Long Click Rate did not clear its bar (+0.12%, interval -0.48% to +0.72%, bar at least +0.50%). The test ran its full 14 days with 1,000,000 users per arm, above the planned 900,000. The pre-period and novelty checks were not run. Decide whether to accept the Successful Search gain while Long Click Rate remains unclear, or to keep running or rerun the test. The document does not recommend either option. \"Decide the trade-off at triage\" is the only instruction given. Long Click Rate change, +0.12% (relative %), against the +0.50% bar. Its interval includes zero and also the bar, so the data cannot tell whether the metric improved enough. The document says the pre-period comparison could not be checked, so it cannot show the two arms were alike before exposure. That is the main named risk. Novelty effects are also unchecked.",
+      "got": false,
+      "how": "overlap 38%"
+    }
+  ],
+  "lost": "Two things. First, Successful Search is labelled \"better\" even though its lower bound (+0.41%) is below its own +0.50% bar. I had to reread to see that it is not clearly over the bar. Second, the \"Calls\" appendix, the \"harm inside a margin goes to escalate\" setting, and the \"Ask\" do not say what a triage decision should produce, so the decision rule is unclear.",
+  "question": "If Long Click Rate stays unclear and the pre-period check cannot be run, should we ship on the Successful Search gain, or rerun the test, and what decision rule settles that?",
+  "replies": {
+    "skim": "1. **Answer:** The document recommends Escalate. Successful Search Rate improved (+0.81%), but Long Click Rate is unclear (+0.12%, 95% interval \u22120.48% to +0.72%) against a bar of at least +0.50%, so the test does not clear its both-primaries requirement. Handover state: the test ran to completion (day 14 of 14, 1,000,000 users per arm), and the pre-period check was not done.\n2. **Decision:** Decide the trade-off at triage: launch on the Successful Search Rate gain despite the unclear Long Click Rate, or hold for more data. The pre-period check is missing, so that gap should be closed before the call.\n3. **Number:** +0.12% (Long Click Rate, relative change, 95% interval \u22120.48% to +0.72%).\n",
+    "full": "1. **Answer:** The document recommends Escalate, which it defines as a trade-off for triage. The test has not passed. Successful Search Rate improved (+0.81%, 95% interval +0.41% to +1.21%). Long Click Rate did not clear its bar (+0.12%, interval -0.48% to +0.72%, bar at least +0.50%). The test ran its full 14 days with 1,000,000 users per arm, above the planned 900,000. The pre-period and novelty checks were not run.\n\n2. **Decision:** Decide whether to accept the Successful Search gain while Long Click Rate remains unclear, or to keep running or rerun the test. The document does not recommend either option. \"Decide the trade-off at triage\" is the only instruction given.\n\n3. **Number:** Long Click Rate change, +0.12% (relative %), against the +0.50% bar. Its interval includes zero and also the bar, so the data cannot tell whether the metric improved enough.\n\n4. **Caveat:** The document says the pre-period comparison could not be checked, so it cannot show the two arms were alike before exposure. That is the main named risk. Novelty effects are also unchecked.\n\n5. **Lost:** Two things. First, Successful Search is labelled \"better\" even though its lower bound (+0.41%) is below its own +0.50% bar. I had to reread to see that it is not clearly over the bar. Second, the \"Calls\" appendix, the \"harm inside a margin goes to escalate\" setting, and the \"Ask\" do not say what a triage decision should produce, so the decision rule is unclear.\n\n6. **Question:** If Long Click Rate stays unclear and the pre-period check cannot be run, should we ship on the Successful Search gain, or rerun the test, and what decision rule settles that?\n"
+  }
+}

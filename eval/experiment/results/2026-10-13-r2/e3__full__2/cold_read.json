@@ -1,0 +1,53 @@
+{
+  "pass": true,
+  "skim": "2/2",
+  "full": "3/3",
+  "items": [
+    {
+      "pass": "skim",
+      "item": "answer",
+      "key": "Escalate: Successful Search Rate rose 0.31% (+0.13% to +0.49%), a real change in the good direction but short of the 0.50% bar.",
+      "reader": "Escalate. Successful Search Rate rose 0.31% (95% interval +0.13% to +0.49%), better than before but below the 0.50% launch bar; the pre-exposure balance check could not run, so the result could be reversed. Decide the trade-off at triage: launch at +0.31% (below the bar) or hold, and first run a pre-exposure comparison to confirm the arms were balanced.",
+      "got": true,
+      "how": "overlap 67%"
+    },
+    {
+      "pass": "skim",
+      "item": "decision",
+      "key": "Decide the trade-off at triage.",
+      "reader": "Decide the trade-off at triage: launch at +0.31% (below the bar) or hold, and first run a pre-exposure comparison to confirm the arms were balanced. Escalate. Successful Search Rate rose 0.31% (95% interval +0.13% to +0.49%), better than before but below the 0.50% launch bar; the pre-exposure balance check could not run, so the result could be reversed.",
+      "got": true,
+      "how": "overlap 100%"
+    },
+    {
+      "pass": "full",
+      "item": "takeaway 1",
+      "key": "Successful Search Rate +0.31% (+0.13% to +0.49%) against at least 0.50% higher.",
+      "reader": "The document recommends **Escalate**, which means a trade-off for triage, not a launch. The 14-day test is complete (1,000,000 users per arm, above the planned 900,000). The primary metric, Successful Search Rate, rose +0.31% (95% interval +0.13% to +0.49%). That is a real improvement but misses the 0.50% bar. All four other guardrails are within margin. Triage must choose among three options. (a) Accept a lower bar of 0.31% or less, which the document says would clear the primary. (b) Run the pre-exposure balance check, which the document says would clear the one check that could not run. (c) Extend the test, which the document says would help only if the estimate reaches 0.50%. The document does not say whether extension is possible after a completed 14-day run. +0.31% change in Successful Search Rate (relative, percent), against a 0.50% bar. The whole interval (+0.13% to +0.49%) sits below the bar. The pre-period comparison was not run, so the arms' balance before exposure is unverified. The novelty check was also not run, so a short-term boost is possible. The \"measured\" claim that the new ranker causes the lift rests on the config diff, and no segment cuts show which queries gained.",
+      "got": true,
+      "how": "overlap 80%"
+    },
+    {
+      "pass": "full",
+      "item": "takeaway 2",
+      "key": "Decide the trade-off at triage.",
+      "reader": "The document recommends **Escalate**, which means a trade-off for triage, not a launch. The 14-day test is complete (1,000,000 users per arm, above the planned 900,000). The primary metric, Successful Search Rate, rose +0.31% (95% interval +0.13% to +0.49%). That is a real improvement but misses the 0.50% bar. All four other guardrails are within margin. Triage must choose among three options. (a) Accept a lower bar of 0.31% or less, which the document says would clear the primary. (b) Run the pre-exposure balance check, which the document says would clear the one check that could not run. (c) Extend the test, which the document says would help only if the estimate reaches 0.50%. The document does not say whether extension is possible after a completed 14-day run. +0.31% change in Successful Search Rate (relative, percent), against a 0.50% bar. The whole interval (+0.13% to +0.49%) sits below the bar. The pre-period comparison was not run, so the arms' balance before exposure is unverified. The novelty check was also not run, so a short-term boost is possible. The \"measured\" claim that the new ranker causes the lift rests on the config diff, and no segment cuts show which queries gained.",
+      "got": true,
+      "how": "overlap 67%"
+    },
+    {
+      "pass": "full",
+      "item": "takeaway 3",
+      "key": "Could reverse it: pre period could not be checked: no pre-period interval or platform check.",
+      "reader": "The document recommends **Escalate**, which means a trade-off for triage, not a launch. The 14-day test is complete (1,000,000 users per arm, above the planned 900,000). The primary metric, Successful Search Rate, rose +0.31% (95% interval +0.13% to +0.49%). That is a real improvement but misses the 0.50% bar. All four other guardrails are within margin. Triage must choose among three options. (a) Accept a lower bar of 0.31% or less, which the document says would clear the primary. (b) Run the pre-exposure balance check, which the document says would clear the one check that could not run. (c) Extend the test, which the document says would help only if the estimate reaches 0.50%. The document does not say whether extension is possible after a completed 14-day run. +0.31% change in Successful Search Rate (relative, percent), against a 0.50% bar. The whole interval (+0.13% to +0.49%) sits below the bar. The pre-period comparison was not run, so the arms' balance before exposure is unverified. The novelty check was also not run, so a short-term boost is possible. The \"measured\" claim that the new ranker causes the lift rests on the config diff, and no segment cuts show which queries gained.",
+      "got": true,
+      "how": "overlap 38%; grader: same fact"
+    }
+  ],
+  "lost": "",
+  "question": "Can the pre-exposure balance check be run from existing data before the triage decision, and is extending the test after day 14 an available option?",
+  "replies": {
+    "skim": "1. Answer: Escalate. Successful Search Rate rose 0.31% (95% interval +0.13% to +0.49%), better than before but below the 0.50% launch bar; the pre-exposure balance check could not run, so the result could be reversed.\n\n2. Decision: Decide the trade-off at triage: launch at +0.31% (below the bar) or hold, and first run a pre-exposure comparison to confirm the arms were balanced.\n\n3. Number: +0.31% (change in Successful Search Rate, percent relative to control).\n",
+    "full": "1. **Answer:** The document recommends **Escalate**, which means a trade-off for triage, not a launch. The 14-day test is complete (1,000,000 users per arm, above the planned 900,000). The primary metric, Successful Search Rate, rose +0.31% (95% interval +0.13% to +0.49%). That is a real improvement but misses the 0.50% bar. All four other guardrails are within margin.\n\n2. **Decision:** Triage must choose among three options. (a) Accept a lower bar of 0.31% or less, which the document says would clear the primary. (b) Run the pre-exposure balance check, which the document says would clear the one check that could not run. (c) Extend the test, which the document says would help only if the estimate reaches 0.50%. The document does not say whether extension is possible after a completed 14-day run.\n\n3. **Number:** +0.31% change in Successful Search Rate (relative, percent), against a 0.50% bar. The whole interval (+0.13% to +0.49%) sits below the bar.\n\n4. **Caveat:** The pre-period comparison was not run, so the arms' balance before exposure is unverified. The novelty check was also not run, so a short-term boost is possible. The \"measured\" claim that the new ranker causes the lift rests on the config diff, and no segment cuts show which queries gained.\n\n5. **Lost:**\n   - \"Could reverse it: pre period could not be checked: no pre-period interval or platform check\" is ambiguous. I could not tell if this means the result could be reversed or that the balance check is missing.\n   - The guardrail margins are never given as numbers, so \"within margin\" cannot be checked.\n   - The \"longer run\" option is unclear because the test has already ended.\n   - \"Harm inside a margin goes to escalate\" is unclear as a rule.\n\n6. **Question:** Can the pre-exposure balance check be run from existing data before the triage decision, and is extending the test after day 14 an available option?\n"
+  }
+}

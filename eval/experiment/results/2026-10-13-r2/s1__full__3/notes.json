@@ -1,0 +1,7 @@
+{"why_it_moved":[
+{"text":"Successful Search Rate rose 0.81% with the Ranker v7 model as the only parameter that differs between arms.","label":"measured"},
+{"text":"The segment cuts of Successful Search Rate (mobile, desktop, head, tail) show no clear segment carrying the lift, so the mechanism is not known.","label":"guess"}],
+"would_change":[
+"A pre-exposure comparison showing the arms already differed on Successful Search Rate would mean the test is broken and the result cannot be trusted.",
+"A daily series by days since first exposure showing the lift fading toward zero in the last days would mean the effect is a novelty and needs more time.",
+"An owner correction to the 0.50% bar or the guardrail margins would reopen the call."]}

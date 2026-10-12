@@ -1,0 +1,9 @@
+{"why_it_moved":[
+{"text":"Queries per User rose 2.4% while Reformulation Rate rose 5.1%, so part of the extra searching is people rephrasing a query.","label":"measured"},
+{"text":"Successful Search Rate, the hypothesis metric in the experiment config, moved -0.35%, and its range includes zero, so it neither confirms nor rules out a loss.","label":"measured"},
+{"text":"The new ranker may return less relevant first results, which makes users search again.","label":"guess"}],
+"would_change":[
+"A cut of Queries per User by whether the query followed a reformulation, showing the gain comes from new intent and not rephrasing, would remove the concern.",
+"A longer run in which Successful Search Rate is flat or up and Reformulation Rate stops rising would remove the concern.",
+"A Successful Search Rate loss that holds with more data would make this a clear block."],
+"analyst_view":{"call":"escalate","reason":"Queries per User is a volume metric and the registered primary, but Reformulation Rate rose 5.1% after correction and Successful Search Rate moved -0.35%. More searching here may mean worse results, so the review should weigh the trade-off before approving."}}

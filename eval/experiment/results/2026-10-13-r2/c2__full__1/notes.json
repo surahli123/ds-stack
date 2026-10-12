@@ -1,0 +1,4 @@
+{"why_it_moved":[{"text":"Successful Search Rate rose +0.81%, but the test arm changed both the ranker model and the snippet length, so the lift cannot be credited to the ranker.","label":"measured"},
+{"text":"Longer snippets may by themselves change clicks and success, independent of the ranker.","label":"guess"}],
+"would_change":["Rerun with snippet length equal in both arms, or have the owner re-register it as part of the test; then the primary and guardrails can be read.","Supply a pre-exposure comparison and a daily series by days since first exposure so the two checks that could not run can run."],
+"analyst_view":null}

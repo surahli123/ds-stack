@@ -1,0 +1,1 @@
+{"check": "ds_experiment_decide", "details": {"decider": "Latency p95 (ms)", "experiment": "ranker_v7", "inputs": {"config": "b84a437530", "daily": null, "prereg": "1c888638ba", "scorecard": "9605efed98", "standards": "a6d22a7308"}}, "status": "dont_ship", "summary": "Latency p95 (ms) rose 3.10% (+2.50% to +3.70%), the wrong way and past its 2.00% margin.", "ts": 1791845453.853}

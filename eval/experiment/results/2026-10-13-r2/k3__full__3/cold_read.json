@@ -1,0 +1,53 @@
+{
+  "pass": false,
+  "skim": "2/2",
+  "full": "2/3",
+  "items": [
+    {
+      "pass": "skim",
+      "item": "answer",
+      "key": "Keep running: Successful Search Rate reads +0.12% (-0.36% to +0.60%); ruling out the 0.50% bar needs about 1.9 times the users so far.",
+      "reader": "Keep running the test. Successful Search Rate is +0.12% (95% interval -0.36% to +0.60%), short of the 0.50% bar, so the result is unclear. Approve running the test longer, since about 1.9 times the current users are needed to rule out the 0.50% bar.",
+      "got": true,
+      "how": "overlap 78%"
+    },
+    {
+      "pass": "skim",
+      "item": "decision",
+      "key": "Approve running the test longer.",
+      "reader": "Approve running the test longer, since about 1.9 times the current users are needed to rule out the 0.50% bar. Keep running the test. Successful Search Rate is +0.12% (95% interval -0.36% to +0.60%), short of the 0.50% bar, so the result is unclear.",
+      "got": true,
+      "how": "overlap 100%"
+    },
+    {
+      "pass": "full",
+      "item": "takeaway 1",
+      "key": "Successful Search Rate +0.12% (-0.36% to +0.60%) against at least 0.50% higher.",
+      "reader": "The document recommends continuing the test, not launching Ranker v7. Current state: day 14 of 14, 1,000,000 users per arm (above the planned 900,000). Successful Search Rate is +0.12% (95% interval -0.36% to +0.60%) against a bar of at least +0.50%, so the verdict is unclear. Four guardrails are within margin. Don't launch on this evidence. Approve extending the test only if the author first runs the two skipped checks (pre-period and novelty) and sets a stop rule. Extending needs about 1.9 times the current users, and the document's own logic says that if the lift stays near +0.12%, the test ends with no win. +0.12% change in Successful Search Rate, against the 0.50% bar. The primary result is inconclusive, and the bar may be out of reach. The pre-period and novelty checks did not run, and there are no segment cuts, so the mechanism behind the small lift is unknown (labelled as a guess).",
+      "got": true,
+      "how": "overlap 90%"
+    },
+    {
+      "pass": "full",
+      "item": "takeaway 2",
+      "key": "Approve running the test longer.",
+      "reader": "The document recommends continuing the test, not launching Ranker v7. Current state: day 14 of 14, 1,000,000 users per arm (above the planned 900,000). Successful Search Rate is +0.12% (95% interval -0.36% to +0.60%) against a bar of at least +0.50%, so the verdict is unclear. Four guardrails are within margin. Don't launch on this evidence. Approve extending the test only if the author first runs the two skipped checks (pre-period and novelty) and sets a stop rule. Extending needs about 1.9 times the current users, and the document's own logic says that if the lift stays near +0.12%, the test ends with no win. +0.12% change in Successful Search Rate, against the 0.50% bar. The primary result is inconclusive, and the bar may be out of reach. The pre-period and novelty checks did not run, and there are no segment cuts, so the mechanism behind the small lift is unknown (labelled as a guess).",
+      "got": true,
+      "how": "overlap 50%"
+    },
+    {
+      "pass": "full",
+      "item": "takeaway 3",
+      "key": "Could reverse it: the remaining data; the call is made at the planned sample.",
+      "reader": "The document recommends continuing the test, not launching Ranker v7. Current state: day 14 of 14, 1,000,000 users per arm (above the planned 900,000). Successful Search Rate is +0.12% (95% interval -0.36% to +0.60%) against a bar of at least +0.50%, so the verdict is unclear. Four guardrails are within margin. Don't launch on this evidence. Approve extending the test only if the author first runs the two skipped checks (pre-period and novelty) and sets a stop rule. Extending needs about 1.9 times the current users, and the document's own logic says that if the lift stays near +0.12%, the test ends with no win. +0.12% change in Successful Search Rate, against the 0.50% bar. The primary result is inconclusive, and the bar may be out of reach. The pre-period and novelty checks did not run, and there are no segment cuts, so the mechanism behind the small lift is unknown (labelled as a guess).",
+      "got": false,
+      "how": "overlap 14%"
+    }
+  ],
+  "lost": "I had to reread the decision line. \"Keep running\" plus \"Approve running the test longer\" reads as extending the test, but \"the call is made at the planned sample\" suggests the test is already at its planned end. \"Keep running\" could also be misread as keeping Ranker v7 live. The document also doesn't say whether \"at least 0.50% higher\" is relative or percentage points. The \"Calls\" definitions don't match the verdict wording: \"Keep running means not enough data yet,\" yet the verdict is \"unclear.\"",
+  "question": "Will you run the pre-exposure comparison and the daily series by days since first exposure before we commit more users, and what stop rule applies if we extend?",
+  "replies": {
+    "skim": "1. Answer: Keep running the test. Successful Search Rate is +0.12% (95% interval -0.36% to +0.60%), short of the 0.50% bar, so the result is unclear.\n2. Decision: Approve running the test longer, since about 1.9 times the current users are needed to rule out the 0.50% bar.\n3. Number: +0.12% (change in Successful Search Rate, percent).\n",
+    "full": "1. **Answer:** The document recommends continuing the test, not launching Ranker v7. Current state: day 14 of 14, 1,000,000 users per arm (above the planned 900,000). Successful Search Rate is +0.12% (95% interval -0.36% to +0.60%) against a bar of at least +0.50%, so the verdict is unclear. Four guardrails are within margin.\n\n2. **Decision:** Don't launch on this evidence. Approve extending the test only if the author first runs the two skipped checks (pre-period and novelty) and sets a stop rule. Extending needs about 1.9 times the current users, and the document's own logic says that if the lift stays near +0.12%, the test ends with no win.\n\n3. **Number:** +0.12% change in Successful Search Rate, against the 0.50% bar.\n\n4. **Caveat:** The primary result is inconclusive, and the bar may be out of reach. The pre-period and novelty checks did not run, and there are no segment cuts, so the mechanism behind the small lift is unknown (labelled as a guess).\n\n5. **Lost:** I had to reread the decision line. \"Keep running\" plus \"Approve running the test longer\" reads as extending the test, but \"the call is made at the planned sample\" suggests the test is already at its planned end. \"Keep running\" could also be misread as keeping Ranker v7 live. The document also doesn't say whether \"at least 0.50% higher\" is relative or percentage points. The \"Calls\" definitions don't match the verdict wording: \"Keep running means not enough data yet,\" yet the verdict is \"unclear.\"\n\n6. **Question:** Will you run the pre-exposure comparison and the daily series by days since first exposure before we commit more users, and what stop rule applies if we extend?\n"
+  }
+}

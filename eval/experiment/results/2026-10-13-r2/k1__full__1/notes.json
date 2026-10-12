@@ -1,0 +1,18 @@
+{
+ "why_it_moved": [
+  {
+   "text": "Successful Search Rate reads +1.42% (+0.32% to +2.52%) after 4 of 14 days, and no guardrail has moved outside its margin.",
+   "label": "measured"
+  },
+  {
+   "text": "The mechanism is unknown: the scorecard has no segment cuts, so we cannot say which queries gained.",
+   "label": "guess"
+  }
+ ],
+ "would_change": [
+  "Reaching the full 14 days with the lift still at or above the 0.5% bar, and the low end of the range clearing it too, would settle the primary.",
+  "A daily series by days since first exposure would show whether the early lift is fading.",
+  "A pre-exposure comparison on Successful Search Rate would let the pre-period check run."
+ ],
+ "analyst_view": null
+}

@@ -1,0 +1,5 @@
+{"why_it_moved":[{"text":"The test arm ran a longer snippet as well as the new ranker, so the lift cannot be credited to the ranker alone.","label":"measured"},
+{"text":"Longer snippets could change clicks on their own, which would feed straight into Successful Search Rate.","label":"guess"}],
+"would_change":["Rerun with snippet_length equal in both arms, or confirm in the audit trail that the snippet change was intended and register it, and the existing numbers can be read.",
+"A pre-exposure comparison and a daily series by days since first exposure would clear the two checks that could not run."],
+"analyst_view":null}

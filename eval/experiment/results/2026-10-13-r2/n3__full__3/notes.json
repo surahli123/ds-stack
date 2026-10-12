@@ -1,0 +1,7 @@
+{"why_it_moved":[
+{"text":"Successful Search Rate is flat at -0.05% (-0.34% to +0.24%), and the segment cuts by device and query type show no consistent direction.","label":"measured"},
+{"text":"The mechanism is unknown; no segment or secondary metric explains a change in how searches end.","label":"guess"}],
+"would_change":[
+"A pre-exposure comparison for Successful Search Rate, which the export did not include, showing the arms already differed before exposure.",
+"A daily series by days since first exposure showing the effect moving over the 14 days, which the novelty check could not test."],
+"analyst_view":null}

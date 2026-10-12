@@ -1,0 +1,53 @@
+{
+  "pass": false,
+  "skim": "1/2",
+  "full": "2/3",
+  "items": [
+    {
+      "pass": "skim",
+      "item": "answer",
+      "key": "Don't ship: Latency p95 (ms) rose 3.10% (+2.50% to +3.70%), the wrong way and past its 2.00% margin.",
+      "reader": "Don't ship. Ranker v7 raised Latency p95 by 3.10%, past its 2.00% margin, while Successful Search Rate rose 0.81%, clearing its 0.50% bar. Agree not to launch; the owner decides whether to iterate on a v7 build that keeps Latency p95 within 2.00%.",
+      "got": false,
+      "how": "overlap 0%"
+    },
+    {
+      "pass": "skim",
+      "item": "decision",
+      "key": "Agree not to launch; the owner decides whether to iterate.",
+      "reader": "Agree not to launch; the owner decides whether to iterate on a v7 build that keeps Latency p95 within 2.00%. Don't ship. Ranker v7 raised Latency p95 by 3.10%, past its 2.00% margin, while Successful Search Rate rose 0.81%, clearing its 0.50% bar.",
+      "got": true,
+      "how": "overlap 100%"
+    },
+    {
+      "pass": "full",
+      "item": "takeaway 1",
+      "key": "Latency p95 (ms) +3.10% (+2.50% to +3.70%) against at most 2.00% higher.",
+      "reader": "The document recommends not launching Ranker v7. Latency p95 rose 3.10%, past its 2.00% margin, even though Successful Search Rate improved 0.81%, above its 0.50% bar. The test is finished: 14 of 14 days, about 1,000,000 users per arm (above the planned 900,000). Agree not to launch. The document asks the owner whether to iterate. A reversal needs either a v7 build whose latency rise stays within 2.00% while search still clears 0.50%, or a formal review that accepts a latency rise beyond the registered margin. Latency p95 change of +3.10% (95% interval +2.50% to +3.70%), against a bar of at most +2.00%. The whole interval sits above the bar, so the overrun is not noise. The latency cost is unexplained. The cause (a heavier lambdamart_v7 model) is inferred, and no segment cuts were read, so which queries pay the cost is unknown. The pre-period and novelty checks were not run, so the search gain could be inflated by novelty.",
+      "got": true,
+      "how": "overlap 88%"
+    },
+    {
+      "pass": "full",
+      "item": "takeaway 2",
+      "key": "Agree not to launch; the owner decides whether to iterate.",
+      "reader": "The document recommends not launching Ranker v7. Latency p95 rose 3.10%, past its 2.00% margin, even though Successful Search Rate improved 0.81%, above its 0.50% bar. The test is finished: 14 of 14 days, about 1,000,000 users per arm (above the planned 900,000). Agree not to launch. The document asks the owner whether to iterate. A reversal needs either a v7 build whose latency rise stays within 2.00% while search still clears 0.50%, or a formal review that accepts a latency rise beyond the registered margin. Latency p95 change of +3.10% (95% interval +2.50% to +3.70%), against a bar of at most +2.00%. The whole interval sits above the bar, so the overrun is not noise. The latency cost is unexplained. The cause (a heavier lambdamart_v7 model) is inferred, and no segment cuts were read, so which queries pay the cost is unknown. The pre-period and novelty checks were not run, so the search gain could be inflated by novelty.",
+      "got": true,
+      "how": "overlap 83%"
+    },
+    {
+      "pass": "full",
+      "item": "takeaway 3",
+      "key": "Could reverse it: only a version that keeps Latency p95 (ms) at at most 2.00% higher.",
+      "reader": "The document recommends not launching Ranker v7. Latency p95 rose 3.10%, past its 2.00% margin, even though Successful Search Rate improved 0.81%, above its 0.50% bar. The test is finished: 14 of 14 days, about 1,000,000 users per arm (above the planned 900,000). Agree not to launch. The document asks the owner whether to iterate. A reversal needs either a v7 build whose latency rise stays within 2.00% while search still clears 0.50%, or a formal review that accepts a latency rise beyond the registered margin. Latency p95 change of +3.10% (95% interval +2.50% to +3.70%), against a bar of at most +2.00%. The whole interval sits above the bar, so the overrun is not noise. The latency cost is unexplained. The cause (a heavier lambdamart_v7 model) is inferred, and no segment cuts were read, so which queries pay the cost is unknown. The pre-period and novelty checks were not run, so the search gain could be inflated by novelty.",
+      "got": false,
+      "how": "overlap 38%"
+    }
+  ],
+  "lost": "Nowhere. The structure and verdicts were clear on a single read.",
+  "question": "Can you break the latency rise down by query type, and does a v7 variant with a lighter scoring model keep p95 within 2.00% while holding the search gain?",
+  "replies": {
+    "skim": "1. Answer: Don't ship. Ranker v7 raised Latency p95 by 3.10%, past its 2.00% margin, while Successful Search Rate rose 0.81%, clearing its 0.50% bar.\n2. Decision: Agree not to launch; the owner decides whether to iterate on a v7 build that keeps Latency p95 within 2.00%.\n3. Number: +3.10% Latency p95 change (ms, 95% interval +2.50% to +3.70%).\n",
+    "full": "1. **Answer:** The document recommends not launching Ranker v7. Latency p95 rose 3.10%, past its 2.00% margin, even though Successful Search Rate improved 0.81%, above its 0.50% bar. The test is finished: 14 of 14 days, about 1,000,000 users per arm (above the planned 900,000).\n\n2. **Decision:** Agree not to launch. The document asks the owner whether to iterate. A reversal needs either a v7 build whose latency rise stays within 2.00% while search still clears 0.50%, or a formal review that accepts a latency rise beyond the registered margin.\n\n3. **Number:** Latency p95 change of +3.10% (95% interval +2.50% to +3.70%), against a bar of at most +2.00%. The whole interval sits above the bar, so the overrun is not noise.\n\n4. **Caveat:** The latency cost is unexplained. The cause (a heavier lambdamart_v7 model) is inferred, and no segment cuts were read, so which queries pay the cost is unknown. The pre-period and novelty checks were not run, so the search gain could be inflated by novelty.\n\n5. **Lost:** Nowhere. The structure and verdicts were clear on a single read.\n\n6. **Question:** Can you break the latency rise down by query type, and does a v7 variant with a lighter scoring model keep p95 within 2.00% while holding the search gain?\n"
+  }
+}

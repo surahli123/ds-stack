@@ -1,0 +1,8 @@
+{"why_it_moved":[
+{"text":"The Successful Search Rate gain shrinks the longer users have had the new ranker, by about 0.1 points per day since exposure.","label":"measured"},
+{"text":"Early users may react to a changed result order, and the gain settles lower as that wears off.","label":"guess"}],
+"would_change":[
+"If the gain by days since exposure levels off above the 0.5% bar once the planned 14 days are in, the call becomes a win.",
+"If the gain keeps falling below the 0.5% bar through the planned 14 days, the call becomes a trade-off for triage.",
+"A before-start comparison of the two groups would let the pre-period check run."],
+"analyst_view":null}

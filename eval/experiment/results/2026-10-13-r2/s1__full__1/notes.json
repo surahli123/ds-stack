@@ -1,0 +1,22 @@
+{
+ "why_it_moved": [
+  {
+   "text": "Successful Search Rate rose 0.81% overall, but no single segment (device or query type) shows a clear gain on its own; the lift is spread thinly.",
+   "label": "measured"
+  },
+  {
+   "text": "Reformulation Rate rose 0.96%, mostly on informational queries (+1.70%), so some users may be re-searching after the new ranker's first page.",
+   "label": "inferred"
+  },
+  {
+   "text": "The mechanism behind the lift is unknown; the new ranker model is the only config difference.",
+   "label": "guess"
+  }
+ ],
+ "would_change": [
+  "The pre period could not be checked; a pre-exposure comparison showing the arms already differed on Successful Search Rate would void the lift.",
+  "A daily series by days since first exposure showing the effect fading would mean the lift is a novelty effect, since the novelty check could not run.",
+  "Reformulation Rate still rising on informational queries in a longer run would show that some of the gain is users searching again."
+ ],
+ "analyst_view": null
+}

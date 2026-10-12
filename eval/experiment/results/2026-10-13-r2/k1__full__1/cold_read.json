@@ -1,0 +1,53 @@
+{
+  "pass": true,
+  "skim": "2/2",
+  "full": "3/3",
+  "items": [
+    {
+      "pass": "skim",
+      "item": "answer",
+      "key": "Keep running: It's day 4 of 14; Successful Search Rate reads +1.42% (+0.32% to +2.52%) so far, too early to call.",
+      "reader": "Keep running. The test is on day 4 of 14, and the primary metric, Successful Search Rate, reads +1.42% (95% interval +0.32% to +2.52%), which is above the 0.50% bar but too early to call. Approve running the test longer, to the full 14 days and the planned 900,000 users per arm (it is at 260,000 per arm now). Re-decide at the planned sample, requiring the lift to stay at or above 0.5% with the low end of the interval also clearing it.",
+      "got": true,
+      "how": "overlap 94%"
+    },
+    {
+      "pass": "skim",
+      "item": "decision",
+      "key": "Approve running the test longer.",
+      "reader": "Approve running the test longer, to the full 14 days and the planned 900,000 users per arm (it is at 260,000 per arm now). Re-decide at the planned sample, requiring the lift to stay at or above 0.5% with the low end of the interval also clearing it. Keep running. The test is on day 4 of 14, and the primary metric, Successful Search Rate, reads +1.42% (95% interval +0.32% to +2.52%), which is above the 0.50% bar but too early to call.",
+      "got": true,
+      "how": "overlap 100%"
+    },
+    {
+      "pass": "full",
+      "item": "takeaway 1",
+      "key": "Successful Search Rate +1.42% (+0.32% to +2.52%) against at least 0.50% higher.",
+      "reader": "Keep running the test. It is day 4 of a planned 14-day test. The primary metric, Successful Search Rate, is at +1.42% (95% interval +0.32% to +2.52%), above the 0.50% bar, but too early to call. No guardrail is outside its margin. Approve running the test longer, to the full 14 days and the planned 900,000 users per arm. Do not launch yet. +1.42% change in Successful Search Rate (relative change; the document gives no unit beyond the percent). The bar is at least +0.50%. The sample is small and early: 260,000 users per arm of the planned 900,000, after 4 of 14 days. The low end of the interval (+0.32%) is below the bar. The pre-period and novelty checks were not run, and the mechanism is unknown because there are no segment cuts. The lift could be fading (a daily series would show this, and none exists yet).",
+      "got": true,
+      "how": "overlap 80%"
+    },
+    {
+      "pass": "full",
+      "item": "takeaway 2",
+      "key": "Approve running the test longer.",
+      "reader": "Keep running the test. It is day 4 of a planned 14-day test. The primary metric, Successful Search Rate, is at +1.42% (95% interval +0.32% to +2.52%), above the 0.50% bar, but too early to call. No guardrail is outside its margin. Approve running the test longer, to the full 14 days and the planned 900,000 users per arm. Do not launch yet. +1.42% change in Successful Search Rate (relative change; the document gives no unit beyond the percent). The bar is at least +0.50%. The sample is small and early: 260,000 users per arm of the planned 900,000, after 4 of 14 days. The low end of the interval (+0.32%) is below the bar. The pre-period and novelty checks were not run, and the mechanism is unknown because there are no segment cuts. The lift could be fading (a daily series would show this, and none exists yet).",
+      "got": true,
+      "how": "overlap 100%"
+    },
+    {
+      "pass": "full",
+      "item": "takeaway 3",
+      "key": "Could reverse it: the remaining data; the call is made at the planned sample.",
+      "reader": "Keep running the test. It is day 4 of a planned 14-day test. The primary metric, Successful Search Rate, is at +1.42% (95% interval +0.32% to +2.52%), above the 0.50% bar, but too early to call. No guardrail is outside its margin. Approve running the test longer, to the full 14 days and the planned 900,000 users per arm. Do not launch yet. +1.42% change in Successful Search Rate (relative change; the document gives no unit beyond the percent). The bar is at least +0.50%. The sample is small and early: 260,000 users per arm of the planned 900,000, after 4 of 14 days. The low end of the interval (+0.32%) is below the bar. The pre-period and novelty checks were not run, and the mechanism is unknown because there are no segment cuts. The lift could be fading (a daily series would show this, and none exists yet).",
+      "got": true,
+      "how": "overlap 43%; grader: same fact"
+    }
+  ],
+  "lost": "Nowhere, mostly. Two small points: \"Can't tell\" and \"Escalate\" are defined in the appendix but not used, and I could not tell whether \"+1.42%\" is relative or absolute. The document does not say whether the 0.50% bar is relative or absolute either.",
+  "question": "Why was the test called at 4 days of a 14-day plan, and is the early readout a pre-committed interim look or a peek that could bias the final decision? Unclear from the document.",
+  "replies": {
+    "skim": "1. Answer: Keep running. The test is on day 4 of 14, and the primary metric, Successful Search Rate, reads +1.42% (95% interval +0.32% to +2.52%), which is above the 0.50% bar but too early to call.\n\n2. Decision: Approve running the test longer, to the full 14 days and the planned 900,000 users per arm (it is at 260,000 per arm now). Re-decide at the planned sample, requiring the lift to stay at or above 0.5% with the low end of the interval also clearing it.\n\n3. Number: +1.42% (Successful Search Rate, relative change in the primary metric, 95% interval +0.32% to +2.52%).\n",
+    "full": "1. **Answer:** Keep running the test. It is day 4 of a planned 14-day test. The primary metric, Successful Search Rate, is at +1.42% (95% interval +0.32% to +2.52%), above the 0.50% bar, but too early to call. No guardrail is outside its margin.\n\n2. **Decision:** Approve running the test longer, to the full 14 days and the planned 900,000 users per arm. Do not launch yet.\n\n3. **Number:** +1.42% change in Successful Search Rate (relative change; the document gives no unit beyond the percent). The bar is at least +0.50%.\n\n4. **Caveat:** The sample is small and early: 260,000 users per arm of the planned 900,000, after 4 of 14 days. The low end of the interval (+0.32%) is below the bar. The pre-period and novelty checks were not run, and the mechanism is unknown because there are no segment cuts. The lift could be fading (a daily series would show this, and none exists yet).\n\n5. **Lost:** Nowhere, mostly. Two small points: \"Can't tell\" and \"Escalate\" are defined in the appendix but not used, and I could not tell whether \"+1.42%\" is relative or absolute. The document does not say whether the 0.50% bar is relative or absolute either.\n\n6. **Question:** Why was the test called at 4 days of a 14-day plan, and is the early readout a pre-committed interim look or a peek that could bias the final decision? Unclear from the document.\n"
+  }
+}

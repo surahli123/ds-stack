@@ -1,0 +1,22 @@
+{
+ "why_it_moved": [
+  {
+   "text": "Successful Search Rate rose 1.24%, but Abandonment Rate also rose 2.20%: more searches succeed while more end with no click.",
+   "label": "measured"
+  },
+  {
+   "text": "Abandonment Rate - Head Queries rose 1.55% and Abandonment Rate - Desktop rose 0.81%; Successful Search Rate - Head Queries rose 0.59%.",
+   "label": "measured"
+  },
+  {
+   "text": "The new ranker may favor answers that satisfy some head queries and push others out of the results list, but no cut here shows it.",
+   "label": "guess"
+  }
+ ],
+ "would_change": [
+  "Abandonment Rate rising less than 1.00% in a rerun or a fixed ranker build would clear the guardrail.",
+  "The team showing the abandonment rise is a logging change, not user behavior, would reopen the call.",
+  "A pre-exposure comparison and a by-exposure-day series would fill the two checks that could not run."
+ ],
+ "analyst_view": null
+}

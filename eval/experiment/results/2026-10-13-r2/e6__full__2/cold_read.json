@@ -1,0 +1,53 @@
+{
+  "pass": false,
+  "skim": "1/2",
+  "full": "3/3",
+  "items": [
+    {
+      "pass": "skim",
+      "item": "answer",
+      "key": "Ship: Queries per User rose 2.40% (+1.50% to +3.30%), which clears the 1.00% bar and every guardrail held.",
+      "reader": "The document concludes Ship: Queries per User rose 2.40% (95% interval +1.50% to +3.30%), clearing the 1.00% bar, and all guardrails held. The analyst's view is Escalate, citing the 5.10% rise in Reformulation Rate and a -0.35% move in Successful Search Rate. Hold the full-traffic launch until the reformulation cut is run (gain from new intent vs. rephrasing), since the analyst's Escalate view and the post-correction Reformulation Rate increase are unresolved; the pre-period and novelty checks were not run.",
+      "got": true,
+      "how": "overlap 79%"
+    },
+    {
+      "pass": "skim",
+      "item": "decision",
+      "key": "Approve the launch to all traffic.",
+      "reader": "Hold the full-traffic launch until the reformulation cut is run (gain from new intent vs. rephrasing), since the analyst's Escalate view and the post-correction Reformulation Rate increase are unresolved; the pre-period and novelty checks were not run. The document concludes Ship: Queries per User rose 2.40% (95% interval +1.50% to +3.30%), clearing the 1.00% bar, and all guardrails held. The analyst's view is Escalate, citing the 5.10% rise in Reformulation Rate and a -0.35% move in Successful Search Rate.",
+      "got": false,
+      "how": "overlap 33%"
+    },
+    {
+      "pass": "full",
+      "item": "takeaway 1",
+      "key": "Queries per User +2.40% (+1.50% to +3.30%) against at least 1.00% higher.",
+      "reader": "The document recommends Ship: Queries per User rose 2.40% (95% interval +1.50% to +3.30%), above the 1.00% bar, and the guardrails held. The analyst's view says Escalate, because Reformulation Rate rose 5.1% and Successful Search Rate moved -0.35%. Current state: the 14-day test is complete with 1,000,000 users per arm, and the launch decision is open. Don't approve the full launch on this document alone. Hold for the reformulation split of Queries per User and the novelty and pre-period checks, which were not run. If the gain holds for queries that did not follow a reformulation, approve. If it doesn't, escalate. Queries per User, +2.40% (percent change vs. control). The secondary Reformulation Rate, +5.10%, is the number that worries me most. Part of the extra searching may be people rephrasing rather than finding what they need. Successful Search Rate (the hypothesis metric) is -0.35% with an interval that includes zero, so a loss is not ruled out. Pre-period and novelty checks were not run, and 55 secondary metrics were tested.",
+      "got": true,
+      "how": "overlap 70%"
+    },
+    {
+      "pass": "full",
+      "item": "takeaway 2",
+      "key": "Approve the launch to all traffic.",
+      "reader": "The document recommends Ship: Queries per User rose 2.40% (95% interval +1.50% to +3.30%), above the 1.00% bar, and the guardrails held. The analyst's view says Escalate, because Reformulation Rate rose 5.1% and Successful Search Rate moved -0.35%. Current state: the 14-day test is complete with 1,000,000 users per arm, and the launch decision is open. Don't approve the full launch on this document alone. Hold for the reformulation split of Queries per User and the novelty and pre-period checks, which were not run. If the gain holds for queries that did not follow a reformulation, approve. If it doesn't, escalate. Queries per User, +2.40% (percent change vs. control). The secondary Reformulation Rate, +5.10%, is the number that worries me most. Part of the extra searching may be people rephrasing rather than finding what they need. Successful Search Rate (the hypothesis metric) is -0.35% with an interval that includes zero, so a loss is not ruled out. Pre-period and novelty checks were not run, and 55 secondary metrics were tested.",
+      "got": true,
+      "how": "overlap 67%"
+    },
+    {
+      "pass": "full",
+      "item": "takeaway 3",
+      "key": "Could reverse it: secondary metric Reformulation Rate got worse after correction.",
+      "reader": "The document recommends Ship: Queries per User rose 2.40% (95% interval +1.50% to +3.30%), above the 1.00% bar, and the guardrails held. The analyst's view says Escalate, because Reformulation Rate rose 5.1% and Successful Search Rate moved -0.35%. Current state: the 14-day test is complete with 1,000,000 users per arm, and the launch decision is open. Don't approve the full launch on this document alone. Hold for the reformulation split of Queries per User and the novelty and pre-period checks, which were not run. If the gain holds for queries that did not follow a reformulation, approve. If it doesn't, escalate. Queries per User, +2.40% (percent change vs. control). The secondary Reformulation Rate, +5.10%, is the number that worries me most. Part of the extra searching may be people rephrasing rather than finding what they need. Successful Search Rate (the hypothesis metric) is -0.35% with an interval that includes zero, so a loss is not ruled out. Pre-period and novelty checks were not run, and 55 secondary metrics were tested.",
+      "got": true,
+      "how": "overlap 44%; grader: same fact"
+    }
+  ],
+  "lost": "Yes.",
+  "question": "Can you split Queries per User by whether the query followed a reformulation, and show whether the +2.4% holds for the non-reformulated queries? Also, what is the Successful Search Rate interval, and what do the pre-period and novelty checks show?",
+  "replies": {
+    "skim": "1. Answer: The document concludes Ship: Queries per User rose 2.40% (95% interval +1.50% to +3.30%), clearing the 1.00% bar, and all guardrails held. The analyst's view is Escalate, citing the 5.10% rise in Reformulation Rate and a -0.35% move in Successful Search Rate.\n2. Decision: Hold the full-traffic launch until the reformulation cut is run (gain from new intent vs. rephrasing), since the analyst's Escalate view and the post-correction Reformulation Rate increase are unresolved; the pre-period and novelty checks were not run.\n3. Number: +2.40% (Queries per User, percent change vs. control).\n",
+    "full": "1. **Answer:** The document recommends Ship: Queries per User rose 2.40% (95% interval +1.50% to +3.30%), above the 1.00% bar, and the guardrails held. The analyst's view says Escalate, because Reformulation Rate rose 5.1% and Successful Search Rate moved -0.35%. Current state: the 14-day test is complete with 1,000,000 users per arm, and the launch decision is open.\n\n2. **Decision:** Don't approve the full launch on this document alone. Hold for the reformulation split of Queries per User and the novelty and pre-period checks, which were not run. If the gain holds for queries that did not follow a reformulation, approve. If it doesn't, escalate.\n\n3. **Number:** Queries per User, +2.40% (percent change vs. control). The secondary Reformulation Rate, +5.10%, is the number that worries me most.\n\n4. **Caveat:** Part of the extra searching may be people rephrasing rather than finding what they need. Successful Search Rate (the hypothesis metric) is -0.35% with an interval that includes zero, so a loss is not ruled out. Pre-period and novelty checks were not run, and 55 secondary metrics were tested.\n\n5. **Lost:** Yes.\n   - The headline says Ship, but the analyst's view says Escalate, and the document doesn't reconcile them.\n   - The guardrail row reads \"1 other guardrail\" with no name. The appendix names it as Latency p95 (ms).\n   - Reformulation Rate is cited as \"got worse after correction\" but isn't in the primary table, and its interval isn't given.\n   - The Successful Search Rate interval is not stated.\n   - \"Could reverse it\" is unclear as a label.\n\n6. **Question:** Can you split Queries per User by whether the query followed a reformulation, and show whether the +2.4% holds for the non-reformulated queries? Also, what is the Successful Search Rate interval, and what do the pre-period and novelty checks show?\n"
+  }
+}

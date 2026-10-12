@@ -1,0 +1,53 @@
+{
+  "pass": true,
+  "skim": "2/2",
+  "full": "3/3",
+  "items": [
+    {
+      "pass": "skim",
+      "item": "answer",
+      "key": "Ship: Successful Search Rate rose 0.81% (+0.41% to +1.21%), which clears the 0.50% bar and every guardrail held.",
+      "reader": "The document recommends shipping Ranker v7. Successful Search Rate rose 0.81% (95% interval +0.41% to +1.21%), clearing the 0.50% bar, with all guardrails holding. The pre-period check and novelty check were not run. Approve the launch to all traffic, but first run the pre-exposure comparison. If the arms already differed on Successful Search Rate before exposure, the test is unreadable and the call should be revisited.",
+      "got": true,
+      "how": "overlap 64%"
+    },
+    {
+      "pass": "skim",
+      "item": "decision",
+      "key": "Approve the launch to all traffic.",
+      "reader": "Approve the launch to all traffic, but first run the pre-exposure comparison. If the arms already differed on Successful Search Rate before exposure, the test is unreadable and the call should be revisited. The document recommends shipping Ranker v7. Successful Search Rate rose 0.81% (95% interval +0.41% to +1.21%), clearing the 0.50% bar, with all guardrails holding. The pre-period check and novelty check were not run.",
+      "got": true,
+      "how": "overlap 100%"
+    },
+    {
+      "pass": "full",
+      "item": "takeaway 1",
+      "key": "Successful Search Rate +0.81% (+0.41% to +1.21%) against at least 0.50% higher.",
+      "reader": "The document recommends shipping Ranker v7 to all traffic. The test is complete: day 14 of 14, about 1,000,000 users per arm. Successful Search Rate rose +0.81% (95% interval +0.41% to +1.21%) against a bar of at least +0.50%, and the four other guardrails held. Approve the launch, but first run the two checks the document says were skipped: the pre-exposure comparison and the daily effect series by days since first exposure. Neither is hard to do, and the document says they could reverse the call. If you want to launch before they're done, that's a risk call you should make explicitly. +0.81% change in Successful Search Rate. The document doesn't say whether this is relative or absolute, so I'm reading it as a relative percent change. The pre-period check and the novelty check were not run, so it's unknown whether the arms already differed before the test or whether the effect is fading. The mechanism is also unknown. Head Queries (-0.95%) and Mobile (+0.74%) did not survive correction, and the document's own guess is only a guess.",
+      "got": true,
+      "how": "overlap 90%"
+    },
+    {
+      "pass": "full",
+      "item": "takeaway 2",
+      "key": "Approve the launch to all traffic.",
+      "reader": "The document recommends shipping Ranker v7 to all traffic. The test is complete: day 14 of 14, about 1,000,000 users per arm. Successful Search Rate rose +0.81% (95% interval +0.41% to +1.21%) against a bar of at least +0.50%, and the four other guardrails held. Approve the launch, but first run the two checks the document says were skipped: the pre-exposure comparison and the daily effect series by days since first exposure. Neither is hard to do, and the document says they could reverse the call. If you want to launch before they're done, that's a risk call you should make explicitly. +0.81% change in Successful Search Rate. The document doesn't say whether this is relative or absolute, so I'm reading it as a relative percent change. The pre-period check and the novelty check were not run, so it's unknown whether the arms already differed before the test or whether the effect is fading. The mechanism is also unknown. Head Queries (-0.95%) and Mobile (+0.74%) did not survive correction, and the document's own guess is only a guess.",
+      "got": true,
+      "how": "overlap 100%"
+    },
+    {
+      "pass": "full",
+      "item": "takeaway 3",
+      "key": "Could reverse it: pre period could not be checked: no pre-period interval or platform check.",
+      "reader": "The document recommends shipping Ranker v7 to all traffic. The test is complete: day 14 of 14, about 1,000,000 users per arm. Successful Search Rate rose +0.81% (95% interval +0.41% to +1.21%) against a bar of at least +0.50%, and the four other guardrails held. Approve the launch, but first run the two checks the document says were skipped: the pre-exposure comparison and the daily effect series by days since first exposure. Neither is hard to do, and the document says they could reverse the call. If you want to launch before they're done, that's a risk call you should make explicitly. +0.81% change in Successful Search Rate. The document doesn't say whether this is relative or absolute, so I'm reading it as a relative percent change. The pre-period check and the novelty check were not run, so it's unknown whether the arms already differed before the test or whether the effect is fading. The mechanism is also unknown. Head Queries (-0.95%) and Mobile (+0.74%) did not survive correction, and the document's own guess is only a guess.",
+      "got": true,
+      "how": "overlap 50%"
+    }
+  ],
+  "lost": "I had to reread the bar. The headline says the result \"clears the 0.50% bar,\" but the interval's lower bound is +0.41%, which is below 0.50%. The claim rests on the point estimate, not the interval. The \"harm inside a margin goes to escalate\" setting was also unclear to me.",
+  "question": "Has the pre-exposure comparison been run, and does the 0.50% bar apply to the point estimate or to the lower end of the interval?",
+  "replies": {
+    "skim": "1. Answer: The document recommends shipping Ranker v7. Successful Search Rate rose 0.81% (95% interval +0.41% to +1.21%), clearing the 0.50% bar, with all guardrails holding. The pre-period check and novelty check were not run.\n\n2. Decision: Approve the launch to all traffic, but first run the pre-exposure comparison. If the arms already differed on Successful Search Rate before exposure, the test is unreadable and the call should be revisited.\n\n3. Number: +0.81% change in Successful Search Rate (primary metric, 95% interval +0.41% to +1.21%).\n",
+    "full": "1. **Answer:** The document recommends shipping Ranker v7 to all traffic. The test is complete: day 14 of 14, about 1,000,000 users per arm. Successful Search Rate rose +0.81% (95% interval +0.41% to +1.21%) against a bar of at least +0.50%, and the four other guardrails held.\n\n2. **Decision:** Approve the launch, but first run the two checks the document says were skipped: the pre-exposure comparison and the daily effect series by days since first exposure. Neither is hard to do, and the document says they could reverse the call. If you want to launch before they're done, that's a risk call you should make explicitly.\n\n3. **Number:** +0.81% change in Successful Search Rate. The document doesn't say whether this is relative or absolute, so I'm reading it as a relative percent change.\n\n4. **Caveat:** The pre-period check and the novelty check were not run, so it's unknown whether the arms already differed before the test or whether the effect is fading. The mechanism is also unknown. Head Queries (-0.95%) and Mobile (+0.74%) did not survive correction, and the document's own guess is only a guess.\n\n5. **Lost:** I had to reread the bar. The headline says the result \"clears the 0.50% bar,\" but the interval's lower bound is +0.41%, which is below 0.50%. The claim rests on the point estimate, not the interval. The \"harm inside a margin goes to escalate\" setting was also unclear to me.\n\n6. **Question:** Has the pre-exposure comparison been run, and does the 0.50% bar apply to the point estimate or to the lower end of the interval?\n"
+  }
+}

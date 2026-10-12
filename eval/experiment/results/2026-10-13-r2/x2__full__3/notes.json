@@ -1,0 +1,10 @@
+{
+ "why_it_moved": [
+  {"text": "The mechanism is unknown; the scorecard has no segment cuts, so no cause for the Successful Search Rate gain can be named.", "label": "guess"}
+ ],
+ "would_change": [
+  "A comparison of Ranker v7 against a randomized control, registered as an A/B test with its own bar, would make the A/B rules apply.",
+  "An explanation of why the arms are split evenly when the holdout design planned a small control group would need to be settled first."
+ ],
+ "analyst_view": null
+}

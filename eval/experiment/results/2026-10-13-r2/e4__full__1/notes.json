@@ -1,0 +1,4 @@
+{"why_it_moved":[{"text":"The mechanism is unknown: the scorecard has no segment cuts, so we can't say which queries gained.","label":"guess"},
+{"text":"On triggered searches the rate rose 1.9%; triggered searches carry 20.5% of control successes, so the overall lift is 0.39%.","label":"measured"}],
+"would_change":["A team decision that an overall lift of 0.39% is worth taking would settle the trade-off at triage.","A pre-exposure comparison and a daily series by days since first exposure would show whether the lift holds steady; a fading lift would lower the case."],
+"analyst_view":null}

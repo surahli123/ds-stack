@@ -1,0 +1,10 @@
+{
+  "case": "k4",
+  "arm": "full",
+  "run": 2,
+  "model": "sonnet",
+  "exit": 0,
+  "seconds": 50.8,
+  "cost_usd": 0.12160379999999998,
+  "turns": 9
+}

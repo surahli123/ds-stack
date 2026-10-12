@@ -1,0 +1,9 @@
+{"why_it_moved":[
+{"text":"Successful Search Rate gain shrinks the longer users have had the new ranker: 1.50% on the first day, 0.40% by the last day measured.","label":"measured"},
+{"text":"Users may be responding to the change being new, so the early gain overstates the steady state.","label":"inferred"},
+{"text":"No segment cuts are in the scorecard, so the mechanism is unknown.","label":"guess"}],
+"would_change":[
+"The effect by days since exposure levels off near or above the 0.5% bar: the gain is durable and the test has settled.",
+"The effect keeps falling below the 0.5% bar: the gain is not durable.",
+"A pre-exposure comparison for the primary, which has not been run, would close the open check."],
+"analyst_view":null}

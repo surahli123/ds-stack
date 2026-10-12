@@ -1,0 +1,10 @@
+{
+  "case": "s3",
+  "arm": "full",
+  "run": 2,
+  "model": "sonnet",
+  "exit": 0,
+  "seconds": 48.4,
+  "cost_usd": 0.1264792,
+  "turns": 8
+}

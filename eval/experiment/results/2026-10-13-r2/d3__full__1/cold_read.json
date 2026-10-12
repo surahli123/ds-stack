@@ -1,0 +1,53 @@
+{
+  "pass": true,
+  "skim": "2/2",
+  "full": "3/3",
+  "items": [
+    {
+      "pass": "skim",
+      "item": "answer",
+      "key": "Don't ship: Abandonment Rate rose 2.20% (+1.50% to +2.90%), the wrong way and past its 1.00% margin.",
+      "reader": "Don't ship. Ranker v7 raised Abandonment Rate (guardrail) by +2.20% (95% interval +1.50% to +2.90%), past its 1.00% margin, even though Successful Search Rate (primary) rose 1.24%. Agree not to launch. The owner decides whether to iterate; the only path back is a rerun or pre-registered explanation showing the abandonment rise comes from logging, not users leaving.",
+      "got": true,
+      "how": "overlap 85%"
+    },
+    {
+      "pass": "skim",
+      "item": "decision",
+      "key": "Agree not to launch; the owner decides whether to iterate.",
+      "reader": "Agree not to launch. The owner decides whether to iterate; the only path back is a rerun or pre-registered explanation showing the abandonment rise comes from logging, not users leaving. Don't ship. Ranker v7 raised Abandonment Rate (guardrail) by +2.20% (95% interval +1.50% to +2.90%), past its 1.00% margin, even though Successful Search Rate (primary) rose 1.24%.",
+      "got": true,
+      "how": "overlap 100%"
+    },
+    {
+      "pass": "full",
+      "item": "takeaway 1",
+      "key": "Abandonment Rate +2.20% (+1.50% to +2.90%) against at most 1.00% higher.",
+      "reader": "Don't ship. Abandonment Rate, a guardrail, rose +2.20% (95% interval +1.50% to +2.90%), past its +1.00% limit. Successful Search Rate, the primary metric, rose +1.24%, which clears its +0.50% bar. The test ran 14 days with 1,000,000 users per arm. The handover state is that the test is finished and the call is no launch. Agree not to launch. The owner decides whether to iterate. A reversal needs either a version that holds Abandonment Rate to at most +1.00% while keeping Successful Search Rate above +0.50%, or a pre-registered explanation that the rise is a logging artifact. Abandonment Rate +2.20% (change vs control, against a bar of at most +1.00%). The document doesn't say whether this is relative or percentage points. The document says the abandonment rise may be real, with users leaving without a click. The cause is a guess the scorecard can't confirm. The pre-period comparison and the by-exposure-day series were not run, so the result's robustness is untested. The head-query cut shows +1.55%, and the other cuts are inconclusive.",
+      "got": true,
+      "how": "overlap 88%"
+    },
+    {
+      "pass": "full",
+      "item": "takeaway 2",
+      "key": "Agree not to launch; the owner decides whether to iterate.",
+      "reader": "Don't ship. Abandonment Rate, a guardrail, rose +2.20% (95% interval +1.50% to +2.90%), past its +1.00% limit. Successful Search Rate, the primary metric, rose +1.24%, which clears its +0.50% bar. The test ran 14 days with 1,000,000 users per arm. The handover state is that the test is finished and the call is no launch. Agree not to launch. The owner decides whether to iterate. A reversal needs either a version that holds Abandonment Rate to at most +1.00% while keeping Successful Search Rate above +0.50%, or a pre-registered explanation that the rise is a logging artifact. Abandonment Rate +2.20% (change vs control, against a bar of at most +1.00%). The document doesn't say whether this is relative or percentage points. The document says the abandonment rise may be real, with users leaving without a click. The cause is a guess the scorecard can't confirm. The pre-period comparison and the by-exposure-day series were not run, so the result's robustness is untested. The head-query cut shows +1.55%, and the other cuts are inconclusive.",
+      "got": true,
+      "how": "overlap 100%"
+    },
+    {
+      "pass": "full",
+      "item": "takeaway 3",
+      "key": "Could reverse it: only a version that keeps Abandonment Rate at at most 1.00% higher.",
+      "reader": "Don't ship. Abandonment Rate, a guardrail, rose +2.20% (95% interval +1.50% to +2.90%), past its +1.00% limit. Successful Search Rate, the primary metric, rose +1.24%, which clears its +0.50% bar. The test ran 14 days with 1,000,000 users per arm. The handover state is that the test is finished and the call is no launch. Agree not to launch. The owner decides whether to iterate. A reversal needs either a version that holds Abandonment Rate to at most +1.00% while keeping Successful Search Rate above +0.50%, or a pre-registered explanation that the rise is a logging artifact. Abandonment Rate +2.20% (change vs control, against a bar of at most +1.00%). The document doesn't say whether this is relative or percentage points. The document says the abandonment rise may be real, with users leaving without a click. The cause is a guess the scorecard can't confirm. The pre-period comparison and the by-exposure-day series were not run, so the result's robustness is untested. The head-query cut shows +1.55%, and the other cuts are inconclusive.",
+      "got": true,
+      "how": "overlap 50%"
+    }
+  ],
+  "lost": "Nowhere significant. The only gaps were that \"not run: pre period, novelty\" is never explained, and the unit for the percentage changes is unstated.",
+  "question": "Is the +2.20% abandonment change relative or in percentage points, and can you run the logging check before deciding whether to iterate?",
+  "replies": {
+    "skim": "1. Answer: Don't ship. Ranker v7 raised Abandonment Rate (guardrail) by +2.20% (95% interval +1.50% to +2.90%), past its 1.00% margin, even though Successful Search Rate (primary) rose 1.24%.\n2. Decision: Agree not to launch. The owner decides whether to iterate; the only path back is a rerun or pre-registered explanation showing the abandonment rise comes from logging, not users leaving.\n3. Number: +2.20% change in Abandonment Rate (guardrail; bar is at most +1.00%).\n",
+    "full": "1. **Answer:** Don't ship. Abandonment Rate, a guardrail, rose +2.20% (95% interval +1.50% to +2.90%), past its +1.00% limit. Successful Search Rate, the primary metric, rose +1.24%, which clears its +0.50% bar. The test ran 14 days with 1,000,000 users per arm. The handover state is that the test is finished and the call is no launch.\n\n2. **Decision:** Agree not to launch. The owner decides whether to iterate. A reversal needs either a version that holds Abandonment Rate to at most +1.00% while keeping Successful Search Rate above +0.50%, or a pre-registered explanation that the rise is a logging artifact.\n\n3. **Number:** Abandonment Rate +2.20% (change vs control, against a bar of at most +1.00%). The document doesn't say whether this is relative or percentage points.\n\n4. **Caveat:** The document says the abandonment rise may be real, with users leaving without a click. The cause is a guess the scorecard can't confirm. The pre-period comparison and the by-exposure-day series were not run, so the result's robustness is untested. The head-query cut shows +1.55%, and the other cuts are inconclusive.\n\n5. **Lost:** Nowhere significant. The only gaps were that \"not run: pre period, novelty\" is never explained, and the unit for the percentage changes is unstated.\n\n6. **Question:** Is the +2.20% abandonment change relative or in percentage points, and can you run the logging check before deciding whether to iterate?\n"
+  }
+}

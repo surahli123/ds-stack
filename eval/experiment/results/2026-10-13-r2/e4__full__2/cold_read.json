@@ -1,0 +1,53 @@
+{
+  "pass": false,
+  "skim": "1/2",
+  "full": "3/3",
+  "items": [
+    {
+      "pass": "skim",
+      "item": "answer",
+      "key": "Escalate: Successful Search Rate rose 0.39% (+0.27% to +0.51%), a real change in the good direction but short of the 0.50% bar.",
+      "reader": "Escalate. The primary metric, Successful Search Rate, rose 0.39% overall, which is a real improvement but below the 0.50% bar, so the launch is not cleared. Decide the trade-off at triage. Confirm with the owner whether the 0.50% bar applies overall or only to triggered searches. If it applies overall, the call is no-launch at +0.39%; if it applies to triggered searches, the 1.9% lift clears it and the launch can proceed.",
+      "got": false,
+      "how": "overlap 0%"
+    },
+    {
+      "pass": "skim",
+      "item": "decision",
+      "key": "Decide the trade-off at triage.",
+      "reader": "Decide the trade-off at triage. Confirm with the owner whether the 0.50% bar applies overall or only to triggered searches. If it applies overall, the call is no-launch at +0.39%; if it applies to triggered searches, the 1.9% lift clears it and the launch can proceed. Escalate. The primary metric, Successful Search Rate, rose 0.39% overall, which is a real improvement but below the 0.50% bar, so the launch is not cleared.",
+      "got": true,
+      "how": "overlap 100%"
+    },
+    {
+      "pass": "full",
+      "item": "takeaway 1",
+      "key": "Successful Search Rate +0.39% (+0.27% to +0.51%) against at least 0.50% higher.",
+      "reader": "The document recommends **Escalate**, a trade-off for triage. Successful Search Rate rose 0.39% overall (95% interval +0.27% to +0.51%). That is better than control but below the 0.50% bar. The test is finished: day 14 of 14, 1,000,000 users per arm. The four other guardrails are within margin. The pre-period and novelty checks were not run. Decide at triage whether to launch on the 0.39% overall result, hold, or extend. First, get the owner to confirm whether the 0.50% bar applies to overall traffic or to triggered searches. That answer decides the call. The document also says the pre-period and novelty checks would be needed before relying on the result. +0.39% change in Successful Search Rate, overall, against a bar of at least +0.50%. The +1.90% triggered-search figure looks bigger but is not the number the bar is written against. The primary is measured on triggered traffic, and the overall figure is derived by scaling 1.90% by the 20.5% share of control successes (1.9% \u00d7 20.5% \u2248 0.39%, which checks out). The mechanism is unknown because there are no segment cuts. Novelty and pre-exposure effects are unchecked.",
+      "got": true,
+      "how": "overlap 90%"
+    },
+    {
+      "pass": "full",
+      "item": "takeaway 2",
+      "key": "Decide the trade-off at triage.",
+      "reader": "The document recommends **Escalate**, a trade-off for triage. Successful Search Rate rose 0.39% overall (95% interval +0.27% to +0.51%). That is better than control but below the 0.50% bar. The test is finished: day 14 of 14, 1,000,000 users per arm. The four other guardrails are within margin. The pre-period and novelty checks were not run. Decide at triage whether to launch on the 0.39% overall result, hold, or extend. First, get the owner to confirm whether the 0.50% bar applies to overall traffic or to triggered searches. That answer decides the call. The document also says the pre-period and novelty checks would be needed before relying on the result. +0.39% change in Successful Search Rate, overall, against a bar of at least +0.50%. The +1.90% triggered-search figure looks bigger but is not the number the bar is written against. The primary is measured on triggered traffic, and the overall figure is derived by scaling 1.90% by the 20.5% share of control successes (1.9% \u00d7 20.5% \u2248 0.39%, which checks out). The mechanism is unknown because there are no segment cuts. Novelty and pre-exposure effects are unchecked.",
+      "got": true,
+      "how": "overlap 100%"
+    },
+    {
+      "pass": "full",
+      "item": "takeaway 3",
+      "key": "Could reverse it: the primary is measured on triggered traffic, so its users aren't compared with the planned total.",
+      "reader": "The document recommends **Escalate**, a trade-off for triage. Successful Search Rate rose 0.39% overall (95% interval +0.27% to +0.51%). That is better than control but below the 0.50% bar. The test is finished: day 14 of 14, 1,000,000 users per arm. The four other guardrails are within margin. The pre-period and novelty checks were not run. Decide at triage whether to launch on the 0.39% overall result, hold, or extend. First, get the owner to confirm whether the 0.50% bar applies to overall traffic or to triggered searches. That answer decides the call. The document also says the pre-period and novelty checks would be needed before relying on the result. +0.39% change in Successful Search Rate, overall, against a bar of at least +0.50%. The +1.90% triggered-search figure looks bigger but is not the number the bar is written against. The primary is measured on triggered traffic, and the overall figure is derived by scaling 1.90% by the 20.5% share of control successes (1.9% \u00d7 20.5% \u2248 0.39%, which checks out). The mechanism is unknown because there are no segment cuts. Novelty and pre-exposure effects are unchecked.",
+      "got": true,
+      "how": "overlap 50%"
+    }
+  ],
+  "lost": "",
+  "question": "For the author: Was the 0.50% bar defined on overall Successful Search Rate or on triggered searches before the test started? If it was defined on triggered searches, the 1.90% lift clears it and the call changes.",
+  "replies": {
+    "skim": "1. Answer: Escalate. The primary metric, Successful Search Rate, rose 0.39% overall, which is a real improvement but below the 0.50% bar, so the launch is not cleared.\n\n2. Decision: Decide the trade-off at triage. Confirm with the owner whether the 0.50% bar applies overall or only to triggered searches. If it applies overall, the call is no-launch at +0.39%; if it applies to triggered searches, the 1.9% lift clears it and the launch can proceed.\n\n3. Number: +0.39% (percent change in Successful Search Rate, overall, 95% interval +0.27% to +0.51%).\n",
+    "full": "1. **Answer:** The document recommends **Escalate**, a trade-off for triage. Successful Search Rate rose 0.39% overall (95% interval +0.27% to +0.51%). That is better than control but below the 0.50% bar. The test is finished: day 14 of 14, 1,000,000 users per arm. The four other guardrails are within margin. The pre-period and novelty checks were not run.\n\n2. **Decision:** Decide at triage whether to launch on the 0.39% overall result, hold, or extend. First, get the owner to confirm whether the 0.50% bar applies to overall traffic or to triggered searches. That answer decides the call. The document also says the pre-period and novelty checks would be needed before relying on the result.\n\n3. **Number:** +0.39% change in Successful Search Rate, overall, against a bar of at least +0.50%. The +1.90% triggered-search figure looks bigger but is not the number the bar is written against.\n\n4. **Caveat:** The primary is measured on triggered traffic, and the overall figure is derived by scaling 1.90% by the 20.5% share of control successes (1.9% \u00d7 20.5% \u2248 0.39%, which checks out). The mechanism is unknown because there are no segment cuts. Novelty and pre-exposure effects are unchecked.\n\n5. **Lost:**\n   - The \"What would change the call\" bullet contradicts itself. It says confirming the bar is overall \"would make the 1.9% triggered lift clear it.\" But the overall figure is 0.39%, so a bar on overall traffic would still not be cleared. Only a bar on triggered searches would be cleared by 1.9%. I reread this several times.\n   - \"Could reverse it\" and \"Fallback\" say nearly the same thing about triggered traffic and the planned total, and it is unclear whether either is a defect or only a caveat.\n   - It is unclear why the call is Escalate rather than another category, given that the guardrails are within margin.\n\n6. **Question:** For the author: Was the 0.50% bar defined on overall Successful Search Rate or on triggered searches before the test started? If it was defined on triggered searches, the 1.90% lift clears it and the call changes.\n"
+  }
+}

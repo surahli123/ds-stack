@@ -1,0 +1,213 @@
+{
+  "call": "keep_running",
+  "call_text": "Keep running",
+  "reason": "It's day 7 of 14; Successful Search Rate reads +0.55% (-0.21% to +1.31%) so far, too early to call.",
+  "ask": "Approve running the test longer.",
+  "decider": {
+    "metric": "Successful Search Rate",
+    "role": "primary",
+    "unit": "relative",
+    "direction": "increase",
+    "threshold": 0.005,
+    "threshold_kind": "bar",
+    "listed_as": "primary",
+    "display_unit": "",
+    "point": 0.0055000000000000005,
+    "low": -0.0020999999999999994,
+    "high": 0.0131,
+    "se": 0.003877622272627371,
+    "level": 0.95,
+    "verdict": "undetermined",
+    "rules_out_bar": false,
+    "achieved_mde": 0.010863489240418455
+  },
+  "status": {
+    "days_run": 7,
+    "planned_days": 14,
+    "units_per_arm": 480000,
+    "planned_units": 900000,
+    "reached": false,
+    "whole_weeks": true,
+    "window_start": "2026-09-12",
+    "as_of": "2026-09-18"
+  },
+  "verdicts": [
+    {
+      "metric": "Successful Search Rate",
+      "role": "primary",
+      "unit": "relative",
+      "direction": "increase",
+      "threshold": 0.005,
+      "threshold_kind": "bar",
+      "listed_as": "primary",
+      "display_unit": "",
+      "point": 0.0055000000000000005,
+      "low": -0.0020999999999999994,
+      "high": 0.0131,
+      "se": 0.003877622272627371,
+      "level": 0.95,
+      "verdict": "undetermined",
+      "rules_out_bar": false,
+      "achieved_mde": 0.010863489240418455
+    },
+    {
+      "metric": "Latency p95 (ms)",
+      "role": "guardrail",
+      "unit": "relative",
+      "direction": "decrease",
+      "threshold": 0.02,
+      "threshold_kind": "margin",
+      "display_unit": "",
+      "margin_source": "pre-registration",
+      "point": 0.002,
+      "low": -0.0075,
+      "high": 0.0115,
+      "se": 0.004847027840784213,
+      "level": 0.95,
+      "verdict": "within"
+    },
+    {
+      "metric": "Abandonment Rate",
+      "role": "guardrail",
+      "unit": "relative",
+      "direction": "decrease",
+      "threshold": 0.01,
+      "threshold_kind": "margin",
+      "display_unit": "",
+      "margin_source": "pre-registration",
+      "point": 0.001,
+      "low": -0.0104,
+      "high": 0.012399999999999998,
+      "se": 0.005816433408941056,
+      "level": 0.95,
+      "verdict": "undetermined"
+    },
+    {
+      "metric": "Zero Result Rate",
+      "role": "guardrail",
+      "unit": "relative",
+      "direction": "decrease",
+      "threshold": 0.03,
+      "threshold_kind": "margin",
+      "display_unit": "",
+      "margin_source": "pre-registration",
+      "point": 0.0,
+      "low": -0.026600000000000002,
+      "high": 0.026600000000000002,
+      "se": 0.0135716779541958,
+      "level": 0.95,
+      "verdict": "within"
+    },
+    {
+      "metric": "Revenue per User",
+      "role": "guardrail",
+      "unit": "relative",
+      "direction": "increase",
+      "threshold": 0.01,
+      "threshold_kind": "margin",
+      "display_unit": "",
+      "margin_source": "pre-registration",
+      "point": -0.001,
+      "low": -0.0143,
+      "high": 0.012300000000000002,
+      "se": 0.0067858389770979,
+      "level": 0.95,
+      "verdict": "undetermined"
+    }
+  ],
+  "checks": [
+    {
+      "check": "scorecard",
+      "status": "pass",
+      "summary": "5 of 5 registered metrics cross-checked (relative, absolute and intervals agree)",
+      "details": {}
+    },
+    {
+      "check": "sample_split",
+      "status": "pass",
+      "summary": "split 49.9% / 50.1% matches the planned 50.0% / 50.0%",
+      "details": {
+        "p": 0.3076859839131538,
+        "counts": [
+          480000,
+          481000
+        ],
+        "source": "units in 'Successful Search Rate' (exposures not in the config)"
+      }
+    },
+    {
+      "check": "config_params",
+      "status": "pass",
+      "summary": "only the intended parameters differ (ranker_model)",
+      "details": {}
+    },
+    {
+      "check": "config_edits",
+      "status": "pass",
+      "summary": "no mid-flight edits in the analysis window",
+      "details": {}
+    },
+    {
+      "check": "pre_period",
+      "status": "could_not_run",
+      "summary": "no pre-period interval or platform check",
+      "details": {}
+    },
+    {
+      "check": "novelty",
+      "status": "could_not_run",
+      "summary": "no usable daily effect series (needs 4 or more days)",
+      "details": {}
+    }
+  ],
+  "daily": [],
+  "secondaries": {
+    "tested": 52,
+    "untested": 0,
+    "q": 0.1,
+    "survivors": []
+  },
+  "open_items": [
+    "Abandonment Rate isn't shown within its margin (+0.10% (-1.04% to +1.24%))",
+    "Revenue per User isn't shown within its margin (-0.10% (-1.43% to +1.23%))",
+    "pre period could not be checked: no pre-period interval or platform check",
+    "novelty could not be checked: no usable daily effect series (needs 4 or more days)"
+  ],
+  "fallbacks": [],
+  "settings": {
+    "ci_level": 0.95,
+    "scorecard_ci_level": 0.95,
+    "levels": {
+      "primary": 0.95,
+      "guardrail": 0.95,
+      "harm": 0.99,
+      "invariant": 0.95,
+      "scorecard": 0.95
+    },
+    "sequential": true,
+    "rule": "all",
+    "ship_requires": "point_at_bar",
+    "cuped": false,
+    "mc_correction": "none",
+    "standards": {
+      "harm_within_margin": "escalate",
+      "below_bar": "escalate",
+      "secondary_harm": "note",
+      "srm_alpha": 0.001,
+      "min_days": 7
+    }
+  },
+  "experiment": {
+    "id": "ranker_v7",
+    "name": "Ranker v7",
+    "test_group": "g_test",
+    "design": "ab"
+  },
+  "inputs": {
+    "scorecard": "0b6febd222",
+    "prereg": "dcc450b976",
+    "config": "b84a437530",
+    "standards": "a6d22a7308",
+    "daily": null
+  }
+}

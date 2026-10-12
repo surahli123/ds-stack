@@ -1,0 +1,8 @@
+{"why_it_moved":[
+{"text":"Successful Search Rate is up 0.81% against a 0.5% bar, and no registered guardrail moved past its margin.","label":"measured"},
+{"text":"No segment cuts are in the scorecard, so the mechanism is not known. The edit to the traffic share part-way through may also have changed who was in each arm.","label":"guess"}],
+"would_change":[
+"A rerun on only the days after the 2026-09-16 allocation change, or a fresh test at a fixed share, that reaches the planned 14 days.",
+"A daily effect series by days since first exposure, which would also show whether the lift is fading.",
+"A pre-exposure comparison of the two arms, which the platform did not run."],
+"analyst_view":null}

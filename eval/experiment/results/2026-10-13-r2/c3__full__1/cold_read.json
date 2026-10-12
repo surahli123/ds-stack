@@ -1,0 +1,53 @@
+{
+  "pass": true,
+  "skim": "2/2",
+  "full": "3/3",
+  "items": [
+    {
+      "pass": "skim",
+      "item": "answer",
+      "key": "Can't tell: Before exposure, Successful Search Rate already differed by +0.71% (+0.31% to +1.11%). No launch decision from this data until it's fixed.",
+      "reader": "Can't tell. The pre-exposure gap on Successful Search Rate (+0.71%) is about as large as the post-exposure lift (+0.81%), so the test needs fixing before any launch call. Agree to fix the pre-period imbalance and rerun the test (re-randomize); make no launch decision from this data.",
+      "got": true,
+      "how": "overlap 0%; grader: same fact"
+    },
+    {
+      "pass": "skim",
+      "item": "decision",
+      "key": "Agree to fix the test and rerun; no launch decision from this data.",
+      "reader": "Agree to fix the pre-period imbalance and rerun the test (re-randomize); make no launch decision from this data. Can't tell. The pre-exposure gap on Successful Search Rate (+0.71%) is about as large as the post-exposure lift (+0.81%), so the test needs fixing before any launch call.",
+      "got": true,
+      "how": "overlap 100%"
+    },
+    {
+      "pass": "full",
+      "item": "takeaway 1",
+      "key": "Before exposure, Successful Search Rate already differed by +0.71% (+0.31% to +1.11%)",
+      "reader": "The document concludes \"Can't tell.\" The test is treated as broken. Successful Search Rate already differed between arms before exposure (+0.71%, interval +0.31% to +1.11%), so the post-exposure lift of +0.81% (+0.41% to +1.21%) probably reflects assignment, not the ranker. Current state: the 14-day run finished with 1,000,000 users per arm, above the planned 900,000. No launch decision has been made. Agree to fix the test and rerun, as the document asks, and make no launch call from this data. The fix should find the cause of the pre-exposure gap, ideally with re-randomized assignment, and add the cause to the pre-registration. The novelty check, which was not run, should be part of the rerun. The +0.71% pre-exposure gap in Successful Search Rate (percent change between arms, before exposure). It is about the same size as the +0.81% lift, which is why the result can't be trusted. The main risk is that the lift is an assignment artifact. The arms were likely not comparable at the start, so the measured effect may not come from the new ranker. The novelty check was not run, and the guardrails, which are all within margin, cannot offset this.",
+      "got": true,
+      "how": "overlap 100%"
+    },
+    {
+      "pass": "full",
+      "item": "takeaway 2",
+      "key": "Agree to fix the test and rerun; no launch decision from this data.",
+      "reader": "The document concludes \"Can't tell.\" The test is treated as broken. Successful Search Rate already differed between arms before exposure (+0.71%, interval +0.31% to +1.11%), so the post-exposure lift of +0.81% (+0.41% to +1.21%) probably reflects assignment, not the ranker. Current state: the 14-day run finished with 1,000,000 users per arm, above the planned 900,000. No launch decision has been made. Agree to fix the test and rerun, as the document asks, and make no launch call from this data. The fix should find the cause of the pre-exposure gap, ideally with re-randomized assignment, and add the cause to the pre-registration. The novelty check, which was not run, should be part of the rerun. The +0.71% pre-exposure gap in Successful Search Rate (percent change between arms, before exposure). It is about the same size as the +0.81% lift, which is why the result can't be trusted. The main risk is that the lift is an assignment artifact. The arms were likely not comparable at the start, so the measured effect may not come from the new ranker. The novelty check was not run, and the guardrails, which are all within margin, cannot offset this.",
+      "got": true,
+      "how": "overlap 100%"
+    },
+    {
+      "pass": "full",
+      "item": "takeaway 3",
+      "key": "Could reverse it: fixing the pre period problem and rerunning.",
+      "reader": "The document concludes \"Can't tell.\" The test is treated as broken. Successful Search Rate already differed between arms before exposure (+0.71%, interval +0.31% to +1.11%), so the post-exposure lift of +0.81% (+0.41% to +1.21%) probably reflects assignment, not the ranker. Current state: the 14-day run finished with 1,000,000 users per arm, above the planned 900,000. No launch decision has been made. Agree to fix the test and rerun, as the document asks, and make no launch call from this data. The fix should find the cause of the pre-exposure gap, ideally with re-randomized assignment, and add the cause to the pre-registration. The novelty check, which was not run, should be part of the rerun. The +0.71% pre-exposure gap in Successful Search Rate (percent change between arms, before exposure). It is about the same size as the +0.81% lift, which is why the result can't be trusted. The main risk is that the lift is an assignment artifact. The arms were likely not comparable at the start, so the measured effect may not come from the new ranker. The novelty check was not run, and the guardrails, which are all within margin, cannot offset this.",
+      "got": true,
+      "how": "overlap 0%; grader: same fact"
+    }
+  ],
+  "lost": "Mildly confused by the table. Its verdict column says \"better\" for the primary metric, and the lift clears the bar of at least 0.50%, which conflicts with the \"Can't tell\" headline. The document does explain the conflict, through the pre-period failure, but only in the checks line. \"Harm inside a margin goes to escalate\" is also unexplained. Nothing else needed a reread.",
+  "question": "What is the suspected cause of the pre-exposure gap in Successful Search Rate, and can the rerun use re-randomized assignment so the arms are comparable from the start?",
+  "replies": {
+    "skim": "1. Answer: Can't tell. The pre-exposure gap on Successful Search Rate (+0.71%) is about as large as the post-exposure lift (+0.81%), so the test needs fixing before any launch call.\n\n2. Decision: Agree to fix the pre-period imbalance and rerun the test (re-randomize); make no launch decision from this data.\n\n3. Number: +0.71% \u2014 the pre-exposure Successful Search Rate gap between arms (percent difference), which invalidates the +0.81% lift.\n",
+    "full": "1. **Answer:** The document concludes \"Can't tell.\" The test is treated as broken. Successful Search Rate already differed between arms before exposure (+0.71%, interval +0.31% to +1.11%), so the post-exposure lift of +0.81% (+0.41% to +1.21%) probably reflects assignment, not the ranker. Current state: the 14-day run finished with 1,000,000 users per arm, above the planned 900,000. No launch decision has been made.\n\n2. **Decision:** Agree to fix the test and rerun, as the document asks, and make no launch call from this data. The fix should find the cause of the pre-exposure gap, ideally with re-randomized assignment, and add the cause to the pre-registration. The novelty check, which was not run, should be part of the rerun.\n\n3. **Number:** The +0.71% pre-exposure gap in Successful Search Rate (percent change between arms, before exposure). It is about the same size as the +0.81% lift, which is why the result can't be trusted.\n\n4. **Caveat:** The main risk is that the lift is an assignment artifact. The arms were likely not comparable at the start, so the measured effect may not come from the new ranker. The novelty check was not run, and the guardrails, which are all within margin, cannot offset this.\n\n5. **Lost:** Mildly confused by the table. Its verdict column says \"better\" for the primary metric, and the lift clears the bar of at least 0.50%, which conflicts with the \"Can't tell\" headline. The document does explain the conflict, through the pre-period failure, but only in the checks line. \"Harm inside a margin goes to escalate\" is also unexplained. Nothing else needed a reread.\n\n6. **Question:** What is the suspected cause of the pre-exposure gap in Successful Search Rate, and can the rerun use re-randomized assignment so the arms are comparable from the start?\n"
+  }
+}

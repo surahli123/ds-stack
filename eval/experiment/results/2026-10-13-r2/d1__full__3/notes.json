@@ -1,0 +1,21 @@
+{
+ "why_it_moved": [
+  {
+   "text": "Successful Search Rate rose 0.81%, above the 0.50% bar, so the new ranker finds more successful searches.",
+   "label": "measured"
+  },
+  {
+   "text": "Latency p95 rose 3.10%, past the 2.00% margin; a heavier lambdamart_v7 model scoring each query is the likely cause, but no cut by query type was read.",
+   "label": "inferred"
+  },
+  {
+   "text": "No segment cuts were read, so which queries pay the latency cost is not known.",
+   "label": "guess"
+  }
+ ],
+ "would_change": [
+  "A v7 build whose Latency p95 rise stays within 2.00% while Successful Search Rate keeps clearing 0.50% would flip the call.",
+  "A review that formally accepts a latency rise beyond the registered 2.00% margin in exchange for the search gain would reopen it."
+ ],
+ "analyst_view": null
+}

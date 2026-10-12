@@ -1,0 +1,53 @@
+{
+  "pass": false,
+  "skim": "2/2",
+  "full": "2/3",
+  "items": [
+    {
+      "pass": "skim",
+      "item": "answer",
+      "key": "Not an A/B test: This is a interleaving test; the A/B launch rule doesn't apply.",
+      "reader": "The document concludes the test is not an A/B test but an interleaving test, so the A/B launch rule doesn't apply. Current state: day 14 of 14 complete, with 1,000,000 users per arm, and the call is pending a dedicated interleaving readout. Don't launch on the A/B rule. Commission the interleaving analysis with its own preference metric, or, if you want an A/B launch decision, rerun as a plain A/B test with v6 and v7 served to separate users. The pre-period and novelty checks still need to run.",
+      "got": true,
+      "how": "overlap 100%"
+    },
+    {
+      "pass": "skim",
+      "item": "decision",
+      "key": "Use the readout for this test design instead.",
+      "reader": "Don't launch on the A/B rule. Commission the interleaving analysis with its own preference metric, or, if you want an A/B launch decision, rerun as a plain A/B test with v6 and v7 served to separate users. The pre-period and novelty checks still need to run. The document concludes the test is not an A/B test but an interleaving test, so the A/B launch rule doesn't apply. Current state: day 14 of 14 complete, with 1,000,000 users per arm, and the call is pending a dedicated interleaving readout.",
+      "got": true,
+      "how": "overlap 40%; grader: same fact"
+    },
+    {
+      "pass": "full",
+      "item": "takeaway 1",
+      "key": "Interleaving",
+      "reader": "The document doesn't recommend launch or no-launch. It says this is an interleaving test, not an A/B test, so the A/B launch rule doesn't apply, and the call must come from a separate interleaving readout that isn't in the document. Current state: day 14 of 14, 1,000,000 users per arm (planned 900,000), whole weeks. Checks passed: scorecard, sample split, config params, config edits. Not run: pre-period, novelty. The mechanism is unknown (marked as a guess). Don't launch on this document. Ask for the interleaving analysis with its preference metric. If the team wants the A/B rule to apply, it needs a rerun with v6 and v7 served to separate users. Whether to do that rerun is a call for the owners, and the document doesn't say who owns it. Unclear. The only number given is 1,000,000 users per arm, which is a sample size and doesn't tell us whether v7 is better. The document gives no effect size, no preference-metric result, and no interval for the primary metric. The guardrails are listed as \"within margin\" with no values. The biggest risk the document names is that the mechanism is unknown. The scorecard has no segment cuts, and results from v6 and v7 are mixed into one list, so we can't attribute the effect. Two checks (pre-period, novelty) weren't run. Secondary metrics (52 tested) show no movement after false-discovery correction.",
+      "got": true,
+      "how": "overlap 100%"
+    },
+    {
+      "pass": "full",
+      "item": "takeaway 2",
+      "key": "Use the readout for this test design instead.",
+      "reader": "The document doesn't recommend launch or no-launch. It says this is an interleaving test, not an A/B test, so the A/B launch rule doesn't apply, and the call must come from a separate interleaving readout that isn't in the document. Current state: day 14 of 14, 1,000,000 users per arm (planned 900,000), whole weeks. Checks passed: scorecard, sample split, config params, config edits. Not run: pre-period, novelty. The mechanism is unknown (marked as a guess). Don't launch on this document. Ask for the interleaving analysis with its preference metric. If the team wants the A/B rule to apply, it needs a rerun with v6 and v7 served to separate users. Whether to do that rerun is a call for the owners, and the document doesn't say who owns it. Unclear. The only number given is 1,000,000 users per arm, which is a sample size and doesn't tell us whether v7 is better. The document gives no effect size, no preference-metric result, and no interval for the primary metric. The guardrails are listed as \"within margin\" with no values. The biggest risk the document names is that the mechanism is unknown. The scorecard has no segment cuts, and results from v6 and v7 are mixed into one list, so we can't attribute the effect. Two checks (pre-period, novelty) weren't run. Secondary metrics (52 tested) show no movement after false-discovery correction.",
+      "got": true,
+      "how": "overlap 40%; grader: same fact"
+    },
+    {
+      "pass": "full",
+      "item": "takeaway 3",
+      "key": "Could reverse it: nothing here; this design needs its own readout.",
+      "reader": "The document doesn't recommend launch or no-launch. It says this is an interleaving test, not an A/B test, so the A/B launch rule doesn't apply, and the call must come from a separate interleaving readout that isn't in the document. Current state: day 14 of 14, 1,000,000 users per arm (planned 900,000), whole weeks. Checks passed: scorecard, sample split, config params, config edits. Not run: pre-period, novelty. The mechanism is unknown (marked as a guess). Don't launch on this document. Ask for the interleaving analysis with its preference metric. If the team wants the A/B rule to apply, it needs a rerun with v6 and v7 served to separate users. Whether to do that rerun is a call for the owners, and the document doesn't say who owns it. Unclear. The only number given is 1,000,000 users per arm, which is a sample size and doesn't tell us whether v7 is better. The document gives no effect size, no preference-metric result, and no interval for the primary metric. The guardrails are listed as \"within margin\" with no values. The biggest risk the document names is that the mechanism is unknown. The scorecard has no segment cuts, and results from v6 and v7 are mixed into one list, so we can't attribute the effect. Two checks (pre-period, novelty) weren't run. Secondary metrics (52 tested) show no movement after false-discovery correction.",
+      "got": false,
+      "how": "overlap 33%"
+    }
+  ],
+  "lost": "I had to reread the \"Decision\" and \"Could reverse it\" lines. \"Could reverse it: nothing here; this design needs its own readout\" doesn't clearly say whether the change can be rolled back. I was also confused by \"1,000,000 users per arm\" alongside \"interleaving.\" In interleaving, each user usually sees both rankers, so an arm split is unclear. The \"test arm mixes v6 and v7 results\" line adds to the confusion.",
+  "question": "What is the interleaving preference-metric result (effect estimate and interval), and how do the \"1,000,000 users per arm\" counts map onto an interleaving design where each user sees both rankers?",
+  "replies": {
+    "skim": "1. Answer: The document concludes the test is not an A/B test but an interleaving test, so the A/B launch rule doesn't apply. Current state: day 14 of 14 complete, with 1,000,000 users per arm, and the call is pending a dedicated interleaving readout.\n2. Decision: Don't launch on the A/B rule. Commission the interleaving analysis with its own preference metric, or, if you want an A/B launch decision, rerun as a plain A/B test with v6 and v7 served to separate users. The pre-period and novelty checks still need to run.\n3. Number: 1,000,000 users per arm (against a planned 900,000), since that is the sample the readout would rest on. The document gives no effect size, so no result number is available.\n",
+    "full": "1. **Answer:** The document doesn't recommend launch or no-launch. It says this is an interleaving test, not an A/B test, so the A/B launch rule doesn't apply, and the call must come from a separate interleaving readout that isn't in the document. Current state: day 14 of 14, 1,000,000 users per arm (planned 900,000), whole weeks. Checks passed: scorecard, sample split, config params, config edits. Not run: pre-period, novelty. The mechanism is unknown (marked as a guess).\n\n2. **Decision:** Don't launch on this document. Ask for the interleaving analysis with its preference metric. If the team wants the A/B rule to apply, it needs a rerun with v6 and v7 served to separate users. Whether to do that rerun is a call for the owners, and the document doesn't say who owns it.\n\n3. **Number:** Unclear. The only number given is 1,000,000 users per arm, which is a sample size and doesn't tell us whether v7 is better. The document gives no effect size, no preference-metric result, and no interval for the primary metric. The guardrails are listed as \"within margin\" with no values.\n\n4. **Caveat:** The biggest risk the document names is that the mechanism is unknown. The scorecard has no segment cuts, and results from v6 and v7 are mixed into one list, so we can't attribute the effect. Two checks (pre-period, novelty) weren't run. Secondary metrics (52 tested) show no movement after false-discovery correction.\n\n5. **Lost:** I had to reread the \"Decision\" and \"Could reverse it\" lines. \"Could reverse it: nothing here; this design needs its own readout\" doesn't clearly say whether the change can be rolled back. I was also confused by \"1,000,000 users per arm\" alongside \"interleaving.\" In interleaving, each user usually sees both rankers, so an arm split is unclear. The \"test arm mixes v6 and v7 results\" line adds to the confusion.\n\n6. **Question:** What is the interleaving preference-metric result (effect estimate and interval), and how do the \"1,000,000 users per arm\" counts map onto an interleaving design where each user sees both rankers?\n"
+  }
+}

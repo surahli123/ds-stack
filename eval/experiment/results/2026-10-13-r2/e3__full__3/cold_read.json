@@ -1,0 +1,53 @@
+{
+  "pass": false,
+  "skim": "2/2",
+  "full": "2/3",
+  "items": [
+    {
+      "pass": "skim",
+      "item": "answer",
+      "key": "Escalate: Successful Search Rate rose 0.31% (+0.13% to +0.49%), a real change in the good direction but short of the 0.50% bar.",
+      "reader": "The document concludes Escalate, not launch. Successful Search Rate rose 0.31% (95% interval +0.13% to +0.49%), better than zero but below the 0.50% bar. The state at handover is day 14 of 14 with 1,000,000 users per arm, with the scorecard, sample split, and config checks passed. The pre-period could not be checked, so the result could be reversed. Decide the trade-off at triage: either accept a bar of 0.31% or lower for this ranker, which would clear the primary with all guardrails within margin, or keep the 0.50% bar and hold the launch. Before deciding, get the pre-period interval and a platform check, since the document says those are missing. Segment cuts also don't exist, so which queries gained is unknown.",
+      "got": true,
+      "how": "overlap 67%"
+    },
+    {
+      "pass": "skim",
+      "item": "decision",
+      "key": "Decide the trade-off at triage.",
+      "reader": "Decide the trade-off at triage: either accept a bar of 0.31% or lower for this ranker, which would clear the primary with all guardrails within margin, or keep the 0.50% bar and hold the launch. Before deciding, get the pre-period interval and a platform check, since the document says those are missing. Segment cuts also don't exist, so which queries gained is unknown. The document concludes Escalate, not launch. Successful Search Rate rose 0.31% (95% interval +0.13% to +0.49%), better than zero but below the 0.50% bar. The state at handover is day 14 of 14 with 1,000,000 users per arm, with the scorecard, sample split, and config checks passed. The pre-period could not be checked, so the result could be reversed.",
+      "got": true,
+      "how": "overlap 100%"
+    },
+    {
+      "pass": "full",
+      "item": "takeaway 1",
+      "key": "Successful Search Rate +0.31% (+0.13% to +0.49%) against at least 0.50% higher.",
+      "reader": "The document recommends **Escalate**, which means a trade-off for triage, not a launch. The primary metric, Successful Search Rate, rose +0.31% (95% interval +0.13% to +0.49%). That is better, but below the 0.50% bar. All four other guardrails stayed within margin. The 14-day test is finished, with 1,000,000 users per arm, above the planned 900,000. Decide the trade-off at triage: either accept a lower bar for this ranker or hold the launch. Before deciding, run the two unrun checks: a pre-exposure comparison and a daily series by days since first exposure. A fading effect or a pre-period gap would weaken the case. Lowering the bar to 0.31% after seeing the result is a post-hoc change, so the team should justify it explicitly. +0.31% change in Successful Search Rate (interval +0.13% to +0.49%), against a 0.50% bar. The pre-period and novelty checks were not run, so the effect could be novelty-driven or reflect a pre-existing gap between arms. The document says this could reverse the call. There are also no segment cuts, so which queries gained is unknown.",
+      "got": true,
+      "how": "overlap 80%"
+    },
+    {
+      "pass": "full",
+      "item": "takeaway 2",
+      "key": "Decide the trade-off at triage.",
+      "reader": "The document recommends **Escalate**, which means a trade-off for triage, not a launch. The primary metric, Successful Search Rate, rose +0.31% (95% interval +0.13% to +0.49%). That is better, but below the 0.50% bar. All four other guardrails stayed within margin. The 14-day test is finished, with 1,000,000 users per arm, above the planned 900,000. Decide the trade-off at triage: either accept a lower bar for this ranker or hold the launch. Before deciding, run the two unrun checks: a pre-exposure comparison and a daily series by days since first exposure. A fading effect or a pre-period gap would weaken the case. Lowering the bar to 0.31% after seeing the result is a post-hoc change, so the team should justify it explicitly. +0.31% change in Successful Search Rate (interval +0.13% to +0.49%), against a 0.50% bar. The pre-period and novelty checks were not run, so the effect could be novelty-driven or reflect a pre-existing gap between arms. The document says this could reverse the call. There are also no segment cuts, so which queries gained is unknown.",
+      "got": true,
+      "how": "overlap 100%"
+    },
+    {
+      "pass": "full",
+      "item": "takeaway 3",
+      "key": "Could reverse it: pre period could not be checked: no pre-period interval or platform check.",
+      "reader": "The document recommends **Escalate**, which means a trade-off for triage, not a launch. The primary metric, Successful Search Rate, rose +0.31% (95% interval +0.13% to +0.49%). That is better, but below the 0.50% bar. All four other guardrails stayed within margin. The 14-day test is finished, with 1,000,000 users per arm, above the planned 900,000. Decide the trade-off at triage: either accept a lower bar for this ranker or hold the launch. Before deciding, run the two unrun checks: a pre-exposure comparison and a daily series by days since first exposure. A fading effect or a pre-period gap would weaken the case. Lowering the bar to 0.31% after seeing the result is a post-hoc change, so the team should justify it explicitly. +0.31% change in Successful Search Rate (interval +0.13% to +0.49%), against a 0.50% bar. The pre-period and novelty checks were not run, so the effect could be novelty-driven or reflect a pre-existing gap between arms. The document says this could reverse the call. There are also no segment cuts, so which queries gained is unknown.",
+      "got": false,
+      "how": "overlap 38%"
+    }
+  ],
+  "lost": "Some confusion, not major rereading:",
+  "question": "Was the 0.50% bar set before the test began, and if we lower it to 0.31%, what is the reason beyond this result? Can you run the pre-exposure and daily-by-exposure checks before we decide?",
+  "replies": {
+    "skim": "1. Answer: The document concludes Escalate, not launch. Successful Search Rate rose 0.31% (95% interval +0.13% to +0.49%), better than zero but below the 0.50% bar. The state at handover is day 14 of 14 with 1,000,000 users per arm, with the scorecard, sample split, and config checks passed. The pre-period could not be checked, so the result could be reversed.\n\n2. Decision: Decide the trade-off at triage: either accept a bar of 0.31% or lower for this ranker, which would clear the primary with all guardrails within margin, or keep the 0.50% bar and hold the launch. Before deciding, get the pre-period interval and a platform check, since the document says those are missing. Segment cuts also don't exist, so which queries gained is unknown.\n\n3. Number: +0.31% (relative change in Successful Search Rate, 95% interval +0.13% to +0.49%). The unit is percent change against control.\n",
+    "full": "1. **Answer:** The document recommends **Escalate**, which means a trade-off for triage, not a launch. The primary metric, Successful Search Rate, rose +0.31% (95% interval +0.13% to +0.49%). That is better, but below the 0.50% bar. All four other guardrails stayed within margin. The 14-day test is finished, with 1,000,000 users per arm, above the planned 900,000.\n\n2. **Decision:** Decide the trade-off at triage: either accept a lower bar for this ranker or hold the launch. Before deciding, run the two unrun checks: a pre-exposure comparison and a daily series by days since first exposure. A fading effect or a pre-period gap would weaken the case. Lowering the bar to 0.31% after seeing the result is a post-hoc change, so the team should justify it explicitly.\n\n3. **Number:** +0.31% change in Successful Search Rate (interval +0.13% to +0.49%), against a 0.50% bar.\n\n4. **Caveat:** The pre-period and novelty checks were not run, so the effect could be novelty-driven or reflect a pre-existing gap between arms. The document says this could reverse the call. There are also no segment cuts, so which queries gained is unknown.\n\n5. **Lost:** Some confusion, not major rereading:\n   - \"Could reverse it\" and \"pre period could not be checked\" sit awkwardly beside \"not run\" in the checks line. It is unclear whether the pre-period check was attempted and failed or was skipped.\n   - \"Harm inside a margin goes to escalate\" is unclear. It seems to say that a guardrail inside its margin but still negative triggers Escalate, but that is not stated directly.\n   - Whether the 0.50% bar was set before the test is unclear.\n\n6. **Question:** Was the 0.50% bar set before the test began, and if we lower it to 0.31%, what is the reason beyond this result? Can you run the pre-exposure and daily-by-exposure checks before we decide?\n"
+  }
+}

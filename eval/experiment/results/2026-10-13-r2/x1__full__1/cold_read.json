@@ -1,0 +1,53 @@
+{
+  "pass": false,
+  "skim": "1/2",
+  "full": "3/3",
+  "items": [
+    {
+      "pass": "skim",
+      "item": "answer",
+      "key": "Not an A/B test: This is a interleaving test; the A/B launch rule doesn't apply.",
+      "reader": "The document concludes this is not an A/B test. It is an interleaving test, so the A/B launch rule does not apply. The test is complete (day 14 of 14, 1,000,000 users per arm). The scorecard, sample split, and config checks passed, but the pre-period and novelty checks were not run. Choose between a fresh two-arm A/B run of v7 against v6 under the standard rule, or a pre-registered interleaving bar (such as a preference win rate) that would let this readout decide. The text does not state that bar, so whether this readout can support a launch is unclear.",
+      "got": true,
+      "how": "overlap 83%"
+    },
+    {
+      "pass": "skim",
+      "item": "decision",
+      "key": "Use the readout for this test design instead.",
+      "reader": "Choose between a fresh two-arm A/B run of v7 against v6 under the standard rule, or a pre-registered interleaving bar (such as a preference win rate) that would let this readout decide. The text does not state that bar, so whether this readout can support a launch is unclear. The document concludes this is not an A/B test. It is an interleaving test, so the A/B launch rule does not apply. The test is complete (day 14 of 14, 1,000,000 users per arm). The scorecard, sample split, and config checks passed, but the pre-period and novelty checks were not run.",
+      "got": false,
+      "how": "overlap 40%"
+    },
+    {
+      "pass": "full",
+      "item": "takeaway 1",
+      "key": "Interleaving",
+      "reader": "The document does not recommend launching. It says this is an interleaving test, so the A/B launch rule doesn't apply, and it asks for a readout built for this design. Current state: day 14 of 14, about 1,000,000 users per arm (above the planned 900,000), with whole weeks covered. Successful Search Rate is up +0.81%, and no guardrail is outside its margin. Scorecard, sample split, and config checks passed. Pre-period and novelty checks were not run. The mechanism is a guess, and no segment cuts were read. Don't launch on this document. Either (a) get the pre-registered interleaving rules (a preference win rate and its bar) and read the test against them, or (b) run a fresh two-arm A/B of v7 against v6 under the standard rule. Before any call, run the pre-period and novelty checks. Also check the 52 secondary metrics in `all_metrics.md`, since the document says none moved after correction but does not show the numbers. Successful Search Rate, +0.81%. The unit is probably relative change, but the document doesn't say. The interval for it is not shown, even though the document says 95% intervals are used. No readout rule exists for this design. The document names this as the bar that would change the call, and the \"why it moved\" is only a guess. Novelty and pre-period, which could explain a short-term lift, have not been run.",
+      "got": true,
+      "how": "overlap 100%"
+    },
+    {
+      "pass": "full",
+      "item": "takeaway 2",
+      "key": "Use the readout for this test design instead.",
+      "reader": "The document does not recommend launching. It says this is an interleaving test, so the A/B launch rule doesn't apply, and it asks for a readout built for this design. Current state: day 14 of 14, about 1,000,000 users per arm (above the planned 900,000), with whole weeks covered. Successful Search Rate is up +0.81%, and no guardrail is outside its margin. Scorecard, sample split, and config checks passed. Pre-period and novelty checks were not run. The mechanism is a guess, and no segment cuts were read. Don't launch on this document. Either (a) get the pre-registered interleaving rules (a preference win rate and its bar) and read the test against them, or (b) run a fresh two-arm A/B of v7 against v6 under the standard rule. Before any call, run the pre-period and novelty checks. Also check the 52 secondary metrics in `all_metrics.md`, since the document says none moved after correction but does not show the numbers. Successful Search Rate, +0.81%. The unit is probably relative change, but the document doesn't say. The interval for it is not shown, even though the document says 95% intervals are used. No readout rule exists for this design. The document names this as the bar that would change the call, and the \"why it moved\" is only a guess. Novelty and pre-period, which could explain a short-term lift, have not been run.",
+      "got": true,
+      "how": "overlap 60%"
+    },
+    {
+      "pass": "full",
+      "item": "takeaway 3",
+      "key": "Could reverse it: nothing here; this design needs its own readout.",
+      "reader": "The document does not recommend launching. It says this is an interleaving test, so the A/B launch rule doesn't apply, and it asks for a readout built for this design. Current state: day 14 of 14, about 1,000,000 users per arm (above the planned 900,000), with whole weeks covered. Successful Search Rate is up +0.81%, and no guardrail is outside its margin. Scorecard, sample split, and config checks passed. Pre-period and novelty checks were not run. The mechanism is a guess, and no segment cuts were read. Don't launch on this document. Either (a) get the pre-registered interleaving rules (a preference win rate and its bar) and read the test against them, or (b) run a fresh two-arm A/B of v7 against v6 under the standard rule. Before any call, run the pre-period and novelty checks. Also check the 52 secondary metrics in `all_metrics.md`, since the document says none moved after correction but does not show the numbers. Successful Search Rate, +0.81%. The unit is probably relative change, but the document doesn't say. The interval for it is not shown, even though the document says 95% intervals are used. No readout rule exists for this design. The document names this as the bar that would change the call, and the \"why it moved\" is only a guess. Novelty and pre-period, which could explain a short-term lift, have not been run.",
+      "got": true,
+      "how": "overlap 33%; grader: same fact"
+    }
+  ],
+  "lost": "",
+  "question": "What pre-registered interleaving rule (preference win rate and its bar) was set before the test, and if none exists, what readout will the team use to decide?",
+  "replies": {
+    "skim": "1. **Answer:** The document concludes this is not an A/B test. It is an interleaving test, so the A/B launch rule does not apply. The test is complete (day 14 of 14, 1,000,000 users per arm). The scorecard, sample split, and config checks passed, but the pre-period and novelty checks were not run.\n2. **Decision:** Choose between a fresh two-arm A/B run of v7 against v6 under the standard rule, or a pre-registered interleaving bar (such as a preference win rate) that would let this readout decide. The text does not state that bar, so whether this readout can support a launch is unclear.\n3. **Number:** +0.81% change in Successful Search Rate (relative, percent). The document flags its mechanism as a guess and no segment cuts were read.\n",
+    "full": "1. **Answer:** The document does not recommend launching. It says this is an interleaving test, so the A/B launch rule doesn't apply, and it asks for a readout built for this design. Current state: day 14 of 14, about 1,000,000 users per arm (above the planned 900,000), with whole weeks covered. Successful Search Rate is up +0.81%, and no guardrail is outside its margin. Scorecard, sample split, and config checks passed. Pre-period and novelty checks were not run. The mechanism is a guess, and no segment cuts were read.\n\n2. **Decision:** Don't launch on this document. Either (a) get the pre-registered interleaving rules (a preference win rate and its bar) and read the test against them, or (b) run a fresh two-arm A/B of v7 against v6 under the standard rule. Before any call, run the pre-period and novelty checks. Also check the 52 secondary metrics in `all_metrics.md`, since the document says none moved after correction but does not show the numbers.\n\n3. **Number:** Successful Search Rate, +0.81%. The unit is probably relative change, but the document doesn't say. The interval for it is not shown, even though the document says 95% intervals are used.\n\n4. **Caveat:** No readout rule exists for this design. The document names this as the bar that would change the call, and the \"why it moved\" is only a guess. Novelty and pre-period, which could explain a short-term lift, have not been run.\n\n5. **Lost:**\n   - The \"Ask\" says to use the readout for this design, but the document never defines that readout. Finding out that it is missing took a reread.\n   - \"Could reverse it: nothing here; this design needs its own readout\" is unclear. I can't tell whether reversal is free, or whether the test simply can't be reversed or read.\n   - The test reports \"1,000,000 users per arm,\" which doesn't fit a typical interleaving design where each user sees both rankers. The document doesn't say how arms were assigned.\n   - The call categories (Can't tell, Keep running, No effect found, Escalate) are defined, but none is applied to this result.\n\n6. **Question:** What pre-registered interleaving rule (preference win rate and its bar) was set before the test, and if none exists, what readout will the team use to decide?\n"
+  }
+}

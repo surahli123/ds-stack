@@ -1,0 +1,8 @@
+{"why_it_moved":[
+{"text":"Successful Search Rate rose 1.24% and CTR rose 1.90%, while Abandonment Rate rose 2.20%: more searches get a click, but more also end with none.","label":"measured"},
+{"text":"Abandonment Rate rose 1.55% on head queries and fell 0.38% on tail queries; the tail drop is too small to trust, so the harm may sit in head queries.","label":"inferred"},
+{"text":"Why the new ranker lifts clicks yet also lifts abandonment is unknown; no per-query data was provided.","label":"guess"}],
+"would_change":[
+"Abandonment Rate back inside its 1.00% margin on a rerun, for example after a fix to head-query ranking, would reopen the call.",
+"A registered explanation that the Abandonment Rate definition changed between arms would send this to triage."],
+"analyst_view":null}

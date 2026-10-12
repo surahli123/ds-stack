@@ -1,0 +1,53 @@
+{
+  "pass": false,
+  "skim": "1/2",
+  "full": "2/3",
+  "items": [
+    {
+      "pass": "skim",
+      "item": "answer",
+      "key": "Escalate: Successful Search Rate rose 0.81% (+0.41% to +1.21%), but Latency p95 (ms) rose 1.20% (+0.70% to +1.70%), the wrong way, though inside its 2.00% margin.",
+      "reader": "Escalate. Successful Search Rate is up 0.81% (a win), but Latency p95 rose 1.20%, inside its 2.00% margin. The pre-period was never checked, so the result could be reversed. Decide the latency trade-off at triage. Either a latency owner accepts the 1.20% slower p95 within margin, which makes this a clear win, or the team holds the launch until the pre-period check and the slowdown are resolved.",
+      "got": false,
+      "how": "overlap 0%"
+    },
+    {
+      "pass": "skim",
+      "item": "decision",
+      "key": "Decide the trade-off at triage.",
+      "reader": "Decide the latency trade-off at triage. Either a latency owner accepts the 1.20% slower p95 within margin, which makes this a clear win, or the team holds the launch until the pre-period check and the slowdown are resolved. Escalate. Successful Search Rate is up 0.81% (a win), but Latency p95 rose 1.20%, inside its 2.00% margin. The pre-period was never checked, so the result could be reversed.",
+      "got": true,
+      "how": "overlap 100%"
+    },
+    {
+      "pass": "full",
+      "item": "takeaway 1",
+      "key": "Latency p95 (ms) +1.20% (+0.70% to +1.70%) against at most 2.00% higher.",
+      "reader": "The document recommends **Escalate**, which means a trade-off for triage, not a launch. Successful Search Rate rose 0.81% (primary, passes its 0.50% bar). Latency p95 rose 1.20% (guardrail, worse but inside its 2.00% margin). The test is complete: day 14 of 14, about 1,000,000 users per arm. Two checks (pre-period and novelty) were not run. Triage needs to decide whether to accept the 1.20% slower p95 as within the 2.00% margin. The latency owner's sign-off is the deciding input. Before that, it would help to run the pre-exposure comparison and the daily series by days since first exposure. The document says those would let the two unrun checks pass. Latency p95 change of **+1.20%** (95% interval +0.70% to +1.70%), against a 2.00% ceiling. It is the number that drives the call, since it is the only guardrail that moved in the wrong direction. The latency rise may be real and growing. The upper end of the interval (+1.70%) is close to the 2.00% margin, and more data could push it past the bar, which would make this a loss. The author also flags an unverified guess that a heavier ranker model is the cause. The pre-period and novelty checks were not run, so the result could be a novelty effect or a pre-existing difference.",
+      "got": true,
+      "how": "overlap 88%"
+    },
+    {
+      "pass": "full",
+      "item": "takeaway 2",
+      "key": "Successful Search Rate +0.81% (+0.41% to +1.21%) against at least 0.50% higher.",
+      "reader": "The document recommends **Escalate**, which means a trade-off for triage, not a launch. Successful Search Rate rose 0.81% (primary, passes its 0.50% bar). Latency p95 rose 1.20% (guardrail, worse but inside its 2.00% margin). The test is complete: day 14 of 14, about 1,000,000 users per arm. Two checks (pre-period and novelty) were not run. Triage needs to decide whether to accept the 1.20% slower p95 as within the 2.00% margin. The latency owner's sign-off is the deciding input. Before that, it would help to run the pre-exposure comparison and the daily series by days since first exposure. The document says those would let the two unrun checks pass. Latency p95 change of **+1.20%** (95% interval +0.70% to +1.70%), against a 2.00% ceiling. It is the number that drives the call, since it is the only guardrail that moved in the wrong direction. The latency rise may be real and growing. The upper end of the interval (+1.70%) is close to the 2.00% margin, and more data could push it past the bar, which would make this a loss. The author also flags an unverified guess that a heavier ranker model is the cause. The pre-period and novelty checks were not run, so the result could be a novelty effect or a pre-existing difference.",
+      "got": false,
+      "how": "overlap 0%"
+    },
+    {
+      "pass": "full",
+      "item": "takeaway 3",
+      "key": "Could reverse it: pre period could not be checked: no pre-period interval or platform check.",
+      "reader": "The document recommends **Escalate**, which means a trade-off for triage, not a launch. Successful Search Rate rose 0.81% (primary, passes its 0.50% bar). Latency p95 rose 1.20% (guardrail, worse but inside its 2.00% margin). The test is complete: day 14 of 14, about 1,000,000 users per arm. Two checks (pre-period and novelty) were not run. Triage needs to decide whether to accept the 1.20% slower p95 as within the 2.00% margin. The latency owner's sign-off is the deciding input. Before that, it would help to run the pre-exposure comparison and the daily series by days since first exposure. The document says those would let the two unrun checks pass. Latency p95 change of **+1.20%** (95% interval +0.70% to +1.70%), against a 2.00% ceiling. It is the number that drives the call, since it is the only guardrail that moved in the wrong direction. The latency rise may be real and growing. The upper end of the interval (+1.70%) is close to the 2.00% margin, and more data could push it past the bar, which would make this a loss. The author also flags an unverified guess that a heavier ranker model is the cause. The pre-period and novelty checks were not run, so the result could be a novelty effect or a pre-existing difference.",
+      "got": true,
+      "how": "overlap 25%; grader: same fact"
+    }
+  ],
+  "lost": "I had to reread the \"Could reverse it: pre period could not be checked\" line. The document does not say whether this means the launch can be reversed or only that the result is less certain. The rule that \"harm inside a margin goes to escalate\" appears only in the appendix. The \"Bar\" and \"Verdict\" columns were clear.",
+  "question": "Would the latency owner accept a +1.20% p95 increase (interval up to +1.70%) as within the 2.00% margin, and what would the pre-exposure check show before we decide?",
+  "replies": {
+    "skim": "1. Answer: Escalate. Successful Search Rate is up 0.81% (a win), but Latency p95 rose 1.20%, inside its 2.00% margin. The pre-period was never checked, so the result could be reversed.\n2. Decision: Decide the latency trade-off at triage. Either a latency owner accepts the 1.20% slower p95 within margin, which makes this a clear win, or the team holds the launch until the pre-period check and the slowdown are resolved.\n3. Number: +0.81% Successful Search Rate (percent change, 95% interval +0.41% to +1.21%).\n",
+    "full": "1. **Answer:** The document recommends **Escalate**, which means a trade-off for triage, not a launch. Successful Search Rate rose 0.81% (primary, passes its 0.50% bar). Latency p95 rose 1.20% (guardrail, worse but inside its 2.00% margin). The test is complete: day 14 of 14, about 1,000,000 users per arm. Two checks (pre-period and novelty) were not run.\n\n2. **Decision:** Triage needs to decide whether to accept the 1.20% slower p95 as within the 2.00% margin. The latency owner's sign-off is the deciding input. Before that, it would help to run the pre-exposure comparison and the daily series by days since first exposure. The document says those would let the two unrun checks pass.\n\n3. **Number:** Latency p95 change of **+1.20%** (95% interval +0.70% to +1.70%), against a 2.00% ceiling. It is the number that drives the call, since it is the only guardrail that moved in the wrong direction.\n\n4. **Caveat:** The latency rise may be real and growing. The upper end of the interval (+1.70%) is close to the 2.00% margin, and more data could push it past the bar, which would make this a loss. The author also flags an unverified guess that a heavier ranker model is the cause. The pre-period and novelty checks were not run, so the result could be a novelty effect or a pre-existing difference.\n\n5. **Lost:** I had to reread the \"Could reverse it: pre period could not be checked\" line. The document does not say whether this means the launch can be reversed or only that the result is less certain. The rule that \"harm inside a margin goes to escalate\" appears only in the appendix. The \"Bar\" and \"Verdict\" columns were clear.\n\n6. **Question:** Would the latency owner accept a +1.20% p95 increase (interval up to +1.70%) as within the 2.00% margin, and what would the pre-exposure check show before we decide?\n"
+  }
+}

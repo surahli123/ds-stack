@@ -1,0 +1,53 @@
+{
+  "pass": true,
+  "skim": "2/2",
+  "full": "3/3",
+  "items": [
+    {
+      "pass": "skim",
+      "item": "answer",
+      "key": "No effect found: Successful Search Rate reads +0.04% (-0.26% to +0.34%), which rules out the 0.50% change the test was built to find.",
+      "reader": "The test found no effect. Successful Search Rate moved +0.04% (95% interval -0.26% to +0.34%), which rules out the 0.50% lift the test was built to detect. The document recommends stopping the test without launching. Agree to stop the test without launching Ranker v7. Before closing it out, check the pre-exposure comparison, since the document says it was never done and that gap could make the result unreadable.",
+      "got": true,
+      "how": "overlap 81%"
+    },
+    {
+      "pass": "skim",
+      "item": "decision",
+      "key": "Agree to stop the test without launching.",
+      "reader": "Agree to stop the test without launching Ranker v7. Before closing it out, check the pre-exposure comparison, since the document says it was never done and that gap could make the result unreadable. The test found no effect. Successful Search Rate moved +0.04% (95% interval -0.26% to +0.34%), which rules out the 0.50% lift the test was built to detect. The document recommends stopping the test without launching.",
+      "got": true,
+      "how": "overlap 100%"
+    },
+    {
+      "pass": "full",
+      "item": "takeaway 1",
+      "key": "Successful Search Rate +0.04% (-0.26% to +0.34%) against at least 0.50% higher.",
+      "reader": "Stop the test without launching. Ranker v7 showed no effect: Successful Search Rate moved +0.04% (95% interval \u22120.26% to +0.34%), which rules out the 0.50% lift the test was designed to detect. The test is at day 14 of 14 with 1,000,000 users per arm. Current state: complete, with a \"No effect found\" call. Agree to stop the test and not launch Ranker v7. The document's own caveat is that the pre-period check was never run, so before this is final, confirm the two arms were balanced before exposure. If they were not, the test is unreadable and the call changes to \"Can't tell.\" +0.04% change in Successful Search Rate (primary metric, unit: percent change versus control), with the interval \u22120.26% to +0.34%. The pre-period comparison and the novelty (daily-by-exposure) check were not run. Either could reopen the result: a pre-exposure imbalance would make the test unreadable, and a lift that faded over time would reopen the question. The document also says the segment cuts were not used, so the mechanism is unknown.",
+      "got": true,
+      "how": "overlap 70%"
+    },
+    {
+      "pass": "full",
+      "item": "takeaway 2",
+      "key": "Agree to stop the test without launching.",
+      "reader": "Stop the test without launching. Ranker v7 showed no effect: Successful Search Rate moved +0.04% (95% interval \u22120.26% to +0.34%), which rules out the 0.50% lift the test was designed to detect. The test is at day 14 of 14 with 1,000,000 users per arm. Current state: complete, with a \"No effect found\" call. Agree to stop the test and not launch Ranker v7. The document's own caveat is that the pre-period check was never run, so before this is final, confirm the two arms were balanced before exposure. If they were not, the test is unreadable and the call changes to \"Can't tell.\" +0.04% change in Successful Search Rate (primary metric, unit: percent change versus control), with the interval \u22120.26% to +0.34%. The pre-period comparison and the novelty (daily-by-exposure) check were not run. Either could reopen the result: a pre-exposure imbalance would make the test unreadable, and a lift that faded over time would reopen the question. The document also says the segment cuts were not used, so the mechanism is unknown.",
+      "got": true,
+      "how": "overlap 100%"
+    },
+    {
+      "pass": "full",
+      "item": "takeaway 3",
+      "key": "Could reverse it: pre period could not be checked: no pre-period interval or platform check.",
+      "reader": "Stop the test without launching. Ranker v7 showed no effect: Successful Search Rate moved +0.04% (95% interval \u22120.26% to +0.34%), which rules out the 0.50% lift the test was designed to detect. The test is at day 14 of 14 with 1,000,000 users per arm. Current state: complete, with a \"No effect found\" call. Agree to stop the test and not launch Ranker v7. The document's own caveat is that the pre-period check was never run, so before this is final, confirm the two arms were balanced before exposure. If they were not, the test is unreadable and the call changes to \"Can't tell.\" +0.04% change in Successful Search Rate (primary metric, unit: percent change versus control), with the interval \u22120.26% to +0.34%. The pre-period comparison and the novelty (daily-by-exposure) check were not run. Either could reopen the result: a pre-exposure imbalance would make the test unreadable, and a lift that faded over time would reopen the question. The document also says the segment cuts were not used, so the mechanism is unknown.",
+      "got": true,
+      "how": "overlap 38%; grader: same fact"
+    }
+  ],
+  "lost": "Slightly on the \"Could reverse it\" line versus the checks list. Both say the pre period was not checked, so the status is clear but the document doesn't explain why it was skipped. Also unclear: what \"harm inside a margin goes to escalate\" means for the guardrails, since all four are within margin. Nothing else needed a reread.",
+  "question": "Why was the pre-period check and novelty check not run, and can you run the pre-exposure comparison of Successful Search Rate before we sign off on stopping?",
+  "replies": {
+    "skim": "1. Answer: The test found no effect. Successful Search Rate moved +0.04% (95% interval -0.26% to +0.34%), which rules out the 0.50% lift the test was built to detect. The document recommends stopping the test without launching.\n\n2. Decision: Agree to stop the test without launching Ranker v7. Before closing it out, check the pre-exposure comparison, since the document says it was never done and that gap could make the result unreadable.\n\n3. Number: +0.04% change in Successful Search Rate (95% interval -0.26% to +0.34%).\n",
+    "full": "1. **Answer:** Stop the test without launching. Ranker v7 showed no effect: Successful Search Rate moved +0.04% (95% interval \u22120.26% to +0.34%), which rules out the 0.50% lift the test was designed to detect. The test is at day 14 of 14 with 1,000,000 users per arm. Current state: complete, with a \"No effect found\" call.\n\n2. **Decision:** Agree to stop the test and not launch Ranker v7. The document's own caveat is that the pre-period check was never run, so before this is final, confirm the two arms were balanced before exposure. If they were not, the test is unreadable and the call changes to \"Can't tell.\"\n\n3. **Number:** +0.04% change in Successful Search Rate (primary metric, unit: percent change versus control), with the interval \u22120.26% to +0.34%.\n\n4. **Caveat:** The pre-period comparison and the novelty (daily-by-exposure) check were not run. Either could reopen the result: a pre-exposure imbalance would make the test unreadable, and a lift that faded over time would reopen the question. The document also says the segment cuts were not used, so the mechanism is unknown.\n\n5. **Lost:** Slightly on the \"Could reverse it\" line versus the checks list. Both say the pre period was not checked, so the status is clear but the document doesn't explain why it was skipped. Also unclear: what \"harm inside a margin goes to escalate\" means for the guardrails, since all four are within margin. Nothing else needed a reread.\n\n6. **Question:** Why was the pre-period check and novelty check not run, and can you run the pre-exposure comparison of Successful Search Rate before we sign off on stopping?\n"
+  }
+}

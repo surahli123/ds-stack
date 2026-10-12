@@ -1,0 +1,1 @@
+{"check": "ds_experiment_decide", "details": {"decider": "design", "experiment": "ranker_v7", "inputs": {"config": "3e40b7e4e1", "daily": null, "prereg": "ddb2e3c16f", "scorecard": "689214b676", "standards": "a6d22a7308"}}, "status": "not_ab", "summary": "This is a holdout test; the A/B launch rule doesn't apply.", "ts": 1791846119.423}

@@ -1,0 +1,8 @@
+{"why_it_moved":[
+{"text":"Test arm also has a longer snippet_length than control, which the pre-registration did not intend, so the ranker and the snippet change are mixed together.","label":"measured"},
+{"text":"Longer snippets could raise successful searches on their own by helping people judge results before clicking.","label":"guess"},
+{"text":"No segment cuts in the scorecard, so how much of the +0.81% comes from the ranker is unknown.","label":"measured"}],
+"would_change":[
+"Fixing the config params problem and rerunning with snippet_length equal in both arms, or adding an arm that isolates the snippet change.",
+"A pre-exposure comparison and a daily series by days since first exposure would let the remaining checks run."],
+"analyst_view":null}

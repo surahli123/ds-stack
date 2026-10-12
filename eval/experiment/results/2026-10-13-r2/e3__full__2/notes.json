@@ -1,0 +1,3 @@
+{"why_it_moved":[{"text":"The only config change between arms is the ranker model, so the lift in Successful Search Rate of 0.31% comes from the new ranker.","label":"measured"},{"text":"No segment cuts are in the scorecard, so which queries gain is not known.","label":"guess"}],
+"would_change":["A pre-exposure comparison showing the arms were balanced would clear the one check that could not run.","The team accepting a bar of 0.31% or lower would clear the primary, since no guardrail is past its margin.","A longer run that moves the estimate to 0.50% or more would clear the bar."],
+"analyst_view":null}

@@ -1,0 +1,22 @@
+{
+ "why_it_moved": [
+  {
+   "text": "Successful Search Rate rose 0.81% and Latency p95 (ms) rose 3.10% in the same arm.",
+   "label": "measured"
+  },
+  {
+   "text": "The v7 model is likely heavier to score, which would explain the slower responses alongside better results.",
+   "label": "guess"
+  },
+  {
+   "text": "No segment cuts were in the scorecard, so which queries or regions drive the latency rise is not known.",
+   "label": "guess"
+  }
+ ],
+ "would_change": [
+  "Only a new version that keeps Latency p95 (ms) at most 2.00% higher while Successful Search Rate stays at least 0.50% higher.",
+  "The team confirming a slower p95 is acceptable for this lift, which changes the registered margin and needs the owner's sign-off.",
+  "A pre-exposure comparison and a daily series by days since first exposure, so the two checks that could not run can run."
+ ],
+ "analyst_view": null
+}

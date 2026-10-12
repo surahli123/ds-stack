@@ -1,0 +1,53 @@
+{
+  "pass": false,
+  "skim": "2/2",
+  "full": "2/3",
+  "items": [
+    {
+      "pass": "skim",
+      "item": "answer",
+      "key": "Can't tell: Parameters changed that the test didn't intend: {'Test': ['snippet_length']}. No launch decision from this data until it's fixed.",
+      "reader": "The document concludes \"Can't tell.\" The test is finished (14 days, 1,000,000 users per arm), but its config check failed: the test arm's `snippet_length` differs from control, so the +0.81% result mixes the ranker with the snippet change. Agree to fix the test so `snippet_length` matches in both arms, then rerun. Make no launch decision from this data.",
+      "got": true,
+      "how": "overlap 50%"
+    },
+    {
+      "pass": "skim",
+      "item": "decision",
+      "key": "Agree to fix the test and rerun; no launch decision from this data.",
+      "reader": "Agree to fix the test so `snippet_length` matches in both arms, then rerun. Make no launch decision from this data. The document concludes \"Can't tell.\" The test is finished (14 days, 1,000,000 users per arm), but its config check failed: the test arm's `snippet_length` differs from control, so the +0.81% result mixes the ranker with the snippet change.",
+      "got": true,
+      "how": "overlap 100%"
+    },
+    {
+      "pass": "full",
+      "item": "takeaway 1",
+      "key": "Parameters changed that the test didn't intend: {'Test': ['snippet_length']}",
+      "reader": "The document concludes \"Can't tell.\" The test is broken because snippet_length differed between arms, which the pre-registration did not intend. The primary metric, Successful Search Rate, rose +0.81% (95% interval +0.41% to +1.21%), above the 0.50% bar, but that lift can't be attributed to the ranker. Current state: the 14-day run finished with 1,000,000 users per arm, and the config-parameter check failed. Agree to fix the test config and rerun, with snippet_length equal in both arms or with an added arm that isolates the snippet change. Make no launch decision from this data. Also run the pre-exposure comparison and the daily series by days since first exposure, since those checks were not run. +0.81% change in Successful Search Rate (95% CI +0.41% to +1.21%). The document doesn't say whether this is relative or absolute percentage points. Confounding. The longer snippets in the test arm may be what raised successful searches, so the ranker's contribution is unknown. There are also no segment cuts, and the pre-period and novelty checks were not run.",
+      "got": true,
+      "how": "overlap 50%"
+    },
+    {
+      "pass": "full",
+      "item": "takeaway 2",
+      "key": "Agree to fix the test and rerun; no launch decision from this data.",
+      "reader": "The document concludes \"Can't tell.\" The test is broken because snippet_length differed between arms, which the pre-registration did not intend. The primary metric, Successful Search Rate, rose +0.81% (95% interval +0.41% to +1.21%), above the 0.50% bar, but that lift can't be attributed to the ranker. Current state: the 14-day run finished with 1,000,000 users per arm, and the config-parameter check failed. Agree to fix the test config and rerun, with snippet_length equal in both arms or with an added arm that isolates the snippet change. Make no launch decision from this data. Also run the pre-exposure comparison and the daily series by days since first exposure, since those checks were not run. +0.81% change in Successful Search Rate (95% CI +0.41% to +1.21%). The document doesn't say whether this is relative or absolute percentage points. Confounding. The longer snippets in the test arm may be what raised successful searches, so the ranker's contribution is unknown. There are also no segment cuts, and the pre-period and novelty checks were not run.",
+      "got": true,
+      "how": "overlap 100%"
+    },
+    {
+      "pass": "full",
+      "item": "takeaway 3",
+      "key": "Could reverse it: fixing the config params problem and rerunning.",
+      "reader": "The document concludes \"Can't tell.\" The test is broken because snippet_length differed between arms, which the pre-registration did not intend. The primary metric, Successful Search Rate, rose +0.81% (95% interval +0.41% to +1.21%), above the 0.50% bar, but that lift can't be attributed to the ranker. Current state: the 14-day run finished with 1,000,000 users per arm, and the config-parameter check failed. Agree to fix the test config and rerun, with snippet_length equal in both arms or with an added arm that isolates the snippet change. Make no launch decision from this data. Also run the pre-exposure comparison and the daily series by days since first exposure, since those checks were not run. +0.81% change in Successful Search Rate (95% CI +0.41% to +1.21%). The document doesn't say whether this is relative or absolute percentage points. Confounding. The longer snippets in the test arm may be what raised successful searches, so the ranker's contribution is unknown. There are also no segment cuts, and the pre-period and novelty checks were not run.",
+      "got": false,
+      "how": "overlap 17%"
+    }
+  ],
+  "lost": "The \"Bar\" column and the unit of the change were unclear, and I had to check the appendix to confirm which four guardrails were meant. The \"harm inside a margin goes to escalate\" rule is also unclear. Otherwise nothing required a reread.",
+  "question": "If snippet_length is equalized and the test is rerun, is the ranker's lift still expected to clear the 0.50% bar, and when could the rerun finish?",
+  "replies": {
+    "skim": "1. **Answer:** The document concludes \"Can't tell.\" The test is finished (14 days, 1,000,000 users per arm), but its config check failed: the test arm's `snippet_length` differs from control, so the +0.81% result mixes the ranker with the snippet change.\n2. **Decision:** Agree to fix the test so `snippet_length` matches in both arms, then rerun. Make no launch decision from this data.\n3. **Number:** +0.81% change in Successful Search Rate (primary metric, 95% interval +0.41% to +1.21%). This is confounded, so it can't support a launch yet.\n",
+    "full": "1. **Answer:** The document concludes \"Can't tell.\" The test is broken because snippet_length differed between arms, which the pre-registration did not intend. The primary metric, Successful Search Rate, rose +0.81% (95% interval +0.41% to +1.21%), above the 0.50% bar, but that lift can't be attributed to the ranker. Current state: the 14-day run finished with 1,000,000 users per arm, and the config-parameter check failed.\n\n2. **Decision:** Agree to fix the test config and rerun, with snippet_length equal in both arms or with an added arm that isolates the snippet change. Make no launch decision from this data. Also run the pre-exposure comparison and the daily series by days since first exposure, since those checks were not run.\n\n3. **Number:** +0.81% change in Successful Search Rate (95% CI +0.41% to +1.21%). The document doesn't say whether this is relative or absolute percentage points.\n\n4. **Caveat:** Confounding. The longer snippets in the test arm may be what raised successful searches, so the ranker's contribution is unknown. There are also no segment cuts, and the pre-period and novelty checks were not run.\n\n5. **Lost:** The \"Bar\" column and the unit of the change were unclear, and I had to check the appendix to confirm which four guardrails were meant. The \"harm inside a margin goes to escalate\" rule is also unclear. Otherwise nothing required a reread.\n\n6. **Question:** If snippet_length is equalized and the test is rerun, is the ranker's lift still expected to clear the 0.50% bar, and when could the rerun finish?\n"
+  }
+}

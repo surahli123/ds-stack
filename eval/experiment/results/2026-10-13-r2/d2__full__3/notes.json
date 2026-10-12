@@ -1,0 +1,9 @@
+{"why_it_moved":[
+{"text":"Successful Search Rate fell 0.62% overall, and the segment cuts do not isolate where: Desktop fell 0.37% while Mobile rose 0.44%.","label":"measured"},
+{"text":"CTR also fell 0.36%, which fits fewer searches ending in a successful click.","label":"inferred"},
+{"text":"The mechanism is unknown: the new ranker model is the only config change, and nothing here shows which results got worse.","label":"guess"}],
+"would_change":[
+"A rerun showing the primary at or above the 0.5% bar, with the guardrails still within margin.",
+"A corrected export, if the primary's metric definition changed mid-test, would void this read.",
+"A pre-exposure comparison of the primary showing the arms already differed before exposure."],
+"analyst_view":null}

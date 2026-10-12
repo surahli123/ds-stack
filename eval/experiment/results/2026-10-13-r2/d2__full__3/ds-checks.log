@@ -1,0 +1,1 @@
+{"check": "ds_experiment_decide", "details": {"decider": "Successful Search Rate", "experiment": "ranker_v7", "inputs": {"config": "b84a437530", "daily": null, "prereg": "1c888638ba", "scorecard": "49abb42280", "standards": "a6d22a7308"}}, "status": "dont_ship", "summary": "Successful Search Rate fell 0.62% (-1.02% to -0.22%), the wrong way.", "ts": 1791845475.486}

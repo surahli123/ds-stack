@@ -1,0 +1,9 @@
+{"why_it_moved":[
+{"text":"Successful Search Rate rose 0.81% while CTR (-0.02%) and Long Click Rate (-0.23%) stayed flat, so the gain is not coming from more clicks.","label":"measured"},
+{"text":"Successful Search Rate - Head Queries fell 0.95% and Successful Search Rate - Mobile rose 0.74%; neither survived correction, so the mechanism is unknown.","label":"measured"},
+{"text":"The new ranker may resolve searches that used to end without a successful click, without changing click volume.","label":"guess"}],
+"would_change":[
+"A pre-exposure comparison showing the arms already differed on Successful Search Rate would make the test unreadable.",
+"A daily effect series by days since first exposure that fades toward zero would mean the test needs more time.",
+"A Head Queries drop that holds up in a follow-up cut would make this a trade-off for triage."],
+"analyst_view":null}

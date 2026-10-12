@@ -1,0 +1,53 @@
+{
+  "pass": true,
+  "skim": "2/2",
+  "full": "3/3",
+  "items": [
+    {
+      "pass": "skim",
+      "item": "answer",
+      "key": "Ship: Successful Search Rate rose 0.81% (+0.41% to +1.21%), which clears the 0.50% bar and every guardrail held.",
+      "reader": "The document concludes Ship: Successful Search Rate rose 0.81% (95% interval +0.41% to +1.21%), clearing the 0.50% bar with guardrails held. The pre-period and novelty checks were not run, so the result could be reversed. Approve the launch to all traffic only after the pre-exposure comparison on Successful Search Rate is run; if the arms already differed before exposure, the test is unreadable and the call changes.",
+      "got": true,
+      "how": "overlap 79%"
+    },
+    {
+      "pass": "skim",
+      "item": "decision",
+      "key": "Approve the launch to all traffic.",
+      "reader": "Approve the launch to all traffic only after the pre-exposure comparison on Successful Search Rate is run; if the arms already differed before exposure, the test is unreadable and the call changes. The document concludes Ship: Successful Search Rate rose 0.81% (95% interval +0.41% to +1.21%), clearing the 0.50% bar with guardrails held. The pre-period and novelty checks were not run, so the result could be reversed.",
+      "got": true,
+      "how": "overlap 100%"
+    },
+    {
+      "pass": "full",
+      "item": "takeaway 1",
+      "key": "Successful Search Rate +0.81% (+0.41% to +1.21%) against at least 0.50% higher.",
+      "reader": "The document recommends shipping Ranker v7 to all traffic. The test is finished: day 14 of 14, about 1,000,000 users per arm. Successful Search Rate rose 0.81% (95% interval +0.41% to +1.21%), above the 0.50% bar, and the four guardrails stayed within margin. Two checks, the pre-period and novelty, were not run. Approve the launch, or first run the two missing checks: the pre-exposure comparison on Successful Search Rate and the daily lift series by days since first exposure. The document says the pre-period check could reverse the call, so I would run it before full rollout. If the team wants to launch now, it should watch for novelty fade afterward. +0.81% change in Successful Search Rate (relative, 95% interval +0.41% to +1.21%). The pre-period check was not run, so the arms' balance before exposure is unknown; the author says that imbalance would make the test unreadable. Novelty was also not checked. The lift is not showing up in clicks (CTR -0.02%, Long Click Rate -0.23%), so the extra successes may not be real user value. The lower bound (+0.41%) is below the 0.50% bar, so \"clears the bar\" rests on the point estimate.",
+      "got": true,
+      "how": "overlap 70%"
+    },
+    {
+      "pass": "full",
+      "item": "takeaway 2",
+      "key": "Approve the launch to all traffic.",
+      "reader": "The document recommends shipping Ranker v7 to all traffic. The test is finished: day 14 of 14, about 1,000,000 users per arm. Successful Search Rate rose 0.81% (95% interval +0.41% to +1.21%), above the 0.50% bar, and the four guardrails stayed within margin. Two checks, the pre-period and novelty, were not run. Approve the launch, or first run the two missing checks: the pre-exposure comparison on Successful Search Rate and the daily lift series by days since first exposure. The document says the pre-period check could reverse the call, so I would run it before full rollout. If the team wants to launch now, it should watch for novelty fade afterward. +0.81% change in Successful Search Rate (relative, 95% interval +0.41% to +1.21%). The pre-period check was not run, so the arms' balance before exposure is unknown; the author says that imbalance would make the test unreadable. Novelty was also not checked. The lift is not showing up in clicks (CTR -0.02%, Long Click Rate -0.23%), so the extra successes may not be real user value. The lower bound (+0.41%) is below the 0.50% bar, so \"clears the bar\" rests on the point estimate.",
+      "got": true,
+      "how": "overlap 100%"
+    },
+    {
+      "pass": "full",
+      "item": "takeaway 3",
+      "key": "Could reverse it: pre period could not be checked: no pre-period interval or platform check.",
+      "reader": "The document recommends shipping Ranker v7 to all traffic. The test is finished: day 14 of 14, about 1,000,000 users per arm. Successful Search Rate rose 0.81% (95% interval +0.41% to +1.21%), above the 0.50% bar, and the four guardrails stayed within margin. Two checks, the pre-period and novelty, were not run. Approve the launch, or first run the two missing checks: the pre-exposure comparison on Successful Search Rate and the daily lift series by days since first exposure. The document says the pre-period check could reverse the call, so I would run it before full rollout. If the team wants to launch now, it should watch for novelty fade afterward. +0.81% change in Successful Search Rate (relative, 95% interval +0.41% to +1.21%). The pre-period check was not run, so the arms' balance before exposure is unknown; the author says that imbalance would make the test unreadable. Novelty was also not checked. The lift is not showing up in clicks (CTR -0.02%, Long Click Rate -0.23%), so the extra successes may not be real user value. The lower bound (+0.41%) is below the 0.50% bar, so \"clears the bar\" rests on the point estimate.",
+      "got": true,
+      "how": "overlap 62%"
+    }
+  ],
+  "lost": "I had to reread the bar logic. The table says the lift \"clears\" 0.50%, but the interval includes values below it, and the document does not say whether the bar applies to the point estimate or the lower bound. \"Harm inside a margin goes to escalate\" and the margin size are not defined. Successful Search Rate is never defined. \"Unclear\" for the Reformulation Rate cut's status: it is labeled a lead, but the document does not say whether it is a risk.",
+  "question": "Can you run the pre-exposure balance check and the days-since-exposure lift series before launch, and does the 0.50% bar apply to the point estimate or to the lower bound of the interval?",
+  "replies": {
+    "skim": "1. Answer: The document concludes Ship: Successful Search Rate rose 0.81% (95% interval +0.41% to +1.21%), clearing the 0.50% bar with guardrails held. The pre-period and novelty checks were not run, so the result could be reversed.\n\n2. Decision: Approve the launch to all traffic only after the pre-exposure comparison on Successful Search Rate is run; if the arms already differed before exposure, the test is unreadable and the call changes.\n\n3. Number: +0.81% (Successful Search Rate lift, 95% interval +0.41% to +1.21%).\n",
+    "full": "1. **Answer:** The document recommends shipping Ranker v7 to all traffic. The test is finished: day 14 of 14, about 1,000,000 users per arm. Successful Search Rate rose 0.81% (95% interval +0.41% to +1.21%), above the 0.50% bar, and the four guardrails stayed within margin. Two checks, the pre-period and novelty, were not run.\n\n2. **Decision:** Approve the launch, or first run the two missing checks: the pre-exposure comparison on Successful Search Rate and the daily lift series by days since first exposure. The document says the pre-period check could reverse the call, so I would run it before full rollout. If the team wants to launch now, it should watch for novelty fade afterward.\n\n3. **Number:** +0.81% change in Successful Search Rate (relative, 95% interval +0.41% to +1.21%).\n\n4. **Caveat:** The pre-period check was not run, so the arms' balance before exposure is unknown; the author says that imbalance would make the test unreadable. Novelty was also not checked. The lift is not showing up in clicks (CTR -0.02%, Long Click Rate -0.23%), so the extra successes may not be real user value. The lower bound (+0.41%) is below the 0.50% bar, so \"clears the bar\" rests on the point estimate.\n\n5. **Lost:** I had to reread the bar logic. The table says the lift \"clears\" 0.50%, but the interval includes values below it, and the document does not say whether the bar applies to the point estimate or the lower bound. \"Harm inside a margin goes to escalate\" and the margin size are not defined. Successful Search Rate is never defined. \"Unclear\" for the Reformulation Rate cut's status: it is labeled a lead, but the document does not say whether it is a risk.\n\n6. **Question:** Can you run the pre-exposure balance check and the days-since-exposure lift series before launch, and does the 0.50% bar apply to the point estimate or to the lower bound of the interval?\n"
+  }
+}

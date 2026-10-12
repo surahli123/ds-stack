@@ -1,0 +1,53 @@
+{
+  "pass": true,
+  "skim": "2/2",
+  "full": "3/3",
+  "items": [
+    {
+      "pass": "skim",
+      "item": "answer",
+      "key": "Keep running: It's day 4 of 14; Successful Search Rate reads +1.42% (+0.32% to +2.52%) so far, too early to call.",
+      "reader": "The document recommends continuing the test. It is on day 4 of 14 with 260,000 of the planned 900,000 users per arm, and Successful Search Rate is +1.42% (95% interval +0.32% to +2.52%), which is too early to call. Approve running the test to the planned 14 days and 900,000 users per arm, and make the launch call at that sample.",
+      "got": true,
+      "how": "overlap 81%"
+    },
+    {
+      "pass": "skim",
+      "item": "decision",
+      "key": "Approve running the test longer.",
+      "reader": "Approve running the test to the planned 14 days and 900,000 users per arm, and make the launch call at that sample. The document recommends continuing the test. It is on day 4 of 14 with 260,000 of the planned 900,000 users per arm, and Successful Search Rate is +1.42% (95% interval +0.32% to +2.52%), which is too early to call.",
+      "got": true,
+      "how": "overlap 75%"
+    },
+    {
+      "pass": "full",
+      "item": "takeaway 1",
+      "key": "Successful Search Rate +1.42% (+0.32% to +2.52%) against at least 0.50% higher.",
+      "reader": "The document recommends \"Keep running\" the Ranker v7 test to its planned size. It's on day 4 of 14, with 260,000 of the planned 900,000 users per arm. Successful Search Rate is +1.42% (95% interval +0.32% to +2.52%), against a bar of at least +0.50%. Four guardrails are within margin. The pre-period and novelty checks were not run. Approve running the test longer, to the planned 900,000 users per arm. The launch decision waits for that data. Nothing should ship yet. +1.42% for Successful Search Rate. The unit is unclear: the document doesn't say whether this is relative or percentage points, and the 0.50% bar uses the same unclear unit. The result is too early to call. The lower bound (+0.32%) is still below the +0.50% bar, and the sample is about 29% of plan. A fading lift is possible, since the document has no daily series. The mechanism is also unknown; the \"why\" is marked as a guess with no segment cuts.",
+      "got": true,
+      "how": "overlap 90%"
+    },
+    {
+      "pass": "full",
+      "item": "takeaway 2",
+      "key": "Approve running the test longer.",
+      "reader": "The document recommends \"Keep running\" the Ranker v7 test to its planned size. It's on day 4 of 14, with 260,000 of the planned 900,000 users per arm. Successful Search Rate is +1.42% (95% interval +0.32% to +2.52%), against a bar of at least +0.50%. Four guardrails are within margin. The pre-period and novelty checks were not run. Approve running the test longer, to the planned 900,000 users per arm. The launch decision waits for that data. Nothing should ship yet. +1.42% for Successful Search Rate. The unit is unclear: the document doesn't say whether this is relative or percentage points, and the 0.50% bar uses the same unclear unit. The result is too early to call. The lower bound (+0.32%) is still below the +0.50% bar, and the sample is about 29% of plan. A fading lift is possible, since the document has no daily series. The mechanism is also unknown; the \"why\" is marked as a guess with no segment cuts.",
+      "got": true,
+      "how": "overlap 100%"
+    },
+    {
+      "pass": "full",
+      "item": "takeaway 3",
+      "key": "Could reverse it: the remaining data; the call is made at the planned sample.",
+      "reader": "The document recommends \"Keep running\" the Ranker v7 test to its planned size. It's on day 4 of 14, with 260,000 of the planned 900,000 users per arm. Successful Search Rate is +1.42% (95% interval +0.32% to +2.52%), against a bar of at least +0.50%. Four guardrails are within margin. The pre-period and novelty checks were not run. Approve running the test longer, to the planned 900,000 users per arm. The launch decision waits for that data. Nothing should ship yet. +1.42% for Successful Search Rate. The unit is unclear: the document doesn't say whether this is relative or percentage points, and the 0.50% bar uses the same unclear unit. The result is too early to call. The lower bound (+0.32%) is still below the +0.50% bar, and the sample is about 29% of plan. A fading lift is possible, since the document has no daily series. The mechanism is also unknown; the \"why\" is marked as a guess with no segment cuts.",
+      "got": true,
+      "how": "overlap 57%"
+    }
+  ],
+  "lost": "I had to reread the \"Could reverse it\" line, which is unclear about what would reverse the decision. \"Verdict: better\" next to a lower bound below the bar also seemed inconsistent. The \"Escalate means a trade-off for triage\" definition didn't make sense to me.",
+  "question": "Does the lift hold day by day since first exposure, or is it fading? A daily series would answer this, and it's the check most likely to change the call.",
+  "replies": {
+    "skim": "1. Answer: The document recommends continuing the test. It is on day 4 of 14 with 260,000 of the planned 900,000 users per arm, and Successful Search Rate is +1.42% (95% interval +0.32% to +2.52%), which is too early to call.\n2. Decision: Approve running the test to the planned 14 days and 900,000 users per arm, and make the launch call at that sample.\n3. Number: +1.42% (percent change in Successful Search Rate, against a bar of at least +0.50%).\n",
+    "full": "1. **Answer:** The document recommends \"Keep running\" the Ranker v7 test to its planned size. It's on day 4 of 14, with 260,000 of the planned 900,000 users per arm. Successful Search Rate is +1.42% (95% interval +0.32% to +2.52%), against a bar of at least +0.50%. Four guardrails are within margin. The pre-period and novelty checks were not run.\n\n2. **Decision:** Approve running the test longer, to the planned 900,000 users per arm. The launch decision waits for that data. Nothing should ship yet.\n\n3. **Number:** +1.42% for Successful Search Rate. The unit is unclear: the document doesn't say whether this is relative or percentage points, and the 0.50% bar uses the same unclear unit.\n\n4. **Caveat:** The result is too early to call. The lower bound (+0.32%) is still below the +0.50% bar, and the sample is about 29% of plan. A fading lift is possible, since the document has no daily series. The mechanism is also unknown; the \"why\" is marked as a guess with no segment cuts.\n\n5. **Lost:** I had to reread the \"Could reverse it\" line, which is unclear about what would reverse the decision. \"Verdict: better\" next to a lower bound below the bar also seemed inconsistent. The \"Escalate means a trade-off for triage\" definition didn't make sense to me.\n\n6. **Question:** Does the lift hold day by day since first exposure, or is it fading? A daily series would answer this, and it's the check most likely to change the call.\n"
+  }
+}

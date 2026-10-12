@@ -1,0 +1,3 @@
+{"why_it_moved":[{"text":"The mechanism is unknown: the scorecard has no segment cuts, and the uneven arm sizes mean the lift may not come from the ranker.","label":"guess"}],
+"would_change":["Fixing the sample split problem and rerunning: the owner finds the cause (bucketing, bot filtering or a logging gap) and the scorecard is re-pulled.","A pre-exposure comparison is added, since the pre-period check could not run.","A daily series by days since first exposure is supplied, since the novelty check could not run."],
+"analyst_view":null}

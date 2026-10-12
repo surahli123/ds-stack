@@ -1,0 +1,53 @@
+{
+  "pass": true,
+  "skim": "2/2",
+  "full": "3/3",
+  "items": [
+    {
+      "pass": "skim",
+      "item": "answer",
+      "key": "Not an A/B test: This is a holdout test; the A/B launch rule doesn't apply.",
+      "reader": "The document concludes it is not an A/B test but a holdout test, and recommends using a readout designed for that test. Current state: day 14 of 90, with 1,000,000 users per arm (above the planned 50,000). The sample-split check failed, and the pre-period and novelty checks were not run. Don't launch on this readout. Get an export whose arm sizes match the planned split to settle the failed sample check, or run a randomized A/B test of the ranker alone with the registered bar before making a call.",
+      "got": true,
+      "how": "overlap 50%"
+    },
+    {
+      "pass": "skim",
+      "item": "decision",
+      "key": "Use the readout for this test design instead.",
+      "reader": "Don't launch on this readout. Get an export whose arm sizes match the planned split to settle the failed sample check, or run a randomized A/B test of the ranker alone with the registered bar before making a call. The document concludes it is not an A/B test but a holdout test, and recommends using a readout designed for that test. Current state: day 14 of 90, with 1,000,000 users per arm (above the planned 50,000). The sample-split check failed, and the pre-period and novelty checks were not run.",
+      "got": true,
+      "how": "overlap 40%; grader: same fact"
+    },
+    {
+      "pass": "full",
+      "item": "takeaway 1",
+      "key": "Holdout",
+      "reader": "The document concludes that this is a holdout test, not an A/B test, so the A/B launch rule doesn't apply. It asks for the readout designed for this test. Current state: day 14 of 90, with 1,000,000 users per arm against a planned 50,000. The sample split check failed. The scorecard, config params, and config edits passed. The pre-period and novelty checks were not run. No primary result or call is stated. Don't make a launch call from this document. Get the sample-split problem explained first, using an export whose arm sizes match the planned split. If the team wants a launch decision on the ranker, run a randomized A/B test of the ranker alone against the registered bar. Whether the holdout should keep running to day 90 is unclear. Users per arm, 1,000,000 (planned 50,000). That mismatch is the biggest red flag, because it is the failed check. Day 14 of 90 is the second most useful number. The sample split failed, which may mean the arms are not what the design says. The mechanism is unknown, and the scorecard has no segment cuts. The pre-period and novelty checks were not run.",
+      "got": true,
+      "how": "overlap 100%"
+    },
+    {
+      "pass": "full",
+      "item": "takeaway 2",
+      "key": "Use the readout for this test design instead.",
+      "reader": "The document concludes that this is a holdout test, not an A/B test, so the A/B launch rule doesn't apply. It asks for the readout designed for this test. Current state: day 14 of 90, with 1,000,000 users per arm against a planned 50,000. The sample split check failed. The scorecard, config params, and config edits passed. The pre-period and novelty checks were not run. No primary result or call is stated. Don't make a launch call from this document. Get the sample-split problem explained first, using an export whose arm sizes match the planned split. If the team wants a launch decision on the ranker, run a randomized A/B test of the ranker alone against the registered bar. Whether the holdout should keep running to day 90 is unclear. Users per arm, 1,000,000 (planned 50,000). That mismatch is the biggest red flag, because it is the failed check. Day 14 of 90 is the second most useful number. The sample split failed, which may mean the arms are not what the design says. The mechanism is unknown, and the scorecard has no segment cuts. The pre-period and novelty checks were not run.",
+      "got": true,
+      "how": "overlap 60%"
+    },
+    {
+      "pass": "full",
+      "item": "takeaway 3",
+      "key": "Could reverse it: nothing here; this design needs its own readout.",
+      "reader": "The document concludes that this is a holdout test, not an A/B test, so the A/B launch rule doesn't apply. It asks for the readout designed for this test. Current state: day 14 of 90, with 1,000,000 users per arm against a planned 50,000. The sample split check failed. The scorecard, config params, and config edits passed. The pre-period and novelty checks were not run. No primary result or call is stated. Don't make a launch call from this document. Get the sample-split problem explained first, using an export whose arm sizes match the planned split. If the team wants a launch decision on the ranker, run a randomized A/B test of the ranker alone against the registered bar. Whether the holdout should keep running to day 90 is unclear. Users per arm, 1,000,000 (planned 50,000). That mismatch is the biggest red flag, because it is the failed check. Day 14 of 90 is the second most useful number. The sample split failed, which may mean the arms are not what the design says. The mechanism is unknown, and the scorecard has no segment cuts. The pre-period and novelty checks were not run.",
+      "got": true,
+      "how": "overlap 33%; grader: same fact"
+    }
+  ],
+  "lost": "",
+  "question": "Why are the arms 1,000,000 users each when 50,000 were planned, and does that sample split failure invalidate the readout?",
+  "replies": {
+    "skim": "1. Answer: The document concludes it is not an A/B test but a holdout test, and recommends using a readout designed for that test. Current state: day 14 of 90, with 1,000,000 users per arm (above the planned 50,000). The sample-split check failed, and the pre-period and novelty checks were not run.\n\n2. Decision: Don't launch on this readout. Get an export whose arm sizes match the planned split to settle the failed sample check, or run a randomized A/B test of the ranker alone with the registered bar before making a call.\n\n3. Number: 1,000,000 users per arm (unit: users), versus the 50,000 planned, which is the number that signals the sample split is off.\n",
+    "full": "1. **Answer:** The document concludes that this is a holdout test, not an A/B test, so the A/B launch rule doesn't apply. It asks for the readout designed for this test. Current state: day 14 of 90, with 1,000,000 users per arm against a planned 50,000. The sample split check failed. The scorecard, config params, and config edits passed. The pre-period and novelty checks were not run. No primary result or call is stated.\n\n2. **Decision:** Don't make a launch call from this document. Get the sample-split problem explained first, using an export whose arm sizes match the planned split. If the team wants a launch decision on the ranker, run a randomized A/B test of the ranker alone against the registered bar. Whether the holdout should keep running to day 90 is unclear.\n\n3. **Number:** Users per arm, 1,000,000 (planned 50,000). That mismatch is the biggest red flag, because it is the failed check. Day 14 of 90 is the second most useful number.\n\n4. **Caveat:** The sample split failed, which may mean the arms are not what the design says. The mechanism is unknown, and the scorecard has no segment cuts. The pre-period and novelty checks were not run.\n\n5. **Lost:**\n   - The \"Checks\" line is ambiguous. \"Sample split fail; passed: \u2026\" reads as if the split failed, but I had to reread it to confirm.\n   - \"Could reverse it: nothing here; this design needs its own readout\" is unclear about whether the test can be stopped or reversed.\n   - \"Why it moved\" has no movement stated, only a guess that the mechanism is unknown.\n   - \"Harm inside a margin goes to escalate\" and \"the bar\" are never defined, so I can't tell what result would count as a win.\n   - I could not find the primary metric's effect size or interval anywhere.\n\n6. **Question:** Why are the arms 1,000,000 users each when 50,000 were planned, and does that sample split failure invalidate the readout?\n"
+  }
+}

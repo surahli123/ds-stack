@@ -1,0 +1,3 @@
+{"why_it_moved":[{"text":"Successful Search Rate rose +0.81% while Long Click Rate moved only +0.12%, so more searches ended in a click but the scorecard does not show those clicks lasting.","label":"measured"},{"text":"The ranker may surface results that get clicked but are abandoned quickly; no segment cuts were read, so the mechanism is not known.","label":"guess"}],
+"would_change":["More data showing Long Click Rate up by at least +0.5% would make the second primary clear its bar.","A pre-period comparison that shows the two arms were alike before exposure would close the one check that could not run."],
+"analyst_view":null}

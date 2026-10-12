@@ -1,0 +1,9 @@
+{"why_it_moved":[
+{"text":"Successful Search Rate rose 0.81%; desktop moved +0.84% and mobile +0.07%, but neither cut is clear on its own, so the split is unproven.","label":"measured"},
+{"text":"Ad Click Rate fell 2.8%, an unregistered secondary; Revenue per User held at -0.10%.","label":"measured"},
+{"text":"The mechanism is unknown; the ranker may surface the answer sooner, so fewer ad clicks follow.","label":"guess"}],
+"would_change":[
+"A pre-exposure comparison showing the arms already differed on Successful Search Rate would void this result, since the test would be broken.",
+"A daily series by days since first exposure showing the lift fading would mean the test needs more time.",
+"Revenue per User falling past its 1% margin on a longer window would block the release."],
+"analyst_view":null}

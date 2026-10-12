@@ -1,0 +1,8 @@
+{"why_it_moved": [
+ {"text": "Successful Search Rate rose 0.81% and Latency p95 rose 1.20% in the same test arm.", "label": "measured"},
+ {"text": "A heavier ranking model plausibly costs extra serving time, which would explain the latency rise.", "label": "inferred"},
+ {"text": "No segment cuts were in the scorecard, so why the success rate rose is not known.", "label": "guess"}],
+ "would_change": [
+  "A latency owner accepting the 1.20% rise, or a fix that brings it back near zero, would clear the guardrail concern.",
+  "A rerun with latency past the 2.00% margin would make the harm a breach.",
+  "A pre-exposure comparison and a daily series by days since first exposure would let the two checks that could not run be run."]}

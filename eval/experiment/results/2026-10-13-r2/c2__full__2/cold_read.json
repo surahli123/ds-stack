@@ -1,0 +1,53 @@
+{
+  "pass": true,
+  "skim": "2/2",
+  "full": "3/3",
+  "items": [
+    {
+      "pass": "skim",
+      "item": "answer",
+      "key": "Can't tell: Parameters changed that the test didn't intend: {'Test': ['snippet_length']}. No launch decision from this data until it's fixed.",
+      "reader": "Can't tell. The test changed snippet_length between arms, so the +0.81% Successful Search Rate lift can't be credited to the ranker alone. Current state: day 14 of 14, the test finished, and the config check failed. Agree to fix the test config so snippet_length matches in both arms, then rerun. Alternatively, confirm in the audit trail that the snippet change was intended and register it. Make no launch decision from this data.",
+      "got": true,
+      "how": "overlap 58%"
+    },
+    {
+      "pass": "skim",
+      "item": "decision",
+      "key": "Agree to fix the test and rerun; no launch decision from this data.",
+      "reader": "Agree to fix the test config so snippet_length matches in both arms, then rerun. Alternatively, confirm in the audit trail that the snippet change was intended and register it. Make no launch decision from this data. Can't tell. The test changed snippet_length between arms, so the +0.81% Successful Search Rate lift can't be credited to the ranker alone. Current state: day 14 of 14, the test finished, and the config check failed.",
+      "got": true,
+      "how": "overlap 100%"
+    },
+    {
+      "pass": "full",
+      "item": "takeaway 1",
+      "key": "Parameters changed that the test didn't intend: {'Test': ['snippet_length']}",
+      "reader": "The document concludes \"Can't tell.\" The test is confounded: the test arm changed `snippet_length` as well as the ranker, so the +0.81% Successful Search Rate lift can't be credited to the ranker. The test ran its full 14 days with 1,000,000 users per arm, but the result isn't usable as it stands. Agree to fix the test and rerun it with `snippet_length` equal in both arms. No launch decision on this data. The alternative is to confirm in the audit trail that the snippet change was intended and register it, but the document doesn't say that path is acceptable. Successful Search Rate change, +0.81% (95% interval +0.41% to +1.21%). The bar is at least +0.50%. The unit is percent change relative to control. The number is not reliable until the confound is removed. The main risk is that longer snippets change clicks on their own, which feeds straight into Successful Search Rate. The document marks this as a guess. The pre-exposure comparison and the daily series by days since first exposure could not run, so novelty and pre-existing differences are unchecked.",
+      "got": true,
+      "how": "overlap 50%"
+    },
+    {
+      "pass": "full",
+      "item": "takeaway 2",
+      "key": "Agree to fix the test and rerun; no launch decision from this data.",
+      "reader": "The document concludes \"Can't tell.\" The test is confounded: the test arm changed `snippet_length` as well as the ranker, so the +0.81% Successful Search Rate lift can't be credited to the ranker. The test ran its full 14 days with 1,000,000 users per arm, but the result isn't usable as it stands. Agree to fix the test and rerun it with `snippet_length` equal in both arms. No launch decision on this data. The alternative is to confirm in the audit trail that the snippet change was intended and register it, but the document doesn't say that path is acceptable. Successful Search Rate change, +0.81% (95% interval +0.41% to +1.21%). The bar is at least +0.50%. The unit is percent change relative to control. The number is not reliable until the confound is removed. The main risk is that longer snippets change clicks on their own, which feeds straight into Successful Search Rate. The document marks this as a guess. The pre-exposure comparison and the daily series by days since first exposure could not run, so novelty and pre-existing differences are unchecked.",
+      "got": true,
+      "how": "overlap 100%"
+    },
+    {
+      "pass": "full",
+      "item": "takeaway 3",
+      "key": "Could reverse it: fixing the config params problem and rerunning.",
+      "reader": "The document concludes \"Can't tell.\" The test is confounded: the test arm changed `snippet_length` as well as the ranker, so the +0.81% Successful Search Rate lift can't be credited to the ranker. The test ran its full 14 days with 1,000,000 users per arm, but the result isn't usable as it stands. Agree to fix the test and rerun it with `snippet_length` equal in both arms. No launch decision on this data. The alternative is to confirm in the audit trail that the snippet change was intended and register it, but the document doesn't say that path is acceptable. Successful Search Rate change, +0.81% (95% interval +0.41% to +1.21%). The bar is at least +0.50%. The unit is percent change relative to control. The number is not reliable until the confound is removed. The main risk is that longer snippets change clicks on their own, which feeds straight into Successful Search Rate. The document marks this as a guess. The pre-exposure comparison and the daily series by days since first exposure could not run, so novelty and pre-existing differences are unchecked.",
+      "got": true,
+      "how": "overlap 0%; grader: same fact"
+    }
+  ],
+  "lost": "Mostly nowhere. Two small snags: the \"Could reverse it\" line and the \"confirm the snippet change was intended and register it\" option are less clear about whether that path would let the existing numbers be used. Also, the point estimate clears the +0.50% bar but the lower bound (+0.41%) does not, and the document never comments on that, though it doesn't matter while the test is broken.",
+  "question": "Was the `snippet_length` change intentional? If not, will you rerun with it equal in both arms, and if so, is it registered in the audit trail so the current numbers can be read?",
+  "replies": {
+    "skim": "1. Answer: Can't tell. The test changed snippet_length between arms, so the +0.81% Successful Search Rate lift can't be credited to the ranker alone. Current state: day 14 of 14, the test finished, and the config check failed.\n\n2. Decision: Agree to fix the test config so snippet_length matches in both arms, then rerun. Alternatively, confirm in the audit trail that the snippet change was intended and register it. Make no launch decision from this data.\n\n3. Number: +0.81% change in Successful Search Rate (95% interval +0.41% to +1.21%), against a bar of at least +0.50%. The number is unusable for the launch call until the snippet confound is resolved.\n",
+    "full": "1. **Answer:** The document concludes \"Can't tell.\" The test is confounded: the test arm changed `snippet_length` as well as the ranker, so the +0.81% Successful Search Rate lift can't be credited to the ranker. The test ran its full 14 days with 1,000,000 users per arm, but the result isn't usable as it stands.\n\n2. **Decision:** Agree to fix the test and rerun it with `snippet_length` equal in both arms. No launch decision on this data. The alternative is to confirm in the audit trail that the snippet change was intended and register it, but the document doesn't say that path is acceptable.\n\n3. **Number:** Successful Search Rate change, +0.81% (95% interval +0.41% to +1.21%). The bar is at least +0.50%. The unit is percent change relative to control. The number is not reliable until the confound is removed.\n\n4. **Caveat:** The main risk is that longer snippets change clicks on their own, which feeds straight into Successful Search Rate. The document marks this as a guess. The pre-exposure comparison and the daily series by days since first exposure could not run, so novelty and pre-existing differences are unchecked.\n\n5. **Lost:** Mostly nowhere. Two small snags: the \"Could reverse it\" line and the \"confirm the snippet change was intended and register it\" option are less clear about whether that path would let the existing numbers be used. Also, the point estimate clears the +0.50% bar but the lower bound (+0.41%) does not, and the document never comments on that, though it doesn't matter while the test is broken.\n\n6. **Question:** Was the `snippet_length` change intentional? If not, will you rerun with it equal in both arms, and if so, is it registered in the audit trail so the current numbers can be read?\n"
+  }
+}

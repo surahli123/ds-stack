@@ -1,0 +1,53 @@
+{
+  "pass": false,
+  "skim": "2/2",
+  "full": "2/3",
+  "items": [
+    {
+      "pass": "skim",
+      "item": "answer",
+      "key": "Can't tell, decided by sample split.",
+      "reader": "The document concludes \"Can't tell.\" The test ran 14 days with 1,000,000 users per arm, but exposures split 50.5% / 49.5% against a planned 50.0% / 50.0%, so the +0.81% primary lift can't be trusted yet. Agree to fix the sample split problem (bucketing, bot filtering, or logging) and rerun. Make no launch decision from this data.",
+      "got": true,
+      "how": "overlap 75%"
+    },
+    {
+      "pass": "skim",
+      "item": "decision",
+      "key": "Agree to fix the test and rerun; no launch decision from this data.",
+      "reader": "Agree to fix the sample split problem (bucketing, bot filtering, or logging) and rerun. Make no launch decision from this data. The document concludes \"Can't tell.\" The test ran 14 days with 1,000,000 users per arm, but exposures split 50.5% / 49.5% against a planned 50.0% / 50.0%, so the +0.81% primary lift can't be trusted yet.",
+      "got": true,
+      "how": "overlap 100%"
+    },
+    {
+      "pass": "full",
+      "item": "takeaway 1",
+      "key": "The arms got 50.5% / 49.5% of exposures against a planned 50.0% / 50.0%, a gap chance almost never produces at this size",
+      "reader": "The document concludes \"Can't tell.\" The test is broken: exposures split 50.5% / 49.5% against a planned 50/50, which chance is unlikely to produce at this size. Current state: the 14-day test is finished, with 1,000,000 users per arm. The primary metric, Successful Search Rate, shows +0.81% (95% interval +0.41% to +1.21%), but that result can't be trusted yet. Agree to fix the sample split and rerun. Make no launch decision from this data. The owner should find the cause (bucketing, bot filtering, or a logging gap), re-pull the scorecard, and add the pre-exposure and daily novelty checks that couldn't run. The exposure split, 50.5% vs 49.5% (planned 50.0% / 50.0%), matters most because it invalidates the result. The number the decision would eventually turn on is the primary lift, +0.81% (in percent change of Successful Search Rate). The split skew has no known cause, so the +0.81% lift may be an artifact. The document also says the mechanism is unknown, the scorecard has no segment cuts, and the lift may not come from the ranker. The pre-period and novelty checks were not run.",
+      "got": true,
+      "how": "overlap 64%"
+    },
+    {
+      "pass": "full",
+      "item": "takeaway 2",
+      "key": "Agree to fix the test and rerun; no launch decision from this data.",
+      "reader": "The document concludes \"Can't tell.\" The test is broken: exposures split 50.5% / 49.5% against a planned 50/50, which chance is unlikely to produce at this size. Current state: the 14-day test is finished, with 1,000,000 users per arm. The primary metric, Successful Search Rate, shows +0.81% (95% interval +0.41% to +1.21%), but that result can't be trusted yet. Agree to fix the sample split and rerun. Make no launch decision from this data. The owner should find the cause (bucketing, bot filtering, or a logging gap), re-pull the scorecard, and add the pre-exposure and daily novelty checks that couldn't run. The exposure split, 50.5% vs 49.5% (planned 50.0% / 50.0%), matters most because it invalidates the result. The number the decision would eventually turn on is the primary lift, +0.81% (in percent change of Successful Search Rate). The split skew has no known cause, so the +0.81% lift may be an artifact. The document also says the mechanism is unknown, the scorecard has no segment cuts, and the lift may not come from the ranker. The pre-period and novelty checks were not run.",
+      "got": true,
+      "how": "overlap 100%"
+    },
+    {
+      "pass": "full",
+      "item": "takeaway 3",
+      "key": "Could reverse it: fixing the sample split problem and rerunning.",
+      "reader": "The document concludes \"Can't tell.\" The test is broken: exposures split 50.5% / 49.5% against a planned 50/50, which chance is unlikely to produce at this size. Current state: the 14-day test is finished, with 1,000,000 users per arm. The primary metric, Successful Search Rate, shows +0.81% (95% interval +0.41% to +1.21%), but that result can't be trusted yet. Agree to fix the sample split and rerun. Make no launch decision from this data. The owner should find the cause (bucketing, bot filtering, or a logging gap), re-pull the scorecard, and add the pre-exposure and daily novelty checks that couldn't run. The exposure split, 50.5% vs 49.5% (planned 50.0% / 50.0%), matters most because it invalidates the result. The number the decision would eventually turn on is the primary lift, +0.81% (in percent change of Successful Search Rate). The split skew has no known cause, so the +0.81% lift may be an artifact. The document also says the mechanism is unknown, the scorecard has no segment cuts, and the lift may not come from the ranker. The pre-period and novelty checks were not run.",
+      "got": false,
+      "how": "overlap 33%"
+    }
+  ],
+  "lost": "Two things. (a) The primary row says \"better,\" but the lower bound (+0.41%) is below the stated bar (at least +0.50%). Whether the bar is met is unclear to me, and it sits oddly beside an overall \"Can't tell.\" (b) \"Harm inside a margin goes to escalate\" and \"variance reduction off\" are not explained, so I couldn't tell how they affect the call.",
+  "question": "What caused the 50.5% / 49.5% split, and does the +0.81% primary lift still hold after the fix and rerun?",
+  "replies": {
+    "skim": "1. Answer: The document concludes \"Can't tell.\" The test ran 14 days with 1,000,000 users per arm, but exposures split 50.5% / 49.5% against a planned 50.0% / 50.0%, so the +0.81% primary lift can't be trusted yet.\n2. Decision: Agree to fix the sample split problem (bucketing, bot filtering, or logging) and rerun. Make no launch decision from this data.\n3. Number: 50.5% of exposures in one arm (planned 50.0%).\n",
+    "full": "1. **Answer:** The document concludes \"Can't tell.\" The test is broken: exposures split 50.5% / 49.5% against a planned 50/50, which chance is unlikely to produce at this size. Current state: the 14-day test is finished, with 1,000,000 users per arm. The primary metric, Successful Search Rate, shows +0.81% (95% interval +0.41% to +1.21%), but that result can't be trusted yet.\n\n2. **Decision:** Agree to fix the sample split and rerun. Make no launch decision from this data. The owner should find the cause (bucketing, bot filtering, or a logging gap), re-pull the scorecard, and add the pre-exposure and daily novelty checks that couldn't run.\n\n3. **Number:** The exposure split, 50.5% vs 49.5% (planned 50.0% / 50.0%), matters most because it invalidates the result. The number the decision would eventually turn on is the primary lift, +0.81% (in percent change of Successful Search Rate).\n\n4. **Caveat:** The split skew has no known cause, so the +0.81% lift may be an artifact. The document also says the mechanism is unknown, the scorecard has no segment cuts, and the lift may not come from the ranker. The pre-period and novelty checks were not run.\n\n5. **Lost:** Two things. (a) The primary row says \"better,\" but the lower bound (+0.41%) is below the stated bar (at least +0.50%). Whether the bar is met is unclear to me, and it sits oddly beside an overall \"Can't tell.\" (b) \"Harm inside a margin goes to escalate\" and \"variance reduction off\" are not explained, so I couldn't tell how they affect the call.\n\n6. **Question:** What caused the 50.5% / 49.5% split, and does the +0.81% primary lift still hold after the fix and rerun?\n"
+  }
+}

@@ -1,0 +1,8 @@
+{"why_it_moved":[
+{"text":"Successful Search Rate already differed between the arms before exposure, by about as much as the lift seen after.","label":"measured"},
+{"text":"The arms were likely not comparable at the start, so the lift may mostly reflect who was assigned, not the new ranker.","label":"inferred"}],
+"would_change":[
+"A pre-exposure comparison showing no gap on Successful Search Rate, for example after a re-randomized rerun, would let the call be made from the lift.",
+"A documented cause for the pre-exposure gap, added to the pre-registration, would move this to triage.",
+"A daily effect series by days since first exposure would allow the novelty check to run."],
+"analyst_view":null}

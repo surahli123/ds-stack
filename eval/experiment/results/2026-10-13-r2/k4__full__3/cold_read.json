@@ -1,0 +1,53 @@
+{
+  "pass": true,
+  "skim": "2/2",
+  "full": "3/3",
+  "items": [
+    {
+      "pass": "skim",
+      "item": "answer",
+      "key": "Keep running: It's day 7 of 14; Successful Search Rate reads +0.55% (-0.21% to +1.31%) so far, too early to call.",
+      "reader": "Keep running the test. Day 7 of 14; the document is a status handover, not a final result. Successful Search Rate is +0.55% (95% interval -0.21% to +1.31%), so the outcome is still unclear. Approve running Ranker v7 to the planned 900,000 users per arm (day 14), then re-decide. The call is only valid at the planned sample, and the document does not say the day-14 projection reaches it.",
+      "got": true,
+      "how": "overlap 75%"
+    },
+    {
+      "pass": "skim",
+      "item": "decision",
+      "key": "Approve running the test longer.",
+      "reader": "Approve running Ranker v7 to the planned 900,000 users per arm (day 14), then re-decide. The call is only valid at the planned sample, and the document does not say the day-14 projection reaches it. Keep running the test. Day 7 of 14; the document is a status handover, not a final result. Successful Search Rate is +0.55% (95% interval -0.21% to +1.31%), so the outcome is still unclear.",
+      "got": true,
+      "how": "overlap 75%"
+    },
+    {
+      "pass": "full",
+      "item": "takeaway 1",
+      "key": "Successful Search Rate +0.55% (-0.21% to +1.31%) against at least 0.50% higher.",
+      "reader": "The document recommends continuing the test. It is day 7 of 14 with 480,000 of the planned 900,000 users per arm. Successful Search Rate is +0.55% (95% interval -0.21% to +1.31%) against a bar of at least +0.50%, so it is too early to call. Both guardrails shown are within margin, and the other two guardrails are also within margin. Approve running the test to the planned sample, about day 14. Then make the call from the final interval. The document's ask is only to keep the test running. It does not set a decision date or say what happens if the test is still unclear at the planned sample. Successful Search Rate change, +0.55% (interval -0.21% to +1.31%), compared with the +0.50% bar. The unit is percent change in the rate. The interval still includes zero and the bar, so the result could be a win, a null, or a small loss. The pre-period and novelty checks were not run, and the data has no segment cuts, so the mechanism is a guess. My rough estimate, which assumes the interval shrinks with the square root of sample size and ignores the wider sequential bounds: at 900,000 users with the same estimate, the interval would be about 0.0% to 1.1%. That lower bound would still miss the \"wholly above 0.5%\" win condition unless the effect grows.",
+      "got": true,
+      "how": "overlap 90%"
+    },
+    {
+      "pass": "full",
+      "item": "takeaway 2",
+      "key": "Approve running the test longer.",
+      "reader": "The document recommends continuing the test. It is day 7 of 14 with 480,000 of the planned 900,000 users per arm. Successful Search Rate is +0.55% (95% interval -0.21% to +1.31%) against a bar of at least +0.50%, so it is too early to call. Both guardrails shown are within margin, and the other two guardrails are also within margin. Approve running the test to the planned sample, about day 14. Then make the call from the final interval. The document's ask is only to keep the test running. It does not set a decision date or say what happens if the test is still unclear at the planned sample. Successful Search Rate change, +0.55% (interval -0.21% to +1.31%), compared with the +0.50% bar. The unit is percent change in the rate. The interval still includes zero and the bar, so the result could be a win, a null, or a small loss. The pre-period and novelty checks were not run, and the data has no segment cuts, so the mechanism is a guess. My rough estimate, which assumes the interval shrinks with the square root of sample size and ignores the wider sequential bounds: at 900,000 users with the same estimate, the interval would be about 0.0% to 1.1%. That lower bound would still miss the \"wholly above 0.5%\" win condition unless the effect grows.",
+      "got": true,
+      "how": "overlap 75%"
+    },
+    {
+      "pass": "full",
+      "item": "takeaway 3",
+      "key": "Could reverse it: the remaining data; the call is made at the planned sample.",
+      "reader": "The document recommends continuing the test. It is day 7 of 14 with 480,000 of the planned 900,000 users per arm. Successful Search Rate is +0.55% (95% interval -0.21% to +1.31%) against a bar of at least +0.50%, so it is too early to call. Both guardrails shown are within margin, and the other two guardrails are also within margin. Approve running the test to the planned sample, about day 14. Then make the call from the final interval. The document's ask is only to keep the test running. It does not set a decision date or say what happens if the test is still unclear at the planned sample. Successful Search Rate change, +0.55% (interval -0.21% to +1.31%), compared with the +0.50% bar. The unit is percent change in the rate. The interval still includes zero and the bar, so the result could be a win, a null, or a small loss. The pre-period and novelty checks were not run, and the data has no segment cuts, so the mechanism is a guess. My rough estimate, which assumes the interval shrinks with the square root of sample size and ignores the wider sequential bounds: at 900,000 users with the same estimate, the interval would be about 0.0% to 1.1%. That lower bound would still miss the \"wholly above 0.5%\" win condition unless the effect grows.",
+      "got": true,
+      "how": "overlap 57%"
+    }
+  ],
+  "lost": "I had to reread two things. \"Could reverse it: the remaining data; the call is made at the planned sample\" does not say what would reverse the call. \"Harm inside a margin goes to escalate\" is also unclear: it is not stated whether this means any guardrail movement inside its margin triggers escalation.",
+  "question": "Does a win require the whole successful-search interval to sit above +0.5%, as the \"What would change the call\" section says, or only the point estimate to be at least +0.5%, as the table's \"at least 0.50% higher\" suggests?",
+  "replies": {
+    "skim": "1. Answer: Keep running the test. Day 7 of 14; the document is a status handover, not a final result. Successful Search Rate is +0.55% (95% interval -0.21% to +1.31%), so the outcome is still unclear.\n2. Decision: Approve running Ranker v7 to the planned 900,000 users per arm (day 14), then re-decide. The call is only valid at the planned sample, and the document does not say the day-14 projection reaches it.\n3. Number: +0.55% change in Successful Search Rate (primary metric; the bar is at least +0.50%).\n",
+    "full": "1. **Answer:** The document recommends continuing the test. It is day 7 of 14 with 480,000 of the planned 900,000 users per arm. Successful Search Rate is +0.55% (95% interval -0.21% to +1.31%) against a bar of at least +0.50%, so it is too early to call. Both guardrails shown are within margin, and the other two guardrails are also within margin.\n\n2. **Decision:** Approve running the test to the planned sample, about day 14. Then make the call from the final interval. The document's ask is only to keep the test running. It does not set a decision date or say what happens if the test is still unclear at the planned sample.\n\n3. **Number:** Successful Search Rate change, +0.55% (interval -0.21% to +1.31%), compared with the +0.50% bar. The unit is percent change in the rate.\n\n4. **Caveat:** The interval still includes zero and the bar, so the result could be a win, a null, or a small loss. The pre-period and novelty checks were not run, and the data has no segment cuts, so the mechanism is a guess. My rough estimate, which assumes the interval shrinks with the square root of sample size and ignores the wider sequential bounds: at 900,000 users with the same estimate, the interval would be about 0.0% to 1.1%. That lower bound would still miss the \"wholly above 0.5%\" win condition unless the effect grows.\n\n5. **Lost:** I had to reread two things. \"Could reverse it: the remaining data; the call is made at the planned sample\" does not say what would reverse the call. \"Harm inside a margin goes to escalate\" is also unclear: it is not stated whether this means any guardrail movement inside its margin triggers escalation.\n\n6. **Question:** Does a win require the whole successful-search interval to sit above +0.5%, as the \"What would change the call\" section says, or only the point estimate to be at least +0.5%, as the table's \"at least 0.50% higher\" suggests?\n"
+  }
+}

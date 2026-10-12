@@ -1,0 +1,9 @@
+{"why_it_moved":[
+{"text":"Successful Search Rate rose 1.24% and Abandonment Rate rose 2.20%: more searches end in a good click, but more also end with no click at all.","label":"measured"},
+{"text":"Only the head-query cut shows abandonment clearly up (+1.55%); mobile, desktop and tail cuts show no clear change either way.","label":"measured"},
+{"text":"The new ranker may favor results that get clicked when people click, while pushing some head queries toward answers they skip. The scorecard cannot confirm this.","label":"guess"}],
+"would_change":[
+"A rerun or a pre-registered explanation showing the abandonment rise comes from a logging change rather than users leaving, which would bring Abandonment Rate back inside its 1.00% margin.",
+"A ranker tweak that cuts Abandonment Rate to within 1.00% of control while keeping Successful Search Rate above its 0.50% bar.",
+"A pre-period comparison and a by-exposure-day series, which the export lacks, would show whether the result holds up, though they cannot undo the breach."],
+"analyst_view":null}

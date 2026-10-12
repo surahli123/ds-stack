@@ -1,0 +1,3 @@
+{"why_it_moved":[{"text":"The scorecard shows Successful Search Rate up +0.81% with no guardrail outside its margin, but no segment cuts were read, so the mechanism is not known.","label":"guess"}],
+"would_change":["A fresh two-arm A/B run of Ranker v7 against v6 with the same registered bar and margins would get a decision under the standard rule.","Pre-registered interleaving rules, such as a preference win rate and its bar, would let this test be read on its own terms."],
+"analyst_view":null}

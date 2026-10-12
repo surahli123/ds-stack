@@ -1,0 +1,53 @@
+{
+  "pass": false,
+  "skim": "2/2",
+  "full": "2/3",
+  "items": [
+    {
+      "pass": "skim",
+      "item": "answer",
+      "key": "Ship: Successful Search Rate rose 0.81% (+0.41% to +1.21%), which clears the 0.50% bar and every guardrail held.",
+      "reader": "The document concludes Ship: Ranker v7 raised Successful Search Rate by 0.81% (95% interval +0.41% to +1.21%), clearing the 0.50% bar with all guardrails held. The pre-period check and novelty check were not run, so the result could be void. Approve the launch to all traffic only after running the pre-exposure comparison, since if the arms already differed on Successful Search Rate, the result is void. If that check can't run, the call rests on the unverified assumption that the arms were balanced before exposure.",
+      "got": true,
+      "how": "overlap 71%"
+    },
+    {
+      "pass": "skim",
+      "item": "decision",
+      "key": "Approve the launch to all traffic.",
+      "reader": "Approve the launch to all traffic only after running the pre-exposure comparison, since if the arms already differed on Successful Search Rate, the result is void. If that check can't run, the call rests on the unverified assumption that the arms were balanced before exposure. The document concludes Ship: Ranker v7 raised Successful Search Rate by 0.81% (95% interval +0.41% to +1.21%), clearing the 0.50% bar with all guardrails held. The pre-period check and novelty check were not run, so the result could be void.",
+      "got": true,
+      "how": "overlap 100%"
+    },
+    {
+      "pass": "full",
+      "item": "takeaway 1",
+      "key": "Successful Search Rate +0.81% (+0.41% to +1.21%) against at least 0.50% higher.",
+      "reader": "The document recommends shipping Ranker v7. The test ran to completion (day 14 of 14, 1,000,000 users per arm). Successful Search Rate rose 0.81% (95% interval +0.41% to +1.21%), clearing the 0.50% bar, and all guardrails held. The pre-period and novelty checks were not run. Approve the launch to all traffic, or first run the two missing checks: a pre-exposure comparison of Successful Search Rate between arms, and a daily effect series by days since first exposure. The document says either one could void the result, and both are cheap to run compared with a full rollout. +0.81% change in Successful Search Rate, with interval +0.41% to +1.21%. The document does not say whether this is relative or percentage points. The result could be invalid or a novelty effect, since neither the pre-period nor the novelty check ran. The mechanism is also unknown: clicks and reformulation barely moved, so the scorecard does not show where the extra successes come from. Only the cuts by segment lean the same way, and none is clear on its own.",
+      "got": true,
+      "how": "overlap 70%"
+    },
+    {
+      "pass": "full",
+      "item": "takeaway 2",
+      "key": "Approve the launch to all traffic.",
+      "reader": "The document recommends shipping Ranker v7. The test ran to completion (day 14 of 14, 1,000,000 users per arm). Successful Search Rate rose 0.81% (95% interval +0.41% to +1.21%), clearing the 0.50% bar, and all guardrails held. The pre-period and novelty checks were not run. Approve the launch to all traffic, or first run the two missing checks: a pre-exposure comparison of Successful Search Rate between arms, and a daily effect series by days since first exposure. The document says either one could void the result, and both are cheap to run compared with a full rollout. +0.81% change in Successful Search Rate, with interval +0.41% to +1.21%. The document does not say whether this is relative or percentage points. The result could be invalid or a novelty effect, since neither the pre-period nor the novelty check ran. The mechanism is also unknown: clicks and reformulation barely moved, so the scorecard does not show where the extra successes come from. Only the cuts by segment lean the same way, and none is clear on its own.",
+      "got": true,
+      "how": "overlap 100%"
+    },
+    {
+      "pass": "full",
+      "item": "takeaway 3",
+      "key": "Could reverse it: pre period could not be checked: no pre-period interval or platform check.",
+      "reader": "The document recommends shipping Ranker v7. The test ran to completion (day 14 of 14, 1,000,000 users per arm). Successful Search Rate rose 0.81% (95% interval +0.41% to +1.21%), clearing the 0.50% bar, and all guardrails held. The pre-period and novelty checks were not run. Approve the launch to all traffic, or first run the two missing checks: a pre-exposure comparison of Successful Search Rate between arms, and a daily effect series by days since first exposure. The document says either one could void the result, and both are cheap to run compared with a full rollout. +0.81% change in Successful Search Rate, with interval +0.41% to +1.21%. The document does not say whether this is relative or percentage points. The result could be invalid or a novelty effect, since neither the pre-period nor the novelty check ran. The mechanism is also unknown: clicks and reformulation barely moved, so the scorecard does not show where the extra successes come from. Only the cuts by segment lean the same way, and none is clear on its own.",
+      "got": false,
+      "how": "overlap 38%"
+    }
+  ],
+  "lost": "Three spots:",
+  "question": "Can you run the pre-exposure comparison and the days-since-exposure novelty series before we go to all traffic, and what are the numeric margins for each guardrail?",
+  "replies": {
+    "skim": "1. Answer: The document concludes Ship: Ranker v7 raised Successful Search Rate by 0.81% (95% interval +0.41% to +1.21%), clearing the 0.50% bar with all guardrails held. The pre-period check and novelty check were not run, so the result could be void.\n\n2. Decision: Approve the launch to all traffic only after running the pre-exposure comparison, since if the arms already differed on Successful Search Rate, the result is void. If that check can't run, the call rests on the unverified assumption that the arms were balanced before exposure.\n\n3. Number: +0.81% change in Successful Search Rate (95% interval +0.41% to +1.21%).\n",
+    "full": "1. **Answer:** The document recommends shipping Ranker v7. The test ran to completion (day 14 of 14, 1,000,000 users per arm). Successful Search Rate rose 0.81% (95% interval +0.41% to +1.21%), clearing the 0.50% bar, and all guardrails held. The pre-period and novelty checks were not run.\n\n2. **Decision:** Approve the launch to all traffic, or first run the two missing checks: a pre-exposure comparison of Successful Search Rate between arms, and a daily effect series by days since first exposure. The document says either one could void the result, and both are cheap to run compared with a full rollout.\n\n3. **Number:** +0.81% change in Successful Search Rate, with interval +0.41% to +1.21%. The document does not say whether this is relative or percentage points.\n\n4. **Caveat:** The result could be invalid or a novelty effect, since neither the pre-period nor the novelty check ran. The mechanism is also unknown: clicks and reformulation barely moved, so the scorecard does not show where the extra successes come from. Only the cuts by segment lean the same way, and none is clear on its own.\n\n5. **Lost:** Three spots:\n   - \"Could reverse it\" reads as a reason to reverse, but it appears to mean \"the result could be reversed,\" so the wording is confusing.\n   - The guardrail margins are never given numerically, so I can't tell how much room each guardrail had.\n   - The unit of the 0.81% (relative or absolute) is unstated.\n\n6. **Question:** Can you run the pre-exposure comparison and the days-since-exposure novelty series before we go to all traffic, and what are the numeric margins for each guardrail?\n"
+  }
+}

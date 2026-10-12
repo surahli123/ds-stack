@@ -1,0 +1,9 @@
+{"why_it_moved":[
+{"text":"Before exposure, the Test group already ran ahead on Successful Search Rate, by about the same size as the lift seen during the test.","label":"measured"},
+{"text":"Most of the lift may come from how users were split between the groups, not from the new ranker.","label":"inferred"},
+{"text":"No segment cuts were read, so the mechanism is not known.","label":"guess"}],
+"would_change":[
+"A pre-exposure comparison that shows the groups were level, or a re-split that fixes the imbalance, would let the lift be read.",
+"A registered explanation for the pre-exposure gap, with evidence, would soften the failed check.",
+"A daily series by days since first exposure would let the novelty check run."],
+"analyst_view":null}

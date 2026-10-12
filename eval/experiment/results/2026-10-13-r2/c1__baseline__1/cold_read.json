@@ -1,0 +1,53 @@
+{
+  "pass": false,
+  "skim": "0/2",
+  "full": "1/3",
+  "items": [
+    {
+      "pass": "skim",
+      "item": "answer",
+      "key": "Can't tell, decided by sample split.",
+      "reader": "Don't ship. Successful Search Rate rose 0.334 pp, below the pre-registered +0.5 pp bar, and the CI's upper end (+0.499 pp) also falls just under it. Don't ship now. Investigate the possible sample-ratio mismatch (1,010,000 control vs 990,000 exposures) before trusting the result or revisiting the decision.",
+      "got": false,
+      "how": "overlap 0%"
+    },
+    {
+      "pass": "skim",
+      "item": "decision",
+      "key": "Agree to fix the test and rerun; no launch decision from this data.",
+      "reader": "Don't ship now. Investigate the possible sample-ratio mismatch (1,010,000 control vs 990,000 exposures) before trusting the result or revisiting the decision. Don't ship. Successful Search Rate rose 0.334 pp, below the pre-registered +0.5 pp bar, and the CI's upper end (+0.499 pp) also falls just under it.",
+      "got": false,
+      "how": "overlap 14%"
+    },
+    {
+      "pass": "full",
+      "item": "takeaway 1",
+      "key": "The arms got 50.5% / 49.5% of exposures against a planned 50.0% / 50.0%, a gap chance almost never produces at this size",
+      "reader": "Don't ship. The primary metric, Successful Search Rate, rose +0.334 pp (95% CI +0.169 to +0.499 pp), which is positive but below the pre-registered +0.5 pp bar. The experiment is still running past its planned 14 days. Don't ship under the pre-registered rule. Before any later decision, have someone check the raw assignment counts to resolve the sample-ratio question. Also decide whether to stop the run, since it is past its planned length. The document doesn't say which. Successful Search Rate, +0.334 pp (unit: percentage points), against the +0.5 pp bar. The sample-ratio conflict is the main risk to trust in the data. `experiment.json` shows 1,010,000 control vs 990,000 test exposures, while the platform reports PASSED and exactly 1,000,000 units per arm. The author couldn't tell which is right. The document says a real mismatch wouldn't change the decision, since the estimate is already below the bar. Clicks per User (\u22121.0%, p = 0.014) is an unplanned metric in a set of about 70, so it is flagged but likely noise.",
+      "got": true,
+      "how": "overlap 0%; grader: same fact"
+    },
+    {
+      "pass": "full",
+      "item": "takeaway 2",
+      "key": "Agree to fix the test and rerun; no launch decision from this data.",
+      "reader": "Don't ship. The primary metric, Successful Search Rate, rose +0.334 pp (95% CI +0.169 to +0.499 pp), which is positive but below the pre-registered +0.5 pp bar. The experiment is still running past its planned 14 days. Don't ship under the pre-registered rule. Before any later decision, have someone check the raw assignment counts to resolve the sample-ratio question. Also decide whether to stop the run, since it is past its planned length. The document doesn't say which. Successful Search Rate, +0.334 pp (unit: percentage points), against the +0.5 pp bar. The sample-ratio conflict is the main risk to trust in the data. `experiment.json` shows 1,010,000 control vs 990,000 test exposures, while the platform reports PASSED and exactly 1,000,000 units per arm. The author couldn't tell which is right. The document says a real mismatch wouldn't change the decision, since the estimate is already below the bar. Clicks per User (\u22121.0%, p = 0.014) is an unplanned metric in a set of about 70, so it is flagged but likely noise.",
+      "got": false,
+      "how": "overlap 43%"
+    },
+    {
+      "pass": "full",
+      "item": "takeaway 3",
+      "key": "Could reverse it: fixing the sample split problem and rerunning.",
+      "reader": "Don't ship. The primary metric, Successful Search Rate, rose +0.334 pp (95% CI +0.169 to +0.499 pp), which is positive but below the pre-registered +0.5 pp bar. The experiment is still running past its planned 14 days. Don't ship under the pre-registered rule. Before any later decision, have someone check the raw assignment counts to resolve the sample-ratio question. Also decide whether to stop the run, since it is past its planned length. The document doesn't say which. Successful Search Rate, +0.334 pp (unit: percentage points), against the +0.5 pp bar. The sample-ratio conflict is the main risk to trust in the data. `experiment.json` shows 1,010,000 control vs 990,000 test exposures, while the platform reports PASSED and exactly 1,000,000 units per arm. The author couldn't tell which is right. The document says a real mismatch wouldn't change the decision, since the estimate is already below the bar. Clicks per User (\u22121.0%, p = 0.014) is an unplanned metric in a set of about 70, so it is flagged but likely noise.",
+      "got": false,
+      "how": "overlap 0%"
+    }
+  ],
+  "lost": "Mostly nowhere. The document doesn't explain what \"Pulse\" is, and it doesn't reconcile \"exposures\" in `experiment.json` with \"units\" in Pulse, which is why the sample-ratio question stays open. I didn't open `readout.md` because you asked me to read only the document below.",
+  "question": "Do `experiment.json` exposures and Pulse units count the same thing, and if not, which one feeds the balance check?",
+  "replies": {
+    "skim": "1. **Answer:** Don't ship. Successful Search Rate rose 0.334 pp, below the pre-registered +0.5 pp bar, and the CI's upper end (+0.499 pp) also falls just under it.\n2. **Decision:** Don't ship now. Investigate the possible sample-ratio mismatch (1,010,000 control vs 990,000 exposures) before trusting the result or revisiting the decision.\n3. **Number:** +0.334 pp (Successful Search Rate lift, in percentage points).\n",
+    "full": "1. **Answer:** Don't ship. The primary metric, Successful Search Rate, rose +0.334 pp (95% CI +0.169 to +0.499 pp), which is positive but below the pre-registered +0.5 pp bar. The experiment is still running past its planned 14 days.\n\n2. **Decision:** Don't ship under the pre-registered rule. Before any later decision, have someone check the raw assignment counts to resolve the sample-ratio question. Also decide whether to stop the run, since it is past its planned length. The document doesn't say which.\n\n3. **Number:** Successful Search Rate, +0.334 pp (unit: percentage points), against the +0.5 pp bar.\n\n4. **Caveat:** The sample-ratio conflict is the main risk to trust in the data. `experiment.json` shows 1,010,000 control vs 990,000 test exposures, while the platform reports PASSED and exactly 1,000,000 units per arm. The author couldn't tell which is right. The document says a real mismatch wouldn't change the decision, since the estimate is already below the bar. Clicks per User (\u22121.0%, p = 0.014) is an unplanned metric in a set of about 70, so it is flagged but likely noise.\n\n5. **Lost:** Mostly nowhere. The document doesn't explain what \"Pulse\" is, and it doesn't reconcile \"exposures\" in `experiment.json` with \"units\" in Pulse, which is why the sample-ratio question stays open. I didn't open `readout.md` because you asked me to read only the document below.\n\n6. **Question:** Do `experiment.json` exposures and Pulse units count the same thing, and if not, which one feeds the balance check?\n"
+  }
+}

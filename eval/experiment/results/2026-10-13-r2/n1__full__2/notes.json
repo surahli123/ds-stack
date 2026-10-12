@@ -1,0 +1,3 @@
+{"why_it_moved":[{"text":"Successful Search Rate is flat at +0.04%; the new ranker did not change how often searches end in a successful click.","label":"measured"},{"text":"The segment cuts in the scorecard were not used here, so the mechanism is unknown.","label":"guess"}],
+"would_change":["A pre-exposure comparison of Successful Search Rate showing the arms already differed would make the test unreadable.","A daily series by days since first exposure showing a lift that faded would reopen the question."],
+"analyst_view":null}

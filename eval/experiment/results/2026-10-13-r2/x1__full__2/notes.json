@@ -1,0 +1,2 @@
+{"why_it_moved":[{"text":"The mechanism is unknown: the scorecard has no segment cuts, and the test arm mixes v6 and v7 results in one list.","label":"guess"}],
+"would_change":["The interleaving analysis, with its own preference metric, would give the call for this design.","A rerun as a plain A/B test, with v6 and v7 served to separate users, would let the A/B rule apply."]}

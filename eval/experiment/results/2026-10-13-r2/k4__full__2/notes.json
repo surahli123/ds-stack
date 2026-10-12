@@ -1,0 +1,3 @@
+{"why_it_moved":[{"text":"The only change between arms is the ranker model, lambdamart_v7 against lambdamart_v6, so any movement in Successful Search Rate comes from it.","label":"measured"},{"text":"No segment cuts were read, so which queries gain is not known.","label":"guess"}],
+"would_change":["Day 14 data with 900000 users per arm, now 480000, where the low end of Successful Search Rate reaches +0.50% would settle it in favor.","Day 14 data where the high end stays under +0.50% would settle it against.","A daily series by days since first exposure would show whether the lift is fading."],
+"analyst_view":null}

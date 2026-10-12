@@ -1,0 +1,5 @@
+{"why_it_moved":[
+{"text":"No cut explains the drop: Successful Search Rate - Mobile moved +0.44% and Desktop -0.37%, and neither cut is clearly different from no change.","label":"measured"},
+{"text":"Reformulation Rate moved +0.11%, which is no visible change, so users are not re-searching more. The mechanism is unknown.","label":"guess"}],
+"would_change":["A rerun of the same test where Successful Search Rate is no longer worse, which would mean this result was a fluke.","A finding that the success metric is logged differently for lambdamart_v7 results, which would mean the drop is a measurement artifact."],
+"analyst_view":null}

@@ -1,0 +1,53 @@
+{
+  "pass": true,
+  "skim": "2/2",
+  "full": "3/3",
+  "items": [
+    {
+      "pass": "skim",
+      "item": "answer",
+      "key": "Keep running: It's day 7 of 14; Successful Search Rate reads +0.55% (-0.21% to +1.31%) so far, too early to call.",
+      "reader": "Keep running the test. It's day 7 of 14 with 480,000 users per arm, short of the planned 900,000. Successful Search Rate is +0.55% (95% interval -0.21% to +1.31%), so the result is unclear. Approve running Ranker v7 longer, to day 14 and the full 900,000 users per arm. Make the call then, when the low end of Successful Search Rate reaches +0.50%.",
+      "got": true,
+      "how": "overlap 75%"
+    },
+    {
+      "pass": "skim",
+      "item": "decision",
+      "key": "Approve running the test longer.",
+      "reader": "Approve running Ranker v7 longer, to day 14 and the full 900,000 users per arm. Make the call then, when the low end of Successful Search Rate reaches +0.50%. Keep running the test. It's day 7 of 14 with 480,000 users per arm, short of the planned 900,000. Successful Search Rate is +0.55% (95% interval -0.21% to +1.31%), so the result is unclear.",
+      "got": true,
+      "how": "overlap 100%"
+    },
+    {
+      "pass": "full",
+      "item": "takeaway 1",
+      "key": "Successful Search Rate +0.55% (-0.21% to +1.31%) against at least 0.50% higher.",
+      "reader": "The document recommends continuing the test. It is on day 7 of 14 with 480,000 users per arm, against a planned 900,000. Primary metric Successful Search Rate is +0.55% (95% interval -0.21% to +1.31%), which is unclear against a bar of at least +0.50%. Both guardrails I checked are within margin. Approve running the test longer. The document asks for that approval, and I'd want the day-14 readout to use the planned sample before any launch call. I'd also ask for the novelty and pre-period checks, which weren't run, before that call. Successful Search Rate change, +0.55% with a lower bound of -0.21%. The bar is +0.50%. The interval still spans zero and the bar, so the result is unclear. The sample is short of the plan, so the interval is wide and can't settle the call. Novelty and pre-period checks weren't run, so a fading lift can't be ruled out. No segment cuts were read, so it's unknown which queries gain.",
+      "got": true,
+      "how": "overlap 90%"
+    },
+    {
+      "pass": "full",
+      "item": "takeaway 2",
+      "key": "Approve running the test longer.",
+      "reader": "The document recommends continuing the test. It is on day 7 of 14 with 480,000 users per arm, against a planned 900,000. Primary metric Successful Search Rate is +0.55% (95% interval -0.21% to +1.31%), which is unclear against a bar of at least +0.50%. Both guardrails I checked are within margin. Approve running the test longer. The document asks for that approval, and I'd want the day-14 readout to use the planned sample before any launch call. I'd also ask for the novelty and pre-period checks, which weren't run, before that call. Successful Search Rate change, +0.55% with a lower bound of -0.21%. The bar is +0.50%. The interval still spans zero and the bar, so the result is unclear. The sample is short of the plan, so the interval is wide and can't settle the call. Novelty and pre-period checks weren't run, so a fading lift can't be ruled out. No segment cuts were read, so it's unknown which queries gain.",
+      "got": true,
+      "how": "overlap 100%"
+    },
+    {
+      "pass": "full",
+      "item": "takeaway 3",
+      "key": "Could reverse it: the remaining data; the call is made at the planned sample.",
+      "reader": "The document recommends continuing the test. It is on day 7 of 14 with 480,000 users per arm, against a planned 900,000. Primary metric Successful Search Rate is +0.55% (95% interval -0.21% to +1.31%), which is unclear against a bar of at least +0.50%. Both guardrails I checked are within margin. Approve running the test longer. The document asks for that approval, and I'd want the day-14 readout to use the planned sample before any launch call. I'd also ask for the novelty and pre-period checks, which weren't run, before that call. Successful Search Rate change, +0.55% with a lower bound of -0.21%. The bar is +0.50%. The interval still spans zero and the bar, so the result is unclear. The sample is short of the plan, so the interval is wide and can't settle the call. Novelty and pre-period checks weren't run, so a fading lift can't be ruled out. No segment cuts were read, so it's unknown which queries gain.",
+      "got": true,
+      "how": "overlap 43%; grader: same fact"
+    }
+  ],
+  "lost": "",
+  "question": "How will the test reach 900,000 users per arm by day 14 when it has 480,000 at day 7, and can you share the daily series by days since first exposure to show whether the lift is holding?",
+  "replies": {
+    "skim": "1. Answer: Keep running the test. It's day 7 of 14 with 480,000 users per arm, short of the planned 900,000. Successful Search Rate is +0.55% (95% interval -0.21% to +1.31%), so the result is unclear.\n\n2. Decision: Approve running Ranker v7 longer, to day 14 and the full 900,000 users per arm. Make the call then, when the low end of Successful Search Rate reaches +0.50%.\n\n3. Number: +0.55% change in Successful Search Rate (95% interval -0.21% to +1.31%), against a bar of at least +0.50%.\n",
+    "full": "1. **Answer:** The document recommends continuing the test. It is on day 7 of 14 with 480,000 users per arm, against a planned 900,000. Primary metric Successful Search Rate is +0.55% (95% interval -0.21% to +1.31%), which is unclear against a bar of at least +0.50%. Both guardrails I checked are within margin.\n\n2. **Decision:** Approve running the test longer. The document asks for that approval, and I'd want the day-14 readout to use the planned sample before any launch call. I'd also ask for the novelty and pre-period checks, which weren't run, before that call.\n\n3. **Number:** Successful Search Rate change, +0.55% with a lower bound of -0.21%. The bar is +0.50%. The interval still spans zero and the bar, so the result is unclear.\n\n4. **Caveat:** The sample is short of the plan, so the interval is wide and can't settle the call. Novelty and pre-period checks weren't run, so a fading lift can't be ruled out. No segment cuts were read, so it's unknown which queries gain.\n\n5. **Lost:**\n   - \"Could reverse it: the remaining data; the call is made at the planned sample\" is unclear about what would reverse the decision.\n   - \"Harm inside a margin goes to escalate\" versus \"Escalate means a trade-off for triage\" is hard to map to a concrete action.\n   - Day 7 with 480,000 users per arm reaching 900,000 by day 14 implies traffic roughly doubling in week two, or a ramp. The document doesn't say which.\n\n6. **Question:** How will the test reach 900,000 users per arm by day 14 when it has 480,000 at day 7, and can you share the daily series by days since first exposure to show whether the lift is holding?\n"
+  }
+}

@@ -1,0 +1,53 @@
+{
+  "pass": false,
+  "skim": "2/2",
+  "full": "2/3",
+  "items": [
+    {
+      "pass": "skim",
+      "item": "answer",
+      "key": "Escalate: Successful Search Rate rose 0.31% (+0.13% to +0.49%), a real change in the good direction but short of the 0.50% bar.",
+      "reader": "Escalate. Ranker v7 improved Successful Search Rate by +0.31% (95% interval +0.13% to +0.49%), which is a real gain but below the 0.50% launch bar, so the document does not recommend launching yet. Decide at triage whether to accept the sub-bar lift and launch, or hold for more days showing at least +0.50%. Before deciding, get the pre-period check, since the document says it was never run and could reverse the call.",
+      "got": true,
+      "how": "overlap 67%"
+    },
+    {
+      "pass": "skim",
+      "item": "decision",
+      "key": "Decide the trade-off at triage.",
+      "reader": "Decide at triage whether to accept the sub-bar lift and launch, or hold for more days showing at least +0.50%. Before deciding, get the pre-period check, since the document says it was never run and could reverse the call. Escalate. Ranker v7 improved Successful Search Rate by +0.31% (95% interval +0.13% to +0.49%), which is a real gain but below the 0.50% launch bar, so the document does not recommend launching yet.",
+      "got": true,
+      "how": "overlap 67%"
+    },
+    {
+      "pass": "full",
+      "item": "takeaway 1",
+      "key": "Successful Search Rate +0.31% (+0.13% to +0.49%) against at least 0.50% higher.",
+      "reader": "The document recommends **Escalate**. Successful Search Rate rose +0.31% (95% interval +0.13% to +0.49%). That is a real improvement, but the whole interval sits below the 0.50% bar. The test finished: day 14 of 14, 1,000,000 users per arm, above the planned 900,000. The four other guardrails are within margin. The pre-period and novelty checks were not run. Decide the trade-off at triage. Either accept a lower bar than 0.50%, or keep the test running to see whether the lift reaches the bar. Before deciding, run the pre-period comparison and a daily series by days since first exposure, since those are the two checks the document says could not be done. +0.31% lift in Successful Search Rate, with the 95% interval +0.13% to +0.49%. The unit is percent, but the document doesn't say whether this is relative or absolute. The result could be wrong because two checks did not run. Without a pre-period check the team can't rule out a pre-existing difference between arms. Without a novelty check they can't rule out a short-lived effect. The mechanism is a guess, and desktop and mobile cuts point in opposite directions.",
+      "got": true,
+      "how": "overlap 70%"
+    },
+    {
+      "pass": "full",
+      "item": "takeaway 2",
+      "key": "Decide the trade-off at triage.",
+      "reader": "The document recommends **Escalate**. Successful Search Rate rose +0.31% (95% interval +0.13% to +0.49%). That is a real improvement, but the whole interval sits below the 0.50% bar. The test finished: day 14 of 14, 1,000,000 users per arm, above the planned 900,000. The four other guardrails are within margin. The pre-period and novelty checks were not run. Decide the trade-off at triage. Either accept a lower bar than 0.50%, or keep the test running to see whether the lift reaches the bar. Before deciding, run the pre-period comparison and a daily series by days since first exposure, since those are the two checks the document says could not be done. +0.31% lift in Successful Search Rate, with the 95% interval +0.13% to +0.49%. The unit is percent, but the document doesn't say whether this is relative or absolute. The result could be wrong because two checks did not run. Without a pre-period check the team can't rule out a pre-existing difference between arms. Without a novelty check they can't rule out a short-lived effect. The mechanism is a guess, and desktop and mobile cuts point in opposite directions.",
+      "got": true,
+      "how": "overlap 100%"
+    },
+    {
+      "pass": "full",
+      "item": "takeaway 3",
+      "key": "Could reverse it: pre period could not be checked: no pre-period interval or platform check.",
+      "reader": "The document recommends **Escalate**. Successful Search Rate rose +0.31% (95% interval +0.13% to +0.49%). That is a real improvement, but the whole interval sits below the 0.50% bar. The test finished: day 14 of 14, 1,000,000 users per arm, above the planned 900,000. The four other guardrails are within margin. The pre-period and novelty checks were not run. Decide the trade-off at triage. Either accept a lower bar than 0.50%, or keep the test running to see whether the lift reaches the bar. Before deciding, run the pre-period comparison and a daily series by days since first exposure, since those are the two checks the document says could not be done. +0.31% lift in Successful Search Rate, with the 95% interval +0.13% to +0.49%. The unit is percent, but the document doesn't say whether this is relative or absolute. The result could be wrong because two checks did not run. Without a pre-period check the team can't rule out a pre-existing difference between arms. Without a novelty check they can't rule out a short-lived effect. The mechanism is a guess, and desktop and mobile cuts point in opposite directions.",
+      "got": false,
+      "how": "overlap 38%"
+    }
+  ],
+  "lost": "I had to reread the \"Settings\" line, \"harm inside a margin goes to escalate,\" because this result is a benefit, not harm. The \"Could reverse it\" label was also unclear. The meaning of \"Escalate\" for a positive but sub-bar result only became clear from the appendix definition (\"a trade-off for triage\"). The \"Bar\" column (\"at least 0.50% higher\") is also not clear about whether it was set before the test.",
+  "question": "Was the 0.50% bar set before the test started, and can the pre-period comparison be run on data that already exists?",
+  "replies": {
+    "skim": "1. Answer: Escalate. Ranker v7 improved Successful Search Rate by +0.31% (95% interval +0.13% to +0.49%), which is a real gain but below the 0.50% launch bar, so the document does not recommend launching yet.\n2. Decision: Decide at triage whether to accept the sub-bar lift and launch, or hold for more days showing at least +0.50%. Before deciding, get the pre-period check, since the document says it was never run and could reverse the call.\n3. Number: +0.31% change in Successful Search Rate (primary metric, 95% interval +0.13% to +0.49%, against a 0.50% bar).\n",
+    "full": "1. **Answer:** The document recommends **Escalate**. Successful Search Rate rose +0.31% (95% interval +0.13% to +0.49%). That is a real improvement, but the whole interval sits below the 0.50% bar. The test finished: day 14 of 14, 1,000,000 users per arm, above the planned 900,000. The four other guardrails are within margin. The pre-period and novelty checks were not run.\n\n2. **Decision:** Decide the trade-off at triage. Either accept a lower bar than 0.50%, or keep the test running to see whether the lift reaches the bar. Before deciding, run the pre-period comparison and a daily series by days since first exposure, since those are the two checks the document says could not be done.\n\n3. **Number:** +0.31% lift in Successful Search Rate, with the 95% interval +0.13% to +0.49%. The unit is percent, but the document doesn't say whether this is relative or absolute.\n\n4. **Caveat:** The result could be wrong because two checks did not run. Without a pre-period check the team can't rule out a pre-existing difference between arms. Without a novelty check they can't rule out a short-lived effect. The mechanism is a guess, and desktop and mobile cuts point in opposite directions.\n\n5. **Lost:** I had to reread the \"Settings\" line, \"harm inside a margin goes to escalate,\" because this result is a benefit, not harm. The \"Could reverse it\" label was also unclear. The meaning of \"Escalate\" for a positive but sub-bar result only became clear from the appendix definition (\"a trade-off for triage\"). The \"Bar\" column (\"at least 0.50% higher\") is also not clear about whether it was set before the test.\n\n6. **Question:** Was the 0.50% bar set before the test started, and can the pre-period comparison be run on data that already exists?\n"
+  }
+}

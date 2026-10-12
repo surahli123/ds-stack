@@ -1,0 +1,53 @@
+{
+  "pass": true,
+  "skim": "2/2",
+  "full": "3/3",
+  "items": [
+    {
+      "pass": "skim",
+      "item": "answer",
+      "key": "Don't ship: Abandonment Rate rose 2.20% (+1.50% to +2.90%), the wrong way and past its 1.00% margin.",
+      "reader": "Don't ship. Abandonment Rate (guardrail) rose 2.20% (95% interval +1.50% to +2.90%), past its 1.00% limit, while Successful Search Rate (primary) rose 1.24%. Agree not to launch Ranker v7; the owner decides whether to iterate. A rerun or fixed build that keeps Abandonment Rate at or below +1.00% would clear the guardrail.",
+      "got": true,
+      "how": "overlap 77%"
+    },
+    {
+      "pass": "skim",
+      "item": "decision",
+      "key": "Agree not to launch; the owner decides whether to iterate.",
+      "reader": "Agree not to launch Ranker v7; the owner decides whether to iterate. A rerun or fixed build that keeps Abandonment Rate at or below +1.00% would clear the guardrail. Don't ship. Abandonment Rate (guardrail) rose 2.20% (95% interval +1.50% to +2.90%), past its 1.00% limit, while Successful Search Rate (primary) rose 1.24%.",
+      "got": true,
+      "how": "overlap 100%"
+    },
+    {
+      "pass": "full",
+      "item": "takeaway 1",
+      "key": "Abandonment Rate +2.20% (+1.50% to +2.90%) against at most 1.00% higher.",
+      "reader": "Don't ship Ranker v7. Abandonment Rate, a guardrail, rose 2.20% (95% interval +1.50% to +2.90%), past its 1.00% limit. The primary metric, Successful Search Rate, rose 1.24%. The test finished (day 14 of 14, 1,000,000 users per arm), and the recommendation is not to launch. For handover: the test is complete and the call is made; the owner decides whether to iterate. Agree not to launch. Leave the iteration decision to the owner. Reconsider only if a rerun or a fixed build keeps Abandonment Rate at no more than +1.00%, or if the rise turns out to be a logging change rather than user behavior. Abandonment Rate change, +2.20% (interval +1.50% to +2.90%), against a bar of at most +1.00%. The rise may be real user harm: more searches succeed, but more also end with no click. The document's explanation for it is a guess, and no cut confirms it. The pre-exposure check and the by-exposure-day series did not run, so novelty and the logging question are open.",
+      "got": true,
+      "how": "overlap 88%"
+    },
+    {
+      "pass": "full",
+      "item": "takeaway 2",
+      "key": "Agree not to launch; the owner decides whether to iterate.",
+      "reader": "Don't ship Ranker v7. Abandonment Rate, a guardrail, rose 2.20% (95% interval +1.50% to +2.90%), past its 1.00% limit. The primary metric, Successful Search Rate, rose 1.24%. The test finished (day 14 of 14, 1,000,000 users per arm), and the recommendation is not to launch. For handover: the test is complete and the call is made; the owner decides whether to iterate. Agree not to launch. Leave the iteration decision to the owner. Reconsider only if a rerun or a fixed build keeps Abandonment Rate at no more than +1.00%, or if the rise turns out to be a logging change rather than user behavior. Abandonment Rate change, +2.20% (interval +1.50% to +2.90%), against a bar of at most +1.00%. The rise may be real user harm: more searches succeed, but more also end with no click. The document's explanation for it is a guess, and no cut confirms it. The pre-exposure check and the by-exposure-day series did not run, so novelty and the logging question are open.",
+      "got": true,
+      "how": "overlap 100%"
+    },
+    {
+      "pass": "full",
+      "item": "takeaway 3",
+      "key": "Could reverse it: only a version that keeps Abandonment Rate at at most 1.00% higher.",
+      "reader": "Don't ship Ranker v7. Abandonment Rate, a guardrail, rose 2.20% (95% interval +1.50% to +2.90%), past its 1.00% limit. The primary metric, Successful Search Rate, rose 1.24%. The test finished (day 14 of 14, 1,000,000 users per arm), and the recommendation is not to launch. For handover: the test is complete and the call is made; the owner decides whether to iterate. Agree not to launch. Leave the iteration decision to the owner. Reconsider only if a rerun or a fixed build keeps Abandonment Rate at no more than +1.00%, or if the rise turns out to be a logging change rather than user behavior. Abandonment Rate change, +2.20% (interval +1.50% to +2.90%), against a bar of at most +1.00%. The rise may be real user harm: more searches succeed, but more also end with no click. The document's explanation for it is a guess, and no cut confirms it. The pre-exposure check and the by-exposure-day series did not run, so novelty and the logging question are open.",
+      "got": true,
+      "how": "overlap 62%"
+    }
+  ],
+  "lost": "Nowhere significant. The phrase \"Could reverse it\" took a moment to parse as the condition for reconsidering. The secondary-metric line (CTR +1.90%, Clicks per User +2.10%, exploratory) is easy to misread as support for launch, but the document says it doesn't change the call.",
+  "question": "Did anything about how \"no click\" is logged change in the treatment arm, and has anyone checked that? If not, is the abandonment rise measured the same way in both arms?",
+  "replies": {
+    "skim": "1. Answer: Don't ship. Abandonment Rate (guardrail) rose 2.20% (95% interval +1.50% to +2.90%), past its 1.00% limit, while Successful Search Rate (primary) rose 1.24%.\n2. Decision: Agree not to launch Ranker v7; the owner decides whether to iterate. A rerun or fixed build that keeps Abandonment Rate at or below +1.00% would clear the guardrail.\n3. Number: +2.20% Abandonment Rate change (guardrail, limit +1.00%).\n",
+    "full": "1. **Answer:** Don't ship Ranker v7. Abandonment Rate, a guardrail, rose 2.20% (95% interval +1.50% to +2.90%), past its 1.00% limit. The primary metric, Successful Search Rate, rose 1.24%. The test finished (day 14 of 14, 1,000,000 users per arm), and the recommendation is not to launch. For handover: the test is complete and the call is made; the owner decides whether to iterate.\n\n2. **Decision:** Agree not to launch. Leave the iteration decision to the owner. Reconsider only if a rerun or a fixed build keeps Abandonment Rate at no more than +1.00%, or if the rise turns out to be a logging change rather than user behavior.\n\n3. **Number:** Abandonment Rate change, +2.20% (interval +1.50% to +2.90%), against a bar of at most +1.00%.\n\n4. **Caveat:** The rise may be real user harm: more searches succeed, but more also end with no click. The document's explanation for it is a guess, and no cut confirms it. The pre-exposure check and the by-exposure-day series did not run, so novelty and the logging question are open.\n\n5. **Lost:** Nowhere significant. The phrase \"Could reverse it\" took a moment to parse as the condition for reconsidering. The secondary-metric line (CTR +1.90%, Clicks per User +2.10%, exploratory) is easy to misread as support for launch, but the document says it doesn't change the call.\n\n6. **Question:** Did anything about how \"no click\" is logged change in the treatment arm, and has anyone checked that? If not, is the abandonment rise measured the same way in both arms?\n"
+  }
+}

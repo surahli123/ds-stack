@@ -1,0 +1,7 @@
+{"why_it_moved":[
+{"text":"The effect held steady from the first days after exposure (+0.81%) to the last days (+0.80%), so it is not a novelty bump.","label":"measured"},
+{"text":"Mechanism is unknown: the scorecard has no segment cuts, so we cannot say which queries the new ranker helps.","label":"guess"}],
+"would_change":[
+"A pre-exposure comparison showing the two groups already differed on Successful Search Rate would make the test unreliable, because that check could not run.",
+"A guardrail moving past its margin in a longer read or a post-release holdout would reverse the call."],
+"analyst_view":null}

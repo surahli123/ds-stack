@@ -1,0 +1,3 @@
+{"why_it_moved":[{"text":"The mechanism is unknown: the scorecard has no segment cuts, and its change columns disagree with each other, so no effect size can be trusted yet.","label":"guess"}],
+"would_change":["Re-export the scorecard with the percent-change column in one consistent unit, matching the absolute change divided by the control mean, then rerun the decision.","Add a pre-exposure comparison and a daily series by days since first exposure, so the pre-period and novelty checks can run."],
+"analyst_view":null}

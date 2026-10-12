@@ -1,0 +1,8 @@
+{"why_it_moved":[
+{"text":"The primary barely moved: Successful Search Rate reads +0.04%, against the 0.50% bar.","label":"measured"},
+{"text":"Revenue per User rose +3.10% while search success stayed flat, which the primary does not explain.","label":"measured"},
+{"text":"The scorecard has no segment cuts, so the mechanism behind the flat result is unknown.","label":"guess"}],
+"would_change":[
+"A pre-exposure comparison for Successful Search Rate that shows the arms differed before exposure would make the test broken.",
+"A daily series by days since first exposure that shows the effect growing late would make a longer run worth it."],
+"analyst_view":null}

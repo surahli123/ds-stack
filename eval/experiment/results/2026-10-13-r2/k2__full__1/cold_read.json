@@ -1,0 +1,53 @@
+{
+  "pass": false,
+  "skim": "2/2",
+  "full": "2/3",
+  "items": [
+    {
+      "pass": "skim",
+      "item": "answer",
+      "key": "Keep running: Successful Search Rate rose 0.81% (+0.41% to +1.21%) overall, but the effect is fading with each day users have had it.",
+      "reader": "Keep running. The primary metric, Successful Search Rate, is up 0.81% (95% interval +0.41% to +1.21%), but the effect fades with each day of exposure, so the document wants more time before a launch call. Approve running the test longer. The call is a win only if the effect-by-days-since-exposure levels off at or above 0.5%, so the launch decision waits on that longer run.",
+      "got": true,
+      "how": "overlap 67%"
+    },
+    {
+      "pass": "skim",
+      "item": "decision",
+      "key": "Approve running the test longer.",
+      "reader": "Approve running the test longer. The call is a win only if the effect-by-days-since-exposure levels off at or above 0.5%, so the launch decision waits on that longer run. Keep running. The primary metric, Successful Search Rate, is up 0.81% (95% interval +0.41% to +1.21%), but the effect fades with each day of exposure, so the document wants more time before a launch call.",
+      "got": true,
+      "how": "overlap 100%"
+    },
+    {
+      "pass": "full",
+      "item": "takeaway 1",
+      "key": "Effect fading: effect by days since exposure: first days +1.33%, last days +0.50% (trend -0.103% per day)",
+      "reader": "The document recommends \"Keep running\" and asks for approval to run the test longer. Successful Search Rate rose +0.81% (95% interval +0.41% to +1.21%) against a bar of at least +0.50%. The effect shrinks with each day users have had the ranker. The test is at day 14 of 14 with 1,000,000 users per arm, past the planned 900,000. The call is being made at the planned sample. Approve extending the test. The author should also run the missing pre-exposure check on Successful Search Rate and the lift-by-days-since-exposure breakdown before or during the extension. The document does not say how long the extension should be or what the stopping rule is (unclear). +0.81% change in Successful Search Rate, relative to control (the document doesn't say whether the change is relative or absolute; I'm assuming relative). Its lower bound, +0.41%, is below the +0.50% bar, so the bar is not cleared with confidence. The lift is fading with days since exposure, which the author suspects is novelty but has not confirmed. The mechanism is unknown, no segment cuts were provided, and the pre-period validity check was not run. If the effect keeps decaying toward zero, the call goes against the change.",
+      "got": false,
+      "how": "overlap 0%"
+    },
+    {
+      "pass": "full",
+      "item": "takeaway 2",
+      "key": "Approve running the test longer.",
+      "reader": "The document recommends \"Keep running\" and asks for approval to run the test longer. Successful Search Rate rose +0.81% (95% interval +0.41% to +1.21%) against a bar of at least +0.50%. The effect shrinks with each day users have had the ranker. The test is at day 14 of 14 with 1,000,000 users per arm, past the planned 900,000. The call is being made at the planned sample. Approve extending the test. The author should also run the missing pre-exposure check on Successful Search Rate and the lift-by-days-since-exposure breakdown before or during the extension. The document does not say how long the extension should be or what the stopping rule is (unclear). +0.81% change in Successful Search Rate, relative to control (the document doesn't say whether the change is relative or absolute; I'm assuming relative). Its lower bound, +0.41%, is below the +0.50% bar, so the bar is not cleared with confidence. The lift is fading with days since exposure, which the author suspects is novelty but has not confirmed. The mechanism is unknown, no segment cuts were provided, and the pre-period validity check was not run. If the effect keeps decaying toward zero, the call goes against the change.",
+      "got": true,
+      "how": "overlap 100%"
+    },
+    {
+      "pass": "full",
+      "item": "takeaway 3",
+      "key": "Could reverse it: the remaining data; the call is made at the planned sample.",
+      "reader": "The document recommends \"Keep running\" and asks for approval to run the test longer. Successful Search Rate rose +0.81% (95% interval +0.41% to +1.21%) against a bar of at least +0.50%. The effect shrinks with each day users have had the ranker. The test is at day 14 of 14 with 1,000,000 users per arm, past the planned 900,000. The call is being made at the planned sample. Approve extending the test. The author should also run the missing pre-exposure check on Successful Search Rate and the lift-by-days-since-exposure breakdown before or during the extension. The document does not say how long the extension should be or what the stopping rule is (unclear). +0.81% change in Successful Search Rate, relative to control (the document doesn't say whether the change is relative or absolute; I'm assuming relative). Its lower bound, +0.41%, is below the +0.50% bar, so the bar is not cleared with confidence. The lift is fading with days since exposure, which the author suspects is novelty but has not confirmed. The mechanism is unknown, no segment cuts were provided, and the pre-period validity check was not run. If the effect keeps decaying toward zero, the call goes against the change.",
+      "got": true,
+      "how": "overlap 57%"
+    }
+  ],
+  "lost": "Yes, in three places:",
+  "question": "Can you show Successful Search Rate lift by days since exposure, and the pre-exposure comparison, and say what result would make you stop the extension and decide?",
+  "replies": {
+    "skim": "1. Answer: Keep running. The primary metric, Successful Search Rate, is up 0.81% (95% interval +0.41% to +1.21%), but the effect fades with each day of exposure, so the document wants more time before a launch call.\n\n2. Decision: Approve running the test longer. The call is a win only if the effect-by-days-since-exposure levels off at or above 0.5%, so the launch decision waits on that longer run.\n\n3. Number: 0.81% (Successful Search Rate lift, relative change; the bar is 0.50%).\n",
+    "full": "1. **Answer:** The document recommends \"Keep running\" and asks for approval to run the test longer. Successful Search Rate rose +0.81% (95% interval +0.41% to +1.21%) against a bar of at least +0.50%. The effect shrinks with each day users have had the ranker. The test is at day 14 of 14 with 1,000,000 users per arm, past the planned 900,000. The call is being made at the planned sample.\n\n2. **Decision:** Approve extending the test. The author should also run the missing pre-exposure check on Successful Search Rate and the lift-by-days-since-exposure breakdown before or during the extension. The document does not say how long the extension should be or what the stopping rule is (unclear).\n\n3. **Number:** +0.81% change in Successful Search Rate, relative to control (the document doesn't say whether the change is relative or absolute; I'm assuming relative). Its lower bound, +0.41%, is below the +0.50% bar, so the bar is not cleared with confidence.\n\n4. **Caveat:** The lift is fading with days since exposure, which the author suspects is novelty but has not confirmed. The mechanism is unknown, no segment cuts were provided, and the pre-period validity check was not run. If the effect keeps decaying toward zero, the call goes against the change.\n\n5. **Lost:** Yes, in three places:\n   - The verdict column says \"better,\" but the call is \"Keep running,\" and the appendix defines that as \"not enough data yet.\" The primary's point estimate already clears its bar, so the document is not clear about why the result is inconclusive.\n   - The \"Checks\" line lists \"novelty flag\" without saying whether it passed or failed. It sits between the passed and not-run lists.\n   - \"Could reverse it: the remaining data; the call is made at the planned sample\" doesn't clearly say what would be reversed or what the remaining data would decide.\n\n6. **Question:** Can you show Successful Search Rate lift by days since exposure, and the pre-exposure comparison, and say what result would make you stop the extension and decide?\n"
+  }
+}

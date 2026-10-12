@@ -1,0 +1,3 @@
+{"why_it_moved":[{"text":"Successful Search Rate rose 0.81% and Latency p95 (ms) rose 1.20% in the same arm; no segment cuts are in the scorecard.","label":"measured"},{"text":"The slower responses may come from a heavier ranker model, which is the only parameter that differs between arms.","label":"guess"}],
+"would_change":["A latency owner accepting a 1.20% slower p95 as within the 2.00% margin would move this to a clear win.","A latency rise that grows past 2.00% on more data would make it a loss.","A pre-exposure comparison and a daily series by days since first exposure would let the two unrun checks pass."],
+"analyst_view":null}

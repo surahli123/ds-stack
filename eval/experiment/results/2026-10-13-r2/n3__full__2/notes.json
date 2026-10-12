@@ -1,0 +1,9 @@
+{"why_it_moved": [
+ {"text": "Successful Search Rate is flat at -0.05%, and the related click metrics barely moved: CTR +0.31%, Long Click Rate -0.08%, Reformulation Rate -0.09%.", "label": "measured"},
+ {"text": "Queries per User rose 1.9% but it is a secondary, and success did not rise with it, so it shows no gain in result quality.", "label": "inferred"},
+ {"text": "No segment cuts are in the scorecard, so which queries the new ranker changes is not known.", "label": "guess"}],
+ "would_change": [
+ "A pre-exposure comparison of Successful Search Rate showing the arms already differed would make the test unreadable.",
+ "A segment where the new ranker lifts Successful Search Rate by 0.50% or more would justify a narrower follow-up test.",
+ "A rerun with a larger sample that finds a lift of 0.50% or more would reopen the question."]
+ ,"analyst_view": null}

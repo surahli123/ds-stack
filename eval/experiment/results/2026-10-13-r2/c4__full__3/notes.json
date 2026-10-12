@@ -1,0 +1,4 @@
+{"why_it_moved":[{"text":"The mechanism is unknown; no segment cuts are in the scorecard and no daily series was supplied.","label":"guess"}],
+"would_change":["Re-export the Pulse results with percent and absolute columns on the same scale, then rerun; the call is made on the corrected scorecard.",
+"Supply a pre-exposure comparison and a daily series by days since first exposure, so the pre-period and novelty checks can run."],
+"analyst_view":null}

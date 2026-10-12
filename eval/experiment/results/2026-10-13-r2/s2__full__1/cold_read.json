@@ -1,0 +1,53 @@
+{
+  "pass": true,
+  "skim": "2/2",
+  "full": "3/3",
+  "items": [
+    {
+      "pass": "skim",
+      "item": "answer",
+      "key": "Ship: Successful Search Rate rose 0.81% (+0.41% to +1.21%), which clears the 0.50% bar and every guardrail held.",
+      "reader": "Ship. Ranker v7 raised Successful Search Rate by +0.81% (95% interval +0.41% to +1.21%), clearing the 0.50% bar with all guardrails within margin; the pre-period and novelty checks were not run. Approve the launch to all traffic, but first run the pre-exposure comparison, since a pre-period difference between arms would make the test unreliable.",
+      "got": true,
+      "how": "overlap 64%"
+    },
+    {
+      "pass": "skim",
+      "item": "decision",
+      "key": "Approve the launch to all traffic.",
+      "reader": "Approve the launch to all traffic, but first run the pre-exposure comparison, since a pre-period difference between arms would make the test unreliable. Ship. Ranker v7 raised Successful Search Rate by +0.81% (95% interval +0.41% to +1.21%), clearing the 0.50% bar with all guardrails within margin; the pre-period and novelty checks were not run.",
+      "got": true,
+      "how": "overlap 100%"
+    },
+    {
+      "pass": "full",
+      "item": "takeaway 1",
+      "key": "Successful Search Rate +0.81% (+0.41% to +1.21%) against at least 0.50% higher.",
+      "reader": "The document recommends shipping Ranker v7 to all traffic. The 14-day test is complete, with 1,000,000 users per arm. Successful Search Rate rose +0.81% (95% interval +0.41% to +1.21%), above the 0.50% bar. All four guardrails stayed within margin. The pre-period and novelty checks were not run. Approve the launch, but first ask for the pre-period comparison and a daily series by days since first exposure. The document itself says the call could be reversed, and those two checks are the only ones that could invalidate the result or show the lift fading. If the team won't wait for them, approve with a staged rollout and monitoring for novelty decay. +0.81% Successful Search Rate, relative lift. The unit is unclear: the document doesn't say whether the 0.50% bar and the lift are relative or absolute, or what the baseline value is. The arms may have already differed before exposure, which would make the test unreliable, and that hasn't been checked. The lift may also be fading, which the novelty check would reveal. The mechanism is unknown because the scorecard has no segment cuts.",
+      "got": true,
+      "how": "overlap 70%"
+    },
+    {
+      "pass": "full",
+      "item": "takeaway 2",
+      "key": "Approve the launch to all traffic.",
+      "reader": "The document recommends shipping Ranker v7 to all traffic. The 14-day test is complete, with 1,000,000 users per arm. Successful Search Rate rose +0.81% (95% interval +0.41% to +1.21%), above the 0.50% bar. All four guardrails stayed within margin. The pre-period and novelty checks were not run. Approve the launch, but first ask for the pre-period comparison and a daily series by days since first exposure. The document itself says the call could be reversed, and those two checks are the only ones that could invalidate the result or show the lift fading. If the team won't wait for them, approve with a staged rollout and monitoring for novelty decay. +0.81% Successful Search Rate, relative lift. The unit is unclear: the document doesn't say whether the 0.50% bar and the lift are relative or absolute, or what the baseline value is. The arms may have already differed before exposure, which would make the test unreliable, and that hasn't been checked. The lift may also be fading, which the novelty check would reveal. The mechanism is unknown because the scorecard has no segment cuts.",
+      "got": true,
+      "how": "overlap 100%"
+    },
+    {
+      "pass": "full",
+      "item": "takeaway 3",
+      "key": "Could reverse it: pre period could not be checked: no pre-period interval or platform check.",
+      "reader": "The document recommends shipping Ranker v7 to all traffic. The 14-day test is complete, with 1,000,000 users per arm. Successful Search Rate rose +0.81% (95% interval +0.41% to +1.21%), above the 0.50% bar. All four guardrails stayed within margin. The pre-period and novelty checks were not run. Approve the launch, but first ask for the pre-period comparison and a daily series by days since first exposure. The document itself says the call could be reversed, and those two checks are the only ones that could invalidate the result or show the lift fading. If the team won't wait for them, approve with a staged rollout and monitoring for novelty decay. +0.81% Successful Search Rate, relative lift. The unit is unclear: the document doesn't say whether the 0.50% bar and the lift are relative or absolute, or what the baseline value is. The arms may have already differed before exposure, which would make the test unreliable, and that hasn't been checked. The lift may also be fading, which the novelty check would reveal. The mechanism is unknown because the scorecard has no segment cuts.",
+      "got": true,
+      "how": "overlap 50%"
+    }
+  ],
+  "lost": "I had to reread the \"Could reverse it\" line. It is unclear whether it means the decision can be reversed or that the result is only provisional. The \"harm inside a margin goes to escalate\" setting was also unclear. The guardrail margin sizes and the result of the 52-metric false-discovery correction are not stated.",
+  "question": "Did the two arms already differ on Successful Search Rate before exposure, and does the +0.81% lift hold across days since first exposure?",
+  "replies": {
+    "skim": "1. Answer: Ship. Ranker v7 raised Successful Search Rate by +0.81% (95% interval +0.41% to +1.21%), clearing the 0.50% bar with all guardrails within margin; the pre-period and novelty checks were not run.\n2. Decision: Approve the launch to all traffic, but first run the pre-exposure comparison, since a pre-period difference between arms would make the test unreliable.\n3. Number: +0.81% (relative change in Successful Search Rate, 95% interval +0.41% to +1.21%).\n",
+    "full": "1. **Answer:** The document recommends shipping Ranker v7 to all traffic. The 14-day test is complete, with 1,000,000 users per arm. Successful Search Rate rose +0.81% (95% interval +0.41% to +1.21%), above the 0.50% bar. All four guardrails stayed within margin. The pre-period and novelty checks were not run.\n\n2. **Decision:** Approve the launch, but first ask for the pre-period comparison and a daily series by days since first exposure. The document itself says the call could be reversed, and those two checks are the only ones that could invalidate the result or show the lift fading. If the team won't wait for them, approve with a staged rollout and monitoring for novelty decay.\n\n3. **Number:** +0.81% Successful Search Rate, relative lift. The unit is unclear: the document doesn't say whether the 0.50% bar and the lift are relative or absolute, or what the baseline value is.\n\n4. **Caveat:** The arms may have already differed before exposure, which would make the test unreliable, and that hasn't been checked. The lift may also be fading, which the novelty check would reveal. The mechanism is unknown because the scorecard has no segment cuts.\n\n5. **Lost:** I had to reread the \"Could reverse it\" line. It is unclear whether it means the decision can be reversed or that the result is only provisional. The \"harm inside a margin goes to escalate\" setting was also unclear. The guardrail margin sizes and the result of the 52-metric false-discovery correction are not stated.\n\n6. **Question:** Did the two arms already differ on Successful Search Rate before exposure, and does the +0.81% lift hold across days since first exposure?\n"
+  }
+}

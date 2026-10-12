@@ -1,0 +1,53 @@
+{
+  "pass": false,
+  "skim": "2/2",
+  "full": "2/3",
+  "items": [
+    {
+      "pass": "skim",
+      "item": "answer",
+      "key": "Ship: Successful Search Rate rose 0.81% (+0.41% to +1.21%), which clears the 0.50% bar and every guardrail held.",
+      "reader": "The document concludes Ship. The primary metric, Successful Search Rate, rose +0.81% (95% interval +0.41% to +1.21%), clearing the 0.50% bar, and all guardrails held. The test ran 14 days at 1,000,000 users per arm. The pre-period check was not run, so the result is not yet fully verified. Approve the launch to all traffic, but first run the pre-period check (pre-exposure comparison of Successful Search Rate between the two groups). If that check shows the groups already differed, the test is unreliable and the call should change.",
+      "got": true,
+      "how": "overlap 79%"
+    },
+    {
+      "pass": "skim",
+      "item": "decision",
+      "key": "Approve the launch to all traffic.",
+      "reader": "Approve the launch to all traffic, but first run the pre-period check (pre-exposure comparison of Successful Search Rate between the two groups). If that check shows the groups already differed, the test is unreliable and the call should change. The document concludes Ship. The primary metric, Successful Search Rate, rose +0.81% (95% interval +0.41% to +1.21%), clearing the 0.50% bar, and all guardrails held. The test ran 14 days at 1,000,000 users per arm. The pre-period check was not run, so the result is not yet fully verified.",
+      "got": true,
+      "how": "overlap 100%"
+    },
+    {
+      "pass": "full",
+      "item": "takeaway 1",
+      "key": "Successful Search Rate +0.81% (+0.41% to +1.21%) against at least 0.50% higher.",
+      "reader": "The document recommends shipping Ranker v7 to all traffic. The test is complete: day 14 of 14, with 1,000,000 users per arm, above the planned 900,000. Successful Search Rate rose +0.81% (95% interval +0.41% to +1.21%), and the four guardrails held. The pre-period check was not run. Approve the full launch, or hold until the pre-period check is run. The check is the document's own stated reversal risk: if the two arms already differed on Successful Search Rate before exposure, the result is unreliable. Running it before launch would settle that. If the launch goes ahead without it, that should be an explicit, accepted risk. +0.81% change in Successful Search Rate. The unit is unclear: the document doesn't say whether this is a relative change or percentage points. The pre-period comparison was not run, so pre-existing group differences are unchecked. The mechanism is also unknown, because the scorecard has no segment cuts.",
+      "got": false,
+      "how": "overlap 0%"
+    },
+    {
+      "pass": "full",
+      "item": "takeaway 2",
+      "key": "Approve the launch to all traffic.",
+      "reader": "The document recommends shipping Ranker v7 to all traffic. The test is complete: day 14 of 14, with 1,000,000 users per arm, above the planned 900,000. Successful Search Rate rose +0.81% (95% interval +0.41% to +1.21%), and the four guardrails held. The pre-period check was not run. Approve the full launch, or hold until the pre-period check is run. The check is the document's own stated reversal risk: if the two arms already differed on Successful Search Rate before exposure, the result is unreliable. Running it before launch would settle that. If the launch goes ahead without it, that should be an explicit, accepted risk. +0.81% change in Successful Search Rate. The unit is unclear: the document doesn't say whether this is a relative change or percentage points. The pre-period comparison was not run, so pre-existing group differences are unchecked. The mechanism is also unknown, because the scorecard has no segment cuts.",
+      "got": true,
+      "how": "overlap 100%"
+    },
+    {
+      "pass": "full",
+      "item": "takeaway 3",
+      "key": "Could reverse it: pre period could not be checked: no pre-period interval or platform check.",
+      "reader": "The document recommends shipping Ranker v7 to all traffic. The test is complete: day 14 of 14, with 1,000,000 users per arm, above the planned 900,000. Successful Search Rate rose +0.81% (95% interval +0.41% to +1.21%), and the four guardrails held. The pre-period check was not run. Approve the full launch, or hold until the pre-period check is run. The check is the document's own stated reversal risk: if the two arms already differed on Successful Search Rate before exposure, the result is unreliable. Running it before launch would settle that. If the launch goes ahead without it, that should be an explicit, accepted risk. +0.81% change in Successful Search Rate. The unit is unclear: the document doesn't say whether this is a relative change or percentage points. The pre-period comparison was not run, so pre-existing group differences are unchecked. The mechanism is also unknown, because the scorecard has no segment cuts.",
+      "got": true,
+      "how": "overlap 38%; grader: same fact"
+    }
+  ],
+  "lost": "Two things. First, the document says the result \"clears the 0.50% bar,\" but the 95% interval's lower bound is +0.41%, which is below 0.50%. Only the point estimate clears the bar. Second, the \"Could reverse it\" line and the \"Checks\" line give the same missing check in different wording, so I had to reconcile them. The guardrail rows also show no values, so I can't confirm the margins from the document alone.",
+  "question": "Why was the pre-period check skipped, and can it be run before the full launch? Also, does the launch bar count as met if the lower bound (+0.41%) is below 0.50%?",
+  "replies": {
+    "skim": "1. Answer: The document concludes Ship. The primary metric, Successful Search Rate, rose +0.81% (95% interval +0.41% to +1.21%), clearing the 0.50% bar, and all guardrails held. The test ran 14 days at 1,000,000 users per arm. The pre-period check was not run, so the result is not yet fully verified.\n\n2. Decision: Approve the launch to all traffic, but first run the pre-period check (pre-exposure comparison of Successful Search Rate between the two groups). If that check shows the groups already differed, the test is unreliable and the call should change.\n\n3. Number: +0.81% (Successful Search Rate, percent change versus control; 95% interval +0.41% to +1.21%).\n",
+    "full": "1. **Answer:** The document recommends shipping Ranker v7 to all traffic. The test is complete: day 14 of 14, with 1,000,000 users per arm, above the planned 900,000. Successful Search Rate rose +0.81% (95% interval +0.41% to +1.21%), and the four guardrails held. The pre-period check was not run.\n\n2. **Decision:** Approve the full launch, or hold until the pre-period check is run. The check is the document's own stated reversal risk: if the two arms already differed on Successful Search Rate before exposure, the result is unreliable. Running it before launch would settle that. If the launch goes ahead without it, that should be an explicit, accepted risk.\n\n3. **Number:** +0.81% change in Successful Search Rate. The unit is unclear: the document doesn't say whether this is a relative change or percentage points.\n\n4. **Caveat:** The pre-period comparison was not run, so pre-existing group differences are unchecked. The mechanism is also unknown, because the scorecard has no segment cuts.\n\n5. **Lost:** Two things. First, the document says the result \"clears the 0.50% bar,\" but the 95% interval's lower bound is +0.41%, which is below 0.50%. Only the point estimate clears the bar. Second, the \"Could reverse it\" line and the \"Checks\" line give the same missing check in different wording, so I had to reconcile them. The guardrail rows also show no values, so I can't confirm the margins from the document alone.\n\n6. **Question:** Why was the pre-period check skipped, and can it be run before the full launch? Also, does the launch bar count as met if the lower bound (+0.41%) is below 0.50%?\n"
+  }
+}

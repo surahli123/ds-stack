@@ -1,0 +1,53 @@
+{
+  "pass": false,
+  "skim": "1/2",
+  "full": "3/3",
+  "items": [
+    {
+      "pass": "skim",
+      "item": "answer",
+      "key": "No effect found: Successful Search Rate reads -0.05% (-0.34% to +0.24%), which rules out the 0.50% change the test was built to find.",
+      "reader": "The test found no effect. Ranker v7 did not move Successful Search Rate (-0.05%, 95% interval -0.34% to +0.24%), so the document recommends stopping the test without launching. The pre-period check is missing, so the call could be reversed. Agree to stop the test without launching. Before closing it out, get the pre-exposure comparison for Successful Search Rate, since that is the one thing that could change the call.",
+      "got": false,
+      "how": "overlap 0%"
+    },
+    {
+      "pass": "skim",
+      "item": "decision",
+      "key": "Agree to stop the test without launching.",
+      "reader": "Agree to stop the test without launching. Before closing it out, get the pre-exposure comparison for Successful Search Rate, since that is the one thing that could change the call. The test found no effect. Ranker v7 did not move Successful Search Rate (-0.05%, 95% interval -0.34% to +0.24%), so the document recommends stopping the test without launching. The pre-period check is missing, so the call could be reversed.",
+      "got": true,
+      "how": "overlap 100%"
+    },
+    {
+      "pass": "full",
+      "item": "takeaway 1",
+      "key": "Successful Search Rate -0.05% (-0.34% to +0.24%) against at least 0.50% higher.",
+      "reader": "The document concludes \"No effect found\" and recommends stopping the test without launching. Current state: day 14 of 14 is complete, with 1,000,000 users per arm, above the planned 900,000. The primary metric, Successful Search Rate, moved -0.05% (95% interval -0.34% to +0.24%), which rules out the 0.50% lift the test was built to detect. Agree to stop the test without launching Ranker v7. The document also flags that the pre-period check was not run, so the team should confirm that before treating the result as final, since it could reverse the call. -0.05% change in Successful Search Rate (95% interval -0.34% to +0.24%). The unit is percent change relative to control. The pre-period comparison was not run, so it is unknown whether the arms already differed before exposure. The novelty check was also not run, so an effect that changes over the 14 days cannot be ruled out. The mechanism is unknown (\"guess\").",
+      "got": true,
+      "how": "overlap 70%"
+    },
+    {
+      "pass": "full",
+      "item": "takeaway 2",
+      "key": "Agree to stop the test without launching.",
+      "reader": "The document concludes \"No effect found\" and recommends stopping the test without launching. Current state: day 14 of 14 is complete, with 1,000,000 users per arm, above the planned 900,000. The primary metric, Successful Search Rate, moved -0.05% (95% interval -0.34% to +0.24%), which rules out the 0.50% lift the test was built to detect. Agree to stop the test without launching Ranker v7. The document also flags that the pre-period check was not run, so the team should confirm that before treating the result as final, since it could reverse the call. -0.05% change in Successful Search Rate (95% interval -0.34% to +0.24%). The unit is percent change relative to control. The pre-period comparison was not run, so it is unknown whether the arms already differed before exposure. The novelty check was also not run, so an effect that changes over the 14 days cannot be ruled out. The mechanism is unknown (\"guess\").",
+      "got": true,
+      "how": "overlap 100%"
+    },
+    {
+      "pass": "full",
+      "item": "takeaway 3",
+      "key": "Could reverse it: pre period could not be checked: no pre-period interval or platform check.",
+      "reader": "The document concludes \"No effect found\" and recommends stopping the test without launching. Current state: day 14 of 14 is complete, with 1,000,000 users per arm, above the planned 900,000. The primary metric, Successful Search Rate, moved -0.05% (95% interval -0.34% to +0.24%), which rules out the 0.50% lift the test was built to detect. Agree to stop the test without launching Ranker v7. The document also flags that the pre-period check was not run, so the team should confirm that before treating the result as final, since it could reverse the call. -0.05% change in Successful Search Rate (95% interval -0.34% to +0.24%). The unit is percent change relative to control. The pre-period comparison was not run, so it is unknown whether the arms already differed before exposure. The novelty check was also not run, so an effect that changes over the 14 days cannot be ruled out. The mechanism is unknown (\"guess\").",
+      "got": true,
+      "how": "overlap 50%"
+    }
+  ],
+  "lost": "Nowhere significant. The \"Could reverse it\" line and the \"not run: pre period, novelty\" check were clear, though the document doesn't say what the team should do if the pre-period check later shows a difference.",
+  "question": "Can you run the pre-exposure comparison for Successful Search Rate and the daily series by days since first exposure before we stop the test, and if the pre-period arms differ, does the no-launch call still hold?",
+  "replies": {
+    "skim": "1. Answer: The test found no effect. Ranker v7 did not move Successful Search Rate (-0.05%, 95% interval -0.34% to +0.24%), so the document recommends stopping the test without launching. The pre-period check is missing, so the call could be reversed.\n\n2. Decision: Agree to stop the test without launching. Before closing it out, get the pre-exposure comparison for Successful Search Rate, since that is the one thing that could change the call.\n\n3. Number: -0.05% (change in Successful Search Rate, 95% interval -0.34% to +0.24%).\n",
+    "full": "1. **Answer:** The document concludes \"No effect found\" and recommends stopping the test without launching. Current state: day 14 of 14 is complete, with 1,000,000 users per arm, above the planned 900,000. The primary metric, Successful Search Rate, moved -0.05% (95% interval -0.34% to +0.24%), which rules out the 0.50% lift the test was built to detect.\n\n2. **Decision:** Agree to stop the test without launching Ranker v7. The document also flags that the pre-period check was not run, so the team should confirm that before treating the result as final, since it could reverse the call.\n\n3. **Number:** -0.05% change in Successful Search Rate (95% interval -0.34% to +0.24%). The unit is percent change relative to control.\n\n4. **Caveat:** The pre-period comparison was not run, so it is unknown whether the arms already differed before exposure. The novelty check was also not run, so an effect that changes over the 14 days cannot be ruled out. The mechanism is unknown (\"guess\").\n\n5. **Lost:** Nowhere significant. The \"Could reverse it\" line and the \"not run: pre period, novelty\" check were clear, though the document doesn't say what the team should do if the pre-period check later shows a difference.\n\n6. **Question:** Can you run the pre-exposure comparison for Successful Search Rate and the daily series by days since first exposure before we stop the test, and if the pre-period arms differ, does the no-launch call still hold?\n"
+  }
+}

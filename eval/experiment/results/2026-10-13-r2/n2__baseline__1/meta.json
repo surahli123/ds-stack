@@ -1,0 +1,10 @@
+{
+  "case": "n2",
+  "arm": "baseline",
+  "run": 1,
+  "model": "sonnet",
+  "exit": 0,
+  "seconds": 26.4,
+  "cost_usd": 0.090557,
+  "turns": 3
+}

@@ -1,0 +1,3 @@
+{"why_it_moved":[{"text":"No segment cuts were read, so the mechanism is not known; the only change between arms is the ranker model.","label":"guess"}],
+"would_change":["A pre-exposure comparison showing the arms already differed on Successful Search Rate would put the result in doubt.","A daily series by days since first exposure showing the lift fading toward zero would put the result in doubt.","A latency or abandonment reading outside its registered margin on a rerun would reverse the call."],
+"analyst_view":null}

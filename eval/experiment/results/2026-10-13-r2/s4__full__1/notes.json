@@ -1,0 +1,8 @@
+{"why_it_moved":[
+{"text":"Successful Search Rate rose 0.81% overall, but CTR (-0.02%) and Long Click Rate (-0.23%) did not move, so the extra successes are not showing up as more clicks.","label":"measured"},
+{"text":"Reformulation Rate rose 2.42% on navigational queries; this is a secondary cut among many that did not survive correction, so it is a lead, not a finding.","label":"measured"},
+{"text":"The new ranker may help some query types and hurt others, but no segment cut was designed to test this.","label":"guess"}],
+"would_change":[
+"A pre-exposure comparison on Successful Search Rate showing the arms already differed before exposure would make the test unreadable.",
+"A daily series by days since first exposure showing the lift fading toward zero would mean the result needs more time."],
+"analyst_view":null}

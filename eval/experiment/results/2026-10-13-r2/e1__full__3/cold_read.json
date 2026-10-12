@@ -1,0 +1,53 @@
+{
+  "pass": false,
+  "skim": "1/2",
+  "full": "3/3",
+  "items": [
+    {
+      "pass": "skim",
+      "item": "answer",
+      "key": "Escalate: Successful Search Rate rose 0.81% (+0.41% to +1.21%), but Abandonment Rate (+0.60% (-0.40% to +1.60%)) isn't shown within its 1.00% margin.",
+      "reader": "Escalate. Successful Search Rate is up 0.81% (above its 0.50% bar, so better), but Abandonment Rate is +0.60% (-0.40% to +1.60%), and its interval reaches past the 1.00% margin, so the guardrail is unclear. Decide the trade-off at triage: accept the unclear Abandonment Rate guardrail or hold the launch. The document says more data narrowing the Abandonment Rate interval inside 1.00% would clear it, and the pre-period was never checked, so that gap also needs resolving before a launch call.",
+      "got": false,
+      "how": "overlap 0%"
+    },
+    {
+      "pass": "skim",
+      "item": "decision",
+      "key": "Decide the trade-off at triage.",
+      "reader": "Decide the trade-off at triage: accept the unclear Abandonment Rate guardrail or hold the launch. The document says more data narrowing the Abandonment Rate interval inside 1.00% would clear it, and the pre-period was never checked, so that gap also needs resolving before a launch call. Escalate. Successful Search Rate is up 0.81% (above its 0.50% bar, so better), but Abandonment Rate is +0.60% (-0.40% to +1.60%), and its interval reaches past the 1.00% margin, so the guardrail is unclear.",
+      "got": true,
+      "how": "overlap 100%"
+    },
+    {
+      "pass": "full",
+      "item": "takeaway 1",
+      "key": "Abandonment Rate +0.60% (-0.40% to +1.60%) against at most 1.00% higher.",
+      "reader": "The document recommends **Escalate**, which means a trade-off for triage, not a launch or a stop. Successful Search Rate rose +0.81% (95% interval +0.41% to +1.21%), clearing its +0.50% bar. Abandonment Rate rose +0.60% (-0.40% to +1.60%), and its upper bound exceeds the 1.00% margin, so the guardrail is unclear. The test is finished: day 14 of 14, 1,000,000 users per arm, above the planned 900,000. The pre-period and novelty checks were not run. Decide whether the primary gain is worth an unresolved abandonment risk. If the answer is not yet clear, either run the pre-period comparison and the daily series by days since first exposure, or extend the test to narrow the abandonment interval. Do not launch on this read alone. The abandonment upper bound, +1.60%, against the 1.00% margin. The document does not state the unit explicitly, so I'm assuming percent change. The pre-period was not checked, which the document says could reverse the call. Novelty was not run. There are no segment cuts, so the mechanism behind the search gain is a guess.",
+      "got": true,
+      "how": "overlap 88%"
+    },
+    {
+      "pass": "full",
+      "item": "takeaway 2",
+      "key": "Successful Search Rate +0.81% (+0.41% to +1.21%) against at least 0.50% higher.",
+      "reader": "The document recommends **Escalate**, which means a trade-off for triage, not a launch or a stop. Successful Search Rate rose +0.81% (95% interval +0.41% to +1.21%), clearing its +0.50% bar. Abandonment Rate rose +0.60% (-0.40% to +1.60%), and its upper bound exceeds the 1.00% margin, so the guardrail is unclear. The test is finished: day 14 of 14, 1,000,000 users per arm, above the planned 900,000. The pre-period and novelty checks were not run. Decide whether the primary gain is worth an unresolved abandonment risk. If the answer is not yet clear, either run the pre-period comparison and the daily series by days since first exposure, or extend the test to narrow the abandonment interval. Do not launch on this read alone. The abandonment upper bound, +1.60%, against the 1.00% margin. The document does not state the unit explicitly, so I'm assuming percent change. The pre-period was not checked, which the document says could reverse the call. Novelty was not run. There are no segment cuts, so the mechanism behind the search gain is a guess.",
+      "got": true,
+      "how": "overlap 80%"
+    },
+    {
+      "pass": "full",
+      "item": "takeaway 3",
+      "key": "Could reverse it: pre period could not be checked: no pre-period interval or platform check.",
+      "reader": "The document recommends **Escalate**, which means a trade-off for triage, not a launch or a stop. Successful Search Rate rose +0.81% (95% interval +0.41% to +1.21%), clearing its +0.50% bar. Abandonment Rate rose +0.60% (-0.40% to +1.60%), and its upper bound exceeds the 1.00% margin, so the guardrail is unclear. The test is finished: day 14 of 14, 1,000,000 users per arm, above the planned 900,000. The pre-period and novelty checks were not run. Decide whether the primary gain is worth an unresolved abandonment risk. If the answer is not yet clear, either run the pre-period comparison and the daily series by days since first exposure, or extend the test to narrow the abandonment interval. Do not launch on this read alone. The abandonment upper bound, +1.60%, against the 1.00% margin. The document does not state the unit explicitly, so I'm assuming percent change. The pre-period was not checked, which the document says could reverse the call. Novelty was not run. There are no segment cuts, so the mechanism behind the search gain is a guess.",
+      "got": true,
+      "how": "overlap 50%"
+    }
+  ],
+  "lost": "",
+  "question": "Is the abandonment increase a real user-harm signal, and can the pre-period and novelty checks be run before the call, or would you extend the test to narrow the interval?",
+  "replies": {
+    "skim": "1. Answer: Escalate. Successful Search Rate is up 0.81% (above its 0.50% bar, so better), but Abandonment Rate is +0.60% (-0.40% to +1.60%), and its interval reaches past the 1.00% margin, so the guardrail is unclear.\n\n2. Decision: Decide the trade-off at triage: accept the unclear Abandonment Rate guardrail or hold the launch. The document says more data narrowing the Abandonment Rate interval inside 1.00% would clear it, and the pre-period was never checked, so that gap also needs resolving before a launch call.\n\n3. Number: +0.60% Abandonment Rate change (95% interval -0.40% to +1.60%), against a 1.00% guardrail margin. Unit: percentage-point change in Abandonment Rate. The primary metric's +0.81% is the other key figure.\n",
+    "full": "1. **Answer:** The document recommends **Escalate**, which means a trade-off for triage, not a launch or a stop. Successful Search Rate rose +0.81% (95% interval +0.41% to +1.21%), clearing its +0.50% bar. Abandonment Rate rose +0.60% (-0.40% to +1.60%), and its upper bound exceeds the 1.00% margin, so the guardrail is unclear. The test is finished: day 14 of 14, 1,000,000 users per arm, above the planned 900,000. The pre-period and novelty checks were not run.\n\n2. **Decision:** Decide whether the primary gain is worth an unresolved abandonment risk. If the answer is not yet clear, either run the pre-period comparison and the daily series by days since first exposure, or extend the test to narrow the abandonment interval. Do not launch on this read alone.\n\n3. **Number:** The abandonment upper bound, +1.60%, against the 1.00% margin. The document does not state the unit explicitly, so I'm assuming percent change.\n\n4. **Caveat:** The pre-period was not checked, which the document says could reverse the call. Novelty was not run. There are no segment cuts, so the mechanism behind the search gain is a guess.\n\n5. **Lost:**\n   - I had to reread the \"Calls\" definitions in the appendix to map \"Escalate\" onto the abandonment row.\n   - \"Config edits\" under Checks is not explained.\n   - The \"Could reverse it\" line is ambiguous about whether it refers to the decision or to the result.\n   - Nothing else required a reread.\n\n6. **Question:** Is the abandonment increase a real user-harm signal, and can the pre-period and novelty checks be run before the call, or would you extend the test to narrow the interval?\n"
+  }
+}

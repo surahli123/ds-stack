@@ -1,0 +1,7 @@
+{"why_it_moved":[
+{"text":"The scorecard has no segment cuts, so the mechanism is unknown.","label":"guess"},
+{"text":"Only the ranker model differs between arms, and the snippet length is the same.","label":"measured"}],
+"would_change":[
+"A pre-exposure comparison showing the groups already differed on Successful Search Rate would make the test untrustworthy.",
+"A daily series by days since first exposure showing the lift fading would mean the lift is novelty and needs more time."],
+"analyst_view":null}

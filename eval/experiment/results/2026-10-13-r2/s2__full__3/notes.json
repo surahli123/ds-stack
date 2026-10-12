@@ -1,0 +1,8 @@
+{"why_it_moved":[
+{"text":"Successful Search Rate rose 0.81%, and the cuts for mobile, desktop, head, tail and informational queries lean the same way, though none is clear alone.","label":"measured"},
+{"text":"Clicks and reformulation barely moved, so the scorecard does not show where the extra successes come from.","label":"measured"},
+{"text":"The mechanism is unknown.","label":"guess"}],
+"would_change":[
+"A pre-exposure comparison showing the arms already differed on Successful Search Rate would void this result, since that check could not run.",
+"A daily effect series by days since first exposure that fades toward zero would mean the lift is a novelty effect, since that check could not run."],
+"analyst_view":null}

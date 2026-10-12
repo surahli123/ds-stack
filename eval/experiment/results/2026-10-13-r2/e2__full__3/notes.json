@@ -1,0 +1,22 @@
+{
+ "why_it_moved": [
+  {
+   "text": "Users may need fewer clicks to succeed, since CTR fell (-0.71%).",
+   "label": "inferred"
+  },
+  {
+   "text": "Latency p95 rose 1.20%, which fits a heavier ranking model scoring more candidates per query.",
+   "label": "inferred"
+  },
+  {
+   "text": "No segment cut of Successful Search Rate (mobile, desktop, head, tail) stands apart, so which queries drive the lift is unknown.",
+   "label": "guess"
+  }
+ ],
+ "would_change": [
+  "A team decision that a 1.20% latency rise is acceptable for the 0.81% success lift would clear it to go out.",
+  "A pre-exposure comparison and a day-by-day effect series would settle the two checks that could not run; a fading effect would mean more data is needed.",
+  "Latency p95 rising past its 2.00% margin on more data would block it."
+ ],
+ "analyst_view": null
+}

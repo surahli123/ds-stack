@@ -1,0 +1,1 @@
+{"check": "ds_experiment_decide", "details": {"decider": "design", "experiment": "ranker_v7", "inputs": {"config": "c036d0fde0", "daily": null, "prereg": "e191e79259", "scorecard": "9e63de48f4", "standards": "a6d22a7308"}}, "status": "not_ab", "summary": "This is a interleaving test; the A/B launch rule doesn't apply.", "ts": 1791846089.739}

@@ -1,0 +1,10 @@
+{
+  "case": "x2",
+  "arm": "full",
+  "run": 1,
+  "model": "sonnet",
+  "exit": 0,
+  "seconds": 53.5,
+  "cost_usd": 0.12177410000000001,
+  "turns": 8
+}

@@ -1,0 +1,53 @@
+{
+  "pass": true,
+  "skim": "2/2",
+  "full": "3/3",
+  "items": [
+    {
+      "pass": "skim",
+      "item": "answer",
+      "key": "Can't tell: Before exposure, Successful Search Rate already differed by +0.71% (+0.31% to +1.11%). No launch decision from this data until it's fixed.",
+      "reader": "Can't tell. The test has a pre-exposure imbalance: the Test group already ran +0.71% ahead on Successful Search Rate before the ranker was exposed, so the +0.81% lift can't be read as a ranker effect. This is a handover of an unresolved result, not a launch. Agree to fix the pre-period imbalance (re-split users or show the groups were level before exposure) and rerun the test. Make no launch decision from this data.",
+      "got": true,
+      "how": "overlap 0%; grader: same fact"
+    },
+    {
+      "pass": "skim",
+      "item": "decision",
+      "key": "Agree to fix the test and rerun; no launch decision from this data.",
+      "reader": "Agree to fix the pre-period imbalance (re-split users or show the groups were level before exposure) and rerun the test. Make no launch decision from this data. Can't tell. The test has a pre-exposure imbalance: the Test group already ran +0.71% ahead on Successful Search Rate before the ranker was exposed, so the +0.81% lift can't be read as a ranker effect. This is a handover of an unresolved result, not a launch.",
+      "got": true,
+      "how": "overlap 100%"
+    },
+    {
+      "pass": "full",
+      "item": "takeaway 1",
+      "key": "Before exposure, Successful Search Rate already differed by +0.71% (+0.31% to +1.11%)",
+      "reader": "The document concludes \"Can't tell.\" The test is treated as broken, not as a result. Before exposure, the Test group already led on Successful Search Rate by +0.71% (+0.31% to +1.11%), which is about the size of the +0.81% lift seen during the test. Handover state: the 14-day run finished with 1,000,000 users per arm, and no launch decision has been made. Agree to fix the pre-period imbalance and rerun the test. Make no launch decision from this data. The document doesn't say what the fix is (a re-split, or a new run with new users). +0.71% (pre-exposure gap in Successful Search Rate, relative or absolute points unclear). It matters most because it is as large as the reported lift of +0.81%, so the lift can't be attributed to the ranker. The unit for both numbers is unclear. The biggest risk is that the lift comes from how users were split between the groups, not from Ranker v7. The novelty check wasn't run, and no segment cuts were read, so the mechanism is unknown.",
+      "got": true,
+      "how": "overlap 90%"
+    },
+    {
+      "pass": "full",
+      "item": "takeaway 2",
+      "key": "Agree to fix the test and rerun; no launch decision from this data.",
+      "reader": "The document concludes \"Can't tell.\" The test is treated as broken, not as a result. Before exposure, the Test group already led on Successful Search Rate by +0.71% (+0.31% to +1.11%), which is about the size of the +0.81% lift seen during the test. Handover state: the 14-day run finished with 1,000,000 users per arm, and no launch decision has been made. Agree to fix the pre-period imbalance and rerun the test. Make no launch decision from this data. The document doesn't say what the fix is (a re-split, or a new run with new users). +0.71% (pre-exposure gap in Successful Search Rate, relative or absolute points unclear). It matters most because it is as large as the reported lift of +0.81%, so the lift can't be attributed to the ranker. The unit for both numbers is unclear. The biggest risk is that the lift comes from how users were split between the groups, not from Ranker v7. The novelty check wasn't run, and no segment cuts were read, so the mechanism is unknown.",
+      "got": true,
+      "how": "overlap 100%"
+    },
+    {
+      "pass": "full",
+      "item": "takeaway 3",
+      "key": "Could reverse it: fixing the pre period problem and rerunning.",
+      "reader": "The document concludes \"Can't tell.\" The test is treated as broken, not as a result. Before exposure, the Test group already led on Successful Search Rate by +0.71% (+0.31% to +1.11%), which is about the size of the +0.81% lift seen during the test. Handover state: the 14-day run finished with 1,000,000 users per arm, and no launch decision has been made. Agree to fix the pre-period imbalance and rerun the test. Make no launch decision from this data. The document doesn't say what the fix is (a re-split, or a new run with new users). +0.71% (pre-exposure gap in Successful Search Rate, relative or absolute points unclear). It matters most because it is as large as the reported lift of +0.81%, so the lift can't be attributed to the ranker. The unit for both numbers is unclear. The biggest risk is that the lift comes from how users were split between the groups, not from Ranker v7. The novelty check wasn't run, and no segment cuts were read, so the mechanism is unknown.",
+      "got": true,
+      "how": "overlap 0%; grader: same fact"
+    }
+  ],
+  "lost": "I had to reread the verdict. The table says \"better\" on the primary metric while the headline says \"Can't tell,\" and the bar \"at least 0.50% higher\" doesn't say whether it is relative or absolute. \"Harm inside a margin goes to escalate\" and the margin itself are also unexplained. The \"Checks\" line is terse: \"pre period fail\" was clear, but \"not run: novelty\" needs the separate \"what would change the call\" section to make sense.",
+  "question": "Does the +0.71% pre-period gap use the same metric definition and window as the test, and what would the re-split or rerun change so the imbalance doesn't come back?",
+  "replies": {
+    "skim": "1. Answer: Can't tell. The test has a pre-exposure imbalance: the Test group already ran +0.71% ahead on Successful Search Rate before the ranker was exposed, so the +0.81% lift can't be read as a ranker effect. This is a handover of an unresolved result, not a launch.\n\n2. Decision: Agree to fix the pre-period imbalance (re-split users or show the groups were level before exposure) and rerun the test. Make no launch decision from this data.\n\n3. Number: +0.71% (pre-exposure Successful Search Rate gap, percent points relative lift, 95% interval +0.31% to +1.11%). The reported +0.81% lift is the figure the imbalance undermines.\n",
+    "full": "1. **Answer:** The document concludes \"Can't tell.\" The test is treated as broken, not as a result. Before exposure, the Test group already led on Successful Search Rate by +0.71% (+0.31% to +1.11%), which is about the size of the +0.81% lift seen during the test. Handover state: the 14-day run finished with 1,000,000 users per arm, and no launch decision has been made.\n\n2. **Decision:** Agree to fix the pre-period imbalance and rerun the test. Make no launch decision from this data. The document doesn't say what the fix is (a re-split, or a new run with new users).\n\n3. **Number:** +0.71% (pre-exposure gap in Successful Search Rate, relative or absolute points unclear). It matters most because it is as large as the reported lift of +0.81%, so the lift can't be attributed to the ranker. The unit for both numbers is unclear.\n\n4. **Caveat:** The biggest risk is that the lift comes from how users were split between the groups, not from Ranker v7. The novelty check wasn't run, and no segment cuts were read, so the mechanism is unknown.\n\n5. **Lost:** I had to reread the verdict. The table says \"better\" on the primary metric while the headline says \"Can't tell,\" and the bar \"at least 0.50% higher\" doesn't say whether it is relative or absolute. \"Harm inside a margin goes to escalate\" and the margin itself are also unexplained. The \"Checks\" line is terse: \"pre period fail\" was clear, but \"not run: novelty\" needs the separate \"what would change the call\" section to make sense.\n\n6. **Question:** Does the +0.71% pre-period gap use the same metric definition and window as the test, and what would the re-split or rerun change so the imbalance doesn't come back?\n"
+  }
+}

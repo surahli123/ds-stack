@@ -1,0 +1,8 @@
+{"why_it_moved":[
+{"text":"Successful Search Rate rose 1.9% on the triggered searches, which are 20.5% of control successes, so the overall lift is 0.39%.","label":"measured"},
+{"text":"The scorecard has no segment cuts, so the mechanism is unknown.","label":"guess"}],
+"would_change":[
+"A confirmed pre-registration where the owner states the bar is on triggered traffic (1.9% would clear it) would move the primary over its bar.",
+"A pre-exposure comparison for the primary would close the check that could not run.",
+"An effect-by-exposure-day series of 4 or more days would show whether the lift is fading."],
+"analyst_view":null}

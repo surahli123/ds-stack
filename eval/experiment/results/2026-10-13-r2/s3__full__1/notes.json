@@ -1,0 +1,2 @@
+{"why_it_moved":[{"text":"The scorecard has no segment cuts, so the mechanism is unknown.","label":"guess"},{"text":"The lift is steady across days since first exposure, so it is not a novelty bump.","label":"measured"}],
+"would_change":["A pre-exposure comparison showing the arms already differed on Successful Search Rate would void the result; that check could not run.","Any registered guardrail found past its margin on a corrected rerun would undo the win."]}

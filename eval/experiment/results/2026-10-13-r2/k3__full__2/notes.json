@@ -1,0 +1,18 @@
+{
+ "why_it_moved": [
+  {
+   "text": "The primary reads +0.12% (-0.36% to +0.60%), so it neither clears nor rules out the 0.50% bar.",
+   "label": "measured"
+  },
+  {
+   "text": "No segment cuts or daily series were in the scorecard, so the mechanism is unknown.",
+   "label": "guess"
+  }
+ ],
+ "would_change": [
+  "More users until the primary either clearly reaches the 0.50% bar or clearly falls short of it.",
+  "A daily series by days since first exposure would show whether the effect is fading or new.",
+  "A pre-exposure comparison would let the pre-period check run."
+ ],
+ "analyst_view": null
+}

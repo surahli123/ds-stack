@@ -1,0 +1,53 @@
+{
+  "pass": false,
+  "skim": "0/2",
+  "full": "0/3",
+  "items": [
+    {
+      "pass": "skim",
+      "item": "answer",
+      "key": "Can't tell, decided by sample split.",
+      "reader": "Don't ship Ranker v7. The lift in Successful Search Rate is real (p = 7e-5), but the point estimate misses the pre-registered 0.5 pp ship bar. Don't launch v7 on this result. The text is cut off before it says what to do next, so any follow-up is unclear.",
+      "got": false,
+      "how": "overlap 0%"
+    },
+    {
+      "pass": "skim",
+      "item": "decision",
+      "key": "Agree to fix the test and rerun; no launch decision from this data.",
+      "reader": "Don't launch v7 on this result. The text is cut off before it says what to do next, so any follow-up is unclear. Don't ship Ranker v7. The lift in Successful Search Rate is real (p = 7e-5), but the point estimate misses the pre-registered 0.5 pp ship bar.",
+      "got": false,
+      "how": "overlap 14%"
+    },
+    {
+      "pass": "full",
+      "item": "takeaway 1",
+      "key": "The arms got 50.5% / 49.5% of exposures against a planned 50.0% / 50.0%, a gap chance almost never produces at this size",
+      "reader": "Don't ship Ranker v7. The lift is real but below the pre-registered bar. Successful Search Rate rose +0.334 pp (41.20% \u2192 41.53%, p = 7e-5), and the bar is 0.5 pp. All four guardrails pass. The current state is a no-ship verdict, pending two checks: the bar's units and a sample-ratio mismatch flagged in `experiment.json`. Don't ship as is. Confirm with the pre-registration author whether the 0.005 bar was absolute or relative. If relative, the 0.81% lift clears it and the verdict becomes Ship. If absolute, either extend the run or iterate on the model. Changing the bar would need to be an open amendment. Also confirm the 1.01M/0.99M split in `experiment.json`, since the document says a real mismatch would invalidate the readout. Successful Search Rate absolute lift, +0.334 percentage points (95% CI +0.169 to +0.502 pp), against a 0.5 pp bar. The verdict depends on how the 0.005 bar was meant. The document says the CI's upper bound only just reaches 0.5 pp, so even a longer run may not clearly clear it. The other named risk is the sample-ratio mismatch. If it is real, the readout is invalid.",
+      "got": false,
+      "how": "overlap 0%"
+    },
+    {
+      "pass": "full",
+      "item": "takeaway 2",
+      "key": "Agree to fix the test and rerun; no launch decision from this data.",
+      "reader": "Don't ship Ranker v7. The lift is real but below the pre-registered bar. Successful Search Rate rose +0.334 pp (41.20% \u2192 41.53%, p = 7e-5), and the bar is 0.5 pp. All four guardrails pass. The current state is a no-ship verdict, pending two checks: the bar's units and a sample-ratio mismatch flagged in `experiment.json`. Don't ship as is. Confirm with the pre-registration author whether the 0.005 bar was absolute or relative. If relative, the 0.81% lift clears it and the verdict becomes Ship. If absolute, either extend the run or iterate on the model. Changing the bar would need to be an open amendment. Also confirm the 1.01M/0.99M split in `experiment.json`, since the document says a real mismatch would invalidate the readout. Successful Search Rate absolute lift, +0.334 percentage points (95% CI +0.169 to +0.502 pp), against a 0.5 pp bar. The verdict depends on how the 0.005 bar was meant. The document says the CI's upper bound only just reaches 0.5 pp, so even a longer run may not clearly clear it. The other named risk is the sample-ratio mismatch. If it is real, the readout is invalid.",
+      "got": false,
+      "how": "overlap 0%"
+    },
+    {
+      "pass": "full",
+      "item": "takeaway 3",
+      "key": "Could reverse it: fixing the sample split problem and rerunning.",
+      "reader": "Don't ship Ranker v7. The lift is real but below the pre-registered bar. Successful Search Rate rose +0.334 pp (41.20% \u2192 41.53%, p = 7e-5), and the bar is 0.5 pp. All four guardrails pass. The current state is a no-ship verdict, pending two checks: the bar's units and a sample-ratio mismatch flagged in `experiment.json`. Don't ship as is. Confirm with the pre-registration author whether the 0.005 bar was absolute or relative. If relative, the 0.81% lift clears it and the verdict becomes Ship. If absolute, either extend the run or iterate on the model. Changing the bar would need to be an open amendment. Also confirm the 1.01M/0.99M split in `experiment.json`, since the document says a real mismatch would invalidate the readout. Successful Search Rate absolute lift, +0.334 percentage points (95% CI +0.169 to +0.502 pp), against a 0.5 pp bar. The verdict depends on how the 0.005 bar was meant. The document says the CI's upper bound only just reaches 0.5 pp, so even a longer run may not clearly clear it. The other named risk is the sample-ratio mismatch. If it is real, the readout is invalid.",
+      "got": false,
+      "how": "overlap 17%"
+    }
+  ],
+  "lost": "Nowhere in the arithmetic. The bar's units were the one thing I had to reason about, since the document quotes it as \"0.005\" with no unit and treats it as absolute. The relative and absolute readings give opposite verdicts.",
+  "question": "Was the pre-registered ship bar of 0.005 meant as 0.5 percentage points absolute or as a 0.5% relative lift?",
+  "replies": {
+    "skim": "1. **Answer:** Don't ship Ranker v7. The lift in Successful Search Rate is real (p = 7e-5), but the point estimate misses the pre-registered 0.5 pp ship bar.\n2. **Decision:** Don't launch v7 on this result. The text is cut off before it says what to do next, so any follow-up is unclear.\n3. **Number:** +0.334 pp absolute lift in Successful Search Rate (41.53% Test vs 41.20% Control), against a 0.5 pp bar.\n",
+    "full": "1. **Answer:** Don't ship Ranker v7. The lift is real but below the pre-registered bar. Successful Search Rate rose +0.334 pp (41.20% \u2192 41.53%, p = 7e-5), and the bar is 0.5 pp. All four guardrails pass. The current state is a no-ship verdict, pending two checks: the bar's units and a sample-ratio mismatch flagged in `experiment.json`.\n\n2. **Decision:** Don't ship as is. Confirm with the pre-registration author whether the 0.005 bar was absolute or relative. If relative, the 0.81% lift clears it and the verdict becomes Ship. If absolute, either extend the run or iterate on the model. Changing the bar would need to be an open amendment. Also confirm the 1.01M/0.99M split in `experiment.json`, since the document says a real mismatch would invalidate the readout.\n\n3. **Number:** Successful Search Rate absolute lift, +0.334 percentage points (95% CI +0.169 to +0.502 pp), against a 0.5 pp bar.\n\n4. **Caveat:** The verdict depends on how the 0.005 bar was meant. The document says the CI's upper bound only just reaches 0.5 pp, so even a longer run may not clearly clear it. The other named risk is the sample-ratio mismatch. If it is real, the readout is invalid.\n\n5. **Lost:** Nowhere in the arithmetic. The bar's units were the one thing I had to reason about, since the document quotes it as \"0.005\" with no unit and treats it as absolute. The relative and absolute readings give opposite verdicts.\n\n6. **Question:** Was the pre-registered ship bar of 0.005 meant as 0.5 percentage points absolute or as a 0.5% relative lift?\n"
+  }
+}

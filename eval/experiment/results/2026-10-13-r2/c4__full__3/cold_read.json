@@ -1,0 +1,53 @@
+{
+  "pass": true,
+  "skim": "2/2",
+  "full": "3/3",
+  "items": [
+    {
+      "pass": "skim",
+      "item": "answer",
+      "key": "Can't tell, decided by scorecard.",
+      "reader": "Can't tell. The scorecard's relative and absolute changes disagree by about 100x, probably a percent-vs-fraction scale error, so the result isn't trustworthy yet. Agree to re-export the Pulse results with consistent scales and rerun the test; make no launch decision from this data.",
+      "got": true,
+      "how": "overlap 67%"
+    },
+    {
+      "pass": "skim",
+      "item": "decision",
+      "key": "Agree to fix the test and rerun; no launch decision from this data.",
+      "reader": "Agree to re-export the Pulse results with consistent scales and rerun the test; make no launch decision from this data. Can't tell. The scorecard's relative and absolute changes disagree by about 100x, probably a percent-vs-fraction scale error, so the result isn't trustworthy yet.",
+      "got": true,
+      "how": "overlap 86%"
+    },
+    {
+      "pass": "full",
+      "item": "takeaway 1",
+      "key": "The scorecard's relative and absolute changes disagree by about 100 times, so a percent column was probably read as a fraction or the reverse",
+      "reader": "The document concludes \"Can't tell.\" The scorecard's relative and absolute changes disagree by about 100x, so the test results are probably unit-mislabeled and unusable for a launch call. Current state: the test finished on day 14 of 14 with 1,000,000 users per arm. The primary metric, Successful Search Rate, shows +0.01% (95% interval +0.00% to +0.01%), below the +0.50% bar. The four other guardrails are within margin. The scorecard check failed, and the pre-period and novelty checks were not run. Agree to fix the scorecard export (put percent and absolute columns on the same scale) and rerun the analysis. Make no launch decision from this data. Also request a pre-exposure comparison and a daily series by days since first exposure so the pre-period and novelty checks can run. Successful Search Rate relative change, +0.01%, against a bar of +0.50%. The unit is percent relative change. Because the scorecard is inconsistent, this number itself may be off by about 100x, so it can't be trusted yet. The biggest risk is that the effect size may be wrong by roughly 100x, so the +0.01% could really be about 1% or about 0.0001%. The pre-period and novelty checks are also missing, and there are no segment cuts or daily series, so the mechanism is unknown (\"[guess]\").",
+      "got": true,
+      "how": "overlap 0%; grader: same fact"
+    },
+    {
+      "pass": "full",
+      "item": "takeaway 2",
+      "key": "Agree to fix the test and rerun; no launch decision from this data.",
+      "reader": "The document concludes \"Can't tell.\" The scorecard's relative and absolute changes disagree by about 100x, so the test results are probably unit-mislabeled and unusable for a launch call. Current state: the test finished on day 14 of 14 with 1,000,000 users per arm. The primary metric, Successful Search Rate, shows +0.01% (95% interval +0.00% to +0.01%), below the +0.50% bar. The four other guardrails are within margin. The scorecard check failed, and the pre-period and novelty checks were not run. Agree to fix the scorecard export (put percent and absolute columns on the same scale) and rerun the analysis. Make no launch decision from this data. Also request a pre-exposure comparison and a daily series by days since first exposure so the pre-period and novelty checks can run. Successful Search Rate relative change, +0.01%, against a bar of +0.50%. The unit is percent relative change. Because the scorecard is inconsistent, this number itself may be off by about 100x, so it can't be trusted yet. The biggest risk is that the effect size may be wrong by roughly 100x, so the +0.01% could really be about 1% or about 0.0001%. The pre-period and novelty checks are also missing, and there are no segment cuts or daily series, so the mechanism is unknown (\"[guess]\").",
+      "got": true,
+      "how": "overlap 100%"
+    },
+    {
+      "pass": "full",
+      "item": "takeaway 3",
+      "key": "Could reverse it: fixing the scorecard problem and rerunning.",
+      "reader": "The document concludes \"Can't tell.\" The scorecard's relative and absolute changes disagree by about 100x, so the test results are probably unit-mislabeled and unusable for a launch call. Current state: the test finished on day 14 of 14 with 1,000,000 users per arm. The primary metric, Successful Search Rate, shows +0.01% (95% interval +0.00% to +0.01%), below the +0.50% bar. The four other guardrails are within margin. The scorecard check failed, and the pre-period and novelty checks were not run. Agree to fix the scorecard export (put percent and absolute columns on the same scale) and rerun the analysis. Make no launch decision from this data. Also request a pre-exposure comparison and a daily series by days since first exposure so the pre-period and novelty checks can run. Successful Search Rate relative change, +0.01%, against a bar of +0.50%. The unit is percent relative change. Because the scorecard is inconsistent, this number itself may be off by about 100x, so it can't be trusted yet. The biggest risk is that the effect size may be wrong by roughly 100x, so the +0.01% could really be about 1% or about 0.0001%. The pre-period and novelty checks are also missing, and there are no segment cuts or daily series, so the mechanism is unknown (\"[guess]\").",
+      "got": true,
+      "how": "overlap 20%; grader: same fact"
+    }
+  ],
+  "lost": "I had to reread the scorecard and the \"Why it moved\" section to work out whether the +0.01% was a fraction or a percent. I was also unclear on what \"passed: config edits\" means and on what \"harm inside a margin goes to escalate\" implies for this decision. The Decision and Ask lines repeat each other, which is fine but adds length.",
+  "question": "Which scale is correct for the Successful Search Rate result: is +0.01% a percent relative change, and what is the absolute difference on the same scale?",
+  "replies": {
+    "skim": "1. Answer: Can't tell. The scorecard's relative and absolute changes disagree by about 100x, probably a percent-vs-fraction scale error, so the result isn't trustworthy yet.\n2. Decision: Agree to re-export the Pulse results with consistent scales and rerun the test; make no launch decision from this data.\n3. Number: Successful Search Rate change +0.01% (95% interval +0.00% to +0.01%), against a bar of at least +0.50%; the unit is percent.\n",
+    "full": "1. **Answer:** The document concludes \"Can't tell.\" The scorecard's relative and absolute changes disagree by about 100x, so the test results are probably unit-mislabeled and unusable for a launch call. Current state: the test finished on day 14 of 14 with 1,000,000 users per arm. The primary metric, Successful Search Rate, shows +0.01% (95% interval +0.00% to +0.01%), below the +0.50% bar. The four other guardrails are within margin. The scorecard check failed, and the pre-period and novelty checks were not run.\n\n2. **Decision:** Agree to fix the scorecard export (put percent and absolute columns on the same scale) and rerun the analysis. Make no launch decision from this data. Also request a pre-exposure comparison and a daily series by days since first exposure so the pre-period and novelty checks can run.\n\n3. **Number:** Successful Search Rate relative change, +0.01%, against a bar of +0.50%. The unit is percent relative change. Because the scorecard is inconsistent, this number itself may be off by about 100x, so it can't be trusted yet.\n\n4. **Caveat:** The biggest risk is that the effect size may be wrong by roughly 100x, so the +0.01% could really be about 1% or about 0.0001%. The pre-period and novelty checks are also missing, and there are no segment cuts or daily series, so the mechanism is unknown (\"[guess]\").\n\n5. **Lost:** I had to reread the scorecard and the \"Why it moved\" section to work out whether the +0.01% was a fraction or a percent. I was also unclear on what \"passed: config edits\" means and on what \"harm inside a margin goes to escalate\" implies for this decision. The Decision and Ask lines repeat each other, which is fine but adds length.\n\n6. **Question:** Which scale is correct for the Successful Search Rate result: is +0.01% a percent relative change, and what is the absolute difference on the same scale?\n"
+  }
+}

@@ -1,0 +1,53 @@
+{
+  "pass": false,
+  "skim": "2/2",
+  "full": "1/3",
+  "items": [
+    {
+      "pass": "skim",
+      "item": "answer",
+      "key": "Keep running: Successful Search Rate rose 0.81% (+0.41% to +1.21%) overall, but the effect is fading with each day users have had it.",
+      "reader": "The document recommends continuing the test. Successful Search Rate rose 0.81% (95% interval +0.41% to +1.21%), above the 0.50% bar, but the gain shrinks by about 0.1 points per day of exposure. The test is at day 14 of 14, with 1,000,000 users per arm. Approve running the test longer, as the document asks. Treat it as a win only if the gain levels off above 0.5% once the planned 14 days of exposure are in.",
+      "got": true,
+      "how": "overlap 67%"
+    },
+    {
+      "pass": "skim",
+      "item": "decision",
+      "key": "Approve running the test longer.",
+      "reader": "Approve running the test longer, as the document asks. Treat it as a win only if the gain levels off above 0.5% once the planned 14 days of exposure are in. The document recommends continuing the test. Successful Search Rate rose 0.81% (95% interval +0.41% to +1.21%), above the 0.50% bar, but the gain shrinks by about 0.1 points per day of exposure. The test is at day 14 of 14, with 1,000,000 users per arm.",
+      "got": true,
+      "how": "overlap 100%"
+    },
+    {
+      "pass": "full",
+      "item": "takeaway 1",
+      "key": "Effect fading: effect by days since exposure: first days +1.33%, last days +0.50% (trend -0.103% per day)",
+      "reader": "The document recommends \"Keep running,\" meaning the test should continue past its planned 14 days. The primary metric, Successful Search Rate, is up 0.81%, with a 95% interval of +0.41% to +1.21%. The bar is +0.50%, so the lower bound falls below it. The gain is fading by about 0.1 points per day since exposure. The test has reached day 14 of 14 with 1,000,000 users per arm. Approve running the test longer. Do not make the call yet. Watch whether the gain levels off above 0.5% (which would make it a win) or keeps falling below 0.5% (which would make it a trade-off for triage). Also run the pre-period check, which hasn't been run. +0.81% change in Successful Search Rate (relative percent change; 95% interval +0.41% to +1.21%, against a +0.50% bar). The gain is shrinking as users get more exposure, so the 0.81% may overstate the long-run effect. The interval's lower bound is already under the bar. The pre-period check wasn't run, so there's no before-start comparison of the two groups.",
+      "got": false,
+      "how": "overlap 0%"
+    },
+    {
+      "pass": "full",
+      "item": "takeaway 2",
+      "key": "Approve running the test longer.",
+      "reader": "The document recommends \"Keep running,\" meaning the test should continue past its planned 14 days. The primary metric, Successful Search Rate, is up 0.81%, with a 95% interval of +0.41% to +1.21%. The bar is +0.50%, so the lower bound falls below it. The gain is fading by about 0.1 points per day since exposure. The test has reached day 14 of 14 with 1,000,000 users per arm. Approve running the test longer. Do not make the call yet. Watch whether the gain levels off above 0.5% (which would make it a win) or keeps falling below 0.5% (which would make it a trade-off for triage). Also run the pre-period check, which hasn't been run. +0.81% change in Successful Search Rate (relative percent change; 95% interval +0.41% to +1.21%, against a +0.50% bar). The gain is shrinking as users get more exposure, so the 0.81% may overstate the long-run effect. The interval's lower bound is already under the bar. The pre-period check wasn't run, so there's no before-start comparison of the two groups.",
+      "got": true,
+      "how": "overlap 100%"
+    },
+    {
+      "pass": "full",
+      "item": "takeaway 3",
+      "key": "Could reverse it: the remaining data; the call is made at the planned sample.",
+      "reader": "The document recommends \"Keep running,\" meaning the test should continue past its planned 14 days. The primary metric, Successful Search Rate, is up 0.81%, with a 95% interval of +0.41% to +1.21%. The bar is +0.50%, so the lower bound falls below it. The gain is fading by about 0.1 points per day since exposure. The test has reached day 14 of 14 with 1,000,000 users per arm. Approve running the test longer. Do not make the call yet. Watch whether the gain levels off above 0.5% (which would make it a win) or keeps falling below 0.5% (which would make it a trade-off for triage). Also run the pre-period check, which hasn't been run. +0.81% change in Successful Search Rate (relative percent change; 95% interval +0.41% to +1.21%, against a +0.50% bar). The gain is shrinking as users get more exposure, so the 0.81% may overstate the long-run effect. The interval's lower bound is already under the bar. The pre-period check wasn't run, so there's no before-start comparison of the two groups.",
+      "got": false,
+      "how": "overlap 29%"
+    }
+  ],
+  "lost": "",
+  "question": "If the gain keeps falling at about 0.1 points per day, when would it drop below 0.5%, and how many more days of data would you need before the call can be made? Also, is extending the test beyond the planned sample feasible, and what's the plan if the gain never settles?",
+  "replies": {
+    "skim": "1. Answer: The document recommends continuing the test. Successful Search Rate rose 0.81% (95% interval +0.41% to +1.21%), above the 0.50% bar, but the gain shrinks by about 0.1 points per day of exposure. The test is at day 14 of 14, with 1,000,000 users per arm.\n2. Decision: Approve running the test longer, as the document asks. Treat it as a win only if the gain levels off above 0.5% once the planned 14 days of exposure are in.\n3. Number: +0.81% lift in Successful Search Rate (percent change, versus the 0.50% bar).\n",
+    "full": "1. **Answer:** The document recommends \"Keep running,\" meaning the test should continue past its planned 14 days. The primary metric, Successful Search Rate, is up 0.81%, with a 95% interval of +0.41% to +1.21%. The bar is +0.50%, so the lower bound falls below it. The gain is fading by about 0.1 points per day since exposure. The test has reached day 14 of 14 with 1,000,000 users per arm.\n\n2. **Decision:** Approve running the test longer. Do not make the call yet. Watch whether the gain levels off above 0.5% (which would make it a win) or keeps falling below 0.5% (which would make it a trade-off for triage). Also run the pre-period check, which hasn't been run.\n\n3. **Number:** +0.81% change in Successful Search Rate (relative percent change; 95% interval +0.41% to +1.21%, against a +0.50% bar).\n\n4. **Caveat:** The gain is shrinking as users get more exposure, so the 0.81% may overstate the long-run effect. The interval's lower bound is already under the bar. The pre-period check wasn't run, so there's no before-start comparison of the two groups.\n\n5. **Lost:**\n   - The \"Keep running\" decision and \"day 14 of 14\" status seem to conflict. It's unclear whether the test ends today or continues.\n   - \"Could reverse it: the remaining data; the call is made at the planned sample\" is unclear.\n   - The novelty check is listed as \"passed,\" yet the \"Why it moved\" section describes a novelty-like decay. That contradiction confused me.\n   - \"Whole weeks\" and \"the bar\" are not explained.\n\n6. **Question:** If the gain keeps falling at about 0.1 points per day, when would it drop below 0.5%, and how many more days of data would you need before the call can be made? Also, is extending the test beyond the planned sample feasible, and what's the plan if the gain never settles?\n"
+  }
+}
