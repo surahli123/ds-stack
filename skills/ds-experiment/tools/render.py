@@ -173,7 +173,8 @@ def status_line(status):
     if status.get("units_per_arm"):
         units = f"{status['units_per_arm']:,} users per arm"
         if status.get("planned_units"):
-            units += f" (planned {status['planned_units']:,})"
+            units += (f", above the planned {status['planned_units']:,}" if status["units_per_arm"] >= status["planned_units"]
+                      else f", short of the planned {status['planned_units']:,}")
         parts.append(units)
     if status.get("whole_weeks") is not None:
         parts.append("whole weeks" if status["whole_weeks"] else "not whole weeks")
@@ -258,30 +259,29 @@ def all_metrics(decision, scorecard):
 
 
 def spine(decision):
-    """The cold-read answer key, from the decision only."""
+    """The cold-read answer key, from the decision only. The takeaways are what a
+    reader should restate when asked for the answer, the decision, the key number
+    and the main risk."""
     answer = f"{decision['call_text']}: {decision['reason']}"
-    if len(answer.split()) > 30:
-        d = decision["decider"]
-        answer = f"{decision['call_text']}, decided by {d.get('metric') or d.get('check', '').replace('_', ' ')}."
-    verdicts = decision["verdicts"]
     decider = decision["decider"]
-    lead = next((v for v in verdicts if v["role"] == "primary" and v.get("point") is not None), None)
-    takeaways = []
+    if len(answer.split()) > 30:
+        answer = f"{decision['call_text']}, decided by {decider.get('metric') or decider.get('check', '').replace('_', ' ')}."
+    lead = next((v for v in decision["verdicts"] if v["role"] == "primary" and v.get("point") is not None), None)
     if decider.get("metric") and decider.get("point") is not None:
-        takeaways.append(f"{decider['metric']} {VERDICT_TEXT.get(decider['verdict'], decider['verdict'])}: {describe(decider)}.")
-    elif decider.get("summary"):
-        takeaways.append(_first_words(decider["summary"], 25))
-    if lead and lead["metric"] != decider.get("metric"):
-        takeaways.append(f"{lead['metric']} {describe(lead)} against a bar of {bar_text(lead)}.")
-    takeaways.append(f"Could reverse it: {reversal(decision)}.")
-    guards = [v for v in verdicts if v["role"] == "guardrail"]
-    if len(takeaways) < 3:
-        takeaways.insert(1, f"Guardrails: {', '.join(v['metric'] + ' ' + VERDICT_TEXT.get(v['verdict'], v['verdict']) for v in guards[:3])}."
-                         if guards else f"Status: {status_line(decision['status'])}.")
-    while len(takeaways) < 3:
-        takeaways.append(f"Status: {status_line(decision['status'])}.")
+        first = f"{decider['metric']} {describe(decider)} against {bar_text(decider)}."
+    else:
+        first = _first_words(_sentence_case(decider.get("summary", decision["reason"])), 25)
+    if decision["call"] == "escalate" and lead and lead["metric"] != decider.get("metric"):
+        second = f"{lead['metric']} {describe(lead)} against {bar_text(lead)}."
+    else:
+        second = decision["ask"]
+    third = f"Could reverse it: {reversal(decision)}."
     return {"type": "readout", "reader": "the launch review (product, engineering and data science leads) deciding whether to launch",
-            "answer": answer, "decision": decision["ask"], "takeaways": [_first_words(t, 40) for t in takeaways[:3]]}
+            "answer": answer, "decision": decision["ask"], "takeaways": [_first_words(t, 40) for t in (first, second, third)]}
+
+
+def _sentence_case(text):
+    return text[:1].upper() + text[1:]
 
 
 def _first_words(text, n):

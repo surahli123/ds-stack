@@ -50,7 +50,7 @@ The launch call comes from code, not from reading 60 metrics. A call compares on
    python3 <dir>/../cold-read/tools/cold_read.py readout.md --spine spine.json
    ```
    `render.py` writes `spine.json` from the decision. Never edit it.
-8. **Reply** with `readout.md` exactly as rendered, then the lint and cold-read result lines verbatim.
+8. **Reply** with `readout.md` exactly as rendered, then the lint and cold-read result lines verbatim, and nothing else. Add no preamble and no caveats section. A caveat that matters belongs in `would_change` or `why_it_moved`, so rerender. If the cold read fails, say so in one line after the result lines.
 
 ## Rules that hold even when they're inconvenient
 
