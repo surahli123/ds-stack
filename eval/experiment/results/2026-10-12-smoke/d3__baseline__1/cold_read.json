@@ -1,0 +1,53 @@
+{
+  "pass": false,
+  "skim": "0/2",
+  "full": "2/3",
+  "items": [
+    {
+      "pass": "skim",
+      "item": "answer",
+      "key": "Don't ship: Abandonment Rate moved the wrong way, +2.20% (+1.50% to +2.90%), past its 1.00% margin.",
+      "reader": "The document recommends not shipping Ranker v7. It meets the primary bar on the point estimate, but Abandonment Rate rose 2.2% relative (+0.0041 absolute), outside its 1% guardrail margin. Don't ship Ranker v7 as it stands. The text doesn't say what to do next, such as whether to fix the abandonment regression or rerun the test.",
+      "got": false,
+      "how": "overlap 0%"
+    },
+    {
+      "pass": "skim",
+      "item": "decision",
+      "key": "Agree not to launch; the owner decides whether to iterate.",
+      "reader": "Don't ship Ranker v7 as it stands. The text doesn't say what to do next, such as whether to fix the abandonment regression or rerun the test. The document recommends not shipping Ranker v7. It meets the primary bar on the point estimate, but Abandonment Rate rose 2.2% relative (+0.0041 absolute), outside its 1% guardrail margin.",
+      "got": false,
+      "how": "overlap 17%"
+    },
+    {
+      "pass": "full",
+      "item": "takeaway 1",
+      "key": "Abandonment Rate +2.20% (+1.50% to +2.90%) against no worse than 1.00%.",
+      "reader": "Don't ship Ranker v7. The primary metric clears the bar on its point estimate, but the Abandonment guardrail is breached. Handover state: the experiment ran cleanly, and the decision depends on how the guardrail margin is read. Hold the launch. Before the review, confirm with the pre-registration authors whether the Abandonment margin is relative (1%) or absolute (0.01). If it is absolute, the breach disappears and the decision should be revisited. Don't act on the 42 exploratory segment rows. Abandonment Rate, +2.2% relative (+0.0041 absolute; 95% CI about +1.5% to +2.9% relative), against a 1% relative margin. The whole interval sits above the margin, so this drives the decision. The margin's definition is unresolved, and it alone decides the outcome. The document also flags that the Revenue CI is wide, so a loss near its margin can't be ruled out, and that the segment results are uncorrected for multiple comparisons.",
+      "got": true,
+      "how": "overlap 0%; grader: same fact"
+    },
+    {
+      "pass": "full",
+      "item": "takeaway 2",
+      "key": "Agree not to launch; the owner decides whether to iterate.",
+      "reader": "Don't ship Ranker v7. The primary metric clears the bar on its point estimate, but the Abandonment guardrail is breached. Handover state: the experiment ran cleanly, and the decision depends on how the guardrail margin is read. Hold the launch. Before the review, confirm with the pre-registration authors whether the Abandonment margin is relative (1%) or absolute (0.01). If it is absolute, the breach disappears and the decision should be revisited. Don't act on the 42 exploratory segment rows. Abandonment Rate, +2.2% relative (+0.0041 absolute; 95% CI about +1.5% to +2.9% relative), against a 1% relative margin. The whole interval sits above the margin, so this drives the decision. The margin's definition is unresolved, and it alone decides the outcome. The document also flags that the Revenue CI is wide, so a loss near its margin can't be ruled out, and that the segment results are uncorrected for multiple comparisons.",
+      "got": true,
+      "how": "overlap 50%"
+    },
+    {
+      "pass": "full",
+      "item": "takeaway 3",
+      "key": "Could reverse it: only a version that keeps Abandonment Rate at no worse than 1.00%.",
+      "reader": "Don't ship Ranker v7. The primary metric clears the bar on its point estimate, but the Abandonment guardrail is breached. Handover state: the experiment ran cleanly, and the decision depends on how the guardrail margin is read. Hold the launch. Before the review, confirm with the pre-registration authors whether the Abandonment margin is relative (1%) or absolute (0.01). If it is absolute, the breach disappears and the decision should be revisited. Don't act on the 42 exploratory segment rows. Abandonment Rate, +2.2% relative (+0.0041 absolute; 95% CI about +1.5% to +2.9% relative), against a 1% relative margin. The whole interval sits above the margin, so this drives the decision. The margin's definition is unresolved, and it alone decides the outcome. The document also flags that the Revenue CI is wide, so a loss near its margin can't be ruled out, and that the segment results are uncorrected for multiple comparisons.",
+      "got": false,
+      "how": "overlap 0%"
+    }
+  ],
+  "lost": "Nowhere. The margin ambiguity is stated openly in the document rather than hidden.",
+  "question": "For the Abandonment guardrail, was the pre-registered margin meant as a 1% relative change or an absolute 0.01?",
+  "replies": {
+    "skim": "1. Answer: The document recommends not shipping Ranker v7. It meets the primary bar on the point estimate, but Abandonment Rate rose 2.2% relative (+0.0041 absolute), outside its 1% guardrail margin.\n2. Decision: Don't ship Ranker v7 as it stands. The text doesn't say what to do next, such as whether to fix the abandonment regression or rerun the test.\n3. Number: Abandonment Rate, +2.2% relative (+0.0041 absolute), with a 95% CI of about +1.5% to +2.9%.\n",
+    "full": "1. **Answer:** Don't ship Ranker v7. The primary metric clears the bar on its point estimate, but the Abandonment guardrail is breached. Handover state: the experiment ran cleanly, and the decision depends on how the guardrail margin is read.\n\n2. **Decision:** Hold the launch. Before the review, confirm with the pre-registration authors whether the Abandonment margin is relative (1%) or absolute (0.01). If it is absolute, the breach disappears and the decision should be revisited. Don't act on the 42 exploratory segment rows.\n\n3. **Number:** Abandonment Rate, +2.2% relative (+0.0041 absolute; 95% CI about +1.5% to +2.9% relative), against a 1% relative margin. The whole interval sits above the margin, so this drives the decision.\n\n4. **Caveat:** The margin's definition is unresolved, and it alone decides the outcome. The document also flags that the Revenue CI is wide, so a loss near its margin can't be ruled out, and that the segment results are uncorrected for multiple comparisons.\n\n5. **Lost:** Nowhere. The margin ambiguity is stated openly in the document rather than hidden.\n\n6. **Question:** For the Abandonment guardrail, was the pre-registered margin meant as a 1% relative change or an absolute 0.01?\n"
+  }
+}

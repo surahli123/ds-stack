@@ -1,0 +1,53 @@
+{
+  "pass": false,
+  "skim": "0/2",
+  "full": "1/3",
+  "items": [
+    {
+      "pass": "skim",
+      "item": "answer",
+      "key": "Can't tell, decided by config edits.",
+      "reader": "The readout recommends not shipping. The Successful Search Rate lift (+0.334 pp) is real (p = 7e-5), but it misses the pre-registered +0.5 pp bar. Don't ship. Guardrails are within margin, so the blocker is the primary metric's effect size, and the readout argues more data won't close the gap.",
+      "got": false,
+      "how": "overlap 0%"
+    },
+    {
+      "pass": "skim",
+      "item": "decision",
+      "key": "Agree to fix the test and rerun; no launch decision from this data.",
+      "reader": "Don't ship. Guardrails are within margin, so the blocker is the primary metric's effect size, and the readout argues more data won't close the gap. The readout recommends not shipping. The Successful Search Rate lift (+0.334 pp) is real (p = 7e-5), but it misses the pre-registered +0.5 pp bar.",
+      "got": false,
+      "how": "overlap 14%"
+    },
+    {
+      "pass": "full",
+      "item": "takeaway 1",
+      "key": "The test was edited mid-flight on 2026-09-16 (Allocation changed from 20% to 10%) and the results include days before and after",
+      "reader": "The readout recommends not shipping. The search success lift is real (+0.334 pp, 95% CI [+0.169, +0.499], p = 7e-5), but it misses the pre-registered +0.5 pp bar. Guardrails are within margin, and no secondary or segment metric is significant. Current state: the decision is \"don't ship,\" and the owners have not yet decided whether to change the bar. Don't ship at the pre-registered bar. If the owners want to ship at +0.33 pp, they should make that call explicitly, knowing the bar would be moved after seeing results. Before that, someone should confirm how users were handled when allocation dropped from 20% to 10% on 2026-09-16. +0.334 pp for Successful Search Rate (0.4120 \u2192 0.4153, absolute percentage points), against a bar of +0.5 pp. The effect falls short of the bar, and even the top of the CI (+0.499 pp) is just under it, so more data wouldn't change the call. The allocation cut is not in the pre-registration, and the files don't say how it affected users.",
+      "got": true,
+      "how": "overlap 54%"
+    },
+    {
+      "pass": "full",
+      "item": "takeaway 2",
+      "key": "Agree to fix the test and rerun; no launch decision from this data.",
+      "reader": "The readout recommends not shipping. The search success lift is real (+0.334 pp, 95% CI [+0.169, +0.499], p = 7e-5), but it misses the pre-registered +0.5 pp bar. Guardrails are within margin, and no secondary or segment metric is significant. Current state: the decision is \"don't ship,\" and the owners have not yet decided whether to change the bar. Don't ship at the pre-registered bar. If the owners want to ship at +0.33 pp, they should make that call explicitly, knowing the bar would be moved after seeing results. Before that, someone should confirm how users were handled when allocation dropped from 20% to 10% on 2026-09-16. +0.334 pp for Successful Search Rate (0.4120 \u2192 0.4153, absolute percentage points), against a bar of +0.5 pp. The effect falls short of the bar, and even the top of the CI (+0.499 pp) is just under it, so more data wouldn't change the call. The allocation cut is not in the pre-registration, and the files don't say how it affected users.",
+      "got": false,
+      "how": "overlap 29%"
+    },
+    {
+      "pass": "full",
+      "item": "takeaway 3",
+      "key": "Could reverse it: fixing the config edits problem and rerunning.",
+      "reader": "The readout recommends not shipping. The search success lift is real (+0.334 pp, 95% CI [+0.169, +0.499], p = 7e-5), but it misses the pre-registered +0.5 pp bar. Guardrails are within margin, and no secondary or segment metric is significant. Current state: the decision is \"don't ship,\" and the owners have not yet decided whether to change the bar. Don't ship at the pre-registered bar. If the owners want to ship at +0.33 pp, they should make that call explicitly, knowing the bar would be moved after seeing results. Before that, someone should confirm how users were handled when allocation dropped from 20% to 10% on 2026-09-16. +0.334 pp for Successful Search Rate (0.4120 \u2192 0.4153, absolute percentage points), against a bar of +0.5 pp. The effect falls short of the bar, and even the top of the CI (+0.499 pp) is just under it, so more data wouldn't change the call. The allocation cut is not in the pre-registration, and the files don't say how it affected users.",
+      "got": false,
+      "how": "overlap 0%"
+    }
+  ],
+  "lost": "Nowhere in the pasted text. One thing I couldn't resolve: the guardrail margins are described as \"read as relative,\" which doesn't say whether the margins were defined that way up front.",
+  "question": "Were the guardrail margins and the +0.5 pp bar defined as relative or absolute before the test, and how were users handled when allocation dropped to 10% on 2026-09-16?",
+  "replies": {
+    "skim": "1. **Answer:** The readout recommends not shipping. The Successful Search Rate lift (+0.334 pp) is real (p = 7e-5), but it misses the pre-registered +0.5 pp bar.\n2. **Decision:** Don't ship. Guardrails are within margin, so the blocker is the primary metric's effect size, and the readout argues more data won't close the gap.\n3. **Number:** +0.334 pp (Successful Search Rate, 0.4120 \u2192 0.4153).\n",
+    "full": "I couldn't open `readout.md`. This session has no file-read or shell tool, and the tools I loaded only handle published artifacts. These answers come from the text you pasted, not the file.\n\n1. **Answer:** The readout recommends not shipping. The search success lift is real (+0.334 pp, 95% CI [+0.169, +0.499], p = 7e-5), but it misses the pre-registered +0.5 pp bar. Guardrails are within margin, and no secondary or segment metric is significant. Current state: the decision is \"don't ship,\" and the owners have not yet decided whether to change the bar.\n\n2. **Decision:** Don't ship at the pre-registered bar. If the owners want to ship at +0.33 pp, they should make that call explicitly, knowing the bar would be moved after seeing results. Before that, someone should confirm how users were handled when allocation dropped from 20% to 10% on 2026-09-16.\n\n3. **Number:** +0.334 pp for Successful Search Rate (0.4120 \u2192 0.4153, absolute percentage points), against a bar of +0.5 pp.\n\n4. **Caveat:** The effect falls short of the bar, and even the top of the CI (+0.499 pp) is just under it, so more data wouldn't change the call. The allocation cut is not in the pre-registration, and the files don't say how it affected users.\n\n5. **Lost:** Nowhere in the pasted text. One thing I couldn't resolve: the guardrail margins are described as \"read as relative,\" which doesn't say whether the margins were defined that way up front.\n\n6. **Question:** Were the guardrail margins and the +0.5 pp bar defined as relative or absolute before the test, and how were users handled when allocation dropped to 10% on 2026-09-16?\n"
+  }
+}

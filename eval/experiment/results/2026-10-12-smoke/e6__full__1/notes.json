@@ -1,0 +1,9 @@
+{"why_it_moved":[
+{"text":"Reformulation Rate rose +5.10% (+4.30% to +5.90%) alongside Queries per User, so users may be re-searching because first results miss.","label":"inferred"},
+{"text":"Successful Search Rate, the hypothesis metric in the experiment config, moved -0.35% (-0.75% to +0.05%); Time to First Click rose +1.28%.","label":"measured"},
+{"text":"Ad Click Rate fell -1.98% (-3.18% to -0.78%); the cause is unknown.","label":"guess"}],
+"would_change":[
+"A pre-registered primary of Successful Search Rate with its interval ruling out a loss would change the call.",
+"Reformulation Rate staying flat in a rerun, or a split showing the extra queries are new searches not retries, would support Ship.",
+"A confirmed pre-registration naming Queries per User as the primary, since the file lacks owner sign-off."],
+"analyst_view":{"call":"escalate","reason":"Queries per User rose with reformulations, and Successful Search Rate, the config's primary, did not improve. The gain may be a worse experience."}}

@@ -1,0 +1,7 @@
+{"why_it_moved":[
+{"text":"Before exposure, Test users already had a higher Successful Search Rate, by +0.71%, against a measured lift of +0.81%.","label":"measured"},
+{"text":"Most of the lift may come from who landed in Test, not from the ranker; the cause of the imbalance is not known.","label":"guess"}],
+"would_change":[
+"A pre-exposure comparison that shows no gap, or a re-randomised rerun, would let the +0.81% lift be judged against the 0.5% bar.",
+"An adjusted readout that removes the pre-exposure gap and still clears the 0.5% bar would restore a Ship call."],
+"analyst_view":null}

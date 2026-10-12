@@ -1,0 +1,1 @@
+{"check": "ds_experiment_decide", "details": {"decider": "pre_period"}, "status": "cant_tell", "summary": "Before exposure, Successful Search Rate already differed by +0.71% (+0.31% to +1.11%). No launch decision from this data until it's fixed.", "ts": 1791843287.263}

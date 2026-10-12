@@ -1,0 +1,53 @@
+{
+  "pass": false,
+  "skim": "2/2",
+  "full": "2/3",
+  "items": [
+    {
+      "pass": "skim",
+      "item": "answer",
+      "key": "Keep running: Successful Search Rate reads +0.12% (-0.36% to +0.60%); ruling out the 0.50% bar needs about 1.9 times the users so far.",
+      "reader": "The document recommends keeping the test running. Successful Search Rate is +0.12% (95% interval -0.36% to +0.60%), which doesn't clear the 0.50% bar yet, so the verdict is unclear. Approve running the test longer. Ruling out the 0.50% bar needs about 1.9 times the current users.",
+      "got": true,
+      "how": "overlap 83%"
+    },
+    {
+      "pass": "skim",
+      "item": "decision",
+      "key": "Approve running the test longer.",
+      "reader": "Approve running the test longer. Ruling out the 0.50% bar needs about 1.9 times the current users. The document recommends keeping the test running. Successful Search Rate is +0.12% (95% interval -0.36% to +0.60%), which doesn't clear the 0.50% bar yet, so the verdict is unclear.",
+      "got": true,
+      "how": "overlap 100%"
+    },
+    {
+      "pass": "full",
+      "item": "takeaway 1",
+      "key": "Successful Search Rate +0.12% (-0.36% to +0.60%) against at least 0.50%.",
+      "reader": "The document recommends **Keep running**: extend the test because the primary metric is inconclusive. Successful Search Rate is +0.12% (95% interval -0.36% to +0.60%), and the 0.50% bar falls inside that interval. The test is at day 14 of 14 with 1,000,000 users per arm, above the planned 900,000. Guardrails are within margin. Approve running the test longer. Before approving, I'd ask for a daily series by days since first exposure to check whether the effect is fading, and a stated target sample and end date. The document says ruling out the bar needs about 1.9 times the current users, which implies roughly 1.9M per arm, but it never states the end date. +0.12% change in Successful Search Rate. The unit is unclear: the document doesn't say whether this is relative or absolute percentage points. The result is inconclusive, and more data may still not settle it. The interval is wide enough to include the bar, and the estimate may be fading, which can't be checked without a daily series. The pre-period and novelty checks could not run, and the scorecard has no segment cuts, so the mechanism is a guess.",
+      "got": true,
+      "how": "overlap 78%"
+    },
+    {
+      "pass": "full",
+      "item": "takeaway 2",
+      "key": "Approve running the test longer.",
+      "reader": "The document recommends **Keep running**: extend the test because the primary metric is inconclusive. Successful Search Rate is +0.12% (95% interval -0.36% to +0.60%), and the 0.50% bar falls inside that interval. The test is at day 14 of 14 with 1,000,000 users per arm, above the planned 900,000. Guardrails are within margin. Approve running the test longer. Before approving, I'd ask for a daily series by days since first exposure to check whether the effect is fading, and a stated target sample and end date. The document says ruling out the bar needs about 1.9 times the current users, which implies roughly 1.9M per arm, but it never states the end date. +0.12% change in Successful Search Rate. The unit is unclear: the document doesn't say whether this is relative or absolute percentage points. The result is inconclusive, and more data may still not settle it. The interval is wide enough to include the bar, and the estimate may be fading, which can't be checked without a daily series. The pre-period and novelty checks could not run, and the scorecard has no segment cuts, so the mechanism is a guess.",
+      "got": true,
+      "how": "overlap 100%"
+    },
+    {
+      "pass": "full",
+      "item": "takeaway 3",
+      "key": "Could reverse it: the remaining data; the call is made at the planned sample.",
+      "reader": "The document recommends **Keep running**: extend the test because the primary metric is inconclusive. Successful Search Rate is +0.12% (95% interval -0.36% to +0.60%), and the 0.50% bar falls inside that interval. The test is at day 14 of 14 with 1,000,000 users per arm, above the planned 900,000. Guardrails are within margin. Approve running the test longer. Before approving, I'd ask for a daily series by days since first exposure to check whether the effect is fading, and a stated target sample and end date. The document says ruling out the bar needs about 1.9 times the current users, which implies roughly 1.9M per arm, but it never states the end date. +0.12% change in Successful Search Rate. The unit is unclear: the document doesn't say whether this is relative or absolute percentage points. The result is inconclusive, and more data may still not settle it. The interval is wide enough to include the bar, and the estimate may be fading, which can't be checked without a daily series. The pre-period and novelty checks could not run, and the scorecard has no segment cuts, so the mechanism is a guess.",
+      "got": false,
+      "how": "overlap 43%"
+    }
+  ],
+  "lost": "I had to reread the \"Could reverse it\" line, which says \"the remaining data; the call is made at the planned sample.\" It is unclear what \"the planned sample\" means now that the test is past 900,000 users per arm. The \"Keep running\" decision also sits oddly beside \"day 14 of 14\" and an already-exceeded sample. The guardrail row lists four metrics with no individual values or bars, and \"harm inside a margin goes to escalate\" is not explained.",
+  "question": "What per-arm sample size and end date would you commit to, and does the 0.12% figure mean relative or absolute change?",
+  "replies": {
+    "skim": "1. **Answer:** The document recommends keeping the test running. Successful Search Rate is +0.12% (95% interval -0.36% to +0.60%), which doesn't clear the 0.50% bar yet, so the verdict is unclear.\n2. **Decision:** Approve running the test longer. Ruling out the 0.50% bar needs about 1.9 times the current users.\n3. **Number:** +0.12%, the change in Successful Search Rate (relative percent change).\n",
+    "full": "1. **Answer:** The document recommends **Keep running**: extend the test because the primary metric is inconclusive. Successful Search Rate is +0.12% (95% interval -0.36% to +0.60%), and the 0.50% bar falls inside that interval. The test is at day 14 of 14 with 1,000,000 users per arm, above the planned 900,000. Guardrails are within margin.\n\n2. **Decision:** Approve running the test longer. Before approving, I'd ask for a daily series by days since first exposure to check whether the effect is fading, and a stated target sample and end date. The document says ruling out the bar needs about 1.9 times the current users, which implies roughly 1.9M per arm, but it never states the end date.\n\n3. **Number:** +0.12% change in Successful Search Rate. The unit is unclear: the document doesn't say whether this is relative or absolute percentage points.\n\n4. **Caveat:** The result is inconclusive, and more data may still not settle it. The interval is wide enough to include the bar, and the estimate may be fading, which can't be checked without a daily series. The pre-period and novelty checks could not run, and the scorecard has no segment cuts, so the mechanism is a guess.\n\n5. **Lost:** I had to reread the \"Could reverse it\" line, which says \"the remaining data; the call is made at the planned sample.\" It is unclear what \"the planned sample\" means now that the test is past 900,000 users per arm. The \"Keep running\" decision also sits oddly beside \"day 14 of 14\" and an already-exceeded sample. The guardrail row lists four metrics with no individual values or bars, and \"harm inside a margin goes to escalate\" is not explained.\n\n6. **Question:** What per-arm sample size and end date would you commit to, and does the 0.12% figure mean relative or absolute change?\n"
+  }
+}

@@ -1,0 +1,1 @@
+{"check": "ds_experiment_decide", "details": {"decider": "Successful Search Rate"}, "status": "keep_running", "summary": "Successful Search Rate reads +0.12% (-0.36% to +0.60%); ruling out the 0.50% bar needs about 1.9 times the users so far.", "ts": 1791843512.387}

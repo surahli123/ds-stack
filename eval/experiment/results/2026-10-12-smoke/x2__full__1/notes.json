@@ -1,0 +1,9 @@
+{"why_it_moved":[
+{"text":"Successful Search Rate rose 0.81%, with every guardrail inside its margin.","label":"measured"},
+{"text":"Gains show in head and tail queries; CTR and clicks per user did not rise, so the lift is not from more clicking.","label":"inferred"},
+{"text":"The mechanism is unknown; no pre-period or daily series was available.","label":"guess"}],
+"would_change":[
+"The owner confirming this was a standard two-arm A/B would turn this into a Ship on the same numbers.",
+"A pre-exposure comparison showing a gap between arms would turn the call into Can't tell.",
+"A daily series by days since first exposure showing the lift fading would turn it into Keep running."],
+"analyst_view":{"call":"ship","reason":"The config shows two equal-size arms differing only in ranker_model, with no holdout group, so the holdout label looks like a pre-registration error. If the owner confirms, the rule gives Ship."}}

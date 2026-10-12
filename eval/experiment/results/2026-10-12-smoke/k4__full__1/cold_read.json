@@ -1,0 +1,53 @@
+{
+  "pass": false,
+  "skim": "1/2",
+  "full": "3/3",
+  "items": [
+    {
+      "pass": "skim",
+      "item": "answer",
+      "key": "Keep running: It's day 7 of 14; Successful Search Rate reads +0.55% (-0.21% to +1.31%) so far, too early to call.",
+      "reader": "The document concludes to keep Ranker v7 running. It is at day 7 of 14, with 480,000 users per arm of the planned 900,000, so the result is too early to call. Approve running the test to the full 14 days and planned sample, then decide on a refreshed scorecard.",
+      "got": false,
+      "how": "overlap 0%"
+    },
+    {
+      "pass": "skim",
+      "item": "decision",
+      "key": "Approve running the test longer.",
+      "reader": "Approve running the test to the full 14 days and planned sample, then decide on a refreshed scorecard. The document concludes to keep Ranker v7 running. It is at day 7 of 14, with 480,000 users per arm of the planned 900,000, so the result is too early to call.",
+      "got": true,
+      "how": "overlap 75%"
+    },
+    {
+      "pass": "full",
+      "item": "takeaway 1",
+      "key": "Successful Search Rate +0.55% (-0.21% to +1.31%) against at least 0.50%.",
+      "reader": "The document recommends continuing the Ranker v7 test to its planned 14 days and 900,000 users per arm. As of the last read, the test is on day 7 with 480,000 users per arm. The primary metric, Successful Search Rate, is +0.55% (95% interval -0.21% to +1.31%), which is short of the +0.50% bar and includes zero, so the verdict is unclear. Guardrails are within margin. Approve running the test to the planned sample, then get a refreshed scorecard at full sample before deciding. Ship if the primary is at or above +0.5% with an interval clear of zero and guardrails hold. Call \"No effect found\" if the interval sits wholly below +0.5%. Also check the dates first: the results stop at 2026-09-18, which means day 14 would have been about 2026-09-25. Today is 2026-10-12, so either the test has ended and the memo is stale, or it is still running with no data past day 7. +0.55% change in Successful Search Rate (interval -0.21% to +1.31%, in percent change relative to control). The interval spans zero, so the result is not yet conclusive. The pre-period and novelty checks could not run. The mechanism is unknown, since the scorecard has no segment cuts. The sample is about 53% of the planned size.",
+      "got": true,
+      "how": "overlap 78%"
+    },
+    {
+      "pass": "full",
+      "item": "takeaway 2",
+      "key": "Approve running the test longer.",
+      "reader": "The document recommends continuing the Ranker v7 test to its planned 14 days and 900,000 users per arm. As of the last read, the test is on day 7 with 480,000 users per arm. The primary metric, Successful Search Rate, is +0.55% (95% interval -0.21% to +1.31%), which is short of the +0.50% bar and includes zero, so the verdict is unclear. Guardrails are within margin. Approve running the test to the planned sample, then get a refreshed scorecard at full sample before deciding. Ship if the primary is at or above +0.5% with an interval clear of zero and guardrails hold. Call \"No effect found\" if the interval sits wholly below +0.5%. Also check the dates first: the results stop at 2026-09-18, which means day 14 would have been about 2026-09-25. Today is 2026-10-12, so either the test has ended and the memo is stale, or it is still running with no data past day 7. +0.55% change in Successful Search Rate (interval -0.21% to +1.31%, in percent change relative to control). The interval spans zero, so the result is not yet conclusive. The pre-period and novelty checks could not run. The mechanism is unknown, since the scorecard has no segment cuts. The sample is about 53% of the planned size.",
+      "got": true,
+      "how": "overlap 75%"
+    },
+    {
+      "pass": "full",
+      "item": "takeaway 3",
+      "key": "Could reverse it: the remaining data; the call is made at the planned sample.",
+      "reader": "The document recommends continuing the Ranker v7 test to its planned 14 days and 900,000 users per arm. As of the last read, the test is on day 7 with 480,000 users per arm. The primary metric, Successful Search Rate, is +0.55% (95% interval -0.21% to +1.31%), which is short of the +0.50% bar and includes zero, so the verdict is unclear. Guardrails are within margin. Approve running the test to the planned sample, then get a refreshed scorecard at full sample before deciding. Ship if the primary is at or above +0.5% with an interval clear of zero and guardrails hold. Call \"No effect found\" if the interval sits wholly below +0.5%. Also check the dates first: the results stop at 2026-09-18, which means day 14 would have been about 2026-09-25. Today is 2026-10-12, so either the test has ended and the memo is stale, or it is still running with no data past day 7. +0.55% change in Successful Search Rate (interval -0.21% to +1.31%, in percent change relative to control). The interval spans zero, so the result is not yet conclusive. The pre-period and novelty checks could not run. The mechanism is unknown, since the scorecard has no segment cuts. The sample is about 53% of the planned size.",
+      "got": true,
+      "how": "overlap 57%"
+    }
+  ],
+  "lost": "",
+  "question": "Is the Ranker v7 test still running, and when will the day-14 scorecard at 900,000 users per arm be available? If it has already ended, why does the memo still say day 7?",
+  "replies": {
+    "skim": "1. **Answer:** The document concludes to keep Ranker v7 running. It is at day 7 of 14, with 480,000 users per arm of the planned 900,000, so the result is too early to call.\n2. **Decision:** Approve running the test to the full 14 days and planned sample, then decide on a refreshed scorecard.\n3. **Number:** Successful Search Rate change of +0.55% (95% interval -0.21% to +1.31%), against a bar of at least 0.50%.\n",
+    "full": "1. **Answer:** The document recommends continuing the Ranker v7 test to its planned 14 days and 900,000 users per arm. As of the last read, the test is on day 7 with 480,000 users per arm. The primary metric, Successful Search Rate, is +0.55% (95% interval -0.21% to +1.31%), which is short of the +0.50% bar and includes zero, so the verdict is unclear. Guardrails are within margin.\n\n2. **Decision:** Approve running the test to the planned sample, then get a refreshed scorecard at full sample before deciding. Ship if the primary is at or above +0.5% with an interval clear of zero and guardrails hold. Call \"No effect found\" if the interval sits wholly below +0.5%. Also check the dates first: the results stop at 2026-09-18, which means day 14 would have been about 2026-09-25. Today is 2026-10-12, so either the test has ended and the memo is stale, or it is still running with no data past day 7.\n\n3. **Number:** +0.55% change in Successful Search Rate (interval -0.21% to +1.31%, in percent change relative to control).\n\n4. **Caveat:** The interval spans zero, so the result is not yet conclusive. The pre-period and novelty checks could not run. The mechanism is unknown, since the scorecard has no segment cuts. The sample is about 53% of the planned size.\n\n5. **Lost:**\n   - The \"Decision: Keep running\" heading and the \"Could reverse it\" line were hard to parse. The second line appears to mean the remaining data is what could change the call.\n   - The 2026-09-18 end date conflicts with the day-14 plan and with today's date. I had to reread to see that.\n   - \"Other guardrails\" gives no numbers, just \"within margin\".\n   - The Ship condition's \"stays at or above\" is unclear about whether it means the current estimate or the full-sample estimate.\n\n6. **Question:** Is the Ranker v7 test still running, and when will the day-14 scorecard at 900,000 users per arm be available? If it has already ended, why does the memo still say day 7?\n"
+  }
+}

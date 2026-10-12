@@ -1,0 +1,53 @@
+{
+  "pass": false,
+  "skim": "1/2",
+  "full": "3/3",
+  "items": [
+    {
+      "pass": "skim",
+      "item": "answer",
+      "key": "Don't ship: Latency p95 (ms) moved the wrong way, +3.10% (+2.50% to +3.70%), past its 2.00% margin.",
+      "reader": "The document recommends not launching. The new ranker lifts Successful Search Rate (+0.81%), but Latency p95 rose +3.10%, past its 2.00% margin. Agree not to launch. Reconsider only if a serving or caching fix brings Latency p95 back within 2.00%, retested on the same plan.",
+      "got": true,
+      "how": "overlap 0%; grader: same fact"
+    },
+    {
+      "pass": "skim",
+      "item": "decision",
+      "key": "Agree not to launch; the owner decides whether to iterate.",
+      "reader": "Agree not to launch. Reconsider only if a serving or caching fix brings Latency p95 back within 2.00%, retested on the same plan. The document recommends not launching. The new ranker lifts Successful Search Rate (+0.81%), but Latency p95 rose +3.10%, past its 2.00% margin.",
+      "got": false,
+      "how": "overlap 33%"
+    },
+    {
+      "pass": "full",
+      "item": "takeaway 1",
+      "key": "Latency p95 (ms) +3.10% (+2.50% to +3.70%) against no worse than 2.00%.",
+      "reader": "The document concludes \"Don't ship.\" Latency p95 (ms) is a guardrail, and its +3.10% change (95% interval +2.50% to +3.70%) breaks the 2.00% margin. The primary metric, Successful Search Rate, improved +0.81%. The experiment is finished (day 14 of 14, 1,000,000 users per arm), and the launch review agrees not to launch. Agree not to launch. The owner decides whether to iterate. The document would reverse the call only for a version that keeps latency within 2.00% when retested on the same plan, or if the owners formally widen the latency margin. Latency p95 change, +3.10% (unit: percent change versus control), against a 2.00% limit. The latency breach is the main risk. The cause is a guess: the heavier lambdamart_v7 model, with no segment cuts read to confirm it. The pre-period and novelty checks could not run because there was no pre-period data or daily series.",
+      "got": true,
+      "how": "overlap 88%"
+    },
+    {
+      "pass": "full",
+      "item": "takeaway 2",
+      "key": "Agree not to launch; the owner decides whether to iterate.",
+      "reader": "The document concludes \"Don't ship.\" Latency p95 (ms) is a guardrail, and its +3.10% change (95% interval +2.50% to +3.70%) breaks the 2.00% margin. The primary metric, Successful Search Rate, improved +0.81%. The experiment is finished (day 14 of 14, 1,000,000 users per arm), and the launch review agrees not to launch. Agree not to launch. The owner decides whether to iterate. The document would reverse the call only for a version that keeps latency within 2.00% when retested on the same plan, or if the owners formally widen the latency margin. Latency p95 change, +3.10% (unit: percent change versus control), against a 2.00% limit. The latency breach is the main risk. The cause is a guess: the heavier lambdamart_v7 model, with no segment cuts read to confirm it. The pre-period and novelty checks could not run because there was no pre-period data or daily series.",
+      "got": true,
+      "how": "overlap 100%"
+    },
+    {
+      "pass": "full",
+      "item": "takeaway 3",
+      "key": "Could reverse it: only a version that keeps Latency p95 (ms) at no worse than 2.00%.",
+      "reader": "The document concludes \"Don't ship.\" Latency p95 (ms) is a guardrail, and its +3.10% change (95% interval +2.50% to +3.70%) breaks the 2.00% margin. The primary metric, Successful Search Rate, improved +0.81%. The experiment is finished (day 14 of 14, 1,000,000 users per arm), and the launch review agrees not to launch. Agree not to launch. The owner decides whether to iterate. The document would reverse the call only for a version that keeps latency within 2.00% when retested on the same plan, or if the owners formally widen the latency margin. Latency p95 change, +3.10% (unit: percent change versus control), against a 2.00% limit. The latency breach is the main risk. The cause is a guess: the heavier lambdamart_v7 model, with no segment cuts read to confirm it. The pre-period and novelty checks could not run because there was no pre-period data or daily series.",
+      "got": true,
+      "how": "overlap 88%"
+    }
+  ],
+  "lost": "",
+  "question": "Was the 2.00% latency margin set in the pre-registration, and if so, would the owners accept a latency trade-off for the +0.81% search gain instead of asking for a fix?",
+  "replies": {
+    "skim": "1. Answer: The document recommends not launching. The new ranker lifts Successful Search Rate (+0.81%), but Latency p95 rose +3.10%, past its 2.00% margin.\n2. Decision: Agree not to launch. Reconsider only if a serving or caching fix brings Latency p95 back within 2.00%, retested on the same plan.\n3. Number: +3.10% change in Latency p95 (ms), against a 2.00% limit.\n",
+    "full": "1. **Answer:** The document concludes \"Don't ship.\" Latency p95 (ms) is a guardrail, and its +3.10% change (95% interval +2.50% to +3.70%) breaks the 2.00% margin. The primary metric, Successful Search Rate, improved +0.81%. The experiment is finished (day 14 of 14, 1,000,000 users per arm), and the launch review agrees not to launch.\n\n2. **Decision:** Agree not to launch. The owner decides whether to iterate. The document would reverse the call only for a version that keeps latency within 2.00% when retested on the same plan, or if the owners formally widen the latency margin.\n\n3. **Number:** Latency p95 change, +3.10% (unit: percent change versus control), against a 2.00% limit.\n\n4. **Caveat:** The latency breach is the main risk. The cause is a guess: the heavier lambdamart_v7 model, with no segment cuts read to confirm it. The pre-period and novelty checks could not run because there was no pre-period data or daily series.\n\n5. **Lost:**\n   - The primary metric's verdict says \"better,\" but its interval's lower bound (+0.41%) is below its own bar (at least 0.50%). The point estimate clears the bar; the interval does not.\n   - The \"Don't ship\" versus \"Escalate\" rule was confusing. The appendix's escalate default comes from an example standards file, not the pre-registration, so I couldn't tell which rule governs here. The table's bar for the other guardrails is blank.\n\n6. **Question:** Was the 2.00% latency margin set in the pre-registration, and if so, would the owners accept a latency trade-off for the +0.81% search gain instead of asking for a fix?\n"
+  }
+}

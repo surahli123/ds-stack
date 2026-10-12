@@ -1,0 +1,53 @@
+{
+  "pass": false,
+  "skim": "1/2",
+  "full": "2/3",
+  "items": [
+    {
+      "pass": "skim",
+      "item": "answer",
+      "key": "Escalate: Successful Search Rate improved +0.81% (+0.41% to +1.21%), but Latency p95 (ms) got worse, +1.20% (+0.70% to +1.70%), inside its 2.00% margin.",
+      "reader": "Escalate. Successful Search Rate rose +0.81%, but Latency p95 (ms) worsened +1.20%, which is within the 2.00% margin. The trade-off is unresolved, and the pre-period could not be checked. Decide whether a 1.20% worse p95 latency is acceptable. If the latency owner accepts it, the call becomes Ship.",
+      "got": false,
+      "how": "overlap 0%"
+    },
+    {
+      "pass": "skim",
+      "item": "decision",
+      "key": "Decide the trade-off at triage.",
+      "reader": "Decide whether a 1.20% worse p95 latency is acceptable. If the latency owner accepts it, the call becomes Ship. Escalate. Successful Search Rate rose +0.81%, but Latency p95 (ms) worsened +1.20%, which is within the 2.00% margin. The trade-off is unresolved, and the pre-period could not be checked.",
+      "got": true,
+      "how": "overlap 67%"
+    },
+    {
+      "pass": "full",
+      "item": "takeaway 1",
+      "key": "Latency p95 (ms) +1.20% (+0.70% to +1.70%) against no worse than 2.00%.",
+      "reader": "The document recommends **Escalate**, a trade-off for triage. Ranker v7 raises Successful Search Rate by +0.81% (95% interval +0.41% to +1.21%), clearing the 0.50% bar. It also raises Latency p95 by +1.20% (+0.70% to +1.70%), which is inside its 2.00% margin. The test is finished: day 14 of 14, with 1,000,000 users per arm. Decide whether a 1.20% worse p95 latency is acceptable. If the latency owner accepts it, ship. If not, ship only after a fix brings latency back to flat and it is re-measured on the same arms. The pre-period and novelty checks did not run, so get those before any ship decision. The change in Latency p95 (ms), +1.20%, matters most, because it is the cost the decision turns on. The benefit to weigh against it is the +0.81% lift in Successful Search Rate. The latency cost is unexplained. The document's own mechanism (a heavier v7 model) is a guess, and the scorecard has no segment cuts to test it. The pre-period and novelty checks could not run, so the lift may not hold or may be a novelty effect.",
+      "got": true,
+      "how": "overlap 100%"
+    },
+    {
+      "pass": "full",
+      "item": "takeaway 2",
+      "key": "Successful Search Rate +0.81% (+0.41% to +1.21%) against at least 0.50%.",
+      "reader": "The document recommends **Escalate**, a trade-off for triage. Ranker v7 raises Successful Search Rate by +0.81% (95% interval +0.41% to +1.21%), clearing the 0.50% bar. It also raises Latency p95 by +1.20% (+0.70% to +1.70%), which is inside its 2.00% margin. The test is finished: day 14 of 14, with 1,000,000 users per arm. Decide whether a 1.20% worse p95 latency is acceptable. If the latency owner accepts it, ship. If not, ship only after a fix brings latency back to flat and it is re-measured on the same arms. The pre-period and novelty checks did not run, so get those before any ship decision. The change in Latency p95 (ms), +1.20%, matters most, because it is the cost the decision turns on. The benefit to weigh against it is the +0.81% lift in Successful Search Rate. The latency cost is unexplained. The document's own mechanism (a heavier v7 model) is a guess, and the scorecard has no segment cuts to test it. The pre-period and novelty checks could not run, so the lift may not hold or may be a novelty effect.",
+      "got": true,
+      "how": "overlap 89%"
+    },
+    {
+      "pass": "full",
+      "item": "takeaway 3",
+      "key": "Could reverse it: pre period could not be checked: no pre-period interval or platform check.",
+      "reader": "The document recommends **Escalate**, a trade-off for triage. Ranker v7 raises Successful Search Rate by +0.81% (95% interval +0.41% to +1.21%), clearing the 0.50% bar. It also raises Latency p95 by +1.20% (+0.70% to +1.70%), which is inside its 2.00% margin. The test is finished: day 14 of 14, with 1,000,000 users per arm. Decide whether a 1.20% worse p95 latency is acceptable. If the latency owner accepts it, ship. If not, ship only after a fix brings latency back to flat and it is re-measured on the same arms. The pre-period and novelty checks did not run, so get those before any ship decision. The change in Latency p95 (ms), +1.20%, matters most, because it is the cost the decision turns on. The benefit to weigh against it is the +0.81% lift in Successful Search Rate. The latency cost is unexplained. The document's own mechanism (a heavier v7 model) is a guess, and the scorecard has no segment cuts to test it. The pre-period and novelty checks could not run, so the lift may not hold or may be a novelty effect.",
+      "got": false,
+      "how": "overlap 25%"
+    }
+  ],
+  "lost": "Two places. The \"Why it moved\" section labels the CTR fall of 0.71% as [measured], but the appendix says no secondary metric moved after the false-discovery correction, so that bullet is weaker than its label. Also, the rule that a harm inside its margin leads to Escalate rather than Ship appears only in the appendix settings, so I had to reread to confirm why an in-margin result is not a Ship.",
+  "question": "Is the +1.20% p95 latency cost acceptable to the latency owner, and if not, can a fix that returns latency to flat be re-measured on the same arms?",
+  "replies": {
+    "skim": "1. **Answer:** Escalate. Successful Search Rate rose +0.81%, but Latency p95 (ms) worsened +1.20%, which is within the 2.00% margin. The trade-off is unresolved, and the pre-period could not be checked.\n2. **Decision:** Decide whether a 1.20% worse p95 latency is acceptable. If the latency owner accepts it, the call becomes Ship.\n3. **Number:** +1.20% change in Latency p95 (ms), against a 2.00% margin.\n",
+    "full": "1. **Answer:** The document recommends **Escalate**, a trade-off for triage. Ranker v7 raises Successful Search Rate by +0.81% (95% interval +0.41% to +1.21%), clearing the 0.50% bar. It also raises Latency p95 by +1.20% (+0.70% to +1.70%), which is inside its 2.00% margin. The test is finished: day 14 of 14, with 1,000,000 users per arm.\n\n2. **Decision:** Decide whether a 1.20% worse p95 latency is acceptable. If the latency owner accepts it, ship. If not, ship only after a fix brings latency back to flat and it is re-measured on the same arms. The pre-period and novelty checks did not run, so get those before any ship decision.\n\n3. **Number:** The change in Latency p95 (ms), +1.20%, matters most, because it is the cost the decision turns on. The benefit to weigh against it is the +0.81% lift in Successful Search Rate.\n\n4. **Caveat:** The latency cost is unexplained. The document's own mechanism (a heavier v7 model) is a guess, and the scorecard has no segment cuts to test it. The pre-period and novelty checks could not run, so the lift may not hold or may be a novelty effect.\n\n5. **Lost:** Two places. The \"Why it moved\" section labels the CTR fall of 0.71% as [measured], but the appendix says no secondary metric moved after the false-discovery correction, so that bullet is weaker than its label. Also, the rule that a harm inside its margin leads to Escalate rather than Ship appears only in the appendix settings, so I had to reread to confirm why an in-margin result is not a Ship.\n\n6. **Question:** Is the +1.20% p95 latency cost acceptable to the latency owner, and if not, can a fix that returns latency to flat be re-measured on the same arms?\n"
+  }
+}

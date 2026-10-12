@@ -1,0 +1,1 @@
+{"check": "ds_experiment_decide", "details": {"decider": "Successful Search Rate"}, "status": "no_effect", "summary": "Successful Search Rate reads +0.06% (-0.24% to +0.36%), which rules out the 0.50% change the test was built to find.", "ts": 1791843553.848}

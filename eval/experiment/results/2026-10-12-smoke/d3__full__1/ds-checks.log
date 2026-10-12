@@ -1,0 +1,1 @@
+{"check": "ds_experiment_decide", "details": {"decider": "Abandonment Rate"}, "status": "dont_ship", "summary": "Abandonment Rate moved the wrong way, +2.20% (+1.50% to +2.90%), past its 1.00% margin.", "ts": 1791843379.439}

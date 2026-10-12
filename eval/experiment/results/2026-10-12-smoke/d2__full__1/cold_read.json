@@ -1,0 +1,53 @@
+{
+  "pass": true,
+  "skim": "2/2",
+  "full": "3/3",
+  "items": [
+    {
+      "pass": "skim",
+      "item": "answer",
+      "key": "Don't ship: Successful Search Rate moved the wrong way, -0.62% (-1.02% to -0.22%).",
+      "reader": "Don't ship. Successful Search Rate fell 0.62% (95% interval -1.02% to -0.22%), against a bar of at least +0.50%. Agree not to launch and leave it to the owner whether to iterate. Only a version that improves Successful Search Rate could reverse this, and a pre-exposure or days-since-exposure check showing the drop is an imbalance or fading novelty would reopen the call.",
+      "got": true,
+      "how": "overlap 73%"
+    },
+    {
+      "pass": "skim",
+      "item": "decision",
+      "key": "Agree not to launch; the owner decides whether to iterate.",
+      "reader": "Agree not to launch and leave it to the owner whether to iterate. Only a version that improves Successful Search Rate could reverse this, and a pre-exposure or days-since-exposure check showing the drop is an imbalance or fading novelty would reopen the call. Don't ship. Successful Search Rate fell 0.62% (95% interval -1.02% to -0.22%), against a bar of at least +0.50%.",
+      "got": true,
+      "how": "overlap 83%"
+    },
+    {
+      "pass": "full",
+      "item": "takeaway 1",
+      "key": "Successful Search Rate -0.62% (-1.02% to -0.22%) against at least 0.50%.",
+      "reader": "Don't ship. Successful Search Rate fell -0.62% (95% interval -1.02% to -0.22%), but the bar was at least +0.50%. The guardrails (latency p95, abandonment, zero-result rate, revenue per user) were within margin. The test finished on day 14 of 14 with 1,000,000 users per arm, above the planned 900,000. Agree not to launch. The owner decides whether to iterate. Only a version that improves Successful Search Rate could reverse this. -0.62% change in Successful Search Rate, the primary metric. The document doesn't say whether this is relative or percentage points. The pre-period check and the novelty check could not run. So the document can't rule out a pre-existing imbalance between arms or a fading novelty effect, either of which could explain the drop. The mechanism is also unknown; the document labels that as a guess.",
+      "got": true,
+      "how": "overlap 89%"
+    },
+    {
+      "pass": "full",
+      "item": "takeaway 2",
+      "key": "Agree not to launch; the owner decides whether to iterate.",
+      "reader": "Don't ship. Successful Search Rate fell -0.62% (95% interval -1.02% to -0.22%), but the bar was at least +0.50%. The guardrails (latency p95, abandonment, zero-result rate, revenue per user) were within margin. The test finished on day 14 of 14 with 1,000,000 users per arm, above the planned 900,000. Agree not to launch. The owner decides whether to iterate. Only a version that improves Successful Search Rate could reverse this. -0.62% change in Successful Search Rate, the primary metric. The document doesn't say whether this is relative or percentage points. The pre-period check and the novelty check could not run. So the document can't rule out a pre-existing imbalance between arms or a fading novelty effect, either of which could explain the drop. The mechanism is also unknown; the document labels that as a guess.",
+      "got": true,
+      "how": "overlap 100%"
+    },
+    {
+      "pass": "full",
+      "item": "takeaway 3",
+      "key": "Could reverse it: only a version where Successful Search Rate improves.",
+      "reader": "Don't ship. Successful Search Rate fell -0.62% (95% interval -1.02% to -0.22%), but the bar was at least +0.50%. The guardrails (latency p95, abandonment, zero-result rate, revenue per user) were within margin. The test finished on day 14 of 14 with 1,000,000 users per arm, above the planned 900,000. Agree not to launch. The owner decides whether to iterate. Only a version that improves Successful Search Rate could reverse this. -0.62% change in Successful Search Rate, the primary metric. The document doesn't say whether this is relative or percentage points. The pre-period check and the novelty check could not run. So the document can't rule out a pre-existing imbalance between arms or a fading novelty effect, either of which could explain the drop. The mechanism is also unknown; the document labels that as a guess.",
+      "got": true,
+      "how": "overlap 100%"
+    }
+  ],
+  "lost": "Mostly nowhere. The one unclear point is that the scorecard passed even though two of the checks couldn't run, so I'd want to know what \"pass\" covers before trusting it. The guardrail rows also have no bar, which the document doesn't explain.",
+  "question": "Can you run the pre-exposure comparison, or a daily series by days since first exposure, to show whether the drop is an imbalance or a novelty effect?",
+  "replies": {
+    "skim": "1. **Answer:** Don't ship. Successful Search Rate fell 0.62% (95% interval -1.02% to -0.22%), against a bar of at least +0.50%.\n2. **Decision:** Agree not to launch and leave it to the owner whether to iterate. Only a version that improves Successful Search Rate could reverse this, and a pre-exposure or days-since-exposure check showing the drop is an imbalance or fading novelty would reopen the call.\n3. **Number:** -0.62% (change in Successful Search Rate, relative to control).\n",
+    "full": "1. **Answer:** Don't ship. Successful Search Rate fell -0.62% (95% interval -1.02% to -0.22%), but the bar was at least +0.50%. The guardrails (latency p95, abandonment, zero-result rate, revenue per user) were within margin. The test finished on day 14 of 14 with 1,000,000 users per arm, above the planned 900,000.\n\n2. **Decision:** Agree not to launch. The owner decides whether to iterate. Only a version that improves Successful Search Rate could reverse this.\n\n3. **Number:** -0.62% change in Successful Search Rate, the primary metric. The document doesn't say whether this is relative or percentage points.\n\n4. **Caveat:** The pre-period check and the novelty check could not run. So the document can't rule out a pre-existing imbalance between arms or a fading novelty effect, either of which could explain the drop. The mechanism is also unknown; the document labels that as a guess.\n\n5. **Lost:** Mostly nowhere. The one unclear point is that the scorecard passed even though two of the checks couldn't run, so I'd want to know what \"pass\" covers before trusting it. The guardrail rows also have no bar, which the document doesn't explain.\n\n6. **Question:** Can you run the pre-exposure comparison, or a daily series by days since first exposure, to show whether the drop is an imbalance or a novelty effect?\n"
+  }
+}

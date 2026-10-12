@@ -1,0 +1,172 @@
+{
+  "call": "ship",
+  "call_text": "Ship",
+  "reason": "Queries per User improved +2.40% (+1.50% to +3.30%), which clears the 1.00% bar and every guardrail held.",
+  "ask": "Approve the launch to all traffic.",
+  "decider": {
+    "metric": "Queries per User",
+    "role": "primary",
+    "unit": "relative",
+    "direction": "increase",
+    "threshold": 0.01,
+    "threshold_kind": "bar",
+    "listed_as": "primary",
+    "point": 0.024,
+    "low": 0.015,
+    "high": 0.033,
+    "se": 0.004591921112321888,
+    "level": 0.95,
+    "verdict": "better",
+    "rules_out_bar": false,
+    "achieved_mde": 0.012864658311021857
+  },
+  "status": {
+    "days_run": 14,
+    "planned_days": 14,
+    "units_per_arm": 1000000,
+    "planned_units": 900000,
+    "reached": true,
+    "whole_weeks": true,
+    "window_start": "2026-09-12",
+    "as_of": "2026-09-25"
+  },
+  "verdicts": [
+    {
+      "metric": "Queries per User",
+      "role": "primary",
+      "unit": "relative",
+      "direction": "increase",
+      "threshold": 0.01,
+      "threshold_kind": "bar",
+      "listed_as": "primary",
+      "point": 0.024,
+      "low": 0.015,
+      "high": 0.033,
+      "se": 0.004591921112321888,
+      "level": 0.95,
+      "verdict": "better",
+      "rules_out_bar": false,
+      "achieved_mde": 0.012864658311021857
+    },
+    {
+      "metric": "Latency p95 (ms)",
+      "role": "guardrail",
+      "unit": "relative",
+      "direction": "decrease",
+      "threshold": 0.02,
+      "threshold_kind": "margin",
+      "display_unit": "",
+      "margin_source": "pre-registration",
+      "point": 0.002,
+      "low": -0.002999999999999999,
+      "high": 0.006999999999999999,
+      "se": 0.00255106728462327,
+      "level": 0.95,
+      "verdict": "within"
+    }
+  ],
+  "checks": [
+    {
+      "check": "scorecard",
+      "status": "pass",
+      "summary": "2 registered metrics consistent (relative, absolute and intervals agree)",
+      "details": {}
+    },
+    {
+      "check": "sample_split",
+      "status": "pass",
+      "summary": "split 50.0% / 50.0% matches the planned 50.0% / 50.0%",
+      "details": {
+        "p": 1.0,
+        "counts": [
+          1000000,
+          1000000
+        ],
+        "source": "units in 'Queries per User' (exposures not in the config)"
+      }
+    },
+    {
+      "check": "config_params",
+      "status": "pass",
+      "summary": "only the intended parameters differ (ranker_model)",
+      "details": {}
+    },
+    {
+      "check": "config_edits",
+      "status": "pass",
+      "summary": "no mid-flight edits in the analysis window",
+      "details": {}
+    },
+    {
+      "check": "pre_period",
+      "status": "could_not_run",
+      "summary": "no pre-period interval or platform check",
+      "details": {}
+    },
+    {
+      "check": "novelty",
+      "status": "could_not_run",
+      "summary": "no daily effect series (needs 4 or more days)",
+      "details": {}
+    }
+  ],
+  "secondaries": {
+    "tested": 55,
+    "q": 0.1,
+    "survivors": [
+      {
+        "metric": "Reformulation Rate",
+        "rel_delta": 0.051,
+        "rel_ci": [
+          0.043,
+          0.059
+        ],
+        "p_value": 0.0,
+        "directionality": "decrease"
+      },
+      {
+        "metric": "Ad Click Rate",
+        "rel_delta": -0.0198097,
+        "rel_ci": [
+          -0.031809699999999996,
+          -0.007809699999999999
+        ],
+        "p_value": 0.001214,
+        "directionality": "increase"
+      }
+    ]
+  },
+  "open_items": [
+    "pre period could not be checked: no pre-period interval or platform check",
+    "novelty could not be checked: no daily effect series (needs 4 or more days)",
+    "secondary metric Reformulation Rate got worse after correction",
+    "secondary metric Ad Click Rate got worse after correction"
+  ],
+  "fallbacks": [],
+  "settings": {
+    "ci_level": 0.95,
+    "levels": {
+      "primary": 0.95,
+      "guardrail": 0.95,
+      "harm": 0.975
+    },
+    "sequential": false,
+    "rule": "all",
+    "ship_requires": "point_at_bar",
+    "cuped": false,
+    "mc_correction": "none",
+    "standards": {
+      "harm_within_margin": "escalate",
+      "below_bar": "escalate",
+      "secondary_harm": "note",
+      "srm_alpha": 0.001,
+      "min_days": 7
+    }
+  },
+  "experiment": {
+    "id": "ranker_v7",
+    "name": "Ranker v7",
+    "test_group": "g_test",
+    "design": "ab"
+  }
+}

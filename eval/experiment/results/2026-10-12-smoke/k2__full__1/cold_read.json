@@ -1,0 +1,53 @@
+{
+  "pass": false,
+  "skim": "2/2",
+  "full": "1/3",
+  "items": [
+    {
+      "pass": "skim",
+      "item": "answer",
+      "key": "Keep running: Successful Search Rate reads +0.81% (+0.41% to +1.21%) overall, but the effect is fading over the days of the test.",
+      "reader": "The document recommends \"Keep running\" Ranker v7 rather than shipping it. Successful Search Rate is up +0.81% overall (95% interval +0.41% to +1.21%), but the lift fades over the test. The test has reached its planned 14 days with 1,000,000 users per arm. Approve running the test longer. Ship only if the lift by days since exposure levels off at or above 0.5%.",
+      "got": true,
+      "how": "overlap 79%"
+    },
+    {
+      "pass": "skim",
+      "item": "decision",
+      "key": "Approve running the test longer.",
+      "reader": "Approve running the test longer. Ship only if the lift by days since exposure levels off at or above 0.5%. The document recommends \"Keep running\" Ranker v7 rather than shipping it. Successful Search Rate is up +0.81% overall (95% interval +0.41% to +1.21%), but the lift fades over the test. The test has reached its planned 14 days with 1,000,000 users per arm.",
+      "got": true,
+      "how": "overlap 100%"
+    },
+    {
+      "pass": "full",
+      "item": "takeaway 1",
+      "key": "Effect fading: effect by days since exposure: first days +1.33%, last days +0.50% (trend -0.103% per day)",
+      "reader": "The document recommends \"Keep running\" and asks for approval to extend the test. The test has reached day 14 of 14 with 1,000,000 users per arm, above the 900,000 planned. Overall Successful Search Rate is +0.81% (95% interval +0.41% to +1.21%), above the 0.50% bar. But the lift fades over the test, from +1.33% early to +0.50% late. Decide whether to approve a longer run. The document gives no duration, stop rule, or cost. If you approve, set an explicit end date and a rule for Ship versus No effect. Also ask for the pre-exposure balance check, which the document says could not run. Without it, the arms' balance is unverified. Successful Search Rate lift, +0.81% overall (unit: percent change vs. control). The most decision-relevant number is probably the late-period lift, +0.50%, which sits exactly at the bar. The fade. The document labels the novelty explanation as \"inferred,\" and it has no segment cuts to show what drives it. If the lift keeps falling, the launch case disappears. The unrun pre-period balance check is the other gap.",
+      "got": false,
+      "how": "overlap 0%"
+    },
+    {
+      "pass": "full",
+      "item": "takeaway 2",
+      "key": "Approve running the test longer.",
+      "reader": "The document recommends \"Keep running\" and asks for approval to extend the test. The test has reached day 14 of 14 with 1,000,000 users per arm, above the 900,000 planned. Overall Successful Search Rate is +0.81% (95% interval +0.41% to +1.21%), above the 0.50% bar. But the lift fades over the test, from +1.33% early to +0.50% late. Decide whether to approve a longer run. The document gives no duration, stop rule, or cost. If you approve, set an explicit end date and a rule for Ship versus No effect. Also ask for the pre-exposure balance check, which the document says could not run. Without it, the arms' balance is unverified. Successful Search Rate lift, +0.81% overall (unit: percent change vs. control). The most decision-relevant number is probably the late-period lift, +0.50%, which sits exactly at the bar. The fade. The document labels the novelty explanation as \"inferred,\" and it has no segment cuts to show what drives it. If the lift keeps falling, the launch case disappears. The unrun pre-period balance check is the other gap.",
+      "got": true,
+      "how": "overlap 100%"
+    },
+    {
+      "pass": "full",
+      "item": "takeaway 3",
+      "key": "Could reverse it: the remaining data; the call is made at the planned sample.",
+      "reader": "The document recommends \"Keep running\" and asks for approval to extend the test. The test has reached day 14 of 14 with 1,000,000 users per arm, above the 900,000 planned. Overall Successful Search Rate is +0.81% (95% interval +0.41% to +1.21%), above the 0.50% bar. But the lift fades over the test, from +1.33% early to +0.50% late. Decide whether to approve a longer run. The document gives no duration, stop rule, or cost. If you approve, set an explicit end date and a rule for Ship versus No effect. Also ask for the pre-exposure balance check, which the document says could not run. Without it, the arms' balance is unverified. Successful Search Rate lift, +0.81% overall (unit: percent change vs. control). The most decision-relevant number is probably the late-period lift, +0.50%, which sits exactly at the bar. The fade. The document labels the novelty explanation as \"inferred,\" and it has no segment cuts to show what drives it. If the lift keeps falling, the launch case disappears. The unrun pre-period balance check is the other gap.",
+      "got": false,
+      "how": "overlap 14%"
+    }
+  ],
+  "lost": "",
+  "question": "If we extend, what lift by days since exposure would you expect to see, and what decision rule (level, duration, and what counts as Ship versus No effect) applies at the end of the extension?",
+  "replies": {
+    "skim": "1. **Answer:** The document recommends \"Keep running\" Ranker v7 rather than shipping it. Successful Search Rate is up +0.81% overall (95% interval +0.41% to +1.21%), but the lift fades over the test. The test has reached its planned 14 days with 1,000,000 users per arm.\n2. **Decision:** Approve running the test longer. Ship only if the lift by days since exposure levels off at or above 0.5%.\n3. **Number:** +0.50% late-period Successful Search Rate lift (%), against the 0.50% bar. The headline +0.81% is an average that includes the early, higher-lift days.\n",
+    "full": "1. **Answer:** The document recommends \"Keep running\" and asks for approval to extend the test. The test has reached day 14 of 14 with 1,000,000 users per arm, above the 900,000 planned. Overall Successful Search Rate is +0.81% (95% interval +0.41% to +1.21%), above the 0.50% bar. But the lift fades over the test, from +1.33% early to +0.50% late.\n\n2. **Decision:** Decide whether to approve a longer run. The document gives no duration, stop rule, or cost. If you approve, set an explicit end date and a rule for Ship versus No effect. Also ask for the pre-exposure balance check, which the document says could not run. Without it, the arms' balance is unverified.\n\n3. **Number:** Successful Search Rate lift, +0.81% overall (unit: percent change vs. control). The most decision-relevant number is probably the late-period lift, +0.50%, which sits exactly at the bar.\n\n4. **Caveat:** The fade. The document labels the novelty explanation as \"inferred,\" and it has no segment cuts to show what drives it. If the lift keeps falling, the launch case disappears. The unrun pre-period balance check is the other gap.\n\n5. **Lost:**\n   - The status says the planned sample is exceeded and the test is at its end, yet the call is \"Keep running,\" which the appendix defines as \"not enough data yet.\" Those don't fit together.\n   - \"Could reverse it: the remaining data; the call is made at the planned sample\" is unclear. I couldn't tell whether the planned sample has been reached or whether the decision is still pending.\n   - The verdict column says \"better,\" while the recommendation is to keep running.\n\n6. **Question:** If we extend, what lift by days since exposure would you expect to see, and what decision rule (level, duration, and what counts as Ship versus No effect) applies at the end of the extension?\n"
+  }
+}

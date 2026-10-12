@@ -1,0 +1,53 @@
+{
+  "pass": false,
+  "skim": "2/2",
+  "full": "2/3",
+  "items": [
+    {
+      "pass": "skim",
+      "item": "answer",
+      "key": "Can't tell, decided by config edits.",
+      "reader": "The document concludes \"Can't tell.\" The test changed allocation from 20% to 10% partway through (2026-09-16), so the results mix users exposed before and after the edit. Agree to fix the test configuration and rerun it, or analyze only days after the edit. No launch decision from this data.",
+      "got": true,
+      "how": "overlap 25%; grader: same fact"
+    },
+    {
+      "pass": "skim",
+      "item": "decision",
+      "key": "Agree to fix the test and rerun; no launch decision from this data.",
+      "reader": "Agree to fix the test configuration and rerun it, or analyze only days after the edit. No launch decision from this data. The document concludes \"Can't tell.\" The test changed allocation from 20% to 10% partway through (2026-09-16), so the results mix users exposed before and after the edit.",
+      "got": true,
+      "how": "overlap 100%"
+    },
+    {
+      "pass": "full",
+      "item": "takeaway 1",
+      "key": "The test was edited mid-flight on 2026-09-16 (Allocation changed from 20% to 10%) and the results include days before and after",
+      "reader": "The document concludes \"Can't tell.\" The test was edited mid-flight on 2026-09-16 (allocation cut from 20% to 10%), so results mix users exposed before and after the change. The test has finished (day 14 of 14, 1,000,000 users per arm), but the result isn't usable for a launch call. Agree to fix the test configuration and rerun. Make no launch decision from this data. An analysis limited to post-edit days could help, but the document notes that even a clean result may only escalate, because the lower end of the primary interval is under the bar. Successful Search Rate, +0.81% (95% interval +0.41% to +1.21%), against a bar of at least 0.50%. Unit: percent, but the document doesn't say whether that is relative or percentage points. Unclear. The mid-test allocation change (2026-09-16) means pre- and post-edit exposure are mixed, so the lift may not be attributable to the ranker. Secondary risk: the lower bound (+0.41%) sits below the 0.50% bar.",
+      "got": true,
+      "how": "overlap 85%"
+    },
+    {
+      "pass": "full",
+      "item": "takeaway 2",
+      "key": "Agree to fix the test and rerun; no launch decision from this data.",
+      "reader": "The document concludes \"Can't tell.\" The test was edited mid-flight on 2026-09-16 (allocation cut from 20% to 10%), so results mix users exposed before and after the change. The test has finished (day 14 of 14, 1,000,000 users per arm), but the result isn't usable for a launch call. Agree to fix the test configuration and rerun. Make no launch decision from this data. An analysis limited to post-edit days could help, but the document notes that even a clean result may only escalate, because the lower end of the primary interval is under the bar. Successful Search Rate, +0.81% (95% interval +0.41% to +1.21%), against a bar of at least 0.50%. Unit: percent, but the document doesn't say whether that is relative or percentage points. Unclear. The mid-test allocation change (2026-09-16) means pre- and post-edit exposure are mixed, so the lift may not be attributable to the ranker. Secondary risk: the lower bound (+0.41%) sits below the 0.50% bar.",
+      "got": true,
+      "how": "overlap 100%"
+    },
+    {
+      "pass": "full",
+      "item": "takeaway 3",
+      "key": "Could reverse it: fixing the config edits problem and rerunning.",
+      "reader": "The document concludes \"Can't tell.\" The test was edited mid-flight on 2026-09-16 (allocation cut from 20% to 10%), so results mix users exposed before and after the change. The test has finished (day 14 of 14, 1,000,000 users per arm), but the result isn't usable for a launch call. Agree to fix the test configuration and rerun. Make no launch decision from this data. An analysis limited to post-edit days could help, but the document notes that even a clean result may only escalate, because the lower end of the primary interval is under the bar. Successful Search Rate, +0.81% (95% interval +0.41% to +1.21%), against a bar of at least 0.50%. Unit: percent, but the document doesn't say whether that is relative or percentage points. Unclear. The mid-test allocation change (2026-09-16) means pre- and post-edit exposure are mixed, so the lift may not be attributable to the ranker. Secondary risk: the lower bound (+0.41%) sits below the 0.50% bar.",
+      "got": false,
+      "how": "overlap 0%"
+    }
+  ],
+  "lost": "I reread two spots. First, the \"config edits fail\" check sits among passing checks, and the footer says \"0 fail\", which seemed to conflict until I read the footer as a document-lint result, not a test result. Second, the primary metric's verdict reads \"better\" while the overall call is \"Can't tell,\" so I had to confirm that the verdict column doesn't override the decision. The guardrail rows also have a blank Bar column, which I read as \"no bar set\" (unclear).",
+  "question": "Can you share the daily series split at 2026-09-16, so we can see whether the successful-search lift holds on post-edit days alone and whether the early cohort is driving it?",
+  "replies": {
+    "skim": "1. Answer: The document concludes \"Can't tell.\" The test changed allocation from 20% to 10% partway through (2026-09-16), so the results mix users exposed before and after the edit.\n2. Decision: Agree to fix the test configuration and rerun it, or analyze only days after the edit. No launch decision from this data.\n3. Number: Successful Search Rate lift of +0.81% (95% interval +0.41% to +1.21%), against a bar of at least 0.50%.\n",
+    "full": "1. **Answer:** The document concludes \"Can't tell.\" The test was edited mid-flight on 2026-09-16 (allocation cut from 20% to 10%), so results mix users exposed before and after the change. The test has finished (day 14 of 14, 1,000,000 users per arm), but the result isn't usable for a launch call.\n\n2. **Decision:** Agree to fix the test configuration and rerun. Make no launch decision from this data. An analysis limited to post-edit days could help, but the document notes that even a clean result may only escalate, because the lower end of the primary interval is under the bar.\n\n3. **Number:** Successful Search Rate, +0.81% (95% interval +0.41% to +1.21%), against a bar of at least 0.50%. Unit: percent, but the document doesn't say whether that is relative or percentage points. Unclear.\n\n4. **Caveat:** The mid-test allocation change (2026-09-16) means pre- and post-edit exposure are mixed, so the lift may not be attributable to the ranker. Secondary risk: the lower bound (+0.41%) sits below the 0.50% bar.\n\n5. **Lost:** I reread two spots. First, the \"config edits fail\" check sits among passing checks, and the footer says \"0 fail\", which seemed to conflict until I read the footer as a document-lint result, not a test result. Second, the primary metric's verdict reads \"better\" while the overall call is \"Can't tell,\" so I had to confirm that the verdict column doesn't override the decision. The guardrail rows also have a blank Bar column, which I read as \"no bar set\" (unclear).\n\n6. **Question:** Can you share the daily series split at 2026-09-16, so we can see whether the successful-search lift holds on post-edit days alone and whether the early cohort is driving it?\n"
+  }
+}

@@ -1,0 +1,9 @@
+{"why_it_moved":[
+{"text":"Successful Search Rate lift shrinks with days since first exposure: +1.33% in the first days, +0.50% in the last days.","label":"measured"},
+{"text":"A fading lift fits a novelty effect, where users react to changed rankings and then settle back.","label":"inferred"},
+{"text":"No segment cuts in the scorecard, so which users or queries drive the fade is unknown.","label":"guess"}],
+"would_change":[
+"An extension where the lift by days since exposure levels off at or above 0.5% would make this a Ship.",
+"An extension where the lift keeps falling below 0.5% would make this a Don't ship or No effect found.",
+"A pre-exposure comparison showing the arms were balanced would close the one check that could not run."],
+"analyst_view":null}

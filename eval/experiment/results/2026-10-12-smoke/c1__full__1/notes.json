@@ -1,0 +1,4 @@
+{"why_it_moved":[{"text":"No segment cuts are in the scorecard, so why successful searches rose is not known.","label":"guess"},
+{"text":"The uneven split may mean one arm lost or gained users unevenly, which could bias the lift in either direction.","label":"inferred"}],
+"would_change":["A logged cause for the uneven split, for example a bot filter or a logging bug in one arm, confirmed by the owner.","A rerun or corrected exposure data with an even split, where the primary still clears its bar."],
+"analyst_view":null}

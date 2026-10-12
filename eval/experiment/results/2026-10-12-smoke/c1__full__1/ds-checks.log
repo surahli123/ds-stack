@@ -1,0 +1,1 @@
+{"check": "ds_experiment_decide", "details": {"decider": "sample_split"}, "status": "cant_tell", "summary": "The arms got 50.5% / 49.5% of exposures against a planned 50.0% / 50.0%, a gap chance almost never produces at this size. No launch decision from this data until it's fixed.", "ts": 1791843287.162}

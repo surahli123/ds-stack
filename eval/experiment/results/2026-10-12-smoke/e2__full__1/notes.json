@@ -1,0 +1,9 @@
+{"why_it_moved":[
+{"text":"Successful Search Rate rose 0.81% while CTR fell 0.71%: more searches end in a good click, but fewer clicks overall.","label":"measured"},
+{"text":"A heavier v7 model plausibly adds the 1.20% Latency p95 cost.","label":"guess"},
+{"text":"The scorecard has no segment cuts, so the mechanism is unknown.","label":"guess"}],
+"would_change":[
+"A latency-owner decision that 1.20% worse p95 is acceptable would make this a Ship.",
+"A fix that brings Latency p95 back to flat, re-measured on the same arms, would make this a Ship.",
+"A daily series by days since first exposure showing the lift fading would move this to Keep running."],
+"analyst_view":null}

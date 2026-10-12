@@ -1,0 +1,53 @@
+{
+  "pass": false,
+  "skim": "0/2",
+  "full": "1/3",
+  "items": [
+    {
+      "pass": "skim",
+      "item": "answer",
+      "key": "Can't tell, decided by scorecard.",
+      "reader": "Ship. Successful Search Rate rose +0.81% (95% interval +0.41% to +1.21%), above the 0.50% bar, and the guardrails held. Approve the launch to all traffic, but first run the pre-period check. The document never checked it, and a pre-exposure gap on Successful Search Rate would void the lift.",
+      "got": false,
+      "how": "overlap 0%"
+    },
+    {
+      "pass": "skim",
+      "item": "decision",
+      "key": "Agree to fix the test and rerun; no launch decision from this data.",
+      "reader": "Approve the launch to all traffic, but first run the pre-period check. The document never checked it, and a pre-exposure gap on Successful Search Rate would void the lift. Ship. Successful Search Rate rose +0.81% (95% interval +0.41% to +1.21%), above the 0.50% bar, and the guardrails held.",
+      "got": false,
+      "how": "overlap 14%"
+    },
+    {
+      "pass": "full",
+      "item": "takeaway 1",
+      "key": "9 scorecard values don't add up. First: Successful Search Rate: relative 8.1e-05 x control 0.412 = 3.3372e-05 but the absolute change is 0.0033372; is a...",
+      "reader": "The document concludes Ship. Successful Search Rate rose +0.81% (95% interval +0.41% to +1.21%), and the guardrails stayed within margin. The ask is approval to launch to all traffic. The test is complete: day 14 of 14, about 1,000,000 users per arm. Hold the full launch until two checks are run. The document says the pre-period and novelty checks could not run, and a pre-exposure difference would void the lift. Also confirm that the scorecard pass came from the unit-corrected `fixed/pulse.json`, not the original Pulse data. If both checks pass and the scorecard holds on corrected data, I'd approve. +0.81% on Successful Search Rate. The unit is unclear: the document doesn't say whether this is relative change or percentage points. The document's biggest named risk is that the pre-period check never ran, so the arms may have differed before exposure. The novelty check also didn't run, so a fading lift is possible. Its own \"what would change the call\" list adds that a desktop drop (-1.29%) holding up in a rerun would make this an Escalate.",
+      "got": false,
+      "how": "overlap 0%"
+    },
+    {
+      "pass": "full",
+      "item": "takeaway 2",
+      "key": "Agree to fix the test and rerun; no launch decision from this data.",
+      "reader": "The document concludes Ship. Successful Search Rate rose +0.81% (95% interval +0.41% to +1.21%), and the guardrails stayed within margin. The ask is approval to launch to all traffic. The test is complete: day 14 of 14, about 1,000,000 users per arm. Hold the full launch until two checks are run. The document says the pre-period and novelty checks could not run, and a pre-exposure difference would void the lift. Also confirm that the scorecard pass came from the unit-corrected `fixed/pulse.json`, not the original Pulse data. If both checks pass and the scorecard holds on corrected data, I'd approve. +0.81% on Successful Search Rate. The unit is unclear: the document doesn't say whether this is relative change or percentage points. The document's biggest named risk is that the pre-period check never ran, so the arms may have differed before exposure. The novelty check also didn't run, so a fading lift is possible. Its own \"what would change the call\" list adds that a desktop drop (-1.29%) holding up in a rerun would make this an Escalate.",
+      "got": true,
+      "how": "overlap 57%"
+    },
+    {
+      "pass": "full",
+      "item": "takeaway 3",
+      "key": "Could reverse it: fixing the scorecard problem and rerunning.",
+      "reader": "The document concludes Ship. Successful Search Rate rose +0.81% (95% interval +0.41% to +1.21%), and the guardrails stayed within margin. The ask is approval to launch to all traffic. The test is complete: day 14 of 14, about 1,000,000 users per arm. Hold the full launch until two checks are run. The document says the pre-period and novelty checks could not run, and a pre-exposure difference would void the lift. Also confirm that the scorecard pass came from the unit-corrected `fixed/pulse.json`, not the original Pulse data. If both checks pass and the scorecard holds on corrected data, I'd approve. +0.81% on Successful Search Rate. The unit is unclear: the document doesn't say whether this is relative change or percentage points. The document's biggest named risk is that the pre-period check never ran, so the arms may have differed before exposure. The novelty check also didn't run, so a fading lift is possible. Its own \"what would change the call\" list adds that a desktop drop (-1.29%) holding up in a rerun would make this an Escalate.",
+      "got": false,
+      "how": "overlap 20%"
+    }
+  ],
+  "lost": "I had to reread the bar. The headline says the lift \"clears the 0.50% bar,\" but the interval's lower bound (+0.41%) is below it. The document treats the point estimate as the test, and the pre-registration rule behind that isn't in the document. The checks line says \"scorecard pass,\" but the handover note says the first run failed on the scorecard because of the fraction-versus-percent mismatch, so I can't tell which data the pass came from. The \"Could reverse it\" line is also unclear: it names the missing pre-period check, but doesn't say what would reverse the call.",
+  "question": "Did the pre-exposure comparison and novelty check run, and do the scorecard pass and all reported numbers come from the unit-corrected Pulse data?",
+  "replies": {
+    "skim": "1. Answer: Ship. Successful Search Rate rose +0.81% (95% interval +0.41% to +1.21%), above the 0.50% bar, and the guardrails held.\n2. Decision: Approve the launch to all traffic, but first run the pre-period check. The document never checked it, and a pre-exposure gap on Successful Search Rate would void the lift.\n3. Number: +0.81%, the change in Successful Search Rate relative to control.\n",
+    "full": "1. **Answer:** The document concludes Ship. Successful Search Rate rose +0.81% (95% interval +0.41% to +1.21%), and the guardrails stayed within margin. The ask is approval to launch to all traffic. The test is complete: day 14 of 14, about 1,000,000 users per arm.\n\n2. **Decision:** Hold the full launch until two checks are run. The document says the pre-period and novelty checks could not run, and a pre-exposure difference would void the lift. Also confirm that the scorecard pass came from the unit-corrected `fixed/pulse.json`, not the original Pulse data. If both checks pass and the scorecard holds on corrected data, I'd approve.\n\n3. **Number:** +0.81% on Successful Search Rate. The unit is unclear: the document doesn't say whether this is relative change or percentage points.\n\n4. **Caveat:** The document's biggest named risk is that the pre-period check never ran, so the arms may have differed before exposure. The novelty check also didn't run, so a fading lift is possible. Its own \"what would change the call\" list adds that a desktop drop (-1.29%) holding up in a rerun would make this an Escalate.\n\n5. **Lost:** I had to reread the bar. The headline says the lift \"clears the 0.50% bar,\" but the interval's lower bound (+0.41%) is below it. The document treats the point estimate as the test, and the pre-registration rule behind that isn't in the document. The checks line says \"scorecard pass,\" but the handover note says the first run failed on the scorecard because of the fraction-versus-percent mismatch, so I can't tell which data the pass came from. The \"Could reverse it\" line is also unclear: it names the missing pre-period check, but doesn't say what would reverse the call.\n\n6. **Question:** Did the pre-exposure comparison and novelty check run, and do the scorecard pass and all reported numbers come from the unit-corrected Pulse data?\n"
+  }
+}

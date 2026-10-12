@@ -1,0 +1,53 @@
+{
+  "pass": false,
+  "skim": "0/2",
+  "full": "0/3",
+  "items": [
+    {
+      "pass": "skim",
+      "item": "answer",
+      "key": "Escalate: Successful Search Rate improved +0.31% (+0.13% to +0.49%), real but short of the 0.50% bar.",
+      "reader": "v7 should not ship. The primary metric, Successful Search Rate, rose +0.00128 (95% CI +0.00054 to +0.00202). That lift is real but below the pre-registered +0.005 bar, and no guardrail is breached. Don't ship v7 under the prereg `point_at_bar` rule. Next steps are unclear, since the text doesn't say what follows.",
+      "got": false,
+      "how": "overlap 0%"
+    },
+    {
+      "pass": "skim",
+      "item": "decision",
+      "key": "Decide the trade-off at triage.",
+      "reader": "Don't ship v7 under the prereg `point_at_bar` rule. Next steps are unclear, since the text doesn't say what follows. v7 should not ship. The primary metric, Successful Search Rate, rose +0.00128 (95% CI +0.00054 to +0.00202). That lift is real but below the pre-registered +0.005 bar, and no guardrail is breached.",
+      "got": false,
+      "how": "overlap 0%"
+    },
+    {
+      "pass": "full",
+      "item": "takeaway 1",
+      "key": "Successful Search Rate +0.31% (+0.13% to +0.49%) against at least 0.50%.",
+      "reader": "Don't ship v7. Successful Search Rate rose +0.00128 (95% CI +0.00054 to +0.00202), which is below the pre-registered +0.005 bar even at the top of the interval. No guardrail is breached, the validity checks pass, and the segment and secondary results don't hold up after correction for multiple tests. Don't ship v7 under the pre-registered rule, and don't relax the criterion after the fact to ship it. The next step is unclear: the summary doesn't say whether to iterate on v7, try a different variant, or stop. Successful Search Rate lift of +0.00128 (absolute, about +0.13 pp), against a ship bar of +0.005. The effect is real but too small to meet the bar. The guardrail margins are ambiguous: the prereg doesn't say whether they're relative or absolute. The author says the conclusion holds under either reading.",
+      "got": false,
+      "how": "overlap 0%"
+    },
+    {
+      "pass": "full",
+      "item": "takeaway 2",
+      "key": "Decide the trade-off at triage.",
+      "reader": "Don't ship v7. Successful Search Rate rose +0.00128 (95% CI +0.00054 to +0.00202), which is below the pre-registered +0.005 bar even at the top of the interval. No guardrail is breached, the validity checks pass, and the segment and secondary results don't hold up after correction for multiple tests. Don't ship v7 under the pre-registered rule, and don't relax the criterion after the fact to ship it. The next step is unclear: the summary doesn't say whether to iterate on v7, try a different variant, or stop. Successful Search Rate lift of +0.00128 (absolute, about +0.13 pp), against a ship bar of +0.005. The effect is real but too small to meet the bar. The guardrail margins are ambiguous: the prereg doesn't say whether they're relative or absolute. The author says the conclusion holds under either reading.",
+      "got": false,
+      "how": "overlap 0%"
+    },
+    {
+      "pass": "full",
+      "item": "takeaway 3",
+      "key": "Could reverse it: pre period could not be checked: no pre-period interval or platform check.",
+      "reader": "Don't ship v7. Successful Search Rate rose +0.00128 (95% CI +0.00054 to +0.00202), which is below the pre-registered +0.005 bar even at the top of the interval. No guardrail is breached, the validity checks pass, and the segment and secondary results don't hold up after correction for multiple tests. Don't ship v7 under the pre-registered rule, and don't relax the criterion after the fact to ship it. The next step is unclear: the summary doesn't say whether to iterate on v7, try a different variant, or stop. Successful Search Rate lift of +0.00128 (absolute, about +0.13 pp), against a ship bar of +0.005. The effect is real but too small to meet the bar. The guardrail margins are ambiguous: the prereg doesn't say whether they're relative or absolute. The author says the conclusion holds under either reading.",
+      "got": false,
+      "how": "overlap 12%"
+    }
+  ],
+  "lost": "Nowhere in the summary. The only gap is the guardrail-margin wording, and I couldn't check that against the full file.",
+  "question": "After this no-ship, is the plan to iterate on v7 or stop, and does the prereg define the guardrail margins as relative or absolute?",
+  "replies": {
+    "skim": "1. **Answer:** v7 should not ship. The primary metric, Successful Search Rate, rose +0.00128 (95% CI +0.00054 to +0.00202). That lift is real but below the pre-registered +0.005 bar, and no guardrail is breached.\n2. **Decision:** Don't ship v7 under the prereg `point_at_bar` rule. Next steps are unclear, since the text doesn't say what follows.\n3. **Number:** +0.00128, the absolute change in Successful Search Rate, against a +0.005 bar. The unit isn't stated, so this assumes a proportion.\n",
+    "full": "I couldn't open `readout.md`. None of my available tools can read local files, so this answer is based only on the summary in your message.\n\n1. **Answer:** Don't ship v7. Successful Search Rate rose +0.00128 (95% CI +0.00054 to +0.00202), which is below the pre-registered +0.005 bar even at the top of the interval. No guardrail is breached, the validity checks pass, and the segment and secondary results don't hold up after correction for multiple tests.\n2. **Decision:** Don't ship v7 under the pre-registered rule, and don't relax the criterion after the fact to ship it. The next step is unclear: the summary doesn't say whether to iterate on v7, try a different variant, or stop.\n3. **Number:** Successful Search Rate lift of +0.00128 (absolute, about +0.13 pp), against a ship bar of +0.005.\n4. **Caveat:** The effect is real but too small to meet the bar. The guardrail margins are ambiguous: the prereg doesn't say whether they're relative or absolute. The author says the conclusion holds under either reading.\n5. **Lost:** Nowhere in the summary. The only gap is the guardrail-margin wording, and I couldn't check that against the full file.\n6. **Question:** After this no-ship, is the plan to iterate on v7 or stop, and does the prereg define the guardrail margins as relative or absolute?\n\nIf you paste the full `readout.md` text or attach it, I can check these answers against it.\n"
+  }
+}

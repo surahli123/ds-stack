@@ -1,0 +1,53 @@
+{
+  "pass": false,
+  "skim": "0/2",
+  "full": "0/3",
+  "items": [
+    {
+      "pass": "skim",
+      "item": "answer",
+      "key": "Escalate: Successful Search Rate improved +0.39% (+0.27% to +0.51%), real but short of the 0.50% bar.",
+      "reader": "Ranker v7 should not ship. The triggered-only SSR lift (+0.0078) misses the pre-registered 0.005 bar once converted to the overall population (about +0.0008 absolute). Don't ship Ranker v7. The text doesn't name a next step.",
+      "got": false,
+      "how": "overlap 0%"
+    },
+    {
+      "pass": "skim",
+      "item": "decision",
+      "key": "Decide the trade-off at triage.",
+      "reader": "Don't ship Ranker v7. The text doesn't name a next step. Ranker v7 should not ship. The triggered-only SSR lift (+0.0078) misses the pre-registered 0.005 bar once converted to the overall population (about +0.0008 absolute).",
+      "got": false,
+      "how": "overlap 0%"
+    },
+    {
+      "pass": "full",
+      "item": "takeaway 1",
+      "key": "Successful Search Rate +0.39% (+0.27% to +0.51%) against at least 0.50%.",
+      "reader": "Ranker v7 misses the pre-registered ship bar. On the overall population, SSR lifts about +0.0008 absolute (+0.39% relative), below the 0.005 bar on either reading. The triggered-only lift of +0.0078 is real but isn't the metric the bar covers. The recommendation is don't ship. Don't ship under the current pre-registration. If the team wants a ~0.4% relative overall gain, it should revise the bar explicitly and record that change, not compare the triggered number to the bar. First, confirm whether 0.005 is absolute or relative. Overall SSR lift, +0.0008 absolute (proportion points), against a bar of 0.005. The document's derivation checks out: 0.10 \u00d7 0.0078 \u2248 0.0008, and the implied overall control SSR is about 0.201, which gives 0.39% relative. The overall figure is the author's derivation from population shares, not Pulse output, so it hasn't been measured directly. The three exploratory signals with p<0.05 (queries per user \u22121.0%, desktop time to first click +0.13 s, informational reformulation +1.8%) come from about 60 uncorrected comparisons, and all point the unfavorable way. The author flags them for follow-up, not as established harms.",
+      "got": false,
+      "how": "overlap 0%"
+    },
+    {
+      "pass": "full",
+      "item": "takeaway 2",
+      "key": "Decide the trade-off at triage.",
+      "reader": "Ranker v7 misses the pre-registered ship bar. On the overall population, SSR lifts about +0.0008 absolute (+0.39% relative), below the 0.005 bar on either reading. The triggered-only lift of +0.0078 is real but isn't the metric the bar covers. The recommendation is don't ship. Don't ship under the current pre-registration. If the team wants a ~0.4% relative overall gain, it should revise the bar explicitly and record that change, not compare the triggered number to the bar. First, confirm whether 0.005 is absolute or relative. Overall SSR lift, +0.0008 absolute (proportion points), against a bar of 0.005. The document's derivation checks out: 0.10 \u00d7 0.0078 \u2248 0.0008, and the implied overall control SSR is about 0.201, which gives 0.39% relative. The overall figure is the author's derivation from population shares, not Pulse output, so it hasn't been measured directly. The three exploratory signals with p<0.05 (queries per user \u22121.0%, desktop time to first click +0.13 s, informational reformulation +1.8%) come from about 60 uncorrected comparisons, and all point the unfavorable way. The author flags them for follow-up, not as established harms.",
+      "got": false,
+      "how": "overlap 0%"
+    },
+    {
+      "pass": "full",
+      "item": "takeaway 3",
+      "key": "Could reverse it: pre period could not be checked: no pre-period interval or platform check.",
+      "reader": "Ranker v7 misses the pre-registered ship bar. On the overall population, SSR lifts about +0.0008 absolute (+0.39% relative), below the 0.005 bar on either reading. The triggered-only lift of +0.0078 is real but isn't the metric the bar covers. The recommendation is don't ship. Don't ship under the current pre-registration. If the team wants a ~0.4% relative overall gain, it should revise the bar explicitly and record that change, not compare the triggered number to the bar. First, confirm whether 0.005 is absolute or relative. Overall SSR lift, +0.0008 absolute (proportion points), against a bar of 0.005. The document's derivation checks out: 0.10 \u00d7 0.0078 \u2248 0.0008, and the implied overall control SSR is about 0.201, which gives 0.39% relative. The overall figure is the author's derivation from population shares, not Pulse output, so it hasn't been measured directly. The three exploratory signals with p<0.05 (queries per user \u22121.0%, desktop time to first click +0.13 s, informational reformulation +1.8%) come from about 60 uncorrected comparisons, and all point the unfavorable way. The author flags them for follow-up, not as established harms.",
+      "got": false,
+      "how": "overlap 0%"
+    }
+  ],
+  "lost": "Nowhere. The one thing I had to work out myself was how the overall figure follows from the triggered figure, and the document's numbers reconcile.",
+  "question": "Is the 0.005 bar meant as an absolute SSR change or a relative one, and was it set for the overall population or the triggered scorecard?",
+  "replies": {
+    "skim": "1. **Answer:** Ranker v7 should not ship. The triggered-only SSR lift (+0.0078) misses the pre-registered 0.005 bar once converted to the overall population (about +0.0008 absolute).\n2. **Decision:** Don't ship Ranker v7. The text doesn't name a next step.\n3. **Number:** Overall SSR lift of about +0.0008 absolute (proportion points), against a 0.005 bar. The author derived this figure from the triggered shares, not from Pulse output.\n",
+    "full": "1. **Answer:** Ranker v7 misses the pre-registered ship bar. On the overall population, SSR lifts about +0.0008 absolute (+0.39% relative), below the 0.005 bar on either reading. The triggered-only lift of +0.0078 is real but isn't the metric the bar covers. The recommendation is don't ship.\n\n2. **Decision:** Don't ship under the current pre-registration. If the team wants a ~0.4% relative overall gain, it should revise the bar explicitly and record that change, not compare the triggered number to the bar. First, confirm whether 0.005 is absolute or relative.\n\n3. **Number:** Overall SSR lift, +0.0008 absolute (proportion points), against a bar of 0.005. The document's derivation checks out: 0.10 \u00d7 0.0078 \u2248 0.0008, and the implied overall control SSR is about 0.201, which gives 0.39% relative.\n\n4. **Caveat:** The overall figure is the author's derivation from population shares, not Pulse output, so it hasn't been measured directly. The three exploratory signals with p<0.05 (queries per user \u22121.0%, desktop time to first click +0.13 s, informational reformulation +1.8%) come from about 60 uncorrected comparisons, and all point the unfavorable way. The author flags them for follow-up, not as established harms.\n\n5. **Lost:** Nowhere. The one thing I had to work out myself was how the overall figure follows from the triggered figure, and the document's numbers reconcile.\n\n6. **Question:** Is the 0.005 bar meant as an absolute SSR change or a relative one, and was it set for the overall population or the triggered scorecard?\n"
+  }
+}

@@ -1,0 +1,53 @@
+{
+  "pass": true,
+  "skim": "2/2",
+  "full": "3/3",
+  "items": [
+    {
+      "pass": "skim",
+      "item": "answer",
+      "key": "Don't ship: Abandonment Rate moved the wrong way, +2.20% (+1.50% to +2.90%), past its 1.00% margin.",
+      "reader": "Don't ship. The abandonment guardrail is breached (Abandonment Rate +2.20%, CI +1.50% to +2.90%, past the 1.00% margin), though the primary metric Successful Search Rate improved (+1.24%). Agree not to launch, and let the owner decide whether to iterate. Only a version keeping Abandonment Rate within 1.00% (or a confirmed definition showing it isn't a harm) would reverse this.",
+      "got": true,
+      "how": "overlap 77%"
+    },
+    {
+      "pass": "skim",
+      "item": "decision",
+      "key": "Agree not to launch; the owner decides whether to iterate.",
+      "reader": "Agree not to launch, and let the owner decide whether to iterate. Only a version keeping Abandonment Rate within 1.00% (or a confirmed definition showing it isn't a harm) would reverse this. Don't ship. The abandonment guardrail is breached (Abandonment Rate +2.20%, CI +1.50% to +2.90%, past the 1.00% margin), though the primary metric Successful Search Rate improved (+1.24%).",
+      "got": true,
+      "how": "overlap 83%"
+    },
+    {
+      "pass": "full",
+      "item": "takeaway 1",
+      "key": "Abandonment Rate +2.20% (+1.50% to +2.90%) against no worse than 1.00%.",
+      "reader": "Don't ship. Abandonment Rate breached its guardrail: +2.20% (95% interval +1.50% to +2.90%) against a 1.00% margin. The primary metric, Successful Search Rate, improved +1.24%. The 14-day test is complete, with 1,000,000 users per arm. Current state: the call is made, and the owner decides whether to iterate. Agree not to launch. The owner decides whether to iterate. A reversal needs either a version that keeps Abandonment Rate within 1.00%, or a team-confirmed definition showing that abandonment isn't a harm for this ranker. Abandonment Rate +2.20%, with its interval +1.50% to +2.90%. Unit: unclear. The document doesn't say whether this is a relative change or percentage points. The mechanism is unknown. Abandonment rose while Successful Search Rate rose, and the segment cuts are too noisy to locate the cause. The pre-period and novelty checks could not run, so the result has no baseline comparison or time-since-exposure check.",
+      "got": true,
+      "how": "overlap 88%"
+    },
+    {
+      "pass": "full",
+      "item": "takeaway 2",
+      "key": "Agree not to launch; the owner decides whether to iterate.",
+      "reader": "Don't ship. Abandonment Rate breached its guardrail: +2.20% (95% interval +1.50% to +2.90%) against a 1.00% margin. The primary metric, Successful Search Rate, improved +1.24%. The 14-day test is complete, with 1,000,000 users per arm. Current state: the call is made, and the owner decides whether to iterate. Agree not to launch. The owner decides whether to iterate. A reversal needs either a version that keeps Abandonment Rate within 1.00%, or a team-confirmed definition showing that abandonment isn't a harm for this ranker. Abandonment Rate +2.20%, with its interval +1.50% to +2.90%. Unit: unclear. The document doesn't say whether this is a relative change or percentage points. The mechanism is unknown. Abandonment rose while Successful Search Rate rose, and the segment cuts are too noisy to locate the cause. The pre-period and novelty checks could not run, so the result has no baseline comparison or time-since-exposure check.",
+      "got": true,
+      "how": "overlap 100%"
+    },
+    {
+      "pass": "full",
+      "item": "takeaway 3",
+      "key": "Could reverse it: only a version that keeps Abandonment Rate at no worse than 1.00%.",
+      "reader": "Don't ship. Abandonment Rate breached its guardrail: +2.20% (95% interval +1.50% to +2.90%) against a 1.00% margin. The primary metric, Successful Search Rate, improved +1.24%. The 14-day test is complete, with 1,000,000 users per arm. Current state: the call is made, and the owner decides whether to iterate. Agree not to launch. The owner decides whether to iterate. A reversal needs either a version that keeps Abandonment Rate within 1.00%, or a team-confirmed definition showing that abandonment isn't a harm for this ranker. Abandonment Rate +2.20%, with its interval +1.50% to +2.90%. Unit: unclear. The document doesn't say whether this is a relative change or percentage points. The mechanism is unknown. Abandonment rose while Successful Search Rate rose, and the segment cuts are too noisy to locate the cause. The pre-period and novelty checks could not run, so the result has no baseline comparison or time-since-exposure check.",
+      "got": true,
+      "how": "overlap 62%"
+    }
+  ],
+  "lost": "",
+  "question": "How is Abandonment Rate defined, and does it count searches answered on the results page? The answer decides whether the breach is a real harm or a measurement artifact.",
+  "replies": {
+    "skim": "1. Answer: Don't ship. The abandonment guardrail is breached (Abandonment Rate +2.20%, CI +1.50% to +2.90%, past the 1.00% margin), though the primary metric Successful Search Rate improved (+1.24%).\n2. Decision: Agree not to launch, and let the owner decide whether to iterate. Only a version keeping Abandonment Rate within 1.00% (or a confirmed definition showing it isn't a harm) would reverse this.\n3. Number: +2.20% change in Abandonment Rate (guardrail, bar is no worse than 1.00%).\n",
+    "full": "1. **Answer:** Don't ship. Abandonment Rate breached its guardrail: +2.20% (95% interval +1.50% to +2.90%) against a 1.00% margin. The primary metric, Successful Search Rate, improved +1.24%. The 14-day test is complete, with 1,000,000 users per arm. Current state: the call is made, and the owner decides whether to iterate.\n\n2. **Decision:** Agree not to launch. The owner decides whether to iterate. A reversal needs either a version that keeps Abandonment Rate within 1.00%, or a team-confirmed definition showing that abandonment isn't a harm for this ranker.\n\n3. **Number:** Abandonment Rate +2.20%, with its interval +1.50% to +2.90%. Unit: unclear. The document doesn't say whether this is a relative change or percentage points.\n\n4. **Caveat:** The mechanism is unknown. Abandonment rose while Successful Search Rate rose, and the segment cuts are too noisy to locate the cause. The pre-period and novelty checks could not run, so the result has no baseline comparison or time-since-exposure check.\n\n5. **Lost:**\n   - The \"Why it moved\" section: the reader has to work out how Successful Search Rate and Abandonment Rate can both rise, and the document labels the explanation a guess.\n   - The \"Bar\" cells for the other guardrails are blank.\n   - The head-queries cut (+1.55%) appears only in the text, not in the table.\n   - The lint and cold-read lines at the bottom are about the document itself, not the decision, so I had to separate them from the readout.\n\n6. **Question:** How is Abandonment Rate defined, and does it count searches answered on the results page? The answer decides whether the breach is a real harm or a measurement artifact.\n"
+  }
+}

@@ -1,0 +1,7 @@
+I've written the readout to `readout.md`, and its first line is `Decision: Ship`. The decision depends on one assumption about the pre-registered bar, explained below.
+
+- **Primary metric:** Successful Search Rate rose from 0.4120 to 0.4153. That is +0.0033 absolute, or +0.81% relative (95% CI +0.40% to +1.21%, p = 7e-5).
+- **The bar:** the pre-registered bar is 0.005. I read it as relative, so 0.81% clears 0.5%. I did that because the guardrail margins in the same file are relative. If the bar was meant as an absolute 0.5 percentage points, the result misses it and the call becomes Don't ship. The readout flags this for the review to confirm.
+- **Guardrails:** latency, abandonment, zero-result rate and revenue per user all stay inside their margins. Abandonment and revenue have thin headroom: the worst end of their intervals is +0.7% against a 1% margin, and −0.8% against a −1% margin.
+- **Design checks:** all clean. The exposure-balance check passed and there were 1M users per arm. Only `ranker_model` differs between arms, and the audit log is empty.
+- **Other flags:** Ad Click Rate fell 2.8% (p = 0.022). It isn't a pre-registered guardrail and there are about 40 metrics, so it may be chance, but the readout recommends watching it after launch. The segment cuts are exploratory and I made no claims from them.

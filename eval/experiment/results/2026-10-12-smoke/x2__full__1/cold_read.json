@@ -1,0 +1,53 @@
+{
+  "pass": false,
+  "skim": "2/2",
+  "full": "2/3",
+  "items": [
+    {
+      "pass": "skim",
+      "item": "answer",
+      "key": "Not an A/B test: This is a holdout test; the A/B launch rule doesn't apply.",
+      "reader": "The document concludes the call is \"Not an A/B test\" and that it is a holdout test that needs its own readout. Current state: day 14 of 14, complete, with 1,000,000 users per arm, and the document's own checks pass except the pre period and novelty checks, which could not run. Confirm the test design with the owner before acting. If the owner confirms it was a standard two-arm A/B, the call flips to Ship on the same numbers. Also run a pre-exposure comparison between arms, since a gap there would make the call Can't tell. Do not launch on the current readout until that is settled.",
+      "got": true,
+      "how": "overlap 50%"
+    },
+    {
+      "pass": "skim",
+      "item": "decision",
+      "key": "Use the readout for this test design instead.",
+      "reader": "Confirm the test design with the owner before acting. If the owner confirms it was a standard two-arm A/B, the call flips to Ship on the same numbers. Also run a pre-exposure comparison between arms, since a gap there would make the call Can't tell. Do not launch on the current readout until that is settled. The document concludes the call is \"Not an A/B test\" and that it is a holdout test that needs its own readout. Current state: day 14 of 14, complete, with 1,000,000 users per arm, and the document's own checks pass except the pre period and novelty checks, which could not run.",
+      "got": true,
+      "how": "overlap 60%"
+    },
+    {
+      "pass": "full",
+      "item": "takeaway 1",
+      "key": "Holdout",
+      "reader": "The document does not reach a final call. It calls the test a holdout, so the A/B launch rule doesn't apply, and asks for the holdout readout. The analyst would call it Ship, but only if the owner confirms it was a two-arm A/B. Current state: the 14-day test is complete (1,000,000 users per arm, above the planned 900,000), and the design label is unresolved. Get the owner to confirm the design before deciding. Check the pre-exposure gap between arms, since the pre-period check could not run, and look at the daily series by days since first exposure, since novelty could not run. Then apply the document's rules: a confirmed A/B with no pre-exposure gap gives Ship, a pre-exposure gap gives Can't tell, and a fading lift gives Keep running. Successful Search Rate, +0.81%. The unit is probably relative percent change, but the document doesn't say. Its interval isn't given, so I can't tell whether the lift is distinguishable from zero. The mechanism is a guess, and there is no pre-period or daily series to test it. The config shows two equal arms differing only in `ranker_model`, with no holdout group, so the \"holdout\" label may be a pre-registration error. Clicks and CTR did not rise, so the lift is not explained by more clicking.",
+      "got": true,
+      "how": "overlap 100%"
+    },
+    {
+      "pass": "full",
+      "item": "takeaway 2",
+      "key": "Use the readout for this test design instead.",
+      "reader": "The document does not reach a final call. It calls the test a holdout, so the A/B launch rule doesn't apply, and asks for the holdout readout. The analyst would call it Ship, but only if the owner confirms it was a two-arm A/B. Current state: the 14-day test is complete (1,000,000 users per arm, above the planned 900,000), and the design label is unresolved. Get the owner to confirm the design before deciding. Check the pre-exposure gap between arms, since the pre-period check could not run, and look at the daily series by days since first exposure, since novelty could not run. Then apply the document's rules: a confirmed A/B with no pre-exposure gap gives Ship, a pre-exposure gap gives Can't tell, and a fading lift gives Keep running. Successful Search Rate, +0.81%. The unit is probably relative percent change, but the document doesn't say. Its interval isn't given, so I can't tell whether the lift is distinguishable from zero. The mechanism is a guess, and there is no pre-period or daily series to test it. The config shows two equal arms differing only in `ranker_model`, with no holdout group, so the \"holdout\" label may be a pre-registration error. Clicks and CTR did not rise, so the lift is not explained by more clicking.",
+      "got": true,
+      "how": "overlap 60%"
+    },
+    {
+      "pass": "full",
+      "item": "takeaway 3",
+      "key": "Could reverse it: nothing here; this design needs its own readout.",
+      "reader": "The document does not reach a final call. It calls the test a holdout, so the A/B launch rule doesn't apply, and asks for the holdout readout. The analyst would call it Ship, but only if the owner confirms it was a two-arm A/B. Current state: the 14-day test is complete (1,000,000 users per arm, above the planned 900,000), and the design label is unresolved. Get the owner to confirm the design before deciding. Check the pre-exposure gap between arms, since the pre-period check could not run, and look at the daily series by days since first exposure, since novelty could not run. Then apply the document's rules: a confirmed A/B with no pre-exposure gap gives Ship, a pre-exposure gap gives Can't tell, and a fading lift gives Keep running. Successful Search Rate, +0.81%. The unit is probably relative percent change, but the document doesn't say. Its interval isn't given, so I can't tell whether the lift is distinguishable from zero. The mechanism is a guess, and there is no pre-period or daily series to test it. The config shows two equal arms differing only in `ranker_model`, with no holdout group, so the \"holdout\" label may be a pre-registration error. Clicks and CTR did not rise, so the lift is not explained by more clicking.",
+      "got": false,
+      "how": "overlap 33%"
+    }
+  ],
+  "lost": "I had to reread the Decision and Analyst's view sections to reconcile them. The \"Ask\" line (\"use the readout for this test design\") does not say what readout that is. The \"harm inside a margin\" thresholds are not given, and \"Could reverse it: nothing here\" was unclear to me. Overall the document's recommended call is ambiguous.",
+  "question": "Was this test pre-registered as a holdout or as a two-arm A/B on `ranker_model`, and if it was a holdout, where is the holdout group?",
+  "replies": {
+    "skim": "1. Answer: The document concludes the call is \"Not an A/B test\" and that it is a holdout test that needs its own readout. Current state: day 14 of 14, complete, with 1,000,000 users per arm, and the document's own checks pass except the pre period and novelty checks, which could not run.\n\n2. Decision: Confirm the test design with the owner before acting. If the owner confirms it was a standard two-arm A/B, the call flips to Ship on the same numbers. Also run a pre-exposure comparison between arms, since a gap there would make the call Can't tell. Do not launch on the current readout until that is settled.\n\n3. Number: Successful Search Rate lift of 0.81% (relative change, percent), the one measured result, with every guardrail inside its margin.\n",
+    "full": "1. **Answer:** The document does not reach a final call. It calls the test a holdout, so the A/B launch rule doesn't apply, and asks for the holdout readout. The analyst would call it Ship, but only if the owner confirms it was a two-arm A/B. Current state: the 14-day test is complete (1,000,000 users per arm, above the planned 900,000), and the design label is unresolved.\n\n2. **Decision:** Get the owner to confirm the design before deciding. Check the pre-exposure gap between arms, since the pre-period check could not run, and look at the daily series by days since first exposure, since novelty could not run. Then apply the document's rules: a confirmed A/B with no pre-exposure gap gives Ship, a pre-exposure gap gives Can't tell, and a fading lift gives Keep running.\n\n3. **Number:** Successful Search Rate, +0.81%. The unit is probably relative percent change, but the document doesn't say. Its interval isn't given, so I can't tell whether the lift is distinguishable from zero.\n\n4. **Caveat:** The mechanism is a guess, and there is no pre-period or daily series to test it. The config shows two equal arms differing only in `ranker_model`, with no holdout group, so the \"holdout\" label may be a pre-registration error. Clicks and CTR did not rise, so the lift is not explained by more clicking.\n\n5. **Lost:** I had to reread the Decision and Analyst's view sections to reconcile them. The \"Ask\" line (\"use the readout for this test design\") does not say what readout that is. The \"harm inside a margin\" thresholds are not given, and \"Could reverse it: nothing here\" was unclear to me. Overall the document's recommended call is ambiguous.\n\n6. **Question:** Was this test pre-registered as a holdout or as a two-arm A/B on `ranker_model`, and if it was a holdout, where is the holdout group?\n"
+  }
+}

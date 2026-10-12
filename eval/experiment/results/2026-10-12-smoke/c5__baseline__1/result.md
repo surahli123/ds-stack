@@ -1,0 +1,7 @@
+I wrote the readout to `readout.md`. It starts with `Decision: Don't ship`.
+
+- **Primary metric:** Successful Search Rate rose by +0.334 pp (0.4120 to 0.4153), with a 95% CI of [+0.169, +0.499] pp and p = 7e-5. The lift is real, but the pre-registration says to ship only if the point estimate reaches +0.5 pp, and it doesn't. Even the top of the CI is just under the bar, so more data wouldn't change this.
+- **Guardrails:** Latency, Abandonment, Zero Result Rate and Revenue per User are all within their margins. I read the margins as relative, and the worse end of each CI stays inside its margin.
+- **Secondary and segment metrics:** None is significant at 95%. The nearest to the line are Long Click Rate – Tail (p = 0.069, negative), Reformulation – Desktop (p = 0.070, favorable) and Time to First Click – Desktop (p = 0.053, favorable). With about 40 cuts, I treated these as noise.
+- **Allocation cut:** Allocation was cut from 20% to 10% on 2026-09-16, which the pre-registration doesn't mention. The 50/50 split and the passing balance check suggest it doesn't bias the result. I can't tell from these files how users were handled when allocation shrank, so the readout flags it for the review.
+- **Lowering the bar:** The readout says that if the team wants to ship at +0.33 pp, that means changing the bar after seeing results. The owners should make that call explicitly.

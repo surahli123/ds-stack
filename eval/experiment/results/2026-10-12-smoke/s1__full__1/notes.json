@@ -1,0 +1,18 @@
+{
+ "why_it_moved": [
+  {
+   "text": "The lift is spread across segments with no single driver; every segment interval includes zero, so no segment explains it.",
+   "label": "measured"
+  },
+  {
+   "text": "Mechanism is unknown; the only intended change is the ranker model, which fits more searches ending in a successful click.",
+   "label": "guess"
+  }
+ ],
+ "would_change": [
+  "A flat or fading effect by days since first exposure (not run: no daily series) would move this to Keep running.",
+  "A pre-exposure comparison showing the arms already differed on Successful Search Rate would make this Can't tell.",
+  "If the review requires the whole interval to clear the 0.50% bar, the lower end of +0.41% falls short and this becomes Escalate."
+ ],
+ "analyst_view": null
+}

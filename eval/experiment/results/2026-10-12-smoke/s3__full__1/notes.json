@@ -1,0 +1,5 @@
+{"why_it_moved":[{"text":"The effect is stable by days since exposure: +0.81% early, +0.80% late, so it is not a novelty bump.","label":"measured"},
+{"text":"No segment cuts were in the scorecard, so which queries gain is not known.","label":"guess"}],
+"would_change":["The pre period could not be checked. A pre-exposure comparison showing the arms already differed on Successful Search Rate would make the test unreliable.",
+"A rollout holdout where the lift lands below 0.50% would argue for stopping, since the low end of the interval is under the bar."],
+"analyst_view":null}

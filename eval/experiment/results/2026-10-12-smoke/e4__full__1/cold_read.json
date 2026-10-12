@@ -1,0 +1,53 @@
+{
+  "pass": true,
+  "skim": "2/2",
+  "full": "3/3",
+  "items": [
+    {
+      "pass": "skim",
+      "item": "answer",
+      "key": "Escalate: Successful Search Rate improved +0.39% (+0.27% to +0.51%), real but short of the 0.50% bar.",
+      "reader": "Escalate. Ranker v7 improved Successful Search Rate by +0.39% (95% interval +0.27% to +0.51%), which is real but below the 0.50% bar. Guardrails are within margin, but the pre-period check could not run. Decide at triage whether to accept a sub-bar win or hold for a longer run or more traffic that would tighten the interval above or below 0.50%. Resolve the missing pre-period check before launch, since it could reverse the call.",
+      "got": true,
+      "how": "overlap 92%"
+    },
+    {
+      "pass": "skim",
+      "item": "decision",
+      "key": "Decide the trade-off at triage.",
+      "reader": "Decide at triage whether to accept a sub-bar win or hold for a longer run or more traffic that would tighten the interval above or below 0.50%. Resolve the missing pre-period check before launch, since it could reverse the call. Escalate. Ranker v7 improved Successful Search Rate by +0.39% (95% interval +0.27% to +0.51%), which is real but below the 0.50% bar. Guardrails are within margin, but the pre-period check could not run.",
+      "got": true,
+      "how": "overlap 67%"
+    },
+    {
+      "pass": "full",
+      "item": "takeaway 1",
+      "key": "Successful Search Rate +0.39% (+0.27% to +0.51%) against at least 0.50%.",
+      "reader": "Escalate. Ranker v7 improved Successful Search Rate by +0.39% (95% interval +0.27% to +0.51%). That is real but below the 0.50% bar. Guardrails are within margin. Decide the trade-off at triage: ship a small win with the bar treated as a floor, or hold for more data. The doc says a ship follows if the owner accepts the bar as a floor and all guardrails stay within margin. Otherwise the test needs a longer run or more traffic to tighten the interval. +0.39% change in Successful Search Rate (relative change, percent), against a bar of at least 0.50%. The pre-period check could not run, so the doc cannot rule out a pre-existing difference. The mechanism is unknown because the scorecard has no segment or query-type cuts. The novelty check also could not run.",
+      "got": true,
+      "how": "overlap 100%"
+    },
+    {
+      "pass": "full",
+      "item": "takeaway 2",
+      "key": "Decide the trade-off at triage.",
+      "reader": "Escalate. Ranker v7 improved Successful Search Rate by +0.39% (95% interval +0.27% to +0.51%). That is real but below the 0.50% bar. Guardrails are within margin. Decide the trade-off at triage: ship a small win with the bar treated as a floor, or hold for more data. The doc says a ship follows if the owner accepts the bar as a floor and all guardrails stay within margin. Otherwise the test needs a longer run or more traffic to tighten the interval. +0.39% change in Successful Search Rate (relative change, percent), against a bar of at least 0.50%. The pre-period check could not run, so the doc cannot rule out a pre-existing difference. The mechanism is unknown because the scorecard has no segment or query-type cuts. The novelty check also could not run.",
+      "got": true,
+      "how": "overlap 100%"
+    },
+    {
+      "pass": "full",
+      "item": "takeaway 3",
+      "key": "Could reverse it: pre period could not be checked: no pre-period interval or platform check.",
+      "reader": "Escalate. Ranker v7 improved Successful Search Rate by +0.39% (95% interval +0.27% to +0.51%). That is real but below the 0.50% bar. Guardrails are within margin. Decide the trade-off at triage: ship a small win with the bar treated as a floor, or hold for more data. The doc says a ship follows if the owner accepts the bar as a floor and all guardrails stay within margin. Otherwise the test needs a longer run or more traffic to tighten the interval. +0.39% change in Successful Search Rate (relative change, percent), against a bar of at least 0.50%. The pre-period check could not run, so the doc cannot rule out a pre-existing difference. The mechanism is unknown because the scorecard has no segment or query-type cuts. The novelty check also could not run.",
+      "got": true,
+      "how": "overlap 38%; grader: same fact"
+    }
+  ],
+  "lost": "Nowhere. The reader would have to check the \"Could reverse it\" line against the checks table to see that the pre-period and novelty checks did not run, but that is not a reread.",
+  "question": "Does the owner accept the 0.50% bar as a floor for a small win if all guardrails stay within margin, and if not, how much more traffic or time is needed to pin the interval above or below 0.50%?",
+  "replies": {
+    "skim": "1. **Answer:** Escalate. Ranker v7 improved Successful Search Rate by +0.39% (95% interval +0.27% to +0.51%), which is real but below the 0.50% bar. Guardrails are within margin, but the pre-period check could not run.\n2. **Decision:** Decide at triage whether to accept a sub-bar win or hold for a longer run or more traffic that would tighten the interval above or below 0.50%. Resolve the missing pre-period check before launch, since it could reverse the call.\n3. **Number:** +0.39% (percent change in Successful Search Rate, 95% interval +0.27% to +0.51%).\n",
+    "full": "1. **Answer:** Escalate. Ranker v7 improved Successful Search Rate by +0.39% (95% interval +0.27% to +0.51%). That is real but below the 0.50% bar. Guardrails are within margin.\n\n2. **Decision:** Decide the trade-off at triage: ship a small win with the bar treated as a floor, or hold for more data. The doc says a ship follows if the owner accepts the bar as a floor and all guardrails stay within margin. Otherwise the test needs a longer run or more traffic to tighten the interval.\n\n3. **Number:** +0.39% change in Successful Search Rate (relative change, percent), against a bar of at least 0.50%.\n\n4. **Caveat:** The pre-period check could not run, so the doc cannot rule out a pre-existing difference. The mechanism is unknown because the scorecard has no segment or query-type cuts. The novelty check also could not run.\n\n5. **Lost:** Nowhere. The reader would have to check the \"Could reverse it\" line against the checks table to see that the pre-period and novelty checks did not run, but that is not a reread.\n\n6. **Question:** Does the owner accept the 0.50% bar as a floor for a small win if all guardrails stay within margin, and if not, how much more traffic or time is needed to pin the interval above or below 0.50%?\n"
+  }
+}

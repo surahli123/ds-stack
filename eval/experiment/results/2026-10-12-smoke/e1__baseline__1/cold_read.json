@@ -1,0 +1,53 @@
+{
+  "pass": false,
+  "skim": "1/2",
+  "full": "2/3",
+  "items": [
+    {
+      "pass": "skim",
+      "item": "answer",
+      "key": "Escalate: Successful Search Rate improved +0.81% (+0.41% to +1.21%), but Abandonment Rate (+0.60% (-0.40% to +1.60%)) isn't shown within its 1.00% margin.",
+      "reader": "The readout recommends escalating. The primary metric, Successful Search Rate, is up 0.81% relative and clears the +0.5% bar, but the abandonment guardrail is not cleared. Don't launch on this readout. Escalate the abandonment question, since the data can't rule out harm or confirm safety.",
+      "got": true,
+      "how": "overlap 0%; grader: same fact"
+    },
+    {
+      "pass": "skim",
+      "item": "decision",
+      "key": "Decide the trade-off at triage.",
+      "reader": "Don't launch on this readout. Escalate the abandonment question, since the data can't rule out harm or confirm safety. The readout recommends escalating. The primary metric, Successful Search Rate, is up 0.81% relative and clears the +0.5% bar, but the abandonment guardrail is not cleared.",
+      "got": false,
+      "how": "overlap 0%"
+    },
+    {
+      "pass": "full",
+      "item": "takeaway 1",
+      "key": "Abandonment Rate +0.60% (-0.40% to +1.60%) against no worse than 1.00%.",
+      "reader": "The document concludes **Escalate**. The primary metric passes (Successful Search Rate +0.81% relative), but the abandonment guardrail is not cleared (+0.6% relative, with a CI reaching +1.6% against a 1% margin). The test is finished: day 14 of 14, 1.0M users per arm against 900k planned, and the setup checks are clean. Escalate to the launch owners to decide whether a possible abandonment increase of up to about 1.6% is acceptable for the search gain. Before relying on the primary result, confirm the unit of the pre-registered bar. If they ship, the document recommends a staged rollout with abandonment monitored against the 1% margin. The abandonment CI upper bound, +1.6% relative, against a 1% margin. This is what blocks clearing the guardrail. The primary point estimate, +0.81% relative, is the headline gain. The data cannot rule out harm to abandonment or confirm it is safe. A second risk is that the bar and margin units are assumed to be relative. If the bar is really +0.5pp absolute, the primary metric misses (+0.33pp).",
+      "got": true,
+      "how": "overlap 0%; grader: same fact"
+    },
+    {
+      "pass": "full",
+      "item": "takeaway 2",
+      "key": "Successful Search Rate +0.81% (+0.41% to +1.21%) against at least 0.50%.",
+      "reader": "The document concludes **Escalate**. The primary metric passes (Successful Search Rate +0.81% relative), but the abandonment guardrail is not cleared (+0.6% relative, with a CI reaching +1.6% against a 1% margin). The test is finished: day 14 of 14, 1.0M users per arm against 900k planned, and the setup checks are clean. Escalate to the launch owners to decide whether a possible abandonment increase of up to about 1.6% is acceptable for the search gain. Before relying on the primary result, confirm the unit of the pre-registered bar. If they ship, the document recommends a staged rollout with abandonment monitored against the 1% margin. The abandonment CI upper bound, +1.6% relative, against a 1% margin. This is what blocks clearing the guardrail. The primary point estimate, +0.81% relative, is the headline gain. The data cannot rule out harm to abandonment or confirm it is safe. A second risk is that the bar and margin units are assumed to be relative. If the bar is really +0.5pp absolute, the primary metric misses (+0.33pp).",
+      "got": true,
+      "how": "overlap 0%; grader: same fact"
+    },
+    {
+      "pass": "full",
+      "item": "takeaway 3",
+      "key": "Could reverse it: pre period could not be checked: no pre-period interval or platform check.",
+      "reader": "The document concludes **Escalate**. The primary metric passes (Successful Search Rate +0.81% relative), but the abandonment guardrail is not cleared (+0.6% relative, with a CI reaching +1.6% against a 1% margin). The test is finished: day 14 of 14, 1.0M users per arm against 900k planned, and the setup checks are clean. Escalate to the launch owners to decide whether a possible abandonment increase of up to about 1.6% is acceptable for the search gain. Before relying on the primary result, confirm the unit of the pre-registered bar. If they ship, the document recommends a staged rollout with abandonment monitored against the 1% margin. The abandonment CI upper bound, +1.6% relative, against a 1% margin. This is what blocks clearing the guardrail. The primary point estimate, +0.81% relative, is the headline gain. The data cannot rule out harm to abandonment or confirm it is safe. A second risk is that the bar and margin units are assumed to be relative. If the bar is really +0.5pp absolute, the primary metric misses (+0.33pp).",
+      "got": false,
+      "how": "overlap 0%"
+    }
+  ],
+  "lost": "Nowhere in the text itself. The one gap was the unit of the bar and margin, which the document infers from the guardrail margins rather than stating. I answered from the text pasted here and did not open `readout.md`.",
+  "question": "Are the pre-registered bar (+0.5%) and abandonment margin (1%) relative changes or absolute percentage points?",
+  "replies": {
+    "skim": "1. **Answer:** The readout recommends escalating. The primary metric, Successful Search Rate, is up 0.81% relative and clears the +0.5% bar, but the abandonment guardrail is not cleared.\n2. **Decision:** Don't launch on this readout. Escalate the abandonment question, since the data can't rule out harm or confirm safety.\n3. **Number:** Abandonment rate, +0.6% relative (\u00b11.0%), with the CI reaching +1.6% against a 1% margin.\n",
+    "full": "1. **Answer:** The document concludes **Escalate**. The primary metric passes (Successful Search Rate +0.81% relative), but the abandonment guardrail is not cleared (+0.6% relative, with a CI reaching +1.6% against a 1% margin). The test is finished: day 14 of 14, 1.0M users per arm against 900k planned, and the setup checks are clean.\n\n2. **Decision:** Escalate to the launch owners to decide whether a possible abandonment increase of up to about 1.6% is acceptable for the search gain. Before relying on the primary result, confirm the unit of the pre-registered bar. If they ship, the document recommends a staged rollout with abandonment monitored against the 1% margin.\n\n3. **Number:** The abandonment CI upper bound, +1.6% relative, against a 1% margin. This is what blocks clearing the guardrail. The primary point estimate, +0.81% relative, is the headline gain.\n\n4. **Caveat:** The data cannot rule out harm to abandonment or confirm it is safe. A second risk is that the bar and margin units are assumed to be relative. If the bar is really +0.5pp absolute, the primary metric misses (+0.33pp).\n\n5. **Lost:** Nowhere in the text itself. The one gap was the unit of the bar and margin, which the document infers from the guardrail margins rather than stating. I answered from the text pasted here and did not open `readout.md`.\n\n6. **Question:** Are the pre-registered bar (+0.5%) and abandonment margin (1%) relative changes or absolute percentage points?\n"
+  }
+}

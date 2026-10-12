@@ -1,0 +1,1 @@
+{"check": "ds_experiment_decide", "details": {"decider": "Latency p95 (ms)"}, "status": "escalate", "summary": "Successful Search Rate improved +0.81% (+0.41% to +1.21%), but Latency p95 (ms) got worse, +1.20% (+0.70% to +1.70%), inside its 2.00% margin.", "ts": 1791843403.302}

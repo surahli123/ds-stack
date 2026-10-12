@@ -1,0 +1,9 @@
+{"why_it_moved":[
+{"text":"The test arm differs from control in two settings: the ranker model, and snippet length. Only the ranker was meant to change.","label":"measured"},
+{"text":"Longer snippets could raise successful searches by themselves, so the lift may not come from the ranker.","label":"guess"},
+{"text":"No segment cuts or daily series are in the scorecard, so the mechanism is unknown.","label":"guess"}],
+"would_change":[
+"A rerun, or a split of the data, where snippet length is the same in both arms would settle whether the ranker alone clears the bar.",
+"A pre-registration note that the snippet change was intended, with evidence, would turn this into an escalation.",
+"A daily series by days since first exposure would let us check the lift is not fading."],
+"analyst_view":null}

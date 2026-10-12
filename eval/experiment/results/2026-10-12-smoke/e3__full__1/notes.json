@@ -1,0 +1,9 @@
+{"why_it_moved":[
+{"text":"Mobile (-0.35%), desktop (+0.59%), head queries (-0.70%) and tail queries (-0.14%) all have intervals that include zero, so no segment explains the +0.31% gain.","label":"measured"},
+{"text":"Guardrails Latency p95, Abandonment Rate, Zero Result Rate and Revenue per User all stayed inside their margins, so the gain did not come from a visible cost.","label":"measured"},
+{"text":"The mechanism is unknown; better ranking of results is the intended cause but no cut here confirms it.","label":"guess"}],
+"would_change":[
+"The owner confirms a lower bar than 0.50% as acceptable, or the review decides +0.31% is worth shipping anyway; then the call becomes Ship.",
+"A rerun or follow-up that shows the true lift reaches 0.50%; this readout's range tops out at +0.49%.",
+"A pre-exposure comparison that fails would make the test unreliable and the call Can't tell."],
+"analyst_view":null}

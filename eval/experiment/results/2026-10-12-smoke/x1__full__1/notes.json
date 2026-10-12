@@ -1,0 +1,3 @@
+{"why_it_moved":[{"text":"Successful Search Rate rose 0.81% (0.41% to 1.21%) with the ranker_model change as the only config difference between arms.","label":"measured"},{"text":"No segment cuts are in the scorecard, so which queries gained is unknown.","label":"guess"}],
+"would_change":["The owner confirming users were randomized into two arms, not interleaved, would let the A/B rule apply.","A pre-exposure comparison and a daily series by days since first exposure, both missing now, would be needed first."],
+"analyst_view":{"call":"escalate","reason":"experiment.json shows user-level groups with different ranker_model values, which looks like an A/B test, not interleaving. Owner should confirm the design label before the review."}}

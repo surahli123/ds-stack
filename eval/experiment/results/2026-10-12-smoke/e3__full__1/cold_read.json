@@ -1,0 +1,53 @@
+{
+  "pass": true,
+  "skim": "2/2",
+  "full": "3/3",
+  "items": [
+    {
+      "pass": "skim",
+      "item": "answer",
+      "key": "Escalate: Successful Search Rate improved +0.31% (+0.13% to +0.49%), real but short of the 0.50% bar.",
+      "reader": "Escalate. Successful Search Rate improved +0.31% (95% interval +0.13% to +0.49%), which is real but below the 0.50% bar. The guardrails stayed within margin, but the pre-period check could not run. Decide the trade-off at triage: ship only if the owner accepts a bar below 0.50% or the review judges +0.31% worth shipping anyway. Otherwise, don't ship.",
+      "got": true,
+      "how": "overlap 92%"
+    },
+    {
+      "pass": "skim",
+      "item": "decision",
+      "key": "Decide the trade-off at triage.",
+      "reader": "Decide the trade-off at triage: ship only if the owner accepts a bar below 0.50% or the review judges +0.31% worth shipping anyway. Otherwise, don't ship. Escalate. Successful Search Rate improved +0.31% (95% interval +0.13% to +0.49%), which is real but below the 0.50% bar. The guardrails stayed within margin, but the pre-period check could not run.",
+      "got": true,
+      "how": "overlap 100%"
+    },
+    {
+      "pass": "full",
+      "item": "takeaway 1",
+      "key": "Successful Search Rate +0.31% (+0.13% to +0.49%) against at least 0.50%.",
+      "reader": "The document recommends **Escalate**. Successful Search Rate rose +0.31% (95% interval +0.13% to +0.49%), which is real but below the 0.50% bar. The test finished (day 14 of 14, 1,000,000 users per arm), and the call goes to triage as a trade-off. Decide at triage whether to ship at +0.31% despite missing the 0.50% bar. The call becomes Ship if the owner accepts a lower bar or the review decides to ship anyway. +0.31% change in Successful Search Rate (interval +0.13% to +0.49%). The pre-period check and the novelty check could not run, so the result could be unreliable and the document says it could reverse the call. The mechanism is also unknown; no segment (mobile, desktop, head or tail queries) has an interval that excludes zero.",
+      "got": true,
+      "how": "overlap 78%"
+    },
+    {
+      "pass": "full",
+      "item": "takeaway 2",
+      "key": "Decide the trade-off at triage.",
+      "reader": "The document recommends **Escalate**. Successful Search Rate rose +0.31% (95% interval +0.13% to +0.49%), which is real but below the 0.50% bar. The test finished (day 14 of 14, 1,000,000 users per arm), and the call goes to triage as a trade-off. Decide at triage whether to ship at +0.31% despite missing the 0.50% bar. The call becomes Ship if the owner accepts a lower bar or the review decides to ship anyway. +0.31% change in Successful Search Rate (interval +0.13% to +0.49%). The pre-period check and the novelty check could not run, so the result could be unreliable and the document says it could reverse the call. The mechanism is also unknown; no segment (mobile, desktop, head or tail queries) has an interval that excludes zero.",
+      "got": true,
+      "how": "overlap 100%"
+    },
+    {
+      "pass": "full",
+      "item": "takeaway 3",
+      "key": "Could reverse it: pre period could not be checked: no pre-period interval or platform check.",
+      "reader": "The document recommends **Escalate**. Successful Search Rate rose +0.31% (95% interval +0.13% to +0.49%), which is real but below the 0.50% bar. The test finished (day 14 of 14, 1,000,000 users per arm), and the call goes to triage as a trade-off. Decide at triage whether to ship at +0.31% despite missing the 0.50% bar. The call becomes Ship if the owner accepts a lower bar or the review decides to ship anyway. +0.31% change in Successful Search Rate (interval +0.13% to +0.49%). The pre-period check and the novelty check could not run, so the result could be unreliable and the document says it could reverse the call. The mechanism is also unknown; no segment (mobile, desktop, head or tail queries) has an interval that excludes zero.",
+      "got": true,
+      "how": "overlap 50%"
+    }
+  ],
+  "lost": "",
+  "question": "Where does the 0.50% bar come from, and would the owner accept +0.31% if the pre-period check cannot be run before triage?",
+  "replies": {
+    "skim": "1. Answer: Escalate. Successful Search Rate improved +0.31% (95% interval +0.13% to +0.49%), which is real but below the 0.50% bar. The guardrails stayed within margin, but the pre-period check could not run.\n2. Decision: Decide the trade-off at triage: ship only if the owner accepts a bar below 0.50% or the review judges +0.31% worth shipping anyway. Otherwise, don't ship.\n3. Number: +0.31% (change in Successful Search Rate, against a 0.50% bar).\n",
+    "full": "1. **Answer:** The document recommends **Escalate**. Successful Search Rate rose +0.31% (95% interval +0.13% to +0.49%), which is real but below the 0.50% bar. The test finished (day 14 of 14, 1,000,000 users per arm), and the call goes to triage as a trade-off.\n\n2. **Decision:** Decide at triage whether to ship at +0.31% despite missing the 0.50% bar. The call becomes Ship if the owner accepts a lower bar or the review decides to ship anyway.\n\n3. **Number:** +0.31% change in Successful Search Rate (interval +0.13% to +0.49%).\n\n4. **Caveat:** The pre-period check and the novelty check could not run, so the result could be unreliable and the document says it could reverse the call. The mechanism is also unknown; no segment (mobile, desktop, head or tail queries) has an interval that excludes zero.\n\n5. **Lost:**\n   - The bar of 0.50% has no stated source (\"unclear\").\n   - The Appendix says \"harm inside a margin goes to escalate,\" which I had to reread. All guardrails are within margin, so it's unclear why harm rules apply here.\n   - The \"Ship\" path depends on an owner or review decision with no named owner (\"unclear\").\n\n6. **Question:** Where does the 0.50% bar come from, and would the owner accept +0.31% if the pre-period check cannot be run before triage?\n"
+  }
+}

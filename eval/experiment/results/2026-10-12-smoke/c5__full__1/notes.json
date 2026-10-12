@@ -1,0 +1,8 @@
+{"why_it_moved":[
+{"text":"No segment cuts or daily series were available, so the mechanism behind the successful-search lift is not known.","label":"guess"},
+{"text":"Allocation was cut in half on 2026-09-16, so results mix users exposed before and after that edit.","label":"measured"}],
+"would_change":[
+"A re-run, or an analysis limited to days after the 2026-09-16 edit, that shows the lift holds on a stable allocation.",
+"A daily series by days since first exposure, to check the lift is not fading and the early cohort is not driving it.",
+"Even then the lower end of the primary interval sits under the 0.5% bar, so a clean result may still only escalate."],
+"analyst_view":null}

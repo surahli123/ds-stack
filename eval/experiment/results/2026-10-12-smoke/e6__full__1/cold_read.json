@@ -1,0 +1,53 @@
+{
+  "pass": false,
+  "skim": "2/2",
+  "full": "2/3",
+  "items": [
+    {
+      "pass": "skim",
+      "item": "answer",
+      "key": "Ship: Queries per User improved +2.40% (+1.50% to +3.30%), which clears the 1.00% bar and every guardrail held.",
+      "reader": "Ship. Queries per User is up +2.40% (95% interval +1.50% to +3.30%), clearing the 1.00% bar with guardrails held. The pre-period and novelty checks could not run, so the result is not fully verified. Do not approve the full launch yet. Approve the launch only after the pre-period check is run, and address the config's primary metric (Successful Search Rate, -0.35%, interval -0.75% to +0.05%), which did not improve. Reformulation Rate rose +5.10%, so users may be re-searching because results miss. The analyst's view is Escalate.",
+      "got": true,
+      "how": "overlap 71%"
+    },
+    {
+      "pass": "skim",
+      "item": "decision",
+      "key": "Approve the launch to all traffic.",
+      "reader": "Do not approve the full launch yet. Approve the launch only after the pre-period check is run, and address the config's primary metric (Successful Search Rate, -0.35%, interval -0.75% to +0.05%), which did not improve. Reformulation Rate rose +5.10%, so users may be re-searching because results miss. The analyst's view is Escalate. Ship. Queries per User is up +2.40% (95% interval +1.50% to +3.30%), clearing the 1.00% bar with guardrails held. The pre-period and novelty checks could not run, so the result is not fully verified.",
+      "got": true,
+      "how": "overlap 67%"
+    },
+    {
+      "pass": "full",
+      "item": "takeaway 1",
+      "key": "Queries per User +2.40% (+1.50% to +3.30%) against at least 1.00%.",
+      "reader": "The document recommends **Ship**: Queries per User rose +2.40% (95% CI +1.50% to +3.30%), above the 1.00% bar, with guardrails held. The test is finished (day 14 of 14, 1,000,000 users per arm). But the analyst's view is **Escalate**, so the document disagrees with itself. Don't approve the full launch yet. Escalate. Get owner sign-off on the primary metric, since the config's hypothesis metric, Successful Search Rate, moved -0.35% (CI -0.75% to +0.05%) and did not improve. Check whether the extra queries are retries, since Reformulation Rate rose +5.10%. Run the pre-period and novelty checks, which could not run. Successful Search Rate at **-0.35%** (CI -0.75% to +0.05%). It is the config's primary, and it is the number that conflicts with the Ship call. The headline +2.40% Queries per User is the number the Ship call rests on. The gain may be a worse experience. More queries came with more reformulations, and the config's own success metric did not improve. The pre-period and novelty checks could not run, so bias from timing or novelty is not ruled out.",
+      "got": true,
+      "how": "overlap 78%"
+    },
+    {
+      "pass": "full",
+      "item": "takeaway 2",
+      "key": "Approve the launch to all traffic.",
+      "reader": "The document recommends **Ship**: Queries per User rose +2.40% (95% CI +1.50% to +3.30%), above the 1.00% bar, with guardrails held. The test is finished (day 14 of 14, 1,000,000 users per arm). But the analyst's view is **Escalate**, so the document disagrees with itself. Don't approve the full launch yet. Escalate. Get owner sign-off on the primary metric, since the config's hypothesis metric, Successful Search Rate, moved -0.35% (CI -0.75% to +0.05%) and did not improve. Check whether the extra queries are retries, since Reformulation Rate rose +5.10%. Run the pre-period and novelty checks, which could not run. Successful Search Rate at **-0.35%** (CI -0.75% to +0.05%). It is the config's primary, and it is the number that conflicts with the Ship call. The headline +2.40% Queries per User is the number the Ship call rests on. The gain may be a worse experience. More queries came with more reformulations, and the config's own success metric did not improve. The pre-period and novelty checks could not run, so bias from timing or novelty is not ruled out.",
+      "got": true,
+      "how": "overlap 67%"
+    },
+    {
+      "pass": "full",
+      "item": "takeaway 3",
+      "key": "Could reverse it: pre period could not be checked: no pre-period interval or platform check.",
+      "reader": "The document recommends **Ship**: Queries per User rose +2.40% (95% CI +1.50% to +3.30%), above the 1.00% bar, with guardrails held. The test is finished (day 14 of 14, 1,000,000 users per arm). But the analyst's view is **Escalate**, so the document disagrees with itself. Don't approve the full launch yet. Escalate. Get owner sign-off on the primary metric, since the config's hypothesis metric, Successful Search Rate, moved -0.35% (CI -0.75% to +0.05%) and did not improve. Check whether the extra queries are retries, since Reformulation Rate rose +5.10%. Run the pre-period and novelty checks, which could not run. Successful Search Rate at **-0.35%** (CI -0.75% to +0.05%). It is the config's primary, and it is the number that conflicts with the Ship call. The headline +2.40% Queries per User is the number the Ship call rests on. The gain may be a worse experience. More queries came with more reformulations, and the config's own success metric did not improve. The pre-period and novelty checks could not run, so bias from timing or novelty is not ruled out.",
+      "got": false,
+      "how": "overlap 25%"
+    }
+  ],
+  "lost": "Yes. The Ship headline and the Escalate analyst view conflict. It is also unclear whether Queries per User is the pre-registered primary; the document says the file lacks owner sign-off. The guardrail row has a blank \"Bar\" cell. The \"Could reverse it\" line says the pre period could not be checked, but the \"Checks\" line says \"scorecard pass,\" which is harder to interpret.",
+  "question": "Which metric was pre-registered as the decision metric, Queries per User or Successful Search Rate, and does the owner sign off on it?",
+  "replies": {
+    "skim": "1. Answer: Ship. Queries per User is up +2.40% (95% interval +1.50% to +3.30%), clearing the 1.00% bar with guardrails held. The pre-period and novelty checks could not run, so the result is not fully verified.\n\n2. Decision: Do not approve the full launch yet. Approve the launch only after the pre-period check is run, and address the config's primary metric (Successful Search Rate, -0.35%, interval -0.75% to +0.05%), which did not improve. Reformulation Rate rose +5.10%, so users may be re-searching because results miss. The analyst's view is Escalate.\n\n3. Number: Queries per User, +2.40% (relative change, 95% interval +1.50% to +3.30%).\n",
+    "full": "1. **Answer:** The document recommends **Ship**: Queries per User rose +2.40% (95% CI +1.50% to +3.30%), above the 1.00% bar, with guardrails held. The test is finished (day 14 of 14, 1,000,000 users per arm). But the analyst's view is **Escalate**, so the document disagrees with itself.\n\n2. **Decision:** Don't approve the full launch yet. Escalate. Get owner sign-off on the primary metric, since the config's hypothesis metric, Successful Search Rate, moved -0.35% (CI -0.75% to +0.05%) and did not improve. Check whether the extra queries are retries, since Reformulation Rate rose +5.10%. Run the pre-period and novelty checks, which could not run.\n\n3. **Number:** Successful Search Rate at **-0.35%** (CI -0.75% to +0.05%). It is the config's primary, and it is the number that conflicts with the Ship call. The headline +2.40% Queries per User is the number the Ship call rests on.\n\n4. **Caveat:** The gain may be a worse experience. More queries came with more reformulations, and the config's own success metric did not improve. The pre-period and novelty checks could not run, so bias from timing or novelty is not ruled out.\n\n5. **Lost:** Yes. The Ship headline and the Escalate analyst view conflict. It is also unclear whether Queries per User is the pre-registered primary; the document says the file lacks owner sign-off. The guardrail row has a blank \"Bar\" cell. The \"Could reverse it\" line says the pre period could not be checked, but the \"Checks\" line says \"scorecard pass,\" which is harder to interpret.\n\n6. **Question:** Which metric was pre-registered as the decision metric, Queries per User or Successful Search Rate, and does the owner sign off on it?\n"
+  }
+}

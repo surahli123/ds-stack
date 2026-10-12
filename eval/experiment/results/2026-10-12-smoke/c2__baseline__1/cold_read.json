@@ -1,0 +1,53 @@
+{
+  "pass": false,
+  "skim": "0/2",
+  "full": "1/3",
+  "items": [
+    {
+      "pass": "skim",
+      "item": "answer",
+      "key": "Can't tell: Parameters changed that the test didn't intend: {'Test': ['snippet_length']}. No launch decision from this data until it's fixed.",
+      "reader": "Don't ship Ranker v7. Successful Search Rate rose 0.334 points, below the pre-registered 0.5-point bar, and the CI's upper end (0.4985) is also just under it. Don't launch v7 as it stands. The text doesn't say what the next step is, so the follow-up is unclear.",
+      "got": false,
+      "how": "overlap 8%"
+    },
+    {
+      "pass": "skim",
+      "item": "decision",
+      "key": "Agree to fix the test and rerun; no launch decision from this data.",
+      "reader": "Don't launch v7 as it stands. The text doesn't say what the next step is, so the follow-up is unclear. Don't ship Ranker v7. Successful Search Rate rose 0.334 points, below the pre-registered 0.5-point bar, and the CI's upper end (0.4985) is also just under it.",
+      "got": false,
+      "how": "overlap 14%"
+    },
+    {
+      "pass": "full",
+      "item": "takeaway 1",
+      "key": "Parameters changed that the test didn't intend: {'Test': ['snippet_length']}",
+      "reader": "The readout recommends not shipping Ranker v7. Successful Search Rate rose 0.334 points (95% CI 0.169 to 0.499), below the pre-registered 0.5-point bar. The test arm also changed `snippet_length` from 160 to 220, which the pre-registration doesn't list, so the lift mixes the ranker and the snippets. Handover state: the decision is made and the readout is written to `readout.md`. The recommended rerun has not started. Don't ship v7. Rerun with only `ranker_model` changed. The document says shipping at about +0.3 points would be a business call made explicitly against the pre-registration, and it doesn't recommend that. +0.334 points of Successful Search Rate, against the 0.5-point bar. The CI's upper bound is 0.499, so even the top of the interval misses the bar. The `snippet_length` change in the test arm. The lift can't be attributed to the ranker alone, and the audit log is empty, so who made the change and when is unknown. The roughly 50 exploratory segment metrics, where a few were nominally significant, are a smaller risk.",
+      "got": true,
+      "how": "overlap 50%"
+    },
+    {
+      "pass": "full",
+      "item": "takeaway 2",
+      "key": "Agree to fix the test and rerun; no launch decision from this data.",
+      "reader": "The readout recommends not shipping Ranker v7. Successful Search Rate rose 0.334 points (95% CI 0.169 to 0.499), below the pre-registered 0.5-point bar. The test arm also changed `snippet_length` from 160 to 220, which the pre-registration doesn't list, so the lift mixes the ranker and the snippets. Handover state: the decision is made and the readout is written to `readout.md`. The recommended rerun has not started. Don't ship v7. Rerun with only `ranker_model` changed. The document says shipping at about +0.3 points would be a business call made explicitly against the pre-registration, and it doesn't recommend that. +0.334 points of Successful Search Rate, against the 0.5-point bar. The CI's upper bound is 0.499, so even the top of the interval misses the bar. The `snippet_length` change in the test arm. The lift can't be attributed to the ranker alone, and the audit log is empty, so who made the change and when is unknown. The roughly 50 exploratory segment metrics, where a few were nominally significant, are a smaller risk.",
+      "got": false,
+      "how": "overlap 43%"
+    },
+    {
+      "pass": "full",
+      "item": "takeaway 3",
+      "key": "Could reverse it: fixing the config params problem and rerunning.",
+      "reader": "The readout recommends not shipping Ranker v7. Successful Search Rate rose 0.334 points (95% CI 0.169 to 0.499), below the pre-registered 0.5-point bar. The test arm also changed `snippet_length` from 160 to 220, which the pre-registration doesn't list, so the lift mixes the ranker and the snippets. Handover state: the decision is made and the readout is written to `readout.md`. The recommended rerun has not started. Don't ship v7. Rerun with only `ranker_model` changed. The document says shipping at about +0.3 points would be a business call made explicitly against the pre-registration, and it doesn't recommend that. +0.334 points of Successful Search Rate, against the 0.5-point bar. The CI's upper bound is 0.499, so even the top of the interval misses the bar. The `snippet_length` change in the test arm. The lift can't be attributed to the ranker alone, and the audit log is empty, so who made the change and when is unknown. The roughly 50 exploratory segment metrics, where a few were nominally significant, are a smaller risk.",
+      "got": false,
+      "how": "overlap 0%"
+    }
+  ],
+  "lost": "Nowhere. The one gap is that the document doesn't explain why the test ran with 1.0M users per arm against 900k planned. That's unexplained, not confusing.",
+  "question": "Who changed `snippet_length` from 160 to 220 in the test arm, and when? Until that is known, the lift can't be credited to the ranker.",
+  "replies": {
+    "skim": "1. **Answer:** Don't ship Ranker v7. Successful Search Rate rose 0.334 points, below the pre-registered 0.5-point bar, and the CI's upper end (0.4985) is also just under it.\n2. **Decision:** Don't launch v7 as it stands. The text doesn't say what the next step is, so the follow-up is unclear.\n3. **Number:** Successful Search Rate lift of 0.334 points (target 0.5 points).\n",
+    "full": "1. **Answer:** The readout recommends not shipping Ranker v7. Successful Search Rate rose 0.334 points (95% CI 0.169 to 0.499), below the pre-registered 0.5-point bar. The test arm also changed `snippet_length` from 160 to 220, which the pre-registration doesn't list, so the lift mixes the ranker and the snippets. Handover state: the decision is made and the readout is written to `readout.md`. The recommended rerun has not started.\n\n2. **Decision:** Don't ship v7. Rerun with only `ranker_model` changed. The document says shipping at about +0.3 points would be a business call made explicitly against the pre-registration, and it doesn't recommend that.\n\n3. **Number:** +0.334 points of Successful Search Rate, against the 0.5-point bar. The CI's upper bound is 0.499, so even the top of the interval misses the bar.\n\n4. **Caveat:** The `snippet_length` change in the test arm. The lift can't be attributed to the ranker alone, and the audit log is empty, so who made the change and when is unknown. The roughly 50 exploratory segment metrics, where a few were nominally significant, are a smaller risk.\n\n5. **Lost:** Nowhere. The one gap is that the document doesn't explain why the test ran with 1.0M users per arm against 900k planned. That's unexplained, not confusing.\n\n6. **Question:** Who changed `snippet_length` from 160 to 220 in the test arm, and when? Until that is known, the lift can't be credited to the ranker.\n"
+  }
+}

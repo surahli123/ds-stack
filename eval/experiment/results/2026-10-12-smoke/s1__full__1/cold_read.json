@@ -1,0 +1,53 @@
+{
+  "pass": true,
+  "skim": "2/2",
+  "full": "3/3",
+  "items": [
+    {
+      "pass": "skim",
+      "item": "answer",
+      "key": "Ship: Successful Search Rate improved +0.81% (+0.41% to +1.21%), which clears the 0.50% bar and every guardrail held.",
+      "reader": "The document recommends shipping. Primary metric Successful Search Rate is up +0.81% (95% CI +0.41% to +1.21%), clearing the 0.50% bar, and all guardrails held. Approve the launch to all traffic, since the 14-day test ran past its planned sample and the effect is positive. Before or alongside launch, note the unchecked pre-period and novelty checks, and get the daily series so you can rule out a fading effect.",
+      "got": true,
+      "how": "overlap 64%"
+    },
+    {
+      "pass": "skim",
+      "item": "decision",
+      "key": "Approve the launch to all traffic.",
+      "reader": "Approve the launch to all traffic, since the 14-day test ran past its planned sample and the effect is positive. Before or alongside launch, note the unchecked pre-period and novelty checks, and get the daily series so you can rule out a fading effect. The document recommends shipping. Primary metric Successful Search Rate is up +0.81% (95% CI +0.41% to +1.21%), clearing the 0.50% bar, and all guardrails held.",
+      "got": true,
+      "how": "overlap 100%"
+    },
+    {
+      "pass": "full",
+      "item": "takeaway 1",
+      "key": "Successful Search Rate +0.81% (+0.41% to +1.21%) against at least 0.50%.",
+      "reader": "The document recommends shipping. The test ran its full planned 14 days with 1,000,000 users per arm, and the primary metric, Successful Search Rate, rose +0.81% (95% interval +0.41% to +1.21%). Current state: the experiment is complete, and the launch to all traffic is awaiting approval. Approve the launch to all traffic, but first settle whether the 0.50% bar applies to the point estimate (+0.81%, which clears it) or the lower interval bound (+0.41%, which does not). If the bar means the lower bound, the document's own rule calls for Escalate, not Ship. Ask the author for the pre-exposure check and daily series if they can be produced quickly, since both could change the call. +0.81% change in Successful Search Rate, 95% interval +0.41% to +1.21%. The document doesn't say whether this is relative or percentage points. The pre-period check and novelty check did not run, and there is no daily series. So the document can't rule out that the arms already differed before the test, or that the effect fades after first exposure. The mechanism is only a guess (the ranker model change).",
+      "got": true,
+      "how": "overlap 78%"
+    },
+    {
+      "pass": "full",
+      "item": "takeaway 2",
+      "key": "Approve the launch to all traffic.",
+      "reader": "The document recommends shipping. The test ran its full planned 14 days with 1,000,000 users per arm, and the primary metric, Successful Search Rate, rose +0.81% (95% interval +0.41% to +1.21%). Current state: the experiment is complete, and the launch to all traffic is awaiting approval. Approve the launch to all traffic, but first settle whether the 0.50% bar applies to the point estimate (+0.81%, which clears it) or the lower interval bound (+0.41%, which does not). If the bar means the lower bound, the document's own rule calls for Escalate, not Ship. Ask the author for the pre-exposure check and daily series if they can be produced quickly, since both could change the call. +0.81% change in Successful Search Rate, 95% interval +0.41% to +1.21%. The document doesn't say whether this is relative or percentage points. The pre-period check and novelty check did not run, and there is no daily series. So the document can't rule out that the arms already differed before the test, or that the effect fades after first exposure. The mechanism is only a guess (the ranker model change).",
+      "got": true,
+      "how": "overlap 100%"
+    },
+    {
+      "pass": "full",
+      "item": "takeaway 3",
+      "key": "Could reverse it: pre period could not be checked: no pre-period interval or platform check.",
+      "reader": "The document recommends shipping. The test ran its full planned 14 days with 1,000,000 users per arm, and the primary metric, Successful Search Rate, rose +0.81% (95% interval +0.41% to +1.21%). Current state: the experiment is complete, and the launch to all traffic is awaiting approval. Approve the launch to all traffic, but first settle whether the 0.50% bar applies to the point estimate (+0.81%, which clears it) or the lower interval bound (+0.41%, which does not). If the bar means the lower bound, the document's own rule calls for Escalate, not Ship. Ask the author for the pre-exposure check and daily series if they can be produced quickly, since both could change the call. +0.81% change in Successful Search Rate, 95% interval +0.41% to +1.21%. The document doesn't say whether this is relative or percentage points. The pre-period check and novelty check did not run, and there is no daily series. So the document can't rule out that the arms already differed before the test, or that the effect fades after first exposure. The mechanism is only a guess (the ranker model change).",
+      "got": true,
+      "how": "overlap 38%; grader: same fact"
+    }
+  ],
+  "lost": "I had to reread the bar criteria. \"Bar: at least 0.50%\" and the \"What would change the call\" section (the lower-bound condition) point in different directions, and it's unclear which governs. The \"Could reverse it\" line and the 0.81% unit also weren't clear on first read.",
+  "question": "Does the 0.50% bar apply to the point estimate or to the lower end of the interval, and can you run the pre-period comparison and daily-exposure series before launch?",
+  "replies": {
+    "skim": "1. Answer: The document recommends shipping. Primary metric Successful Search Rate is up +0.81% (95% CI +0.41% to +1.21%), clearing the 0.50% bar, and all guardrails held.\n\n2. Decision: Approve the launch to all traffic, since the 14-day test ran past its planned sample and the effect is positive. Before or alongside launch, note the unchecked pre-period and novelty checks, and get the daily series so you can rule out a fading effect.\n\n3. Number: +0.81% (Successful Search Rate, relative change, 95% CI +0.41% to +1.21%).\n",
+    "full": "1. **Answer:** The document recommends shipping. The test ran its full planned 14 days with 1,000,000 users per arm, and the primary metric, Successful Search Rate, rose +0.81% (95% interval +0.41% to +1.21%). Current state: the experiment is complete, and the launch to all traffic is awaiting approval.\n\n2. **Decision:** Approve the launch to all traffic, but first settle whether the 0.50% bar applies to the point estimate (+0.81%, which clears it) or the lower interval bound (+0.41%, which does not). If the bar means the lower bound, the document's own rule calls for Escalate, not Ship. Ask the author for the pre-exposure check and daily series if they can be produced quickly, since both could change the call.\n\n3. **Number:** +0.81% change in Successful Search Rate, 95% interval +0.41% to +1.21%. The document doesn't say whether this is relative or percentage points.\n\n4. **Caveat:** The pre-period check and novelty check did not run, and there is no daily series. So the document can't rule out that the arms already differed before the test, or that the effect fades after first exposure. The mechanism is only a guess (the ranker model change).\n\n5. **Lost:** I had to reread the bar criteria. \"Bar: at least 0.50%\" and the \"What would change the call\" section (the lower-bound condition) point in different directions, and it's unclear which governs. The \"Could reverse it\" line and the 0.81% unit also weren't clear on first read.\n\n6. **Question:** Does the 0.50% bar apply to the point estimate or to the lower end of the interval, and can you run the pre-period comparison and daily-exposure series before launch?\n"
+  }
+}

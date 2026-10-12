@@ -1,0 +1,53 @@
+{
+  "pass": false,
+  "skim": "0/2",
+  "full": "0/3",
+  "items": [
+    {
+      "pass": "skim",
+      "item": "answer",
+      "key": "Can't tell, decided by scorecard.",
+      "reader": "Ship Ranker v7. Successful Search Rate rose 0.81% relative (+0.33 pp), meeting the pre-registered point-estimate bar, and all four guardrails hold at the worst end of their CIs. Launch Ranker v7, after confirming the \"Assumption to confirm\" the text cuts off before naming. The CI's lower bound (+0.41%) sits below the +0.5% bar, so the launch rests on the point estimate.",
+      "got": false,
+      "how": "overlap 0%"
+    },
+    {
+      "pass": "skim",
+      "item": "decision",
+      "key": "Agree to fix the test and rerun; no launch decision from this data.",
+      "reader": "Launch Ranker v7, after confirming the \"Assumption to confirm\" the text cuts off before naming. The CI's lower bound (+0.41%) sits below the +0.5% bar, so the launch rests on the point estimate. Ship Ranker v7. Successful Search Rate rose 0.81% relative (+0.33 pp), meeting the pre-registered point-estimate bar, and all four guardrails hold at the worst end of their CIs.",
+      "got": false,
+      "how": "overlap 14%"
+    },
+    {
+      "pass": "full",
+      "item": "takeaway 1",
+      "key": "9 scorecard values don't add up. First: Successful Search Rate: relative 8.1e-05 x control 0.412 = 3.3372e-05 but the absolute change is 0.0033372; is a...",
+      "reader": "The document recommends shipping Ranker v7. The primary metric, Successful Search Rate, is up 0.81% relative (+0.33 pp). That meets the point-estimate bar of +0.5%, though the 95% CI's lower end (+0.41%) is below it. All four guardrails stay inside margin at the CI's worst end, and the validity checks pass. **Current state:** the experiment still shows as active, and the Pulse snapshot is from 2026-09-25. Ship, conditional on two things. First, confirm the bar and margins were meant as relative changes. If the 0.5% bar was absolute (0.5 pp), the +0.33 pp result misses it. Second, refresh Pulse before the review. After launch, monitor Clicks per User (down 1.2%) and Desktop Successful Search Rate (down 1.3%). Successful Search Rate, +0.81% relative (+0.33 pp absolute), with a 95% CI of +0.41% to +1.21%. The win is small, and it clears the pre-registered bar only on the point estimate. The CI includes values below the bar. The relative-versus-absolute reading of the bar is also an open question. The document also flags that the two negative secondary signals (Clicks per User and Desktop SSR) don't line up with the primary win, and that the Desktop result doesn't survive multiple-comparison correction.",
+      "got": false,
+      "how": "overlap 0%"
+    },
+    {
+      "pass": "full",
+      "item": "takeaway 2",
+      "key": "Agree to fix the test and rerun; no launch decision from this data.",
+      "reader": "The document recommends shipping Ranker v7. The primary metric, Successful Search Rate, is up 0.81% relative (+0.33 pp). That meets the point-estimate bar of +0.5%, though the 95% CI's lower end (+0.41%) is below it. All four guardrails stay inside margin at the CI's worst end, and the validity checks pass. **Current state:** the experiment still shows as active, and the Pulse snapshot is from 2026-09-25. Ship, conditional on two things. First, confirm the bar and margins were meant as relative changes. If the 0.5% bar was absolute (0.5 pp), the +0.33 pp result misses it. Second, refresh Pulse before the review. After launch, monitor Clicks per User (down 1.2%) and Desktop Successful Search Rate (down 1.3%). Successful Search Rate, +0.81% relative (+0.33 pp absolute), with a 95% CI of +0.41% to +1.21%. The win is small, and it clears the pre-registered bar only on the point estimate. The CI includes values below the bar. The relative-versus-absolute reading of the bar is also an open question. The document also flags that the two negative secondary signals (Clicks per User and Desktop SSR) don't line up with the primary win, and that the Desktop result doesn't survive multiple-comparison correction.",
+      "got": false,
+      "how": "overlap 14%"
+    },
+    {
+      "pass": "full",
+      "item": "takeaway 3",
+      "key": "Could reverse it: fixing the scorecard problem and rerunning.",
+      "reader": "The document recommends shipping Ranker v7. The primary metric, Successful Search Rate, is up 0.81% relative (+0.33 pp). That meets the point-estimate bar of +0.5%, though the 95% CI's lower end (+0.41%) is below it. All four guardrails stay inside margin at the CI's worst end, and the validity checks pass. **Current state:** the experiment still shows as active, and the Pulse snapshot is from 2026-09-25. Ship, conditional on two things. First, confirm the bar and margins were meant as relative changes. If the 0.5% bar was absolute (0.5 pp), the +0.33 pp result misses it. Second, refresh Pulse before the review. After launch, monitor Clicks per User (down 1.2%) and Desktop Successful Search Rate (down 1.3%). Successful Search Rate, +0.81% relative (+0.33 pp absolute), with a 95% CI of +0.41% to +1.21%. The win is small, and it clears the pre-registered bar only on the point estimate. The CI includes values below the bar. The relative-versus-absolute reading of the bar is also an open question. The document also flags that the two negative secondary signals (Clicks per User and Desktop SSR) don't line up with the primary win, and that the Desktop result doesn't survive multiple-comparison correction.",
+      "got": false,
+      "how": "overlap 0%"
+    }
+  ],
+  "lost": "Nowhere in the document itself. The one thing I had to work out was whether the bar is relative or absolute, and the document raises that point itself. \"Pulse\" is never defined, so I'm unclear what it is or where its snapshot comes from.",
+  "question": "Was the bar meant as relative, and was the rule that only the point estimate has to clear it written into the pre-registration before the data came in?",
+  "replies": {
+    "skim": "1. Answer: Ship Ranker v7. Successful Search Rate rose 0.81% relative (+0.33 pp), meeting the pre-registered point-estimate bar, and all four guardrails hold at the worst end of their CIs.\n2. Decision: Launch Ranker v7, after confirming the \"Assumption to confirm\" the text cuts off before naming. The CI's lower bound (+0.41%) sits below the +0.5% bar, so the launch rests on the point estimate.\n3. Number: +0.81% relative (+0.33 pp) lift in Successful Search Rate.\n",
+    "full": "1. **Answer:** The document recommends shipping Ranker v7. The primary metric, Successful Search Rate, is up 0.81% relative (+0.33 pp). That meets the point-estimate bar of +0.5%, though the 95% CI's lower end (+0.41%) is below it. All four guardrails stay inside margin at the CI's worst end, and the validity checks pass. **Current state:** the experiment still shows as active, and the Pulse snapshot is from 2026-09-25.\n\n2. **Decision:** Ship, conditional on two things. First, confirm the bar and margins were meant as relative changes. If the 0.5% bar was absolute (0.5 pp), the +0.33 pp result misses it. Second, refresh Pulse before the review. After launch, monitor Clicks per User (down 1.2%) and Desktop Successful Search Rate (down 1.3%).\n\n3. **Number:** Successful Search Rate, +0.81% relative (+0.33 pp absolute), with a 95% CI of +0.41% to +1.21%.\n\n4. **Caveat:** The win is small, and it clears the pre-registered bar only on the point estimate. The CI includes values below the bar. The relative-versus-absolute reading of the bar is also an open question. The document also flags that the two negative secondary signals (Clicks per User and Desktop SSR) don't line up with the primary win, and that the Desktop result doesn't survive multiple-comparison correction.\n\n5. **Lost:** Nowhere in the document itself. The one thing I had to work out was whether the bar is relative or absolute, and the document raises that point itself. \"Pulse\" is never defined, so I'm unclear what it is or where its snapshot comes from.\n\n6. **Question:** Was the bar meant as relative, and was the rule that only the point estimate has to clear it written into the pre-registration before the data came in?\n"
+  }
+}

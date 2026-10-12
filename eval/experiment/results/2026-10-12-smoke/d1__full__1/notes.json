@@ -1,0 +1,7 @@
+{"why_it_moved":[
+{"text":"Successful Search Rate rose +0.81% while Latency p95 (ms) rose +3.10%, so the new ranker helps result quality but is slower to respond.","label":"measured"},
+{"text":"The slowdown plausibly comes from the heavier lambdamart_v7 model scoring each query; no segment cuts were read to confirm.","label":"guess"}],
+"would_change":[
+"A serving fix or caching change that brings Latency p95 (ms) back inside its 2.00% margin, retested on the same plan.",
+"The owners formally widening the latency margin, which would turn this into a trade-off for triage."],
+"analyst_view":null}
