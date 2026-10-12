@@ -71,8 +71,19 @@ def scorecard_invariants(metrics, analysis):
         if rel is not None and abs(rel) > 5:
             problems.append(f"{name}: a relative change of {rel:g} looks like percent read as a fraction")
     if problems:
-        return result("scorecard", FAIL, f"{len(problems)} scorecard values don't add up. First: " + problems[0],
-                      problems=problems)
+        ratio = None
+        for m in metrics:
+            c, rel, ab = m.get("control_mean"), m.get("rel_delta"), m.get("abs_delta")
+            if c and rel and ab:
+                ratio = ab / (rel * c)
+                break
+        if ratio and (abs(ratio) > 20 or abs(ratio) < 0.05):
+            factor = round(abs(ratio)) if abs(ratio) > 1 else round(1 / abs(ratio))
+            summary = (f"the scorecard's relative and absolute changes disagree by about {factor} times, so a percent "
+                       "column was probably read as a fraction or the reverse")
+        else:
+            summary = f"{len(problems)} scorecard values don't add up, starting with {problems[0].split(':')[0]}"
+        return result("scorecard", FAIL, summary, problems=problems)
     if metrics and not checkable:
         return result("scorecard", COULD_NOT_RUN, "the export has no control means next to its changes, so a percent "
                       "column read as a fraction (or the reverse) can't be caught")
