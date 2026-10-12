@@ -1,21 +1,21 @@
 {
-  "pass": true,
+  "pass": false,
   "skim": "2/2",
-  "full": "3/3",
+  "full": "2/3",
   "items": [
     {
       "pass": "skim",
       "item": "answer",
       "key": "Can't tell, decided by config edits.",
-      "reader": "Can't tell. The test's allocation was edited mid-flight on 2026-09-16 (20% to 10%), so the results mix pre- and post-change days and no launch call can be made from them. Agree to fix the test configuration and rerun on a window that starts after the allocation change, or with allocation held fixed for the whole test. No launch decision until then.",
+      "reader": "The test is inconclusive. The allocation was changed mid-flight on 2026-09-16 (20% to 10%), so the results can't be called. Agree to fix the test configuration and rerun on a window after the allocation change, or with allocation held fixed. No launch decision until then.",
       "got": true,
-      "how": "overlap 25%; grader: same fact"
+      "how": "overlap 0%; grader: same fact"
     },
     {
       "pass": "skim",
       "item": "decision",
       "key": "Agree to fix the test and rerun; no launch decision from this data.",
-      "reader": "Agree to fix the test configuration and rerun on a window that starts after the allocation change, or with allocation held fixed for the whole test. No launch decision until then. Can't tell. The test's allocation was edited mid-flight on 2026-09-16 (20% to 10%), so the results mix pre- and post-change days and no launch call can be made from them.",
+      "reader": "Agree to fix the test configuration and rerun on a window after the allocation change, or with allocation held fixed. No launch decision until then. The test is inconclusive. The allocation was changed mid-flight on 2026-09-16 (20% to 10%), so the results can't be called.",
       "got": true,
       "how": "overlap 86%"
     },
@@ -23,7 +23,7 @@
       "pass": "full",
       "item": "takeaway 1",
       "key": "The test was edited mid-flight on 2026-09-16 (Allocation changed from 20% to 10%) and the results include days before and after",
-      "reader": "The document concludes \"Can't tell.\" No launch decision should be made from this data. The test ran to day 14 of 14 with about 1,000,000 users per arm, but its allocation was changed mid-flight on 2026-09-16 (20% to 10%), and the results mix days from before and after that change. Current state: the test is finished but its results are unusable until it is fixed and rerun. Agree to fix the test and rerun it. Either start the analysis window after the 2026-09-16 allocation change, or hold the allocation fixed for the whole test. Until then, no launch decision. Successful Search Rate change of +0.81% (95% interval +0.41% to +1.21%). The bar is at least +0.50%. The unit is \"%\", but the document doesn't say whether that is relative or percentage points. The mid-test allocation change, which makes the comparison invalid as it stands. Also, the fade and pre-period checks were not run, and the mechanism behind the lift is unknown (no segment cuts).",
+      "reader": "The document concludes \"Can't tell.\" The test's allocation changed mid-flight (20% to 10% on 2026-09-16), and the results mix days before and after that change. The test is broken, so no launch decision can be made from this data. Agree to fix the test and rerun it, either on a window that starts after the 2026-09-16 allocation change or with the allocation held fixed for the whole test. Make no launch decision from the current data. +0.81% change in Successful Search Rate (95% interval +0.41% to +1.21%). The bar is at least +0.50%. The config changed mid-test, so the effect can't be trusted. The document also has no segment cuts, so the mechanism is unknown. The pre-period and novelty (fade) checks were not run.",
       "got": true,
       "how": "overlap 85%"
     },
@@ -31,7 +31,7 @@
       "pass": "full",
       "item": "takeaway 2",
       "key": "Agree to fix the test and rerun; no launch decision from this data.",
-      "reader": "The document concludes \"Can't tell.\" No launch decision should be made from this data. The test ran to day 14 of 14 with about 1,000,000 users per arm, but its allocation was changed mid-flight on 2026-09-16 (20% to 10%), and the results mix days from before and after that change. Current state: the test is finished but its results are unusable until it is fixed and rerun. Agree to fix the test and rerun it. Either start the analysis window after the 2026-09-16 allocation change, or hold the allocation fixed for the whole test. Until then, no launch decision. Successful Search Rate change of +0.81% (95% interval +0.41% to +1.21%). The bar is at least +0.50%. The unit is \"%\", but the document doesn't say whether that is relative or percentage points. The mid-test allocation change, which makes the comparison invalid as it stands. Also, the fade and pre-period checks were not run, and the mechanism behind the lift is unknown (no segment cuts).",
+      "reader": "The document concludes \"Can't tell.\" The test's allocation changed mid-flight (20% to 10% on 2026-09-16), and the results mix days before and after that change. The test is broken, so no launch decision can be made from this data. Agree to fix the test and rerun it, either on a window that starts after the 2026-09-16 allocation change or with the allocation held fixed for the whole test. Make no launch decision from the current data. +0.81% change in Successful Search Rate (95% interval +0.41% to +1.21%). The bar is at least +0.50%. The config changed mid-test, so the effect can't be trusted. The document also has no segment cuts, so the mechanism is unknown. The pre-period and novelty (fade) checks were not run.",
       "got": true,
       "how": "overlap 100%"
     },
@@ -39,15 +39,15 @@
       "pass": "full",
       "item": "takeaway 3",
       "key": "Could reverse it: fixing the config edits problem and rerunning.",
-      "reader": "The document concludes \"Can't tell.\" No launch decision should be made from this data. The test ran to day 14 of 14 with about 1,000,000 users per arm, but its allocation was changed mid-flight on 2026-09-16 (20% to 10%), and the results mix days from before and after that change. Current state: the test is finished but its results are unusable until it is fixed and rerun. Agree to fix the test and rerun it. Either start the analysis window after the 2026-09-16 allocation change, or hold the allocation fixed for the whole test. Until then, no launch decision. Successful Search Rate change of +0.81% (95% interval +0.41% to +1.21%). The bar is at least +0.50%. The unit is \"%\", but the document doesn't say whether that is relative or percentage points. The mid-test allocation change, which makes the comparison invalid as it stands. Also, the fade and pre-period checks were not run, and the mechanism behind the lift is unknown (no segment cuts).",
-      "got": true,
-      "how": "overlap 0%; grader: same fact"
+      "reader": "The document concludes \"Can't tell.\" The test's allocation changed mid-flight (20% to 10% on 2026-09-16), and the results mix days before and after that change. The test is broken, so no launch decision can be made from this data. Agree to fix the test and rerun it, either on a window that starts after the 2026-09-16 allocation change or with the allocation held fixed for the whole test. Make no launch decision from the current data. +0.81% change in Successful Search Rate (95% interval +0.41% to +1.21%). The bar is at least +0.50%. The config changed mid-test, so the effect can't be trusted. The document also has no segment cuts, so the mechanism is unknown. The pre-period and novelty (fade) checks were not run.",
+      "got": false,
+      "how": "overlap 17%"
     }
   ],
-  "lost": "Two things. (a) The verdict is \"better,\" but the interval's lower bound (+0.41%) is below the +0.50% bar, so the bar isn't clearly cleared even on this data. That doesn't change the \"Can't tell\" call, but the \"better\" label reads as stronger than the numbers support. (b) \"Could reverse it\" is unclear: it's not stated what \"it\" refers to. Otherwise nowhere.",
-  "question": "Was the 2026-09-16 allocation change applied equally to both arms, and can you export the daily effect split at that date so we can see whether a clean post-change window is large enough to call the result?",
+  "lost": "\"Could reverse it\" is unclear: I can't tell whether \"it\" means the no-launch call or the test. The \"better\" verdict also confused me. The point estimate clears the +0.50% bar, but the interval's lower end (+0.41%) doesn't, so I had to reread to see how the bar applies.",
+  "question": "Does the +0.81% Successful Search Rate result still hold on a rerun window that starts after the 2026-09-16 allocation change?",
   "replies": {
-    "skim": "1. Answer: Can't tell. The test's allocation was edited mid-flight on 2026-09-16 (20% to 10%), so the results mix pre- and post-change days and no launch call can be made from them.\n2. Decision: Agree to fix the test configuration and rerun on a window that starts after the allocation change, or with allocation held fixed for the whole test. No launch decision until then.\n3. Number: +0.81% (95% interval +0.41% to +1.21%) in Successful Search Rate, a relative change in the primary metric. It isn't usable for a launch call while the allocation problem stands.\n",
-    "full": "1. **Answer:** The document concludes \"Can't tell.\" No launch decision should be made from this data. The test ran to day 14 of 14 with about 1,000,000 users per arm, but its allocation was changed mid-flight on 2026-09-16 (20% to 10%), and the results mix days from before and after that change. Current state: the test is finished but its results are unusable until it is fixed and rerun.\n\n2. **Decision:** Agree to fix the test and rerun it. Either start the analysis window after the 2026-09-16 allocation change, or hold the allocation fixed for the whole test. Until then, no launch decision.\n\n3. **Number:** Successful Search Rate change of +0.81% (95% interval +0.41% to +1.21%). The bar is at least +0.50%. The unit is \"%\", but the document doesn't say whether that is relative or percentage points.\n\n4. **Caveat:** The mid-test allocation change, which makes the comparison invalid as it stands. Also, the fade and pre-period checks were not run, and the mechanism behind the lift is unknown (no segment cuts).\n\n5. **Lost:** Two things. (a) The verdict is \"better,\" but the interval's lower bound (+0.41%) is below the +0.50% bar, so the bar isn't clearly cleared even on this data. That doesn't change the \"Can't tell\" call, but the \"better\" label reads as stronger than the numbers support. (b) \"Could reverse it\" is unclear: it's not stated what \"it\" refers to. Otherwise nowhere.\n\n6. **Question:** Was the 2026-09-16 allocation change applied equally to both arms, and can you export the daily effect split at that date so we can see whether a clean post-change window is large enough to call the result?\n"
+    "skim": "1. Answer: The test is inconclusive. The allocation was changed mid-flight on 2026-09-16 (20% to 10%), so the results can't be called.\n2. Decision: Agree to fix the test configuration and rerun on a window after the allocation change, or with allocation held fixed. No launch decision until then.\n3. Number: +0.81% change in Successful Search Rate (95% interval +0.41% to +1.21%), against a bar of at least +0.50%. The number is not usable for a call until the rerun.\n",
+    "full": "1. **Answer:** The document concludes \"Can't tell.\" The test's allocation changed mid-flight (20% to 10% on 2026-09-16), and the results mix days before and after that change. The test is broken, so no launch decision can be made from this data.\n\n2. **Decision:** Agree to fix the test and rerun it, either on a window that starts after the 2026-09-16 allocation change or with the allocation held fixed for the whole test. Make no launch decision from the current data.\n\n3. **Number:** +0.81% change in Successful Search Rate (95% interval +0.41% to +1.21%). The bar is at least +0.50%.\n\n4. **Caveat:** The config changed mid-test, so the effect can't be trusted. The document also has no segment cuts, so the mechanism is unknown. The pre-period and novelty (fade) checks were not run.\n\n5. **Lost:** \"Could reverse it\" is unclear: I can't tell whether \"it\" means the no-launch call or the test. The \"better\" verdict also confused me. The point estimate clears the +0.50% bar, but the interval's lower end (+0.41%) doesn't, so I had to reread to see how the bar applies.\n\n6. **Question:** Does the +0.81% Successful Search Rate result still hold on a rerun window that starts after the 2026-09-16 allocation change?\n"
   }
 }

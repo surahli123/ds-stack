@@ -7,31 +7,31 @@
       "pass": "skim",
       "item": "answer",
       "key": "Don't ship: Successful Search Rate fell 0.62% (-1.02% to -0.22%), the wrong way.",
-      "reader": "Don't ship. Successful Search Rate fell 0.62% (95% interval -1.02% to -0.22%), the wrong way against a bar of at least +0.50%. Agree not to launch, and let the owner decide whether to iterate.",
+      "reader": "Don't ship. Successful Search Rate fell 0.62% (95% interval -1.02% to -0.22%), the wrong direction. Agree not to launch. The owner decides whether to iterate, and only a version that improves Successful Search Rate could reverse this.",
       "got": true,
-      "how": "overlap 100%"
+      "how": "overlap 91%"
     },
     {
       "pass": "skim",
       "item": "decision",
       "key": "Agree not to launch; the owner decides whether to iterate.",
-      "reader": "Agree not to launch, and let the owner decide whether to iterate. Don't ship. Successful Search Rate fell 0.62% (95% interval -1.02% to -0.22%), the wrong way against a bar of at least +0.50%.",
+      "reader": "Agree not to launch. The owner decides whether to iterate, and only a version that improves Successful Search Rate could reverse this. Don't ship. Successful Search Rate fell 0.62% (95% interval -1.02% to -0.22%), the wrong direction.",
       "got": true,
-      "how": "overlap 83%"
+      "how": "overlap 100%"
     },
     {
       "pass": "full",
       "item": "takeaway 1",
       "key": "Successful Search Rate -0.62% (-1.02% to -0.22%) against at least 0.50% higher.",
-      "reader": "The document recommends not launching Ranker v7. Successful Search Rate (the primary metric) fell -0.62% (95% interval -1.02% to -0.22%), against a bar of at least +0.50%. The four guardrails stayed within margin. The test is finished: day 14 of 14, with 1,000,000 users per arm. The owner decides whether to iterate. Agree not to launch. Leave any iteration to the owner. A reopened version would need the primary at or above +0.50% with guardrails inside their margins. The document does not say when or whether the owner will iterate. Successful Search Rate, -0.62%. The unit is unclear: the document doesn't say whether this is a relative change or a percentage-point change. The mechanism is unknown. The \"Why it moved\" line is marked as a guess, and the scorecard has no segment cuts. The pre-period and novelty checks were not run, so it's unclear whether the drop is real or a novelty effect.",
+      "reader": "Don't ship. Successful Search Rate fell 0.62% (95% interval -1.02% to -0.22%), the wrong direction and well short of the +0.50% bar. All four other guardrails stayed within their margins. The test is finished: day 14 of 14, with 1,000,000 users per arm. Agree not to launch. The owner decides whether to iterate. The doc says only a version that improves Successful Search Rate, with guardrails inside their margins, would reopen the question. The -0.62% change in Successful Search Rate, with its interval (-1.02% to -0.22%). The mechanism for the drop is unknown. The doc labels its explanation as a guess, and the scorecard has no segment cuts. The pre-period and novelty checks were not run, so the doc can't rule out problems that existed before exposure.",
       "got": true,
-      "how": "overlap 90%"
+      "how": "overlap 70%"
     },
     {
       "pass": "full",
       "item": "takeaway 2",
       "key": "Agree not to launch; the owner decides whether to iterate.",
-      "reader": "The document recommends not launching Ranker v7. Successful Search Rate (the primary metric) fell -0.62% (95% interval -1.02% to -0.22%), against a bar of at least +0.50%. The four guardrails stayed within margin. The test is finished: day 14 of 14, with 1,000,000 users per arm. The owner decides whether to iterate. Agree not to launch. Leave any iteration to the owner. A reopened version would need the primary at or above +0.50% with guardrails inside their margins. The document does not say when or whether the owner will iterate. Successful Search Rate, -0.62%. The unit is unclear: the document doesn't say whether this is a relative change or a percentage-point change. The mechanism is unknown. The \"Why it moved\" line is marked as a guess, and the scorecard has no segment cuts. The pre-period and novelty checks were not run, so it's unclear whether the drop is real or a novelty effect.",
+      "reader": "Don't ship. Successful Search Rate fell 0.62% (95% interval -1.02% to -0.22%), the wrong direction and well short of the +0.50% bar. All four other guardrails stayed within their margins. The test is finished: day 14 of 14, with 1,000,000 users per arm. Agree not to launch. The owner decides whether to iterate. The doc says only a version that improves Successful Search Rate, with guardrails inside their margins, would reopen the question. The -0.62% change in Successful Search Rate, with its interval (-1.02% to -0.22%). The mechanism for the drop is unknown. The doc labels its explanation as a guess, and the scorecard has no segment cuts. The pre-period and novelty checks were not run, so the doc can't rule out problems that existed before exposure.",
       "got": true,
       "how": "overlap 100%"
     },
@@ -39,15 +39,15 @@
       "pass": "full",
       "item": "takeaway 3",
       "key": "Could reverse it: only a version where Successful Search Rate improves.",
-      "reader": "The document recommends not launching Ranker v7. Successful Search Rate (the primary metric) fell -0.62% (95% interval -1.02% to -0.22%), against a bar of at least +0.50%. The four guardrails stayed within margin. The test is finished: day 14 of 14, with 1,000,000 users per arm. The owner decides whether to iterate. Agree not to launch. Leave any iteration to the owner. A reopened version would need the primary at or above +0.50% with guardrails inside their margins. The document does not say when or whether the owner will iterate. Successful Search Rate, -0.62%. The unit is unclear: the document doesn't say whether this is a relative change or a percentage-point change. The mechanism is unknown. The \"Why it moved\" line is marked as a guess, and the scorecard has no segment cuts. The pre-period and novelty checks were not run, so it's unclear whether the drop is real or a novelty effect.",
+      "reader": "Don't ship. Successful Search Rate fell 0.62% (95% interval -1.02% to -0.22%), the wrong direction and well short of the +0.50% bar. All four other guardrails stayed within their margins. The test is finished: day 14 of 14, with 1,000,000 users per arm. Agree not to launch. The owner decides whether to iterate. The doc says only a version that improves Successful Search Rate, with guardrails inside their margins, would reopen the question. The -0.62% change in Successful Search Rate, with its interval (-1.02% to -0.22%). The mechanism for the drop is unknown. The doc labels its explanation as a guess, and the scorecard has no segment cuts. The pre-period and novelty checks were not run, so the doc can't rule out problems that existed before exposure.",
       "got": true,
-      "how": "overlap 57%"
+      "how": "overlap 86%"
     }
   ],
-  "lost": "Mostly nowhere. The verdict says \"worse,\" but no call label is given. I had to reread the Calls definitions in the appendix to see which call applies, and the document never names it directly.",
-  "question": "Can you run the pre-exposure and novelty checks before closing this? They are the only way to tell whether the -0.62% is a real ranker effect or a novelty artifact, and the document doesn't say whether that data exists.",
+  "lost": "Nowhere major. One small gap: the checks list says \"config edits\" passed, but the doc doesn't say what that check covers.",
+  "question": "Can you run the pre-period check and a daily series by days since first exposure, plus segment cuts, to find where the drop comes from before deciding whether iterating is worth it?",
   "replies": {
-    "skim": "1. Answer: Don't ship. Successful Search Rate fell 0.62% (95% interval -1.02% to -0.22%), the wrong way against a bar of at least +0.50%.\n2. Decision: Agree not to launch, and let the owner decide whether to iterate.\n3. Number: -0.62% (relative change in Successful Search Rate).\n",
-    "full": "1. **Answer:** The document recommends not launching Ranker v7. Successful Search Rate (the primary metric) fell -0.62% (95% interval -1.02% to -0.22%), against a bar of at least +0.50%. The four guardrails stayed within margin. The test is finished: day 14 of 14, with 1,000,000 users per arm. The owner decides whether to iterate.\n\n2. **Decision:** Agree not to launch. Leave any iteration to the owner. A reopened version would need the primary at or above +0.50% with guardrails inside their margins. The document does not say when or whether the owner will iterate.\n\n3. **Number:** Successful Search Rate, -0.62%. The unit is unclear: the document doesn't say whether this is a relative change or a percentage-point change.\n\n4. **Caveat:** The mechanism is unknown. The \"Why it moved\" line is marked as a guess, and the scorecard has no segment cuts. The pre-period and novelty checks were not run, so it's unclear whether the drop is real or a novelty effect.\n\n5. **Lost:** Mostly nowhere. The verdict says \"worse,\" but no call label is given. I had to reread the Calls definitions in the appendix to see which call applies, and the document never names it directly.\n\n6. **Question:** Can you run the pre-exposure and novelty checks before closing this? They are the only way to tell whether the -0.62% is a real ranker effect or a novelty artifact, and the document doesn't say whether that data exists.\n"
+    "skim": "1. Answer: Don't ship. Successful Search Rate fell 0.62% (95% interval -1.02% to -0.22%), the wrong direction.\n2. Decision: Agree not to launch. The owner decides whether to iterate, and only a version that improves Successful Search Rate could reverse this.\n3. Number: -0.62% (change in Successful Search Rate, 95% interval -1.02% to -0.22%).\n",
+    "full": "1. **Answer:** Don't ship. Successful Search Rate fell 0.62% (95% interval -1.02% to -0.22%), the wrong direction and well short of the +0.50% bar. All four other guardrails stayed within their margins. The test is finished: day 14 of 14, with 1,000,000 users per arm.\n\n2. **Decision:** Agree not to launch. The owner decides whether to iterate. The doc says only a version that improves Successful Search Rate, with guardrails inside their margins, would reopen the question.\n\n3. **Number:** The -0.62% change in Successful Search Rate, with its interval (-1.02% to -0.22%).\n\n4. **Caveat:** The mechanism for the drop is unknown. The doc labels its explanation as a guess, and the scorecard has no segment cuts. The pre-period and novelty checks were not run, so the doc can't rule out problems that existed before exposure.\n\n5. **Lost:** Nowhere major. One small gap: the checks list says \"config edits\" passed, but the doc doesn't say what that check covers.\n\n6. **Question:** Can you run the pre-period check and a daily series by days since first exposure, plus segment cuts, to find where the drop comes from before deciding whether iterating is worth it?\n"
   }
 }

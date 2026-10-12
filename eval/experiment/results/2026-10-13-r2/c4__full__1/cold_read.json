@@ -1,13 +1,13 @@
 {
-  "pass": true,
+  "pass": false,
   "skim": "2/2",
-  "full": "3/3",
+  "full": "2/3",
   "items": [
     {
       "pass": "skim",
       "item": "answer",
       "key": "Can't tell, decided by scorecard.",
-      "reader": "Can't tell. The scorecard's relative and absolute changes disagree by about 100x, so the percent column was likely misread, and no launch decision should be made from this data. Agree to fix the scorecard and rerun the test; make no launch call until the rerun is in.",
+      "reader": "Can't tell. The scorecard's relative and absolute changes disagree by about 100 times, so the percent column was probably misread, and the ranker v7 test needs fixing and rerunning before any launch call. Agree to fix the scorecard and rerun the test; make no launch decision from this data.",
       "got": true,
       "how": "overlap 67%"
     },
@@ -15,7 +15,7 @@
       "pass": "skim",
       "item": "decision",
       "key": "Agree to fix the test and rerun; no launch decision from this data.",
-      "reader": "Agree to fix the scorecard and rerun the test; make no launch call until the rerun is in. Can't tell. The scorecard's relative and absolute changes disagree by about 100x, so the percent column was likely misread, and no launch decision should be made from this data.",
+      "reader": "Agree to fix the scorecard and rerun the test; make no launch decision from this data. Can't tell. The scorecard's relative and absolute changes disagree by about 100 times, so the percent column was probably misread, and the ranker v7 test needs fixing and rerunning before any launch call.",
       "got": true,
       "how": "overlap 100%"
     },
@@ -23,7 +23,7 @@
       "pass": "full",
       "item": "takeaway 1",
       "key": "The scorecard's relative and absolute changes disagree by about 100 times, so a percent column was probably read as a fraction or the reverse",
-      "reader": "The document concludes \"Can't tell.\" The scorecard's relative and absolute changes disagree by about 100x, probably because a percent column was read as a fraction or the reverse. Current state: the 14-day test is complete (1,000,000 users per arm, above the planned 900,000), and no launch decision has been made. Agree to fix the scorecard by re-exporting Pulse results with the percent column confirmed, then rerun. Make no launch decision from this data. The document also suggests adding a pre-exposure comparison and a daily series by days since first exposure so the pre-period and novelty checks can run. Successful Search Rate change, +0.01% (95% interval +0.00% to +0.01%), against a bar of at least +0.50%. The unit is percent, but this number is the one the scorecard can't yet be trusted to report. If the 100x error is real, the true effect could be near +1%, which would clear the bar. The document doesn't address that. The percent column is unreliable until re-exported. The pre-period and novelty checks were not run. The mechanism is unknown, and the scorecard has no segment cuts.",
+      "reader": "The review can't reach a launch call. The scorecard's relative and absolute changes disagree by about 100x, probably a percent figure read as a fraction or the reverse. Current state: the test ran 14 of 14 days with 1,000,000 users per arm, but the scorecard check failed. Agree to fix the scorecard, re-export the Pulse results with the percent column confirmed, and rerun. Make no launch decision from this data. Successful Search Rate, +0.01% (95% interval +0.00% to +0.01%), against a bar of at least 0.50%. The number itself is suspect until the export is fixed. The scorecard's percent column may be wrong by 100x, so every change figure is in doubt. The pre-period and novelty checks were not run, and the scorecard has no segment cuts.",
       "got": true,
       "how": "overlap 0%; grader: same fact"
     },
@@ -31,7 +31,7 @@
       "pass": "full",
       "item": "takeaway 2",
       "key": "Agree to fix the test and rerun; no launch decision from this data.",
-      "reader": "The document concludes \"Can't tell.\" The scorecard's relative and absolute changes disagree by about 100x, probably because a percent column was read as a fraction or the reverse. Current state: the 14-day test is complete (1,000,000 users per arm, above the planned 900,000), and no launch decision has been made. Agree to fix the scorecard by re-exporting Pulse results with the percent column confirmed, then rerun. Make no launch decision from this data. The document also suggests adding a pre-exposure comparison and a daily series by days since first exposure so the pre-period and novelty checks can run. Successful Search Rate change, +0.01% (95% interval +0.00% to +0.01%), against a bar of at least +0.50%. The unit is percent, but this number is the one the scorecard can't yet be trusted to report. If the 100x error is real, the true effect could be near +1%, which would clear the bar. The document doesn't address that. The percent column is unreliable until re-exported. The pre-period and novelty checks were not run. The mechanism is unknown, and the scorecard has no segment cuts.",
+      "reader": "The review can't reach a launch call. The scorecard's relative and absolute changes disagree by about 100x, probably a percent figure read as a fraction or the reverse. Current state: the test ran 14 of 14 days with 1,000,000 users per arm, but the scorecard check failed. Agree to fix the scorecard, re-export the Pulse results with the percent column confirmed, and rerun. Make no launch decision from this data. Successful Search Rate, +0.01% (95% interval +0.00% to +0.01%), against a bar of at least 0.50%. The number itself is suspect until the export is fixed. The scorecard's percent column may be wrong by 100x, so every change figure is in doubt. The pre-period and novelty checks were not run, and the scorecard has no segment cuts.",
       "got": true,
       "how": "overlap 100%"
     },
@@ -39,15 +39,15 @@
       "pass": "full",
       "item": "takeaway 3",
       "key": "Could reverse it: fixing the scorecard problem and rerunning.",
-      "reader": "The document concludes \"Can't tell.\" The scorecard's relative and absolute changes disagree by about 100x, probably because a percent column was read as a fraction or the reverse. Current state: the 14-day test is complete (1,000,000 users per arm, above the planned 900,000), and no launch decision has been made. Agree to fix the scorecard by re-exporting Pulse results with the percent column confirmed, then rerun. Make no launch decision from this data. The document also suggests adding a pre-exposure comparison and a daily series by days since first exposure so the pre-period and novelty checks can run. Successful Search Rate change, +0.01% (95% interval +0.00% to +0.01%), against a bar of at least +0.50%. The unit is percent, but this number is the one the scorecard can't yet be trusted to report. If the 100x error is real, the true effect could be near +1%, which would clear the bar. The document doesn't address that. The percent column is unreliable until re-exported. The pre-period and novelty checks were not run. The mechanism is unknown, and the scorecard has no segment cuts.",
-      "got": true,
-      "how": "overlap 40%; grader: same fact"
+      "reader": "The review can't reach a launch call. The scorecard's relative and absolute changes disagree by about 100x, probably a percent figure read as a fraction or the reverse. Current state: the test ran 14 of 14 days with 1,000,000 users per arm, but the scorecard check failed. Agree to fix the scorecard, re-export the Pulse results with the percent column confirmed, and rerun. Make no launch decision from this data. Successful Search Rate, +0.01% (95% interval +0.00% to +0.01%), against a bar of at least 0.50%. The number itself is suspect until the export is fixed. The scorecard's percent column may be wrong by 100x, so every change figure is in doubt. The pre-period and novelty checks were not run, and the scorecard has no segment cuts.",
+      "got": false,
+      "how": "overlap 40%"
     }
   ],
-  "lost": "I had to reread the 100x claim. The document asserts that relative and absolute changes disagree but never shows both values side by side, so I couldn't verify it. The \"better, below the bar\" verdict next to a \"Can't tell\" decision also took a second look. The interval's two-decimal precision (+0.00% to +0.01%) is too coarse to read much from.",
-  "question": "Which column in the Pulse export is the percent change, and can you show the relative and absolute Successful Search Rate values side by side so we can confirm the 100x mismatch?",
+  "lost": "Nowhere major. The one gap: the document says the relative and absolute changes disagree, but the table shows only one change column, so I couldn't tell which figure is wrong. The appendix's Desktop result (-0.01%) also sits oddly beside the primary's +0.01%, though the appendix says it's exploratory.",
+  "question": "What are the control and treatment means for Successful Search Rate, and which of the two change figures does the Pulse export get wrong?",
   "replies": {
-    "skim": "1. Answer: Can't tell. The scorecard's relative and absolute changes disagree by about 100x, so the percent column was likely misread, and no launch decision should be made from this data.\n2. Decision: Agree to fix the scorecard and rerun the test; make no launch call until the rerun is in.\n3. Number: Successful Search Rate change of +0.01% (95% interval +0.00% to +0.01%), against a 0.50% bar (unit: percent).\n",
-    "full": "1. **Answer:** The document concludes \"Can't tell.\" The scorecard's relative and absolute changes disagree by about 100x, probably because a percent column was read as a fraction or the reverse. Current state: the 14-day test is complete (1,000,000 users per arm, above the planned 900,000), and no launch decision has been made.\n\n2. **Decision:** Agree to fix the scorecard by re-exporting Pulse results with the percent column confirmed, then rerun. Make no launch decision from this data. The document also suggests adding a pre-exposure comparison and a daily series by days since first exposure so the pre-period and novelty checks can run.\n\n3. **Number:** Successful Search Rate change, +0.01% (95% interval +0.00% to +0.01%), against a bar of at least +0.50%. The unit is percent, but this number is the one the scorecard can't yet be trusted to report. If the 100x error is real, the true effect could be near +1%, which would clear the bar. The document doesn't address that.\n\n4. **Caveat:** The percent column is unreliable until re-exported. The pre-period and novelty checks were not run. The mechanism is unknown, and the scorecard has no segment cuts.\n\n5. **Lost:** I had to reread the 100x claim. The document asserts that relative and absolute changes disagree but never shows both values side by side, so I couldn't verify it. The \"better, below the bar\" verdict next to a \"Can't tell\" decision also took a second look. The interval's two-decimal precision (+0.00% to +0.01%) is too coarse to read much from.\n\n6. **Question:** Which column in the Pulse export is the percent change, and can you show the relative and absolute Successful Search Rate values side by side so we can confirm the 100x mismatch?\n"
+    "skim": "1. Answer: Can't tell. The scorecard's relative and absolute changes disagree by about 100 times, so the percent column was probably misread, and the ranker v7 test needs fixing and rerunning before any launch call.\n2. Decision: Agree to fix the scorecard and rerun the test; make no launch decision from this data.\n3. Number: +0.01% change in Successful Search Rate (primary metric), against a bar of at least +0.50%.\n",
+    "full": "1. **Answer:** The review can't reach a launch call. The scorecard's relative and absolute changes disagree by about 100x, probably a percent figure read as a fraction or the reverse. Current state: the test ran 14 of 14 days with 1,000,000 users per arm, but the scorecard check failed.\n\n2. **Decision:** Agree to fix the scorecard, re-export the Pulse results with the percent column confirmed, and rerun. Make no launch decision from this data.\n\n3. **Number:** Successful Search Rate, +0.01% (95% interval +0.00% to +0.01%), against a bar of at least 0.50%. The number itself is suspect until the export is fixed.\n\n4. **Caveat:** The scorecard's percent column may be wrong by 100x, so every change figure is in doubt. The pre-period and novelty checks were not run, and the scorecard has no segment cuts.\n\n5. **Lost:** Nowhere major. The one gap: the document says the relative and absolute changes disagree, but the table shows only one change column, so I couldn't tell which figure is wrong. The appendix's Desktop result (-0.01%) also sits oddly beside the primary's +0.01%, though the appendix says it's exploratory.\n\n6. **Question:** What are the control and treatment means for Successful Search Rate, and which of the two change figures does the Pulse export get wrong?\n"
   }
 }

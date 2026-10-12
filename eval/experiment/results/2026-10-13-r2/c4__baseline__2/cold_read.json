@@ -1,0 +1,53 @@
+{
+  "pass": false,
+  "skim": "0/2",
+  "full": "0/3",
+  "items": [
+    {
+      "pass": "skim",
+      "item": "answer",
+      "key": "Can't tell, decided by scorecard.",
+      "reader": "Ship. The primary metric, Successful Search Rate, clears its +0.5% bar, and no pre-registered guardrail is breached. Ship, once the review confirms whether the +0.5% bar is relative or absolute. Relative, it is met at +0.81%. Absolute, the change of 0.4120 \u2192 0.4153 is only +0.33 points, which would miss it. The second confirmation point is cut off in the text.",
+      "got": false,
+      "how": "overlap 0%"
+    },
+    {
+      "pass": "skim",
+      "item": "decision",
+      "key": "Agree to fix the test and rerun; no launch decision from this data.",
+      "reader": "Ship, once the review confirms whether the +0.5% bar is relative or absolute. Relative, it is met at +0.81%. Absolute, the change of 0.4120 \u2192 0.4153 is only +0.33 points, which would miss it. The second confirmation point is cut off in the text. Ship. The primary metric, Successful Search Rate, clears its +0.5% bar, and no pre-registered guardrail is breached.",
+      "got": false,
+      "how": "overlap 0%"
+    },
+    {
+      "pass": "full",
+      "item": "takeaway 1",
+      "key": "The scorecard's relative and absolute changes disagree by about 100 times, so a percent column was probably read as a fraction or the reverse",
+      "reader": "The readout recommends **Ship**. The primary metric clears its bar, and no pre-registered guardrail is breached. Two points still need confirming at the review: the units of the bar, and segment cuts that don't reproduce the headline lift. Ship, but only after the review confirms the +0.5% bar is relative. If it was meant as an absolute +0.005, the observed +0.0033 misses it and the call becomes Don't ship. Next steps: confirm the bar's units with the author, get an explanation for the segment mismatch, and set post-launch monitoring on Clicks per User. Successful Search Rate, relative lift of **+0.81%** (0.4120 \u2192 0.4153), 95% CI about +0.41% to +1.21%. The absolute change is +0.0033. The segment cuts don't reproduce the headline lift. Every segment change is at most +0.0014, while the overall change is +0.0033, and the segment control means don't average to the overall 0.412. The document doesn't explain why. Revenue is also a tight guardrail, with its CI's worst end at -0.8% against a 1% margin.",
+      "got": false,
+      "how": "overlap 0%"
+    },
+    {
+      "pass": "full",
+      "item": "takeaway 2",
+      "key": "Agree to fix the test and rerun; no launch decision from this data.",
+      "reader": "The readout recommends **Ship**. The primary metric clears its bar, and no pre-registered guardrail is breached. Two points still need confirming at the review: the units of the bar, and segment cuts that don't reproduce the headline lift. Ship, but only after the review confirms the +0.5% bar is relative. If it was meant as an absolute +0.005, the observed +0.0033 misses it and the call becomes Don't ship. Next steps: confirm the bar's units with the author, get an explanation for the segment mismatch, and set post-launch monitoring on Clicks per User. Successful Search Rate, relative lift of **+0.81%** (0.4120 \u2192 0.4153), 95% CI about +0.41% to +1.21%. The absolute change is +0.0033. The segment cuts don't reproduce the headline lift. Every segment change is at most +0.0014, while the overall change is +0.0033, and the segment control means don't average to the overall 0.412. The document doesn't explain why. Revenue is also a tight guardrail, with its CI's worst end at -0.8% against a 1% margin.",
+      "got": false,
+      "how": "overlap 0%"
+    },
+    {
+      "pass": "full",
+      "item": "takeaway 3",
+      "key": "Could reverse it: fixing the scorecard problem and rerunning.",
+      "reader": "The readout recommends **Ship**. The primary metric clears its bar, and no pre-registered guardrail is breached. Two points still need confirming at the review: the units of the bar, and segment cuts that don't reproduce the headline lift. Ship, but only after the review confirms the +0.5% bar is relative. If it was meant as an absolute +0.005, the observed +0.0033 misses it and the call becomes Don't ship. Next steps: confirm the bar's units with the author, get an explanation for the segment mismatch, and set post-launch monitoring on Clicks per User. Successful Search Rate, relative lift of **+0.81%** (0.4120 \u2192 0.4153), 95% CI about +0.41% to +1.21%. The absolute change is +0.0033. The segment cuts don't reproduce the headline lift. Every segment change is at most +0.0014, while the overall change is +0.0033, and the segment control means don't average to the overall 0.412. The document doesn't explain why. Revenue is also a tight guardrail, with its CI's worst end at -0.8% against a 1% margin.",
+      "got": false,
+      "how": "overlap 0%"
+    }
+  ],
+  "lost": "I had to reread the bar's units. The document says \"+0.5%\" without stating relative or absolute, and the decision flips depending on which it is. The segment reconciliation also confused me, because the document doesn't say whether the segment definitions or the arm mix differ.",
+  "question": "Was the +0.5% bar pre-registered as a relative lift or as an absolute +0.005?",
+  "replies": {
+    "skim": "1. Answer: Ship. The primary metric, Successful Search Rate, clears its +0.5% bar, and no pre-registered guardrail is breached.\n2. Decision: Ship, once the review confirms whether the +0.5% bar is relative or absolute. Relative, it is met at +0.81%. Absolute, the change of 0.4120 \u2192 0.4153 is only +0.33 points, which would miss it. The second confirmation point is cut off in the text.\n3. Number: +0.81% relative lift in Successful Search Rate (95% CI about +0.41% to +1.21%).\n",
+    "full": "1. **Answer:** The readout recommends **Ship**. The primary metric clears its bar, and no pre-registered guardrail is breached. Two points still need confirming at the review: the units of the bar, and segment cuts that don't reproduce the headline lift.\n\n2. **Decision:** Ship, but only after the review confirms the +0.5% bar is relative. If it was meant as an absolute +0.005, the observed +0.0033 misses it and the call becomes Don't ship. Next steps: confirm the bar's units with the author, get an explanation for the segment mismatch, and set post-launch monitoring on Clicks per User.\n\n3. **Number:** Successful Search Rate, relative lift of **+0.81%** (0.4120 \u2192 0.4153), 95% CI about +0.41% to +1.21%. The absolute change is +0.0033.\n\n4. **Caveat:** The segment cuts don't reproduce the headline lift. Every segment change is at most +0.0014, while the overall change is +0.0033, and the segment control means don't average to the overall 0.412. The document doesn't explain why. Revenue is also a tight guardrail, with its CI's worst end at -0.8% against a 1% margin.\n\n5. **Lost:** I had to reread the bar's units. The document says \"+0.5%\" without stating relative or absolute, and the decision flips depending on which it is. The segment reconciliation also confused me, because the document doesn't say whether the segment definitions or the arm mix differ.\n\n6. **Question:** Was the +0.5% bar pre-registered as a relative lift or as an absolute +0.005?\n"
+  }
+}

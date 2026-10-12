@@ -1,0 +1,53 @@
+{
+  "pass": false,
+  "skim": "0/2",
+  "full": "3/3",
+  "items": [
+    {
+      "pass": "skim",
+      "item": "answer",
+      "key": "Don't ship: Latency p95 (ms) rose 3.10% (+2.50% to +3.70%), the wrong way and past its 2.00% margin.",
+      "reader": "Don't ship v7 as is. It clears the SSR bar (+0.81% relative) but breaches the pre-registered latency guardrail. Hold the launch. Ask engineering to bring latency back under the 2% margin and re-test, and confirm that the 0.005 bar is relative, since the absolute SSR change (+0.0033) would not clear it.",
+      "got": false,
+      "how": "overlap 0%"
+    },
+    {
+      "pass": "skim",
+      "item": "decision",
+      "key": "Agree not to launch; the owner decides whether to iterate.",
+      "reader": "Hold the launch. Ask engineering to bring latency back under the 2% margin and re-test, and confirm that the 0.005 bar is relative, since the absolute SSR change (+0.0033) would not clear it. Don't ship v7 as is. It clears the SSR bar (+0.81% relative) but breaches the pre-registered latency guardrail.",
+      "got": false,
+      "how": "overlap 17%"
+    },
+    {
+      "pass": "full",
+      "item": "takeaway 1",
+      "key": "Latency p95 (ms) +3.10% (+2.50% to +3.70%) against at most 2.00% higher.",
+      "reader": "The readout concludes don't ship v7 as it stands. SSR improves enough to clear the pre-registered bar (+0.81% relative, 95% CI +0.41% to +1.21%), but p95 latency breaches its guardrail (+3.1%, +12.8 ms, against a 2% margin). Current state: not shipped, blocked on latency. Don't ship. Ask the ranker team whether the latency regression can be cut and rerun under the same pre-registration. If the team wants to ship anyway, treat it as an explicit guardrail override with a named owner. Before the review, settle whether the 0.5 bar is relative or absolute, and check the segment inconsistency. Latency p95 +3.1% (+12.8 ms) against a 2% margin. It's the only breach and the reason for the no-ship call. The SSR lift, +0.81% relative, is the number that would otherwise support shipping. The main risk is the trade-off itself. The SSR gain is uncorroborated: CTR, Long Click Rate and Clicks per User are flat. The document also flags that the segment SSR results (negative in both Mobile and Desktop, positive overall) can't all be right, so segment numbers shouldn't be quoted yet.",
+      "got": true,
+      "how": "overlap 0%; grader: same fact"
+    },
+    {
+      "pass": "full",
+      "item": "takeaway 2",
+      "key": "Agree not to launch; the owner decides whether to iterate.",
+      "reader": "The readout concludes don't ship v7 as it stands. SSR improves enough to clear the pre-registered bar (+0.81% relative, 95% CI +0.41% to +1.21%), but p95 latency breaches its guardrail (+3.1%, +12.8 ms, against a 2% margin). Current state: not shipped, blocked on latency. Don't ship. Ask the ranker team whether the latency regression can be cut and rerun under the same pre-registration. If the team wants to ship anyway, treat it as an explicit guardrail override with a named owner. Before the review, settle whether the 0.5 bar is relative or absolute, and check the segment inconsistency. Latency p95 +3.1% (+12.8 ms) against a 2% margin. It's the only breach and the reason for the no-ship call. The SSR lift, +0.81% relative, is the number that would otherwise support shipping. The main risk is the trade-off itself. The SSR gain is uncorroborated: CTR, Long Click Rate and Clicks per User are flat. The document also flags that the segment SSR results (negative in both Mobile and Desktop, positive overall) can't all be right, so segment numbers shouldn't be quoted yet.",
+      "got": true,
+      "how": "overlap 33%; grader: same fact"
+    },
+    {
+      "pass": "full",
+      "item": "takeaway 3",
+      "key": "Could reverse it: only a version that keeps Latency p95 (ms) at at most 2.00% higher.",
+      "reader": "The readout concludes don't ship v7 as it stands. SSR improves enough to clear the pre-registered bar (+0.81% relative, 95% CI +0.41% to +1.21%), but p95 latency breaches its guardrail (+3.1%, +12.8 ms, against a 2% margin). Current state: not shipped, blocked on latency. Don't ship. Ask the ranker team whether the latency regression can be cut and rerun under the same pre-registration. If the team wants to ship anyway, treat it as an explicit guardrail override with a named owner. Before the review, settle whether the 0.5 bar is relative or absolute, and check the segment inconsistency. Latency p95 +3.1% (+12.8 ms) against a 2% margin. It's the only breach and the reason for the no-ship call. The SSR lift, +0.81% relative, is the number that would otherwise support shipping. The main risk is the trade-off itself. The SSR gain is uncorroborated: CTR, Long Click Rate and Clicks per User are flat. The document also flags that the segment SSR results (negative in both Mobile and Desktop, positive overall) can't all be right, so segment numbers shouldn't be quoted yet.",
+      "got": true,
+      "how": "overlap 0%; grader: same fact"
+    }
+  ],
+  "lost": "I reread the primary table to check the bar. The \"0.005\" bar is ambiguous, and the document only infers the relative reading from the guardrail margins. The segment paradox also needed a second look. The experiment window is unclear too: 14 days from 2026\u201109\u201112 ends on 09\u201126, but the data stops at 09\u201125, and the document doesn't say whether the full run was used.",
+  "question": "Can the ranker team cut the +12.8 ms p95 latency regression, and if so, how much of the SSR gain survives the change?",
+  "replies": {
+    "skim": "1. **Answer:** Don't ship v7 as is. It clears the SSR bar (+0.81% relative) but breaches the pre-registered latency guardrail.\n2. **Decision:** Hold the launch. Ask engineering to bring latency back under the 2% margin and re-test, and confirm that the 0.005 bar is relative, since the absolute SSR change (+0.0033) would not clear it.\n3. **Number:** +3.1% relative latency change, against a 2% limit.\n",
+    "full": "1. **Answer:** The readout concludes don't ship v7 as it stands. SSR improves enough to clear the pre-registered bar (+0.81% relative, 95% CI +0.41% to +1.21%), but p95 latency breaches its guardrail (+3.1%, +12.8 ms, against a 2% margin). Current state: not shipped, blocked on latency.\n\n2. **Decision:** Don't ship. Ask the ranker team whether the latency regression can be cut and rerun under the same pre-registration. If the team wants to ship anyway, treat it as an explicit guardrail override with a named owner. Before the review, settle whether the 0.5 bar is relative or absolute, and check the segment inconsistency.\n\n3. **Number:** Latency p95 +3.1% (+12.8 ms) against a 2% margin. It's the only breach and the reason for the no-ship call. The SSR lift, +0.81% relative, is the number that would otherwise support shipping.\n\n4. **Caveat:** The main risk is the trade-off itself. The SSR gain is uncorroborated: CTR, Long Click Rate and Clicks per User are flat. The document also flags that the segment SSR results (negative in both Mobile and Desktop, positive overall) can't all be right, so segment numbers shouldn't be quoted yet.\n\n5. **Lost:** I reread the primary table to check the bar. The \"0.005\" bar is ambiguous, and the document only infers the relative reading from the guardrail margins. The segment paradox also needed a second look. The experiment window is unclear too: 14 days from 2026\u201109\u201112 ends on 09\u201126, but the data stops at 09\u201125, and the document doesn't say whether the full run was used.\n\n6. **Question:** Can the ranker team cut the +12.8 ms p95 latency regression, and if so, how much of the SSR gain survives the change?\n"
+  }
+}

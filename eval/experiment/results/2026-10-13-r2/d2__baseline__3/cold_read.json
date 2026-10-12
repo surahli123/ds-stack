@@ -1,0 +1,53 @@
+{
+  "pass": false,
+  "skim": "0/2",
+  "full": "2/3",
+  "items": [
+    {
+      "pass": "skim",
+      "item": "answer",
+      "key": "Don't ship: Successful Search Rate fell 0.62% (-1.02% to -0.22%), the wrong way.",
+      "reader": "Ranker v7 lowered Successful Search Rate, the pre-registered primary metric, by a statistically significant amount, so the document recommends not shipping. Don't ship Ranker v7.",
+      "got": false,
+      "how": "overlap 0%"
+    },
+    {
+      "pass": "skim",
+      "item": "decision",
+      "key": "Agree not to launch; the owner decides whether to iterate.",
+      "reader": "Don't ship Ranker v7. Ranker v7 lowered Successful Search Rate, the pre-registered primary metric, by a statistically significant amount, so the document recommends not shipping.",
+      "got": false,
+      "how": "overlap 0%"
+    },
+    {
+      "pass": "full",
+      "item": "takeaway 1",
+      "key": "Successful Search Rate -0.62% (-1.02% to -0.22%) against at least 0.50% higher.",
+      "reader": "The document concludes \"Don't ship\" for Ranker v7. Successful Search Rate, the pre-registered primary metric, fell significantly. Current state: the experiment still shows as \"active\" in Statsig and hasn't been ended. Don't ship v7 and end the experiment in Statsig. If the team still wants v7, find out why Successful Search Rate fell (head and informational queries first), then run a new pre-registered test. Successful Search Rate change of **-0.26 percentage points** (0.4120 to 0.4094), with 95% CI [-0.42, -0.09] pp and p = 0.0024. The segment analysis is the main limit. About 50 segment metrics were checked with no multiplicity correction, and the two nominally significant CTR drops (head queries, informational queries) are treated only as hints. The guardrail for Revenue per User is within margin but not strongly ruled out (worst case about -0.8% against a -1% margin).",
+      "got": false,
+      "how": "overlap 0%"
+    },
+    {
+      "pass": "full",
+      "item": "takeaway 2",
+      "key": "Agree not to launch; the owner decides whether to iterate.",
+      "reader": "The document concludes \"Don't ship\" for Ranker v7. Successful Search Rate, the pre-registered primary metric, fell significantly. Current state: the experiment still shows as \"active\" in Statsig and hasn't been ended. Don't ship v7 and end the experiment in Statsig. If the team still wants v7, find out why Successful Search Rate fell (head and informational queries first), then run a new pre-registered test. Successful Search Rate change of **-0.26 percentage points** (0.4120 to 0.4094), with 95% CI [-0.42, -0.09] pp and p = 0.0024. The segment analysis is the main limit. About 50 segment metrics were checked with no multiplicity correction, and the two nominally significant CTR drops (head queries, informational queries) are treated only as hints. The guardrail for Revenue per User is within margin but not strongly ruled out (worst case about -0.8% against a -1% margin).",
+      "got": true,
+      "how": "overlap 0%; grader: same fact"
+    },
+    {
+      "pass": "full",
+      "item": "takeaway 3",
+      "key": "Could reverse it: only a version where Successful Search Rate improves.",
+      "reader": "The document concludes \"Don't ship\" for Ranker v7. Successful Search Rate, the pre-registered primary metric, fell significantly. Current state: the experiment still shows as \"active\" in Statsig and hasn't been ended. Don't ship v7 and end the experiment in Statsig. If the team still wants v7, find out why Successful Search Rate fell (head and informational queries first), then run a new pre-registered test. Successful Search Rate change of **-0.26 percentage points** (0.4120 to 0.4094), with 95% CI [-0.42, -0.09] pp and p = 0.0024. The segment analysis is the main limit. About 50 segment metrics were checked with no multiplicity correction, and the two nominally significant CTR drops (head queries, informational queries) are treated only as hints. The guardrail for Revenue per User is within margin but not strongly ruled out (worst case about -0.8% against a -1% margin).",
+      "got": true,
+      "how": "overlap 57%"
+    }
+  ],
+  "lost": "Only the ship-bar units. The document says \"+0.005\" was read as +0.5 pp absolute, and it's unclear whether the pre-registered bar was absolute or relative. The document says the result misses the bar under either reading, so the decision doesn't depend on it. Also, the rounded inputs give -0.63% relative, not the stated -0.62%. That is probably rounding in the source values and doesn't change anything.",
+  "question": "Was the +0.005 ship bar pre-registered as an absolute change (+0.5 pp) or a relative one (+0.5%)?",
+  "replies": {
+    "skim": "1. **Answer:** Ranker v7 lowered Successful Search Rate, the pre-registered primary metric, by a statistically significant amount, so the document recommends not shipping.\n2. **Decision:** Don't ship Ranker v7.\n3. **Number:** Successful Search Rate change of -0.26 pp (0.4120 \u2192 0.4094, 95% CI [-0.42, -0.09] pp).\n",
+    "full": "1. **Answer:** The document concludes \"Don't ship\" for Ranker v7. Successful Search Rate, the pre-registered primary metric, fell significantly. Current state: the experiment still shows as \"active\" in Statsig and hasn't been ended.\n\n2. **Decision:** Don't ship v7 and end the experiment in Statsig. If the team still wants v7, find out why Successful Search Rate fell (head and informational queries first), then run a new pre-registered test.\n\n3. **Number:** Successful Search Rate change of **-0.26 percentage points** (0.4120 to 0.4094), with 95% CI [-0.42, -0.09] pp and p = 0.0024.\n\n4. **Caveat:** The segment analysis is the main limit. About 50 segment metrics were checked with no multiplicity correction, and the two nominally significant CTR drops (head queries, informational queries) are treated only as hints. The guardrail for Revenue per User is within margin but not strongly ruled out (worst case about -0.8% against a -1% margin).\n\n5. **Lost:** Only the ship-bar units. The document says \"+0.005\" was read as +0.5 pp absolute, and it's unclear whether the pre-registered bar was absolute or relative. The document says the result misses the bar under either reading, so the decision doesn't depend on it. Also, the rounded inputs give -0.63% relative, not the stated -0.62%. That is probably rounding in the source values and doesn't change anything.\n\n6. **Question:** Was the +0.005 ship bar pre-registered as an absolute change (+0.5 pp) or a relative one (+0.5%)?\n"
+  }
+}

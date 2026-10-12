@@ -1,0 +1,53 @@
+{
+  "pass": false,
+  "skim": "0/2",
+  "full": "1/3",
+  "items": [
+    {
+      "pass": "skim",
+      "item": "answer",
+      "key": "Don't ship: Latency p95 (ms) rose 3.10% (+2.50% to +3.70%), the wrong way and past its 2.00% margin.",
+      "reader": "Don't ship. Ranker v7 improves Successful Search Rate but breaks the pre-registered latency guardrail. Don't launch. The latency regression alone blocks it, and the text cuts off before saying who should settle the units of the 0.005 bar.",
+      "got": false,
+      "how": "overlap 0%"
+    },
+    {
+      "pass": "skim",
+      "item": "decision",
+      "key": "Agree not to launch; the owner decides whether to iterate.",
+      "reader": "Don't launch. The latency regression alone blocks it, and the text cuts off before saying who should settle the units of the 0.005 bar. Don't ship. Ranker v7 improves Successful Search Rate but breaks the pre-registered latency guardrail.",
+      "got": false,
+      "how": "overlap 17%"
+    },
+    {
+      "pass": "full",
+      "item": "takeaway 1",
+      "key": "Latency p95 (ms) +3.10% (+2.50% to +3.70%) against at most 2.00% higher.",
+      "reader": "The document concludes **don't ship** Ranker v7. Search success improves, but p95 latency rises 3.1% (412 \u2192 424.8 ms), with a 95% CI of +2.5% to +3.7%. The whole interval is past the pre-registered 2% tolerance. Handover state: the launch is blocked, and the author recommends fixing the latency regression and re-testing. A waiver from the owners is the alternative. Don't ship. Fix the latency regression and re-test. Also confirm whether the 0.005 primary bar is relative or absolute, though the decision is the same either way. p95 latency +3.1% (412 \u2192 424.8 ms, about +13 ms), against a 2% pre-registered tolerance. The CI's lower bound (+2.5%) is already above the tolerance. The document doesn't establish whether the latency regression comes from the model or from infrastructure noise. The segment cuts are exploratory and unadjusted, so some nominal hits are expected by chance.",
+      "got": true,
+      "how": "overlap 0%; grader: same fact"
+    },
+    {
+      "pass": "full",
+      "item": "takeaway 2",
+      "key": "Agree not to launch; the owner decides whether to iterate.",
+      "reader": "The document concludes **don't ship** Ranker v7. Search success improves, but p95 latency rises 3.1% (412 \u2192 424.8 ms), with a 95% CI of +2.5% to +3.7%. The whole interval is past the pre-registered 2% tolerance. Handover state: the launch is blocked, and the author recommends fixing the latency regression and re-testing. A waiver from the owners is the alternative. Don't ship. Fix the latency regression and re-test. Also confirm whether the 0.005 primary bar is relative or absolute, though the decision is the same either way. p95 latency +3.1% (412 \u2192 424.8 ms, about +13 ms), against a 2% pre-registered tolerance. The CI's lower bound (+2.5%) is already above the tolerance. The document doesn't establish whether the latency regression comes from the model or from infrastructure noise. The segment cuts are exploratory and unadjusted, so some nominal hits are expected by chance.",
+      "got": false,
+      "how": "overlap 33%"
+    },
+    {
+      "pass": "full",
+      "item": "takeaway 3",
+      "key": "Could reverse it: only a version that keeps Latency p95 (ms) at at most 2.00% higher.",
+      "reader": "The document concludes **don't ship** Ranker v7. Search success improves, but p95 latency rises 3.1% (412 \u2192 424.8 ms), with a 95% CI of +2.5% to +3.7%. The whole interval is past the pre-registered 2% tolerance. Handover state: the launch is blocked, and the author recommends fixing the latency regression and re-testing. A waiver from the owners is the alternative. Don't ship. Fix the latency regression and re-test. Also confirm whether the 0.005 primary bar is relative or absolute, though the decision is the same either way. p95 latency +3.1% (412 \u2192 424.8 ms, about +13 ms), against a 2% pre-registered tolerance. The CI's lower bound (+2.5%) is already above the tolerance. The document doesn't establish whether the latency regression comes from the model or from infrastructure noise. The segment cuts are exploratory and unadjusted, so some nominal hits are expected by chance.",
+      "got": false,
+      "how": "overlap 0%"
+    }
+  ],
+  "lost": "I reread the primary-metric bullet to work out the units of the 0.005 bar. The pre-registration doesn't state them.",
+  "question": "Is the latency increase caused by the model itself or by infrastructure, and can you re-run the test with that isolated?",
+  "replies": {
+    "skim": "1. **Answer:** Don't ship. Ranker v7 improves Successful Search Rate but breaks the pre-registered latency guardrail.\n2. **Decision:** Don't launch. The latency regression alone blocks it, and the text cuts off before saying who should settle the units of the 0.005 bar.\n3. **Number:** p95 latency +3.1% (412 \u2192 424.8 ms, 95% CI +2.5% to +3.7%), which is above the pre-registered 2% tolerance.\n",
+    "full": "1. **Answer:** The document concludes **don't ship** Ranker v7. Search success improves, but p95 latency rises 3.1% (412 \u2192 424.8 ms), with a 95% CI of +2.5% to +3.7%. The whole interval is past the pre-registered 2% tolerance. Handover state: the launch is blocked, and the author recommends fixing the latency regression and re-testing. A waiver from the owners is the alternative.\n\n2. **Decision:** Don't ship. Fix the latency regression and re-test. Also confirm whether the 0.005 primary bar is relative or absolute, though the decision is the same either way.\n\n3. **Number:** p95 latency +3.1% (412 \u2192 424.8 ms, about +13 ms), against a 2% pre-registered tolerance. The CI's lower bound (+2.5%) is already above the tolerance.\n\n4. **Caveat:** The document doesn't establish whether the latency regression comes from the model or from infrastructure noise. The segment cuts are exploratory and unadjusted, so some nominal hits are expected by chance.\n\n5. **Lost:** I reread the primary-metric bullet to work out the units of the 0.005 bar. The pre-registration doesn't state them.\n\n6. **Question:** Is the latency increase caused by the model itself or by infrastructure, and can you re-run the test with that isolated?\n"
+  }
+}

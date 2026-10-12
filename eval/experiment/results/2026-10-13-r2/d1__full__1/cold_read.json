@@ -1,21 +1,21 @@
 {
-  "pass": true,
-  "skim": "2/2",
+  "pass": false,
+  "skim": "1/2",
   "full": "3/3",
   "items": [
     {
       "pass": "skim",
       "item": "answer",
       "key": "Don't ship: Latency p95 (ms) rose 3.10% (+2.50% to +3.70%), the wrong way and past its 2.00% margin.",
-      "reader": "Don't ship. The document recommends against launching Ranker v7 because Latency p95 rose 3.10% (interval +2.50% to +3.70%), past its 2.00% limit. Successful Search Rate did improve (+0.81%), but that doesn't offset the latency breach. Agree not to launch. The owner decides whether to iterate. A relaunch candidate would need to keep Latency p95 at no more than 2.00% higher while keeping the Successful Search Rate gain (for example, via model distillation or caching).",
-      "got": true,
-      "how": "overlap 77%"
+      "reader": "Don't ship Ranker v7. Latency p95 rose 3.10% (past its 2.00% margin), while Successful Search Rate rose 0.81% (past its 0.50% bar). Agree not to launch; the owner decides whether to iterate. A version that brings latency under 2.00% while keeping the search gain could reverse it.",
+      "got": false,
+      "how": "overlap 0%"
     },
     {
       "pass": "skim",
       "item": "decision",
       "key": "Agree not to launch; the owner decides whether to iterate.",
-      "reader": "Agree not to launch. The owner decides whether to iterate. A relaunch candidate would need to keep Latency p95 at no more than 2.00% higher while keeping the Successful Search Rate gain (for example, via model distillation or caching). Don't ship. The document recommends against launching Ranker v7 because Latency p95 rose 3.10% (interval +2.50% to +3.70%), past its 2.00% limit. Successful Search Rate did improve (+0.81%), but that doesn't offset the latency breach.",
+      "reader": "Agree not to launch; the owner decides whether to iterate. A version that brings latency under 2.00% while keeping the search gain could reverse it. Don't ship Ranker v7. Latency p95 rose 3.10% (past its 2.00% margin), while Successful Search Rate rose 0.81% (past its 0.50% bar).",
       "got": true,
       "how": "overlap 100%"
     },
@@ -23,15 +23,15 @@
       "pass": "full",
       "item": "takeaway 1",
       "key": "Latency p95 (ms) +3.10% (+2.50% to +3.70%) against at most 2.00% higher.",
-      "reader": "The document recommends not launching Ranker v7. Latency p95 rose 3.10% (95% interval +2.50% to +3.70%), past its 2.00% margin, even though Successful Search Rate rose 0.81%, past its 0.50% bar. The test is finished: day 14 of 14, 1,000,000 users per arm. Agree not to launch. The owner decides whether to iterate. Two paths could reverse this: a version that keeps latency at or under 2.00% higher while keeping the search gain, or an owner-signed waiver of the latency margin that moves it to triage. The two checks that didn't run (pre-period and novelty) could be completed with a pre-period comparison and a daily series. Latency p95 change of +3.10% (unit: percent, against a 2.00% limit). The latency regression is past its margin. The cause, the heavier lambdamart_v7 model, is labelled inferred, not measured. The scorecard has no segment cuts, so which queries got slower is unknown. The pre-period and novelty checks weren't run.",
+      "reader": "Don't ship Ranker v7. Latency p95 rose 3.10% (95% interval +2.50% to +3.70%), past its 2.00% margin. Successful Search Rate rose 0.81%, which the document reads as a win. The other three guardrails are within margin. Agree not to launch. The owner decides whether to iterate. A version would need latency at or under +2.00% while keeping the search gain to be reconsidered. The other route is a written, owner-signed waiver of the latency margin, which would move the decision to the triage meeting. The pre-period and novelty checks, which didn't run, could be completed first. Latency p95 at +3.10% (ms), against the +2.00% limit. It's the only figure past its bar, so it drives the call. The latency regression. The document names the likely cause as the heavier lambdamart_v7 model, but labels that [inferred]. There are no segment cuts, so which queries got slower is unknown ([guess]). Two checks did not run.",
       "got": true,
-      "how": "overlap 100%"
+      "how": "overlap 88%"
     },
     {
       "pass": "full",
       "item": "takeaway 2",
       "key": "Agree not to launch; the owner decides whether to iterate.",
-      "reader": "The document recommends not launching Ranker v7. Latency p95 rose 3.10% (95% interval +2.50% to +3.70%), past its 2.00% margin, even though Successful Search Rate rose 0.81%, past its 0.50% bar. The test is finished: day 14 of 14, 1,000,000 users per arm. Agree not to launch. The owner decides whether to iterate. Two paths could reverse this: a version that keeps latency at or under 2.00% higher while keeping the search gain, or an owner-signed waiver of the latency margin that moves it to triage. The two checks that didn't run (pre-period and novelty) could be completed with a pre-period comparison and a daily series. Latency p95 change of +3.10% (unit: percent, against a 2.00% limit). The latency regression is past its margin. The cause, the heavier lambdamart_v7 model, is labelled inferred, not measured. The scorecard has no segment cuts, so which queries got slower is unknown. The pre-period and novelty checks weren't run.",
+      "reader": "Don't ship Ranker v7. Latency p95 rose 3.10% (95% interval +2.50% to +3.70%), past its 2.00% margin. Successful Search Rate rose 0.81%, which the document reads as a win. The other three guardrails are within margin. Agree not to launch. The owner decides whether to iterate. A version would need latency at or under +2.00% while keeping the search gain to be reconsidered. The other route is a written, owner-signed waiver of the latency margin, which would move the decision to the triage meeting. The pre-period and novelty checks, which didn't run, could be completed first. Latency p95 at +3.10% (ms), against the +2.00% limit. It's the only figure past its bar, so it drives the call. The latency regression. The document names the likely cause as the heavier lambdamart_v7 model, but labels that [inferred]. There are no segment cuts, so which queries got slower is unknown ([guess]). Two checks did not run.",
       "got": true,
       "how": "overlap 100%"
     },
@@ -39,15 +39,15 @@
       "pass": "full",
       "item": "takeaway 3",
       "key": "Could reverse it: only a version that keeps Latency p95 (ms) at at most 2.00% higher.",
-      "reader": "The document recommends not launching Ranker v7. Latency p95 rose 3.10% (95% interval +2.50% to +3.70%), past its 2.00% margin, even though Successful Search Rate rose 0.81%, past its 0.50% bar. The test is finished: day 14 of 14, 1,000,000 users per arm. Agree not to launch. The owner decides whether to iterate. Two paths could reverse this: a version that keeps latency at or under 2.00% higher while keeping the search gain, or an owner-signed waiver of the latency margin that moves it to triage. The two checks that didn't run (pre-period and novelty) could be completed with a pre-period comparison and a daily series. Latency p95 change of +3.10% (unit: percent, against a 2.00% limit). The latency regression is past its margin. The cause, the heavier lambdamart_v7 model, is labelled inferred, not measured. The scorecard has no segment cuts, so which queries got slower is unknown. The pre-period and novelty checks weren't run.",
+      "reader": "Don't ship Ranker v7. Latency p95 rose 3.10% (95% interval +2.50% to +3.70%), past its 2.00% margin. Successful Search Rate rose 0.81%, which the document reads as a win. The other three guardrails are within margin. Agree not to launch. The owner decides whether to iterate. A version would need latency at or under +2.00% while keeping the search gain to be reconsidered. The other route is a written, owner-signed waiver of the latency margin, which would move the decision to the triage meeting. The pre-period and novelty checks, which didn't run, could be completed first. Latency p95 at +3.10% (ms), against the +2.00% limit. It's the only figure past its bar, so it drives the call. The latency regression. The document names the likely cause as the heavier lambdamart_v7 model, but labels that [inferred]. There are no segment cuts, so which queries got slower is unknown ([guess]). Two checks did not run.",
       "got": true,
-      "how": "overlap 88%"
+      "how": "overlap 62%"
     }
   ],
-  "lost": "Nowhere. The one thing I'd flag is that the header says \"Don't ship\" while the call categories (Can't tell / Keep running / No effect / Escalate) don't name that label, so I had to infer how it maps.",
-  "question": "Can you run the segment cut to show which queries got slower, and does profiling confirm lambdamart_v7 scoring is the cause? That answer decides whether a distilled or cached version is worth building.",
+  "lost": "The \"harm inside a margin goes to escalate\" setting is unclear to me, and I couldn't tell what it means for this decision. I also couldn't tell which config edits were checked. Nothing else needed a reread.",
+  "question": "The document says Successful Search Rate cleared its 0.50% bar, but the interval's lower bound is +0.41%, under that bar. Is the primary gain reliable enough to justify a latency trade-off, and would a version with a distilled or cached model keep it?",
   "replies": {
-    "skim": "1. Answer: Don't ship. The document recommends against launching Ranker v7 because Latency p95 rose 3.10% (interval +2.50% to +3.70%), past its 2.00% limit. Successful Search Rate did improve (+0.81%), but that doesn't offset the latency breach.\n\n2. Decision: Agree not to launch. The owner decides whether to iterate. A relaunch candidate would need to keep Latency p95 at no more than 2.00% higher while keeping the Successful Search Rate gain (for example, via model distillation or caching).\n\n3. Number: +3.10% (Latency p95 change, percent, against a 2.00% maximum).\n",
-    "full": "1. **Answer:** The document recommends not launching Ranker v7. Latency p95 rose 3.10% (95% interval +2.50% to +3.70%), past its 2.00% margin, even though Successful Search Rate rose 0.81%, past its 0.50% bar. The test is finished: day 14 of 14, 1,000,000 users per arm.\n\n2. **Decision:** Agree not to launch. The owner decides whether to iterate. Two paths could reverse this: a version that keeps latency at or under 2.00% higher while keeping the search gain, or an owner-signed waiver of the latency margin that moves it to triage. The two checks that didn't run (pre-period and novelty) could be completed with a pre-period comparison and a daily series.\n\n3. **Number:** Latency p95 change of +3.10% (unit: percent, against a 2.00% limit).\n\n4. **Caveat:** The latency regression is past its margin. The cause, the heavier lambdamart_v7 model, is labelled inferred, not measured. The scorecard has no segment cuts, so which queries got slower is unknown. The pre-period and novelty checks weren't run.\n\n5. **Lost:** Nowhere. The one thing I'd flag is that the header says \"Don't ship\" while the call categories (Can't tell / Keep running / No effect / Escalate) don't name that label, so I had to infer how it maps.\n\n6. **Question:** Can you run the segment cut to show which queries got slower, and does profiling confirm lambdamart_v7 scoring is the cause? That answer decides whether a distilled or cached version is worth building.\n"
+    "skim": "1. Answer: Don't ship Ranker v7. Latency p95 rose 3.10% (past its 2.00% margin), while Successful Search Rate rose 0.81% (past its 0.50% bar).\n2. Decision: Agree not to launch; the owner decides whether to iterate. A version that brings latency under 2.00% while keeping the search gain could reverse it.\n3. Number: +3.10% Latency p95 (ms), against a 2.00% maximum.\n",
+    "full": "1. **Answer:** Don't ship Ranker v7. Latency p95 rose 3.10% (95% interval +2.50% to +3.70%), past its 2.00% margin. Successful Search Rate rose 0.81%, which the document reads as a win. The other three guardrails are within margin.\n\n2. **Decision:** Agree not to launch. The owner decides whether to iterate. A version would need latency at or under +2.00% while keeping the search gain to be reconsidered. The other route is a written, owner-signed waiver of the latency margin, which would move the decision to the triage meeting. The pre-period and novelty checks, which didn't run, could be completed first.\n\n3. **Number:** Latency p95 at +3.10% (ms), against the +2.00% limit. It's the only figure past its bar, so it drives the call.\n\n4. **Caveat:** The latency regression. The document names the likely cause as the heavier lambdamart_v7 model, but labels that [inferred]. There are no segment cuts, so which queries got slower is unknown ([guess]). Two checks did not run.\n\n5. **Lost:** The \"harm inside a margin goes to escalate\" setting is unclear to me, and I couldn't tell what it means for this decision. I also couldn't tell which config edits were checked. Nothing else needed a reread.\n\n6. **Question:** The document says Successful Search Rate cleared its 0.50% bar, but the interval's lower bound is +0.41%, under that bar. Is the primary gain reliable enough to justify a latency trade-off, and would a version with a distilled or cached model keep it?\n"
   }
 }

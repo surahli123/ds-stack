@@ -1,13 +1,13 @@
 {
   "pass": false,
   "skim": "1/2",
-  "full": "3/3",
+  "full": "1/3",
   "items": [
     {
       "pass": "skim",
       "item": "answer",
       "key": "Can't tell: Before exposure, Successful Search Rate already differed by +0.71% (+0.31% to +1.11%). No launch decision from this data until it's fixed.",
-      "reader": "The document concludes \"Can't tell.\" The 14-day test is complete, but the pre-exposure check failed: Successful Search Rate was already +0.71% higher in the test arm before exposure, so the +0.81% lift may be a head start rather than the ranker's effect. Agree to fix the test's pre-period imbalance and rerun it, and make no launch decision from this data.",
+      "reader": "The test can't support a launch call. Successful Search Rate was already +0.71% higher in the test arm before exposure, nearly the same as the +0.81% lift measured after, so the lift may be a head start rather than the ranker's effect. The document recommends fixing the pre-period problem and rerunning. Agree to fix the test and rerun. Don't make a launch decision from this data.",
       "got": false,
       "how": "overlap 0%"
     },
@@ -15,7 +15,7 @@
       "pass": "skim",
       "item": "decision",
       "key": "Agree to fix the test and rerun; no launch decision from this data.",
-      "reader": "Agree to fix the test's pre-period imbalance and rerun it, and make no launch decision from this data. The document concludes \"Can't tell.\" The 14-day test is complete, but the pre-exposure check failed: Successful Search Rate was already +0.71% higher in the test arm before exposure, so the +0.81% lift may be a head start rather than the ranker's effect.",
+      "reader": "Agree to fix the test and rerun. Don't make a launch decision from this data. The test can't support a launch call. Successful Search Rate was already +0.71% higher in the test arm before exposure, nearly the same as the +0.81% lift measured after, so the lift may be a head start rather than the ranker's effect. The document recommends fixing the pre-period problem and rerunning.",
       "got": true,
       "how": "overlap 100%"
     },
@@ -23,15 +23,15 @@
       "pass": "full",
       "item": "takeaway 1",
       "key": "Before exposure, Successful Search Rate already differed by +0.71% (+0.31% to +1.11%)",
-      "reader": "The document concludes \"Can't tell.\" The test is broken: Successful Search Rate already differed by +0.71% (95% interval +0.31% to +1.11%) before exposure, nearly as large as the +0.81% lift seen after. Current state: the 14-day test is complete, with 1,000,000 users per arm, and no launch decision should be made from this data. Agree to fix the test and rerun it. Do not launch on this data. The fix should address the pre-exposure imbalance, for example with fresh assignment or an analysis that adjusts for pre-test behaviour. The pre-exposure gap of +0.71% in Successful Search Rate (relative change, 95% interval +0.31% to +1.11%). It matters most because it shows the arms were not comparable, which undermines the +0.81% lift (95% interval +0.41% to +1.21%). The +0.81% may be a head start from non-comparable arms (the document's guess is a skewed user mix), not the ranker's effect. The novelty check was not run, and the daily series that would show whether the lift holds was not provided.",
-      "got": true,
-      "how": "overlap 100%"
+      "reader": "The document concludes \"Can't tell.\" The test is broken: Successful Search Rate was already +0.71% higher in the test arm before exposure, so the +0.81% lift after exposure may be a head start, not the ranker. The 14-day run is complete, with 1,000,000 users per arm. Agree to fix the pre-exposure imbalance and rerun the test. Make no launch decision from this data. +0.81% for Successful Search Rate (95% interval +0.41% to +1.21%). The document doesn't say whether this is relative change or percentage points. The arms were probably not comparable at assignment, for example because of a skewed user mix. Launching on this result could credit the ranker with a pre-existing difference. The novelty check was also not run.",
+      "got": false,
+      "how": "overlap 0%"
     },
     {
       "pass": "full",
       "item": "takeaway 2",
       "key": "Agree to fix the test and rerun; no launch decision from this data.",
-      "reader": "The document concludes \"Can't tell.\" The test is broken: Successful Search Rate already differed by +0.71% (95% interval +0.31% to +1.11%) before exposure, nearly as large as the +0.81% lift seen after. Current state: the 14-day test is complete, with 1,000,000 users per arm, and no launch decision should be made from this data. Agree to fix the test and rerun it. Do not launch on this data. The fix should address the pre-exposure imbalance, for example with fresh assignment or an analysis that adjusts for pre-test behaviour. The pre-exposure gap of +0.71% in Successful Search Rate (relative change, 95% interval +0.31% to +1.11%). It matters most because it shows the arms were not comparable, which undermines the +0.81% lift (95% interval +0.41% to +1.21%). The +0.81% may be a head start from non-comparable arms (the document's guess is a skewed user mix), not the ranker's effect. The novelty check was not run, and the daily series that would show whether the lift holds was not provided.",
+      "reader": "The document concludes \"Can't tell.\" The test is broken: Successful Search Rate was already +0.71% higher in the test arm before exposure, so the +0.81% lift after exposure may be a head start, not the ranker. The 14-day run is complete, with 1,000,000 users per arm. Agree to fix the pre-exposure imbalance and rerun the test. Make no launch decision from this data. +0.81% for Successful Search Rate (95% interval +0.41% to +1.21%). The document doesn't say whether this is relative change or percentage points. The arms were probably not comparable at assignment, for example because of a skewed user mix. Launching on this result could credit the ranker with a pre-existing difference. The novelty check was also not run.",
       "got": true,
       "how": "overlap 100%"
     },
@@ -39,15 +39,15 @@
       "pass": "full",
       "item": "takeaway 3",
       "key": "Could reverse it: fixing the pre period problem and rerunning.",
-      "reader": "The document concludes \"Can't tell.\" The test is broken: Successful Search Rate already differed by +0.71% (95% interval +0.31% to +1.11%) before exposure, nearly as large as the +0.81% lift seen after. Current state: the 14-day test is complete, with 1,000,000 users per arm, and no launch decision should be made from this data. Agree to fix the test and rerun it. Do not launch on this data. The fix should address the pre-exposure imbalance, for example with fresh assignment or an analysis that adjusts for pre-test behaviour. The pre-exposure gap of +0.71% in Successful Search Rate (relative change, 95% interval +0.31% to +1.11%). It matters most because it shows the arms were not comparable, which undermines the +0.81% lift (95% interval +0.41% to +1.21%). The +0.81% may be a head start from non-comparable arms (the document's guess is a skewed user mix), not the ranker's effect. The novelty check was not run, and the daily series that would show whether the lift holds was not provided.",
-      "got": true,
-      "how": "overlap 0%; grader: same fact"
+      "reader": "The document concludes \"Can't tell.\" The test is broken: Successful Search Rate was already +0.71% higher in the test arm before exposure, so the +0.81% lift after exposure may be a head start, not the ranker. The 14-day run is complete, with 1,000,000 users per arm. Agree to fix the pre-exposure imbalance and rerun the test. Make no launch decision from this data. +0.81% for Successful Search Rate (95% interval +0.41% to +1.21%). The document doesn't say whether this is relative change or percentage points. The arms were probably not comparable at assignment, for example because of a skewed user mix. Launching on this result could credit the ranker with a pre-existing difference. The novelty check was also not run.",
+      "got": false,
+      "how": "overlap 0%"
     }
   ],
-  "lost": "Mostly nowhere. One conflict: the table marks Successful Search Rate as \"better,\" while the headline says \"Can't tell.\" The unit of \"Change\" (relative percent or percentage points) is unclear. The appendix does explain the call definitions.",
-  "question": "What caused the +0.71% pre-exposure gap in Successful Search Rate, and did you check assignment before planning the rerun?",
+  "lost": "The primary metric's verdict reads \"better\" under a \"Can't tell\" headline, which is the confusion the failed cold read describes. I also had to reread the \"Could reverse it\" line and the \"harm inside a margin goes to escalate\" rule to understand what they mean for this decision.",
+  "question": "Why was Successful Search Rate already higher in the test arm before exposure, and was the assignment or user mix skewed?",
   "replies": {
-    "skim": "1. Answer: The document concludes \"Can't tell.\" The 14-day test is complete, but the pre-exposure check failed: Successful Search Rate was already +0.71% higher in the test arm before exposure, so the +0.81% lift may be a head start rather than the ranker's effect.\n2. Decision: Agree to fix the test's pre-period imbalance and rerun it, and make no launch decision from this data.\n3. Number: +0.81% (95% interval +0.41% to +1.21%) for Successful Search Rate, the primary metric. The unit is percent, but the document doesn't say whether it's relative or absolute.\n",
-    "full": "1. **Answer:** The document concludes \"Can't tell.\" The test is broken: Successful Search Rate already differed by +0.71% (95% interval +0.31% to +1.11%) before exposure, nearly as large as the +0.81% lift seen after. Current state: the 14-day test is complete, with 1,000,000 users per arm, and no launch decision should be made from this data.\n\n2. **Decision:** Agree to fix the test and rerun it. Do not launch on this data. The fix should address the pre-exposure imbalance, for example with fresh assignment or an analysis that adjusts for pre-test behaviour.\n\n3. **Number:** The pre-exposure gap of +0.71% in Successful Search Rate (relative change, 95% interval +0.31% to +1.11%). It matters most because it shows the arms were not comparable, which undermines the +0.81% lift (95% interval +0.41% to +1.21%).\n\n4. **Caveat:** The +0.81% may be a head start from non-comparable arms (the document's guess is a skewed user mix), not the ranker's effect. The novelty check was not run, and the daily series that would show whether the lift holds was not provided.\n\n5. **Lost:** Mostly nowhere. One conflict: the table marks Successful Search Rate as \"better,\" while the headline says \"Can't tell.\" The unit of \"Change\" (relative percent or percentage points) is unclear. The appendix does explain the call definitions.\n\n6. **Question:** What caused the +0.71% pre-exposure gap in Successful Search Rate, and did you check assignment before planning the rerun?\n"
+    "skim": "1. Answer: The test can't support a launch call. Successful Search Rate was already +0.71% higher in the test arm before exposure, nearly the same as the +0.81% lift measured after, so the lift may be a head start rather than the ranker's effect. The document recommends fixing the pre-period problem and rerunning.\n2. Decision: Agree to fix the test and rerun. Don't make a launch decision from this data.\n3. Number: +0.81% (Successful Search Rate, percent change, 95% interval +0.41% to +1.21%). The +0.71% pre-exposure gap matters just as much, since it accounts for nearly all of that lift.\n",
+    "full": "1. **Answer:** The document concludes \"Can't tell.\" The test is broken: Successful Search Rate was already +0.71% higher in the test arm before exposure, so the +0.81% lift after exposure may be a head start, not the ranker. The 14-day run is complete, with 1,000,000 users per arm.\n\n2. **Decision:** Agree to fix the pre-exposure imbalance and rerun the test. Make no launch decision from this data.\n\n3. **Number:** +0.81% for Successful Search Rate (95% interval +0.41% to +1.21%). The document doesn't say whether this is relative change or percentage points.\n\n4. **Caveat:** The arms were probably not comparable at assignment, for example because of a skewed user mix. Launching on this result could credit the ranker with a pre-existing difference. The novelty check was also not run.\n\n5. **Lost:** The primary metric's verdict reads \"better\" under a \"Can't tell\" headline, which is the confusion the failed cold read describes. I also had to reread the \"Could reverse it\" line and the \"harm inside a margin goes to escalate\" rule to understand what they mean for this decision.\n\n6. **Question:** Why was Successful Search Rate already higher in the test arm before exposure, and was the assignment or user mix skewed?\n"
   }
 }

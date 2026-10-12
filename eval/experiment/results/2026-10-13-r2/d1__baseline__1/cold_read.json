@@ -1,0 +1,53 @@
+{
+  "pass": false,
+  "skim": "1/2",
+  "full": "2/3",
+  "items": [
+    {
+      "pass": "skim",
+      "item": "answer",
+      "key": "Don't ship: Latency p95 (ms) rose 3.10% (+2.50% to +3.70%), the wrong way and past its 2.00% margin.",
+      "reader": "The readout concludes \"Don't ship.\" The primary metric, Successful Search Rate, rose +0.0033 (95% CI +0.0017 to +0.0050), below the pre-registered ship bar of +0.005. The p95 latency guardrail also fails at +3.1% against a 2% margin. Don't ship. The text gives no follow-up plan, so the next steps are unclear.",
+      "got": true,
+      "how": "overlap 0%; grader: same fact"
+    },
+    {
+      "pass": "skim",
+      "item": "decision",
+      "key": "Agree not to launch; the owner decides whether to iterate.",
+      "reader": "Don't ship. The text gives no follow-up plan, so the next steps are unclear. The readout concludes \"Don't ship.\" The primary metric, Successful Search Rate, rose +0.0033 (95% CI +0.0017 to +0.0050), below the pre-registered ship bar of +0.005. The p95 latency guardrail also fails at +3.1% against a 2% margin.",
+      "got": false,
+      "how": "overlap 0%"
+    },
+    {
+      "pass": "full",
+      "item": "takeaway 1",
+      "key": "Latency p95 (ms) +3.10% (+2.50% to +3.70%) against at most 2.00% higher.",
+      "reader": "The readout recommends not shipping. The primary metric is positive but below the bar, and the p95 latency guardrail fails. It recommends fixing the latency regression and re-testing. Handover state: decision made (don't ship), with one open item, confirming whether the bar is absolute or relative. Don't ship. Assign the latency fix, then re-run the test. Before the re-test, get the team to confirm the bar's unit. Relative would make the primary pass, but latency still blocks shipping. Successful Search Rate lift of +0.0033 (absolute; 95% CI +0.0017 to +0.0050), against a +0.005 bar. The latency regression is the deciding number for the blocking guardrail: +3.1% p95 latency (CI 2.5% to 3.7%), against a 2% margin. The biggest risk is the latency regression, which blocks shipping on its own. A secondary risk is the informational Clicks per User cut for informational queries (\u22121.5%, p = 0.037). It is one of many unplanned cuts with no multiple-comparison correction, so it is a hypothesis only.",
+      "got": true,
+      "how": "overlap 0%; grader: same fact"
+    },
+    {
+      "pass": "full",
+      "item": "takeaway 2",
+      "key": "Agree not to launch; the owner decides whether to iterate.",
+      "reader": "The readout recommends not shipping. The primary metric is positive but below the bar, and the p95 latency guardrail fails. It recommends fixing the latency regression and re-testing. Handover state: decision made (don't ship), with one open item, confirming whether the bar is absolute or relative. Don't ship. Assign the latency fix, then re-run the test. Before the re-test, get the team to confirm the bar's unit. Relative would make the primary pass, but latency still blocks shipping. Successful Search Rate lift of +0.0033 (absolute; 95% CI +0.0017 to +0.0050), against a +0.005 bar. The latency regression is the deciding number for the blocking guardrail: +3.1% p95 latency (CI 2.5% to 3.7%), against a 2% margin. The biggest risk is the latency regression, which blocks shipping on its own. A secondary risk is the informational Clicks per User cut for informational queries (\u22121.5%, p = 0.037). It is one of many unplanned cuts with no multiple-comparison correction, so it is a hypothesis only.",
+      "got": false,
+      "how": "overlap 17%"
+    },
+    {
+      "pass": "full",
+      "item": "takeaway 3",
+      "key": "Could reverse it: only a version that keeps Latency p95 (ms) at at most 2.00% higher.",
+      "reader": "The readout recommends not shipping. The primary metric is positive but below the bar, and the p95 latency guardrail fails. It recommends fixing the latency regression and re-testing. Handover state: decision made (don't ship), with one open item, confirming whether the bar is absolute or relative. Don't ship. Assign the latency fix, then re-run the test. Before the re-test, get the team to confirm the bar's unit. Relative would make the primary pass, but latency still blocks shipping. Successful Search Rate lift of +0.0033 (absolute; 95% CI +0.0017 to +0.0050), against a +0.005 bar. The latency regression is the deciding number for the blocking guardrail: +3.1% p95 latency (CI 2.5% to 3.7%), against a 2% margin. The biggest risk is the latency regression, which blocks shipping on its own. A secondary risk is the informational Clicks per User cut for informational queries (\u22121.5%, p = 0.037). It is one of many unplanned cuts with no multiple-comparison correction, so it is a hypothesis only.",
+      "got": true,
+      "how": "overlap 0%; grader: same fact"
+    }
+  ],
+  "lost": "Nowhere in the summary. The one thing I couldn't check was the file itself, so I can't confirm the summary matches it word for word.",
+  "question": "Is the +0.005 pre-registered bar absolute or relative, and did the prereg intend it that way?",
+  "replies": {
+    "skim": "1. **Answer:** The readout concludes \"Don't ship.\" The primary metric, Successful Search Rate, rose +0.0033 (95% CI +0.0017 to +0.0050), below the pre-registered ship bar of +0.005. The p95 latency guardrail also fails at +3.1% against a 2% margin.\n2. **Decision:** Don't ship. The text gives no follow-up plan, so the next steps are unclear.\n3. **Number:** +0.0033 (absolute change in Successful Search Rate, against a +0.005 bar). The text doesn't state whether the unit is a fraction or percentage points.\n",
+    "full": "I couldn't open `readout.md`: none of my tools can read local files. These answers come from the summary in your message.\n\n1. **Answer:** The readout recommends not shipping. The primary metric is positive but below the bar, and the p95 latency guardrail fails. It recommends fixing the latency regression and re-testing. Handover state: decision made (don't ship), with one open item, confirming whether the bar is absolute or relative.\n\n2. **Decision:** Don't ship. Assign the latency fix, then re-run the test. Before the re-test, get the team to confirm the bar's unit. Relative would make the primary pass, but latency still blocks shipping.\n\n3. **Number:** Successful Search Rate lift of +0.0033 (absolute; 95% CI +0.0017 to +0.0050), against a +0.005 bar. The latency regression is the deciding number for the blocking guardrail: +3.1% p95 latency (CI 2.5% to 3.7%), against a 2% margin.\n\n4. **Caveat:** The biggest risk is the latency regression, which blocks shipping on its own. A secondary risk is the informational Clicks per User cut for informational queries (\u22121.5%, p = 0.037). It is one of many unplanned cuts with no multiple-comparison correction, so it is a hypothesis only.\n\n5. **Lost:** Nowhere in the summary. The one thing I couldn't check was the file itself, so I can't confirm the summary matches it word for word.\n\n6. **Question:** Is the +0.005 pre-registered bar absolute or relative, and did the prereg intend it that way?\n"
+  }
+}

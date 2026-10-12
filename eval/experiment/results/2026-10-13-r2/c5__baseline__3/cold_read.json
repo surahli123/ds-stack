@@ -1,0 +1,53 @@
+{
+  "pass": false,
+  "skim": "0/2",
+  "full": "1/3",
+  "items": [
+    {
+      "pass": "skim",
+      "item": "answer",
+      "key": "Can't tell, decided by config edits.",
+      "reader": "The document recommends shipping. Successful Search Rate rose from 41.20% to 41.53% (+0.81% relative), clearing the pre-registered 0.5% bar, and guardrails stay within their margins. Ship, but only after confirming the two open items the document lists at its end, which aren't in this excerpt. The 95% CI's lower bound (+0.41%) is below the bar, so the true lift could be smaller than the threshold.",
+      "got": false,
+      "how": "overlap 0%"
+    },
+    {
+      "pass": "skim",
+      "item": "decision",
+      "key": "Agree to fix the test and rerun; no launch decision from this data.",
+      "reader": "Ship, but only after confirming the two open items the document lists at its end, which aren't in this excerpt. The 95% CI's lower bound (+0.41%) is below the bar, so the true lift could be smaller than the threshold. The document recommends shipping. Successful Search Rate rose from 41.20% to 41.53% (+0.81% relative), clearing the pre-registered 0.5% bar, and guardrails stay within their margins.",
+      "got": false,
+      "how": "overlap 0%"
+    },
+    {
+      "pass": "full",
+      "item": "takeaway 1",
+      "key": "The test was edited mid-flight on 2026-09-16 (Allocation changed from 20% to 10%) and the results include days before and after",
+      "reader": "The readout recommends **Ship**. The primary metric, Successful Search Rate, rose from 41.20% to 41.53% (+0.81% relative). Guardrails are inside their margins, and no secondary metric is significant after multiple-testing correction. Two items are still open. Ship, once two things are settled before the meeting. (a) Confirm whether the pre-registered 0.005 bar is relative or absolute. If relative, the point estimate clears it. If absolute (0.5 pp), the +0.33 pp lift misses and the call is Don't ship. (b) Reconcile the allocation change: the audit log says 10% from 2026-09-16, but `experiment.json` says 20%. The comparison should still hold, but there is no per-day data to rule out a time trend. Successful Search Rate, +0.81% relative (+0.334 pp absolute). The 95% CI is +0.41% to +1.21% relative, p = 7e-5. The CI's lower bound (+0.41% relative) is below the 0.5% bar, so the true lift could be smaller than the bar. The unit ambiguity on the bar and the unreconciled allocation change are the other named risks.",
+      "got": true,
+      "how": "overlap 46%; grader: same fact"
+    },
+    {
+      "pass": "full",
+      "item": "takeaway 2",
+      "key": "Agree to fix the test and rerun; no launch decision from this data.",
+      "reader": "The readout recommends **Ship**. The primary metric, Successful Search Rate, rose from 41.20% to 41.53% (+0.81% relative). Guardrails are inside their margins, and no secondary metric is significant after multiple-testing correction. Two items are still open. Ship, once two things are settled before the meeting. (a) Confirm whether the pre-registered 0.005 bar is relative or absolute. If relative, the point estimate clears it. If absolute (0.5 pp), the +0.33 pp lift misses and the call is Don't ship. (b) Reconcile the allocation change: the audit log says 10% from 2026-09-16, but `experiment.json` says 20%. The comparison should still hold, but there is no per-day data to rule out a time trend. Successful Search Rate, +0.81% relative (+0.334 pp absolute). The 95% CI is +0.41% to +1.21% relative, p = 7e-5. The CI's lower bound (+0.41% relative) is below the 0.5% bar, so the true lift could be smaller than the bar. The unit ambiguity on the bar and the unreconciled allocation change are the other named risks.",
+      "got": false,
+      "how": "overlap 14%"
+    },
+    {
+      "pass": "full",
+      "item": "takeaway 3",
+      "key": "Could reverse it: fixing the config edits problem and rerunning.",
+      "reader": "The readout recommends **Ship**. The primary metric, Successful Search Rate, rose from 41.20% to 41.53% (+0.81% relative). Guardrails are inside their margins, and no secondary metric is significant after multiple-testing correction. Two items are still open. Ship, once two things are settled before the meeting. (a) Confirm whether the pre-registered 0.005 bar is relative or absolute. If relative, the point estimate clears it. If absolute (0.5 pp), the +0.33 pp lift misses and the call is Don't ship. (b) Reconcile the allocation change: the audit log says 10% from 2026-09-16, but `experiment.json` says 20%. The comparison should still hold, but there is no per-day data to rule out a time trend. Successful Search Rate, +0.81% relative (+0.334 pp absolute). The 95% CI is +0.41% to +1.21% relative, p = 7e-5. The CI's lower bound (+0.41% relative) is below the 0.5% bar, so the true lift could be smaller than the bar. The unit ambiguity on the bar and the unreconciled allocation change are the other named risks.",
+      "got": false,
+      "how": "overlap 0%"
+    }
+  ],
+  "lost": "The bar's unit (relative vs. absolute) is the spot I'd reread. The whole decision flips on it, and the document doesn't settle it. The guardrail table's \"margins read as relative\" note also needed a second look, since the Revenue per User margin is negative.",
+  "question": "\"Is the 0.005 ship bar in the pre-registration relative or absolute, and does the 10% allocation period from 2026-09-16 need to be excluded or modeled?\"",
+  "replies": {
+    "skim": "1. **Answer:** The document recommends shipping. Successful Search Rate rose from 41.20% to 41.53% (+0.81% relative), clearing the pre-registered 0.5% bar, and guardrails stay within their margins.\n2. **Decision:** Ship, but only after confirming the two open items the document lists at its end, which aren't in this excerpt. The 95% CI's lower bound (+0.41%) is below the bar, so the true lift could be smaller than the threshold.\n3. **Number:** +0.81% relative lift in Successful Search Rate (+0.334 pp).\n",
+    "full": "1. **Answer:** The readout recommends **Ship**. The primary metric, Successful Search Rate, rose from 41.20% to 41.53% (+0.81% relative). Guardrails are inside their margins, and no secondary metric is significant after multiple-testing correction. Two items are still open.\n\n2. **Decision:** Ship, once two things are settled before the meeting. (a) Confirm whether the pre-registered 0.005 bar is relative or absolute. If relative, the point estimate clears it. If absolute (0.5 pp), the +0.33 pp lift misses and the call is Don't ship. (b) Reconcile the allocation change: the audit log says 10% from 2026-09-16, but `experiment.json` says 20%. The comparison should still hold, but there is no per-day data to rule out a time trend.\n\n3. **Number:** Successful Search Rate, +0.81% relative (+0.334 pp absolute). The 95% CI is +0.41% to +1.21% relative, p = 7e-5.\n\n4. **Caveat:** The CI's lower bound (+0.41% relative) is below the 0.5% bar, so the true lift could be smaller than the bar. The unit ambiguity on the bar and the unreconciled allocation change are the other named risks.\n\n5. **Lost:** The bar's unit (relative vs. absolute) is the spot I'd reread. The whole decision flips on it, and the document doesn't settle it. The guardrail table's \"margins read as relative\" note also needed a second look, since the Revenue per User margin is negative.\n\n6. **Question:** \"Is the 0.005 ship bar in the pre-registration relative or absolute, and does the 10% allocation period from 2026-09-16 need to be excluded or modeled?\"\n"
+  }
+}

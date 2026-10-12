@@ -1,0 +1,53 @@
+{
+  "pass": false,
+  "skim": "0/2",
+  "full": "1/3",
+  "items": [
+    {
+      "pass": "skim",
+      "item": "answer",
+      "key": "Don't ship: Abandonment Rate rose 2.20% (+1.50% to +2.90%), the wrong way and past its 1.00% margin.",
+      "reader": "Don't ship. Ranker v7 clears the Successful Search Rate bar on point estimate, but it breaches the pre-registered Abandonment Rate guardrail. Hold the launch. The document doesn't say what to do about the guardrail breach, so the next step is unclear.",
+      "got": false,
+      "how": "overlap 0%"
+    },
+    {
+      "pass": "skim",
+      "item": "decision",
+      "key": "Agree not to launch; the owner decides whether to iterate.",
+      "reader": "Hold the launch. The document doesn't say what to do about the guardrail breach, so the next step is unclear. Don't ship. Ranker v7 clears the Successful Search Rate bar on point estimate, but it breaches the pre-registered Abandonment Rate guardrail.",
+      "got": false,
+      "how": "overlap 17%"
+    },
+    {
+      "pass": "full",
+      "item": "takeaway 1",
+      "key": "Abandonment Rate +2.20% (+1.50% to +2.90%) against at most 1.00% higher.",
+      "reader": "The document recommends **don't ship** Ranker v7. It meets the primary bar (Successful Search Rate +0.00511 vs. +0.005) but breaches the pre-registered Abandonment Rate guardrail (+2.2% relative, worse). Current state: the 14-day test ended 2026-09-25 but is still marked \"active,\" so it has not been formally concluded. Don't ship v7 as is. Investigate the abandonment increase, starting with head queries. If a revised ranker removes the regression and keeps the primary lift, re-test it. Override the guardrail only if leadership explicitly accepts the trade-off. Abandonment Rate, +2.2% relative (absolute +0.0041, \u00b10.0013), against a 1% margin. This is the number that drives the decision. The abandonment breach is the main risk. The primary lift is also thin: the 95% CI runs from about +0.0035 to +0.0068, so the lower bound sits below the 0.005 bar. The document also says the guardrail margins are read as relative changes. If the 1% margin was meant as absolute, abandonment passes, so that reading decides the outcome.",
+      "got": false,
+      "how": "overlap 0%"
+    },
+    {
+      "pass": "full",
+      "item": "takeaway 2",
+      "key": "Agree not to launch; the owner decides whether to iterate.",
+      "reader": "The document recommends **don't ship** Ranker v7. It meets the primary bar (Successful Search Rate +0.00511 vs. +0.005) but breaches the pre-registered Abandonment Rate guardrail (+2.2% relative, worse). Current state: the 14-day test ended 2026-09-25 but is still marked \"active,\" so it has not been formally concluded. Don't ship v7 as is. Investigate the abandonment increase, starting with head queries. If a revised ranker removes the regression and keeps the primary lift, re-test it. Override the guardrail only if leadership explicitly accepts the trade-off. Abandonment Rate, +2.2% relative (absolute +0.0041, \u00b10.0013), against a 1% margin. This is the number that drives the decision. The abandonment breach is the main risk. The primary lift is also thin: the 95% CI runs from about +0.0035 to +0.0068, so the lower bound sits below the 0.005 bar. The document also says the guardrail margins are read as relative changes. If the 1% margin was meant as absolute, abandonment passes, so that reading decides the outcome.",
+      "got": false,
+      "how": "overlap 17%"
+    },
+    {
+      "pass": "full",
+      "item": "takeaway 3",
+      "key": "Could reverse it: only a version that keeps Abandonment Rate at at most 1.00% higher.",
+      "reader": "The document recommends **don't ship** Ranker v7. It meets the primary bar (Successful Search Rate +0.00511 vs. +0.005) but breaches the pre-registered Abandonment Rate guardrail (+2.2% relative, worse). Current state: the 14-day test ended 2026-09-25 but is still marked \"active,\" so it has not been formally concluded. Don't ship v7 as is. Investigate the abandonment increase, starting with head queries. If a revised ranker removes the regression and keeps the primary lift, re-test it. Override the guardrail only if leadership explicitly accepts the trade-off. Abandonment Rate, +2.2% relative (absolute +0.0041, \u00b10.0013), against a 1% margin. This is the number that drives the decision. The abandonment breach is the main risk. The primary lift is also thin: the 95% CI runs from about +0.0035 to +0.0068, so the lower bound sits below the 0.005 bar. The document also says the guardrail margins are read as relative changes. If the 1% margin was meant as absolute, abandonment passes, so that reading decides the outcome.",
+      "got": true,
+      "how": "overlap 0%; grader: same fact"
+    }
+  ],
+  "lost": "I had to reread the Abandonment margin line to confirm the relative/absolute reading. Two smaller things were unclear: \"1,000,000 units per arm against 900,000 planned\" doesn't say whether 900,000 is per arm or total, and \"Pulse\" is never defined.",
+  "question": "Was the 1% guardrail margin pre-registered as a relative or an absolute change? That single answer flips the result.",
+  "replies": {
+    "skim": "1. **Answer:** Don't ship. Ranker v7 clears the Successful Search Rate bar on point estimate, but it breaches the pre-registered Abandonment Rate guardrail.\n2. **Decision:** Hold the launch. The document doesn't say what to do about the guardrail breach, so the next step is unclear.\n3. **Number:** +0.00511 absolute Successful Search Rate lift (41.20% \u2192 41.71%, +1.24% relative), against a bar of +0.005.\n",
+    "full": "1. **Answer:** The document recommends **don't ship** Ranker v7. It meets the primary bar (Successful Search Rate +0.00511 vs. +0.005) but breaches the pre-registered Abandonment Rate guardrail (+2.2% relative, worse). Current state: the 14-day test ended 2026-09-25 but is still marked \"active,\" so it has not been formally concluded.\n\n2. **Decision:** Don't ship v7 as is. Investigate the abandonment increase, starting with head queries. If a revised ranker removes the regression and keeps the primary lift, re-test it. Override the guardrail only if leadership explicitly accepts the trade-off.\n\n3. **Number:** Abandonment Rate, +2.2% relative (absolute +0.0041, \u00b10.0013), against a 1% margin. This is the number that drives the decision.\n\n4. **Caveat:** The abandonment breach is the main risk. The primary lift is also thin: the 95% CI runs from about +0.0035 to +0.0068, so the lower bound sits below the 0.005 bar. The document also says the guardrail margins are read as relative changes. If the 1% margin was meant as absolute, abandonment passes, so that reading decides the outcome.\n\n5. **Lost:** I had to reread the Abandonment margin line to confirm the relative/absolute reading. Two smaller things were unclear: \"1,000,000 units per arm against 900,000 planned\" doesn't say whether 900,000 is per arm or total, and \"Pulse\" is never defined.\n\n6. **Question:** Was the 1% guardrail margin pre-registered as a relative or an absolute change? That single answer flips the result.\n"
+  }
+}

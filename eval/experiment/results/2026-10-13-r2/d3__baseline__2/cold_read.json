@@ -1,0 +1,53 @@
+{
+  "pass": false,
+  "skim": "0/2",
+  "full": "3/3",
+  "items": [
+    {
+      "pass": "skim",
+      "item": "answer",
+      "key": "Don't ship: Abandonment Rate rose 2.20% (+1.50% to +2.90%), the wrong way and past its 1.00% margin.",
+      "reader": "Don't ship Ranker v7. It clears the primary bar (Successful Search Rate) by a hair, but breaches the Abandonment Rate guardrail. Don't launch. The text doesn't say what to do next, such as whether to fix the abandonment regression or re-run the test.",
+      "got": false,
+      "how": "overlap 0%"
+    },
+    {
+      "pass": "skim",
+      "item": "decision",
+      "key": "Agree not to launch; the owner decides whether to iterate.",
+      "reader": "Don't launch. The text doesn't say what to do next, such as whether to fix the abandonment regression or re-run the test. Don't ship Ranker v7. It clears the primary bar (Successful Search Rate) by a hair, but breaches the Abandonment Rate guardrail.",
+      "got": false,
+      "how": "overlap 33%"
+    },
+    {
+      "pass": "full",
+      "item": "takeaway 1",
+      "key": "Abandonment Rate +2.20% (+1.50% to +2.90%) against at most 1.00% higher.",
+      "reader": "The document recommends not shipping Ranker v7. It meets the primary bar only narrowly (Successful Search Rate +0.00511 absolute, point estimate vs. a 0.005 bar) but breaches the Abandonment Rate guardrail (+2.2% relative, 95% CI +1.5% to +2.9%, beyond a 1% margin). It recommends investigating the abandonment increase before any relaunch. Current state: no launch approval; the decision is pending at the review. Don't ship v7 as it stands. Next steps: (a) investigate the abandonment increase; (b) at the review, decide whether to accept the trade-off, which requires an explicit prereg change; (c) have the prereg authors confirm whether the margins are relative or absolute, since that flips the guardrail result; (d) re-pull the Pulse snapshot to confirm the full 14-day window. Abandonment Rate +2.2% relative (CI +1.5% to +2.9%). It is the guardrail breach that drives the decision. The primary win is real but within 0.0001 of the bar. The margin definition. The prereg doesn't say whether margins are absolute or relative, and under an absolute reading the abandonment breach disappears. The document also flags that the Pulse snapshot may be a day short of the window, and that about 45 uncorrected segment slices are exploratory only.",
+      "got": true,
+      "how": "overlap 0%; grader: same fact"
+    },
+    {
+      "pass": "full",
+      "item": "takeaway 2",
+      "key": "Agree not to launch; the owner decides whether to iterate.",
+      "reader": "The document recommends not shipping Ranker v7. It meets the primary bar only narrowly (Successful Search Rate +0.00511 absolute, point estimate vs. a 0.005 bar) but breaches the Abandonment Rate guardrail (+2.2% relative, 95% CI +1.5% to +2.9%, beyond a 1% margin). It recommends investigating the abandonment increase before any relaunch. Current state: no launch approval; the decision is pending at the review. Don't ship v7 as it stands. Next steps: (a) investigate the abandonment increase; (b) at the review, decide whether to accept the trade-off, which requires an explicit prereg change; (c) have the prereg authors confirm whether the margins are relative or absolute, since that flips the guardrail result; (d) re-pull the Pulse snapshot to confirm the full 14-day window. Abandonment Rate +2.2% relative (CI +1.5% to +2.9%). It is the guardrail breach that drives the decision. The primary win is real but within 0.0001 of the bar. The margin definition. The prereg doesn't say whether margins are absolute or relative, and under an absolute reading the abandonment breach disappears. The document also flags that the Pulse snapshot may be a day short of the window, and that about 45 uncorrected segment slices are exploratory only.",
+      "got": true,
+      "how": "overlap 33%; grader: same fact"
+    },
+    {
+      "pass": "full",
+      "item": "takeaway 3",
+      "key": "Could reverse it: only a version that keeps Abandonment Rate at at most 1.00% higher.",
+      "reader": "The document recommends not shipping Ranker v7. It meets the primary bar only narrowly (Successful Search Rate +0.00511 absolute, point estimate vs. a 0.005 bar) but breaches the Abandonment Rate guardrail (+2.2% relative, 95% CI +1.5% to +2.9%, beyond a 1% margin). It recommends investigating the abandonment increase before any relaunch. Current state: no launch approval; the decision is pending at the review. Don't ship v7 as it stands. Next steps: (a) investigate the abandonment increase; (b) at the review, decide whether to accept the trade-off, which requires an explicit prereg change; (c) have the prereg authors confirm whether the margins are relative or absolute, since that flips the guardrail result; (d) re-pull the Pulse snapshot to confirm the full 14-day window. Abandonment Rate +2.2% relative (CI +1.5% to +2.9%). It is the guardrail breach that drives the decision. The primary win is real but within 0.0001 of the bar. The margin definition. The prereg doesn't say whether margins are absolute or relative, and under an absolute reading the abandonment breach disappears. The document also flags that the Pulse snapshot may be a day short of the window, and that about 45 uncorrected segment slices are exploratory only.",
+      "got": true,
+      "how": "overlap 0%; grader: same fact"
+    }
+  ],
+  "lost": "Nowhere major. I had to reread the margin-assumption bullet to see that the breach verdict depends on it. The primary bar being judged on the point estimate, not the CI, is stated clearly.",
+  "question": "Was the 1% abandonment margin defined as relative or absolute in the prereg before the test started, and if relative, why does the prereg not say so?",
+  "replies": {
+    "skim": "1. **Answer:** Don't ship Ranker v7. It clears the primary bar (Successful Search Rate) by a hair, but breaches the Abandonment Rate guardrail.\n2. **Decision:** Don't launch. The text doesn't say what to do next, such as whether to fix the abandonment regression or re-run the test.\n3. **Number:** Abandonment Rate up 2.2% relative (95% CI +1.5% to +2.9%), against a 1% margin.\n",
+    "full": "1. **Answer:** The document recommends not shipping Ranker v7. It meets the primary bar only narrowly (Successful Search Rate +0.00511 absolute, point estimate vs. a 0.005 bar) but breaches the Abandonment Rate guardrail (+2.2% relative, 95% CI +1.5% to +2.9%, beyond a 1% margin). It recommends investigating the abandonment increase before any relaunch. Current state: no launch approval; the decision is pending at the review.\n\n2. **Decision:** Don't ship v7 as it stands. Next steps: (a) investigate the abandonment increase; (b) at the review, decide whether to accept the trade-off, which requires an explicit prereg change; (c) have the prereg authors confirm whether the margins are relative or absolute, since that flips the guardrail result; (d) re-pull the Pulse snapshot to confirm the full 14-day window.\n\n3. **Number:** Abandonment Rate +2.2% relative (CI +1.5% to +2.9%). It is the guardrail breach that drives the decision. The primary win is real but within 0.0001 of the bar.\n\n4. **Caveat:** The margin definition. The prereg doesn't say whether margins are absolute or relative, and under an absolute reading the abandonment breach disappears. The document also flags that the Pulse snapshot may be a day short of the window, and that about 45 uncorrected segment slices are exploratory only.\n\n5. **Lost:** Nowhere major. I had to reread the margin-assumption bullet to see that the breach verdict depends on it. The primary bar being judged on the point estimate, not the CI, is stated clearly.\n\n6. **Question:** Was the 1% abandonment margin defined as relative or absolute in the prereg before the test started, and if relative, why does the prereg not say so?\n"
+  }
+}
