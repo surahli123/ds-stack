@@ -1,0 +1,6 @@
+{
+ "title": "c1's split with a listed explanation",
+ "call": "escalate",
+ "decider": "sample_split",
+ "why": "explanation listed in the prereg softens the fail to a flag; triage confirms"
+}

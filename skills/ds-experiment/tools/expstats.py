@@ -12,6 +12,8 @@ NORMAL = NormalDist()
 
 def z_for(level):
     """Two-sided critical value, e.g. 1.96 for level 0.95."""
+    if not 0.5 < level < 1:
+        raise ValueError(f"confidence level {level} must be a fraction between 0.5 and 1 (0.95, not 95)")
     return NORMAL.inv_cdf(0.5 + level / 2)
 
 

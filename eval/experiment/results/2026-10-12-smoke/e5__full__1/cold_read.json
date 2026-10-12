@@ -1,0 +1,53 @@
+{
+  "pass": true,
+  "skim": "2/2",
+  "full": "3/3",
+  "items": [
+    {
+      "pass": "skim",
+      "item": "answer",
+      "key": "Escalate: Successful Search Rate improved but Long Click Rate is undetermined, +0.12% (-0.48% to +0.72%); the test needs every primary to improve.",
+      "reader": "The document recommends escalating. Successful Search Rate improved (+0.81%), but Long Click Rate is unclear (+0.12%, interval -0.48% to +0.72%) against a bar of at least 0.50%. Settle at triage whether Long Click Rate must clear its bar to launch. If the owners say it doesn't, only Successful Search Rate counts and the call becomes Ship.",
+      "got": true,
+      "how": "overlap 56%"
+    },
+    {
+      "pass": "skim",
+      "item": "decision",
+      "key": "Decide the trade-off at triage.",
+      "reader": "Settle at triage whether Long Click Rate must clear its bar to launch. If the owners say it doesn't, only Successful Search Rate counts and the call becomes Ship. The document recommends escalating. Successful Search Rate improved (+0.81%), but Long Click Rate is unclear (+0.12%, interval -0.48% to +0.72%) against a bar of at least 0.50%.",
+      "got": true,
+      "how": "overlap 33%; grader: same fact"
+    },
+    {
+      "pass": "full",
+      "item": "takeaway 1",
+      "key": "Long Click Rate +0.12% (-0.48% to +0.72%) against at least 0.50%.",
+      "reader": "The document recommends **Escalate**, which means a trade-off for triage. Successful Search Rate improved (+0.81%, interval +0.41% to +1.21%, above the 0.50% bar). Long Click Rate is unclear (+0.12%, interval \u22120.48% to +0.72%). The test needs every primary to improve. It is finished: day 14 of 14, 1,000,000 users per arm, above the planned 900,000. Decide whether Long Click Rate must move for a Ship. If it does not, the call is Ship. If a longer run shows it at or above +0.5%, the call is also Ship. If its interval falls wholly below +0.5%, the call is No effect found. Settle the requirement first, because it decides whether an extension is worth running. Long Click Rate, +0.12% (95% interval \u22120.48% to +0.72%) against a bar of at least 0.50%. It is the number that decides the call. The document names two limits. The pre-period check and the novelty check could not run, so the result could be reversed. Also, the mechanism is a guess: more searches may end in a click that is not a long one, so the gain may be shallower than hoped.",
+      "got": true,
+      "how": "overlap 100%"
+    },
+    {
+      "pass": "full",
+      "item": "takeaway 2",
+      "key": "Successful Search Rate +0.81% (+0.41% to +1.21%) against at least 0.50%.",
+      "reader": "The document recommends **Escalate**, which means a trade-off for triage. Successful Search Rate improved (+0.81%, interval +0.41% to +1.21%, above the 0.50% bar). Long Click Rate is unclear (+0.12%, interval \u22120.48% to +0.72%). The test needs every primary to improve. It is finished: day 14 of 14, 1,000,000 users per arm, above the planned 900,000. Decide whether Long Click Rate must move for a Ship. If it does not, the call is Ship. If a longer run shows it at or above +0.5%, the call is also Ship. If its interval falls wholly below +0.5%, the call is No effect found. Settle the requirement first, because it decides whether an extension is worth running. Long Click Rate, +0.12% (95% interval \u22120.48% to +0.72%) against a bar of at least 0.50%. It is the number that decides the call. The document names two limits. The pre-period check and the novelty check could not run, so the result could be reversed. Also, the mechanism is a guess: more searches may end in a click that is not a long one, so the gain may be shallower than hoped.",
+      "got": true,
+      "how": "overlap 100%"
+    },
+    {
+      "pass": "full",
+      "item": "takeaway 3",
+      "key": "Could reverse it: pre period could not be checked: no pre-period interval or platform check.",
+      "reader": "The document recommends **Escalate**, which means a trade-off for triage. Successful Search Rate improved (+0.81%, interval +0.41% to +1.21%, above the 0.50% bar). Long Click Rate is unclear (+0.12%, interval \u22120.48% to +0.72%). The test needs every primary to improve. It is finished: day 14 of 14, 1,000,000 users per arm, above the planned 900,000. Decide whether Long Click Rate must move for a Ship. If it does not, the call is Ship. If a longer run shows it at or above +0.5%, the call is also Ship. If its interval falls wholly below +0.5%, the call is No effect found. Settle the requirement first, because it decides whether an extension is worth running. Long Click Rate, +0.12% (95% interval \u22120.48% to +0.72%) against a bar of at least 0.50%. It is the number that decides the call. The document names two limits. The pre-period check and the novelty check could not run, so the result could be reversed. Also, the mechanism is a guess: more searches may end in a click that is not a long one, so the gain may be shallower than hoped.",
+      "got": true,
+      "how": "overlap 38%; grader: same fact"
+    }
+  ],
+  "lost": "The guardrail margin is never stated; the table says \"within margin\" with no value. The sample-split and config checks are marked as passing, but their thresholds are not given. The readout also does not say what the pre-period check would have shown.",
+  "question": "Is Long Click Rate required to clear +0.5% to ship, and if so, is one extension the plan to get there?",
+  "replies": {
+    "skim": "1. **Answer:** The document recommends escalating. Successful Search Rate improved (+0.81%), but Long Click Rate is unclear (+0.12%, interval -0.48% to +0.72%) against a bar of at least 0.50%.\n2. **Decision:** Settle at triage whether Long Click Rate must clear its bar to launch. If the owners say it doesn't, only Successful Search Rate counts and the call becomes Ship.\n3. **Number:** +0.12% (percent change in Long Click Rate, the primary metric that is unresolved).\n",
+    "full": "1. **Answer:** The document recommends **Escalate**, which means a trade-off for triage. Successful Search Rate improved (+0.81%, interval +0.41% to +1.21%, above the 0.50% bar). Long Click Rate is unclear (+0.12%, interval \u22120.48% to +0.72%). The test needs every primary to improve. It is finished: day 14 of 14, 1,000,000 users per arm, above the planned 900,000.\n\n2. **Decision:** Decide whether Long Click Rate must move for a Ship. If it does not, the call is Ship. If a longer run shows it at or above +0.5%, the call is also Ship. If its interval falls wholly below +0.5%, the call is No effect found. Settle the requirement first, because it decides whether an extension is worth running.\n\n3. **Number:** Long Click Rate, +0.12% (95% interval \u22120.48% to +0.72%) against a bar of at least 0.50%. It is the number that decides the call.\n\n4. **Caveat:** The document names two limits. The pre-period check and the novelty check could not run, so the result could be reversed. Also, the mechanism is a guess: more searches may end in a click that is not a long one, so the gain may be shallower than hoped.\n\n5. **Lost:** The guardrail margin is never stated; the table says \"within margin\" with no value. The sample-split and config checks are marked as passing, but their thresholds are not given. The readout also does not say what the pre-period check would have shown.\n\n6. **Question:** Is Long Click Rate required to clear +0.5% to ship, and if so, is one extension the plan to get there?\n"
+  }
+}

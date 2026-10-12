@@ -21,51 +21,86 @@ import json
 import os
 import re
 import sys
+import unicodedata
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, HERE)
 
-from decide import CALL_TEXT, describe, threshold_text  # noqa: E402
+from decide import CALL_TEXT, _key, describe, moved, threshold_text  # noqa: E402
 
-STAT_SPEAK = re.compile(r"p[- ]?values?|\bp\s*[<=>]|statistical|significan|\balpha\b|z[- ]?score|t[- ]?stat|"
-                        r"\bpower(ed)?\b|variance|cuped|bonferroni|sequential|\bsrm\b|null hypothesis|"
-                        r"confidence interval|\bci\b", re.I)
-CALL_WORDS = re.compile(r"\bship\b|don'?t ship|escalat|keep running|no effect found|can'?t tell", re.I)
-NUMBER = re.compile(r"(?<![\w.])([-+−]?\d+(?:,\d{3})*(?:\.\d+)?)\s*(%|pp\b)?")
+STAT_SPEAK = re.compile(r"p[- ]?values?|\bp\s*(?:[<=>]|of\b|was\b|is\b)|statistical|significan|\balpha\b|"
+                        r"z[- ]?score|t[- ]?stat|\bpower(ed)?\b|variance|cuped|bonferroni|sequential|\bsrm\b|"
+                        r"null hypothesis|confidence|\bci\b|\bintervals?\b|standard errors?|margin of error|\bnoise\b|"
+                        r"\bby chance\b|\brobust\b|\bsigma\b|percent level|\bdegrees of freedom\b", re.I)
+CALL_WORDS = re.compile(r"\bship(ping|ped)?\b|don'?t ship|escalat|keep running|no effect found|can'?t tell|"
+                        r"\blaunch(ing|ed)?\b|roll(ing)?[ -]?out|go/no[- ]go", re.I)
+NUMBER_WORDS = re.compile(r"\b(one|two|three|four|five|six|seven|eight|nine|ten|a half|half|a third|a quarter|"
+                          r"twice|double|triple)\b\s*(percent|percentage|pp|%|times|x\b)?", re.I)
+NUMBER = re.compile(r"(?<![\w.])([-+−]?\d+(?:,\d{3})*(?:\.\d+)?)\s*(%|pp\b|x\b)?")
+DOWN = re.compile(r"\b(fell|fall|falls|dropped|drops|decreased|declined|down|lower|shrank|lost)\b", re.I)
+UP = re.compile(r"\b(rose|rise|rises|increased|grew|up|higher|gained|climbed)\b", re.I)
 LABELS = ("measured", "inferred", "guess")
 MAX_BULLETS, MAX_WORDS, MAX_VIEW_WORDS = 3, 35, 45
 GLOSSARY = ("Calls: Can't tell means the test is broken. Keep running means not enough data yet. "
             "No effect found means enough data and nothing as big as the bar. Escalate means a trade-off for triage.")
 
 
-def allowed_numbers(decision, scorecard):
+def _metric_numbers(m):
     percents, plain = set(), set()
-    for comparison in scorecard.get("comparisons", []):
-        for m in comparison["metrics"]:
-            for key in ("rel_delta",):
-                if m.get(key) is not None:
-                    percents.add(100 * m[key])
-            for ci in (m.get("rel_ci"), m.get("seq_rel_ci")):
-                for b in ci or []:
-                    percents.add(100 * b)
-            for key in ("control_mean", "test_mean", "abs_delta", "control_units", "test_units"):
-                if m.get(key) is not None:
-                    plain.add(m[key])
-                    if key in ("control_mean", "test_mean") and 0 < abs(m[key]) <= 1:
-                        percents.add(100 * m[key])
-            if m.get("abs_delta") is not None and m.get("control_mean") is not None and abs(m["control_mean"]) <= 1:
-                percents.add(100 * m["abs_delta"])  # a rate's change in percentage points
-            for b in m.get("abs_ci") or []:
-                plain.add(b)
+    for key in ("rel_delta",):
+        if m.get(key) is not None:
+            percents.add(100 * m[key])
+    for ci in (m.get("rel_ci"), m.get("seq_rel_ci")):
+        for b in ci or []:
+            percents.add(100 * b)
+    for key in ("control_mean", "test_mean", "abs_delta", "control_units", "test_units"):
+        if m.get(key) is not None:
+            plain.add(m[key])
+            if key in ("control_mean", "test_mean") and 0 < abs(m[key]) <= 1:
+                percents.add(100 * m[key])
+    if m.get("abs_delta") is not None and m.get("control_mean") is not None and abs(m["control_mean"]) <= 1:
+        percents.add(100 * m["abs_delta"])  # a rate's change in percentage points
+    for b in m.get("abs_ci") or []:
+        plain.add(b)
+    return percents, plain
+
+
+def allowed_numbers(decision, scorecard, text=""):
+    """Numbers a bullet may use: those of the metrics it names, the decider and the
+    primaries, plus the decision's own (thresholds, status, daily series, shares)."""
+    percents, plain = set(), set()
+    words = set(re.findall(r"[a-z0-9]+", text.lower()))
+
+    def named_in_text(name):
+        first = re.findall(r"[a-z0-9]+", name.lower())[:1]
+        return (_key(name) and _key(name) in _key(text)) or (first and len(first[0]) >= 5 and first[0] in words)
+
+    named = [m for c in scorecard.get("comparisons", []) if c.get("test_group") == decision["experiment"].get("test_group")
+             for m in c["metrics"] if named_in_text(m["metric"])]
+    anchors = {_key(decision["decider"].get("metric", ""))} | {_key(v["metric"]) for v in decision["verdicts"] if v["role"] == "primary"}
+    for c in scorecard.get("comparisons", []):
+        for m in c["metrics"]:
+            if m in named or _key(m["metric"]) in anchors:
+                p, q = _metric_numbers(m)
+                percents |= p
+                plain |= q
     for v in decision["verdicts"]:
         for key in ("point", "low", "high", "threshold"):
             if v.get(key) is not None:
-                (percents if v.get("unit") == "relative" else plain).add(100 * v[key] if v.get("unit") == "relative" else v[key])
-                if key == "threshold" and v.get("unit") == "relative":
+                if v.get("unit") == "relative":
                     percents.add(100 * v[key])
+                else:
+                    plain.add(v[key])
+        for key in ("point", "low", "high"):
+            if (v.get("triggered") or {}).get(key) is not None:
+                percents.add(100 * v["triggered"][key])
+        if v.get("scaled_from_triggered"):
+            percents.add(100 * v["scaled_from_triggered"])
     for s in decision["secondaries"]["survivors"]:
         if s.get("rel_delta") is not None:
             percents.add(100 * s["rel_delta"])
+    for value in decision.get("daily") or []:
+        percents.add(100 * value)
     for key, value in decision["status"].items():
         if isinstance(value, (int, float)) and not isinstance(value, bool):
             plain.add(value)
@@ -74,18 +109,51 @@ def allowed_numbers(decision, scorecard):
 
 
 def number_ok(text_value, unit, percents, plain):
-    value = abs(float(text_value.replace(",", "").replace("−", "-")))
+    raw = text_value.replace(",", "").replace("−", "-")
+    value = abs(float(raw))
+    decimals = len(raw.split(".")[1]) if "." in raw else 0
+    tolerance = 0.5 * 10 ** -decimals + 1e-9
     if unit in ("%", "pp"):
-        return any(abs(value - abs(p)) <= 0.0051 + 1e-9 or abs(value - abs(p)) <= 0.051 and len(text_value.split(".")[-1]) == 1
-                   for p in percents) or any(abs(value - abs(p)) <= 0.0051 for p in plain)
-    if value <= 10 and float(value).is_integer():
+        return any(abs(value - abs(p)) <= tolerance for p in percents)
+    if unit == "x":
+        return False
+    if value <= 10 and float(value).is_integer() or decimals == 0 and 1990 <= value <= 2100:
         return True
-    return any(abs(value - abs(p)) <= max(0.005 * abs(p), 0.0051) for p in plain | percents)
+    return any(abs(value - abs(p)) <= max(tolerance, 0.005 * abs(p)) for p in plain | percents)
+
+
+def _normal(text):
+    text = unicodedata.normalize("NFKC", text)
+    return re.sub(r"[\u2010-\u2015\u2212]", "-", text)
+
+
+def _sign_problems(where, text, decision, scorecard):
+    """A direction word next to a metric name that contradicts the scorecard's sign."""
+    problems = []
+    lowered = text.lower()
+    for c in scorecard.get("comparisons", []):
+        if c.get("test_group") != decision["experiment"].get("test_group"):
+            continue
+        for m in sorted(c["metrics"], key=lambda m: -len(m["metric"])):
+            name = m["metric"].lower()
+            at = lowered.find(name)
+            point = m.get("rel_delta") if m.get("rel_delta") is not None else m.get("abs_delta")
+            ci = m.get("rel_ci") or m.get("abs_ci")
+            if at < 0 or point is None or not ci or ci[0] <= 0 <= ci[1]:
+                continue
+            window = " ".join(lowered[at + len(name):].split()[:6])
+            if point > 0 and DOWN.search(window) or point < 0 and UP.search(window):
+                problems.append(f"{where}: says {m['metric']} moved the other way from the scorecard "
+                                f"({100 * m['rel_delta']:+.2f}%)" if m.get("rel_delta") is not None else
+                                f"{where}: says {m['metric']} moved the other way from the scorecard")
+            lowered = lowered.replace(name, " " * len(name))
+    return problems
 
 
 def check_notes(notes, decision, scorecard):
+    if not isinstance(notes, dict):
+        return ["notes.json must be an object with why_it_moved, would_change and analyst_view"]
     problems = []
-    percents, plain = allowed_numbers(decision, scorecard)
     why = notes.get("why_it_moved") or []
     change = notes.get("would_change") or []
     view = notes.get("analyst_view")
@@ -100,28 +168,45 @@ def check_notes(notes, decision, scorecard):
         if not isinstance(item, dict) or item.get("label") not in LABELS:
             problems.append(f"why_it_moved #{i} needs a label: measured, inferred or guess")
             continue
-        texts.append((f"why_it_moved #{i}", item.get("text", ""), MAX_WORDS))
-        if CALL_WORDS.search(item.get("text", "")):
-            problems.append(f"why_it_moved #{i} uses a call word ('{CALL_WORDS.search(item['text']).group(0)}'); "
-                            "the call is made once, in the title")
-    texts += [(f"would_change #{i}", t, MAX_WORDS) for i, t in enumerate(change, 1)]
+        texts.append((f"why_it_moved #{i}", item.get("text", ""), MAX_WORDS, True))
+    texts += [(f"would_change #{i}", t, MAX_WORDS, True) for i, t in enumerate(change, 1)]
     if view:
-        if view.get("call") not in CALL_TEXT or view.get("call") == decision["call"]:
+        if not isinstance(view, dict) or view.get("call") not in CALL_TEXT or view.get("call") == decision["call"]:
             problems.append(f"analyst_view.call must be one of {sorted(CALL_TEXT)} and differ from the scripted call")
-        texts.append(("analyst_view", view.get("reason", ""), MAX_VIEW_WORDS))
-    for where, text, cap in texts:
+        else:
+            texts.append(("analyst_view", view.get("reason", ""), MAX_VIEW_WORDS, False))
+    for where, text, cap, no_calls in texts:
         if not isinstance(text, str) or not text.strip():
             problems.append(f"{where} is empty")
             continue
+        text = _normal(text)
+        if "\n" in text or text.lstrip().startswith(("#", "|", ">")):
+            problems.append(f"{where} must be one plain sentence or two, with no line breaks, headings or tables")
         words = len(text.split())
         if words > cap:
             problems.append(f"{where} has {words} words; at most {cap}")
         speak = STAT_SPEAK.search(text)
         if speak:
             problems.append(f"{where} uses stat-speak ('{speak.group(0)}'); say what it means for the decision instead")
+        if no_calls and CALL_WORDS.search(text):
+            problems.append(f"{where} uses a call word ('{CALL_WORDS.search(text).group(0)}'); the call is made once, "
+                            "in the title, and the analyst's view is the place to disagree")
+        word_number = NUMBER_WORDS.search(text)
+        if word_number and (word_number.group(2) or word_number.group(1).lower() in ("twice", "double", "triple", "half", "a half", "a third", "a quarter")):
+            problems.append(f"{where}: write '{word_number.group(0).strip()}' as the scorecard's number so it can be checked")
+        percents, plain = allowed_numbers(decision, scorecard, text)
+        for verb, number in re.findall(r"\b(\w+)\s+(?:by\s+)?(?:about\s+|nearly\s+|roughly\s+)?([-+]?\d+(?:\.\d+)?)\s*%", text):
+            value = float(number)
+            decimals = len(number.split(".")[1]) if "." in number else 0
+            matches = [p for p in percents if abs(abs(value) - abs(p)) <= 0.5 * 10 ** -decimals + 1e-9]
+            if matches and (DOWN.fullmatch(verb) and all(p > 0 for p in matches)
+                            or UP.fullmatch(verb) and all(p < 0 for p in matches)):
+                problems.append(f"{where}: '{verb} {number}%' has the opposite sign from the scorecard's change")
         for match in NUMBER.finditer(re.sub(r"\b[A-Za-z]+\d+\w*\b|\d{4}-\d{2}-\d{2}", " ", text)):
             if not number_ok(match.group(1), match.group(2), percents, plain):
-                problems.append(f"{where}: {match.group(0).strip()} is not a number in the scorecard or the decision")
+                problems.append(f"{where}: {match.group(0).strip()} is not a number for the metrics this bullet names, "
+                                "the decider or the primary")
+        problems.extend(_sign_problems(where, text, decision, scorecard))
     return problems
 
 
@@ -129,10 +214,11 @@ def bar_text(v):
     if v.get("threshold") is None:
         return "no worse than zero" if v["role"] == "guardrail" else "none registered"
     shown = threshold_text(v["threshold"], v.get("unit", "relative"), v.get("display_unit", ""))
+    down_is_good = v.get("direction") in ("decrease", "lower", "down", "lower_is_better")
     if v["role"] == "primary":
-        return f"at least {shown}"
+        return f"at least {shown} lower" if down_is_good else f"at least {shown} higher"
     if v["role"] == "guardrail":
-        return f"no worse than {shown}"
+        return f"at most {shown} higher" if down_is_good else f"at most {shown} lower"
     return "no change"
 
 
@@ -144,6 +230,8 @@ VERDICT_TEXT = {"better": "better", "below_bar": "better, below the bar", "worse
 
 def row(v):
     change = describe(v) if v.get("point") is not None else ""
+    if v.get("scaled_from_triggered"):
+        change += " overall"
     return f"| {v['metric']} | {v['role']} | {change} | {bar_text(v)} | {VERDICT_TEXT.get(v['verdict'], v['verdict'])} |"
 
 
@@ -159,7 +247,8 @@ def metric_rows(decision):
     lines = [row(v) for v in first + alarms + primaries]
     quiet_guards = [v["metric"] for v in quiet if v["role"] == "guardrail"]
     if quiet_guards:
-        lines.append(f"| Other guardrails | guardrail | {', '.join(quiet_guards)} | | within margin |")
+        lines.append(f"| {len(quiet_guards)} other guardrail{'s' if len(quiet_guards) > 1 else ''} | guardrail | | | "
+                     f"{'all ' if len(quiet_guards) > 1 else ''}within margin |")
     for v in quiet:
         if v["role"] == "invariant":
             lines.append(row(v))
@@ -182,9 +271,40 @@ def status_line(status):
 
 
 def checks_line(checks):
-    order = {"fail": 0, "flag": 1, "could_not_run": 2, "pass": 3}
-    shown = sorted(checks, key=lambda c: order.get(c["status"], 4))
-    return "; ".join(f"{c['check'].replace('_', ' ')} {c['status'].replace('_', ' ')}" for c in shown)
+    name = lambda c: c["check"].replace("_", " ")  # noqa: E731
+    parts = [f"{name(c)} {c['status']}" for c in checks if c["status"] in ("fail", "flag")]
+    passed = [name(c) for c in checks if c["status"] == "pass"]
+    unrun = [name(c) for c in checks if c["status"] == "could_not_run"]
+    if passed:
+        parts.append(f"passed: {', '.join(passed)}")
+    if unrun:
+        parts.append(f"not run: {', '.join(unrun)}")
+    return "; ".join(parts)
+
+
+def history(decision):
+    """Earlier decide.py calls for this experiment in the run log that reached a different call."""
+    path = os.environ.get("DS_CHECKS_LOG") or os.path.join(os.getcwd(), ".ds-checks.log")
+    if not os.path.exists(path):
+        return None
+    runs = []
+    with open(path, encoding="utf-8") as handle:
+        for line in handle:
+            try:
+                entry = json.loads(line)
+            except ValueError:
+                continue
+            details = entry.get("details") or {}
+            if entry.get("check") == "ds_experiment_decide" and details.get("experiment") == decision["experiment"].get("id"):
+                runs.append(entry)
+    earlier = [r for r in runs if r.get("status") != decision["call"]]
+    if not earlier:
+        return None
+    changed = sorted({k for r in earlier for k, v in (r["details"].get("inputs") or {}).items()
+                      if v != (decision.get("inputs") or {}).get(k)})
+    calls = ", ".join(f"{CALL_TEXT.get(r['status'], r['status'])} ({r['details'].get('decider')})" for r in earlier[-3:])
+    return (f"decide.py ran {len(runs)} times on this experiment; earlier it called {calls}"
+            + (f", with different {', '.join(changed)}" if changed else "") + ". The readout shows the last run.")
 
 
 def reversal(decision):
@@ -213,6 +333,9 @@ def readout(decision, notes, scorecard):
              f"Ask: {decision['ask']}", "",
              f"Status: {status_line(decision['status'])}.", "",
              f"Could reverse it: {reversal(decision)}.", ""]
+    past = history(decision)
+    if past:
+        lines += [f"History: {past}", ""]
     if decision["call"] != "not_ab":
         lines += [f"| Metric | Role | Change ({round(100 * decision['settings']['ci_level'])}% interval) | Bar | Verdict |",
                   "|---|---|---|---|---|"] + metric_rows(decision) + [""]
@@ -228,16 +351,34 @@ def readout(decision, notes, scorecard):
     sec = decision["secondaries"]
     survivors = sec["survivors"]
     lines += ["## Appendix", ""]
+    shown = lambda s: f"{100 * s['rel_delta']:+.2f}%" if s.get("rel_delta") is not None else f"{s.get('abs_delta'):+g}"  # noqa: E731
     if survivors:
-        names = ", ".join(f"{s['metric']} ({100 * s['rel_delta']:+.2f}%)" for s in survivors if s.get("rel_delta") is not None)
-        lines.append(f"- Secondary metrics: {sec['tested']} tested; after a false-discovery correction these moved: {names}. "
+        names = ", ".join(f"{s['metric']} ({shown(s)})" for s in survivors[:5])
+        more = f" and {len(survivors) - 5} more" if len(survivors) > 5 else ""
+        lines.append(f"- Secondary metrics: {sec['tested']} tested; after a false-discovery correction these moved: {names}{more}. "
                      "They are exploratory and don't change the call.")
-    else:
+    elif sec["tested"]:
         lines.append(f"- Secondary metrics: {sec['tested']} tested; none moved after a false-discovery correction.")
+    if sec.get("untested"):
+        lines.append(f"- Secondary metrics not tested: {sec['untested']} (the scorecard gives them no p-values).")
     settings = decision["settings"]
+    levels = settings.get("levels", {})
     cuped = {True: "on (changes are adjusted for pre-test behaviour)", False: "off", None: "not recorded"}[settings.get("cuped")]
-    lines.append(f"- Settings: {round(100 * settings['ci_level'])}% intervals; variance reduction {cuped}; "
+    level_text = f"{round(100 * settings['ci_level'])}% intervals"
+    if levels.get("primary") and abs(levels["primary"] - settings["ci_level"]) > 1e-9:
+        level_text += f", {100 * levels['primary']:.1f}% for primaries (shared across them)"
+    if settings.get("sequential"):
+        level_text += ", sequential (they stay valid when the test is checked early)"
+    lines.append(f"- Settings: {level_text}; variance reduction {cuped}; "
                  f"harm inside a margin goes to {settings['standards']['harm_within_margin']}.")
+    for v in decision["verdicts"]:
+        if v.get("triggered"):
+            t = v["triggered"]
+            lines.append(f"- {v['metric']} is measured on triggered traffic ({100 * t['point']:+.2f}%); the call uses the overall "
+                         f"change, scaled by its {100 * v['scaled_from_triggered']:.1f}% share of the control total.")
+    quiet = [v["metric"] for v in decision["verdicts"] if v["role"] == "guardrail" and v["verdict"] in ("within", "no_harm_detected")]
+    if quiet:
+        lines.append(f"- Guardrails within margin: {', '.join(quiet)}.")
     for item in decision["fallbacks"]:
         lines.append(f"- Fallback: {item}.")
     lines += ["- Every metric, with means and p-values: all_metrics.md.", f"- {GLOSSARY}", ""]

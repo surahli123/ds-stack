@@ -1,0 +1,6 @@
+{
+ "title": "s1 plus an invariant the scorecard doesn't carry",
+ "call": "escalate",
+ "decider": "Exposures per User",
+ "why": "a registered check that can't run should not vanish"
+}

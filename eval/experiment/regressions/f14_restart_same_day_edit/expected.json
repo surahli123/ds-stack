@@ -1,0 +1,6 @@
+{
+ "title": "edit then restart on 09-16, results through 09-29",
+ "call": "ship",
+ "decider": "Successful Search Rate",
+ "why": "the restart resets the window; the edit is before it"
+}

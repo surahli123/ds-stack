@@ -41,10 +41,14 @@ def run_job(job, model, out_dir, timeout):
             shutil.copytree(os.path.join(ROOT, "skills", skill), os.path.join(work, ".claude", "skills", skill), ignore=SKIP)
         with open(os.path.join(work, "CLAUDE.md"), "w") as handle:
             handle.write(FULL_NOTE)
+        os.makedirs(os.path.join(work, "overlay"))
+        shutil.copy(os.path.join(ROOT, "overlay.example", "standards.json"), os.path.join(work, "overlay", "standards.json"))
     config = os.path.join(root, "config")
     os.makedirs(config)
     env = {k: os.environ[k] for k in PASSTHROUGH_ENV if k in os.environ}
     env.update(HOME=config, CLAUDE_CONFIG_DIR=config, DS_CHECKS_LOG=os.path.join(work, ".ds-checks.log"))
+    if arm == "full":
+        env["DS_OVERLAY_DIR"] = os.path.join(work, "overlay")
     with open(os.path.join(work, "task.md")) as handle:
         prompt = handle.read()
     cmd = ["claude", "-p", prompt, "--model", model, "--output-format", "stream-json", "--verbose",

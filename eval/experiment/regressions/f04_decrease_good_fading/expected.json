@@ -1,0 +1,6 @@
+{
+ "title": "time to first click (decrease is good) fading by exposure day",
+ "call": "keep_running",
+ "decider": "Time to First Click (s)",
+ "why": "effect fades from about -3.5% to -0.8% by exposure day"
+}

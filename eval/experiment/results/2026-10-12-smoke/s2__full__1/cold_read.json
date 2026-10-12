@@ -1,0 +1,53 @@
+{
+  "pass": false,
+  "skim": "1/2",
+  "full": "3/3",
+  "items": [
+    {
+      "pass": "skim",
+      "item": "answer",
+      "key": "Ship: Successful Search Rate improved +0.81% (+0.41% to +1.21%), which clears the 0.50% bar and every guardrail held.",
+      "reader": "The document recommends shipping Ranker v7 to all traffic, based on a +0.81% lift in Successful Search Rate. The analyst's view in the same document is Escalate. Don't approve the full launch yet. Run the pre-period and novelty checks and explain the 2.8% Ad Click Rate drop first. The interval's low end (+0.41%) is under the 0.50% bar.",
+      "got": false,
+      "how": "overlap 0%"
+    },
+    {
+      "pass": "skim",
+      "item": "decision",
+      "key": "Approve the launch to all traffic.",
+      "reader": "Don't approve the full launch yet. Run the pre-period and novelty checks and explain the 2.8% Ad Click Rate drop first. The interval's low end (+0.41%) is under the 0.50% bar. The document recommends shipping Ranker v7 to all traffic, based on a +0.81% lift in Successful Search Rate. The analyst's view in the same document is Escalate.",
+      "got": true,
+      "how": "overlap 100%"
+    },
+    {
+      "pass": "full",
+      "item": "takeaway 1",
+      "key": "Successful Search Rate +0.81% (+0.41% to +1.21%) against at least 0.50%.",
+      "reader": "The document recommends Ship. Ranker v7 raised Successful Search Rate by +0.81% (95% interval +0.41% to +1.21%), above the 0.50% bar, and the guardrails held. The test is complete: day 14 of 14, with 1,000,000 users per arm. Approval to launch to all traffic is requested. Approve the launch only after the pre-period balance check runs. The registered rule supports Ship, but the document says that if the arms already differed beforehand, the result becomes Can't tell. Fourteen days of data already exist, so this check is cheap. If it passes, ship. The analyst's Escalate view is a second reason to confirm before full rollout. +0.81% change in Successful Search Rate, with a 95% interval of +0.41% to +1.21%. The document doesn't say whether this is a relative or absolute change: unclear. The pre-period and novelty checks could not run. The low end of the interval (+0.41%) is below the 0.50% bar. Ad Click Rate fell 2.8%, which is a guess and not a registered guardrail.",
+      "got": true,
+      "how": "overlap 78%"
+    },
+    {
+      "pass": "full",
+      "item": "takeaway 2",
+      "key": "Approve the launch to all traffic.",
+      "reader": "The document recommends Ship. Ranker v7 raised Successful Search Rate by +0.81% (95% interval +0.41% to +1.21%), above the 0.50% bar, and the guardrails held. The test is complete: day 14 of 14, with 1,000,000 users per arm. Approval to launch to all traffic is requested. Approve the launch only after the pre-period balance check runs. The registered rule supports Ship, but the document says that if the arms already differed beforehand, the result becomes Can't tell. Fourteen days of data already exist, so this check is cheap. If it passes, ship. The analyst's Escalate view is a second reason to confirm before full rollout. +0.81% change in Successful Search Rate, with a 95% interval of +0.41% to +1.21%. The document doesn't say whether this is a relative or absolute change: unclear. The pre-period and novelty checks could not run. The low end of the interval (+0.41%) is below the 0.50% bar. Ad Click Rate fell 2.8%, which is a guess and not a registered guardrail.",
+      "got": true,
+      "how": "overlap 100%"
+    },
+    {
+      "pass": "full",
+      "item": "takeaway 3",
+      "key": "Could reverse it: pre period could not be checked: no pre-period interval or platform check.",
+      "reader": "The document recommends Ship. Ranker v7 raised Successful Search Rate by +0.81% (95% interval +0.41% to +1.21%), above the 0.50% bar, and the guardrails held. The test is complete: day 14 of 14, with 1,000,000 users per arm. Approval to launch to all traffic is requested. Approve the launch only after the pre-period balance check runs. The registered rule supports Ship, but the document says that if the arms already differed beforehand, the result becomes Can't tell. Fourteen days of data already exist, so this check is cheap. If it passes, ship. The analyst's Escalate view is a second reason to confirm before full rollout. +0.81% change in Successful Search Rate, with a 95% interval of +0.41% to +1.21%. The document doesn't say whether this is a relative or absolute change: unclear. The pre-period and novelty checks could not run. The low end of the interval (+0.41%) is below the 0.50% bar. Ad Click Rate fell 2.8%, which is a guess and not a registered guardrail.",
+      "got": true,
+      "how": "overlap 38%; grader: same fact"
+    }
+  ],
+  "lost": "The document never says what the call is when a check couldn't run. \"Could reverse it\" and \"Ship holds under the registered rule\" pull in different directions, and the reader has to work out which one governs. The guardrail margins are not stated, so \"moving past its margin\" can't be judged: unclear. The \"Bar\" column is blank for the guardrails.",
+  "question": "Did the pre-period comparison show the two arms were balanced before exposure, and if it couldn't run, can it run before the full rollout?",
+  "replies": {
+    "skim": "1. **Answer:** The document recommends shipping Ranker v7 to all traffic, based on a +0.81% lift in Successful Search Rate. The analyst's view in the same document is Escalate.\n2. **Decision:** Don't approve the full launch yet. Run the pre-period and novelty checks and explain the 2.8% Ad Click Rate drop first. The interval's low end (+0.41%) is under the 0.50% bar.\n3. **Number:** +0.41%, the lower bound of the Successful Search Rate interval (relative change, against a 0.50% bar).\n",
+    "full": "1. **Answer:** The document recommends Ship. Ranker v7 raised Successful Search Rate by +0.81% (95% interval +0.41% to +1.21%), above the 0.50% bar, and the guardrails held. The test is complete: day 14 of 14, with 1,000,000 users per arm. Approval to launch to all traffic is requested.\n\n2. **Decision:** Approve the launch only after the pre-period balance check runs. The registered rule supports Ship, but the document says that if the arms already differed beforehand, the result becomes Can't tell. Fourteen days of data already exist, so this check is cheap. If it passes, ship. The analyst's Escalate view is a second reason to confirm before full rollout.\n\n3. **Number:** +0.81% change in Successful Search Rate, with a 95% interval of +0.41% to +1.21%. The document doesn't say whether this is a relative or absolute change: unclear.\n\n4. **Caveat:** The pre-period and novelty checks could not run. The low end of the interval (+0.41%) is below the 0.50% bar. Ad Click Rate fell 2.8%, which is a guess and not a registered guardrail.\n\n5. **Lost:** The document never says what the call is when a check couldn't run. \"Could reverse it\" and \"Ship holds under the registered rule\" pull in different directions, and the reader has to work out which one governs. The guardrail margins are not stated, so \"moving past its margin\" can't be judged: unclear. The \"Bar\" column is blank for the guardrails.\n\n6. **Question:** Did the pre-period comparison show the two arms were balanced before exposure, and if it couldn't run, can it run before the full rollout?\n"
+  }
+}

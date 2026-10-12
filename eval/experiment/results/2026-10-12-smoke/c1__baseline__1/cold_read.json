@@ -1,13 +1,13 @@
 {
   "pass": false,
   "skim": "0/2",
-  "full": "1/3",
+  "full": "2/3",
   "items": [
     {
       "pass": "skim",
       "item": "answer",
       "key": "Can't tell, decided by sample split.",
-      "reader": "Don't ship Ranker v7. The lift is real, but the point estimate (+0.334 pp) falls short of the pre-registered +0.5 pp ship bar. Don't launch v7 as it stands. The text doesn't say what to do next, such as iterating or re-running the test.",
+      "reader": "Don't ship. Ranker v7 raised Successful Search Rate by a real but smaller amount than the pre-registered bar. Don't ship v7 as it stands. The text doesn't say what to do next.",
       "got": false,
       "how": "overlap 0%"
     },
@@ -15,15 +15,15 @@
       "pass": "skim",
       "item": "decision",
       "key": "Agree to fix the test and rerun; no launch decision from this data.",
-      "reader": "Don't launch v7 as it stands. The text doesn't say what to do next, such as iterating or re-running the test. Don't ship Ranker v7. The lift is real, but the point estimate (+0.334 pp) falls short of the pre-registered +0.5 pp ship bar.",
+      "reader": "Don't ship v7 as it stands. The text doesn't say what to do next. Don't ship. Ranker v7 raised Successful Search Rate by a real but smaller amount than the pre-registered bar.",
       "got": false,
-      "how": "overlap 29%"
+      "how": "overlap 0%"
     },
     {
       "pass": "full",
       "item": "takeaway 1",
       "key": "The arms got 50.5% / 49.5% of exposures against a planned 50.0% / 50.0%, a gap chance almost never produces at this size",
-      "reader": "The review concludes **don't ship Ranker v7**. Successful Search Rate rose +0.334 pp (+0.81% relative), which is real but below the pre-registered +0.5 pp bar. All four guardrails pass. An unresolved exposure-count mismatch could invalidate the primary result. The current state is no-ship, pending that check. Don't ship v7 on this readout. Before any further decision, confirm whether the exposure imbalance is real. If the team still wants v7, treat it as a new decision: re-run with a larger or longer test, or have the owners revise the bar before looking at more data. +0.334 pp absolute lift in Successful Search Rate, against a +0.5 pp ship bar. The 95% CI is +0.17 to +0.50 pp. The exposure imbalance. `experiment.json` shows 1.01M control and 0.99M test exposures, a sample-ratio mismatch (chi-square \u2248 200, p far below 0.001). The health check says \"PASSED,\" and Pulse reports 1.0M per arm, not the planned 900k. If the mismatch is real, the primary result isn't trustworthy in either direction.",
+      "reader": "Don't ship Ranker v7. The lift is real (+0.334 pp Successful Search Rate, 95% CI +0.17 to +0.50 pp), but it misses the pre-registered +0.5 pp bar. All four guardrails pass. The exposure counts also don't balance, which the document calls a sample-ratio mismatch. Reject the ship on this readout. Resolve the exposure discrepancy first. If the team still wants v7, treat it as a new decision: re-run with a larger or longer test, or have the owners revise the bar before anyone sees new results. +0.334 pp absolute lift in Successful Search Rate, against a +0.5 pp ship bar. The exposure imbalance. Control has 1.01M exposures and test has 0.99M, a chi-square of about 200 at a 50/50 split. If that mismatch is real, the primary result can't be trusted in either direction. The \"Exposures balanced: PASSED\" health check contradicts it, and Pulse's per-arm counts (1.0M, against a planned 900k) don't match `experiment.json` either.",
       "got": true,
       "how": "overlap 0%; grader: same fact"
     },
@@ -31,23 +31,23 @@
       "pass": "full",
       "item": "takeaway 2",
       "key": "Agree to fix the test and rerun; no launch decision from this data.",
-      "reader": "The review concludes **don't ship Ranker v7**. Successful Search Rate rose +0.334 pp (+0.81% relative), which is real but below the pre-registered +0.5 pp bar. All four guardrails pass. An unresolved exposure-count mismatch could invalidate the primary result. The current state is no-ship, pending that check. Don't ship v7 on this readout. Before any further decision, confirm whether the exposure imbalance is real. If the team still wants v7, treat it as a new decision: re-run with a larger or longer test, or have the owners revise the bar before looking at more data. +0.334 pp absolute lift in Successful Search Rate, against a +0.5 pp ship bar. The 95% CI is +0.17 to +0.50 pp. The exposure imbalance. `experiment.json` shows 1.01M control and 0.99M test exposures, a sample-ratio mismatch (chi-square \u2248 200, p far below 0.001). The health check says \"PASSED,\" and Pulse reports 1.0M per arm, not the planned 900k. If the mismatch is real, the primary result isn't trustworthy in either direction.",
+      "reader": "Don't ship Ranker v7. The lift is real (+0.334 pp Successful Search Rate, 95% CI +0.17 to +0.50 pp), but it misses the pre-registered +0.5 pp bar. All four guardrails pass. The exposure counts also don't balance, which the document calls a sample-ratio mismatch. Reject the ship on this readout. Resolve the exposure discrepancy first. If the team still wants v7, treat it as a new decision: re-run with a larger or longer test, or have the owners revise the bar before anyone sees new results. +0.334 pp absolute lift in Successful Search Rate, against a +0.5 pp ship bar. The exposure imbalance. Control has 1.01M exposures and test has 0.99M, a chi-square of about 200 at a 50/50 split. If that mismatch is real, the primary result can't be trusted in either direction. The \"Exposures balanced: PASSED\" health check contradicts it, and Pulse's per-arm counts (1.0M, against a planned 900k) don't match `experiment.json` either.",
       "got": false,
-      "how": "overlap 43%"
+      "how": "overlap 29%"
     },
     {
       "pass": "full",
       "item": "takeaway 3",
       "key": "Could reverse it: fixing the sample split problem and rerunning.",
-      "reader": "The review concludes **don't ship Ranker v7**. Successful Search Rate rose +0.334 pp (+0.81% relative), which is real but below the pre-registered +0.5 pp bar. All four guardrails pass. An unresolved exposure-count mismatch could invalidate the primary result. The current state is no-ship, pending that check. Don't ship v7 on this readout. Before any further decision, confirm whether the exposure imbalance is real. If the team still wants v7, treat it as a new decision: re-run with a larger or longer test, or have the owners revise the bar before looking at more data. +0.334 pp absolute lift in Successful Search Rate, against a +0.5 pp ship bar. The 95% CI is +0.17 to +0.50 pp. The exposure imbalance. `experiment.json` shows 1.01M control and 0.99M test exposures, a sample-ratio mismatch (chi-square \u2248 200, p far below 0.001). The health check says \"PASSED,\" and Pulse reports 1.0M per arm, not the planned 900k. If the mismatch is real, the primary result isn't trustworthy in either direction.",
-      "got": false,
-      "how": "overlap 0%"
+      "reader": "Don't ship Ranker v7. The lift is real (+0.334 pp Successful Search Rate, 95% CI +0.17 to +0.50 pp), but it misses the pre-registered +0.5 pp bar. All four guardrails pass. The exposure counts also don't balance, which the document calls a sample-ratio mismatch. Reject the ship on this readout. Resolve the exposure discrepancy first. If the team still wants v7, treat it as a new decision: re-run with a larger or longer test, or have the owners revise the bar before anyone sees new results. +0.334 pp absolute lift in Successful Search Rate, against a +0.5 pp ship bar. The exposure imbalance. Control has 1.01M exposures and test has 0.99M, a chi-square of about 200 at a 50/50 split. If that mismatch is real, the primary result can't be trusted in either direction. The \"Exposures balanced: PASSED\" health check contradicts it, and Pulse's per-arm counts (1.0M, against a planned 900k) don't match `experiment.json` either.",
+      "got": true,
+      "how": "overlap 17%; grader: same fact"
     }
   ],
-  "lost": "Two things. The guardrail margins are unclear: the pre-registration doesn't say whether they're relative or absolute, and the review assumes relative. The exposure counts also don't agree across `experiment.json`, the health check and Pulse, so I couldn't tell which source to trust. Nothing else needed a reread.",
-  "question": "Do the 1.01M/0.99M exposure counts come from the same snapshot as the Pulse data (ds 2026-09-25), and does the imbalance hold when both are re-pulled over the same dates?",
+  "lost": "Two things. The guardrail margins are unclear: the pre-registration doesn't say whether they are relative or absolute, and the author read them as relative. The exposure counts also conflict across `experiment.json` and Pulse, and I couldn't tell which snapshot is authoritative.",
+  "question": "Which exposure snapshot is authoritative, and does the sample-ratio check still fail when run on the same data as the primary metric?",
   "replies": {
-    "skim": "1. **Answer:** Don't ship Ranker v7. The lift is real, but the point estimate (+0.334 pp) falls short of the pre-registered +0.5 pp ship bar.\n2. **Decision:** Don't launch v7 as it stands. The text doesn't say what to do next, such as iterating or re-running the test.\n3. **Number:** +0.334 pp absolute lift in Successful Search Rate (95% CI +0.17 to +0.50 pp).\n",
-    "full": "1. **Answer:** The review concludes **don't ship Ranker v7**. Successful Search Rate rose +0.334 pp (+0.81% relative), which is real but below the pre-registered +0.5 pp bar. All four guardrails pass. An unresolved exposure-count mismatch could invalidate the primary result. The current state is no-ship, pending that check.\n\n2. **Decision:** Don't ship v7 on this readout. Before any further decision, confirm whether the exposure imbalance is real. If the team still wants v7, treat it as a new decision: re-run with a larger or longer test, or have the owners revise the bar before looking at more data.\n\n3. **Number:** +0.334 pp absolute lift in Successful Search Rate, against a +0.5 pp ship bar. The 95% CI is +0.17 to +0.50 pp.\n\n4. **Caveat:** The exposure imbalance. `experiment.json` shows 1.01M control and 0.99M test exposures, a sample-ratio mismatch (chi-square \u2248 200, p far below 0.001). The health check says \"PASSED,\" and Pulse reports 1.0M per arm, not the planned 900k. If the mismatch is real, the primary result isn't trustworthy in either direction.\n\n5. **Lost:** Two things. The guardrail margins are unclear: the pre-registration doesn't say whether they're relative or absolute, and the review assumes relative. The exposure counts also don't agree across `experiment.json`, the health check and Pulse, so I couldn't tell which source to trust. Nothing else needed a reread.\n\n6. **Question:** Do the 1.01M/0.99M exposure counts come from the same snapshot as the Pulse data (ds 2026-09-25), and does the imbalance hold when both are re-pulled over the same dates?\n"
+    "skim": "1. Answer: Don't ship. Ranker v7 raised Successful Search Rate by a real but smaller amount than the pre-registered bar.\n2. Decision: Don't ship v7 as it stands. The text doesn't say what to do next.\n3. Number: +0.334 pp absolute lift in Successful Search Rate (pre-registered ship bar: +0.5 pp).\n",
+    "full": "1. **Answer:** Don't ship Ranker v7. The lift is real (+0.334 pp Successful Search Rate, 95% CI +0.17 to +0.50 pp), but it misses the pre-registered +0.5 pp bar. All four guardrails pass. The exposure counts also don't balance, which the document calls a sample-ratio mismatch.\n\n2. **Decision:** Reject the ship on this readout. Resolve the exposure discrepancy first. If the team still wants v7, treat it as a new decision: re-run with a larger or longer test, or have the owners revise the bar before anyone sees new results.\n\n3. **Number:** +0.334 pp absolute lift in Successful Search Rate, against a +0.5 pp ship bar.\n\n4. **Caveat:** The exposure imbalance. Control has 1.01M exposures and test has 0.99M, a chi-square of about 200 at a 50/50 split. If that mismatch is real, the primary result can't be trusted in either direction. The \"Exposures balanced: PASSED\" health check contradicts it, and Pulse's per-arm counts (1.0M, against a planned 900k) don't match `experiment.json` either.\n\n5. **Lost:** Two things. The guardrail margins are unclear: the pre-registration doesn't say whether they are relative or absolute, and the author read them as relative. The exposure counts also conflict across `experiment.json` and Pulse, and I couldn't tell which snapshot is authoritative.\n\n6. **Question:** Which exposure snapshot is authoritative, and does the sample-ratio check still fail when run on the same data as the primary metric?\n"
   }
 }

@@ -1,0 +1,6 @@
+{
+ "title": "fixed-horizon test at day 14, request sequential 'false' (string), seq intervals present",
+ "call": "ship",
+ "decider": "Successful Search Rate",
+ "why": "+0.55% (+0.15 to +0.95) at the planned sample clears the bar"
+}

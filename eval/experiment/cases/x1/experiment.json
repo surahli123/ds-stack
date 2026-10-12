@@ -1,9 +1,9 @@
 {
  "message": "ok",
  "data": {
-  "id": "ranker_v7",
-  "name": "Ranker v7",
-  "hypothesis": "The new ranker raises the share of searches that end in a successful click.",
+  "id": "ranker_v7_interleaving",
+  "name": "Ranker v7 interleaving",
+  "hypothesis": "Team-draft interleaving of v6 and v7 rankings shows users prefer v7 results.",
   "idType": "userID",
   "layerID": "search_ranking",
   "allocation": 20,
@@ -24,7 +24,8 @@
     "size": 50,
     "parameterValues": {
      "ranker_model": "lambdamart_v7",
-     "snippet_length": "160"
+     "snippet_length": "160",
+     "serving_mode": "team_draft_interleaving"
     }
    }
   ],

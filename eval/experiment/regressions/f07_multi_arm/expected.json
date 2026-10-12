@@ -1,0 +1,6 @@
+{
+ "title": "two arms, B breaches latency; prereg picks g_test_b",
+ "call": "dont_ship",
+ "decider": "Latency p95 (ms)",
+ "why": "arm B latency +3.1% past its 2% margin"
+}

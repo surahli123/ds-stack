@@ -1,13 +1,13 @@
 {
   "pass": false,
-  "skim": "1/2",
-  "full": "1/3",
+  "skim": "0/2",
+  "full": "3/3",
   "items": [
     {
       "pass": "skim",
       "item": "answer",
       "key": "Can't tell: Before exposure, Successful Search Rate already differed by +0.71% (+0.31% to +1.11%). No launch decision from this data until it's fixed.",
-      "reader": "The document concludes \"Can't tell.\" The +0.81% lift clears the bar, but the arms already differed by about the same amount before launch, so the lift can't be attributed to the ranker. Don't launch on this readout. Adjust for the pre-launch gap or rerun before deciding.",
+      "reader": "The document concludes \"Can't tell.\" The +0.81% relative lift (+0.33 pp) clears the +0.5% bar, but the arms already differed by about the same amount before launch, so the lift can't be attributed to the ranker. Don't launch yet. The text gives no next step, so this is my inference: measure and account for the pre-launch gap before deciding.",
       "got": false,
       "how": "overlap 0%"
     },
@@ -15,15 +15,15 @@
       "pass": "skim",
       "item": "decision",
       "key": "Agree to fix the test and rerun; no launch decision from this data.",
-      "reader": "Don't launch on this readout. Adjust for the pre-launch gap or rerun before deciding. The document concludes \"Can't tell.\" The +0.81% lift clears the bar, but the arms already differed by about the same amount before launch, so the lift can't be attributed to the ranker.",
-      "got": true,
-      "how": "overlap 29%; grader: same fact"
+      "reader": "Don't launch yet. The text gives no next step, so this is my inference: measure and account for the pre-launch gap before deciding. The document concludes \"Can't tell.\" The +0.81% relative lift (+0.33 pp) clears the +0.5% bar, but the arms already differed by about the same amount before launch, so the lift can't be attributed to the ranker.",
+      "got": false,
+      "how": "overlap 14%"
     },
     {
       "pass": "full",
       "item": "takeaway 1",
       "key": "Before exposure, Successful Search Rate already differed by +0.71% (+0.31% to +1.11%)",
-      "reader": "The doc concludes \"Can't tell.\" The raw result (+0.81% relative on Successful Search Rate, CI [+0.41%, +1.21%]) clears the +0.5% bar on the point estimate. But test was already ahead of control by +0.71% before the ranker went live, so most of the lift may be that baseline gap. Adjusted for it, the lift is about +0.10% (CI roughly [\u22120.47%, +0.67%]). Guardrails are clean. Nothing is decided yet. Don't ship on the raw number, and don't kill v7 either. Next steps: The adjusted lift, about +0.10% relative (CI roughly [\u22120.47%, +0.67%]). This is the author's own rough calculation, and it assumes the pre-period gap would have persisted unchanged. The bar's unit is unclear. The author reads it as relative, and if it is absolute (0.5 pp), the raw result fails it. The arms were not equivalent before launch. The pre-period gap is statistically significant, and the pulse was run with CUPED off, so the lift can't be separated from the baseline difference. The guardrails only show v7 probably does no harm, not that it helps.",
+      "reader": "The document concludes \"Can't tell.\" The raw lift (+0.81% relative) clears the +0.5% bar, but the pre-launch gap (+0.71%) is about the same size, so the adjusted lift is roughly +0.10%, with a CI of about [\u22120.47%, +0.67%]. Current state: undecided. Don't ship on the raw number, and don't kill it, because the guardrails are clean. Hold. Re-pull the pulse with CUPED on. Find out why test led control before launch. If randomization is broken, fix it and rerun. Ship only if the adjusted lower bound clears the bar. The adjusted Successful Search Rate lift, about +0.10% relative (CI roughly [\u22120.47%, +0.67%]). The author's own adjustment, which is rough and assumes the pre-period gap persists unchanged. The pre-launch imbalance. The arms were not equivalent before the ranker went live, and the pulse was run without CUPED, so the raw lift can't be separated from that gap. The bar's unit is also uncertain: if it's absolute (0.5 pp), the result fails outright.",
       "got": true,
       "how": "overlap 0%; grader: same fact"
     },
@@ -31,23 +31,23 @@
       "pass": "full",
       "item": "takeaway 2",
       "key": "Agree to fix the test and rerun; no launch decision from this data.",
-      "reader": "The doc concludes \"Can't tell.\" The raw result (+0.81% relative on Successful Search Rate, CI [+0.41%, +1.21%]) clears the +0.5% bar on the point estimate. But test was already ahead of control by +0.71% before the ranker went live, so most of the lift may be that baseline gap. Adjusted for it, the lift is about +0.10% (CI roughly [\u22120.47%, +0.67%]). Guardrails are clean. Nothing is decided yet. Don't ship on the raw number, and don't kill v7 either. Next steps: The adjusted lift, about +0.10% relative (CI roughly [\u22120.47%, +0.67%]). This is the author's own rough calculation, and it assumes the pre-period gap would have persisted unchanged. The bar's unit is unclear. The author reads it as relative, and if it is absolute (0.5 pp), the raw result fails it. The arms were not equivalent before launch. The pre-period gap is statistically significant, and the pulse was run with CUPED off, so the lift can't be separated from the baseline difference. The guardrails only show v7 probably does no harm, not that it helps.",
-      "got": false,
-      "how": "overlap 29%"
+      "reader": "The document concludes \"Can't tell.\" The raw lift (+0.81% relative) clears the +0.5% bar, but the pre-launch gap (+0.71%) is about the same size, so the adjusted lift is roughly +0.10%, with a CI of about [\u22120.47%, +0.67%]. Current state: undecided. Don't ship on the raw number, and don't kill it, because the guardrails are clean. Hold. Re-pull the pulse with CUPED on. Find out why test led control before launch. If randomization is broken, fix it and rerun. Ship only if the adjusted lower bound clears the bar. The adjusted Successful Search Rate lift, about +0.10% relative (CI roughly [\u22120.47%, +0.67%]). The author's own adjustment, which is rough and assumes the pre-period gap persists unchanged. The pre-launch imbalance. The arms were not equivalent before the ranker went live, and the pulse was run without CUPED, so the raw lift can't be separated from that gap. The bar's unit is also uncertain: if it's absolute (0.5 pp), the result fails outright.",
+      "got": true,
+      "how": "overlap 57%"
     },
     {
       "pass": "full",
       "item": "takeaway 3",
       "key": "Could reverse it: fixing the pre period problem and rerunning.",
-      "reader": "The doc concludes \"Can't tell.\" The raw result (+0.81% relative on Successful Search Rate, CI [+0.41%, +1.21%]) clears the +0.5% bar on the point estimate. But test was already ahead of control by +0.71% before the ranker went live, so most of the lift may be that baseline gap. Adjusted for it, the lift is about +0.10% (CI roughly [\u22120.47%, +0.67%]). Guardrails are clean. Nothing is decided yet. Don't ship on the raw number, and don't kill v7 either. Next steps: The adjusted lift, about +0.10% relative (CI roughly [\u22120.47%, +0.67%]). This is the author's own rough calculation, and it assumes the pre-period gap would have persisted unchanged. The bar's unit is unclear. The author reads it as relative, and if it is absolute (0.5 pp), the raw result fails it. The arms were not equivalent before launch. The pre-period gap is statistically significant, and the pulse was run with CUPED off, so the lift can't be separated from the baseline difference. The guardrails only show v7 probably does no harm, not that it helps.",
-      "got": false,
-      "how": "overlap 0%"
+      "reader": "The document concludes \"Can't tell.\" The raw lift (+0.81% relative) clears the +0.5% bar, but the pre-launch gap (+0.71%) is about the same size, so the adjusted lift is roughly +0.10%, with a CI of about [\u22120.47%, +0.67%]. Current state: undecided. Don't ship on the raw number, and don't kill it, because the guardrails are clean. Hold. Re-pull the pulse with CUPED on. Find out why test led control before launch. If randomization is broken, fix it and rerun. Ship only if the adjusted lower bound clears the bar. The adjusted Successful Search Rate lift, about +0.10% relative (CI roughly [\u22120.47%, +0.67%]). The author's own adjustment, which is rough and assumes the pre-period gap persists unchanged. The pre-launch imbalance. The arms were not equivalent before the ranker went live, and the pulse was run without CUPED, so the raw lift can't be separated from that gap. The bar's unit is also uncertain: if it's absolute (0.5 pp), the result fails outright.",
+      "got": true,
+      "how": "overlap 0%; grader: same fact"
     }
   ],
-  "lost": "Nowhere significant. The one spot I'd reread is the bar's unit, since the doc states its relative-units assumption but doesn't confirm it.",
-  "question": "What caused test to lead by +0.71% before the ranker was live, and does the adjusted estimate hold once CUPED is applied?",
+  "lost": "Nowhere significant. The one soft spot is the bar's unit. The author says \"I read the bar as relative,\" which is their inference, not something the document confirms.",
+  "question": "What caused test to lead control before launch: bucketing/salt, or the overlap with `search_ranking`?",
   "replies": {
-    "skim": "1. Answer: The document concludes \"Can't tell.\" The +0.81% lift clears the bar, but the arms already differed by about the same amount before launch, so the lift can't be attributed to the ranker.\n2. Decision: Don't launch on this readout. Adjust for the pre-launch gap or rerun before deciding.\n3. Number: +0.81% relative lift in Successful Search Rate (+0.33 pp), against a +0.5% relative bar. The pre-launch gap is the number that would settle it, but the document doesn't state its value.\n",
-    "full": "1. **Answer:** The doc concludes \"Can't tell.\" The raw result (+0.81% relative on Successful Search Rate, CI [+0.41%, +1.21%]) clears the +0.5% bar on the point estimate. But test was already ahead of control by +0.71% before the ranker went live, so most of the lift may be that baseline gap. Adjusted for it, the lift is about +0.10% (CI roughly [\u22120.47%, +0.67%]). Guardrails are clean. Nothing is decided yet.\n\n2. **Decision:** Don't ship on the raw number, and don't kill v7 either. Next steps:\n   - Re-pull the pulse with CUPED on.\n   - Find out why test led before launch (bucketing or salt issue, or overlap with `search_ranking`).\n   - If the adjusted lower bound clears the bar, ship. If the adjusted lift stays near +0.1%, treat v7 as not meeting the bar and rerun with clean randomization.\n\n3. **Number:** The adjusted lift, about +0.10% relative (CI roughly [\u22120.47%, +0.67%]). This is the author's own rough calculation, and it assumes the pre-period gap would have persisted unchanged. The bar's unit is unclear. The author reads it as relative, and if it is absolute (0.5 pp), the raw result fails it.\n\n4. **Caveat:** The arms were not equivalent before launch. The pre-period gap is statistically significant, and the pulse was run with CUPED off, so the lift can't be separated from the baseline difference. The guardrails only show v7 probably does no harm, not that it helps.\n\n5. **Lost:** Nowhere significant. The one spot I'd reread is the bar's unit, since the doc states its relative-units assumption but doesn't confirm it.\n\n6. **Question:** What caused test to lead by +0.71% before the ranker was live, and does the adjusted estimate hold once CUPED is applied?\n"
+    "skim": "1. **Answer:** The document concludes \"Can't tell.\" The +0.81% relative lift (+0.33 pp) clears the +0.5% bar, but the arms already differed by about the same amount before launch, so the lift can't be attributed to the ranker.\n2. **Decision:** Don't launch yet. The text gives no next step, so this is my inference: measure and account for the pre-launch gap before deciding.\n3. **Number:** +0.81% relative lift in Successful Search Rate (+0.33 pp). The size of the pre-launch gap is not stated, so the number that would settle this is unclear.\n",
+    "full": "1. **Answer:** The document concludes \"Can't tell.\" The raw lift (+0.81% relative) clears the +0.5% bar, but the pre-launch gap (+0.71%) is about the same size, so the adjusted lift is roughly +0.10%, with a CI of about [\u22120.47%, +0.67%]. Current state: undecided. Don't ship on the raw number, and don't kill it, because the guardrails are clean.\n\n2. **Decision:** Hold. Re-pull the pulse with CUPED on. Find out why test led control before launch. If randomization is broken, fix it and rerun. Ship only if the adjusted lower bound clears the bar.\n\n3. **Number:** The adjusted Successful Search Rate lift, about +0.10% relative (CI roughly [\u22120.47%, +0.67%]). The author's own adjustment, which is rough and assumes the pre-period gap persists unchanged.\n\n4. **Caveat:** The pre-launch imbalance. The arms were not equivalent before the ranker went live, and the pulse was run without CUPED, so the raw lift can't be separated from that gap. The bar's unit is also uncertain: if it's absolute (0.5 pp), the result fails outright.\n\n5. **Lost:** Nowhere significant. The one soft spot is the bar's unit. The author says \"I read the bar as relative,\" which is their inference, not something the document confirms.\n\n6. **Question:** What caused test to lead control before launch: bucketing/salt, or the overlap with `search_ranking`?\n"
   }
 }

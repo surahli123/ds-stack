@@ -1,0 +1,53 @@
+{
+  "pass": true,
+  "skim": "2/2",
+  "full": "3/3",
+  "items": [
+    {
+      "pass": "skim",
+      "item": "answer",
+      "key": "No effect found: Successful Search Rate reads +0.06% (-0.24% to +0.36%), which rules out the 0.50% change the test was built to find.",
+      "reader": "The test found no effect. The primary metric, Successful Search Rate, moved +0.06% (-0.24% to +0.36%), which rules out the 0.50% lift the test was built to detect. Agree to stop the test without launching.",
+      "got": true,
+      "how": "overlap 81%"
+    },
+    {
+      "pass": "skim",
+      "item": "decision",
+      "key": "Agree to stop the test without launching.",
+      "reader": "Agree to stop the test without launching. The test found no effect. The primary metric, Successful Search Rate, moved +0.06% (-0.24% to +0.36%), which rules out the 0.50% lift the test was built to detect.",
+      "got": true,
+      "how": "overlap 100%"
+    },
+    {
+      "pass": "full",
+      "item": "takeaway 1",
+      "key": "Successful Search Rate +0.06% (-0.24% to +0.36%) against at least 0.50%.",
+      "reader": "The test found no effect. Successful Search Rate moved +0.06% (95% interval -0.24% to +0.36%), and the upper bound is below the 0.50% bar the test was built to detect. Current state: the test finished on day 14 of 14 with 1,000,000 users per arm, and the guardrails were within margin. Agree to stop the test without launching Ranker v7. Successful Search Rate change, +0.06% (relative to control; the document doesn't say whether that is relative or absolute percentage points). The bar is at least 0.50%. The pre-period check could not run, so there is no pre-exposure comparison or platform check. The document says this could reverse the call to \"Can't tell\" if the arms differed before launch. Also, there are no segment cuts, so the mechanism behind the flat result is unknown.",
+      "got": true,
+      "how": "overlap 89%"
+    },
+    {
+      "pass": "full",
+      "item": "takeaway 2",
+      "key": "Agree to stop the test without launching.",
+      "reader": "The test found no effect. Successful Search Rate moved +0.06% (95% interval -0.24% to +0.36%), and the upper bound is below the 0.50% bar the test was built to detect. Current state: the test finished on day 14 of 14 with 1,000,000 users per arm, and the guardrails were within margin. Agree to stop the test without launching Ranker v7. Successful Search Rate change, +0.06% (relative to control; the document doesn't say whether that is relative or absolute percentage points). The bar is at least 0.50%. The pre-period check could not run, so there is no pre-exposure comparison or platform check. The document says this could reverse the call to \"Can't tell\" if the arms differed before launch. Also, there are no segment cuts, so the mechanism behind the flat result is unknown.",
+      "got": true,
+      "how": "overlap 100%"
+    },
+    {
+      "pass": "full",
+      "item": "takeaway 3",
+      "key": "Could reverse it: pre period could not be checked: no pre-period interval or platform check.",
+      "reader": "The test found no effect. Successful Search Rate moved +0.06% (95% interval -0.24% to +0.36%), and the upper bound is below the 0.50% bar the test was built to detect. Current state: the test finished on day 14 of 14 with 1,000,000 users per arm, and the guardrails were within margin. Agree to stop the test without launching Ranker v7. Successful Search Rate change, +0.06% (relative to control; the document doesn't say whether that is relative or absolute percentage points). The bar is at least 0.50%. The pre-period check could not run, so there is no pre-exposure comparison or platform check. The document says this could reverse the call to \"Can't tell\" if the arms differed before launch. Also, there are no segment cuts, so the mechanism behind the flat result is unknown.",
+      "got": true,
+      "how": "overlap 62%"
+    }
+  ],
+  "lost": "Mostly nowhere. I reread the \"What would change the call\" section, because the first bullet is hard to parse: an extension would move the call to \"Keep running,\" but the document says a lift between 0.24% and 0.50% is too small to launch anyway, so the extension wouldn't change the launch decision.",
+  "question": "Can the pre-period balance check be run from existing data before the test is stopped, and if it shows the arms differed, would you still call this \"No effect found\"?",
+  "replies": {
+    "skim": "1. Answer: The test found no effect. The primary metric, Successful Search Rate, moved +0.06% (-0.24% to +0.36%), which rules out the 0.50% lift the test was built to detect.\n2. Decision: Agree to stop the test without launching.\n3. Number: +0.06% (change in Successful Search Rate, 95% interval -0.24% to +0.36%).\n",
+    "full": "1. **Answer:** The test found no effect. Successful Search Rate moved +0.06% (95% interval -0.24% to +0.36%), and the upper bound is below the 0.50% bar the test was built to detect. Current state: the test finished on day 14 of 14 with 1,000,000 users per arm, and the guardrails were within margin.\n\n2. **Decision:** Agree to stop the test without launching Ranker v7.\n\n3. **Number:** Successful Search Rate change, +0.06% (relative to control; the document doesn't say whether that is relative or absolute percentage points). The bar is at least 0.50%.\n\n4. **Caveat:** The pre-period check could not run, so there is no pre-exposure comparison or platform check. The document says this could reverse the call to \"Can't tell\" if the arms differed before launch. Also, there are no segment cuts, so the mechanism behind the flat result is unknown.\n\n5. **Lost:** Mostly nowhere. I reread the \"What would change the call\" section, because the first bullet is hard to parse: an extension would move the call to \"Keep running,\" but the document says a lift between 0.24% and 0.50% is too small to launch anyway, so the extension wouldn't change the launch decision.\n\n6. **Question:** Can the pre-period balance check be run from existing data before the test is stopped, and if it shows the arms differed, would you still call this \"No effect found\"?\n"
+  }
+}

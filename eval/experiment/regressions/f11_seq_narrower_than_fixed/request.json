@@ -1,0 +1,7 @@
+{
+ "control": "g_control",
+ "test": "g_test",
+ "confidence": "95",
+ "cuped": "false",
+ "sequential": true
+}

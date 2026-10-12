@@ -233,9 +233,14 @@ case("c5", "allocation cut mid-test", gold("cant_tell", "config_edits", 0.81, wh
                       "changes": {"allocation": {"old": 20, "new": 10}}}]})
 # --- not an A/B test ---
 case("x1", "interleaving test", gold("not_ab", "design", None, why="team-draft interleaving: preference, not an A/B lift"),
-     pre=prereg(design="interleaving"))
+     pre=prereg(design="interleaving", intended_params=["serving_mode", "ranker_model"]),
+     exp=experiment("Ranker v7 interleaving", test_params={"serving_mode": "team_draft_interleaving"},
+                    extra={"hypothesis": "Team-draft interleaving of v6 and v7 rankings shows users prefer v7 results."}))
 case("x2", "long-term holdout", gold("not_ab", "design", None, why="holdout measures a bundle of launches"),
-     pre=prereg(design="holdout"))
+     pre=prereg(design="holdout", intended_params=["ranker_model"], planned={"days": 90, "units_per_arm": 50000}),
+     exp=experiment("Q3 search launches holdout", sizes=(5, 95), duration=90,
+                    extra={"hypothesis": "The 5% holdout measures the combined effect of the quarter's ranking launches.",
+                           "holdoutIDs": ["q3_search_holdout"]}))
 
 TASK = """You are the data scientist on a search ranking experiment, "{name}". The launch review meets tomorrow.
 

@@ -1,0 +1,6 @@
+{
+ "title": "any-rule, lead +0.31% below bar, CTR clears",
+ "call": "ship",
+ "decider": "CTR",
+ "why": "under 'any' one primary clearing the bar is enough"
+}

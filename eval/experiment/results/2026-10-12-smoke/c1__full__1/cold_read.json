@@ -1,21 +1,21 @@
 {
-  "pass": true,
+  "pass": false,
   "skim": "2/2",
-  "full": "3/3",
+  "full": "2/3",
   "items": [
     {
       "pass": "skim",
       "item": "answer",
       "key": "Can't tell, decided by sample split.",
-      "reader": "Can't tell. The arms got 50.5% / 49.5% of exposures instead of the planned 50% / 50%, which the document says chance almost never produces at this size, so the +0.81% Successful Search Rate lift can't support a launch decision. Agree to fix the sample split and rerun the test. Don't launch on this data. The fix needs a logged cause for the imbalance, such as a bot filter or logging bug, confirmed by the owner.",
+      "reader": "The document concludes \"Can't tell.\" The arms got 50.5% / 49.5% of exposures instead of the planned 50/50, so the +0.81% Successful Search Rate lift can't be trusted yet. Agree to find and fix the cause of the uneven split (a bot filter or logging bug, confirmed by the owner), rerun the test, and make no launch decision from this data.",
       "got": true,
-      "how": "overlap 75%"
+      "how": "overlap 50%"
     },
     {
       "pass": "skim",
       "item": "decision",
       "key": "Agree to fix the test and rerun; no launch decision from this data.",
-      "reader": "Agree to fix the sample split and rerun the test. Don't launch on this data. The fix needs a logged cause for the imbalance, such as a bot filter or logging bug, confirmed by the owner. Can't tell. The arms got 50.5% / 49.5% of exposures instead of the planned 50% / 50%, which the document says chance almost never produces at this size, so the +0.81% Successful Search Rate lift can't support a launch decision.",
+      "reader": "Agree to find and fix the cause of the uneven split (a bot filter or logging bug, confirmed by the owner), rerun the test, and make no launch decision from this data. The document concludes \"Can't tell.\" The arms got 50.5% / 49.5% of exposures instead of the planned 50/50, so the +0.81% Successful Search Rate lift can't be trusted yet.",
       "got": true,
       "how": "overlap 100%"
     },
@@ -23,15 +23,15 @@
       "pass": "full",
       "item": "takeaway 1",
       "key": "The arms got 50.5% / 49.5% of exposures against a planned 50.0% / 50.0%, a gap chance almost never produces at this size",
-      "reader": "The test is broken, so the verdict is Can't tell. Exposures split 50.5% / 49.5% against a planned 50.0% / 50.0%, and the sample-split check failed. The primary metric, Successful Search Rate, shows +0.81% (95% interval +0.41% to +1.21%), which clears the 0.50% bar, but the document doesn't trust it. Current state: day 14 of 14, 1,000,000 users per arm. Agree to fix the test and rerun. Make no launch decision from this data. Per the document, the rerun needs a confirmed cause for the uneven split, such as a bot filter or a logging bug, and then an even split where the primary still clears its bar. The 50.5% / 49.5% exposure split (percent of users per arm). It's the reason the call is Can't tell. The +0.81% lift in Successful Search Rate (percent change) is the number that would matter if the split were valid. The uneven split may mean one arm lost or gained users unevenly, which could bias the lift in either direction. The document also says there are no segment cuts, so the cause of the lift is unknown.",
-      "got": true,
-      "how": "overlap 43%; grader: same fact"
+      "reader": "The review concludes \"Can't tell.\" The test's split is broken: the arms got 50.5% / 49.5% of exposures against a planned 50/50, so the result can't be trusted yet. The primary metric looks positive (Successful Search Rate +0.81%), but that doesn't settle the decision. The test ran to completion (14 of 14 days, 1,000,000 users per arm), and no launch decision has been made. Agree to fix the test and rerun. No launch decision should come from this data. The rerun should only proceed once the owner confirms the cause of the uneven split, or the exposure data is corrected. Successful Search Rate, +0.81% (95% interval +0.41% to +1.21%), against a bar of at least 0.50%. The unit is percent, but the document doesn't say whether this is relative or percentage points. The uneven split may mean one arm lost or gained users unevenly, which could bias the lift in either direction. The cause of the split is unknown, and the scorecard has no segment cuts, so why successful searches rose is also unknown.",
+      "got": false,
+      "how": "overlap 0%"
     },
     {
       "pass": "full",
       "item": "takeaway 2",
       "key": "Agree to fix the test and rerun; no launch decision from this data.",
-      "reader": "The test is broken, so the verdict is Can't tell. Exposures split 50.5% / 49.5% against a planned 50.0% / 50.0%, and the sample-split check failed. The primary metric, Successful Search Rate, shows +0.81% (95% interval +0.41% to +1.21%), which clears the 0.50% bar, but the document doesn't trust it. Current state: day 14 of 14, 1,000,000 users per arm. Agree to fix the test and rerun. Make no launch decision from this data. Per the document, the rerun needs a confirmed cause for the uneven split, such as a bot filter or a logging bug, and then an even split where the primary still clears its bar. The 50.5% / 49.5% exposure split (percent of users per arm). It's the reason the call is Can't tell. The +0.81% lift in Successful Search Rate (percent change) is the number that would matter if the split were valid. The uneven split may mean one arm lost or gained users unevenly, which could bias the lift in either direction. The document also says there are no segment cuts, so the cause of the lift is unknown.",
+      "reader": "The review concludes \"Can't tell.\" The test's split is broken: the arms got 50.5% / 49.5% of exposures against a planned 50/50, so the result can't be trusted yet. The primary metric looks positive (Successful Search Rate +0.81%), but that doesn't settle the decision. The test ran to completion (14 of 14 days, 1,000,000 users per arm), and no launch decision has been made. Agree to fix the test and rerun. No launch decision should come from this data. The rerun should only proceed once the owner confirms the cause of the uneven split, or the exposure data is corrected. Successful Search Rate, +0.81% (95% interval +0.41% to +1.21%), against a bar of at least 0.50%. The unit is percent, but the document doesn't say whether this is relative or percentage points. The uneven split may mean one arm lost or gained users unevenly, which could bias the lift in either direction. The cause of the split is unknown, and the scorecard has no segment cuts, so why successful searches rose is also unknown.",
       "got": true,
       "how": "overlap 100%"
     },
@@ -39,15 +39,15 @@
       "pass": "full",
       "item": "takeaway 3",
       "key": "Could reverse it: fixing the sample split problem and rerunning.",
-      "reader": "The test is broken, so the verdict is Can't tell. Exposures split 50.5% / 49.5% against a planned 50.0% / 50.0%, and the sample-split check failed. The primary metric, Successful Search Rate, shows +0.81% (95% interval +0.41% to +1.21%), which clears the 0.50% bar, but the document doesn't trust it. Current state: day 14 of 14, 1,000,000 users per arm. Agree to fix the test and rerun. Make no launch decision from this data. Per the document, the rerun needs a confirmed cause for the uneven split, such as a bot filter or a logging bug, and then an even split where the primary still clears its bar. The 50.5% / 49.5% exposure split (percent of users per arm). It's the reason the call is Can't tell. The +0.81% lift in Successful Search Rate (percent change) is the number that would matter if the split were valid. The uneven split may mean one arm lost or gained users unevenly, which could bias the lift in either direction. The document also says there are no segment cuts, so the cause of the lift is unknown.",
+      "reader": "The review concludes \"Can't tell.\" The test's split is broken: the arms got 50.5% / 49.5% of exposures against a planned 50/50, so the result can't be trusted yet. The primary metric looks positive (Successful Search Rate +0.81%), but that doesn't settle the decision. The test ran to completion (14 of 14 days, 1,000,000 users per arm), and no launch decision has been made. Agree to fix the test and rerun. No launch decision should come from this data. The rerun should only proceed once the owner confirms the cause of the uneven split, or the exposure data is corrected. Successful Search Rate, +0.81% (95% interval +0.41% to +1.21%), against a bar of at least 0.50%. The unit is percent, but the document doesn't say whether this is relative or percentage points. The uneven split may mean one arm lost or gained users unevenly, which could bias the lift in either direction. The cause of the split is unknown, and the scorecard has no segment cuts, so why successful searches rose is also unknown.",
       "got": true,
       "how": "overlap 17%; grader: same fact"
     }
   ],
-  "lost": "",
-  "question": "What caused the uneven split, has the owner confirmed it, and why couldn't the pre-period and novelty checks run?",
+  "lost": "Nowhere significant. The one gap is that the unit of the +0.81% (relative or absolute) is unclear.",
+  "question": "What caused the 50.5% / 49.5% split, and has the owner confirmed it?",
   "replies": {
-    "skim": "1. **Answer:** Can't tell. The arms got 50.5% / 49.5% of exposures instead of the planned 50% / 50%, which the document says chance almost never produces at this size, so the +0.81% Successful Search Rate lift can't support a launch decision.\n2. **Decision:** Agree to fix the sample split and rerun the test. Don't launch on this data. The fix needs a logged cause for the imbalance, such as a bot filter or logging bug, confirmed by the owner.\n3. **Number:** 50.5% of exposures in one arm (planned 50.0%, unit: percent of exposures).\n",
-    "full": "1. **Answer:** The test is broken, so the verdict is Can't tell. Exposures split 50.5% / 49.5% against a planned 50.0% / 50.0%, and the sample-split check failed. The primary metric, Successful Search Rate, shows +0.81% (95% interval +0.41% to +1.21%), which clears the 0.50% bar, but the document doesn't trust it. Current state: day 14 of 14, 1,000,000 users per arm.\n\n2. **Decision:** Agree to fix the test and rerun. Make no launch decision from this data. Per the document, the rerun needs a confirmed cause for the uneven split, such as a bot filter or a logging bug, and then an even split where the primary still clears its bar.\n\n3. **Number:** The 50.5% / 49.5% exposure split (percent of users per arm). It's the reason the call is Can't tell. The +0.81% lift in Successful Search Rate (percent change) is the number that would matter if the split were valid.\n\n4. **Caveat:** The uneven split may mean one arm lost or gained users unevenly, which could bias the lift in either direction. The document also says there are no segment cuts, so the cause of the lift is unknown.\n\n5. **Lost:**\n   - Why the pre-period and novelty checks \"could not run\" is unclear.\n   - The guardrail \"Bar\" column is blank, so I couldn't tell what those metrics are judged against.\n   - \"Harm inside a margin goes to escalate\" is unclear. It's not obvious what margin applies or what escalating means here.\n   - \"Could reverse it\" in the header reads oddly, since the fix is what would change the call.\n\n6. **Question:** What caused the uneven split, has the owner confirmed it, and why couldn't the pre-period and novelty checks run?\n"
+    "skim": "1. **Answer:** The document concludes \"Can't tell.\" The arms got 50.5% / 49.5% of exposures instead of the planned 50/50, so the +0.81% Successful Search Rate lift can't be trusted yet.\n2. **Decision:** Agree to find and fix the cause of the uneven split (a bot filter or logging bug, confirmed by the owner), rerun the test, and make no launch decision from this data.\n3. **Number:** 50.5% of exposures went to one arm (planned 50.0%), a 0.5-point gap in percent of exposures.\n",
+    "full": "1. **Answer:** The review concludes \"Can't tell.\" The test's split is broken: the arms got 50.5% / 49.5% of exposures against a planned 50/50, so the result can't be trusted yet. The primary metric looks positive (Successful Search Rate +0.81%), but that doesn't settle the decision. The test ran to completion (14 of 14 days, 1,000,000 users per arm), and no launch decision has been made.\n\n2. **Decision:** Agree to fix the test and rerun. No launch decision should come from this data. The rerun should only proceed once the owner confirms the cause of the uneven split, or the exposure data is corrected.\n\n3. **Number:** Successful Search Rate, +0.81% (95% interval +0.41% to +1.21%), against a bar of at least 0.50%. The unit is percent, but the document doesn't say whether this is relative or percentage points.\n\n4. **Caveat:** The uneven split may mean one arm lost or gained users unevenly, which could bias the lift in either direction. The cause of the split is unknown, and the scorecard has no segment cuts, so why successful searches rose is also unknown.\n\n5. **Lost:** Nowhere significant. The one gap is that the unit of the +0.81% (relative or absolute) is unclear.\n\n6. **Question:** What caused the 50.5% / 49.5% split, and has the owner confirmed it?\n"
   }
 }

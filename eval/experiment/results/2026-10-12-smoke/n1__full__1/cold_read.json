@@ -1,0 +1,53 @@
+{
+  "pass": false,
+  "skim": "2/2",
+  "full": "2/3",
+  "items": [
+    {
+      "pass": "skim",
+      "item": "answer",
+      "key": "No effect found: Successful Search Rate reads +0.04% (-0.26% to +0.34%), which rules out the 0.50% change the test was built to find.",
+      "reader": "No effect found. Successful Search Rate moved +0.04% (95% interval -0.26% to +0.34%), which rules out the 0.50% change the test was built to detect. The document asks to stop the test without launching. Agree to stop without launching. The pre-period check was not run, so a pre-test imbalance is not ruled out. A pre-exposure comparison for Successful Search Rate is the one thing that could change the call.",
+      "got": true,
+      "how": "overlap 88%"
+    },
+    {
+      "pass": "skim",
+      "item": "decision",
+      "key": "Agree to stop the test without launching.",
+      "reader": "Agree to stop without launching. The pre-period check was not run, so a pre-test imbalance is not ruled out. A pre-exposure comparison for Successful Search Rate is the one thing that could change the call. No effect found. Successful Search Rate moved +0.04% (95% interval -0.26% to +0.34%), which rules out the 0.50% change the test was built to detect. The document asks to stop the test without launching.",
+      "got": true,
+      "how": "overlap 100%"
+    },
+    {
+      "pass": "full",
+      "item": "takeaway 1",
+      "key": "Successful Search Rate +0.04% (-0.26% to +0.34%) against at least 0.50%.",
+      "reader": "The test found no effect. Successful Search Rate moved +0.04% (95% interval -0.26% to +0.34%), which rules out the 0.50% lift the test was built to detect. The guardrails are within margin. The test ran its full 14 days with 1,000,000 users per arm. The pre-period check could not run. Agree to stop the test without launching the new ranker. +0.04% change in Successful Search Rate, against a 0.50% bar. The pre-period check could not run, so a pre-test imbalance is not ruled out. The novelty check also could not run.",
+      "got": true,
+      "how": "overlap 89%"
+    },
+    {
+      "pass": "full",
+      "item": "takeaway 2",
+      "key": "Agree to stop the test without launching.",
+      "reader": "The test found no effect. Successful Search Rate moved +0.04% (95% interval -0.26% to +0.34%), which rules out the 0.50% lift the test was built to detect. The guardrails are within margin. The test ran its full 14 days with 1,000,000 users per arm. The pre-period check could not run. Agree to stop the test without launching the new ranker. +0.04% change in Successful Search Rate, against a 0.50% bar. The pre-period check could not run, so a pre-test imbalance is not ruled out. The novelty check also could not run.",
+      "got": true,
+      "how": "overlap 100%"
+    },
+    {
+      "pass": "full",
+      "item": "takeaway 3",
+      "key": "Could reverse it: pre period could not be checked: no pre-period interval or platform check.",
+      "reader": "The test found no effect. Successful Search Rate moved +0.04% (95% interval -0.26% to +0.34%), which rules out the 0.50% lift the test was built to detect. The guardrails are within margin. The test ran its full 14 days with 1,000,000 users per arm. The pre-period check could not run. Agree to stop the test without launching the new ranker. +0.04% change in Successful Search Rate, against a 0.50% bar. The pre-period check could not run, so a pre-test imbalance is not ruled out. The novelty check also could not run.",
+      "got": false,
+      "how": "overlap 38%"
+    }
+  ],
+  "lost": "Mostly nowhere. The primary row says \"unclear\" while the headline says \"No effect found,\" which reads as a mild conflict. The \"Could reverse it\" line is also vague about what would change the call. The guardrail margin is never stated.",
+  "question": "Can the pre-period comparison for Successful Search Rate be run before the stop is agreed, and what is the margin for the guardrail metrics?",
+  "replies": {
+    "skim": "1. **Answer:** No effect found. Successful Search Rate moved +0.04% (95% interval -0.26% to +0.34%), which rules out the 0.50% change the test was built to detect. The document asks to stop the test without launching.\n2. **Decision:** Agree to stop without launching. The pre-period check was not run, so a pre-test imbalance is not ruled out. A pre-exposure comparison for Successful Search Rate is the one thing that could change the call.\n3. **Number:** +0.04% (percent change in Successful Search Rate, against a 0.50% bar).\n",
+    "full": "1. **Answer:** The test found no effect. Successful Search Rate moved +0.04% (95% interval -0.26% to +0.34%), which rules out the 0.50% lift the test was built to detect. The guardrails are within margin. The test ran its full 14 days with 1,000,000 users per arm. The pre-period check could not run.\n\n2. **Decision:** Agree to stop the test without launching the new ranker.\n\n3. **Number:** +0.04% change in Successful Search Rate, against a 0.50% bar.\n\n4. **Caveat:** The pre-period check could not run, so a pre-test imbalance is not ruled out. The novelty check also could not run.\n\n5. **Lost:** Mostly nowhere. The primary row says \"unclear\" while the headline says \"No effect found,\" which reads as a mild conflict. The \"Could reverse it\" line is also vague about what would change the call. The guardrail margin is never stated.\n\n6. **Question:** Can the pre-period comparison for Successful Search Rate be run before the stop is agreed, and what is the margin for the guardrail metrics?\n"
+  }
+}

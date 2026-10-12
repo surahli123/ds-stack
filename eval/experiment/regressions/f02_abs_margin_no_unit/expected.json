@@ -1,0 +1,6 @@
+{
+ "title": "margin 10 (meant ms) without margin_unit",
+ "exit": 2,
+ "message": "margin_unit",
+ "why": "a relative margin of 10 (1000%) is refused with a hint, never guessed"
+}

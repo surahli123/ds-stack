@@ -17,6 +17,7 @@ Writes decision.json (default next to the scorecard) and appends one line to
 """
 
 import argparse
+import hashlib
 import json
 import os
 import sys
@@ -27,6 +28,7 @@ sys.path.insert(0, HERE)
 
 import checks as chk  # noqa: E402
 import expstats  # noqa: E402
+from adapters import _bool  # noqa: E402
 
 CALL_TEXT = {"not_ab": "Not an A/B test", "cant_tell": "Can't tell", "dont_ship": "Don't ship",
              "keep_running": "Keep running", "escalate": "Escalate", "no_effect": "No effect found", "ship": "Ship"}
@@ -46,12 +48,23 @@ class InputError(ValueError):
     """The inputs can't support a call."""
 
 
+def _key(name):
+    return "".join(ch for ch in str(name).lower() if ch.isalnum())
+
+
 def find(metrics, name):
-    """Exact, case-insensitive match on the metric name. No fuzzy matching: a near
-    miss binds the wrong metric silently."""
-    wanted = str(name).strip().lower()
-    hits = [m for m in metrics if str(m["metric"]).strip().lower() == wanted]
+    """Match on the metric name ignoring case, spaces and punctuation ('Latency P95 ms'
+    finds 'Latency p95 (ms)'). Letters and digits must agree, so p95 never binds p99."""
+    wanted = _key(name)
+    hits = [m for m in metrics if _key(m["metric"]) == wanted]
     return hits[0] if hits else None
+
+
+def near_names(metrics, name, limit=2):
+    """Scorecard names that share the most words with a missing metric, for the message."""
+    words = set(str(name).lower().replace("(", " ").replace(")", " ").split())
+    scored = sorted(metrics, key=lambda m: -len(words & set(str(m["metric"]).lower().replace("(", " ").replace(")", " ").split())))
+    return [m["metric"] for m in scored[:limit] if words & set(str(m["metric"]).lower().split())]
 
 
 def interval(m, unit, level, base_level, sequential=False):
@@ -97,24 +110,44 @@ def sign_of(direction):
     return 0
 
 
+def _abs_text(value, ref, suffix=""):
+    """An absolute value with decimals set by the size of `ref`, so a row reads evenly."""
+    size = abs(ref) or abs(value) or 1
+    decimals = max(0, min(4, 2 - int(f"{size:e}".split("e")[1])))
+    unit = f" {suffix}" if suffix and suffix[0].isalpha() else suffix
+    return f"{value:+.{decimals}f}{unit}"
+
+
 def describe(entry):
     """'+0.81% (+0.36% to +1.26%)' in the entry's unit."""
     point, low, high = entry["point"], entry["low"], entry["high"]
     if entry["unit"] == "relative":
         return f"{100 * point:+.2f}% ({100 * low:+.2f}% to {100 * high:+.2f}%)"
     suffix = entry.get("display_unit", "")
-    return f"{point:+.3g}{suffix} ({low:+.3g}{suffix} to {high:+.3g}{suffix})"
+    return f"{_abs_text(point, point, suffix)} ({_abs_text(low, point, suffix)} to {_abs_text(high, point, suffix)})"
+
+
+def moved(entry):
+    """'rose 0.81% (+0.36% to +1.26%)' or 'fell 2.00% (-2.60% to -1.40%)', with the direction as a word."""
+    text = describe(entry)
+    verb = "rose" if entry["point"] >= 0 else "fell"
+    return f"{verb} {text.lstrip('+-')}"
 
 
 def threshold_text(value, unit, display_unit=""):
-    return f"{100 * value:.2f}%" if unit == "relative" else f"{value:g}{display_unit}"
+    if unit == "relative":
+        return f"{100 * value:.2f}%"
+    suffix = f" {display_unit}" if display_unit and display_unit[0].isalpha() else display_unit
+    return f"{value:g}{suffix}"
 
 
 def judge_primary(spec, m, levels, base, sequential, ship_requires):
+    spec = {**spec, "registered_as": spec["metric"], "metric": m["metric"]}
     sign = sign_of(spec.get("direction"))
     unit = spec.get("bar_unit", "relative")
     entry = {"metric": spec["metric"], "role": "primary", "unit": unit, "direction": spec.get("direction"),
-             "threshold": spec.get("bar"), "threshold_kind": "bar", "listed_as": m.get("listed_as")}
+             "threshold": spec.get("bar"), "threshold_kind": "bar", "listed_as": m.get("listed_as"),
+             "display_unit": spec.get("display_unit", "")}
     if sign == 0:
         return {**entry, "verdict": "no_direction"}
     iv = interval(m, unit, levels["primary"], base, sequential)
@@ -123,6 +156,7 @@ def judge_primary(spec, m, levels, base, sequential, ship_requires):
         return {**entry, "verdict": "no_interval"}
     share = spec.get("mass_share")
     if share:  # triggered lift -> overall lift: scale by the triggered share of control metric mass
+        entry["triggered"] = {"point": iv[0], "low": iv[1], "high": iv[2]}
         iv = tuple(v * share for v in iv[:3]) + (iv[3] * share,)
         entry["scaled_from_triggered"] = share
     point, low, high, se = iv
@@ -144,6 +178,8 @@ def judge_primary(spec, m, levels, base, sequential, ship_requires):
 
 
 def judge_guardrail(spec, m, levels, base, sequential):
+    if m is not None:
+        spec = {**spec, "registered_as": spec["metric"], "metric": m["metric"]}
     sign = sign_of(spec.get("direction"))
     margin, unit = spec.get("margin"), spec.get("margin_unit", "relative")
     entry = {"metric": spec["metric"], "role": "guardrail", "unit": unit, "direction": spec.get("direction"),
@@ -188,20 +224,38 @@ def judge_invariant(spec, m, level, base):
             "verdict": "moved" if moved else "held"}
 
 
+def check_thresholds(specs):
+    """A relative bar or margin above 50% is almost always a unit mistake (10 meant as 10 ms, 0.5 meant as 0.5%)."""
+    for spec in specs:
+        for key, unit_key in (("bar", "bar_unit"), ("margin", "margin_unit")):
+            value = spec.get(key)
+            if value is None:
+                continue
+            if not isinstance(value, (int, float)) or isinstance(value, bool) or value < 0:
+                raise InputError(f"{key} for {spec['metric']} must be a non-negative number, got {value!r}")
+            if spec.get(unit_key, "relative") == "relative" and value >= 0.5:
+                raise InputError(f"{key} {value:g} for {spec['metric']} is relative, i.e. {100 * value:g}%. Write a fraction "
+                                 f"(0.005 for 0.5%), or set {unit_key}: \"absolute\" if you meant {value:g} in the metric's units")
+
+
 def merge_standards(standards):
     merged = dict(DEFAULT_STANDARDS)
     merged.update(standards or {})
     return merged
 
 
-def pick_comparison(scorecard, prereg):
+def pick_comparison(scorecard, prereg, config=None):
     comparisons = scorecard.get("comparisons") or []
     if not comparisons:
         raise InputError("the scorecard has no comparisons")
     wanted = prereg.get("test_group")
     if wanted:
+        aliases = {_key(wanted)}
+        for g in (config or {}).get("groups", []):
+            if _key(wanted) in (_key(g.get("id")), _key(g.get("name"))):
+                aliases |= {_key(g.get("id")), _key(g.get("name"))}
         for c in comparisons:
-            if str(c.get("test_group")).lower() == str(wanted).lower():
+            if _key(c.get("test_group")) in aliases:
                 return c
         raise InputError(f"test group '{wanted}' is not in the scorecard ({[c.get('test_group') for c in comparisons]})")
     if len(comparisons) > 1:
@@ -215,11 +269,16 @@ def decide(scorecard, prereg, config=None, standards=None, daily=None):
     fallbacks = []
     if not prereg.get("confirmed"):
         fallbacks.append("the pre-registration was transcribed, not confirmed by the owner")
-    base = prereg.get("ci_level") or analysis.get("ci_level") or ((config or {}).get("settings") or {}).get("ci_level")
-    if not base:
-        base = 0.95
-        fallbacks.append("confidence level not stated anywhere; assumed 95%")
-    comparison = pick_comparison(scorecard, prereg)
+    # The level the scorecard's intervals were computed at, and the level the call is made at.
+    scorecard_level = analysis.get("ci_level") or ((config or {}).get("settings") or {}).get("ci_level") \
+        or prereg.get("scorecard_ci_level")
+    if not scorecard_level:
+        scorecard_level = 0.95
+        fallbacks.append("the scorecard's confidence level isn't recorded (request.json 'confidence'); assumed 95%")
+    base = prereg.get("ci_level") or scorecard_level
+    for value in (scorecard_level, base):
+        expstats.z_for(value)
+    comparison = pick_comparison(scorecard, prereg, config)
     metrics = comparison["metrics"]
     primaries = (prereg.get("primaries") or {}).get("metrics") or []
     if not primaries:
@@ -234,13 +293,16 @@ def decide(scorecard, prereg, config=None, standards=None, daily=None):
     for g in guard_specs:
         if not g.get("direction") and std["directions"].get(g["metric"]):
             g["direction"] = std["directions"][g["metric"]]
+    check_thresholds(primaries + guard_specs)
+    invariant_specs = prereg.get("invariants") or []
     registered = len(primaries) + len(guard_specs)
     alpha = 1 - base
     levels = {"primary": 1 - alpha / len(primaries) if rule == "any" and len(primaries) > 1 else base,
-              "guardrail": base, "harm": 1 - alpha / max(registered, 1)}
-    configured = ((config or {}).get("settings") or {}).get("sequential")
-    sequential = bool(prereg.get("sequential") or (analysis.get("sequential") if analysis.get("sequential") is not None
-                                                   else configured))
+              "guardrail": base, "harm": 1 - alpha / max(registered, 1),
+              "invariant": 1 - alpha / max(len(invariant_specs), 1), "scorecard": scorecard_level}
+    configured = _bool(((config or {}).get("settings") or {}).get("sequential"))
+    requested = _bool(analysis.get("sequential"))
+    sequential = bool(_bool(prereg.get("sequential")) or (requested if requested is not None else configured))
     if sequential and not any(m.get("seq_rel_ci") or m.get("seq_abs_ci") for m in metrics):
         fallbacks.append("sequential testing is on but the scorecard has no sequential intervals; used fixed-horizon ones")
         sequential = False
@@ -257,35 +319,46 @@ def decide(scorecard, prereg, config=None, standards=None, daily=None):
     verdicts = []
     for spec in primaries:
         m = find(metrics, spec["metric"])
-        verdicts.append(judge_primary(spec, m, levels, base, sequential, ship_requires) if m else
-                        {"metric": spec["metric"], "role": "primary", "verdict": "missing"})
+        verdicts.append(judge_primary(spec, m, levels, scorecard_level, sequential, ship_requires) if m else
+                        {"metric": spec["metric"], "role": "primary", "verdict": "missing",
+                         "near": near_names(metrics, spec["metric"])})
     for spec in guard_specs:
-        verdicts.append(judge_guardrail(spec, find(metrics, spec["metric"]), levels, base, sequential))
-    for spec in prereg.get("invariants") or []:
-        verdicts.append(judge_invariant(spec, find(metrics, spec["metric"]), base, base))
+        m = find(metrics, spec["metric"])
+        verdict = judge_guardrail(spec, m, levels, scorecard_level, sequential)
+        if m is None:
+            verdict["near"] = near_names(metrics, spec["metric"])
+        verdicts.append(verdict)
+    for spec in invariant_specs:
+        verdicts.append(judge_invariant(spec, find(metrics, spec["metric"]), levels["invariant"], scorecard_level))
     prim = [v for v in verdicts if v["role"] == "primary"]
     guards = [v for v in verdicts if v["role"] == "guardrail"]
 
-    lead = prim[0]
-    lead_sign = sign_of(lead.get("direction")) or 1
-    checks.append(chk.novelty(daily, lead_sign * (1 if lead.get("point", 0) >= 0 else -1)))
+    rank = {"better": 0, "below_bar": 1, "undetermined": 2, "worse": 3}
+    lead = min(prim, key=lambda v: rank.get(v["verdict"], 4)) if rule == "any" else prim[0]
+    checks.append(chk.novelty(daily, 1 if (lead.get("point") or 0) >= 0 else -1))
 
-    registered_names = {s["metric"].strip().lower() for s in primaries + guard_specs + (prereg.get("invariants") or [])}
-    secondaries = [m for m in metrics if m["metric"].strip().lower() not in registered_names and m.get("p_value") is not None]
+    registered_names = {_key(s["metric"]) for s in primaries + guard_specs + invariant_specs}
+    others = [m for m in metrics if _key(m["metric"]) not in registered_names]
+    secondaries = [m for m in others if m.get("p_value") is not None]
     survivors = [secondaries[i] for i in expstats.benjamini_hochberg([m["p_value"] for m in secondaries], std["secondary_q"])]
+    survivors.sort(key=lambda m: m["p_value"])
     harmful = [m for m in survivors if sign_of(m.get("directionality")) * (m.get("rel_delta") or m.get("abs_delta") or 0) < 0]
 
-    status = study_status(config, analysis, prereg, primary_metric, std, fallbacks)
-    call, decider, reason = rule_chain(design, checks, prim, guards, verdicts, status, sequential, std, rule, harmful)
+    status = study_status(config, analysis, prereg, primary_metric, std, fallbacks,
+                          triggered=any(p.get("mass_share") for p in primaries))
+    call, decider, reason = rule_chain(design, checks, prim, guards, verdicts, status, sequential, std, rule, harmful, lead)
     open_items = collect_open_items(verdicts, checks, fallbacks, status, harmful, call)
     return {
         "call": call, "call_text": CALL_TEXT[call], "reason": reason, "ask": ASK[call], "decider": decider,
         "status": status, "verdicts": verdicts, "checks": checks,
-        "secondaries": {"tested": len(secondaries), "q": std["secondary_q"],
+        "daily": [p.get("rel_delta") for p in (daily or []) if isinstance(p, dict) and p.get("rel_delta") is not None],
+        "secondaries": {"tested": len(secondaries), "untested": len(others) - len(secondaries), "q": std["secondary_q"],
                         "survivors": [{"metric": m["metric"], "rel_delta": m.get("rel_delta"), "rel_ci": m.get("rel_ci"),
-                                       "p_value": m["p_value"], "directionality": m.get("directionality")} for m in survivors]},
+                                       "abs_delta": m.get("abs_delta"), "p_value": m["p_value"],
+                                       "directionality": m.get("directionality")} for m in survivors]},
         "open_items": open_items, "fallbacks": fallbacks,
-        "settings": {"ci_level": base, "levels": levels, "sequential": sequential, "rule": rule,
+        "settings": {"ci_level": base, "scorecard_ci_level": scorecard_level, "levels": levels,
+                     "sequential": sequential, "rule": rule,
                      "ship_requires": ship_requires, "cuped": analysis.get("cuped"),
                      "mc_correction": analysis.get("mc_correction"), "standards": {k: std[k] for k in (
                          "harm_within_margin", "below_bar", "secondary_harm", "srm_alpha", "min_days")}},
@@ -295,7 +368,7 @@ def decide(scorecard, prereg, config=None, standards=None, daily=None):
     }
 
 
-def study_status(config, analysis, prereg, primary_metric, std, fallbacks):
+def study_status(config, analysis, prereg, primary_metric, std, fallbacks, triggered=False):
     planned = prereg.get("planned") or {}
     start = (config or {}).get("start") or prereg.get("start")
     restarts = [e["date"] for e in (config or {}).get("edits", []) if e.get("action") in chk.RESTARTS and e.get("date")]
@@ -309,21 +382,24 @@ def study_status(config, analysis, prereg, primary_metric, std, fallbacks):
     if planned_days is None and planned_units is None:
         planned_days = std["min_days"]
         fallbacks.append(f"no planned duration registered; used the team minimum of {planned_days} days")
-    reached = True
-    if planned_days is not None:
-        reached = reached and days is not None and days >= planned_days
-    if planned_units is not None:
-        reached = reached and units is not None and units >= planned_units
+    if triggered and planned_units is not None:
+        fallbacks.append("the primary is measured on triggered traffic, so its users aren't compared with the planned total")
+        planned_units = None
+    known = []
+    if planned_days is not None and days is not None:
+        known.append(days >= planned_days)
+    if planned_units is not None and units is not None:
+        known.append(units >= planned_units)
+    reached = all(known) if known else None
     if days is None:
-        fallbacks.append("days run unknown (no start date or results date)")
+        fallbacks.append("days run unknown (no start date or results date; set 'as_of' in request.json)")
     return {"days_run": days, "planned_days": planned_days, "units_per_arm": units, "planned_units": planned_units,
             "reached": reached, "whole_weeks": None if days is None else days % 7 == 0,
             "window_start": window_start, "as_of": as_of}
 
 
-def rule_chain(design, checks, prim, guards, verdicts, status, sequential, std, rule, harmful):
+def rule_chain(design, checks, prim, guards, verdicts, status, sequential, std, rule, harmful, lead):
     """The ordered rules. Returns (call, decider, reason)."""
-    lead = prim[0]
     if design != "ab":
         return "not_ab", {"check": "design", "summary": design}, f"This is a {design} test; the A/B launch rule doesn't apply."
     blocking = [c for c in checks if c["status"] == chk.FAIL and c["check"] != "novelty"]
@@ -332,33 +408,46 @@ def rule_chain(design, checks, prim, guards, verdicts, status, sequential, std, 
         return "cant_tell", {"check": c["check"], "summary": c["summary"]}, f"{_sentence(c['summary'])} No launch decision from this data until it's fixed."
     for v in prim:
         if v["verdict"] in ("missing", "no_interval"):
+            hint = f" (closest names: {', '.join(v['near'])})" if v.get("near") else ""
             return "cant_tell", {"metric": v["metric"], "role": "primary", "verdict": v["verdict"]}, \
-                f"The primary metric {v['metric']} is {'not in the scorecard' if v['verdict'] == 'missing' else 'missing an interval'}."
-    moved = [v for v in verdicts if v["role"] == "invariant" and v["verdict"] == "moved"]
-    if moved:
-        v = moved[0]
-        return "cant_tell", v, f"{v['metric']} moved {describe(v)} though the change shouldn't touch it, so the arms aren't comparable."
+                f"The primary metric {v['metric']} is {'not in the scorecard' if v['verdict'] == 'missing' else 'missing an interval'}{hint}."
+    moved_inv = [v for v in verdicts if v["role"] == "invariant" and v["verdict"] == "moved"]
+    if moved_inv:
+        v = moved_inv[0]
+        return "cant_tell", v, f"{v['metric']} {moved(v)} though the change shouldn't touch it, so the arms aren't comparable."
+    unverified = next((c for c in checks if c["check"] == "scorecard" and c["status"] == chk.COULD_NOT_RUN), None)
+    if unverified:
+        return "escalate", {"check": "scorecard", "summary": unverified["summary"]}, \
+            f"{_sentence(unverified['summary'])} Check the export's units before trusting any number here."
 
     breached = [v for v in guards if v["verdict"] == "breached"]
     if breached:
         v = max(breached, key=lambda g: abs(g["point"]) / (g["threshold"] or abs(g["point"]) or 1))
         limit = f"past its {threshold_text(v['threshold'], v['unit'], v.get('display_unit', ''))} margin" if v["threshold"] is not None \
             else "and the change is clearly worse than zero"
-        return "dont_ship", v, f"{v['metric']} moved the wrong way, {describe(v)}, {limit}."
+        return "dont_ship", v, f"{v['metric']} {moved(v)}, the wrong way and {limit}."
     worse = [v for v in prim if v["verdict"] == "worse"]
     if worse:
         v = worse[0]
-        return "dont_ship", v, f"{v['metric']} moved the wrong way, {describe(v)}."
+        return "dont_ship", v, f"{v['metric']} {moved(v)}, the wrong way."
 
+    if status["reached"] is None:
+        return "escalate", {"check": "status", "summary": "run length unknown"}, \
+            (f"{lead['metric']} reads {describe(lead)}, but neither the days run nor the users per arm can be compared "
+             "with the plan, so it isn't known whether the test is finished.")
     early = not status["reached"] and (not sequential or lead["verdict"] == "undetermined")
     if early:
-        where = (f"day {status['days_run']} of {status['planned_days']}" if status["days_run"] is not None
-                 and status["planned_days"] else "before the planned sample")
-        return "keep_running", lead, f"It's {where}; {lead['metric']} reads {describe(lead)} so far, too early to call."
+        if status["days_run"] is not None and status["planned_days"] and status["days_run"] < status["planned_days"]:
+            where = f"It's day {status['days_run']} of {status['planned_days']}"
+        else:
+            where = (f"It has {status['units_per_arm']:,} of the planned {status['planned_units']:,} users per arm"
+                     if status.get("planned_units") and status.get("units_per_arm") else "It's before the planned sample")
+        return "keep_running", lead, f"{where}; {lead['metric']} reads {describe(lead)} so far, too early to call."
     novelty = next((c for c in checks if c["check"] == "novelty"), None)
-    if novelty and novelty["status"] == chk.FLAG and lead["verdict"] in ("better", "below_bar"):
+    if (novelty and novelty["status"] == chk.FLAG and novelty["details"].get("basis") == "days_since_exposure"
+            and lead["verdict"] in ("better", "below_bar")):
         return "keep_running", {"check": "novelty", "summary": novelty["summary"], "metric": lead["metric"]}, \
-            f"{lead['metric']} reads {describe(lead)} overall, but the effect is fading over the days of the test."
+            f"{lead['metric']} {moved(lead)} overall, but the effect is fading with each day users have had it."
 
     no_dir = [v for v in verdicts if v["verdict"] == "no_direction"]
     if no_dir:
@@ -367,21 +456,27 @@ def rule_chain(design, checks, prim, guards, verdicts, status, sequential, std, 
     if flagged:
         return "escalate", {"check": flagged[0]["check"], "summary": flagged[0]["summary"]}, \
             f"{_sentence(flagged[0]['summary'])} Triage should confirm the explanation before any launch."
+    gaps = [v for v in verdicts if v["role"] == "invariant" and v["verdict"] in ("missing", "no_interval")]
+    if gaps:
+        return "escalate", gaps[0], f"Invariant {gaps[0]['metric']} is not in the scorecard, so the arms' comparability isn't checked."
 
     better = [v for v in prim if v["verdict"] in ("better", "below_bar")]
-    if lead["verdict"] == "undetermined" and not better:
-        if lead.get("threshold") is None:
-            return "escalate", lead, f"{lead['metric']} reads {describe(lead)}; no bar is registered, so 'no effect' can't be shown."
-        if lead.get("rules_out_bar"):
+    if not better:
+        unsettled = [v for v in prim if v["verdict"] == "undetermined" and not v.get("rules_out_bar")]
+        if any(v.get("threshold") in (None, 0) for v in prim):
+            v = next(v for v in prim if v.get("threshold") in (None, 0))
+            return "escalate", v, f"{v['metric']} reads {describe(v)}; no bar is registered, so 'no effect' can't be shown."
+        if not unsettled:
             return "no_effect", lead, (f"{lead['metric']} reads {describe(lead)}, which rules out the "
-                                       f"{threshold_text(lead['threshold'], lead['unit'])} change the test was built to find.")
-        factor = (lead["achieved_mde"] / lead["threshold"]) ** 2 if lead["threshold"] else float("inf")
+                                       f"{threshold_text(lead['threshold'], lead['unit'], lead.get('display_unit', ''))} "
+                                       "change the test was built to find.")
+        v = max(unsettled, key=lambda u: (u["achieved_mde"] / u["threshold"]) ** 2)
+        factor = (v["achieved_mde"] / v["threshold"]) ** 2
+        bar = threshold_text(v["threshold"], v["unit"], v.get("display_unit", ""))
         if factor <= std["max_extension_factor"]:
-            return "keep_running", lead, (f"{lead['metric']} reads {describe(lead)}; ruling out the "
-                                          f"{threshold_text(lead['threshold'], lead['unit'])} bar needs about "
-                                          f"{factor:.1f} times the users so far.")
-        return "escalate", lead, (f"{lead['metric']} reads {describe(lead)}; this test is too small to rule out the "
-                                  f"{threshold_text(lead['threshold'], lead['unit'])} bar (it would need about {factor:.0f} times the users).")
+            return "keep_running", v, f"{v['metric']} reads {describe(v)}; ruling out the {bar} bar needs about {factor:.1f} times the users so far."
+        return "escalate", v, (f"{v['metric']} reads {describe(v)}; this test is too small to rule out the {bar} bar "
+                               f"(it would need about {factor:.0f} times the users).")
     if rule == "all" and len(better) < len(prim):
         other = next(v for v in prim if v not in better)
         return "escalate", other, f"{better[0]['metric']} improved but {other['metric']} is undetermined, {describe(other)}; the test needs every primary to improve."
@@ -389,10 +484,11 @@ def rule_chain(design, checks, prim, guards, verdicts, status, sequential, std, 
     missing = [v for v in guards if v["verdict"] in ("missing", "no_interval")]
     undetermined = [v for v in guards if v["verdict"] == "undetermined"]
     within_harm = [v for v in guards if v["verdict"] == "harm_within_margin"]
-    head = f"{lead['metric']} improved {describe(lead)}"
+    head = f"{lead['metric']} {moved(lead)}"
     if missing:
         v = missing[0]
-        return "escalate", v, f"{head}, but guardrail {v['metric']} is {'not in the scorecard' if v['verdict'] == 'missing' else 'missing an interval'}."
+        hint = f" (closest names: {', '.join(v['near'])})" if v.get("near") else ""
+        return "escalate", v, f"{head}, but guardrail {v['metric']} is {'not in the scorecard' if v['verdict'] == 'missing' else 'missing an interval'}{hint}."
     if undetermined:
         v = undetermined[0]
         return "escalate", v, (f"{head}, but {v['metric']} ({describe(v)}) isn't shown within its "
@@ -400,39 +496,44 @@ def rule_chain(design, checks, prim, guards, verdicts, status, sequential, std, 
     if within_harm and std["harm_within_margin"] != "allow":
         v = within_harm[0]
         call = "dont_ship" if std["harm_within_margin"] == "block" else "escalate"
-        return call, v, (f"{head}, but {v['metric']} got worse, {describe(v)}, inside its "
+        return call, v, (f"{head}, but {v['metric']} {moved(v)}, the wrong way, though inside its "
                          f"{threshold_text(v['threshold'], v['unit'], v.get('display_unit', ''))} margin.")
     below = [v for v in prim if v["verdict"] == "below_bar"]
-    if below and std["below_bar"] != "ship":
+    if below and std["below_bar"] != "ship" and (rule == "all" or lead["verdict"] == "below_bar"):
         v = below[0]
         call = "dont_ship" if std["below_bar"] == "dont_ship" else "escalate"
-        return call, v, f"{v['metric']} improved {describe(v)}, real but short of the {threshold_text(v['threshold'], v['unit'])} bar."
+        bar = threshold_text(v["threshold"], v["unit"], v.get("display_unit", ""))
+        return call, v, f"{v['metric']} {moved(v)}, a real change in the good direction but short of the {bar} bar."
     if harmful and std["secondary_harm"] == "escalate":
         return "escalate", {"metric": harmful[0]["metric"], "role": "secondary"}, \
             f"{head}, but secondary metric {harmful[0]['metric']} got worse after correction for many metrics."
-    bar = f", which clears the {threshold_text(lead['threshold'], lead['unit'])} bar" if lead.get("threshold") is not None else ""
+    bar = (f", which clears the {threshold_text(lead['threshold'], lead['unit'], lead.get('display_unit', ''))} bar"
+           if lead.get("threshold") is not None else "")
     guard_note = " and every guardrail held" if guards else "; no guardrails were registered"
     return "ship", lead, f"{head}{bar}{guard_note}."
 
 
 def collect_open_items(verdicts, checks, fallbacks, status, harmful, call):
-    items = []
+    """Things that could change the call, most material first; checks that couldn't run go last."""
+    risks, notes, unrun = [], [], []
     for v in verdicts:
         if v["verdict"] == "harm_within_margin" and v.get("point") is not None:
-            items.append(f"{v['metric']} got worse inside its margin ({describe(v)})")
+            risks.append(f"{v['metric']} {moved(v)}, the wrong way, inside its margin")
         if v["verdict"] == "undetermined" and v["role"] == "guardrail":
-            items.append(f"{v['metric']} isn't shown within its margin ({describe(v)})")
-    for c in checks:
-        if c["status"] == chk.COULD_NOT_RUN:
-            items.append(f"{c['check'].replace('_', ' ')} could not be checked: {c['summary']}")
-        elif c["status"] == chk.FLAG:
-            items.append(c["summary"])
-    items.extend(fallbacks)
-    if status.get("whole_weeks") is False:
-        items.append(f"{status['days_run']} days is not whole weeks, so day-of-week mix differs from a full week")
+            risks.append(f"{v['metric']} isn't shown within its margin ({describe(v)})")
+        if v["verdict"] in ("missing", "no_interval") and v["role"] != "primary":
+            risks.append(f"{v['role']} {v['metric']} is not in the scorecard")
     for m in harmful:
-        items.append(f"secondary metric {m['metric']} got worse after correction")
-    return items
+        risks.append(f"secondary metric {m['metric']} got worse after correction")
+    for c in checks:
+        if c["status"] == chk.FLAG:
+            risks.append(c["summary"])
+        elif c["status"] == chk.COULD_NOT_RUN:
+            unrun.append(f"{c['check'].replace('_', ' ')} could not be checked: {c['summary']}")
+    notes.extend(fallbacks)
+    if status.get("whole_weeks") is False:
+        notes.append(f"{status['days_run']} days is not whole weeks, so day-of-week mix differs from a full week")
+    return risks + notes + unrun
 
 
 def _sentence(text):
@@ -440,10 +541,19 @@ def _sentence(text):
     return (text[0].upper() + text[1:]).rstrip(".") + "."
 
 
-def log_decision(decision):
+def fingerprint(path):
+    if not path:
+        return None
+    with open(path, "rb") as handle:
+        return hashlib.sha1(handle.read()).hexdigest()[:10]
+
+
+def log_decision(decision, inputs=None):
     path = os.environ.get("DS_CHECKS_LOG") or os.path.join(os.getcwd(), ".ds-checks.log")
     entry = {"ts": round(time.time(), 3), "check": "ds_experiment_decide", "status": decision["call"],
-             "summary": decision["reason"], "details": {"decider": decision["decider"].get("metric") or decision["decider"].get("check")}}
+             "summary": decision["reason"], "details": {"decider": decision["decider"].get("metric") or decision["decider"].get("check"),
+                                                        "experiment": decision["experiment"].get("id"),
+                                                        "inputs": inputs or {}}}
     with open(path, "a", encoding="utf-8") as handle:
         handle.write(json.dumps(entry, sort_keys=True) + "\n")
 
@@ -466,13 +576,17 @@ def main(argv=None):
     args = parser.parse_args(argv)
     try:
         decision = decide(load(args.scorecard), load(args.prereg), load(args.config), load(args.standards), load(args.daily))
-    except (OSError, ValueError, KeyError) as err:
-        print(f"decide: {err}", file=sys.stderr)
+    except (OSError, ValueError, KeyError, TypeError, AttributeError) as err:
+        print(f"decide: {type(err).__name__}: {err}", file=sys.stderr)
         return 2
     out = args.out or os.path.join(os.path.dirname(os.path.abspath(args.scorecard)), "decision.json")
     with open(out, "w", encoding="utf-8") as handle:
         json.dump(decision, handle, indent=2)
-    log_decision(decision)
+    inputs = {name: fingerprint(getattr(args, name)) for name in ("scorecard", "prereg", "config", "standards", "daily")}
+    decision["inputs"] = inputs
+    with open(out, "w", encoding="utf-8") as handle:
+        json.dump(decision, handle, indent=2)
+    log_decision(decision, inputs)
     for c in decision["checks"]:
         print(f"check {c['check']}: {c['status']} - {c['summary']}")
     for v in decision["verdicts"]:

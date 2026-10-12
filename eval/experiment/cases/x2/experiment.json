@@ -1,9 +1,9 @@
 {
  "message": "ok",
  "data": {
-  "id": "ranker_v7",
-  "name": "Ranker v7",
-  "hypothesis": "The new ranker raises the share of searches that end in a successful click.",
+  "id": "q3_search_launches_holdout",
+  "name": "Q3 search launches holdout",
+  "hypothesis": "The 5% holdout measures the combined effect of the quarter's ranking launches.",
   "idType": "userID",
   "layerID": "search_ranking",
   "allocation": 20,
@@ -12,7 +12,7 @@
    {
     "id": "g_control",
     "name": "Control",
-    "size": 50,
+    "size": 5,
     "parameterValues": {
      "ranker_model": "lambdamart_v6",
      "snippet_length": "160"
@@ -21,7 +21,7 @@
    {
     "id": "g_test",
     "name": "Test",
-    "size": 50,
+    "size": 95,
     "parameterValues": {
      "ranker_model": "lambdamart_v7",
      "snippet_length": "160"
@@ -29,7 +29,7 @@
    }
   ],
   "startTime": 1789171200000,
-  "duration": 14,
+  "duration": 90,
   "status": "active",
   "defaultConfidenceInterval": "95",
   "sequentialTesting": false,
@@ -47,6 +47,9 @@
     "name": "Exposures balanced",
     "status": "PASSED"
    }
+  ],
+  "holdoutIDs": [
+   "q3_search_holdout"
   ]
  }
 }

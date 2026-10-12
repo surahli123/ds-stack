@@ -1,0 +1,6 @@
+{
+ "title": "s3 win, only the calendar-day series is available",
+ "call": "ship",
+ "decider": "Successful Search Rate",
+ "why": "a calendar-day fade is day-of-week and late joiners; ship with the exposure-day cut as an open item"
+}

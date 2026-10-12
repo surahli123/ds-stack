@@ -7,7 +7,7 @@
       "pass": "skim",
       "item": "answer",
       "key": "Can't tell: Parameters changed that the test didn't intend: {'Test': ['snippet_length']}. No launch decision from this data until it's fixed.",
-      "reader": "Can't tell. The test changed snippet length in addition to the ranker, so the result can't isolate the ranker's effect. Successful Search Rate rose +0.81% (95% interval +0.41% to +1.21%), above the 0.50% bar, but that doesn't count without a clean test. Agree to fix the test config and rerun, with snippet length held equal across arms. No launch decision from this data.",
+      "reader": "Can't tell. The test changed snippet length in both arms as well as the ranker, so the ranker's effect isn't isolated. Agree to fix the test config so snippet length matches across arms, then rerun. No launch decision until then.",
       "got": true,
       "how": "overlap 50%"
     },
@@ -15,23 +15,23 @@
       "pass": "skim",
       "item": "decision",
       "key": "Agree to fix the test and rerun; no launch decision from this data.",
-      "reader": "Agree to fix the test config and rerun, with snippet length held equal across arms. No launch decision from this data. Can't tell. The test changed snippet length in addition to the ranker, so the result can't isolate the ranker's effect. Successful Search Rate rose +0.81% (95% interval +0.41% to +1.21%), above the 0.50% bar, but that doesn't count without a clean test.",
+      "reader": "Agree to fix the test config so snippet length matches across arms, then rerun. No launch decision until then. Can't tell. The test changed snippet length in both arms as well as the ranker, so the ranker's effect isn't isolated.",
       "got": true,
-      "how": "overlap 100%"
+      "how": "overlap 86%"
     },
     {
       "pass": "full",
       "item": "takeaway 1",
       "key": "Parameters changed that the test didn't intend: {'Test': ['snippet_length']}",
-      "reader": "The document concludes \"Can't tell.\" The test is broken: the test arm changed snippet length as well as the ranker, so the +0.81% lift in Successful Search Rate can't be attributed to the ranker. Current state: day 14 of 14, 1M users per arm, no launch decision. Agree to fix the test config and rerun, or split the existing data so snippet length is the same in both arms. Make no launch decision from this data. +0.81% change in Successful Search Rate (95% interval +0.41% to +1.21%), against a bar of at least 0.50%. Longer snippets alone could raise successful searches, so the lift may not come from the ranker. Also, the pre-period and novelty checks could not run, and there are no segment cuts or daily series to check whether the lift is fading.",
+      "reader": "The document concludes \"Can't tell.\" The test is broken: the test arm differs from control in snippet length as well as the ranker, so the +0.81% lift can't be attributed to the ranker. Current state: the test finished (day 14 of 14, 1,000,000 users per arm), with no valid launch decision. Agree to fix the test configuration so only the ranker differs, then rerun. Make no launch decision from this data. Successful Search Rate, +0.81% (95% interval +0.41% to +1.21%), against a bar of at least +0.50%. The unit is percent change in the rate. Longer snippets may raise successful searches by themselves, so the lift may not come from the ranker. The scorecard also has no segment cuts or daily series, so the mechanism and whether the lift is fading are unknown.",
       "got": true,
-      "how": "overlap 33%; grader: same fact"
+      "how": "overlap 17%; grader: same fact"
     },
     {
       "pass": "full",
       "item": "takeaway 2",
       "key": "Agree to fix the test and rerun; no launch decision from this data.",
-      "reader": "The document concludes \"Can't tell.\" The test is broken: the test arm changed snippet length as well as the ranker, so the +0.81% lift in Successful Search Rate can't be attributed to the ranker. Current state: day 14 of 14, 1M users per arm, no launch decision. Agree to fix the test config and rerun, or split the existing data so snippet length is the same in both arms. Make no launch decision from this data. +0.81% change in Successful Search Rate (95% interval +0.41% to +1.21%), against a bar of at least 0.50%. Longer snippets alone could raise successful searches, so the lift may not come from the ranker. Also, the pre-period and novelty checks could not run, and there are no segment cuts or daily series to check whether the lift is fading.",
+      "reader": "The document concludes \"Can't tell.\" The test is broken: the test arm differs from control in snippet length as well as the ranker, so the +0.81% lift can't be attributed to the ranker. Current state: the test finished (day 14 of 14, 1,000,000 users per arm), with no valid launch decision. Agree to fix the test configuration so only the ranker differs, then rerun. Make no launch decision from this data. Successful Search Rate, +0.81% (95% interval +0.41% to +1.21%), against a bar of at least +0.50%. The unit is percent change in the rate. Longer snippets may raise successful searches by themselves, so the lift may not come from the ranker. The scorecard also has no segment cuts or daily series, so the mechanism and whether the lift is fading are unknown.",
       "got": true,
       "how": "overlap 100%"
     },
@@ -39,15 +39,15 @@
       "pass": "full",
       "item": "takeaway 3",
       "key": "Could reverse it: fixing the config params problem and rerunning.",
-      "reader": "The document concludes \"Can't tell.\" The test is broken: the test arm changed snippet length as well as the ranker, so the +0.81% lift in Successful Search Rate can't be attributed to the ranker. Current state: day 14 of 14, 1M users per arm, no launch decision. Agree to fix the test config and rerun, or split the existing data so snippet length is the same in both arms. Make no launch decision from this data. +0.81% change in Successful Search Rate (95% interval +0.41% to +1.21%), against a bar of at least 0.50%. Longer snippets alone could raise successful searches, so the lift may not come from the ranker. Also, the pre-period and novelty checks could not run, and there are no segment cuts or daily series to check whether the lift is fading.",
+      "reader": "The document concludes \"Can't tell.\" The test is broken: the test arm differs from control in snippet length as well as the ranker, so the +0.81% lift can't be attributed to the ranker. Current state: the test finished (day 14 of 14, 1,000,000 users per arm), with no valid launch decision. Agree to fix the test configuration so only the ranker differs, then rerun. Make no launch decision from this data. Successful Search Rate, +0.81% (95% interval +0.41% to +1.21%), against a bar of at least +0.50%. The unit is percent change in the rate. Longer snippets may raise successful searches by themselves, so the lift may not come from the ranker. The scorecard also has no segment cuts or daily series, so the mechanism and whether the lift is fading are unknown.",
       "got": true,
-      "how": "overlap 17%; grader: same fact"
+      "how": "overlap 0%; grader: same fact"
     }
   ],
-  "lost": "Slightly. The Verdict column says \"better\" for the primary metric, while the headline says \"Can't tell,\" so I had to reread to confirm that the headline governs. The guardrail \"Bar\" cell is blank, which is unclear: unclear whether those guardrails have no bar or one that was left out.",
-  "question": "Was the snippet length change meant to be part of Ranker v7, and if so, where is the pre-registration evidence? That note is what would turn this into an escalation rather than a rerun.",
+  "lost": "Nowhere significant. Minor gaps: the guardrail rows give verdicts (\"within margin\") but no numbers, the \"margin\" that triggers escalation is never defined, and it's unclear why the pre-period and novelty checks \"could not run.\"",
+  "question": "Was the snippet length change an accidental config edit, or was it meant to be in the test? If accidental, can you rerun with snippet length matched across arms?",
   "replies": {
-    "skim": "1. Answer: Can't tell. The test changed snippet length in addition to the ranker, so the result can't isolate the ranker's effect. Successful Search Rate rose +0.81% (95% interval +0.41% to +1.21%), above the 0.50% bar, but that doesn't count without a clean test.\n2. Decision: Agree to fix the test config and rerun, with snippet length held equal across arms. No launch decision from this data.\n3. Number: +0.81% change in Successful Search Rate (primary metric, vs. 0.50% bar).\n",
-    "full": "1. **Answer:** The document concludes \"Can't tell.\" The test is broken: the test arm changed snippet length as well as the ranker, so the +0.81% lift in Successful Search Rate can't be attributed to the ranker. Current state: day 14 of 14, 1M users per arm, no launch decision.\n\n2. **Decision:** Agree to fix the test config and rerun, or split the existing data so snippet length is the same in both arms. Make no launch decision from this data.\n\n3. **Number:** +0.81% change in Successful Search Rate (95% interval +0.41% to +1.21%), against a bar of at least 0.50%.\n\n4. **Caveat:** Longer snippets alone could raise successful searches, so the lift may not come from the ranker. Also, the pre-period and novelty checks could not run, and there are no segment cuts or daily series to check whether the lift is fading.\n\n5. **Lost:** Slightly. The Verdict column says \"better\" for the primary metric, while the headline says \"Can't tell,\" so I had to reread to confirm that the headline governs. The guardrail \"Bar\" cell is blank, which is unclear: unclear whether those guardrails have no bar or one that was left out.\n\n6. **Question:** Was the snippet length change meant to be part of Ranker v7, and if so, where is the pre-registration evidence? That note is what would turn this into an escalation rather than a rerun.\n"
+    "skim": "1. Answer: Can't tell. The test changed snippet length in both arms as well as the ranker, so the ranker's effect isn't isolated.\n2. Decision: Agree to fix the test config so snippet length matches across arms, then rerun. No launch decision until then.\n3. Number: +0.81% (95% interval +0.41% to +1.21%) Successful Search Rate, primary metric, against a bar of at least 0.50%.\n",
+    "full": "1. **Answer:** The document concludes \"Can't tell.\" The test is broken: the test arm differs from control in snippet length as well as the ranker, so the +0.81% lift can't be attributed to the ranker. Current state: the test finished (day 14 of 14, 1,000,000 users per arm), with no valid launch decision.\n\n2. **Decision:** Agree to fix the test configuration so only the ranker differs, then rerun. Make no launch decision from this data.\n\n3. **Number:** Successful Search Rate, +0.81% (95% interval +0.41% to +1.21%), against a bar of at least +0.50%. The unit is percent change in the rate.\n\n4. **Caveat:** Longer snippets may raise successful searches by themselves, so the lift may not come from the ranker. The scorecard also has no segment cuts or daily series, so the mechanism and whether the lift is fading are unknown.\n\n5. **Lost:** Nowhere significant. Minor gaps: the guardrail rows give verdicts (\"within margin\") but no numbers, the \"margin\" that triggers escalation is never defined, and it's unclear why the pre-period and novelty checks \"could not run.\"\n\n6. **Question:** Was the snippet length change an accidental config edit, or was it meant to be in the test? If accidental, can you rerun with snippet length matched across arms?\n"
   }
 }

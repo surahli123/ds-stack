@@ -43,6 +43,7 @@
   }
  ],
  "intended_params": [
+  "serving_mode",
   "ranker_model"
  ]
 }

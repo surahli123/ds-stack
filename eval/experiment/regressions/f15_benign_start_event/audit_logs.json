@@ -1,0 +1,9 @@
+{
+ "data": [
+  {
+   "actionType": "experiment_start",
+   "date": "2026-09-12",
+   "changeLog": "Experiment started"
+  }
+ ]
+}

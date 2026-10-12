@@ -8,6 +8,7 @@ pre-registration lists an explanation for it.
 
 import math
 import os
+import re
 import sys
 from datetime import date
 
@@ -44,11 +45,17 @@ def scorecard_invariants(metrics, analysis):
     for CUPED-adjusted deltas too); raw means must agree with the delta only
     when CUPED is off.
     """
-    problems = []
+    problems, checkable = [], 0
     for m in metrics:
         name, c, t = m["metric"], m.get("control_mean"), m.get("test_mean")
         rel, ab = m.get("rel_delta"), m.get("abs_delta")
         tol = abs(c or 0) * 2e-5 + 1e-12
+        if c and rel is not None and (ab is not None or t is not None):
+            checkable += 1
+        for fixed, seq in ((m.get("rel_ci"), m.get("seq_rel_ci")), (m.get("abs_ci"), m.get("seq_abs_ci"))):
+            if fixed and seq and (seq[1] - seq[0]) < 0.99 * (fixed[1] - fixed[0]):
+                problems.append(f"{name}: the sequential interval is narrower than the fixed one, which sequential "
+                                "testing never produces; the export's columns are probably swapped or mislabelled")
         if c and rel is not None and ab is not None and not _close(rel * c, ab, rel=0.05, abs_tol=tol):
             problems.append(f"{name}: relative {rel:g} x control {c:g} = {rel * c:g} but the absolute change is {ab:g}; "
                             "is a percent column read as a fraction, or the reverse?")
@@ -66,7 +73,11 @@ def scorecard_invariants(metrics, analysis):
     if problems:
         return result("scorecard", FAIL, f"{len(problems)} scorecard values don't add up. First: " + problems[0],
                       problems=problems)
-    return result("scorecard", PASS, f"{len(metrics)} registered metrics consistent (relative, absolute and intervals agree)")
+    if metrics and not checkable:
+        return result("scorecard", COULD_NOT_RUN, "the export has no control means next to its changes, so a percent "
+                      "column read as a fraction (or the reverse) can't be caught")
+    return result("scorecard", PASS, f"{checkable} of {len(metrics)} registered metrics cross-checked "
+                  "(relative, absolute and intervals agree)")
 
 
 def sample_split(config, primary, alpha, explanations):
@@ -77,10 +88,11 @@ def sample_split(config, primary, alpha, explanations):
     exposures = (config or {}).get("exposures") or {}
     active = [g for g in groups if not g.get("disabled")]
     if exposures and active and all(g.get("name") in exposures or g.get("id") in exposures for g in active):
-        counts = [int(exposures.get(g.get("name"), exposures.get(g.get("id")))) for g in active]
+        counts = [_count(exposures.get(g.get("name"), exposures.get(g.get("id")))) for g in active]
         source = "exposures"
     elif primary and primary.get("control_units") and primary.get("test_units") and len(active) == 2:
-        control_first = active[0].get("id") == (config or {}).get("control_group") or active[0].get("name", "").lower() == "control"
+        control_first = (active[0].get("id") == (config or {}).get("control_group")
+                         or (active[0].get("name") or "").lower() == "control")
         units = [int(primary["control_units"]), int(primary["test_units"])]
         counts = units if control_first else units[::-1]
         source = f"units in '{primary['metric']}' (exposures not in the config)"
@@ -133,20 +145,22 @@ def config_checks(config, prereg, as_of):
         else:
             out.append(result("config_params", PASS, f"only the intended parameters differ ({', '.join(intended) or 'none'})"))
     unit = prereg.get("unit")
-    if unit and config.get("id_type") and unit.lower() != str(config["id_type"]).lower():
+    if unit and config.get("id_type") and _unit_key(unit) != _unit_key(config["id_type"]):
         out.append(result("config_unit", FAIL, f"randomized on {config['id_type']} but pre-registered on {unit}"))
     edits = [e for e in config.get("edits", []) if e.get("date") and config.get("start")
              and config["start"] <= e["date"] <= (as_of or "9999")]
-    restarts = [e for e in edits if e.get("action") in RESTARTS]
-    window_start = max([e["date"] for e in restarts], default=config.get("start"))
-    disruptive = [e for e in edits if e.get("action") in DISRUPTIVE_EDITS and e["date"] >= (window_start or "")]
+    order = lambda e: (e["date"], str(e.get("time") or ""), e.get("action") in RESTARTS)  # noqa: E731
+    restarts = sorted((e for e in edits if e.get("action") in RESTARTS), key=order)
+    window_start = restarts[-1]["date"] if restarts else config.get("start")
+    disruptive = [e for e in edits if e.get("action") in DISRUPTIVE_EDITS
+                  and (not restarts or order(e) > order(restarts[-1]))]
     if disruptive:
         first = disruptive[0]
         out.append(result("config_edits", FAIL, f"the test was edited mid-flight on {first['date']} "
                           f"({first.get('summary') or first['action']}) and the results include days before and after",
                           edits=disruptive))
-    elif edits:
-        out.append(result("config_edits", FLAG, f"results restart on {window_start} after a restart; earlier days excluded",
+    elif restarts:
+        out.append(result("config_edits", FLAG, f"results count from the restart on {window_start}; earlier days excluded",
                           window_start=window_start))
     else:
         out.append(result("config_edits", PASS, "no mid-flight edits in the analysis window"))
@@ -180,8 +194,10 @@ def pre_period(prereg, config, primary_name):
 
 def novelty(series, effect_sign, z_needed=2.0):
     """Is the effect fading? `series` is [{day, rel_delta, rel_ci, basis}] by days since first exposure."""
-    if not series or len(series) < 4:
-        return result("novelty", COULD_NOT_RUN, "no daily effect series (needs 4 or more days)")
+    series = [p for p in (series or []) if isinstance(p, dict) and p.get("rel_delta") is not None
+              and p.get("rel_ci") and len(p["rel_ci"]) == 2 and p.get("day") is not None]
+    if len(series) < 4:
+        return result("novelty", COULD_NOT_RUN, "no usable daily effect series (needs 4 or more days)")
     basis = series[0].get("basis", "days_since_exposure")
     days = [p["day"] for p in series]
     effects = [p["rel_delta"] for p in series]
@@ -195,10 +211,20 @@ def novelty(series, effect_sign, z_needed=2.0):
                f"(trend {100 * slope:+.3f}% per day)")
     if fading and basis != "days_since_exposure":
         return result("novelty", FLAG, summary + "; calendar days mix day-of-week and late joiners, so cut by days "
-                      "since first exposure before calling it novelty", late=late, late_se=late_se)
+                      "since first exposure before calling it novelty", late=late, late_se=late_se, basis=basis)
     if fading:
-        return result("novelty", FLAG, "effect fading: " + summary, late=late, late_se=late_se)
-    return result("novelty", PASS, summary, late=late, late_se=late_se)
+        return result("novelty", FLAG, "effect fading: " + summary, late=late, late_se=late_se, basis=basis)
+    return result("novelty", PASS, summary, late=late, late_se=late_se, basis=basis)
+
+
+def _count(value):
+    if isinstance(value, dict):
+        value = value.get("count", value.get("units", value.get("exposures")))
+    return int(value)
+
+
+def _unit_key(text):
+    return re.sub(r"[^a-z0-9]", "", str(text).lower())
 
 
 def _health(config, name):

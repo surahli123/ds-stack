@@ -1,0 +1,53 @@
+{
+  "pass": false,
+  "skim": "0/2",
+  "full": "0/3",
+  "items": [
+    {
+      "pass": "skim",
+      "item": "answer",
+      "key": "Keep running: It's day 4 of 14; Successful Search Rate reads +1.42% (+0.32% to +2.52%) so far, too early to call.",
+      "reader": "The document makes no launch recommendation. It is an interim Ranker v7 readout, and the experiment is in a handover state: about 3 of 14 planned days, past its planned end, still marked active, with an empty audit log, no final Pulse pull, and uncorrected peeking. Don't launch yet. Get a final Pulse pull over the full pre-registered window, or formally close the experiment, and name an owner for that.",
+      "got": false,
+      "how": "overlap 0%"
+    },
+    {
+      "pass": "skim",
+      "item": "decision",
+      "key": "Approve running the test longer.",
+      "reader": "Don't launch yet. Get a final Pulse pull over the full pre-registered window, or formally close the experiment, and name an owner for that. The document makes no launch recommendation. It is an interim Ranker v7 readout, and the experiment is in a handover state: about 3 of 14 planned days, past its planned end, still marked active, with an empty audit log, no final Pulse pull, and uncorrected peeking.",
+      "got": false,
+      "how": "overlap 0%"
+    },
+    {
+      "pass": "full",
+      "item": "takeaway 1",
+      "key": "Successful Search Rate +1.42% (+0.32% to +2.52%) against at least 0.50%.",
+      "reader": "The document makes no launch recommendation. Its conclusion is \"Can't tell.\" The Ranker v7 experiment is in an interim state: a 3-day look at about 29% of the planned sample. It is still `active` past its planned end (about 2026-09-26), and there is no final Pulse pull. Don't decide on launch yet, and treat \"no decision yet\" as the default. Re-pull Pulse for the full window with the same settings, then apply the pre-registered rule: ship only if the Successful Search Rate lift is at or above +0.005 and all guardrails hold, with Revenue per User checked first. Also find out why the experiment is still running. Successful Search Rate absolute lift, point estimate +0.00585 (unit: change in a proportion, about +0.6 points). It sits just above the +0.005 bar, but its 95% CI runs from about +0.0013 to +0.0104. The biggest risk is that the estimate comes from an unadjusted interim peek at 3 of 14 days and about 29% of the sample. The point estimate may shrink as data accumulates. Revenue per User's lower bound (about \u22120.8%) is also close to its \u22121% margin.",
+      "got": false,
+      "how": "overlap 0%"
+    },
+    {
+      "pass": "full",
+      "item": "takeaway 2",
+      "key": "Approve running the test longer.",
+      "reader": "The document makes no launch recommendation. Its conclusion is \"Can't tell.\" The Ranker v7 experiment is in an interim state: a 3-day look at about 29% of the planned sample. It is still `active` past its planned end (about 2026-09-26), and there is no final Pulse pull. Don't decide on launch yet, and treat \"no decision yet\" as the default. Re-pull Pulse for the full window with the same settings, then apply the pre-registered rule: ship only if the Successful Search Rate lift is at or above +0.005 and all guardrails hold, with Revenue per User checked first. Also find out why the experiment is still running. Successful Search Rate absolute lift, point estimate +0.00585 (unit: change in a proportion, about +0.6 points). It sits just above the +0.005 bar, but its 95% CI runs from about +0.0013 to +0.0104. The biggest risk is that the estimate comes from an unadjusted interim peek at 3 of 14 days and about 29% of the sample. The point estimate may shrink as data accumulates. Revenue per User's lower bound (about \u22120.8%) is also close to its \u22121% margin.",
+      "got": false,
+      "how": "overlap 25%"
+    },
+    {
+      "pass": "full",
+      "item": "takeaway 3",
+      "key": "Could reverse it: the remaining data; the call is made at the planned sample.",
+      "reader": "The document makes no launch recommendation. Its conclusion is \"Can't tell.\" The Ranker v7 experiment is in an interim state: a 3-day look at about 29% of the planned sample. It is still `active` past its planned end (about 2026-09-26), and there is no final Pulse pull. Don't decide on launch yet, and treat \"no decision yet\" as the default. Re-pull Pulse for the full window with the same settings, then apply the pre-registered rule: ship only if the Successful Search Rate lift is at or above +0.005 and all guardrails hold, with Revenue per User checked first. Also find out why the experiment is still running. Successful Search Rate absolute lift, point estimate +0.00585 (unit: change in a proportion, about +0.6 points). It sits just above the +0.005 bar, but its 95% CI runs from about +0.0013 to +0.0104. The biggest risk is that the estimate comes from an unadjusted interim peek at 3 of 14 days and about 29% of the sample. The point estimate may shrink as data accumulates. Revenue per User's lower bound (about \u22120.8%) is also close to its \u22121% margin.",
+      "got": false,
+      "how": "overlap 43%"
+    }
+  ],
+  "lost": "Nowhere significant. The arithmetic checks out (for example, 0.00585 / 0.4120 \u2248 1.42%). One spot was unclear: the ship rule keys on the point estimate, not the CI's lower bound, and the document doesn't say whether the CI should matter.",
+  "question": "Why is the experiment still `active` past its planned 2026-09-26 end, and can you pull the full 14-day Pulse result before the meeting?",
+  "replies": {
+    "skim": "1. **Answer:** The document makes no launch recommendation. It is an interim Ranker v7 readout, and the experiment is in a handover state: about 3 of 14 planned days, past its planned end, still marked active, with an empty audit log, no final Pulse pull, and uncorrected peeking.\n2. **Decision:** Don't launch yet. Get a final Pulse pull over the full pre-registered window, or formally close the experiment, and name an owner for that.\n3. **Number:** 261k test users (and 260k control) against 900k planned per arm, which is about 29% of planned sample (unit: users per arm).\n",
+    "full": "1. **Answer:** The document makes no launch recommendation. Its conclusion is \"Can't tell.\" The Ranker v7 experiment is in an interim state: a 3-day look at about 29% of the planned sample. It is still `active` past its planned end (about 2026-09-26), and there is no final Pulse pull.\n\n2. **Decision:** Don't decide on launch yet, and treat \"no decision yet\" as the default. Re-pull Pulse for the full window with the same settings, then apply the pre-registered rule: ship only if the Successful Search Rate lift is at or above +0.005 and all guardrails hold, with Revenue per User checked first. Also find out why the experiment is still running.\n\n3. **Number:** Successful Search Rate absolute lift, point estimate +0.00585 (unit: change in a proportion, about +0.6 points). It sits just above the +0.005 bar, but its 95% CI runs from about +0.0013 to +0.0104.\n\n4. **Caveat:** The biggest risk is that the estimate comes from an unadjusted interim peek at 3 of 14 days and about 29% of the sample. The point estimate may shrink as data accumulates. Revenue per User's lower bound (about \u22120.8%) is also close to its \u22121% margin.\n\n5. **Lost:** Nowhere significant. The arithmetic checks out (for example, 0.00585 / 0.4120 \u2248 1.42%). One spot was unclear: the ship rule keys on the point estimate, not the CI's lower bound, and the document doesn't say whether the CI should matter.\n\n6. **Question:** Why is the experiment still `active` past its planned 2026-09-26 end, and can you pull the full 14-day Pulse result before the meeting?\n"
+  }
+}

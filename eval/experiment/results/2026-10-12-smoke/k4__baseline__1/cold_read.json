@@ -1,0 +1,53 @@
+{
+  "pass": false,
+  "skim": "2/2",
+  "full": "2/3",
+  "items": [
+    {
+      "pass": "skim",
+      "item": "answer",
+      "key": "Keep running: It's day 7 of 14; Successful Search Rate reads +0.55% (-0.21% to +1.31%) so far, too early to call.",
+      "reader": "The test should keep running. The primary metric (Successful Search Rate) shows a +0.55% relative lift (0.4143 vs 0.4120), but the sequential 95% interval [-0.21%, +1.31%] includes zero, so the lift is not established. Keep running and don't launch yet. Whether the +0.5% bar is met depends on whether prereg.json defines it as relative or absolute, which the document says it doesn't state.",
+      "got": true,
+      "how": "overlap 0%; grader: same fact"
+    },
+    {
+      "pass": "skim",
+      "item": "decision",
+      "key": "Approve running the test longer.",
+      "reader": "Keep running and don't launch yet. Whether the +0.5% bar is met depends on whether prereg.json defines it as relative or absolute, which the document says it doesn't state. The test should keep running. The primary metric (Successful Search Rate) shows a +0.55% relative lift (0.4143 vs 0.4120), but the sequential 95% interval [-0.21%, +1.31%] includes zero, so the lift is not established.",
+      "got": true,
+      "how": "overlap 50%"
+    },
+    {
+      "pass": "full",
+      "item": "takeaway 1",
+      "key": "Successful Search Rate +0.55% (-0.21% to +1.31%) against at least 0.50%.",
+      "reader": "The readout finds no established lift on the primary metric. Successful Search Rate is +0.55% relative (+0.0023 absolute), with a sequential 95% interval of [-0.21%, +1.31%] that includes zero. It is an interim day-7 snapshot of a 14-day test, so it is not final. Current state: the experiment is still marked active, and the final data has not been pulled. Keep running, as the header says, and pull the final 14-day Pulse with the same settings. Re-run the readout, then ship only if the sequential interval clears the bar and both remaining guardrails (Abandonment, Revenue per User) clear. If the interval still includes zero, record \"No effect found.\" Successful Search Rate relative lift, +0.55% (95% sequential interval [-0.21%, +1.31%]). The result rests on an early, partial snapshot (about 481k of 900k planned units per arm). The fixed-horizon p-value is invalid at this interim look, and `experiment.json` says `sequentialTesting: false` while the prereg uses sequential. Two guardrails are unresolved, with intervals allowing about +1.24% abandonment and -1.43% revenue per user. The head-query and mobile segment results are unplanned cuts and not actionable.",
+      "got": false,
+      "how": "overlap 0%"
+    },
+    {
+      "pass": "full",
+      "item": "takeaway 2",
+      "key": "Approve running the test longer.",
+      "reader": "The readout finds no established lift on the primary metric. Successful Search Rate is +0.55% relative (+0.0023 absolute), with a sequential 95% interval of [-0.21%, +1.31%] that includes zero. It is an interim day-7 snapshot of a 14-day test, so it is not final. Current state: the experiment is still marked active, and the final data has not been pulled. Keep running, as the header says, and pull the final 14-day Pulse with the same settings. Re-run the readout, then ship only if the sequential interval clears the bar and both remaining guardrails (Abandonment, Revenue per User) clear. If the interval still includes zero, record \"No effect found.\" Successful Search Rate relative lift, +0.55% (95% sequential interval [-0.21%, +1.31%]). The result rests on an early, partial snapshot (about 481k of 900k planned units per arm). The fixed-horizon p-value is invalid at this interim look, and `experiment.json` says `sequentialTesting: false` while the prereg uses sequential. Two guardrails are unresolved, with intervals allowing about +1.24% abandonment and -1.43% revenue per user. The head-query and mobile segment results are unplanned cuts and not actionable.",
+      "got": true,
+      "how": "overlap 50%"
+    },
+    {
+      "pass": "full",
+      "item": "takeaway 3",
+      "key": "Could reverse it: the remaining data; the call is made at the planned sample.",
+      "reader": "The readout finds no established lift on the primary metric. Successful Search Rate is +0.55% relative (+0.0023 absolute), with a sequential 95% interval of [-0.21%, +1.31%] that includes zero. It is an interim day-7 snapshot of a 14-day test, so it is not final. Current state: the experiment is still marked active, and the final data has not been pulled. Keep running, as the header says, and pull the final 14-day Pulse with the same settings. Re-run the readout, then ship only if the sequential interval clears the bar and both remaining guardrails (Abandonment, Revenue per User) clear. If the interval still includes zero, record \"No effect found.\" Successful Search Rate relative lift, +0.55% (95% sequential interval [-0.21%, +1.31%]). The result rests on an early, partial snapshot (about 481k of 900k planned units per arm). The fixed-horizon p-value is invalid at this interim look, and `experiment.json` says `sequentialTesting: false` while the prereg uses sequential. Two guardrails are unresolved, with intervals allowing about +1.24% abandonment and -1.43% revenue per user. The head-query and mobile segment results are unplanned cuts and not actionable.",
+      "got": true,
+      "how": "overlap 43%; grader: same fact"
+    }
+  ],
+  "lost": "I had to reread the bar definition. The +0.5% threshold could be relative or absolute, and the document says `prereg.json` doesn't specify which. The author's reading (relative) is plausible, but the conclusion changes depending on the answer. The \"Keep running\" header also sits oddly with the planned end date (2026-09-26), which passed 16 days ago. I'd note that as a timeline question, not a point of confusion.",
+  "question": "Does `prereg.json` define the +0.5% bar as relative or absolute, and if relative, is that the intended reading?",
+  "replies": {
+    "skim": "1. **Answer:** The test should keep running. The primary metric (Successful Search Rate) shows a +0.55% relative lift (0.4143 vs 0.4120), but the sequential 95% interval [-0.21%, +1.31%] includes zero, so the lift is not established.\n2. **Decision:** Keep running and don't launch yet. Whether the +0.5% bar is met depends on whether prereg.json defines it as relative or absolute, which the document says it doesn't state.\n3. **Number:** +0.55% relative lift in Successful Search Rate (95% interval -0.21% to +1.31%).\n",
+    "full": "1. **Answer:** The readout finds no established lift on the primary metric. Successful Search Rate is +0.55% relative (+0.0023 absolute), with a sequential 95% interval of [-0.21%, +1.31%] that includes zero. It is an interim day-7 snapshot of a 14-day test, so it is not final. Current state: the experiment is still marked active, and the final data has not been pulled.\n\n2. **Decision:** Keep running, as the header says, and pull the final 14-day Pulse with the same settings. Re-run the readout, then ship only if the sequential interval clears the bar and both remaining guardrails (Abandonment, Revenue per User) clear. If the interval still includes zero, record \"No effect found.\"\n\n3. **Number:** Successful Search Rate relative lift, +0.55% (95% sequential interval [-0.21%, +1.31%]).\n\n4. **Caveat:** The result rests on an early, partial snapshot (about 481k of 900k planned units per arm). The fixed-horizon p-value is invalid at this interim look, and `experiment.json` says `sequentialTesting: false` while the prereg uses sequential. Two guardrails are unresolved, with intervals allowing about +1.24% abandonment and -1.43% revenue per user. The head-query and mobile segment results are unplanned cuts and not actionable.\n\n5. **Lost:** I had to reread the bar definition. The +0.5% threshold could be relative or absolute, and the document says `prereg.json` doesn't specify which. The author's reading (relative) is plausible, but the conclusion changes depending on the answer. The \"Keep running\" header also sits oddly with the planned end date (2026-09-26), which passed 16 days ago. I'd note that as a timeline question, not a point of confusion.\n\n6. **Question:** Does `prereg.json` define the +0.5% bar as relative or absolute, and if relative, is that the intended reading?\n"
+  }
+}

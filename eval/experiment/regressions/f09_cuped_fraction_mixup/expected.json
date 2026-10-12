@@ -1,0 +1,6 @@
+{
+ "title": "CUPED on, percentChange as a fraction",
+ "call": "cant_tell",
+ "decider": "scorecard",
+ "why": "relative x control disagrees with the absolute change"
+}

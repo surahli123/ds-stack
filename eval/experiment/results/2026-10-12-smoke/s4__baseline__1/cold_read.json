@@ -1,0 +1,53 @@
+{
+  "pass": false,
+  "skim": "2/2",
+  "full": "1/3",
+  "items": [
+    {
+      "pass": "skim",
+      "item": "answer",
+      "key": "Ship: Successful Search Rate improved +0.81% (+0.41% to +1.21%), which clears the 0.50% bar and every guardrail held.",
+      "reader": "The document recommends shipping. Successful Search Rate rose +0.81% relative (+0.33pp), clearing the 0.5% pre-registered bar. All four guardrails stayed within margin, and the 14-day test was valid. Ship it.",
+      "got": true,
+      "how": "overlap 0%; grader: same fact"
+    },
+    {
+      "pass": "skim",
+      "item": "decision",
+      "key": "Approve the launch to all traffic.",
+      "reader": "Ship it. The document recommends shipping. Successful Search Rate rose +0.81% relative (+0.33pp), clearing the 0.5% pre-registered bar. All four guardrails stayed within margin, and the 14-day test was valid.",
+      "got": true,
+      "how": "overlap 0%; grader: same fact"
+    },
+    {
+      "pass": "full",
+      "item": "takeaway 1",
+      "key": "Successful Search Rate +0.81% (+0.41% to +1.21%) against at least 0.50%.",
+      "reader": "Recommend **Ship**. The primary metric, Successful Search Rate, is up +0.81% relative (+0.33pp absolute) and clears the pre-registered 0.5% bar on the point estimate. All four guardrails are within margin. Current state: the 14-day test is complete and valid, but the recommendation depends on an unresolved question about the bar's units. Ship only after confirming the bar is relative. If it's absolute, the result (+0.33pp) fails and the decision flips. If it's relative, ship and monitor head-query Successful Search Rate and Reformulation Rate, since both show exploratory regressions. The document doesn't say what level would trigger a rollback. Successful Search Rate lift of **+0.81% relative** (95% CI +0.41% to +1.21%, p=7e-5). The unit is relative percent, and the document's own \"Caveat 1\" makes that unit the main open question. The biggest named limit is the **unit of the 0.005 bar**. The author reads it as relative, based on the guardrail margins. Under the absolute reading, the result fails. The lower CI bound (+0.41%) is also below the bar, so the true lift may be under 0.5% even under the relative reading.",
+      "got": true,
+      "how": "overlap 0%; grader: same fact"
+    },
+    {
+      "pass": "full",
+      "item": "takeaway 2",
+      "key": "Approve the launch to all traffic.",
+      "reader": "Recommend **Ship**. The primary metric, Successful Search Rate, is up +0.81% relative (+0.33pp absolute) and clears the pre-registered 0.5% bar on the point estimate. All four guardrails are within margin. Current state: the 14-day test is complete and valid, but the recommendation depends on an unresolved question about the bar's units. Ship only after confirming the bar is relative. If it's absolute, the result (+0.33pp) fails and the decision flips. If it's relative, ship and monitor head-query Successful Search Rate and Reformulation Rate, since both show exploratory regressions. The document doesn't say what level would trigger a rollback. Successful Search Rate lift of **+0.81% relative** (95% CI +0.41% to +1.21%, p=7e-5). The unit is relative percent, and the document's own \"Caveat 1\" makes that unit the main open question. The biggest named limit is the **unit of the 0.005 bar**. The author reads it as relative, based on the guardrail margins. Under the absolute reading, the result fails. The lower CI bound (+0.41%) is also below the bar, so the true lift may be under 0.5% even under the relative reading.",
+      "got": false,
+      "how": "overlap 0%"
+    },
+    {
+      "pass": "full",
+      "item": "takeaway 3",
+      "key": "Could reverse it: pre period could not be checked: no pre-period interval or platform check.",
+      "reader": "Recommend **Ship**. The primary metric, Successful Search Rate, is up +0.81% relative (+0.33pp absolute) and clears the pre-registered 0.5% bar on the point estimate. All four guardrails are within margin. Current state: the 14-day test is complete and valid, but the recommendation depends on an unresolved question about the bar's units. Ship only after confirming the bar is relative. If it's absolute, the result (+0.33pp) fails and the decision flips. If it's relative, ship and monitor head-query Successful Search Rate and Reformulation Rate, since both show exploratory regressions. The document doesn't say what level would trigger a rollback. Successful Search Rate lift of **+0.81% relative** (95% CI +0.41% to +1.21%, p=7e-5). The unit is relative percent, and the document's own \"Caveat 1\" makes that unit the main open question. The biggest named limit is the **unit of the 0.005 bar**. The author reads it as relative, based on the guardrail margins. Under the absolute reading, the result fails. The lower CI bound (+0.41%) is also below the bar, so the true lift may be under 0.5% even under the relative reading.",
+      "got": false,
+      "how": "overlap 0%"
+    }
+  ],
+  "lost": "Three places. (a) The \"head and tail both negative while total is positive\" claim: only the head number (\u22120.95%) is given, so the tail figure is missing, and the author says they couldn't reconcile it. A mix shift between segments (a Simpson's-style effect on a ratio metric) could explain it, but the document doesn't consider that. (b) \"Pulse\" is used without definition. (c) The argument that the margins are relative rests on one example (a 3% margin on a 3.1% rate), and I'd want the margin definitions stated directly.",
+  "question": "Is the 0.005 bar relative or absolute in the pre-registration, and can you point to the line that says so?",
+  "replies": {
+    "skim": "1. **Answer:** The document recommends shipping. Successful Search Rate rose +0.81% relative (+0.33pp), clearing the 0.5% pre-registered bar. All four guardrails stayed within margin, and the 14-day test was valid.\n2. **Decision:** Ship it.\n3. **Number:** +0.81% relative lift in Successful Search Rate (95% CI +0.41% to +1.21%).\n",
+    "full": "1. **Conclusion:** Recommend **Ship**. The primary metric, Successful Search Rate, is up +0.81% relative (+0.33pp absolute) and clears the pre-registered 0.5% bar on the point estimate. All four guardrails are within margin. Current state: the 14-day test is complete and valid, but the recommendation depends on an unresolved question about the bar's units.\n\n2. **Decision:** Ship only after confirming the bar is relative. If it's absolute, the result (+0.33pp) fails and the decision flips. If it's relative, ship and monitor head-query Successful Search Rate and Reformulation Rate, since both show exploratory regressions. The document doesn't say what level would trigger a rollback.\n\n3. **Number:** Successful Search Rate lift of **+0.81% relative** (95% CI +0.41% to +1.21%, p=7e-5). The unit is relative percent, and the document's own \"Caveat 1\" makes that unit the main open question.\n\n4. **Caveat:** The biggest named limit is the **unit of the 0.005 bar**. The author reads it as relative, based on the guardrail margins. Under the absolute reading, the result fails. The lower CI bound (+0.41%) is also below the bar, so the true lift may be under 0.5% even under the relative reading.\n\n5. **Lost:** Three places. (a) The \"head and tail both negative while total is positive\" claim: only the head number (\u22120.95%) is given, so the tail figure is missing, and the author says they couldn't reconcile it. A mix shift between segments (a Simpson's-style effect on a ratio metric) could explain it, but the document doesn't consider that. (b) \"Pulse\" is used without definition. (c) The argument that the margins are relative rests on one example (a 3% margin on a 3.1% rate), and I'd want the margin definitions stated directly.\n\n6. **Question:** Is the 0.005 bar relative or absolute in the pre-registration, and can you point to the line that says so?\n"
+  }
+}

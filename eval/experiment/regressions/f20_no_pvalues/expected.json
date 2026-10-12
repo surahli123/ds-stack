@@ -1,0 +1,6 @@
+{
+ "title": "s1 with pValue removed from every record",
+ "call": "ship",
+ "decider": "Successful Search Rate",
+ "why": "ship; the appendix must not claim 0 secondaries were tested"
+}

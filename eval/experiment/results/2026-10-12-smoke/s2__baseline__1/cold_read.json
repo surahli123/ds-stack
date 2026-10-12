@@ -1,0 +1,53 @@
+{
+  "pass": false,
+  "skim": "0/2",
+  "full": "0/3",
+  "items": [
+    {
+      "pass": "skim",
+      "item": "answer",
+      "key": "Ship: Successful Search Rate improved +0.81% (+0.41% to +1.21%), which clears the 0.50% bar and every guardrail held.",
+      "reader": "The readout recommends Ship. Successful Search Rate rose from 0.4120 to 0.4153, +0.81% relative, which clears the 0.5% bar only if the bar is relative. Have the review confirm whether the pre-registered bar is relative or absolute before launching. If it is absolute (0.5 percentage points), the result misses and the call becomes Don't ship.",
+      "got": false,
+      "how": "overlap 0%"
+    },
+    {
+      "pass": "skim",
+      "item": "decision",
+      "key": "Approve the launch to all traffic.",
+      "reader": "Have the review confirm whether the pre-registered bar is relative or absolute before launching. If it is absolute (0.5 percentage points), the result misses and the call becomes Don't ship. The readout recommends Ship. Successful Search Rate rose from 0.4120 to 0.4153, +0.81% relative, which clears the 0.5% bar only if the bar is relative.",
+      "got": false,
+      "how": "overlap 0%"
+    },
+    {
+      "pass": "full",
+      "item": "takeaway 1",
+      "key": "Successful Search Rate +0.81% (+0.41% to +1.21%) against at least 0.50%.",
+      "reader": "The summary says Ship. The primary metric, Successful Search Rate, rose 0.81% relative, and the guardrails are inside their margins. Current state: the call depends on whether the 0.005 bar is relative (ship) or absolute (don't ship). Confirm the bar's units before launching. If relative, ship and watch Ad Click Rate after launch. If absolute, don't ship. Successful Search Rate, +0.81% relative (0.4120 to 0.4153, +0.0033 absolute). The bar's units. Even if it is relative, the 95% CI lower bound is +0.40%, below the 0.5% bar, so the bar is cleared only on the point estimate. Abandonment and revenue have thin headroom, and Ad Click Rate fell 2.8% (p = 0.022) across about 40 metrics with no correction mentioned.",
+      "got": false,
+      "how": "overlap 0%"
+    },
+    {
+      "pass": "full",
+      "item": "takeaway 2",
+      "key": "Approve the launch to all traffic.",
+      "reader": "The summary says Ship. The primary metric, Successful Search Rate, rose 0.81% relative, and the guardrails are inside their margins. Current state: the call depends on whether the 0.005 bar is relative (ship) or absolute (don't ship). Confirm the bar's units before launching. If relative, ship and watch Ad Click Rate after launch. If absolute, don't ship. Successful Search Rate, +0.81% relative (0.4120 to 0.4153, +0.0033 absolute). The bar's units. Even if it is relative, the 95% CI lower bound is +0.40%, below the 0.5% bar, so the bar is cleared only on the point estimate. Abandonment and revenue have thin headroom, and Ad Click Rate fell 2.8% (p = 0.022) across about 40 metrics with no correction mentioned.",
+      "got": false,
+      "how": "overlap 33%"
+    },
+    {
+      "pass": "full",
+      "item": "takeaway 3",
+      "key": "Could reverse it: pre period could not be checked: no pre-period interval or platform check.",
+      "reader": "The summary says Ship. The primary metric, Successful Search Rate, rose 0.81% relative, and the guardrails are inside their margins. Current state: the call depends on whether the 0.005 bar is relative (ship) or absolute (don't ship). Confirm the bar's units before launching. If relative, ship and watch Ad Click Rate after launch. If absolute, don't ship. Successful Search Rate, +0.81% relative (0.4120 to 0.4153, +0.0033 absolute). The bar's units. Even if it is relative, the 95% CI lower bound is +0.40%, below the 0.5% bar, so the bar is cleared only on the point estimate. Abandonment and revenue have thin headroom, and Ad Click Rate fell 2.8% (p = 0.022) across about 40 metrics with no correction mentioned.",
+      "got": false,
+      "how": "overlap 0%"
+    }
+  ],
+  "lost": "Nothing from the document itself, since I could not read it. From the summary, the bar's units were the only confusing point.",
+  "question": "Was the 0.005 pre-registered bar written as relative or absolute, and was that fixed before the test started?",
+  "replies": {
+    "skim": "1. **Answer:** The readout recommends Ship. Successful Search Rate rose from 0.4120 to 0.4153, +0.81% relative, which clears the 0.5% bar only if the bar is relative.\n2. **Decision:** Have the review confirm whether the pre-registered bar is relative or absolute before launching. If it is absolute (0.5 percentage points), the result misses and the call becomes Don't ship.\n3. **Number:** +0.81% relative lift in Successful Search Rate (+0.0033 absolute, 95% CI +0.40% to +1.21%).\n",
+    "full": "I could not open `readout.md`. The tools I have can publish or read Artifact links, not local files, so this answer rests only on the summary in your message, not on the document itself.\n\n1. **Answer:** The summary says Ship. The primary metric, Successful Search Rate, rose 0.81% relative, and the guardrails are inside their margins. Current state: the call depends on whether the 0.005 bar is relative (ship) or absolute (don't ship).\n2. **Decision:** Confirm the bar's units before launching. If relative, ship and watch Ad Click Rate after launch. If absolute, don't ship.\n3. **Number:** Successful Search Rate, +0.81% relative (0.4120 to 0.4153, +0.0033 absolute).\n4. **Caveat:** The bar's units. Even if it is relative, the 95% CI lower bound is +0.40%, below the 0.5% bar, so the bar is cleared only on the point estimate. Abandonment and revenue have thin headroom, and Ad Click Rate fell 2.8% (p = 0.022) across about 40 metrics with no correction mentioned.\n5. **Lost:** Nothing from the document itself, since I could not read it. From the summary, the bar's units were the only confusing point.\n6. **Question:** Was the 0.005 pre-registered bar written as relative or absolute, and was that fixed before the test started?\n\nIf you want me to check the file, I need a way to read local files, or you can paste its contents.\n"
+  }
+}

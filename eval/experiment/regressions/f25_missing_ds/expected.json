@@ -1,0 +1,6 @@
+{
+ "title": "s1 without the ds field in the response",
+ "call": "ship",
+ "decider": "Successful Search Rate",
+ "why": "day count unknown is not 'before the planned sample' when units exceed the plan"
+}

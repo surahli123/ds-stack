@@ -1,0 +1,56 @@
+{
+ "message": "ok",
+ "data": {
+  "id": "ranker_v7",
+  "name": "Ranker v7",
+  "hypothesis": "The new ranker raises the share of searches that end in a successful click.",
+  "idType": "userID",
+  "layerID": "search_ranking",
+  "allocation": 20,
+  "controlGroupID": "g_control",
+  "groups": [
+   {
+    "id": "g_control",
+    "name": "Control",
+    "size": 50,
+    "parameterValues": {
+     "ranker_model": "lambdamart_v6",
+     "snippet_length": "160"
+    }
+   },
+   {
+    "id": "g_test",
+    "name": "Test",
+    "size": 50,
+    "parameterValues": {
+     "ranker_model": "lambdamart_v7",
+     "snippet_length": "160"
+    }
+   }
+  ],
+  "startTime": 1789171200000,
+  "duration": 14,
+  "status": "active",
+  "defaultConfidenceInterval": "95",
+  "sequentialTesting": false,
+  "bonferroniCorrection": false,
+  "primaryMetrics": [
+   {
+    "name": "Successful Search Rate",
+    "type": "ratio",
+    "direction": "increase"
+   }
+  ],
+  "healthChecks": [
+   {
+    "type": "has_balanced_exposures",
+    "name": "Exposures balanced",
+    "status": "PASSED"
+   }
+  ],
+  "exposures": {
+   "Control": 1010000,
+   "Test": 990000
+  }
+ }
+}

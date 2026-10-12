@@ -1,0 +1,6 @@
+{
+ "title": "sequential half-width is half the fixed one, day 7 of 14",
+ "call": "cant_tell",
+ "decider": "scorecard",
+ "why": "a sequential interval can't be narrower than the fixed one; at best keep running"
+}

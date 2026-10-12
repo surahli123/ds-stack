@@ -1,0 +1,6 @@
+{
+ "title": "e4 with 100k triggered users per arm, planned 900k overall",
+ "call": "escalate",
+ "decider": "Successful Search Rate",
+ "why": "+0.39% overall after scaling, below the bar; units planned refer to overall"
+}

@@ -1,0 +1,6 @@
+{
+ "title": "audit log has the experiment_start entry on the start date",
+ "call": "ship",
+ "decider": "Successful Search Rate",
+ "why": "a start event is not an edit and not a restart"
+}

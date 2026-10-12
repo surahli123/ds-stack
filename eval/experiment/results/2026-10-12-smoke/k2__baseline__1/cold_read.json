@@ -1,0 +1,53 @@
+{
+  "pass": false,
+  "skim": "0/2",
+  "full": "1/3",
+  "items": [
+    {
+      "pass": "skim",
+      "item": "answer",
+      "key": "Keep running: Successful Search Rate reads +0.81% (+0.41% to +1.21%) overall, but the effect is fading over the days of the test.",
+      "reader": "Don't ship. Ranker v7 gives a real lift in Successful Search Rate, but the point estimate misses the pre-registered 0.005 bar if read as absolute. The text cuts off before its reasoning for reading the bar as relative. Don't ship v7 as is. Settle whether the 0.005 bar is absolute or relative before any further decision, since the pre-registration doesn't say and the outcome depends on it.",
+      "got": false,
+      "how": "overlap 0%"
+    },
+    {
+      "pass": "skim",
+      "item": "decision",
+      "key": "Approve running the test longer.",
+      "reader": "Don't ship v7 as is. Settle whether the 0.005 bar is absolute or relative before any further decision, since the pre-registration doesn't say and the outcome depends on it. Don't ship. Ranker v7 gives a real lift in Successful Search Rate, but the point estimate misses the pre-registered 0.005 bar if read as absolute. The text cuts off before its reasoning for reading the bar as relative.",
+      "got": false,
+      "how": "overlap 0%"
+    },
+    {
+      "pass": "full",
+      "item": "takeaway 1",
+      "key": "Effect fading: effect by days since exposure: first days +1.33%, last days +0.50% (trend -0.103% per day)",
+      "reader": "The document recommends **not shipping** Ranker v7. The Successful Search Rate lift is real (+0.33pp, CI +0.17 to +0.50pp), but it misses the pre-registered bar under an absolute reading and the effect is decaying. Guardrails pass. The test finished its 14 days, and the decision is still open. Don't ship v7. If the team still wants it, run a longer holdout or a re-run and judge it on the late-exposure effect. Also fix the pre-registration so the bar's units (absolute or relative) are explicit. The daily relative lift in Successful Search Rate on the most recent exposure day, **+0.4%** (day 12, CI \u22120.2% to +1.0%). It is the best estimate of where the effect is heading, and it is below the 0.5% bar under either reading. The pooled figure, +0.33pp absolute (+0.81% relative), is the one the team will likely quote, but the document says it overstates the steady state. The effect looks like a novelty effect that is fading. The day-12 CI includes zero, and days 13\u201314 are missing from the daily file. The document also notes about 60 untested segment cuts with no multiple-comparison correction, so the significant segment results could be chance.",
+      "got": false,
+      "how": "overlap 0%"
+    },
+    {
+      "pass": "full",
+      "item": "takeaway 2",
+      "key": "Approve running the test longer.",
+      "reader": "The document recommends **not shipping** Ranker v7. The Successful Search Rate lift is real (+0.33pp, CI +0.17 to +0.50pp), but it misses the pre-registered bar under an absolute reading and the effect is decaying. Guardrails pass. The test finished its 14 days, and the decision is still open. Don't ship v7. If the team still wants it, run a longer holdout or a re-run and judge it on the late-exposure effect. Also fix the pre-registration so the bar's units (absolute or relative) are explicit. The daily relative lift in Successful Search Rate on the most recent exposure day, **+0.4%** (day 12, CI \u22120.2% to +1.0%). It is the best estimate of where the effect is heading, and it is below the 0.5% bar under either reading. The pooled figure, +0.33pp absolute (+0.81% relative), is the one the team will likely quote, but the document says it overstates the steady state. The effect looks like a novelty effect that is fading. The day-12 CI includes zero, and days 13\u201314 are missing from the daily file. The document also notes about 60 untested segment cuts with no multiple-comparison correction, so the significant segment results could be chance.",
+      "got": true,
+      "how": "overlap 50%"
+    },
+    {
+      "pass": "full",
+      "item": "takeaway 3",
+      "key": "Could reverse it: the remaining data; the call is made at the planned sample.",
+      "reader": "The document recommends **not shipping** Ranker v7. The Successful Search Rate lift is real (+0.33pp, CI +0.17 to +0.50pp), but it misses the pre-registered bar under an absolute reading and the effect is decaying. Guardrails pass. The test finished its 14 days, and the decision is still open. Don't ship v7. If the team still wants it, run a longer holdout or a re-run and judge it on the late-exposure effect. Also fix the pre-registration so the bar's units (absolute or relative) are explicit. The daily relative lift in Successful Search Rate on the most recent exposure day, **+0.4%** (day 12, CI \u22120.2% to +1.0%). It is the best estimate of where the effect is heading, and it is below the 0.5% bar under either reading. The pooled figure, +0.33pp absolute (+0.81% relative), is the one the team will likely quote, but the document says it overstates the steady state. The effect looks like a novelty effect that is fading. The day-12 CI includes zero, and days 13\u201314 are missing from the daily file. The document also notes about 60 untested segment cuts with no multiple-comparison correction, so the significant segment results could be chance.",
+      "got": false,
+      "how": "overlap 0%"
+    }
+  ],
+  "lost": "I reread the bar. The pre-registration doesn't say whether 0.005 is absolute or relative, and the decision depends on which it is. The recommendation holds under both readings, so the ambiguity doesn't change the outcome. I only have the document's summary of `daily_by_exposure_day.json`, not the file, so I can't check the decay myself.",
+  "question": "What is the lift over exposure days 7\u201314, including the two days missing from the daily file, and was the 0.005 bar meant as absolute or relative?",
+  "replies": {
+    "skim": "1. **Answer:** Don't ship. Ranker v7 gives a real lift in Successful Search Rate, but the point estimate misses the pre-registered 0.005 bar if read as absolute. The text cuts off before its reasoning for reading the bar as relative.\n2. **Decision:** Don't ship v7 as is. Settle whether the 0.005 bar is absolute or relative before any further decision, since the pre-registration doesn't say and the outcome depends on it.\n3. **Number:** +0.33pp absolute lift in Successful Search Rate (41.20% \u2192 41.53%; 95% CI +0.17pp to +0.50pp).\n",
+    "full": "1. **Answer:** The document recommends **not shipping** Ranker v7. The Successful Search Rate lift is real (+0.33pp, CI +0.17 to +0.50pp), but it misses the pre-registered bar under an absolute reading and the effect is decaying. Guardrails pass. The test finished its 14 days, and the decision is still open.\n\n2. **Decision:** Don't ship v7. If the team still wants it, run a longer holdout or a re-run and judge it on the late-exposure effect. Also fix the pre-registration so the bar's units (absolute or relative) are explicit.\n\n3. **Number:** The daily relative lift in Successful Search Rate on the most recent exposure day, **+0.4%** (day 12, CI \u22120.2% to +1.0%). It is the best estimate of where the effect is heading, and it is below the 0.5% bar under either reading. The pooled figure, +0.33pp absolute (+0.81% relative), is the one the team will likely quote, but the document says it overstates the steady state.\n\n4. **Caveat:** The effect looks like a novelty effect that is fading. The day-12 CI includes zero, and days 13\u201314 are missing from the daily file. The document also notes about 60 untested segment cuts with no multiple-comparison correction, so the significant segment results could be chance.\n\n5. **Lost:** I reread the bar. The pre-registration doesn't say whether 0.005 is absolute or relative, and the decision depends on which it is. The recommendation holds under both readings, so the ambiguity doesn't change the outcome. I only have the document's summary of `daily_by_exposure_day.json`, not the file, so I can't check the decay myself.\n\n6. **Question:** What is the lift over exposure days 7\u201314, including the two days missing from the daily file, and was the 0.005 bar meant as absolute or relative?\n"
+  }
+}

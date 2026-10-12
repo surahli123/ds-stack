@@ -1,0 +1,53 @@
+{
+  "pass": false,
+  "skim": "0/2",
+  "full": "0/3",
+  "items": [
+    {
+      "pass": "skim",
+      "item": "answer",
+      "key": "Ship: Queries per User improved +2.40% (+1.50% to +3.30%), which clears the 1.00% bar and every guardrail held.",
+      "reader": "The readout recommends **Escalate**. Pre-registered ship criteria pass (Queries per User +2.4%, 95% CI about +1.5% to +3.3%; latency p95 +0.2%), but the configured primary metric, Successful Search Rate, is flat to slightly negative (\u22120.35%, p=0.086), so the team won't ship on the criteria alone. Don't launch yet. Escalate, resolve the mismatch between the pre-registered primary metric (Queries per User) and the configured one (Successful Search Rate), and assess the possible harm of about 0.75% before deciding.",
+      "got": false,
+      "how": "overlap 0%"
+    },
+    {
+      "pass": "skim",
+      "item": "decision",
+      "key": "Approve the launch to all traffic.",
+      "reader": "Don't launch yet. Escalate, resolve the mismatch between the pre-registered primary metric (Queries per User) and the configured one (Successful Search Rate), and assess the possible harm of about 0.75% before deciding. The readout recommends **Escalate**. Pre-registered ship criteria pass (Queries per User +2.4%, 95% CI about +1.5% to +3.3%; latency p95 +0.2%), but the configured primary metric, Successful Search Rate, is flat to slightly negative (\u22120.35%, p=0.086), so the team won't ship on the criteria alone.",
+      "got": false,
+      "how": "overlap 33%"
+    },
+    {
+      "pass": "full",
+      "item": "takeaway 1",
+      "key": "Queries per User +2.40% (+1.50% to +3.30%) against at least 1.00%.",
+      "reader": "The readout recommends **Escalate**. The pre-registered criteria pass (Queries per User +2.4%, latency +0.2%), but the configured primary metric (Successful Search Rate, -0.35%, p=0.086) is flat to negative, and the other metrics don't back up \"more queries means better search.\" Current state: the test is complete and clean, and the decision is waiting on a metric choice and a data reconciliation. Don't ship on the pre-registered rule alone. First, the review should decide whether Queries per User or Successful Search Rate is the right success metric. Second, the reformulation numbers should be re-pulled and reconciled. If Queries per User is confirmed, the prereg says ship. If the goal is successful searches, lean toward don't ship. Successful Search Rate, -0.35% relative to control (p=0.086). It's the configured primary, and it's the one that tests whether search is actually better. The Queries per User figure is +2.4% relative to control, with a 95% CI of +1.5% to +3.3%. The win depends on which metric counts. The readout says the data can't rule out a harm of about 0.75% on successful searches. Higher query counts could also come from users re-searching, and Overall Reformulation Rate is up 5.1%, which fits that reading.",
+      "got": false,
+      "how": "overlap 0%"
+    },
+    {
+      "pass": "full",
+      "item": "takeaway 2",
+      "key": "Approve the launch to all traffic.",
+      "reader": "The readout recommends **Escalate**. The pre-registered criteria pass (Queries per User +2.4%, latency +0.2%), but the configured primary metric (Successful Search Rate, -0.35%, p=0.086) is flat to negative, and the other metrics don't back up \"more queries means better search.\" Current state: the test is complete and clean, and the decision is waiting on a metric choice and a data reconciliation. Don't ship on the pre-registered rule alone. First, the review should decide whether Queries per User or Successful Search Rate is the right success metric. Second, the reformulation numbers should be re-pulled and reconciled. If Queries per User is confirmed, the prereg says ship. If the goal is successful searches, lean toward don't ship. Successful Search Rate, -0.35% relative to control (p=0.086). It's the configured primary, and it's the one that tests whether search is actually better. The Queries per User figure is +2.4% relative to control, with a 95% CI of +1.5% to +3.3%. The win depends on which metric counts. The readout says the data can't rule out a harm of about 0.75% on successful searches. Higher query counts could also come from users re-searching, and Overall Reformulation Rate is up 5.1%, which fits that reading.",
+      "got": false,
+      "how": "overlap 0%"
+    },
+    {
+      "pass": "full",
+      "item": "takeaway 3",
+      "key": "Could reverse it: pre period could not be checked: no pre-period interval or platform check.",
+      "reader": "The readout recommends **Escalate**. The pre-registered criteria pass (Queries per User +2.4%, latency +0.2%), but the configured primary metric (Successful Search Rate, -0.35%, p=0.086) is flat to negative, and the other metrics don't back up \"more queries means better search.\" Current state: the test is complete and clean, and the decision is waiting on a metric choice and a data reconciliation. Don't ship on the pre-registered rule alone. First, the review should decide whether Queries per User or Successful Search Rate is the right success metric. Second, the reformulation numbers should be re-pulled and reconciled. If Queries per User is confirmed, the prereg says ship. If the goal is successful searches, lean toward don't ship. Successful Search Rate, -0.35% relative to control (p=0.086). It's the configured primary, and it's the one that tests whether search is actually better. The Queries per User figure is +2.4% relative to control, with a 95% CI of +1.5% to +3.3%. The win depends on which metric counts. The readout says the data can't rule out a harm of about 0.75% on successful searches. Higher query counts could also come from users re-searching, and Overall Reformulation Rate is up 5.1%, which fits that reading.",
+      "got": false,
+      "how": "overlap 0%"
+    }
+  ],
+  "lost": "The reformulation numbers. Overall is +5.1%, but Mobile (-2.0%) and Desktop (-0.8%) are both negative. Since the overall rate is a weighted mix of the slices, this can only happen if the segment mix differs between arms. With 50/50 randomization, that points to a data or definition problem. The readout says it needs reconciling but doesn't say why it happened. I also worked from the summary in your message and didn't open `readout.md`.",
+  "question": "Why does the pre-registered success metric say Queries per User while the Statsig config uses Successful Search Rate, and was that switch ever documented or approved?",
+  "replies": {
+    "skim": "1. **Answer:** The readout recommends **Escalate**. Pre-registered ship criteria pass (Queries per User +2.4%, 95% CI about +1.5% to +3.3%; latency p95 +0.2%), but the configured primary metric, Successful Search Rate, is flat to slightly negative (\u22120.35%, p=0.086), so the team won't ship on the criteria alone.\n2. **Decision:** Don't launch yet. Escalate, resolve the mismatch between the pre-registered primary metric (Queries per User) and the configured one (Successful Search Rate), and assess the possible harm of about 0.75% before deciding.\n3. **Number:** \u22120.35% change in Successful Search Rate (p=0.086). The text doesn't say whether this is relative or percentage points.\n",
+    "full": "1. **Answer:** The readout recommends **Escalate**. The pre-registered criteria pass (Queries per User +2.4%, latency +0.2%), but the configured primary metric (Successful Search Rate, -0.35%, p=0.086) is flat to negative, and the other metrics don't back up \"more queries means better search.\" Current state: the test is complete and clean, and the decision is waiting on a metric choice and a data reconciliation.\n\n2. **Decision:** Don't ship on the pre-registered rule alone. First, the review should decide whether Queries per User or Successful Search Rate is the right success metric. Second, the reformulation numbers should be re-pulled and reconciled. If Queries per User is confirmed, the prereg says ship. If the goal is successful searches, lean toward don't ship.\n\n3. **Number:** Successful Search Rate, -0.35% relative to control (p=0.086). It's the configured primary, and it's the one that tests whether search is actually better. The Queries per User figure is +2.4% relative to control, with a 95% CI of +1.5% to +3.3%.\n\n4. **Caveat:** The win depends on which metric counts. The readout says the data can't rule out a harm of about 0.75% on successful searches. Higher query counts could also come from users re-searching, and Overall Reformulation Rate is up 5.1%, which fits that reading.\n\n5. **Lost:** The reformulation numbers. Overall is +5.1%, but Mobile (-2.0%) and Desktop (-0.8%) are both negative. Since the overall rate is a weighted mix of the slices, this can only happen if the segment mix differs between arms. With 50/50 randomization, that points to a data or definition problem. The readout says it needs reconciling but doesn't say why it happened. I also worked from the summary in your message and didn't open `readout.md`.\n\n6. **Question:** Why does the pre-registered success metric say Queries per User while the Statsig config uses Successful Search Rate, and was that switch ever documented or approved?\n"
+  }
+}

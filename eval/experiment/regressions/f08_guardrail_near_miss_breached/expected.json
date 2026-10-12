@@ -1,0 +1,6 @@
+{
+ "title": "prereg says 'Latency P95 ms', scorecard has 'Latency p95 (ms)' at +3.1%",
+ "call": "dont_ship",
+ "decider": "Latency p95 (ms)",
+ "why": "the breach is in the scorecard under a near-identical name"
+}

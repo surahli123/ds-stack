@@ -1,0 +1,6 @@
+{
+ "title": "time to first click with an absolute bar of 0.1s",
+ "call": "ship",
+ "decider": "Time to First Click (s)",
+ "why": "-0.13s clears a 0.1s absolute bar"
+}

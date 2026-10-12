@@ -1,0 +1,6 @@
+{
+ "title": "absolute 10ms latency margin, breached",
+ "call": "dont_ship",
+ "decider": "Latency p95 (ms)",
+ "why": "latency +12.8ms (+10.3 to +15.2) past its 10ms margin"
+}

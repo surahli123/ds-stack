@@ -1,0 +1,6 @@
+{
+ "title": "percentChange as a fraction, export has no means or absolutes",
+ "call": "escalate",
+ "decider": "scorecard",
+ "why": "units can't be verified without control means: escalate, don't call it broken"
+}

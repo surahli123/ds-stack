@@ -31,6 +31,8 @@ import render  # noqa: E402
 CALL_PATTERNS = [("dont_ship", r"don['’]?t ship|do not ship|no[- ]ship"), ("cant_tell", r"can['’]?t tell|cannot tell"),
                  ("no_effect", r"no effect"), ("keep_running", r"keep running|extend"), ("not_ab", r"not an a/?b"),
                  ("escalate", r"escalat"), ("ship", r"\bship\b")]
+CONTAMINATION = ("eval/experiment/gold", "/gold/", "make_cases", "pipeline_cases", "make_regressions",
+                 "eval/experiment/results", "eval/experiment/regressions", "grade_arms")
 DECIDER_WORDS = {"sample_split": ["split", "sample ratio", "srm", "imbalance", "mismatch", "allocation"],
                  "config_params": ["snippet", "parameter"], "pre_period": ["pre-period", "pre-experiment", "before exposure",
                                                                            "pre period", "pre-exposure", "pre-test"],
@@ -120,18 +122,24 @@ def main():
         cost = 0 if correct else (matrix[gold["call"]].get(effective) if effective else max(matrix[gold["call"]].values()))
         fails, words = lint(os.path.join(run_dir, "result.md"))
         meta = json.load(open(os.path.join(run_dir, "meta.json")))
+        transcript_path = os.path.join(run_dir, "transcript.jsonl")
+        transcript = open(transcript_path, encoding="utf-8", errors="replace").read() if os.path.exists(transcript_path) else None
+        contaminated = transcript is None or any(marker in transcript for marker in CONTAMINATION)
         row = {"case": cid, "arm": arm, "run": int(run), "gold": gold["call"], "call": call, "analyst_view": view,
                "correct": correct, "cost": cost, "decider_near_top": decider_near_top(text, gold), "lint_fails": fails,
-               "words": words, "stat_speak": stat_speak(text), "usd": meta.get("cost_usd"), "seconds": meta.get("seconds")}
+               "words": words, "stat_speak": stat_speak(text), "usd": meta.get("cost_usd"), "seconds": meta.get("seconds"),
+               "contaminated": contaminated}
         if args.cold_read:
             row["skim"], row["full"] = cold_read(run_dir, cid)
         rows.append(row)
 
+    dropped = [f"{r['case']}__{r['arm']}__{r['run']}" for r in rows if r["contaminated"]]
+    rows = [r for r in rows if not r["contaminated"]]
     golds = {r["case"]: r["gold"] for r in rows}
     accept = {c: json.load(open(os.path.join(HERE, "gold", f"{c}.json")))["accept_calls"] for c in golds}
     constant = {c: sum(0 if c in accept[k] else matrix[g][c] for k, g in golds.items()) / len(golds) for c in matrix}
     best_constant = min(constant.items(), key=lambda kv: kv[1])
-    summary = {"best_constant_policy": best_constant, "arms": {}}
+    summary = {"best_constant_policy": best_constant, "arms": {}, "contaminated": dropped}
     for arm in sorted({r["arm"] for r in rows}):
         mine = [r for r in rows if r["arm"] == arm]
         by_class = defaultdict(list)
@@ -161,7 +169,8 @@ def main():
     with open(os.path.join(args.run, "summary.json"), "w") as handle:
         json.dump(summary, handle, indent=2)
     lines = [f"# Experiment readout eval: {os.path.basename(args.run.rstrip('/'))}", "",
-             f"Best constant policy: always '{best_constant[0]}', mean cost {best_constant[1]:.2f}.", "",
+             f"Best constant policy: always '{best_constant[0]}', mean cost {best_constant[1]:.2f}.",
+             f"Contaminated runs dropped (transcript missing or touches eval files): {len(dropped)}.", "",
              "| Arm | Correct | Mean cost | Ship on a blocker | Decider in first 6 lines | Lint-clean | Words | Stat-speak | $ per run | Verdict |",
              "|---|---|---|---|---|---|---|---|---|---|"]
     for arm, r in summary["arms"].items():

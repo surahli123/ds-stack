@@ -1,0 +1,53 @@
+{
+  "pass": false,
+  "skim": "1/2",
+  "full": "1/3",
+  "items": [
+    {
+      "pass": "skim",
+      "item": "answer",
+      "key": "No effect found: Successful Search Rate reads -0.05% (-0.34% to +0.24%), which rules out the 0.50% change the test was built to find.",
+      "reader": "v7 showed no effect on Successful Search Rate. The test was clean, but the lift missed the +0.005 pre-registered bar, and the upper CI bound sits about 5x below it. Do not launch v7.",
+      "got": false,
+      "how": "overlap 0%"
+    },
+    {
+      "pass": "skim",
+      "item": "decision",
+      "key": "Agree to stop the test without launching.",
+      "reader": "Do not launch v7. v7 showed no effect on Successful Search Rate. The test was clean, but the lift missed the +0.005 pre-registered bar, and the upper CI bound sits about 5x below it.",
+      "got": true,
+      "how": "overlap 20%; grader: same fact"
+    },
+    {
+      "pass": "full",
+      "item": "takeaway 1",
+      "key": "Successful Search Rate -0.05% (-0.34% to +0.24%) against at least 0.50%.",
+      "reader": "Don't ship v7 as a ranking win. The primary metric shows no effect: Successful Search Rate moved -0.0002 (95% CI [-0.0014, +0.0010], p = 0.74) against a pre-registered bar of +0.005. The guardrails are within margin. Retiring v6 is a separate decision. Decline the v7 launch on this test. Decide v6 retirement separately, since v7 shows no harm. Any smaller-lift claim needs a new pre-registered bar and a new test. Follow up on the Ad Click Rate drop. Successful Search Rate, absolute change -0.0002. The unit is unclear; the document doesn't say whether this is a fraction of searches or something else. The Revenue per User guardrail is the tightest, with a lower bound of about -0.8% against a -1% margin. Ad Click Rate (-1.5%, p = 0.013) and Queries per User (+1.9%, p = 0.028) are exploratory and would not survive correction across 56 secondary metrics.",
+      "got": false,
+      "how": "overlap 0%"
+    },
+    {
+      "pass": "full",
+      "item": "takeaway 2",
+      "key": "Agree to stop the test without launching.",
+      "reader": "Don't ship v7 as a ranking win. The primary metric shows no effect: Successful Search Rate moved -0.0002 (95% CI [-0.0014, +0.0010], p = 0.74) against a pre-registered bar of +0.005. The guardrails are within margin. Retiring v6 is a separate decision. Decline the v7 launch on this test. Decide v6 retirement separately, since v7 shows no harm. Any smaller-lift claim needs a new pre-registered bar and a new test. Follow up on the Ad Click Rate drop. Successful Search Rate, absolute change -0.0002. The unit is unclear; the document doesn't say whether this is a fraction of searches or something else. The Revenue per User guardrail is the tightest, with a lower bound of about -0.8% against a -1% margin. Ad Click Rate (-1.5%, p = 0.013) and Queries per User (+1.9%, p = 0.028) are exploratory and would not survive correction across 56 secondary metrics.",
+      "got": true,
+      "how": "overlap 20%; grader: same fact"
+    },
+    {
+      "pass": "full",
+      "item": "takeaway 3",
+      "key": "Could reverse it: pre period could not be checked: no pre-period interval or platform check.",
+      "reader": "Don't ship v7 as a ranking win. The primary metric shows no effect: Successful Search Rate moved -0.0002 (95% CI [-0.0014, +0.0010], p = 0.74) against a pre-registered bar of +0.005. The guardrails are within margin. Retiring v6 is a separate decision. Decline the v7 launch on this test. Decide v6 retirement separately, since v7 shows no harm. Any smaller-lift claim needs a new pre-registered bar and a new test. Follow up on the Ad Click Rate drop. Successful Search Rate, absolute change -0.0002. The unit is unclear; the document doesn't say whether this is a fraction of searches or something else. The Revenue per User guardrail is the tightest, with a lower bound of about -0.8% against a -1% margin. Ad Click Rate (-1.5%, p = 0.013) and Queries per User (+1.9%, p = 0.028) are exploratory and would not survive correction across 56 secondary metrics.",
+      "got": false,
+      "how": "overlap 0%"
+    }
+  ],
+  "lost": "Mostly nowhere. Two small gaps: the arms ran 1.0M units each against 0.9M planned, and the document doesn't explain the overshoot. The unit of randomization is also unclear.",
+  "question": "Was the Ad Click Rate drop expected, and does it have a plausible mechanism? With Revenue per User already close to its margin, it could be an early revenue signal.",
+  "replies": {
+    "skim": "1. Answer: v7 showed no effect on Successful Search Rate. The test was clean, but the lift missed the +0.005 pre-registered bar, and the upper CI bound sits about 5x below it.\n2. Decision: Do not launch v7.\n3. Number: Successful Search Rate change of -0.0002 (absolute change in the rate, 95% CI [-0.0014, +0.0010], p = 0.74). The excerpt doesn't state the unit beyond that.\n",
+    "full": "1. **Answer:** Don't ship v7 as a ranking win. The primary metric shows no effect: Successful Search Rate moved -0.0002 (95% CI [-0.0014, +0.0010], p = 0.74) against a pre-registered bar of +0.005. The guardrails are within margin. Retiring v6 is a separate decision.\n\n2. **Decision:** Decline the v7 launch on this test. Decide v6 retirement separately, since v7 shows no harm. Any smaller-lift claim needs a new pre-registered bar and a new test. Follow up on the Ad Click Rate drop.\n\n3. **Number:** Successful Search Rate, absolute change -0.0002. The unit is unclear; the document doesn't say whether this is a fraction of searches or something else.\n\n4. **Caveat:** The Revenue per User guardrail is the tightest, with a lower bound of about -0.8% against a -1% margin. Ad Click Rate (-1.5%, p = 0.013) and Queries per User (+1.9%, p = 0.028) are exploratory and would not survive correction across 56 secondary metrics.\n\n5. **Lost:** Mostly nowhere. Two small gaps: the arms ran 1.0M units each against 0.9M planned, and the document doesn't explain the overshoot. The unit of randomization is also unclear.\n\n6. **Question:** Was the Ad Click Rate drop expected, and does it have a plausible mechanism? With Revenue per User already close to its margin, it could be an early revenue signal.\n"
+  }
+}

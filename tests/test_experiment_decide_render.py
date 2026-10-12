@@ -91,3 +91,26 @@ def test_bad_notes_stop_the_render(tmp_path):
                            "--decision", str(tmp_path / "decision.json"), "--scorecard", str(tmp_path / "scorecard.json"),
                            "--notes", str(tmp_path / "notes.json")], capture_output=True, text=True)
     assert proc.returncode == 1 and "stat-speak" in proc.stderr and not (tmp_path / "readout.md").exists()
+
+
+@pytest.mark.parametrize("text", [
+    "The lift is robust at the five percent level.",
+    "The interval excludes zero, so the lift is real.",
+    "Ad clicks fell with a p of 0.03.",
+    "The lift is signiﬁcant on mobile.",
+    "The p‑value on mobile is small.",
+    "Successful searches rose nearly one percent on mobile.",
+    "Tail queries improved 2x more than head queries.",
+    "Successful searches fell 0.81% because the ranker buries navigational results.",
+    "Worth launching now; the ranker reads intent better.",
+])
+def test_gaming_attempts_are_rejected(text):
+    decision, scorecard = _case("s1")
+    assert render.check_notes({"why_it_moved": [{"text": text, "label": "inferred"}], "would_change": []},
+                              decision, scorecard), text
+
+
+def test_call_words_and_headings_are_rejected_in_would_change():
+    decision, scorecard = _case("s1")
+    for text in ("Ship anyway even if abandonment rises.", "## Verdict: go now"):
+        assert render.check_notes({"why_it_moved": [], "would_change": [text]}, decision, scorecard), text

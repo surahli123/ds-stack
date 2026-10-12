@@ -1,0 +1,6 @@
+{
+ "title": "four invariants, one crosses zero at p~0.03",
+ "call": "ship",
+ "decider": "Successful Search Rate",
+ "why": "one of four invariants at p=0.03 is chance; invariants need a tighter alpha"
+}

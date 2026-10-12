@@ -1,0 +1,6 @@
+{
+ "title": "bar 0.5 meant 0.5% on the s1 win",
+ "exit": 2,
+ "message": "bar_unit",
+ "why": "a relative bar of 0.5 (50%) is refused with a hint, never guessed"
+}

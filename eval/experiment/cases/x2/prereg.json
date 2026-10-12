@@ -6,8 +6,8 @@
  "confirmed": true,
  "ci_level": 0.95,
  "planned": {
-  "days": 14,
-  "units_per_arm": 900000
+  "days": 90,
+  "units_per_arm": 50000
  },
  "primaries": {
   "rule": "all",

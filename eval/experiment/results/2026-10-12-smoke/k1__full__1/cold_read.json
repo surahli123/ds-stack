@@ -1,0 +1,53 @@
+{
+  "pass": true,
+  "skim": "2/2",
+  "full": "3/3",
+  "items": [
+    {
+      "pass": "skim",
+      "item": "answer",
+      "key": "Keep running: It's day 4 of 14; Successful Search Rate reads +1.42% (+0.32% to +2.52%) so far, too early to call.",
+      "reader": "The test is on day 4 of 14 and too early to call. The recommendation is to keep running it. Successful Search Rate is +1.42% (95% interval +0.32% to +2.52%), and the lower bound sits below the 0.50% bar. Approve running the test to the planned 14 days and 900,000 users per arm, and ship only if the lift is still at or above 0.5% then.",
+      "got": true,
+      "how": "overlap 88%"
+    },
+    {
+      "pass": "skim",
+      "item": "decision",
+      "key": "Approve running the test longer.",
+      "reader": "Approve running the test to the planned 14 days and 900,000 users per arm, and ship only if the lift is still at or above 0.5% then. The test is on day 4 of 14 and too early to call. The recommendation is to keep running it. Successful Search Rate is +1.42% (95% interval +0.32% to +2.52%), and the lower bound sits below the 0.50% bar.",
+      "got": true,
+      "how": "overlap 75%"
+    },
+    {
+      "pass": "full",
+      "item": "takeaway 1",
+      "key": "Successful Search Rate +1.42% (+0.32% to +2.52%) against at least 0.50%.",
+      "reader": "Keep running the test. At day 4 of 14, with 260,000 of the planned 900,000 users per arm, the primary metric is above its bar but the interval is wide, so it is too early to call. Approve running the test to the planned 14 days and 900,000 users per arm. Ship only if the lift stays at or above 0.5% and no guardrail moves past its margin. Successful Search Rate, +1.42% (95% interval +0.32% to +2.52%). The bar is at least 0.50%. The result is early and underpowered. Pre-period and novelty checks could not run, and the scorecard has no segment cuts, so the mechanism behind the lift is unknown. A lift that fades as exposure grows would change the call.",
+      "got": true,
+      "how": "overlap 89%"
+    },
+    {
+      "pass": "full",
+      "item": "takeaway 2",
+      "key": "Approve running the test longer.",
+      "reader": "Keep running the test. At day 4 of 14, with 260,000 of the planned 900,000 users per arm, the primary metric is above its bar but the interval is wide, so it is too early to call. Approve running the test to the planned 14 days and 900,000 users per arm. Ship only if the lift stays at or above 0.5% and no guardrail moves past its margin. Successful Search Rate, +1.42% (95% interval +0.32% to +2.52%). The bar is at least 0.50%. The result is early and underpowered. Pre-period and novelty checks could not run, and the scorecard has no segment cuts, so the mechanism behind the lift is unknown. A lift that fades as exposure grows would change the call.",
+      "got": true,
+      "how": "overlap 75%"
+    },
+    {
+      "pass": "full",
+      "item": "takeaway 3",
+      "key": "Could reverse it: the remaining data; the call is made at the planned sample.",
+      "reader": "Keep running the test. At day 4 of 14, with 260,000 of the planned 900,000 users per arm, the primary metric is above its bar but the interval is wide, so it is too early to call. Approve running the test to the planned 14 days and 900,000 users per arm. Ship only if the lift stays at or above 0.5% and no guardrail moves past its margin. Successful Search Rate, +1.42% (95% interval +0.32% to +2.52%). The bar is at least 0.50%. The result is early and underpowered. Pre-period and novelty checks could not run, and the scorecard has no segment cuts, so the mechanism behind the lift is unknown. A lift that fades as exposure grows would change the call.",
+      "got": true,
+      "how": "overlap 29%; grader: same fact"
+    }
+  ],
+  "lost": "Nowhere. The trailing lint and cold-read lines and the note about `/tmp/o2` are outside the readout.",
+  "question": "Which segment or query type drives the +1.42% lift? The scorecard has no cuts, so it's unclear whether the effect is broad or concentrated.",
+  "replies": {
+    "skim": "1. Answer: The test is on day 4 of 14 and too early to call. The recommendation is to keep running it. Successful Search Rate is +1.42% (95% interval +0.32% to +2.52%), and the lower bound sits below the 0.50% bar.\n2. Decision: Approve running the test to the planned 14 days and 900,000 users per arm, and ship only if the lift is still at or above 0.5% then.\n3. Number: +1.42% lift in Successful Search Rate (percent change).\n",
+    "full": "1. **Answer:** Keep running the test. At day 4 of 14, with 260,000 of the planned 900,000 users per arm, the primary metric is above its bar but the interval is wide, so it is too early to call.\n\n2. **Decision:** Approve running the test to the planned 14 days and 900,000 users per arm. Ship only if the lift stays at or above 0.5% and no guardrail moves past its margin.\n\n3. **Number:** Successful Search Rate, +1.42% (95% interval +0.32% to +2.52%). The bar is at least 0.50%.\n\n4. **Caveat:** The result is early and underpowered. Pre-period and novelty checks could not run, and the scorecard has no segment cuts, so the mechanism behind the lift is unknown. A lift that fades as exposure grows would change the call.\n\n5. **Lost:** Nowhere. The trailing lint and cold-read lines and the note about `/tmp/o2` are outside the readout.\n\n6. **Question:** Which segment or query type drives the +1.42% lift? The scorecard has no cuts, so it's unclear whether the effect is broad or concentrated.\n"
+  }
+}

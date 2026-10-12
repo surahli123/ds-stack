@@ -1,0 +1,53 @@
+{
+  "pass": false,
+  "skim": "0/2",
+  "full": "1/3",
+  "items": [
+    {
+      "pass": "skim",
+      "item": "answer",
+      "key": "Keep running: Successful Search Rate reads +0.12% (-0.36% to +0.60%); ruling out the 0.50% bar needs about 1.9 times the users so far.",
+      "reader": "Ranker v7 had no measurable effect on Successful Search Rate. The point estimate is +0.12% relative, well short of the +0.5% prereg bar, and the CI (\u22120.36% to +0.60%) includes zero. Do not launch Ranker v7.",
+      "got": false,
+      "how": "overlap 0%"
+    },
+    {
+      "pass": "skim",
+      "item": "decision",
+      "key": "Approve running the test longer.",
+      "reader": "Do not launch Ranker v7. Ranker v7 had no measurable effect on Successful Search Rate. The point estimate is +0.12% relative, well short of the +0.5% prereg bar, and the CI (\u22120.36% to +0.60%) includes zero.",
+      "got": false,
+      "how": "overlap 0%"
+    },
+    {
+      "pass": "full",
+      "item": "takeaway 1",
+      "key": "Successful Search Rate +0.12% (-0.36% to +0.60%) against at least 0.50%.",
+      "reader": "The document concludes that Ranker v7 had no measurable effect on Successful Search Rate: +0.12% relative (+0.0005 absolute), with a 95% CI of \u22120.36% to +0.60% and p=0.62. That is well short of the prereg bar. It recommends not launching v7. **Current state:** the experiment still reads \"active\" after its planned end, so 20% of traffic is still exposed to the test. Don't launch v7 on this evidence. Close out the experiment to stop the exposure. If the team still believes in v7, run a new, better-powered test or one aimed at a specific hypothesis. Don't extend this test. A separate launch for maintenance reasons would be a different decision and is safe on guardrails. Successful Search Rate, +0.12% relative change (the unit is relative %, though the bar's unit is itself unclear). The most important comparison is that point estimate against the 0.5% bar. The upper CI bound (+0.60%) is above the bar, so a bar-sized gain can't be ruled out. The author flags this. The other caveats are the unresolved unit of the bar and the uncorrected secondary metrics, several of which lean negative.",
+      "got": true,
+      "how": "overlap 0%; grader: same fact"
+    },
+    {
+      "pass": "full",
+      "item": "takeaway 2",
+      "key": "Approve running the test longer.",
+      "reader": "The document concludes that Ranker v7 had no measurable effect on Successful Search Rate: +0.12% relative (+0.0005 absolute), with a 95% CI of \u22120.36% to +0.60% and p=0.62. That is well short of the prereg bar. It recommends not launching v7. **Current state:** the experiment still reads \"active\" after its planned end, so 20% of traffic is still exposed to the test. Don't launch v7 on this evidence. Close out the experiment to stop the exposure. If the team still believes in v7, run a new, better-powered test or one aimed at a specific hypothesis. Don't extend this test. A separate launch for maintenance reasons would be a different decision and is safe on guardrails. Successful Search Rate, +0.12% relative change (the unit is relative %, though the bar's unit is itself unclear). The most important comparison is that point estimate against the 0.5% bar. The upper CI bound (+0.60%) is above the bar, so a bar-sized gain can't be ruled out. The author flags this. The other caveats are the unresolved unit of the bar and the uncorrected secondary metrics, several of which lean negative.",
+      "got": false,
+      "how": "overlap 25%"
+    },
+    {
+      "pass": "full",
+      "item": "takeaway 3",
+      "key": "Could reverse it: the remaining data; the call is made at the planned sample.",
+      "reader": "The document concludes that Ranker v7 had no measurable effect on Successful Search Rate: +0.12% relative (+0.0005 absolute), with a 95% CI of \u22120.36% to +0.60% and p=0.62. That is well short of the prereg bar. It recommends not launching v7. **Current state:** the experiment still reads \"active\" after its planned end, so 20% of traffic is still exposed to the test. Don't launch v7 on this evidence. Close out the experiment to stop the exposure. If the team still believes in v7, run a new, better-powered test or one aimed at a specific hypothesis. Don't extend this test. A separate launch for maintenance reasons would be a different decision and is safe on guardrails. Successful Search Rate, +0.12% relative change (the unit is relative %, though the bar's unit is itself unclear). The most important comparison is that point estimate against the 0.5% bar. The upper CI bound (+0.60%) is above the bar, so a bar-sized gain can't be ruled out. The author flags this. The other caveats are the unresolved unit of the bar and the uncorrected secondary metrics, several of which lean negative.",
+      "got": false,
+      "how": "overlap 14%"
+    }
+  ],
+  "lost": "I had to reread the bar. The document says \"0.005\" and then reads it as relative, with a note on what happens if it's absolute. The conclusion is the same either way, but I couldn't confirm the unit from the text.",
+  "question": "Was the 0.005 bar written into the prereg as a relative or absolute change, and was that set before the test started?",
+  "replies": {
+    "skim": "1. Answer: Ranker v7 had no measurable effect on Successful Search Rate. The point estimate is +0.12% relative, well short of the +0.5% prereg bar, and the CI (\u22120.36% to +0.60%) includes zero.\n2. Decision: Do not launch Ranker v7.\n3. Number: +0.12% relative change in Successful Search Rate (95% CI \u22120.36% to +0.60%).\n",
+    "full": "1. **Answer:** The document concludes that Ranker v7 had no measurable effect on Successful Search Rate: +0.12% relative (+0.0005 absolute), with a 95% CI of \u22120.36% to +0.60% and p=0.62. That is well short of the prereg bar. It recommends not launching v7. **Current state:** the experiment still reads \"active\" after its planned end, so 20% of traffic is still exposed to the test.\n\n2. **Decision:** Don't launch v7 on this evidence. Close out the experiment to stop the exposure. If the team still believes in v7, run a new, better-powered test or one aimed at a specific hypothesis. Don't extend this test. A separate launch for maintenance reasons would be a different decision and is safe on guardrails.\n\n3. **Number:** Successful Search Rate, +0.12% relative change (the unit is relative %, though the bar's unit is itself unclear). The most important comparison is that point estimate against the 0.5% bar.\n\n4. **Caveat:** The upper CI bound (+0.60%) is above the bar, so a bar-sized gain can't be ruled out. The author flags this. The other caveats are the unresolved unit of the bar and the uncorrected secondary metrics, several of which lean negative.\n\n5. **Lost:** I had to reread the bar. The document says \"0.005\" and then reads it as relative, with a note on what happens if it's absolute. The conclusion is the same either way, but I couldn't confirm the unit from the text.\n\n6. **Question:** Was the 0.005 bar written into the prereg as a relative or absolute change, and was that set before the test started?\n"
+  }
+}

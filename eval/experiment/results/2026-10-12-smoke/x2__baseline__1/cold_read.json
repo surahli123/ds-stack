@@ -1,0 +1,53 @@
+{
+  "pass": false,
+  "skim": "0/2",
+  "full": "2/3",
+  "items": [
+    {
+      "pass": "skim",
+      "item": "answer",
+      "key": "Not an A/B test: This is a holdout test; the A/B launch rule doesn't apply.",
+      "reader": "Don't ship. Successful Search Rate rose +0.00334 (95% CI +0.0017 to +0.0050), below the pre-registered bar of 0.005. All guardrails are inside their margins. Hold the launch. Before revisiting it, confirm the unit of the 0.005 bar, which the pre-registration doesn't state and the readout assumes.",
+      "got": false,
+      "how": "overlap 33%"
+    },
+    {
+      "pass": "skim",
+      "item": "decision",
+      "key": "Use the readout for this test design instead.",
+      "reader": "Hold the launch. Before revisiting it, confirm the unit of the 0.005 bar, which the pre-registration doesn't state and the readout assumes. Don't ship. Successful Search Rate rose +0.00334 (95% CI +0.0017 to +0.0050), below the pre-registered bar of 0.005. All guardrails are inside their margins.",
+      "got": false,
+      "how": "overlap 20%"
+    },
+    {
+      "pass": "full",
+      "item": "takeaway 1",
+      "key": "Holdout",
+      "reader": "The document recommends **don't ship**. The primary metric rose +0.00334 (95% CI +0.0017 to +0.0050), which is real but below the pre-registered bar of 0.005. The bar applies to the point estimate. All four guardrails are inside their margins. The recommendation depends on one open point: whether the 0.005 bar is absolute or relative. The author asks the pre-registration authors to confirm before the meeting. Don't ship on the current reading. Get the unit of the 0.005 bar confirmed before the meeting. If it's absolute, the result misses the bar and the answer stays don't ship. If it's relative, the observed +0.81% clears it and the answer becomes ship. The pre-registration's decision rule should decide it, not the readout's reading. Successful Search Rate lift of **+0.00334 absolute** (the metric's own scale, likely a rate, which the document doesn't name) against a bar of 0.005. The author's relative figure is +0.81%, but the baseline isn't given, so I can't check it. The document's biggest named risk is that the decision hinges on an unstated unit for the bar. Two smaller limits it names: about 70 secondary and segment comparisons with a few at p<0.05, mixed signs and no multiplicity correction (treated as exploratory), and a design the pre-registration calls a \"holdout\" that was analyzed as a standard A/B.",
+      "got": true,
+      "how": "overlap 100%"
+    },
+    {
+      "pass": "full",
+      "item": "takeaway 2",
+      "key": "Use the readout for this test design instead.",
+      "reader": "The document recommends **don't ship**. The primary metric rose +0.00334 (95% CI +0.0017 to +0.0050), which is real but below the pre-registered bar of 0.005. The bar applies to the point estimate. All four guardrails are inside their margins. The recommendation depends on one open point: whether the 0.005 bar is absolute or relative. The author asks the pre-registration authors to confirm before the meeting. Don't ship on the current reading. Get the unit of the 0.005 bar confirmed before the meeting. If it's absolute, the result misses the bar and the answer stays don't ship. If it's relative, the observed +0.81% clears it and the answer becomes ship. The pre-registration's decision rule should decide it, not the readout's reading. Successful Search Rate lift of **+0.00334 absolute** (the metric's own scale, likely a rate, which the document doesn't name) against a bar of 0.005. The author's relative figure is +0.81%, but the baseline isn't given, so I can't check it. The document's biggest named risk is that the decision hinges on an unstated unit for the bar. Two smaller limits it names: about 70 secondary and segment comparisons with a few at p<0.05, mixed signs and no multiplicity correction (treated as exploratory), and a design the pre-registration calls a \"holdout\" that was analyzed as a standard A/B.",
+      "got": false,
+      "how": "overlap 40%"
+    },
+    {
+      "pass": "full",
+      "item": "takeaway 3",
+      "key": "Could reverse it: nothing here; this design needs its own readout.",
+      "reader": "The document recommends **don't ship**. The primary metric rose +0.00334 (95% CI +0.0017 to +0.0050), which is real but below the pre-registered bar of 0.005. The bar applies to the point estimate. All four guardrails are inside their margins. The recommendation depends on one open point: whether the 0.005 bar is absolute or relative. The author asks the pre-registration authors to confirm before the meeting. Don't ship on the current reading. Get the unit of the 0.005 bar confirmed before the meeting. If it's absolute, the result misses the bar and the answer stays don't ship. If it's relative, the observed +0.81% clears it and the answer becomes ship. The pre-registration's decision rule should decide it, not the readout's reading. Successful Search Rate lift of **+0.00334 absolute** (the metric's own scale, likely a rate, which the document doesn't name) against a bar of 0.005. The author's relative figure is +0.81%, but the baseline isn't given, so I can't check it. The document's biggest named risk is that the decision hinges on an unstated unit for the bar. Two smaller limits it names: about 70 secondary and segment comparisons with a few at p<0.05, mixed signs and no multiplicity correction (treated as exploratory), and a design the pre-registration calls a \"holdout\" that was analyzed as a standard A/B.",
+      "got": true,
+      "how": "overlap 50%"
+    }
+  ],
+  "lost": "The \"holdout\" label was unclear. The document doesn't say what a holdout means in the pre-registration or whether it changes the analysis. The baseline value was also missing, so the relative figure is unverifiable. I also worked from the text in your message and didn't open `readout.md`.",
+  "question": "Is the pre-registered 0.005 bar an absolute difference on the Successful Search Rate scale or a relative 0.5% lift?",
+  "replies": {
+    "skim": "1. **Answer:** Don't ship. Successful Search Rate rose +0.00334 (95% CI +0.0017 to +0.0050), below the pre-registered bar of 0.005. All guardrails are inside their margins.\n2. **Decision:** Hold the launch. Before revisiting it, confirm the unit of the 0.005 bar, which the pre-registration doesn't state and the readout assumes.\n3. **Number:** +0.00334 on Successful Search Rate, against a bar of 0.005. The unit is unclear because the text doesn't say whether the lift is absolute or relative.\n",
+    "full": "1. **Answer:** The document recommends **don't ship**. The primary metric rose +0.00334 (95% CI +0.0017 to +0.0050), which is real but below the pre-registered bar of 0.005. The bar applies to the point estimate. All four guardrails are inside their margins. The recommendation depends on one open point: whether the 0.005 bar is absolute or relative. The author asks the pre-registration authors to confirm before the meeting.\n\n2. **Decision:** Don't ship on the current reading. Get the unit of the 0.005 bar confirmed before the meeting. If it's absolute, the result misses the bar and the answer stays don't ship. If it's relative, the observed +0.81% clears it and the answer becomes ship. The pre-registration's decision rule should decide it, not the readout's reading.\n\n3. **Number:** Successful Search Rate lift of **+0.00334 absolute** (the metric's own scale, likely a rate, which the document doesn't name) against a bar of 0.005. The author's relative figure is +0.81%, but the baseline isn't given, so I can't check it.\n\n4. **Caveat:** The document's biggest named risk is that the decision hinges on an unstated unit for the bar. Two smaller limits it names: about 70 secondary and segment comparisons with a few at p<0.05, mixed signs and no multiplicity correction (treated as exploratory), and a design the pre-registration calls a \"holdout\" that was analyzed as a standard A/B.\n\n5. **Lost:** The \"holdout\" label was unclear. The document doesn't say what a holdout means in the pre-registration or whether it changes the analysis. The baseline value was also missing, so the relative figure is unverifiable. I also worked from the text in your message and didn't open `readout.md`.\n\n6. **Question:** Is the pre-registered 0.005 bar an absolute difference on the Successful Search Rate scale or a relative 0.5% lift?\n"
+  }
+}

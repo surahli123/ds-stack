@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 """Normalize a scorecard export and an experiment config into scorecard.json and config.json.
 
-    # Statsig Console API responses
-    python3 normalize.py --pulse pulse.json [--pulse pulse_arm2.json] --request request.json \
+    # Statsig Console API responses (FILE:GROUP when there are several test groups)
+    python3 normalize.py --pulse pulse.json [--pulse pulse_b.json:g_test_b] --request request.json \
         [--experiment experiment.json] [--audit audit_logs.json] [--exposures exposures.json] [--out-dir DIR]
 
     # any CSV export, through a column map kept in the private overlay
@@ -25,7 +25,7 @@ import adapters  # noqa: E402
 
 def main(argv=None):
     parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
-    parser.add_argument("--pulse", action="append", help="a pulse_results response; repeat once per test group")
+    parser.add_argument("--pulse", action="append", help="a pulse_results response, as FILE or FILE:GROUP; repeat per test group")
     parser.add_argument("--csv")
     parser.add_argument("--map", help="column map for --csv")
     parser.add_argument("--request")
@@ -37,7 +37,13 @@ def main(argv=None):
     try:
         request = adapters.load_json(args.request) if args.request else {}
         if args.pulse:
-            scorecard = adapters.statsig_pulse([adapters.load_json(p) for p in args.pulse], request)
+            files, groups = [], []
+            for item in args.pulse:
+                path, _, group = item.partition(":") if not os.path.exists(item) else (item, "", "")
+                files.append(path)
+                groups.append(group or None)
+            scorecard = adapters.statsig_pulse([adapters.load_json(p) for p in files], request,
+                                               groups if any(groups) else None)
         elif args.csv and args.map:
             scorecard = adapters.mapped_csv(args.csv, adapters.load_json(args.map), request)
         else:
@@ -49,8 +55,8 @@ def main(argv=None):
             if args.exposures:
                 config["exposures"] = adapters.load_json(args.exposures)
             outputs["config.json"] = config
-    except (OSError, ValueError) as err:
-        print(f"normalize: {err}", file=sys.stderr)
+    except (OSError, ValueError, TypeError, AttributeError, KeyError) as err:
+        print(f"normalize: {type(err).__name__}: {err}", file=sys.stderr)
         return 2
     os.makedirs(args.out_dir, exist_ok=True)
     for name, content in outputs.items():

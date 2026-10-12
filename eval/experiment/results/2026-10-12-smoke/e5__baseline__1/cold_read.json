@@ -1,0 +1,53 @@
+{
+  "pass": false,
+  "skim": "0/2",
+  "full": "0/3",
+  "items": [
+    {
+      "pass": "skim",
+      "item": "answer",
+      "key": "Escalate: Successful Search Rate improved but Long Click Rate is undetermined, +0.12% (-0.48% to +0.72%); the test needs every primary to improve.",
+      "reader": "Don't ship. Successful Search Rate rose 0.0033, short of the +0.005 bar. Long Click Rate was flat at +0.0003, with a CI (\u22120.0011 to +0.0016) that rules out the bar. Guardrails pass. Don't launch. The pre-registered bar isn't met on either primary metric, and Long Click Rate is the blocker.",
+      "got": false,
+      "how": "overlap 0%"
+    },
+    {
+      "pass": "skim",
+      "item": "decision",
+      "key": "Decide the trade-off at triage.",
+      "reader": "Don't launch. The pre-registered bar isn't met on either primary metric, and Long Click Rate is the blocker. Don't ship. Successful Search Rate rose 0.0033, short of the +0.005 bar. Long Click Rate was flat at +0.0003, with a CI (\u22120.0011 to +0.0016) that rules out the bar. Guardrails pass.",
+      "got": false,
+      "how": "overlap 0%"
+    },
+    {
+      "pass": "full",
+      "item": "takeaway 1",
+      "key": "Long Click Rate +0.12% (-0.48% to +0.72%) against at least 0.50%.",
+      "reader": "Don't ship v7. Successful Search Rate improved modestly (+0.0033, CI +0.0017 to +0.0050), but it is about two-thirds of the +0.005 bar. Long Click Rate is flat (+0.0003, CI \u22120.0011 to +0.0016), and its upper bound is below the bar. All four guardrails pass. The current state is a completed 14-day test with a clean exposure check. Don't ship. If the team still wants v7, it should iterate on the model or file a new pre-registered decision. Don't relax the bar after seeing these results. Before any future decision, fix the Statsig config so it lists both primaries. Long Click Rate, +0.0003 absolute (about +0.03 percentage points). It is the metric that blocks shipping on its own. The Successful Search Rate lift is +0.0033 absolute (about +0.33 points). The biggest limit the document names is the config mismatch. Statsig lists only Successful Search Rate as primary, but the pre-registration requires both. The ~70 uncorrected secondary and segment metrics are also a stated risk, though the author excluded them from the decision.",
+      "got": false,
+      "how": "overlap 0%"
+    },
+    {
+      "pass": "full",
+      "item": "takeaway 2",
+      "key": "Successful Search Rate +0.81% (+0.41% to +1.21%) against at least 0.50%.",
+      "reader": "Don't ship v7. Successful Search Rate improved modestly (+0.0033, CI +0.0017 to +0.0050), but it is about two-thirds of the +0.005 bar. Long Click Rate is flat (+0.0003, CI \u22120.0011 to +0.0016), and its upper bound is below the bar. All four guardrails pass. The current state is a completed 14-day test with a clean exposure check. Don't ship. If the team still wants v7, it should iterate on the model or file a new pre-registered decision. Don't relax the bar after seeing these results. Before any future decision, fix the Statsig config so it lists both primaries. Long Click Rate, +0.0003 absolute (about +0.03 percentage points). It is the metric that blocks shipping on its own. The Successful Search Rate lift is +0.0033 absolute (about +0.33 points). The biggest limit the document names is the config mismatch. Statsig lists only Successful Search Rate as primary, but the pre-registration requires both. The ~70 uncorrected secondary and segment metrics are also a stated risk, though the author excluded them from the decision.",
+      "got": false,
+      "how": "overlap 0%"
+    },
+    {
+      "pass": "full",
+      "item": "takeaway 3",
+      "key": "Could reverse it: pre period could not be checked: no pre-period interval or platform check.",
+      "reader": "Don't ship v7. Successful Search Rate improved modestly (+0.0033, CI +0.0017 to +0.0050), but it is about two-thirds of the +0.005 bar. Long Click Rate is flat (+0.0003, CI \u22120.0011 to +0.0016), and its upper bound is below the bar. All four guardrails pass. The current state is a completed 14-day test with a clean exposure check. Don't ship. If the team still wants v7, it should iterate on the model or file a new pre-registered decision. Don't relax the bar after seeing these results. Before any future decision, fix the Statsig config so it lists both primaries. Long Click Rate, +0.0003 absolute (about +0.03 percentage points). It is the metric that blocks shipping on its own. The Successful Search Rate lift is +0.0033 absolute (about +0.33 points). The biggest limit the document names is the config mismatch. Statsig lists only Successful Search Rate as primary, but the pre-registration requires both. The ~70 uncorrected secondary and segment metrics are also a stated risk, though the author excluded them from the decision.",
+      "got": false,
+      "how": "overlap 12%"
+    }
+  ],
+  "lost": "Two things. First, the guardrail margins are \"assuming relative,\" so I couldn't confirm the pass without that. Second, the doc says \"running longer is unlikely to change the answer\" with no power or CI-width reasoning behind it. I also didn't open `readout.md`; I worked only from the text you pasted.",
+  "question": "Are the guardrail margins relative or absolute, and which primary set is the intended one, the pre-registration's two metrics or the Statsig config's single metric?",
+  "replies": {
+    "skim": "1. **Answer:** Don't ship. Successful Search Rate rose 0.0033, short of the +0.005 bar. Long Click Rate was flat at +0.0003, with a CI (\u22120.0011 to +0.0016) that rules out the bar. Guardrails pass.\n2. **Decision:** Don't launch. The pre-registered bar isn't met on either primary metric, and Long Click Rate is the blocker.\n3. **Number:** Long Click Rate change of +0.0003 (absolute rate change, about +0.03 points against a +0.5-point bar; the document doesn't state the unit explicitly).\n",
+    "full": "1. **Answer:** Don't ship v7. Successful Search Rate improved modestly (+0.0033, CI +0.0017 to +0.0050), but it is about two-thirds of the +0.005 bar. Long Click Rate is flat (+0.0003, CI \u22120.0011 to +0.0016), and its upper bound is below the bar. All four guardrails pass. The current state is a completed 14-day test with a clean exposure check.\n\n2. **Decision:** Don't ship. If the team still wants v7, it should iterate on the model or file a new pre-registered decision. Don't relax the bar after seeing these results. Before any future decision, fix the Statsig config so it lists both primaries.\n\n3. **Number:** Long Click Rate, +0.0003 absolute (about +0.03 percentage points). It is the metric that blocks shipping on its own. The Successful Search Rate lift is +0.0033 absolute (about +0.33 points).\n\n4. **Caveat:** The biggest limit the document names is the config mismatch. Statsig lists only Successful Search Rate as primary, but the pre-registration requires both. The ~70 uncorrected secondary and segment metrics are also a stated risk, though the author excluded them from the decision.\n\n5. **Lost:** Two things. First, the guardrail margins are \"assuming relative,\" so I couldn't confirm the pass without that. Second, the doc says \"running longer is unlikely to change the answer\" with no power or CI-width reasoning behind it. I also didn't open `readout.md`; I worked only from the text you pasted.\n\n6. **Question:** Are the guardrail margins relative or absolute, and which primary set is the intended one, the pre-registration's two metrics or the Statsig config's single metric?\n"
+  }
+}

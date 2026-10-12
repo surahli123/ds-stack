@@ -15,6 +15,8 @@ The launch call comes from code, not from reading 60 metrics. A call compares on
 
 ## Steps
 
+`<overlay>` below is `$DS_OVERLAY_DIR`, the private overlay. If it's unset, leave out `--standards`: the defaults apply and the readout says so. Don't search the filesystem for an overlay or for example files.
+
 1. **Collect the inputs:**
    - the scorecard: the Statsig `pulse_results` response, or a CSV export
    - the experiment config and its audit log
@@ -34,11 +36,12 @@ The launch call comes from code, not from reading 60 metrics. A call compares on
    ```
    python3 <dir>/tools/decide.py --scorecard scorecard.json --config config.json --prereg prereg.json --standards <overlay>/standards.json [--daily daily_by_exposure_day.json]
    ```
-   The daily series must be by days since first exposure. A calendar-day series mixes day of week with late joiners. Read every line it prints. Don't edit `decision.json`.
+   The daily series must be by days since first exposure. A calendar-day series mixes day of week with late joiners. Read every line it prints.
+   Never edit `scorecard.json`, `config.json` or `decision.json` by hand, and never correct the export's numbers yourself. If a check fails because of how the data was exported, the call is Can't tell. Say in `would_change` how to fix the export. The readout's History line shows every rerun that changed the call.
 5. **Write `notes.json`.** It is the only text you write. The schema is in `tools/render.py`.
    - `why_it_moved`: at most 3 bullets, each labelled measured, inferred or guess. Use segment cuts in the scorecard when they exist. Otherwise one guess bullet says the mechanism is unknown.
    - `would_change`: at most 3 bullets. Each names the data or event that would flip the call.
-   - `analyst_view`: only when you'd make a different call, with the reason. Use it when the evidence contradicts the pre-registration, for example a primary that rose for a bad reason.
+   - `analyst_view`: only when evidence the rule can't see would change the call, with the reason. Never use it to argue with a registered bar or margin, a check that couldn't run, or a secondary metric that didn't survive correction. The classic case is a volume primary (queries, sessions or clicks per user) that rose while success fell or reformulation rose: more searching can mean worse results.
 6. **Render:**
    ```
    python3 <dir>/tools/render.py --decision decision.json --scorecard scorecard.json --notes notes.json
@@ -50,7 +53,7 @@ The launch call comes from code, not from reading 60 metrics. A call compares on
    python3 <dir>/../cold-read/tools/cold_read.py readout.md --spine spine.json
    ```
    `render.py` writes `spine.json` from the decision. Never edit it.
-8. **Reply** with `readout.md` exactly as rendered, then the lint and cold-read result lines verbatim, and nothing else. Add no preamble and no caveats section. A caveat that matters belongs in `would_change` or `why_it_moved`, so rerender. If the cold read fails, say so in one line after the result lines.
+8. **Reply** with `readout.md` exactly as rendered, starting with its first line, then the lint and cold-read result lines verbatim, and nothing else. Never summarize it or point to the file instead. Add no preamble and no caveats section. A caveat that matters belongs in `would_change` or `why_it_moved`, so rerender. If the cold read fails, say so in one line after the result lines.
 
 ## Rules that hold even when they're inconvenient
 

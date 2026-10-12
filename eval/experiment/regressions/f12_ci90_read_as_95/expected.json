@@ -1,0 +1,6 @@
+{
+ "title": "request confidence 90, prereg ci_level 0.95, abandonment just inside at 90%",
+ "call": "escalate",
+ "decider": "Abandonment Rate",
+ "why": "at the registered 95% the upper end is +1.07%, past the 1% margin"
+}

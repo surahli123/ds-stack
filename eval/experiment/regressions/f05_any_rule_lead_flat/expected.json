@@ -1,0 +1,6 @@
+{
+ "title": "any-rule, 3 primaries, lead flat, CTR clears",
+ "call": "ship",
+ "decider": "CTR",
+ "why": "under 'any', CTR +1.5% clears the bar; the decider and reason must name CTR"
+}

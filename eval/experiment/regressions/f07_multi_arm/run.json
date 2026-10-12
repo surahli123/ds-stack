@@ -1,0 +1,6 @@
+{
+ "pulse": [
+  "pulse.json:g_test",
+  "pulse_b.json:g_test_b"
+ ]
+}
