@@ -1,0 +1,10 @@
+{
+ "title": "strong win hides an abandonment breach",
+ "call": "dont_ship",
+ "decider": "Abandonment Rate",
+ "primary_rel_pct": 1.24,
+ "accept_calls": [
+  "dont_ship"
+ ],
+ "why": "abandonment +2.2% past its 1% margin; the primary win doesn't override a guardrail"
+}

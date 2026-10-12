@@ -1,0 +1,10 @@
+{
+ "title": "clean win",
+ "call": "ship",
+ "decider": "Successful Search Rate",
+ "primary_rel_pct": 0.81,
+ "accept_calls": [
+  "ship"
+ ],
+ "why": "primary clears the bar; guardrails within"
+}

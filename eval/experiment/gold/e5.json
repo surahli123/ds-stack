@@ -1,0 +1,10 @@
+{
+ "title": "two primaries, one undetermined",
+ "call": "escalate",
+ "decider": "Long Click Rate",
+ "primary_rel_pct": 0.81,
+ "accept_calls": [
+  "escalate"
+ ],
+ "why": "the pre-registration needs both primaries; long clicks are undetermined"
+}

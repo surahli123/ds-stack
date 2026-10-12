@@ -1,0 +1,10 @@
+{
+ "title": "CUPED on: deltas are adjusted, means are raw",
+ "call": "ship",
+ "decider": "Successful Search Rate",
+ "primary_rel_pct": 0.81,
+ "accept_calls": [
+  "ship"
+ ],
+ "why": "CUPED delta is the estimate; the absolute in brackets must be rel x control mean"
+}

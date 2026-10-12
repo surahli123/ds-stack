@@ -1,0 +1,10 @@
+{
+ "title": "export has lift as a fraction where percent is expected",
+ "call": "cant_tell",
+ "decider": "scorecard",
+ "primary_rel_pct": null,
+ "accept_calls": [
+  "cant_tell"
+ ],
+ "why": "percentChange 0.0081 read as percent gives 0.008%, which disagrees with the means"
+}

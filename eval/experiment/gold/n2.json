@@ -1,0 +1,11 @@
+{
+ "title": "flat overall, tail queries win",
+ "call": "no_effect",
+ "decider": "Successful Search Rate",
+ "primary_rel_pct": 0.06,
+ "accept_calls": [
+  "no_effect",
+  "escalate"
+ ],
+ "why": "the registered primary is overall; a tail-only win is an analyst's note, not a launch"
+}

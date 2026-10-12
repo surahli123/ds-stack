@@ -1,0 +1,10 @@
+{
+ "title": "calendar trend fades, flat by days since exposure",
+ "call": "ship",
+ "decider": "Successful Search Rate",
+ "primary_rel_pct": 0.81,
+ "accept_calls": [
+  "ship"
+ ],
+ "why": "the calendar-day fade is day-of-week and late joiners; by exposure day the effect is flat"
+}

@@ -1,0 +1,10 @@
+{
+ "title": "pre-period bias",
+ "call": "cant_tell",
+ "decider": "pre_period",
+ "primary_rel_pct": 0.81,
+ "accept_calls": [
+  "cant_tell"
+ ],
+ "why": "arms differed by +0.7% before exposure"
+}

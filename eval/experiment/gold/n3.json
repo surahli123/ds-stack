@@ -1,0 +1,10 @@
+{
+ "title": "flat primary, heavy users move queries per user",
+ "call": "no_effect",
+ "decider": "Successful Search Rate",
+ "primary_rel_pct": -0.05,
+ "accept_calls": [
+  "no_effect"
+ ],
+ "why": "queries per user +1.9% is a secondary; the primary rules out the bar"
+}

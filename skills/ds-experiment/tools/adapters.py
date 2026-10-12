@@ -190,6 +190,7 @@ def statsig_config(experiment, audit_logs=None):
         "health_checks": [{"type": h.get("type"), "name": h.get("name"), "status": h.get("status"),
                            "metadata": h.get("metadata", {})} for h in exp.get("healthChecks", [])],
         "edits": edits,
+        "exposures": exp.get("exposures") or {},
     }
 
 

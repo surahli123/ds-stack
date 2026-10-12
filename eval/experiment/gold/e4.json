@@ -1,0 +1,10 @@
+{
+ "title": "triggered lift reported as overall",
+ "call": "escalate",
+ "decider": "Successful Search Rate",
+ "primary_rel_pct": 0.39,
+ "accept_calls": [
+  "escalate"
+ ],
+ "why": "+1.9% on triggered searches is +0.39% overall at a 20.5% metric-mass share, below the 0.5% overall bar"
+}

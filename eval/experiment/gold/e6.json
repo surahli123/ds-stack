@@ -1,0 +1,11 @@
+{
+ "title": "engagement primary up for the wrong reason",
+ "call": "ship",
+ "decider": "Queries per User",
+ "primary_rel_pct": 2.4,
+ "accept_calls": [
+  "escalate",
+  "dont_ship"
+ ],
+ "why": "the rule ships on queries per user, but reformulation and abandonment rose and success fell: the analyst should disagree"
+}

@@ -6,7 +6,9 @@ The generic core (this repo) holds no company facts. Anything specific to a work
 ~/ds-stack-private/overlay/      # never inside a repo
 ├── denylist.txt                 # terms that must never be committed (used by hooks/)
 ├── metrics.json                 # metric definitions the agent reads
-└── runner.json                  # safety-envelope settings for the guarded query runner
+├── runner.json                  # safety-envelope settings for the guarded query runner
+├── standards.json               # team launch standards for ds-experiment
+└── scorecard_map.json           # column map for a scorecard CSV export
 ```
 
 Set it up:
@@ -31,3 +33,7 @@ git config core.hooksPath .githooks                 # in this repo: enables the 
 - read-only credentials outside scratch, enforced by the warehouse, not only by the runner
 
 Before any unsupervised session, run the adapter's copy of `safety/selftest.py`. It must exit 0.
+
+**standards.json.** The triage meeting's defaults for `ds-experiment`: guardrails and margins used when a pre-registration names none, what harm inside a margin does (`escalate`, `allow` or `block`), what a win below the bar does, and the sample-split alpha. Every fallback to it is named in the readout.
+
+**scorecard_map.json.** Maps a scorecard export's column names to the canonical fields, so moving from one scorecard to another changes this file and nothing else. `normalize.py` refuses a map whose columns aren't in the export, and `decide.py` fails the scorecard check when relative and absolute changes don't agree, which is what a wrong map usually produces.

@@ -1,0 +1,10 @@
+{
+ "title": "sequential testing on, mid-test",
+ "call": "keep_running",
+ "decider": "Successful Search Rate",
+ "primary_rel_pct": 0.55,
+ "accept_calls": [
+  "keep_running"
+ ],
+ "why": "sequential interval includes zero on day 7 of 14"
+}

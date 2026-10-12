@@ -1,0 +1,110 @@
+[
+ {
+  "day": 1,
+  "rel_delta": 0.015,
+  "rel_ci": [
+   0.009,
+   0.020999999999999998
+  ],
+  "basis": "days_since_exposure"
+ },
+ {
+  "day": 2,
+  "rel_delta": 0.0138,
+  "rel_ci": [
+   0.0078,
+   0.019799999999999998
+  ],
+  "basis": "days_since_exposure"
+ },
+ {
+  "day": 3,
+  "rel_delta": 0.0127,
+  "rel_ci": [
+   0.006699999999999999,
+   0.0187
+  ],
+  "basis": "days_since_exposure"
+ },
+ {
+  "day": 4,
+  "rel_delta": 0.0115,
+  "rel_ci": [
+   0.0055,
+   0.0175
+  ],
+  "basis": "days_since_exposure"
+ },
+ {
+  "day": 5,
+  "rel_delta": 0.01,
+  "rel_ci": [
+   0.004,
+   0.016
+  ],
+  "basis": "days_since_exposure"
+ },
+ {
+  "day": 6,
+  "rel_delta": 0.0091,
+  "rel_ci": [
+   0.0031000000000000003,
+   0.0151
+  ],
+  "basis": "days_since_exposure"
+ },
+ {
+  "day": 7,
+  "rel_delta": 0.0082,
+  "rel_ci": [
+   0.0022000000000000006,
+   0.0142
+  ],
+  "basis": "days_since_exposure"
+ },
+ {
+  "day": 8,
+  "rel_delta": 0.007,
+  "rel_ci": [
+   0.001,
+   0.013000000000000001
+  ],
+  "basis": "days_since_exposure"
+ },
+ {
+  "day": 9,
+  "rel_delta": 0.0061,
+  "rel_ci": [
+   0.00010000000000000026,
+   0.0121
+  ],
+  "basis": "days_since_exposure"
+ },
+ {
+  "day": 10,
+  "rel_delta": 0.0052,
+  "rel_ci": [
+   -0.0008000000000000004,
+   0.0112
+  ],
+  "basis": "days_since_exposure"
+ },
+ {
+  "day": 11,
+  "rel_delta": 0.0046,
+  "rel_ci": [
+   -0.0014000000000000002,
+   0.0106
+  ],
+  "basis": "days_since_exposure"
+ },
+ {
+  "day": 12,
+  "rel_delta": 0.004,
+  "rel_ci": [
+   -0.002,
+   0.01
+  ],
+  "basis": "days_since_exposure"
+ }
+]

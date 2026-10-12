@@ -1,0 +1,10 @@
+{
+ "title": "inconclusive but one more week settles it",
+ "call": "keep_running",
+ "decider": "Successful Search Rate",
+ "primary_rel_pct": 0.12,
+ "accept_calls": [
+  "keep_running"
+ ],
+ "why": "interval -0.36% to +0.60% can't rule out the 0.5% bar; about 1.2x the users would"
+}

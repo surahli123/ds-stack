@@ -1,0 +1,128 @@
+[
+ {
+  "day": 1,
+  "rel_delta": 0.0125,
+  "rel_ci": [
+   0.006500000000000001,
+   0.018500000000000003
+  ],
+  "basis": "calendar_day"
+ },
+ {
+  "day": 2,
+  "rel_delta": 0.0118,
+  "rel_ci": [
+   0.0058,
+   0.0178
+  ],
+  "basis": "calendar_day"
+ },
+ {
+  "day": 3,
+  "rel_delta": 0.0102,
+  "rel_ci": [
+   0.004200000000000001,
+   0.0162
+  ],
+  "basis": "calendar_day"
+ },
+ {
+  "day": 4,
+  "rel_delta": 0.0095,
+  "rel_ci": [
+   0.0034999999999999996,
+   0.0155
+  ],
+  "basis": "calendar_day"
+ },
+ {
+  "day": 5,
+  "rel_delta": 0.0088,
+  "rel_ci": [
+   0.0028000000000000004,
+   0.0148
+  ],
+  "basis": "calendar_day"
+ },
+ {
+  "day": 6,
+  "rel_delta": 0.0071,
+  "rel_ci": [
+   0.0011000000000000003,
+   0.0131
+  ],
+  "basis": "calendar_day"
+ },
+ {
+  "day": 7,
+  "rel_delta": 0.0066,
+  "rel_ci": [
+   0.0005999999999999998,
+   0.0126
+  ],
+  "basis": "calendar_day"
+ },
+ {
+  "day": 8,
+  "rel_delta": 0.0084,
+  "rel_ci": [
+   0.0023999999999999994,
+   0.0144
+  ],
+  "basis": "calendar_day"
+ },
+ {
+  "day": 9,
+  "rel_delta": 0.0079,
+  "rel_ci": [
+   0.0019000000000000006,
+   0.013900000000000001
+  ],
+  "basis": "calendar_day"
+ },
+ {
+  "day": 10,
+  "rel_delta": 0.007,
+  "rel_ci": [
+   0.001,
+   0.013000000000000001
+  ],
+  "basis": "calendar_day"
+ },
+ {
+  "day": 11,
+  "rel_delta": 0.0061,
+  "rel_ci": [
+   0.00010000000000000026,
+   0.0121
+  ],
+  "basis": "calendar_day"
+ },
+ {
+  "day": 12,
+  "rel_delta": 0.0058,
+  "rel_ci": [
+   -0.00020000000000000052,
+   0.0118
+  ],
+  "basis": "calendar_day"
+ },
+ {
+  "day": 13,
+  "rel_delta": 0.0054,
+  "rel_ci": [
+   -0.0005999999999999998,
+   0.0114
+  ],
+  "basis": "calendar_day"
+ },
+ {
+  "day": 14,
+  "rel_delta": 0.005,
+  "rel_ci": [
+   -0.001,
+   0.011
+  ],
+  "basis": "calendar_day"
+ }
+]

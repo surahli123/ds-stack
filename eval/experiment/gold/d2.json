@@ -1,0 +1,10 @@
+{
+ "title": "primary got worse",
+ "call": "dont_ship",
+ "decider": "Successful Search Rate",
+ "primary_rel_pct": -0.62,
+ "accept_calls": [
+  "dont_ship"
+ ],
+ "why": "primary fell, CI excludes zero"
+}

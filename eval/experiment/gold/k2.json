@@ -1,0 +1,10 @@
+{
+ "title": "effect fading by days since exposure",
+ "call": "keep_running",
+ "decider": "Successful Search Rate",
+ "primary_rel_pct": 0.81,
+ "accept_calls": [
+  "keep_running"
+ ],
+ "why": "effect falls from about +1.4% to +0.4% by exposure day"
+}

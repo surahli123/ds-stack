@@ -1,0 +1,10 @@
+{
+ "title": "abandonment interval crosses its margin",
+ "call": "escalate",
+ "decider": "Abandonment Rate",
+ "primary_rel_pct": 0.81,
+ "accept_calls": [
+  "escalate"
+ ],
+ "why": "abandonment +0.6% (-0.4% to +1.6%) is not shown within its 1% margin"
+}

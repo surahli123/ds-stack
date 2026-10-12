@@ -1,0 +1,10 @@
+{
+ "title": "latency guardrail breached",
+ "call": "dont_ship",
+ "decider": "Latency p95 (ms)",
+ "primary_rel_pct": 0.81,
+ "accept_calls": [
+  "dont_ship"
+ ],
+ "why": "latency +3.1% past its 2% margin"
+}

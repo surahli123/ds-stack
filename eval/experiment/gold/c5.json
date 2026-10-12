@@ -1,0 +1,10 @@
+{
+ "title": "allocation cut mid-test",
+ "call": "cant_tell",
+ "decider": "config_edits",
+ "primary_rel_pct": 0.81,
+ "accept_calls": [
+  "cant_tell"
+ ],
+ "why": "allocation 20 -> 10 on day 5, no restart"
+}

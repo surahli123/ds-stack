@@ -1,0 +1,10 @@
+{
+ "title": "long-term holdout",
+ "call": "not_ab",
+ "decider": "design",
+ "primary_rel_pct": null,
+ "accept_calls": [
+  "not_ab"
+ ],
+ "why": "holdout measures a bundle of launches"
+}

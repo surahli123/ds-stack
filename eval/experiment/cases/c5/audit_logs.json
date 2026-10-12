@@ -1,0 +1,15 @@
+{
+ "data": [
+  {
+   "actionType": "experiment_edit",
+   "date": "2026-09-16",
+   "changeLog": "Allocation changed from 20% to 10%",
+   "changes": {
+    "allocation": {
+     "old": 20,
+     "new": 10
+    }
+   }
+  }
+ ]
+}

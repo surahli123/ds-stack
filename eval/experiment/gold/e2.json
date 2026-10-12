@@ -1,0 +1,10 @@
+{
+ "title": "latency worse but inside its margin",
+ "call": "escalate",
+ "decider": "Latency p95 (ms)",
+ "primary_rel_pct": 0.81,
+ "accept_calls": [
+  "escalate"
+ ],
+ "why": "latency +1.2% is significantly worse but inside the 2% margin; team standard sends it to triage"
+}

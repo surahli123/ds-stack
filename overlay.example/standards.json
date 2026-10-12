@@ -1,0 +1,15 @@
+{
+  "_note": "Team-wide launch standards for ds-experiment. Example values; replace with your triage meeting's.",
+  "srm_alpha": 0.001,
+  "min_days": 7,
+  "harm_within_margin": "escalate",
+  "below_bar": "escalate",
+  "secondary_harm": "note",
+  "secondary_q": 0.1,
+  "max_extension_factor": 2.0,
+  "guardrails": [
+    {"metric": "Latency p95 (ms)", "direction": "decrease", "margin": 0.02},
+    {"metric": "Abandonment Rate", "direction": "decrease", "margin": 0.01}
+  ],
+  "directions": {"Latency p95 (ms)": "decrease", "Abandonment Rate": "decrease", "Successful Search Rate": "increase"}
+}

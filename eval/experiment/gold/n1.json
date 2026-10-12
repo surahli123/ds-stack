@@ -1,0 +1,10 @@
+{
+ "title": "flat at full power, one secondary 'wins'",
+ "call": "no_effect",
+ "decider": "Successful Search Rate",
+ "primary_rel_pct": 0.04,
+ "accept_calls": [
+  "no_effect"
+ ],
+ "why": "interval rules out the 0.5% bar; Revenue per User +2.5% (p~0.004) does not survive correction"
+}

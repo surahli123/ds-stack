@@ -1,0 +1,10 @@
+{
+ "title": "real win below the bar",
+ "call": "escalate",
+ "decider": "Successful Search Rate",
+ "primary_rel_pct": 0.31,
+ "accept_calls": [
+  "escalate"
+ ],
+ "why": "+0.31% is real (CI excludes zero) but short of the 0.5% bar"
+}

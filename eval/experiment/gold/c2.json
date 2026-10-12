@@ -1,0 +1,10 @@
+{
+ "title": "test changed a second parameter",
+ "call": "cant_tell",
+ "decider": "config_params",
+ "primary_rel_pct": 0.81,
+ "accept_calls": [
+  "cant_tell"
+ ],
+ "why": "snippet_length 160 -> 220 in test only"
+}

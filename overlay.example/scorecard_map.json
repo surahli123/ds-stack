@@ -1,0 +1,17 @@
+{
+  "_note": "Column map from a scorecard CSV export to the canonical fields. Example names; copy your export's header exactly.",
+  "metric": "Metric",
+  "test_group": "Variant",
+  "listed_as": "Metric Group",
+  "directionality": "Direction",
+  "control_mean": "Control Mean",
+  "test_mean": "Test Mean",
+  "control_units": "Control Units",
+  "test_units": "Test Units",
+  "abs_delta": "Absolute Delta",
+  "rel_delta": "Relative Delta %",
+  "rel_ci_lo": "Relative CI Lower %",
+  "rel_ci_hi": "Relative CI Upper %",
+  "p_value": "P-Value",
+  "_percent_fields": ["rel_delta", "rel_ci_lo", "rel_ci_hi"]
+}

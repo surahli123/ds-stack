@@ -1,0 +1,10 @@
+{
+ "title": "early win on day 4 of 14",
+ "call": "keep_running",
+ "decider": "Successful Search Rate",
+ "primary_rel_pct": 1.42,
+ "accept_calls": [
+  "keep_running"
+ ],
+ "why": "fixed-horizon interval on day 4 of 14"
+}

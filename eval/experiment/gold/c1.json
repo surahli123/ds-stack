@@ -1,0 +1,10 @@
+{
+ "title": "sample ratio mismatch",
+ "call": "cant_tell",
+ "decider": "sample_split",
+ "primary_rel_pct": 0.81,
+ "accept_calls": [
+  "cant_tell"
+ ],
+ "why": "exposures 50.5/49.5 at a million per arm"
+}
