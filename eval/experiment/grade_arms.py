@@ -142,15 +142,27 @@ def main():
     summary = {"best_constant_policy": best_constant, "arms": {}, "contaminated": dropped}
     for arm in sorted({r["arm"] for r in rows}):
         mine = [r for r in rows if r["arm"] == arm]
+        majority = {}
+        for cid in sorted({r["case"] for r in mine}):
+            runs_here = [r for r in mine if r["case"] == cid]
+            calls = [r["analyst_view"] or r["call"] for r in runs_here]
+            top = max(set(calls), key=lambda c: (calls.count(c), next(r["cost"] for r in runs_here if (r["analyst_view"] or r["call"]) == c)))
+            pick = next(r for r in runs_here if (r["analyst_view"] or r["call"]) == top)
+            majority[cid] = {"gold": pick["gold"], "call": top, "correct": pick["correct"], "cost": pick["cost"]}
         by_class = defaultdict(list)
-        for r in mine:
-            by_class[r["gold"]].append(r["correct"])
+        for m in majority.values():
+            by_class[m["gold"]].append(m["correct"])
         mean = lambda key: sum(r[key] for r in mine if r.get(key) is not None) / max(1, sum(r.get(key) is not None for r in mine))  # noqa: E731
         runs = max(r["run"] for r in mine)
         result = {
-            "runs": len(mine), "accuracy": sum(r["correct"] for r in mine) / len(mine), "mean_cost": mean("cost"),
-            "ship_on_dont_ship_or_cant_tell": sum(1 for r in mine if r["gold"] in ("dont_ship", "cant_tell") and
-                                                  (r["analyst_view"] or r["call"]) == "ship"),
+            "runs": len(mine), "cases": len(majority),
+            "accuracy": sum(m["correct"] for m in majority.values()) / len(majority),
+            "mean_cost": sum(m["cost"] for m in majority.values()) / len(majority),
+            "run_accuracy": sum(r["correct"] for r in mine) / len(mine), "run_mean_cost": mean("cost"),
+            "ship_on_dont_ship_or_cant_tell": sum(1 for m in majority.values() if m["gold"] in ("dont_ship", "cant_tell")
+                                                  and m["call"] == "ship"),
+            "runs_shipping_a_blocker": sum(1 for r in mine if r["gold"] in ("dont_ship", "cant_tell") and
+                                           (r["analyst_view"] or r["call"]) == "ship"),
             "per_class": {k: f"{sum(v)}/{len(v)}" for k, v in sorted(by_class.items())},
             "decider_near_top": mean("decider_near_top"), "lint_clean": sum(r["lint_fails"] == 0 for r in mine) / len(mine),
             "mean_words": mean("words"), "mean_stat_speak": mean("stat_speak"), "mean_usd": mean("usd"),
@@ -171,6 +183,7 @@ def main():
     lines = [f"# Experiment readout eval: {os.path.basename(args.run.rstrip('/'))}", "",
              f"Best constant policy: always '{best_constant[0]}', mean cost {best_constant[1]:.2f}.",
              f"Contaminated runs dropped (transcript missing or touches eval files): {len(dropped)}.", "",
+             "Correct and mean cost are per case, on the majority call across runs; the rest are per run.", "",
              "| Arm | Correct | Mean cost | Ship on a blocker | Decider in first 6 lines | Lint-clean | Words | Stat-speak | $ per run | Verdict |",
              "|---|---|---|---|---|---|---|---|---|---|"]
     for arm, r in summary["arms"].items():

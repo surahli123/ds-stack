@@ -1,17 +1,73 @@
 {
-  "_note": "Pre-registered 2026-10-12 before any model run. Change only before a new run, never after seeing results.",
+  "_note": "Pre-registered 2026-10-12 before any model run; majority clause added 2026-10-13 before round 2 results. Every pass-rule input is counted per case on the majority call across its runs (ties go to the costlier call). Change only before a new run, never after seeing results.",
   "runs_per_case": 3,
   "max_mean_cost": 0.4,
   "min_margin_below_best_constant": 0.5,
   "max_ship_on_dont_ship_or_cant_tell": 0,
   "min_share_correct_per_class": 0.5,
   "cost_matrix_rows_true_cols_made": {
-    "ship":         {"ship": 0, "dont_ship": 2,   "escalate": 1, "keep_running": 1,   "no_effect": 2,   "cant_tell": 1.5, "not_ab": 2},
-    "dont_ship":    {"ship": 5, "dont_ship": 0,   "escalate": 1, "keep_running": 2,   "no_effect": 3,   "cant_tell": 2,   "not_ab": 2},
-    "escalate":     {"ship": 3, "dont_ship": 1.5, "escalate": 0, "keep_running": 1,   "no_effect": 2,   "cant_tell": 1,   "not_ab": 2},
-    "keep_running": {"ship": 3, "dont_ship": 2,   "escalate": 1, "keep_running": 0,   "no_effect": 3,   "cant_tell": 1,   "not_ab": 2},
-    "no_effect":    {"ship": 3, "dont_ship": 1,   "escalate": 1, "keep_running": 1.5, "no_effect": 0,   "cant_tell": 1.5, "not_ab": 2},
-    "cant_tell":    {"ship": 4, "dont_ship": 2,   "escalate": 1, "keep_running": 2,   "no_effect": 3,   "cant_tell": 0,   "not_ab": 2},
-    "not_ab":       {"ship": 3, "dont_ship": 2,   "escalate": 1, "keep_running": 2,   "no_effect": 2,   "cant_tell": 1,   "not_ab": 0}
+    "ship": {
+      "ship": 0,
+      "dont_ship": 2,
+      "escalate": 1,
+      "keep_running": 1,
+      "no_effect": 2,
+      "cant_tell": 1.5,
+      "not_ab": 2
+    },
+    "dont_ship": {
+      "ship": 5,
+      "dont_ship": 0,
+      "escalate": 1,
+      "keep_running": 2,
+      "no_effect": 3,
+      "cant_tell": 2,
+      "not_ab": 2
+    },
+    "escalate": {
+      "ship": 3,
+      "dont_ship": 1.5,
+      "escalate": 0,
+      "keep_running": 1,
+      "no_effect": 2,
+      "cant_tell": 1,
+      "not_ab": 2
+    },
+    "keep_running": {
+      "ship": 3,
+      "dont_ship": 2,
+      "escalate": 1,
+      "keep_running": 0,
+      "no_effect": 3,
+      "cant_tell": 1,
+      "not_ab": 2
+    },
+    "no_effect": {
+      "ship": 3,
+      "dont_ship": 1,
+      "escalate": 1,
+      "keep_running": 1.5,
+      "no_effect": 0,
+      "cant_tell": 1.5,
+      "not_ab": 2
+    },
+    "cant_tell": {
+      "ship": 4,
+      "dont_ship": 2,
+      "escalate": 1,
+      "keep_running": 2,
+      "no_effect": 3,
+      "cant_tell": 0,
+      "not_ab": 2
+    },
+    "not_ab": {
+      "ship": 3,
+      "dont_ship": 2,
+      "escalate": 1,
+      "keep_running": 2,
+      "no_effect": 2,
+      "cant_tell": 1,
+      "not_ab": 0
+    }
   }
 }
