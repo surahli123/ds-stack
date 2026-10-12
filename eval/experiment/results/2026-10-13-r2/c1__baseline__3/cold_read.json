@@ -1,0 +1,53 @@
+{
+  "pass": false,
+  "skim": "1/2",
+  "full": "1/3",
+  "items": [
+    {
+      "pass": "skim",
+      "item": "answer",
+      "key": "Can't tell, decided by sample split.",
+      "reader": "The readout doesn't recommend shipping. It can't make the call yet because the experiment config shows uneven arm exposures (1,010,000 Control vs 990,000 Test on a 50/50 design, z of about 14), while the balance check reports PASSED. Hold the launch. Someone needs to check the raw assignment counts to find out which exposure figure is correct before deciding.",
+      "got": true,
+      "how": "overlap 0%; grader: same fact"
+    },
+    {
+      "pass": "skim",
+      "item": "decision",
+      "key": "Agree to fix the test and rerun; no launch decision from this data.",
+      "reader": "Hold the launch. Someone needs to check the raw assignment counts to find out which exposure figure is correct before deciding. The readout doesn't recommend shipping. It can't make the call yet because the experiment config shows uneven arm exposures (1,010,000 Control vs 990,000 Test on a 50/50 design, z of about 14), while the balance check reports PASSED.",
+      "got": false,
+      "how": "overlap 29%"
+    },
+    {
+      "pass": "full",
+      "item": "takeaway 1",
+      "key": "The arms got 50.5% / 49.5% of exposures against a planned 50.0% / 50.0%, a gap chance almost never produces at this size",
+      "reader": "The readout concludes \"Can't tell.\" Successful Search Rate rose from 41.20% to 41.53% (+0.81% relative, p=7e-05), but the exposure counts conflict. `experiment.json` shows 1,010,000 Control and 990,000 Test for a 50/50 design, while Pulse analyzed 1,000,000 per arm. The health check reports PASSED anyway. Until that is resolved, the result isn't trustworthy. Hold. Don't ship yet. First, someone checks the raw assignment counts to settle the sample ratio mismatch (SRM). If the counts are balanced and the bar is relative, the result meets the prereg rule and the call becomes Ship. If the bar was meant as an absolute 0.5 percentage points, the result misses it and the call becomes Don't ship. Successful Search Rate lift of +0.81% relative (+0.33 percentage points, 95% CI +0.41% to +1.21%). The unit matters because the ship bar of 0.005 is read as relative, and the document doesn't confirm that. The exposure imbalance. A gap of 20,000 between arms at about 2M users gives z \u2248 14, and the document says the health check contradicts it. Also, the bar and guardrail margins are read as relative, which the document doesn't confirm.",
+      "got": true,
+      "how": "overlap 0%; grader: same fact"
+    },
+    {
+      "pass": "full",
+      "item": "takeaway 2",
+      "key": "Agree to fix the test and rerun; no launch decision from this data.",
+      "reader": "The readout concludes \"Can't tell.\" Successful Search Rate rose from 41.20% to 41.53% (+0.81% relative, p=7e-05), but the exposure counts conflict. `experiment.json` shows 1,010,000 Control and 990,000 Test for a 50/50 design, while Pulse analyzed 1,000,000 per arm. The health check reports PASSED anyway. Until that is resolved, the result isn't trustworthy. Hold. Don't ship yet. First, someone checks the raw assignment counts to settle the sample ratio mismatch (SRM). If the counts are balanced and the bar is relative, the result meets the prereg rule and the call becomes Ship. If the bar was meant as an absolute 0.5 percentage points, the result misses it and the call becomes Don't ship. Successful Search Rate lift of +0.81% relative (+0.33 percentage points, 95% CI +0.41% to +1.21%). The unit matters because the ship bar of 0.005 is read as relative, and the document doesn't confirm that. The exposure imbalance. A gap of 20,000 between arms at about 2M users gives z \u2248 14, and the document says the health check contradicts it. Also, the bar and guardrail margins are read as relative, which the document doesn't confirm.",
+      "got": false,
+      "how": "overlap 14%"
+    },
+    {
+      "pass": "full",
+      "item": "takeaway 3",
+      "key": "Could reverse it: fixing the sample split problem and rerunning.",
+      "reader": "The readout concludes \"Can't tell.\" Successful Search Rate rose from 41.20% to 41.53% (+0.81% relative, p=7e-05), but the exposure counts conflict. `experiment.json` shows 1,010,000 Control and 990,000 Test for a 50/50 design, while Pulse analyzed 1,000,000 per arm. The health check reports PASSED anyway. Until that is resolved, the result isn't trustworthy. Hold. Don't ship yet. First, someone checks the raw assignment counts to settle the sample ratio mismatch (SRM). If the counts are balanced and the bar is relative, the result meets the prereg rule and the call becomes Ship. If the bar was meant as an absolute 0.5 percentage points, the result misses it and the call becomes Don't ship. Successful Search Rate lift of +0.81% relative (+0.33 percentage points, 95% CI +0.41% to +1.21%). The unit matters because the ship bar of 0.005 is read as relative, and the document doesn't confirm that. The exposure imbalance. A gap of 20,000 between arms at about 2M users gives z \u2248 14, and the document says the health check contradicts it. Also, the bar and guardrail margins are read as relative, which the document doesn't confirm.",
+      "got": false,
+      "how": "overlap 17%"
+    }
+  ],
+  "lost": "I had to reread the bar. Its unit (0.005 relative or absolute) is not stated, and the document says it is \"read\" as relative, which means the author didn't pin it down. The prereg margins for guardrails have the same gap. The \"about 2M users\" figure is also approximate, so I couldn't check the z-value exactly.",
+  "question": "Which exposure counts are correct, the 1,010,000/990,000 split in `experiment.json` or the 1,000,000 per arm Pulse analyzed?",
+  "replies": {
+    "skim": "1. **Answer:** The readout doesn't recommend shipping. It can't make the call yet because the experiment config shows uneven arm exposures (1,010,000 Control vs 990,000 Test on a 50/50 design, z of about 14), while the balance check reports PASSED.\n2. **Decision:** Hold the launch. Someone needs to check the raw assignment counts to find out which exposure figure is correct before deciding.\n3. **Number:** Successful Search Rate lift of +0.81% relative (41.20% to 41.53%, +0.33 percentage points).\n",
+    "full": "1. **Answer:** The readout concludes \"Can't tell.\" Successful Search Rate rose from 41.20% to 41.53% (+0.81% relative, p=7e-05), but the exposure counts conflict. `experiment.json` shows 1,010,000 Control and 990,000 Test for a 50/50 design, while Pulse analyzed 1,000,000 per arm. The health check reports PASSED anyway. Until that is resolved, the result isn't trustworthy.\n\n2. **Decision:** Hold. Don't ship yet. First, someone checks the raw assignment counts to settle the sample ratio mismatch (SRM). If the counts are balanced and the bar is relative, the result meets the prereg rule and the call becomes Ship. If the bar was meant as an absolute 0.5 percentage points, the result misses it and the call becomes Don't ship.\n\n3. **Number:** Successful Search Rate lift of +0.81% relative (+0.33 percentage points, 95% CI +0.41% to +1.21%). The unit matters because the ship bar of 0.005 is read as relative, and the document doesn't confirm that.\n\n4. **Caveat:** The exposure imbalance. A gap of 20,000 between arms at about 2M users gives z \u2248 14, and the document says the health check contradicts it. Also, the bar and guardrail margins are read as relative, which the document doesn't confirm.\n\n5. **Lost:** I had to reread the bar. Its unit (0.005 relative or absolute) is not stated, and the document says it is \"read\" as relative, which means the author didn't pin it down. The prereg margins for guardrails have the same gap. The \"about 2M users\" figure is also approximate, so I couldn't check the z-value exactly.\n\n6. **Question:** Which exposure counts are correct, the 1,010,000/990,000 split in `experiment.json` or the 1,000,000 per arm Pulse analyzed?\n"
+  }
+}

@@ -1,0 +1,53 @@
+{
+  "pass": false,
+  "skim": "0/2",
+  "full": "2/3",
+  "items": [
+    {
+      "pass": "skim",
+      "item": "answer",
+      "key": "Can't tell: Parameters changed that the test didn't intend: {'Test': ['snippet_length']}. No launch decision from this data until it's fixed.",
+      "reader": "The document recommends Escalate, not a straight ship. The test arm changed `snippet_length` (160 in Control, 220 in Test) as well as the pre-registered `ranker_model`, and the audit log is empty, so the measured lift can't be attributed to the ranker alone. Escalate, and get someone to confirm whether the snippet change was deliberate. If it was, ship the tested bundle (lambdamart_v7 plus longer snippets) as tested. If it wasn't, the text is cut off before saying what to do; unclear.",
+      "got": false,
+      "how": "overlap 25%"
+    },
+    {
+      "pass": "skim",
+      "item": "decision",
+      "key": "Agree to fix the test and rerun; no launch decision from this data.",
+      "reader": "Escalate, and get someone to confirm whether the snippet change was deliberate. If it was, ship the tested bundle (lambdamart_v7 plus longer snippets) as tested. If it wasn't, the text is cut off before saying what to do; unclear. The document recommends Escalate, not a straight ship. The test arm changed `snippet_length` (160 in Control, 220 in Test) as well as the pre-registered `ranker_model`, and the audit log is empty, so the measured lift can't be attributed to the ranker alone.",
+      "got": false,
+      "how": "overlap 14%"
+    },
+    {
+      "pass": "full",
+      "item": "takeaway 1",
+      "key": "Parameters changed that the test didn't intend: {'Test': ['snippet_length']}",
+      "reader": "The document recommends escalating rather than shipping. The day-14 readout shows Successful Search Rate up +0.81% relative, and all guardrails pass. But Test changed `snippet_length` (160 to 220) along with the ranker, so the lift can't be credited to the ranker alone. The audit log is empty, so it's unclear whether that change was deliberate. Escalate to tomorrow's review and don't ship yet. Get two confirmations first: whether `snippet_length` 220 was intended, and whether the 0.005 bar is relative. If both point the right way, ship the tested bundle. If the ranker has to be credited alone, run a follow-up with `snippet_length` held at 160 in both arms. +0.81% relative lift in Successful Search Rate (absolute +0.00334, p = 7e-05). The 95% CI is about +0.41% to +1.21%. Whether this clears the bar depends on the bar's unit, which the document doesn't specify. The snippet-length confound. Test differs on two parameters, the audit log is empty, and Time to First Click is slightly worse (+0.9%, p = 0.08), which is the metric a longer snippet would most plausibly move.",
+      "got": true,
+      "how": "overlap 67%"
+    },
+    {
+      "pass": "full",
+      "item": "takeaway 2",
+      "key": "Agree to fix the test and rerun; no launch decision from this data.",
+      "reader": "The document recommends escalating rather than shipping. The day-14 readout shows Successful Search Rate up +0.81% relative, and all guardrails pass. But Test changed `snippet_length` (160 to 220) along with the ranker, so the lift can't be credited to the ranker alone. The audit log is empty, so it's unclear whether that change was deliberate. Escalate to tomorrow's review and don't ship yet. Get two confirmations first: whether `snippet_length` 220 was intended, and whether the 0.005 bar is relative. If both point the right way, ship the tested bundle. If the ranker has to be credited alone, run a follow-up with `snippet_length` held at 160 in both arms. +0.81% relative lift in Successful Search Rate (absolute +0.00334, p = 7e-05). The 95% CI is about +0.41% to +1.21%. Whether this clears the bar depends on the bar's unit, which the document doesn't specify. The snippet-length confound. Test differs on two parameters, the audit log is empty, and Time to First Click is slightly worse (+0.9%, p = 0.08), which is the metric a longer snippet would most plausibly move.",
+      "got": true,
+      "how": "overlap 14%; grader: same fact"
+    },
+    {
+      "pass": "full",
+      "item": "takeaway 3",
+      "key": "Could reverse it: fixing the config params problem and rerunning.",
+      "reader": "The document recommends escalating rather than shipping. The day-14 readout shows Successful Search Rate up +0.81% relative, and all guardrails pass. But Test changed `snippet_length` (160 to 220) along with the ranker, so the lift can't be credited to the ranker alone. The audit log is empty, so it's unclear whether that change was deliberate. Escalate to tomorrow's review and don't ship yet. Get two confirmations first: whether `snippet_length` 220 was intended, and whether the 0.005 bar is relative. If both point the right way, ship the tested bundle. If the ranker has to be credited alone, run a follow-up with `snippet_length` held at 160 in both arms. +0.81% relative lift in Successful Search Rate (absolute +0.00334, p = 7e-05). The 95% CI is about +0.41% to +1.21%. Whether this clears the bar depends on the bar's unit, which the document doesn't specify. The snippet-length confound. Test differs on two parameters, the audit log is empty, and Time to First Click is slightly worse (+0.9%, p = 0.08), which is the metric a longer snippet would most plausibly move.",
+      "got": false,
+      "how": "overlap 0%"
+    }
+  ],
+  "lost": "The unit of the 0.005 bar. The document says it is unitless, and the relative reading is inferred from the guardrail margins, not stated. The prereg owners need to confirm it. Nothing else was confusing. The dates reconcile (test started 2026-09-12, 14 days to ds 2026-09-25), and the arithmetic checks out (0.00334 / 0.4120 \u2248 0.81%).",
+  "question": "Was `snippet_length` = 220 in Test a deliberate part of the treatment? If it was, is the 0.005 bar relative?",
+  "replies": {
+    "skim": "1. **Answer:** The document recommends Escalate, not a straight ship. The test arm changed `snippet_length` (160 in Control, 220 in Test) as well as the pre-registered `ranker_model`, and the audit log is empty, so the measured lift can't be attributed to the ranker alone.\n2. **Decision:** Escalate, and get someone to confirm whether the snippet change was deliberate. If it was, ship the tested bundle (lambdamart_v7 plus longer snippets) as tested. If it wasn't, the text is cut off before saying what to do; unclear.\n3. **Number:** unclear. The text gives no measured lift for Successful Search Rate. The only number it states is snippet length, 160 vs 220, and its unit isn't given (presumably characters).\n",
+    "full": "1. **Answer:** The document recommends escalating rather than shipping. The day-14 readout shows Successful Search Rate up +0.81% relative, and all guardrails pass. But Test changed `snippet_length` (160 to 220) along with the ranker, so the lift can't be credited to the ranker alone. The audit log is empty, so it's unclear whether that change was deliberate.\n\n2. **Decision:** Escalate to tomorrow's review and don't ship yet. Get two confirmations first: whether `snippet_length` 220 was intended, and whether the 0.005 bar is relative. If both point the right way, ship the tested bundle. If the ranker has to be credited alone, run a follow-up with `snippet_length` held at 160 in both arms.\n\n3. **Number:** +0.81% relative lift in Successful Search Rate (absolute +0.00334, p = 7e-05). The 95% CI is about +0.41% to +1.21%. Whether this clears the bar depends on the bar's unit, which the document doesn't specify.\n\n4. **Caveat:** The snippet-length confound. Test differs on two parameters, the audit log is empty, and Time to First Click is slightly worse (+0.9%, p = 0.08), which is the metric a longer snippet would most plausibly move.\n\n5. **Lost:** The unit of the 0.005 bar. The document says it is unitless, and the relative reading is inferred from the guardrail margins, not stated. The prereg owners need to confirm it. Nothing else was confusing. The dates reconcile (test started 2026-09-12, 14 days to ds 2026-09-25), and the arithmetic checks out (0.00334 / 0.4120 \u2248 0.81%).\n\n6. **Question:** Was `snippet_length` = 220 in Test a deliberate part of the treatment? If it was, is the 0.005 bar relative?\n"
+  }
+}

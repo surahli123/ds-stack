@@ -1,0 +1,53 @@
+{
+  "pass": false,
+  "skim": "1/2",
+  "full": "3/3",
+  "items": [
+    {
+      "pass": "skim",
+      "item": "answer",
+      "key": "Can't tell: Parameters changed that the test didn't intend: {'Test': ['snippet_length']}. No launch decision from this data until it's fixed.",
+      "reader": "Escalate. The Ranker v7 arm clears the pre-registered bar and hurts no guardrail, but the document does not recommend shipping on this evidence alone. Hold the launch. Find out who changed `snippet_length` (160 to 220) and why, since the audit log is empty, and confirm whether the 0.005 bar is relative or absolute before crediting the lift to the ranker.",
+      "got": true,
+      "how": "overlap 25%; grader: same fact"
+    },
+    {
+      "pass": "skim",
+      "item": "decision",
+      "key": "Agree to fix the test and rerun; no launch decision from this data.",
+      "reader": "Hold the launch. Find out who changed `snippet_length` (160 to 220) and why, since the audit log is empty, and confirm whether the 0.005 bar is relative or absolute before crediting the lift to the ranker. Escalate. The Ranker v7 arm clears the pre-registered bar and hurts no guardrail, but the document does not recommend shipping on this evidence alone.",
+      "got": false,
+      "how": "overlap 14%"
+    },
+    {
+      "pass": "full",
+      "item": "takeaway 1",
+      "key": "Parameters changed that the test didn't intend: {'Test': ['snippet_length']}",
+      "reader": "The readout recommends escalating, not shipping. Ranker v7 clears the pre-registered bar and no guardrail is hurt. But the Test arm also changed `snippet_length` from 160 to 220, with no audit record, so the lift can't be credited to the ranker alone. The bar's unit is also unstated. Current state: the decision is pending, and the review must settle the unit and who made the snippet change. Escalate. I'd recommend against shipping the bundle as tested, because it ships an unlogged change along with the ranker. I'd rerun with `snippet_length` held at 160 to isolate the ranker effect. Before that, confirm the bar's unit. If relative, the result passes. If absolute, it fails and the answer is Don't ship. Either way, find out who set 220 and why. Successful Search Rate, relative lift of +0.81% (95% CI 0.41% to 1.21%, p=7e-5). The unit is relative percent change. The absolute reading is 0.33 pp. The main risk is the confound. The snippet change ran alongside the ranker change with no recorded owner or reason, so the effect may not be the ranker's. The bar's unit is the second risk, because it flips pass to fail. Desktop success is down 0.66%, but that isn't significant.",
+      "got": true,
+      "how": "overlap 50%"
+    },
+    {
+      "pass": "full",
+      "item": "takeaway 2",
+      "key": "Agree to fix the test and rerun; no launch decision from this data.",
+      "reader": "The readout recommends escalating, not shipping. Ranker v7 clears the pre-registered bar and no guardrail is hurt. But the Test arm also changed `snippet_length` from 160 to 220, with no audit record, so the lift can't be credited to the ranker alone. The bar's unit is also unstated. Current state: the decision is pending, and the review must settle the unit and who made the snippet change. Escalate. I'd recommend against shipping the bundle as tested, because it ships an unlogged change along with the ranker. I'd rerun with `snippet_length` held at 160 to isolate the ranker effect. Before that, confirm the bar's unit. If relative, the result passes. If absolute, it fails and the answer is Don't ship. Either way, find out who set 220 and why. Successful Search Rate, relative lift of +0.81% (95% CI 0.41% to 1.21%, p=7e-5). The unit is relative percent change. The absolute reading is 0.33 pp. The main risk is the confound. The snippet change ran alongside the ranker change with no recorded owner or reason, so the effect may not be the ranker's. The bar's unit is the second risk, because it flips pass to fail. Desktop success is down 0.66%, but that isn't significant.",
+      "got": true,
+      "how": "overlap 43%; grader: same fact"
+    },
+    {
+      "pass": "full",
+      "item": "takeaway 3",
+      "key": "Could reverse it: fixing the config params problem and rerunning.",
+      "reader": "The readout recommends escalating, not shipping. Ranker v7 clears the pre-registered bar and no guardrail is hurt. But the Test arm also changed `snippet_length` from 160 to 220, with no audit record, so the lift can't be credited to the ranker alone. The bar's unit is also unstated. Current state: the decision is pending, and the review must settle the unit and who made the snippet change. Escalate. I'd recommend against shipping the bundle as tested, because it ships an unlogged change along with the ranker. I'd rerun with `snippet_length` held at 160 to isolate the ranker effect. Before that, confirm the bar's unit. If relative, the result passes. If absolute, it fails and the answer is Don't ship. Either way, find out who set 220 and why. Successful Search Rate, relative lift of +0.81% (95% CI 0.41% to 1.21%, p=7e-5). The unit is relative percent change. The absolute reading is 0.33 pp. The main risk is the confound. The snippet change ran alongside the ranker change with no recorded owner or reason, so the effect may not be the ranker's. The bar's unit is the second risk, because it flips pass to fail. Desktop success is down 0.66%, but that isn't significant.",
+      "got": true,
+      "how": "overlap 0%; grader: same fact"
+    }
+  ],
+  "lost": "The unit of the 0.005 bar. The pasted text doesn't say whether it is relative or absolute, and the answer depends on it.",
+  "question": "Is the 0.005 pre-registered bar relative or absolute? That single answer decides pass or fail. Who set `snippet_length` to 220 is the next question, and it blocks a clean attribution either way.",
+  "replies": {
+    "skim": "1. **Answer:** Escalate. The Ranker v7 arm clears the pre-registered bar and hurts no guardrail, but the document does not recommend shipping on this evidence alone.\n2. **Decision:** Hold the launch. Find out who changed `snippet_length` (160 to 220) and why, since the audit log is empty, and confirm whether the 0.005 bar is relative or absolute before crediting the lift to the ranker.\n3. **Number:** Successful Search Rate lift of +0.81% relative (95% CI 0.41% to 1.21%, p=7e-5). The excerpt cuts off before the bar comparison, so whether it passes the bar depends on the unit, which is unclear.\n",
+    "full": "I couldn't open `readout.md` because the Read tool is disabled in this session and I have no shell. These answers come from the document text pasted in your message.\n\n1. **Answer:** The readout recommends escalating, not shipping. Ranker v7 clears the pre-registered bar and no guardrail is hurt. But the Test arm also changed `snippet_length` from 160 to 220, with no audit record, so the lift can't be credited to the ranker alone. The bar's unit is also unstated. Current state: the decision is pending, and the review must settle the unit and who made the snippet change.\n\n2. **Decision:** Escalate. I'd recommend against shipping the bundle as tested, because it ships an unlogged change along with the ranker. I'd rerun with `snippet_length` held at 160 to isolate the ranker effect. Before that, confirm the bar's unit. If relative, the result passes. If absolute, it fails and the answer is Don't ship. Either way, find out who set 220 and why.\n\n3. **Number:** Successful Search Rate, relative lift of +0.81% (95% CI 0.41% to 1.21%, p=7e-5). The unit is relative percent change. The absolute reading is 0.33 pp.\n\n4. **Caveat:** The main risk is the confound. The snippet change ran alongside the ranker change with no recorded owner or reason, so the effect may not be the ranker's. The bar's unit is the second risk, because it flips pass to fail. Desktop success is down 0.66%, but that isn't significant.\n\n5. **Lost:** The unit of the 0.005 bar. The pasted text doesn't say whether it is relative or absolute, and the answer depends on it.\n\n6. **Question:** Is the 0.005 pre-registered bar relative or absolute? That single answer decides pass or fail. Who set `snippet_length` to 220 is the next question, and it blocks a clean attribution either way.\n"
+  }
+}

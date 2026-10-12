@@ -1,0 +1,53 @@
+{
+  "pass": false,
+  "skim": "2/2",
+  "full": "2/3",
+  "items": [
+    {
+      "pass": "skim",
+      "item": "answer",
+      "key": "Can't tell: Before exposure, Successful Search Rate already differed by +0.71% (+0.31% to +1.11%). No launch decision from this data until it's fixed.",
+      "reader": "The document can't say whether the ranker works. The unadjusted +0.81% lift in Successful Search Rate is confounded by a +0.71% gap between the arms before launch. Don't launch on this readout. Re-run the analysis with the pre-launch gap adjusted (CUPED or equivalent) and check it against the +0.5% ship bar.",
+      "got": true,
+      "how": "overlap 0%; grader: same fact"
+    },
+    {
+      "pass": "skim",
+      "item": "decision",
+      "key": "Agree to fix the test and rerun; no launch decision from this data.",
+      "reader": "Don't launch on this readout. Re-run the analysis with the pre-launch gap adjusted (CUPED or equivalent) and check it against the +0.5% ship bar. The document can't say whether the ranker works. The unadjusted +0.81% lift in Successful Search Rate is confounded by a +0.71% gap between the arms before launch.",
+      "got": true,
+      "how": "overlap 14%; grader: same fact"
+    },
+    {
+      "pass": "full",
+      "item": "takeaway 1",
+      "key": "Before exposure, Successful Search Rate already differed by +0.71% (+0.31% to +1.11%)",
+      "reader": "The document recommends not deciding yet (\"Can't tell\"). The unadjusted lift is +0.81% relative on Successful Search Rate (95% CI +0.41% to +1.21%), but the arms already differed before launch by +0.71% on that metric. Pulse ran with CUPED off, so the lift can't be separated from that gap. The author's rough adjusted estimate is about +0.10% \u00b1 0.57%, which fits both no effect and a pass. Current state: the experiment is still marked active, well past its planned 14 days. The Pulse data is from day 14. Don't launch yet. Re-pull Pulse with CUPED on, find out why the arms differed at baseline, and apply the prereg ship, don't-ship and rerun rules to the adjusted estimate. Also decide whether the experiment should keep running, since it is past its planned end. Pre-launch gap of +0.71% (relative, Successful Search Rate), set against the +0.81% observed lift and the +0.5% ship bar. The gap is what decides whether the lift is real. The baseline imbalance is about the same size as the observed lift, so the ranker's effect can't be isolated. The adjusted figure is the author's own calculation, treating the two periods as independent, not a Pulse output.",
+      "got": false,
+      "how": "overlap 0%"
+    },
+    {
+      "pass": "full",
+      "item": "takeaway 2",
+      "key": "Agree to fix the test and rerun; no launch decision from this data.",
+      "reader": "The document recommends not deciding yet (\"Can't tell\"). The unadjusted lift is +0.81% relative on Successful Search Rate (95% CI +0.41% to +1.21%), but the arms already differed before launch by +0.71% on that metric. Pulse ran with CUPED off, so the lift can't be separated from that gap. The author's rough adjusted estimate is about +0.10% \u00b1 0.57%, which fits both no effect and a pass. Current state: the experiment is still marked active, well past its planned 14 days. The Pulse data is from day 14. Don't launch yet. Re-pull Pulse with CUPED on, find out why the arms differed at baseline, and apply the prereg ship, don't-ship and rerun rules to the adjusted estimate. Also decide whether the experiment should keep running, since it is past its planned end. Pre-launch gap of +0.71% (relative, Successful Search Rate), set against the +0.81% observed lift and the +0.5% ship bar. The gap is what decides whether the lift is real. The baseline imbalance is about the same size as the observed lift, so the ranker's effect can't be isolated. The adjusted figure is the author's own calculation, treating the two periods as independent, not a Pulse output.",
+      "got": true,
+      "how": "overlap 43%; grader: same fact"
+    },
+    {
+      "pass": "full",
+      "item": "takeaway 3",
+      "key": "Could reverse it: fixing the pre period problem and rerunning.",
+      "reader": "The document recommends not deciding yet (\"Can't tell\"). The unadjusted lift is +0.81% relative on Successful Search Rate (95% CI +0.41% to +1.21%), but the arms already differed before launch by +0.71% on that metric. Pulse ran with CUPED off, so the lift can't be separated from that gap. The author's rough adjusted estimate is about +0.10% \u00b1 0.57%, which fits both no effect and a pass. Current state: the experiment is still marked active, well past its planned 14 days. The Pulse data is from day 14. Don't launch yet. Re-pull Pulse with CUPED on, find out why the arms differed at baseline, and apply the prereg ship, don't-ship and rerun rules to the adjusted estimate. Also decide whether the experiment should keep running, since it is past its planned end. Pre-launch gap of +0.71% (relative, Successful Search Rate), set against the +0.81% observed lift and the +0.5% ship bar. The gap is what decides whether the lift is real. The baseline imbalance is about the same size as the observed lift, so the ranker's effect can't be isolated. The adjusted figure is the author's own calculation, treating the two periods as independent, not a Pulse output.",
+      "got": true,
+      "how": "overlap 0%; grader: same fact"
+    }
+  ],
+  "lost": "Nowhere.",
+  "question": "Why did the arms differ on Successful Search Rate before launch, was it assignment or the pre-period window, and what does the CUPED-adjusted estimate show?",
+  "replies": {
+    "skim": "1. **Answer:** The document can't say whether the ranker works. The unadjusted +0.81% lift in Successful Search Rate is confounded by a +0.71% gap between the arms before launch.\n2. **Decision:** Don't launch on this readout. Re-run the analysis with the pre-launch gap adjusted (CUPED or equivalent) and check it against the +0.5% ship bar.\n3. **Number:** +0.10% relative lift in Successful Search Rate (\u00b10.57%), after subtracting the pre-launch gap.\n",
+    "full": "1. **Answer:** The document recommends not deciding yet (\"Can't tell\"). The unadjusted lift is +0.81% relative on Successful Search Rate (95% CI +0.41% to +1.21%), but the arms already differed before launch by +0.71% on that metric. Pulse ran with CUPED off, so the lift can't be separated from that gap. The author's rough adjusted estimate is about +0.10% \u00b1 0.57%, which fits both no effect and a pass. Current state: the experiment is still marked active, well past its planned 14 days. The Pulse data is from day 14.\n\n2. **Decision:** Don't launch yet. Re-pull Pulse with CUPED on, find out why the arms differed at baseline, and apply the prereg ship, don't-ship and rerun rules to the adjusted estimate. Also decide whether the experiment should keep running, since it is past its planned end.\n\n3. **Number:** Pre-launch gap of +0.71% (relative, Successful Search Rate), set against the +0.81% observed lift and the +0.5% ship bar. The gap is what decides whether the lift is real.\n\n4. **Caveat:** The baseline imbalance is about the same size as the observed lift, so the ranker's effect can't be isolated. The adjusted figure is the author's own calculation, treating the two periods as independent, not a Pulse output.\n\n5. **Lost:** Nowhere.\n\n6. **Question:** Why did the arms differ on Successful Search Rate before launch, was it assignment or the pre-period window, and what does the CUPED-adjusted estimate show?\n"
+  }
+}

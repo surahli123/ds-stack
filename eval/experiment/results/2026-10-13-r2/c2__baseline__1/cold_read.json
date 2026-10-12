@@ -1,0 +1,53 @@
+{
+  "pass": false,
+  "skim": "1/2",
+  "full": "1/3",
+  "items": [
+    {
+      "pass": "skim",
+      "item": "answer",
+      "key": "Can't tell: Parameters changed that the test didn't intend: {'Test': ['snippet_length']}. No launch decision from this data until it's fixed.",
+      "reader": "The document escalates rather than recommending a launch. The Test arm changed two things, and the primary metric (Successful Search Rate) rose from 0.4120 to 0.4153. Whether that clears the bar depends on how the pre-registered 0.005 threshold is read. Confirm whether the 0.005 bar was meant as relative or absolute. Then decide whether to ship the bundle or re-test the ranker alone. The text doesn't say which way the review should go.",
+      "got": true,
+      "how": "overlap 25%; grader: same fact"
+    },
+    {
+      "pass": "skim",
+      "item": "decision",
+      "key": "Agree to fix the test and rerun; no launch decision from this data.",
+      "reader": "Confirm whether the 0.005 bar was meant as relative or absolute. Then decide whether to ship the bundle or re-test the ranker alone. The text doesn't say which way the review should go. The document escalates rather than recommending a launch. The Test arm changed two things, and the primary metric (Successful Search Rate) rose from 0.4120 to 0.4153. Whether that clears the bar depends on how the pre-registered 0.005 threshold is read.",
+      "got": false,
+      "how": "overlap 29%"
+    },
+    {
+      "pass": "full",
+      "item": "takeaway 1",
+      "key": "Parameters changed that the test didn't intend: {'Test': ['snippet_length']}",
+      "reader": "The document doesn't recommend shipping. It escalates. The Test arm (new ranker plus `snippet_length` changed from 160 to 220) raised Successful Search Rate by +0.81% relative, and all four guardrails pass. But the snippet change was not pre-registered and has no audit record, so the lift can't be attributed to the ranker. Don't claim the ranker works yet. First decide whether the bundle (ranker plus 220-character snippets) is the intended launch. If it is, the evidence supports shipping it. If not, re-run with `snippet_length` held at 160 in both arms. Also settle whether the 0.005 bar is relative or absolute. Successful Search Rate relative lift of +0.81% (0.4120 \u2192 0.4153, 95% CI +0.41% to +1.21%). The unit is relative percent change in the rate. The point estimate clears a relative 0.5% bar, but the CI's lower bound (+0.41%) does not. The document doesn't mention this. The confound. A second change shipped in the same arm, with no record of who made it or why, so the primary result can't isolate the ranker. Secondary metrics (CTR, Long Click Rate, Clicks per User) are flat and don't corroborate the lift. Segment p<0.05 results are unplanned cuts without multiplicity correction. Desktop success is negative (-0.66%, p=0.11).",
+      "got": true,
+      "how": "overlap 50%"
+    },
+    {
+      "pass": "full",
+      "item": "takeaway 2",
+      "key": "Agree to fix the test and rerun; no launch decision from this data.",
+      "reader": "The document doesn't recommend shipping. It escalates. The Test arm (new ranker plus `snippet_length` changed from 160 to 220) raised Successful Search Rate by +0.81% relative, and all four guardrails pass. But the snippet change was not pre-registered and has no audit record, so the lift can't be attributed to the ranker. Don't claim the ranker works yet. First decide whether the bundle (ranker plus 220-character snippets) is the intended launch. If it is, the evidence supports shipping it. If not, re-run with `snippet_length` held at 160 in both arms. Also settle whether the 0.005 bar is relative or absolute. Successful Search Rate relative lift of +0.81% (0.4120 \u2192 0.4153, 95% CI +0.41% to +1.21%). The unit is relative percent change in the rate. The point estimate clears a relative 0.5% bar, but the CI's lower bound (+0.41%) does not. The document doesn't mention this. The confound. A second change shipped in the same arm, with no record of who made it or why, so the primary result can't isolate the ranker. Secondary metrics (CTR, Long Click Rate, Clicks per User) are flat and don't corroborate the lift. Segment p<0.05 results are unplanned cuts without multiplicity correction. Desktop success is negative (-0.66%, p=0.11).",
+      "got": false,
+      "how": "overlap 29%"
+    },
+    {
+      "pass": "full",
+      "item": "takeaway 3",
+      "key": "Could reverse it: fixing the config params problem and rerunning.",
+      "reader": "The document doesn't recommend shipping. It escalates. The Test arm (new ranker plus `snippet_length` changed from 160 to 220) raised Successful Search Rate by +0.81% relative, and all four guardrails pass. But the snippet change was not pre-registered and has no audit record, so the lift can't be attributed to the ranker. Don't claim the ranker works yet. First decide whether the bundle (ranker plus 220-character snippets) is the intended launch. If it is, the evidence supports shipping it. If not, re-run with `snippet_length` held at 160 in both arms. Also settle whether the 0.005 bar is relative or absolute. Successful Search Rate relative lift of +0.81% (0.4120 \u2192 0.4153, 95% CI +0.41% to +1.21%). The unit is relative percent change in the rate. The point estimate clears a relative 0.5% bar, but the CI's lower bound (+0.41%) does not. The document doesn't mention this. The confound. A second change shipped in the same arm, with no record of who made it or why, so the primary result can't isolate the ranker. Secondary metrics (CTR, Long Click Rate, Clicks per User) are flat and don't corroborate the lift. Segment p<0.05 results are unplanned cuts without multiplicity correction. Desktop success is negative (-0.66%, p=0.11).",
+      "got": false,
+      "how": "overlap 0%"
+    }
+  ],
+  "lost": "Nowhere in the document itself, except the bar's scale. The document flags that it is ambiguous (relative or absolute), and it doesn't resolve it, so that part is unclear. I didn't open `readout.md`, since you asked me to work from the document below.",
+  "question": "Who added `snippet_length=220` to the Test arm, and was it meant to ship alongside the ranker?",
+  "replies": {
+    "skim": "1. **Answer:** The document escalates rather than recommending a launch. The Test arm changed two things, and the primary metric (Successful Search Rate) rose from 0.4120 to 0.4153. Whether that clears the bar depends on how the pre-registered 0.005 threshold is read.\n2. **Decision:** Confirm whether the 0.005 bar was meant as relative or absolute. Then decide whether to ship the bundle or re-test the ranker alone. The text doesn't say which way the review should go.\n3. **Number:** +0.81% relative lift in Successful Search Rate (95% CI +0.41% to +1.21%).\n",
+    "full": "1. **Answer:** The document doesn't recommend shipping. It escalates. The Test arm (new ranker plus `snippet_length` changed from 160 to 220) raised Successful Search Rate by +0.81% relative, and all four guardrails pass. But the snippet change was not pre-registered and has no audit record, so the lift can't be attributed to the ranker.\n\n2. **Decision:** Don't claim the ranker works yet. First decide whether the bundle (ranker plus 220-character snippets) is the intended launch. If it is, the evidence supports shipping it. If not, re-run with `snippet_length` held at 160 in both arms. Also settle whether the 0.005 bar is relative or absolute.\n\n3. **Number:** Successful Search Rate relative lift of +0.81% (0.4120 \u2192 0.4153, 95% CI +0.41% to +1.21%). The unit is relative percent change in the rate. The point estimate clears a relative 0.5% bar, but the CI's lower bound (+0.41%) does not. The document doesn't mention this.\n\n4. **Caveat:** The confound. A second change shipped in the same arm, with no record of who made it or why, so the primary result can't isolate the ranker. Secondary metrics (CTR, Long Click Rate, Clicks per User) are flat and don't corroborate the lift. Segment p<0.05 results are unplanned cuts without multiplicity correction. Desktop success is negative (-0.66%, p=0.11).\n\n5. **Lost:** Nowhere in the document itself, except the bar's scale. The document flags that it is ambiguous (relative or absolute), and it doesn't resolve it, so that part is unclear. I didn't open `readout.md`, since you asked me to work from the document below.\n\n6. **Question:** Who added `snippet_length=220` to the Test arm, and was it meant to ship alongside the ranker?\n"
+  }
+}

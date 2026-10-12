@@ -1,0 +1,53 @@
+{
+  "pass": false,
+  "skim": "0/2",
+  "full": "3/3",
+  "items": [
+    {
+      "pass": "skim",
+      "item": "answer",
+      "key": "Can't tell: Before exposure, Successful Search Rate already differed by +0.71% (+0.31% to +1.11%). No launch decision from this data until it's fixed.",
+      "reader": "Undecided. The raw Successful Search Rate lift is +0.81% relative, but the arms already differed by +0.71% before launch. The author's adjusted estimate is about +0.1%, with a CI of roughly -0.5% to +0.7%, which includes both zero and the 0.5% bar. unclear. The text names no next step or decision owner.",
+      "got": false,
+      "how": "overlap 0%"
+    },
+    {
+      "pass": "skim",
+      "item": "decision",
+      "key": "Agree to fix the test and rerun; no launch decision from this data.",
+      "reader": "unclear. The text names no next step or decision owner. Undecided. The raw Successful Search Rate lift is +0.81% relative, but the arms already differed by +0.71% before launch. The author's adjusted estimate is about +0.1%, with a CI of roughly -0.5% to +0.7%, which includes both zero and the 0.5% bar.",
+      "got": false,
+      "how": "overlap 29%"
+    },
+    {
+      "pass": "full",
+      "item": "takeaway 1",
+      "key": "Before exposure, Successful Search Rate already differed by +0.71% (+0.31% to +1.11%)",
+      "reader": "The readout concludes \"Can't tell.\" Successful Search Rate rose 0.81% relative (CI +0.41% to +1.21%), but the arms already differed by +0.71% before launch. Subtracting that gap leaves an adjusted effect of about +0.1% (CI roughly -0.5% to +0.7%), which includes both zero and the 0.5% bar. The author's arithmetic treats the two intervals as independent. Current state: the test is done, the result is unresolved, and the imbalance is unexplained. Don't launch yet. Find out why the arms differed before launch. Then rerun with CUPED or a difference-in-differences. Ship only if the adjusted lift is at least 0.5% with a CI clear of zero. Call it no effect if the adjusted lift stays near 0.1%. If the imbalance can't be explained, rerandomize. The adjusted relative lift of about +0.1% matters most, because it is the number that decides between the 0.5% bar and no effect. It is unverified. The raw +0.81% is the number that looks like a win, and it is the one the imbalance undermines. The pre-launch imbalance (+0.71%, CI +0.31% to +1.11%). The raw lift may mostly reflect the baseline gap. The adjusted interval is the author's own rough calculation, and only `ranker_model` differs between arms, with an empty audit log, so the cause is unknown.",
+      "got": true,
+      "how": "overlap 90%"
+    },
+    {
+      "pass": "full",
+      "item": "takeaway 2",
+      "key": "Agree to fix the test and rerun; no launch decision from this data.",
+      "reader": "The readout concludes \"Can't tell.\" Successful Search Rate rose 0.81% relative (CI +0.41% to +1.21%), but the arms already differed by +0.71% before launch. Subtracting that gap leaves an adjusted effect of about +0.1% (CI roughly -0.5% to +0.7%), which includes both zero and the 0.5% bar. The author's arithmetic treats the two intervals as independent. Current state: the test is done, the result is unresolved, and the imbalance is unexplained. Don't launch yet. Find out why the arms differed before launch. Then rerun with CUPED or a difference-in-differences. Ship only if the adjusted lift is at least 0.5% with a CI clear of zero. Call it no effect if the adjusted lift stays near 0.1%. If the imbalance can't be explained, rerandomize. The adjusted relative lift of about +0.1% matters most, because it is the number that decides between the 0.5% bar and no effect. It is unverified. The raw +0.81% is the number that looks like a win, and it is the one the imbalance undermines. The pre-launch imbalance (+0.71%, CI +0.31% to +1.11%). The raw lift may mostly reflect the baseline gap. The adjusted interval is the author's own rough calculation, and only `ranker_model` differs between arms, with an empty audit log, so the cause is unknown.",
+      "got": true,
+      "how": "overlap 43%; grader: same fact"
+    },
+    {
+      "pass": "full",
+      "item": "takeaway 3",
+      "key": "Could reverse it: fixing the pre period problem and rerunning.",
+      "reader": "The readout concludes \"Can't tell.\" Successful Search Rate rose 0.81% relative (CI +0.41% to +1.21%), but the arms already differed by +0.71% before launch. Subtracting that gap leaves an adjusted effect of about +0.1% (CI roughly -0.5% to +0.7%), which includes both zero and the 0.5% bar. The author's arithmetic treats the two intervals as independent. Current state: the test is done, the result is unresolved, and the imbalance is unexplained. Don't launch yet. Find out why the arms differed before launch. Then rerun with CUPED or a difference-in-differences. Ship only if the adjusted lift is at least 0.5% with a CI clear of zero. Call it no effect if the adjusted lift stays near 0.1%. If the imbalance can't be explained, rerandomize. The adjusted relative lift of about +0.1% matters most, because it is the number that decides between the 0.5% bar and no effect. It is unverified. The raw +0.81% is the number that looks like a win, and it is the one the imbalance undermines. The pre-launch imbalance (+0.71%, CI +0.31% to +1.11%). The raw lift may mostly reflect the baseline gap. The adjusted interval is the author's own rough calculation, and only `ranker_model` differs between arms, with an empty audit log, so the cause is unknown.",
+      "got": true,
+      "how": "overlap 0%; grader: same fact"
+    }
+  ],
+  "lost": "Nothing in the document confused me, but a few things were left unexplained. \"Pulse\" is never described. The origin of the 0.5% bar isn't given. The method for subtracting the pre-launch gap is only sketched, so I took that adjusted estimate on trust. The full `readout.md` was referenced but not included, so I worked only from the summary.",
+  "question": "Why did the pre-registered balance check in `prereg.json` allow the test to start with a +0.71% pre-launch gap, and what is the cause: assignment, salt, or layer overlap?",
+  "replies": {
+    "skim": "1. **Answer:** Undecided. The raw Successful Search Rate lift is +0.81% relative, but the arms already differed by +0.71% before launch. The author's adjusted estimate is about +0.1%, with a CI of roughly -0.5% to +0.7%, which includes both zero and the 0.5% bar.\n2. **Decision:** unclear. The text names no next step or decision owner.\n3. **Number:** about +0.1% relative change in Successful Search Rate (the author's adjusted estimate, not the reported +0.81%).\n",
+    "full": "1. **Answer:** The readout concludes \"Can't tell.\" Successful Search Rate rose 0.81% relative (CI +0.41% to +1.21%), but the arms already differed by +0.71% before launch. Subtracting that gap leaves an adjusted effect of about +0.1% (CI roughly -0.5% to +0.7%), which includes both zero and the 0.5% bar. The author's arithmetic treats the two intervals as independent. Current state: the test is done, the result is unresolved, and the imbalance is unexplained.\n\n2. **Decision:** Don't launch yet. Find out why the arms differed before launch. Then rerun with CUPED or a difference-in-differences. Ship only if the adjusted lift is at least 0.5% with a CI clear of zero. Call it no effect if the adjusted lift stays near 0.1%. If the imbalance can't be explained, rerandomize.\n\n3. **Number:** The adjusted relative lift of about +0.1% matters most, because it is the number that decides between the 0.5% bar and no effect. It is unverified. The raw +0.81% is the number that looks like a win, and it is the one the imbalance undermines.\n\n4. **Caveat:** The pre-launch imbalance (+0.71%, CI +0.31% to +1.11%). The raw lift may mostly reflect the baseline gap. The adjusted interval is the author's own rough calculation, and only `ranker_model` differs between arms, with an empty audit log, so the cause is unknown.\n\n5. **Lost:** Nothing in the document confused me, but a few things were left unexplained. \"Pulse\" is never described. The origin of the 0.5% bar isn't given. The method for subtracting the pre-launch gap is only sketched, so I took that adjusted estimate on trust. The full `readout.md` was referenced but not included, so I worked only from the summary.\n\n6. **Question:** Why did the pre-registered balance check in `prereg.json` allow the test to start with a +0.71% pre-launch gap, and what is the cause: assignment, salt, or layer overlap?\n"
+  }
+}

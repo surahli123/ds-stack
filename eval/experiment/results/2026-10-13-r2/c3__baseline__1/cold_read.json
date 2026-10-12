@@ -1,0 +1,53 @@
+{
+  "pass": false,
+  "skim": "0/2",
+  "full": "0/3",
+  "items": [
+    {
+      "pass": "skim",
+      "item": "answer",
+      "key": "Can't tell: Before exposure, Successful Search Rate already differed by +0.71% (+0.31% to +1.11%). No launch decision from this data until it's fixed.",
+      "reader": "The document recommends shipping. Successful Search Rate rose from 41.20% to 41.53%, a +0.81% relative lift that clears the +0.5% bar. All four guardrails sit inside their margins at the worst end of the CI. The exposure-balance check result is cut off, so it's unclear whether it passed. Ship, once the exposure-balance check is confirmed clean, and watch Revenue per User after launch (-0.8% against a -1% margin).",
+      "got": false,
+      "how": "overlap 0%"
+    },
+    {
+      "pass": "skim",
+      "item": "decision",
+      "key": "Agree to fix the test and rerun; no launch decision from this data.",
+      "reader": "Ship, once the exposure-balance check is confirmed clean, and watch Revenue per User after launch (-0.8% against a -1% margin). The document recommends shipping. Successful Search Rate rose from 41.20% to 41.53%, a +0.81% relative lift that clears the +0.5% bar. All four guardrails sit inside their margins at the worst end of the CI. The exposure-balance check result is cut off, so it's unclear whether it passed.",
+      "got": false,
+      "how": "overlap 14%"
+    },
+    {
+      "pass": "full",
+      "item": "takeaway 1",
+      "key": "Before exposure, Successful Search Rate already differed by +0.71% (+0.31% to +1.11%)",
+      "reader": "The document recommends **Ship**. The primary metric beat its bar, all guardrails stayed within margin at the worst end of their CIs, and the experiment passed its health checks. Open items: the experiment still shows \"active\" in Statsig, and mobile Successful Search Rate points negative (not significant). Ship, after confirming one thing: that the prereg bar of 0.005 is relative (+0.5% of 41.20%), not 0.5 pp absolute. If it is absolute, the +0.33 pp lift fails. After launch, close the experiment in Statsig and watch Revenue per User (-0.8% against a -1% margin) and mobile Successful Search Rate once ramped. Successful Search Rate relative lift, **+0.81%** (41.20% \u2192 41.53%), against a bar of +0.5% relative. The 95% CI is +0.41% to +1.21%. The document's main caveat is the bar's unit. If it was meant as absolute, the result fails. The next risk is that the lower CI bound (+0.41%) sits just under the bar. Revenue per User has a thin margin, and the mobile cut is unplanned and negative.",
+      "got": false,
+      "how": "overlap 0%"
+    },
+    {
+      "pass": "full",
+      "item": "takeaway 2",
+      "key": "Agree to fix the test and rerun; no launch decision from this data.",
+      "reader": "The document recommends **Ship**. The primary metric beat its bar, all guardrails stayed within margin at the worst end of their CIs, and the experiment passed its health checks. Open items: the experiment still shows \"active\" in Statsig, and mobile Successful Search Rate points negative (not significant). Ship, after confirming one thing: that the prereg bar of 0.005 is relative (+0.5% of 41.20%), not 0.5 pp absolute. If it is absolute, the +0.33 pp lift fails. After launch, close the experiment in Statsig and watch Revenue per User (-0.8% against a -1% margin) and mobile Successful Search Rate once ramped. Successful Search Rate relative lift, **+0.81%** (41.20% \u2192 41.53%), against a bar of +0.5% relative. The 95% CI is +0.41% to +1.21%. The document's main caveat is the bar's unit. If it was meant as absolute, the result fails. The next risk is that the lower CI bound (+0.41%) sits just under the bar. Revenue per User has a thin margin, and the mobile cut is unplanned and negative.",
+      "got": false,
+      "how": "overlap 14%"
+    },
+    {
+      "pass": "full",
+      "item": "takeaway 3",
+      "key": "Could reverse it: fixing the pre period problem and rerunning.",
+      "reader": "The document recommends **Ship**. The primary metric beat its bar, all guardrails stayed within margin at the worst end of their CIs, and the experiment passed its health checks. Open items: the experiment still shows \"active\" in Statsig, and mobile Successful Search Rate points negative (not significant). Ship, after confirming one thing: that the prereg bar of 0.005 is relative (+0.5% of 41.20%), not 0.5 pp absolute. If it is absolute, the +0.33 pp lift fails. After launch, close the experiment in Statsig and watch Revenue per User (-0.8% against a -1% margin) and mobile Successful Search Rate once ramped. Successful Search Rate relative lift, **+0.81%** (41.20% \u2192 41.53%), against a bar of +0.5% relative. The 95% CI is +0.41% to +1.21%. The document's main caveat is the bar's unit. If it was meant as absolute, the result fails. The next risk is that the lower CI bound (+0.41%) sits just under the bar. Revenue per User has a thin margin, and the mobile cut is unplanned and negative.",
+      "got": false,
+      "how": "overlap 0%"
+    }
+  ],
+  "lost": "The bar's unit. The summary says \"+0.5% relative\" in the primary metric, but the bar is written as 0.005, and the assumption section says that reading is unconfirmed. The line \"audit log is empty\" is also unexplained. Nothing else needed a reread.",
+  "question": "Was the prereg bar written as a relative lift (+0.5% of baseline) rather than 0.5 pp absolute?",
+  "replies": {
+    "skim": "1. **Answer:** The document recommends shipping. Successful Search Rate rose from 41.20% to 41.53%, a +0.81% relative lift that clears the +0.5% bar. All four guardrails sit inside their margins at the worst end of the CI. The exposure-balance check result is cut off, so it's unclear whether it passed.\n2. **Decision:** Ship, once the exposure-balance check is confirmed clean, and watch Revenue per User after launch (-0.8% against a -1% margin).\n3. **Number:** +0.81% relative lift in Successful Search Rate (41.20% \u2192 41.53%).\n",
+    "full": "1. **Answer:** The document recommends **Ship**. The primary metric beat its bar, all guardrails stayed within margin at the worst end of their CIs, and the experiment passed its health checks. Open items: the experiment still shows \"active\" in Statsig, and mobile Successful Search Rate points negative (not significant).\n\n2. **Decision:** Ship, after confirming one thing: that the prereg bar of 0.005 is relative (+0.5% of 41.20%), not 0.5 pp absolute. If it is absolute, the +0.33 pp lift fails. After launch, close the experiment in Statsig and watch Revenue per User (-0.8% against a -1% margin) and mobile Successful Search Rate once ramped.\n\n3. **Number:** Successful Search Rate relative lift, **+0.81%** (41.20% \u2192 41.53%), against a bar of +0.5% relative. The 95% CI is +0.41% to +1.21%.\n\n4. **Caveat:** The document's main caveat is the bar's unit. If it was meant as absolute, the result fails. The next risk is that the lower CI bound (+0.41%) sits just under the bar. Revenue per User has a thin margin, and the mobile cut is unplanned and negative.\n\n5. **Lost:** The bar's unit. The summary says \"+0.5% relative\" in the primary metric, but the bar is written as 0.005, and the assumption section says that reading is unconfirmed. The line \"audit log is empty\" is also unexplained. Nothing else needed a reread.\n\n6. **Question:** Was the prereg bar written as a relative lift (+0.5% of baseline) rather than 0.5 pp absolute?\n\nI answered from the summary you pasted and did not open `readout.md`. It may answer the bar-unit and audit-log questions.\n"
+  }
+}
