@@ -39,6 +39,11 @@ ASK = {"ship": "Approve the launch to all traffic.",
        "no_effect": "Agree to stop the test without launching.",
        "cant_tell": "Agree to fix the test and rerun; no launch decision from this data.",
        "not_ab": "Use the readout for this test design instead."}
+UNRUN = {"pre_period": "no pre-period comparison, so a difference between the arms before the test isn't ruled out",
+         "novelty": "no daily series by exposure day, so a fading effect isn't ruled out",
+         "sample_split": "no exposure counts, so the split between the arms isn't checked",
+         "config_params": "the pre-registration doesn't list the intended parameters, so other changes between the arms aren't ruled out",
+         "config": "no experiment config, so parameters, unit and mid-flight edits aren't checked"}
 DEFAULT_STANDARDS = {"srm_alpha": 0.001, "min_days": 7, "harm_within_margin": "escalate", "below_bar": "escalate",
                      "secondary_harm": "note", "secondary_q": 0.1, "max_extension_factor": 2.0,
                      "guardrails": [], "directions": {}}
@@ -529,7 +534,7 @@ def collect_open_items(verdicts, checks, fallbacks, status, harmful, call):
         if c["status"] == chk.FLAG:
             risks.append(c["summary"])
         elif c["status"] == chk.COULD_NOT_RUN:
-            unrun.append(f"{c['check'].replace('_', ' ')} could not be checked: {c['summary']}")
+            unrun.append(UNRUN.get(c["check"], f"{c['check'].replace('_', ' ')} could not be checked: {c['summary']}"))
     notes.extend(fallbacks)
     if status.get("whole_weeks") is False:
         notes.append(f"{status['days_run']} days is not whole weeks, so day-of-week mix differs from a full week")

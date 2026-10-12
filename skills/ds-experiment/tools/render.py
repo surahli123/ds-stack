@@ -210,13 +210,18 @@ def check_notes(notes, decision, scorecard):
     return problems
 
 
-def bar_text(v):
+def bar_text(v, ship_requires="point_at_bar"):
     if v.get("threshold") is None:
         return "no worse than zero" if v["role"] == "guardrail" else "none registered"
     shown = threshold_text(v["threshold"], v.get("unit", "relative"), v.get("display_unit", ""))
     down_is_good = v.get("direction") in ("decrease", "lower", "down", "lower_is_better")
     if v["role"] == "primary":
-        return f"at least {shown} lower" if down_is_good else f"at least {shown} higher"
+        way = "lower" if down_is_good else "higher"
+        if ship_requires == "ci_at_bar":
+            return f"whole interval at least {shown} {way}"
+        if ship_requires == "ci_excludes_zero":
+            return f"interval clear of zero; {shown} {way} to rule out"
+        return f"estimate at least {shown} {way}"
     if v["role"] == "guardrail":
         return f"at most {shown} higher" if down_is_good else f"at most {shown} lower"
     return "no change"
@@ -228,11 +233,11 @@ VERDICT_TEXT = {"better": "better", "below_bar": "better, below the bar", "worse
                 "no_direction": "no direction registered", "moved": "moved", "held": "held"}
 
 
-def row(v):
+def row(v, ship_requires="point_at_bar"):
     change = describe(v) if v.get("point") is not None else ""
     if v.get("scaled_from_triggered"):
         change += " overall"
-    return f"| {v['metric']} | {v['role']} | {change} | {bar_text(v)} | {VERDICT_TEXT.get(v['verdict'], v['verdict'])} |"
+    return f"| {v['metric']} | {v['role']} | {change} | {bar_text(v, ship_requires)} | {VERDICT_TEXT.get(v['verdict'], v['verdict'])} |"
 
 
 def metric_rows(decision):
@@ -244,14 +249,15 @@ def metric_rows(decision):
     alarms = [v for v in verdicts if v not in first and v["verdict"] in flagged]
     primaries = [v for v in verdicts if v not in first and v not in alarms and v["role"] == "primary"]
     quiet = [v for v in verdicts if v not in first and v not in alarms and v not in primaries]
-    lines = [row(v) for v in first + alarms + primaries]
+    ship_requires = decision["settings"].get("ship_requires", "point_at_bar")
+    lines = [row(v, ship_requires) for v in first + alarms + primaries]
     quiet_guards = [v["metric"] for v in quiet if v["role"] == "guardrail"]
     if quiet_guards:
         lines.append(f"| {len(quiet_guards)} other guardrail{'s' if len(quiet_guards) > 1 else ''} | guardrail | | | "
                      f"{'all ' if len(quiet_guards) > 1 else ''}within margin |")
     for v in quiet:
         if v["role"] == "invariant":
-            lines.append(row(v))
+            lines.append(row(v, ship_requires))
     return lines
 
 
