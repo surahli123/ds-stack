@@ -1,0 +1,53 @@
+{
+  "pass": true,
+  "skim": "2/2",
+  "full": "3/3",
+  "items": [
+    {
+      "pass": "skim",
+      "item": "answer",
+      "key": "Can't tell, decided by sample split.",
+      "reader": "The document concludes \"Can't tell.\" Day 14 of 14 is complete with 1,000,000 users per arm, but the arms received 50.5% / 49.5% of exposures instead of the planned 50.0% / 50.0%, so the primary metric (+0.81% Successful Search Rate) can't be trusted. Agree to find and fix the uneven split (assignment bug, bot filtering, or logging loss in one arm), rerun the test, and re-export the scorecard. Make no launch decision from this data.",
+      "got": true,
+      "how": "overlap 50%"
+    },
+    {
+      "pass": "skim",
+      "item": "decision",
+      "key": "Agree to fix the test and rerun; no launch decision from this data.",
+      "reader": "Agree to find and fix the uneven split (assignment bug, bot filtering, or logging loss in one arm), rerun the test, and re-export the scorecard. Make no launch decision from this data. The document concludes \"Can't tell.\" Day 14 of 14 is complete with 1,000,000 users per arm, but the arms received 50.5% / 49.5% of exposures instead of the planned 50.0% / 50.0%, so the primary metric (+0.81% Successful Search Rate) can't be trusted.",
+      "got": true,
+      "how": "overlap 100%"
+    },
+    {
+      "pass": "full",
+      "item": "takeaway 1",
+      "key": "The arms got 50.5% / 49.5% of exposures against a planned 50.0% / 50.0%, a gap chance almost never produces at this size",
+      "reader": "The document concludes \"Can't tell.\" The test is broken, so no launch decision should be made from it. The sample split was 50.5% / 49.5% against a planned 50% / 50%, which fails the sample-ratio check. The test ran its full 14 days with 1,000,000 users per arm. Its primary metric shows a result that looks like a pass, but it can't be trusted until the split is fixed. Agree to fix the test and rerun it. Find the cause of the uneven exposure split (assignment bug, bot filtering, or logging loss in one arm), re-export the scorecard, and add the pre-exposure comparison and daily series by days since first exposure. Make no launch call until then. The 50.5% / 49.5% exposure split, against a planned 50% / 50%. The gap is about 0.5 percentage points, which the document says chance almost never produces at this size, and it is the reason the result can't be used. The primary metric's +0.81% change in Successful Search Rate (95% interval +0.41% to +1.21%, bar at least +0.50%) is the number that would matter once the split is fixed. The document doesn't state whether the +0.81% is relative or absolute. The uneven split means the two arms may not be comparable, so the +0.81% primary result may be invalid. The mechanism behind the lift is unknown, since no segment cuts were read, and the pre-period and novelty checks were not run.",
+      "got": true,
+      "how": "overlap 0%; grader: same fact"
+    },
+    {
+      "pass": "full",
+      "item": "takeaway 2",
+      "key": "Agree to fix the test and rerun; no launch decision from this data.",
+      "reader": "The document concludes \"Can't tell.\" The test is broken, so no launch decision should be made from it. The sample split was 50.5% / 49.5% against a planned 50% / 50%, which fails the sample-ratio check. The test ran its full 14 days with 1,000,000 users per arm. Its primary metric shows a result that looks like a pass, but it can't be trusted until the split is fixed. Agree to fix the test and rerun it. Find the cause of the uneven exposure split (assignment bug, bot filtering, or logging loss in one arm), re-export the scorecard, and add the pre-exposure comparison and daily series by days since first exposure. Make no launch call until then. The 50.5% / 49.5% exposure split, against a planned 50% / 50%. The gap is about 0.5 percentage points, which the document says chance almost never produces at this size, and it is the reason the result can't be used. The primary metric's +0.81% change in Successful Search Rate (95% interval +0.41% to +1.21%, bar at least +0.50%) is the number that would matter once the split is fixed. The document doesn't state whether the +0.81% is relative or absolute. The uneven split means the two arms may not be comparable, so the +0.81% primary result may be invalid. The mechanism behind the lift is unknown, since no segment cuts were read, and the pre-period and novelty checks were not run.",
+      "got": true,
+      "how": "overlap 86%"
+    },
+    {
+      "pass": "full",
+      "item": "takeaway 3",
+      "key": "Could reverse it: fixing the sample split problem and rerunning.",
+      "reader": "The document concludes \"Can't tell.\" The test is broken, so no launch decision should be made from it. The sample split was 50.5% / 49.5% against a planned 50% / 50%, which fails the sample-ratio check. The test ran its full 14 days with 1,000,000 users per arm. Its primary metric shows a result that looks like a pass, but it can't be trusted until the split is fixed. Agree to fix the test and rerun it. Find the cause of the uneven exposure split (assignment bug, bot filtering, or logging loss in one arm), re-export the scorecard, and add the pre-exposure comparison and daily series by days since first exposure. Make no launch call until then. The 50.5% / 49.5% exposure split, against a planned 50% / 50%. The gap is about 0.5 percentage points, which the document says chance almost never produces at this size, and it is the reason the result can't be used. The primary metric's +0.81% change in Successful Search Rate (95% interval +0.41% to +1.21%, bar at least +0.50%) is the number that would matter once the split is fixed. The document doesn't state whether the +0.81% is relative or absolute. The uneven split means the two arms may not be comparable, so the +0.81% primary result may be invalid. The mechanism behind the lift is unknown, since no segment cuts were read, and the pre-period and novelty checks were not run.",
+      "got": true,
+      "how": "overlap 33%; grader: same fact"
+    }
+  ],
+  "lost": "Two spots. The table marks the primary metric \"better,\" which conflicts with the headline \"Can't tell.\" The unit and type of the +0.81% change (relative or absolute) are not stated.",
+  "question": "Which arm was affected, and was the cause an assignment bug, bot filtering, or logging loss?",
+  "replies": {
+    "skim": "1. **Answer:** The document concludes \"Can't tell.\" Day 14 of 14 is complete with 1,000,000 users per arm, but the arms received 50.5% / 49.5% of exposures instead of the planned 50.0% / 50.0%, so the primary metric (+0.81% Successful Search Rate) can't be trusted.\n2. **Decision:** Agree to find and fix the uneven split (assignment bug, bot filtering, or logging loss in one arm), rerun the test, and re-export the scorecard. Make no launch decision from this data.\n3. **Number:** 50.5% (exposure share in the treatment arm, against a planned 50.0%).\n",
+    "full": "1. **Answer:** The document concludes \"Can't tell.\" The test is broken, so no launch decision should be made from it. The sample split was 50.5% / 49.5% against a planned 50% / 50%, which fails the sample-ratio check. The test ran its full 14 days with 1,000,000 users per arm. Its primary metric shows a result that looks like a pass, but it can't be trusted until the split is fixed.\n\n2. **Decision:** Agree to fix the test and rerun it. Find the cause of the uneven exposure split (assignment bug, bot filtering, or logging loss in one arm), re-export the scorecard, and add the pre-exposure comparison and daily series by days since first exposure. Make no launch call until then.\n\n3. **Number:** The 50.5% / 49.5% exposure split, against a planned 50% / 50%. The gap is about 0.5 percentage points, which the document says chance almost never produces at this size, and it is the reason the result can't be used. The primary metric's +0.81% change in Successful Search Rate (95% interval +0.41% to +1.21%, bar at least +0.50%) is the number that would matter once the split is fixed. The document doesn't state whether the +0.81% is relative or absolute.\n\n4. **Caveat:** The uneven split means the two arms may not be comparable, so the +0.81% primary result may be invalid. The mechanism behind the lift is unknown, since no segment cuts were read, and the pre-period and novelty checks were not run.\n\n5. **Lost:** Two spots. The table marks the primary metric \"better,\" which conflicts with the headline \"Can't tell.\" The unit and type of the +0.81% change (relative or absolute) are not stated.\n\n6. **Question:** Which arm was affected, and was the cause an assignment bug, bot filtering, or logging loss?\n"
+  }
+}
