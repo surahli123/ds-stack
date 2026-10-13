@@ -35,7 +35,7 @@ def config_check(cfg, contract, arms, control, test, command):
     groups.update({g.get("id"): g for g in cfg.get("groups", [])})
     missing = [a for a in (control, test) if a not in groups]
     if missing:
-        return result("M0-1", "BLOCK", f"T1 arm {', '.join(missing)} isn't in the config's groups", "config and T1")
+        return result("M0-1", "BLOCK", f"the scorecard's arm {', '.join(missing)} isn't in the config's groups", "config and T1")
     a, b = groups[control].get("parameters") or {}, groups[test].get("parameters") or {}
     diffs = sorted(k for k in set(a) | set(b) if a.get(k) != b.get(k))
     intended = set(contract.get("intended_params") or [])
@@ -65,29 +65,34 @@ def split_check(comparison, cfg, contract, control, test, std, split_metric):
         share = f"{100 * counts[1] / sum(counts):.1f}% of exposed units in {test} against a planned {100 * sizes[1] / sum(sizes):.1f}%"
         status = "BLOCK" if p < std.get("srm_alpha", 0.001) else "WARN" if p < std.get("srm_warn_alpha", 0.01) else "PASS"
         return result("M0-2", status, share + (f" (p = {p:.2g})" if status != "PASS" else ""), f"T1 '{m['metric']}' units",
-                      p=p, counts=counts)
+                      p=p, counts=counts, planned_test_share=sizes[1] / sum(sizes))
     vendor = next((h for h in (cfg or {}).get("health_checks", []) if "balanced" in str(h.get("name", "")).lower()), None)
     if vendor:
         status = {"PASSED": "PASS", "WARNING": "WARN", "FAILED": "BLOCK"}.get(str(vendor.get("status")).upper(), "UNKNOWN")
         return result("M0-2", status, f"the vendor's balance check says {vendor.get('status')}", "vendor health check")
     why = ("the overlay names no count of all exposed units" if not split_metric else
-           f"'{split_metric}' isn't in T1" if not m else "the planned split is unknown (no config)")
+           f"'{split_metric}' isn't in the scorecard" if not m else "the planned split is unknown (no config)")
     return result("M0-2", "UNKNOWN", f"the sample split wasn't tested: {why}", None)
 
 
 def coverage_check(comparison, contract):
     specs = ((contract.get("primaries") or {}).get("metrics") or []) + (contract.get("guardrails") or [])
-    missing, empty = [], []
+    missing, empty, unfilled = [], [], []
     for s in specs:
         m = find(comparison["metrics"], s["metric"])
         if not m:
             missing.append(s["metric"])
-        elif not m.get("control_units") or not m.get("test_units"):
+        elif m.get("control_units") is None or m.get("test_units") is None:
+            unfilled.append(s["metric"])  # the scorecard doesn't fill units for it: unknown, not zero
+        elif not m["control_units"] or not m["test_units"]:
             empty.append(s["metric"])
     if empty:
         return result("M0-3", "BLOCK", f"{', '.join(empty)} has zero units in an arm", "T1", empty=empty, missing=missing)
+    if unfilled and not missing:
+        return result("M0-3", "UNKNOWN", f"the scorecard leaves the unit counts empty for {', '.join(unfilled)}, so coverage "
+                      "can't be checked", None, missing=[], unfilled=unfilled)
     if missing:
-        return result("M0-3", "UNKNOWN", f"{', '.join(missing)} {'are' if len(missing) > 1 else 'is'} missing from T1 "
+        return result("M0-3", "UNKNOWN", f"{', '.join(missing)} {'are' if len(missing) > 1 else 'is'} missing from the scorecard "
                       "(check the metric pipeline jobs)", None, missing=missing)
     return result("M0-3", "PASS", f"all {len(specs)} contract metrics are in T1 with units in both arms", "T1")
 
@@ -96,12 +101,14 @@ def consistency_check(comparison, contract, analysis):
     specs = ((contract.get("primaries") or {}).get("metrics") or []) + (contract.get("guardrails") or [])
     registered = [m for m in (find(comparison["metrics"], s["metric"]) for s in specs) if m]
     names = [m["metric"].lower() for m in comparison["metrics"]]
-    dupes = sorted({n for n in names if names.count(n) > 1})
+    dupes = sorted({n for n in names if names.count(n) > 1} | set(comparison.get("duplicates") or []))
     core = chk.scorecard_invariants(registered, analysis)
     status = FROM_CORE[core["status"]]
     reason = core["summary"]
     if dupes and status == "PASS":
-        status, reason = "WARN", f"{reason}; {len(dupes)} metric names appear twice in the snapshot: {', '.join(dupes[:3])}"
+        status, reason = "WARN", (f"{len(dupes)} metric name{'s appear' if len(dupes) > 1 else ' appears'} twice in the snapshot "
+                                  f"({', '.join(dupes[:3])}); the run kept the row with a p-value, so check which one the "
+                                  f"scorecard shows")
     return result("M0-4", status, reason, "T1 snapshot" if status != "UNKNOWN" else None, dupes=dupes)
 
 
@@ -124,13 +131,16 @@ def power_check(comparison, contract, level=0.95):
 
 
 def quality_check(series, test, split_metric):
-    rows = [r for r in series or [] if r["test_group"] == test and (not split_metric or r["metric"] == split_metric)]
+    """Units by day for one metric: the exposed-unit count if named, else one primary (mixing
+    metrics would compare one metric's units with another's)."""
+    rows = [r for r in series or [] if r["test_group"] == test and split_metric
+            and str(r["metric"]).lower() == split_metric.lower()]
     if len(rows) < 3:
         return result("M0-6", "UNKNOWN", "data quality wasn't checked: fewer than 3 daily snapshots", None)
     rows.sort(key=lambda r: str(r["snapshot"]))
     problems = []
     for arm in ("control_units", "test_units"):
-        values = [r[arm] or 0 for r in rows]
+        values = [r[arm] for r in rows if r[arm] is not None]
         steps = [b - a for a, b in zip(values, values[1:])]
         if any(s < 0 for s in steps):
             problems.append(f"{arm.split('_')[0]} units fall between snapshots")
@@ -167,6 +177,7 @@ def run_m0(scorecard, series, cfg, contract, std, overlay_cfg, command):
     out, mid = {}, {}
     control = scorecard["control_group"]
     split_metric = overlay_cfg.get("split_count_metric")
+    lead = next((m["metric"] for m in (contract.get("primaries") or {}).get("metrics") or []), None)
     for comparison in scorecard["comparisons"]:
         test = comparison["test_group"]
         checks = [config_check(cfg, contract, None, control, test, command),
@@ -174,7 +185,7 @@ def run_m0(scorecard, series, cfg, contract, std, overlay_cfg, command):
                   coverage_check(comparison, contract),
                   consistency_check(comparison, contract, scorecard["analysis"]),
                   power_check(comparison, contract),
-                  quality_check(series, test, split_metric)]
+                  quality_check(series, test, split_metric or lead)]
         dur, is_mid = duration_check(cfg, contract, scorecard["analysis"]["as_of"])
         checks += [dur, stratification_check(contract)]
         out[test], mid[test] = checks, is_mid

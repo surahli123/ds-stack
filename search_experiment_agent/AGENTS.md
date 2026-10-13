@@ -1,4 +1,4 @@
-# Search experiment agent: instructions for the coding agent
+# Kangaroo: instructions for the coding agent
 
 ## Intent
 
@@ -8,16 +8,20 @@ Give triage a readout it can act on for one search experiment.
 
 An M0 check that can't run lowers the grade. It never stops M1.
 
+## Two jobs
+
+- **Someone asks about an experiment in this chat.** Follow `skills/kangaroo/SKILL.md`: call the kangaroo tools, or `python3 bin/kangaroo <command>` in a shell, and reply with the "In one minute" text as written.
+- **Someone asks you to change the agent.** Read `.agents/skills/search_m0_readiness` or `search_m1` first, change the code, and run `python3 -m unittest discover -s tests` before you finish.
+
 ## Run
 
 ```
-cd search_experiment_agent
-python3 -m search_agent.run --experiment <name | config id | console URL> \
-    --overlay <overlay> --warehouse <warehouse> --configs <configs> \
-    --knowledge <overlay> --cards <overlay>/cards --out runs/<name>
+python3 -m search_agent analyze --scorecard <file> [--contract <file>] [--config <file>]
+python3 -m search_agent analyze --experiment <name | config id | console URL> --warehouse sqlite:<path> --configs <dir>
+python3 -m search_agent demo --out <dir>
 ```
 
-The run writes `readout.md`, `triage_prep_<arm>.md`, `trace.json`, `review.json`, `card_draft.json` and `case/` into the out folder. Reply with `readout.md` as written, plus the one-line counts the command prints.
+A run writes `readout.md`, `readout.html`, `triage_prep_<arm>.md`, `trace.json`, `review.json`, `card_draft.json` and `case/` into `runs/<experiment>-<time>/` of the workspace (`KANGAROO_HOME`, default `~/.kangaroo`).
 
 ## Boundaries
 
@@ -25,19 +29,19 @@ The run writes `readout.md`, `triage_prep_<arm>.md`, `trace.json`, `review.json`
 2. Numbers. Every number comes from the tools. Never compute or restate one in your own words.
 3. The warehouse. Use only the allow-listed read tool. Never call a dashboard or write tool.
 4. What leaves this machine. Rows never enter a trace or a reply: only statement IDs, row counts and aggregates. Traces, lessons and cases stay here.
-5. Knowledge. Lessons change it only after an evaluation passes and a person approves. Never edit the knowledge files directly.
+5. Knowledge. Lessons change it only after an evaluation passes and a person approves by name. Never edit the knowledge files directly.
 6. M0. No lesson changes a check, the grade, or the cut runner; those go through engineering review.
+7. Confirmation. A cause is confirmed only when its cut and its control cut agree. Never relax that to make a readout look stronger.
 
 ## Map
 
-- `search_agent/`: the run.
+- `search_agent/`: the run (`run.py`), `api.py`, `mcp_server.py`, `hosts.py`, `demo.py`.
   - `sources/`: warehouse, T1, config, resolver.
   - `m0/`: checks and the grade.
   - `m1/`: method, cuts, the pattern library, the cut templates.
-  - `render/`: the readout.
-  - `trace.py`
+  - `render/`: the readout, the one-minute brief, HTML.
 - `learning/`: cards, lessons, evaluation, approval, the knowledge version, and the `loop` command.
 - `docs/specs/stage-contract.md`: the only rule between M0 and M1.
-- `.agents/skills/`: `search_m0_readiness` and `search_m1`.
+- `skills/kangaroo/`: the conversation skill. `.agents/skills/`: `search_m0_readiness` and `search_m1`.
 - `synth/`: the synthetic warehouse, for tests and evaluation at home.
 - `tests/`: unittest. Run them with `python3 -m unittest discover -s tests`.

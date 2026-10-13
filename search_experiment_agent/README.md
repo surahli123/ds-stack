@@ -1,65 +1,74 @@
-# Search experiment agent
+# Kangaroo
 
-An agent that turns one search A/B experiment into a readout the triage meeting can act on.
+Kangaroo is a search experiment agent. Give it one A/B experiment's scorecard and it tells the owner three things in plain words: whether the experiment can go to triage, why its metrics moved, and what to check before the meeting.
 
-Input: a name, a config ID or a console URL.
+- **M0** checks the setup and the data, and grades each arm. A check that can't run lowers the grade; it never stops the analysis.
+- **M1** explains the movements. It runs the deep-dive cuts it can script against the query-level table and counts a cause as confirmed only when the data separates it from its look-alikes.
+- **Learning loop.** Each run leaves a trace. A person's verdicts become typed lessons. A lesson changes the agent only after a paired evaluation on held-out past runs passes and a person approves it by name. Reports cite what confirmed, similar past experiments taught.
 
-What it does:
-1. Checks the setup and the data (M0).
-2. Explains why each metric moved (M1), running the deep-dive cuts it can script against the query-level table.
-3. Says whether the flight is ready for triage.
-4. Cites what confirmed, similar past experiments taught.
+Everything here runs at home on a synthetic warehouse shaped like the work one, with the Python standard library only.
 
-Every run leaves a trace. Reviewed traces become typed lessons. A lesson changes the agent's knowledge only after a paired evaluation passes on held-out flights and a person approves it.
+## See it work
 
-This prototype runs at home on a synthetic warehouse shaped like the work one. The analysis core is ds-stack's `ds-experiment` tools, used unchanged.
+```
+python3 -m search_agent demo --out /tmp/kangaroo-demo
+```
+
+In about a minute this runs the whole loop. Six past experiments are analyzed and frozen. A reviewer's flag yields a lesson, which passes evaluation on a held-out experiment with no regressions and is approved. A new experiment then arrives as a scorecard file and gets its report. `DEMO.md` in the output folder walks through each step, and each report is in `runs/<name>/readout.html`.
+
+## Use it in a chat
+
+Kangaroo runs as an MCP server that Claude Code (CLI and desktop app), Codex (CLI and desktop app) and Cursor can call, plus a conversation skill (`skills/kangaroo/SKILL.md`).
+
+- **Open this folder in the host.** `.mcp.json` (Claude Code), `.cursor/mcp.json` (Cursor) and the skill links in `.claude/skills/` and `.agents/skills/` load on their own; approve the server when the host asks.
+- **Use it from any folder.** `python3 bin/kangaroo setup` prints the exact command or config for each host, with absolute paths. For Claude Code that's `claude mcp add --scope user kangaroo -- python3 /path/to/bin/kangaroo mcp`; for Codex, `codex mcp add kangaroo -- python3 /path/to/bin/kangaroo mcp`.
+
+Then talk to it:
+
+> Here is my experiment's scorecard: exports/scorecard.csv. Can it go to triage?
+> Why did 1P Long Click Rate fall?
+> That's wrong, it's 3P results pushing 1P results down. Record my verdict, I'm Suri.
+
+The host replies with the report's "In one minute" text as written, answers follow-ups from the run's trace, records verdicts, and proposes and evaluates lessons. It approves nothing unless the person says so, with their name. Without the MCP tools, the skill runs the same commands in a shell.
+
+## Use it from the command line
+
+```
+python3 -m search_agent analyze --scorecard S.csv [--contract C.json] [--config CFG.json]
+python3 -m search_agent why "1P Long Click Rate"
+python3 -m search_agent review wrong --metric "1P Long Click Rate" --note "..." --reviewer NAME
+python3 -m search_agent lessons propose | list | evaluate ID | approve ID --approver NAME
+python3 -m search_agent report --part details | triage_prep | all
+```
+
+Runs, frozen cases, lessons and cards live in one workspace, `KANGAROO_HOME` (default `~/.kangaroo`).
 
 ## How a run goes
 
-1. Resolve the input to the config (if available) and the experiment name that keys T1, the vendor scorecard table.
-2. Read T1's latest snapshot and its daily series.
-3. **M0** checks config, sample split, metric coverage, consistency, power, data quality and duration. Each is PASS, WARN, BLOCK or UNKNOWN, with its source. `docs/specs/stage-contract.md` turns these into a grade per arm: `not_permitted`, `directional_only` or `decision_grade`.
-4. **M1** works one arm at a time:
-   - decide.py makes the launch call, and explain.py matches the enterprise patterns.
-   - The agent runs each scripted cut through a fixed, read-only runner, joined to the assignment source and the paying cohort. Each cut is a ratio of sums per user, so its numbers tie to T1.
-   - Each result confirms or refutes a pattern by script, and the grade is recomputed after every action.
-5. Render the readout and a triage prep per arm, then write the trace, a review form, a card draft and the frozen case.
+1. Read the scorecard (T1's latest snapshot and its daily series) and the config, if there is one.
+2. **M0**: config, sample split, metric coverage, consistency, power, data quality and duration. Each check is PASS, WARN, BLOCK or UNKNOWN with its source. `docs/specs/stage-contract.md` turns them into a grade per arm: not permitted (a BLOCK), directional only (an UNKNOWN, or mid-flight) or decision grade.
+3. **M1**, one arm at a time:
+   - The launch call comes from that arm and control alone, so one bad arm never decides another.
+   - Each candidate cause names a cut where it acts and a control cut that its look-alikes would fail. The agent runs both through a fixed, read-only runner; each is a ratio of sums per user that ties to T1.
+   - A cause is **Confirmed** when both agree. When one agrees, or a full-page cut compares different query sets because the full-page share moved, it **Fits the data, not yet confirmed**. A cause from co-movement alone is **Likely**.
+4. Write the report (Markdown and HTML), a triage prep per arm, the trace, a review form, a card draft and the frozen case.
 
 ## Results at home
 
-All results below are on synthetic flights.
+These results come from 13 synthetic flights with planted causes, plus 10 adversarial flights from a separate review.
 
-- **Grade and mechanism, 9 flights.** The planted grade comes out on 9 of 9. The planted mechanism comes out on 7 of 9.
-  - The two misses share a renamed placement metric. A one-line mapping lesson learned on the first fixes the second, which it never saw.
-- **Evidence behind findings.** Every confirmed finding names the statement that confirmed it, and no run has an unsupported claim.
-- **The learning loop:**
-  - A mapping lesson passes with 0 regressions on 8 held-out cases and improves the 1 it should.
-  - A harmful lesson fails on the case it would break.
-  - After approval, a confirmed card is cited in the next similar flight's readout.
+- **Grades:** right on 11 of 13 flights. The other two have a renamed primary metric, so they read as directional only until a person approves the alias lesson; then they're right too.
+- **Causes:** the planted cause is confirmed on 10 of 13. The 3 misses share a renamed placement metric that one mapping lesson fixes. No flight confirms a cause that wasn't planted, and no claim is stated as confirmed without the cuts behind it.
+- **Learning loop:** a useful lesson passes on held-out runs with 0 regressions. A harmful one, a vacuous one that names its targets, an edited report and a probing cut template are each refused.
+- **Tests:** `python3 -m unittest discover -s tests` runs 36 tests in under two minutes.
 
 ## Layout
 
-- `search_agent/`: the run (`run.py`)
-  - `sources/`: warehouse, T1, config, resolver
-  - `m0/`: checks and the grade
-  - `m1/`: method, cut runner, enterprise pattern library, cut templates
-  - `render/`: the readout
-  - `trace.py`
-- `learning/`: cards, lessons, paired evaluation and approval, the knowledge version, the `loop` command
-- `.agents/skills/`: `search_m0_readiness`, `search_m1`
-- `docs/specs/`: the stage contract
-- `overlay.example/`: warehouse settings, standards, contracts
-- `synth/`: the synthetic warehouse
-- `tests/`: unittest only
+- `search_agent/`: the run, `api.py` (what a chat or the command line calls), `mcp_server.py`, `hosts.py`, `demo.py`
+  - `sources/`, `m0/`, `m1/` (method, cut runner, pattern library, cut templates), `render/` (report, brief, HTML)
+- `learning/`: cards, lessons, paired evaluation and approval, the knowledge version
+- `skills/kangaroo/`: the conversation skill; `.agents/skills/`: skills for a coding agent that changes the code
+- `bin/kangaroo`: the launcher; `overlay.example/`: warehouse settings, standards, contracts
+- `synth/`: the synthetic warehouse; `tests/`: unittest only
 
-## Try it
-
-```
-python3 synth/make_warehouse.py --out /tmp/synth
-cp /tmp/synth/contracts/*.json overlay.example/contracts/
-python3 -m search_agent.run --experiment synth-3p-boost-mid --overlay overlay.example \
-    --warehouse sqlite:/tmp/synth/warehouse.sqlite --configs /tmp/synth/configs --out /tmp/runs/mid
-python3 -m unittest discover -s tests
-```
-
-`learning/loop.py` documents the loop, one command per step: freeze, propose, evaluate, approve, stamp, confirm-card, stats.
+At work, see `PORTING.md`.

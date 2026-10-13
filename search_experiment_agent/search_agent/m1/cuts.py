@@ -130,6 +130,38 @@ def series_points(rows, control, test, min_units):
     return points
 
 
+IDENTIFIERS = ("user_id", "query_id", "tenant_id", "unit")
+ALLOWED_KEYS = {"produces", "filter", "x", "y", "y_per_user", "full_page", "surface_shift_is_the_question", "series", "note"}
+
+
+def template_problem(tpl, known_columns=None):
+    """Why a proposed template can't be used, or None. A template is data a lesson may add, so
+    it may only name query-table columns the shipped templates already use (or the overlay
+    lists), never an identifier column (a filter on one is a membership probe), and no
+    statement keyword besides the expression itself."""
+    if not isinstance(tpl, dict) or not tpl.get("produces") or "x" not in tpl or "y" not in tpl:
+        return "it needs produces, x and y"
+    extra = set(tpl) - ALLOWED_KEYS
+    if extra:
+        return f"unknown fields: {', '.join(sorted(extra))}"
+    known = set(known_columns or [])
+    if not known:
+        for t in load_templates().values():
+            for field in ("filter", "x", "y"):
+                known |= set(re.findall(r"\bt\.(\w+)", str(t.get(field, ""))))
+    for field in ("filter", "x", "y"):
+        expr = str(tpl.get(field, ""))
+        cols = set(re.findall(r"\bt\.(\w+)", expr))
+        bad = [c for c in cols if c in IDENTIFIERS or c not in known]
+        if bad:
+            return f"{field} names {', '.join(sorted(bad))}, which a template may not use"
+        if re.search(r"\b(select|from|join|union|insert|update|delete|drop|with)\b|;|--", expr, re.I):
+            return f"{field} holds a statement keyword"
+        if re.search(r"\b(?:" + "|".join(IDENTIFIERS) + r")\b", expr, re.I):
+            return f"{field} names an identifier column"
+    return None
+
+
 def dry_run_sql(tpl, wh_cfg, dialect="spark"):
     """The statement with LIMIT 0, to check a template compiles on the work warehouse before it is used."""
     return build_sql(tpl, wh_cfg, dialect) + " LIMIT 0"

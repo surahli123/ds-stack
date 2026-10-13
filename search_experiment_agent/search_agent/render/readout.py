@@ -13,8 +13,11 @@ confirmed it and the claim names the statement.
 
 import re
 
-STRENGTH = {"confirmed": "Confirmed", "inferred": "Likely", "exploratory": "Exploratory, not for the decision"}
-ORDER = {"confirmed": 0, "inferred": 1, "exploratory": 2}
+from search_agent.render import brief
+
+STRENGTH = {"confirmed": "Confirmed", "consistent": "Fits the data, not yet confirmed", "inferred": "Likely",
+            "exploratory": "Exploratory, not for the decision"}
+ORDER = {"confirmed": 0, "consistent": 1, "inferred": 2, "exploratory": 3}
 OUTCOME = {"confirms": "supports it", "refutes": "rules it out", "inconclusive": "no clear change"}
 BANNED = ("packet", "seal", "receipt", "M0-", "accepted_m", "checkpoint")
 
@@ -44,7 +47,9 @@ def readiness_line(p):
     confirmed = list(dict.fromkeys(confirmed))
     so_far = f" Confirmed so far: {'; '.join(confirmed)}." if confirmed else ""
     if g["grade"] == "not_permitted":
-        return f"Ready for triage: no. {_sentence('; '.join(g['reasons']))} Only cuts that diagnose it ran."
+        diagnosed = any(a["status"] == "ran" and a.get("kind") == "cut" for a in p["actions"])
+        tail = " Only cuts that diagnose it ran." if diagnosed else " No deep-dive cut ran: fix this first."
+        return f"Ready for triage: no. {_sentence('; '.join(g['reasons']))}{tail}"
     if g["grade"] == "directional_only":
         return f"Ready for triage: for a directional discussion, not a decision.{so_far}"
     reason = r["reasons"][0]
@@ -54,10 +59,6 @@ def readiness_line(p):
         reason = (f"{', '.join(orphans)} moved with no explanation in the library" if orphans else
                   "some contract metrics didn't move as expected, and nothing in the library explains why")
     return f"Ready for triage: {r['text']}. {_sentence(reason)}{so_far}"
-
-
-def _first_clause(text):
-    return text.split("; ")[0]
 
 
 def pair_block(p, control, approval, shared_warn=False, seen=None):
@@ -76,8 +77,8 @@ def pair_block(p, control, approval, shared_warn=False, seen=None):
         lines.append("Launch call: none until the blocking problem is resolved.")
     else:
         lines.append(f"Launch call (scripted): {d['call_text']}. {_sentence(d['reason'])}")
-    if g["warns"] and not shared_warn:
-        lines.append(f"Warning: {_sentence(_first_clause(g['warns'][0]))}")
+    if g["warns"] and not shared_warn and g["grade"] != "not_permitted":
+        lines += [f"Warning: {_sentence(w)}" for w in g["warns"]]
     if g["grade"] == "not_permitted":
         lines += ["", "Movements are not interpretable until the problem above is resolved; the cuts below diagnose it."]
         return lines
@@ -106,14 +107,25 @@ def pair_block(p, control, approval, shared_warn=False, seen=None):
             lines.append(f"- [{strength}] {c['candidate']}. {_sentence(c['mechanism'])}")
         for a in p["actions"]:
             if a["status"] == "ran" and a.get("target_pattern") == c["candidate_id"]:
-                caveat = f" Caveat: {a['caveat']}, so this compares different query sets." if a.get("caveat") else ""
-                lines.append(f"  - Cut: {a['exact_next_task']}: {OUTCOME.get(a['outcome'], a['outcome'])} "
+                role = "Control cut" if a.get("role") == "control" else "Cut"
+                caveat = (f" Caveat: {a['caveat']}, so this compares different query sets and can't confirm it."
+                          if a.get("caveat") else "")
+                lines.append(f"  - {role}: {a['exact_next_task']}: {OUTCOME.get(a['outcome'], a['outcome'])} "
                              f"({a.get('detail') or 'no detail'}).{caveat}")
+        if c["support_level"] == "consistent" and c.get("awaiting"):
+            lines.append(f"  - Not confirmed until: {'; '.join(c['awaiting'][:2])}.")
     orphans = [c for c in p["claims"] if not c["candidate_id"] and not c["change"].startswith("didn't move")
                and c["metric"].lower() not in features]
-    if orphans:
-        lines.append("- No candidate for: " + "; ".join(f"{c['metric']} ({c['change'].split(' (')[0]})" for c in orphans)
-                     + ". Treat as possibly chance until a cut says otherwise.")
+    chance = [c for c in orphans if c["status"] == "possibly chance"]
+    unexplained = [c for c in orphans if c["status"] != "possibly chance"]
+    if unexplained:
+        lines.append("- No explanation in the library for: " + "; ".join(f"{c['metric']} ({c['change'].split(' (')[0]})"
+                                                                         for c in unexplained)
+                     + ". The move is clear, so it needs a cause; say 'unexplained' rather than guess.")
+    if chance:
+        lines.append("- Not registered, and no explanation: " + "; ".join(f"{c['metric']} ({c['change'].split(' (')[0]})"
+                                                                       for c in chance)
+                     + ". With this many metrics some move by chance; treat these as possibly chance.")
     if not explained and not orphans:
         lines.append("- Nothing to explain.")
     return lines
@@ -123,13 +135,18 @@ def before_triage(pairs):
     arms_of = {}
     for p in pairs:
         items = [c["reason"] for c in p["m0"] if c["affects_grade"] and c["status"] == "UNKNOWN"]
+        gaps = {}
         for a in p["actions"]:
             if a["status"] == "access gap":
-                items.append(f"run '{a['exact_next_task']}' once its tables are approved ({a['source_or_access_gap']})")
-            elif a["status"] == "no result":
+                gaps.setdefault(a["source_or_access_gap"], []).append(a["exact_next_task"])
+        for gap, cuts in gaps.items():
+            items.append(f"run '{cuts[0]}' once its tables are approved ({gap})" if len(cuts) == 1 else
+                         f"run {len(cuts)} deep-dive cuts once their tables are approved ({gap}): {'; '.join(cuts)}")
+        for a in p["actions"]:
+            if a["status"] == "no result":
                 items.append(f"'{a['exact_next_task']}' gave no result ({a['source_or_access_gap']})")
         durability = next((q for q in p["explained"]["standard"] if q["question"] == "Will it last?"), None)
-        if durability and not durability["ok"]:
+        if durability and not durability["ok"] and p["grade"]["grade"] != "not_permitted":
             items.append(f"durability: {durability['answer'].split(': ', 1)[-1]}")
         items += [f"{d['cut']} (tests: {d['tests']})" for d in p["explained"]["deep_dives"] if not d.get("sql")][:2]
         for item in items:
@@ -150,7 +167,8 @@ def ask_engineer(pairs, cfg_present):
             if q.get("note") or q["ok"] is not False:
                 continue
             if q["question"].startswith("Is the data trustworthy"):
-                asks.append(f"The data check says: {q['answer'].split(': ', 1)[-1]}. What happened?")
+                arm = f" for {p['test']}" if len(pairs) > 1 else ""
+                asks.append(f"The data check{arm} says: {q['answer'].split(': ', 1)[-1]}. What happened?")
         if p["grade"]["grade"] == "not_permitted":
             continue
         for c in p["claims"]:
@@ -204,14 +222,19 @@ def summary(pairs, control):
                 cells.append(f"{100 * m['rel_delta']:+.2f}%" + ("" if clear else " (not clear)"))
         lines.append("| " + " | ".join([p["test"], p["grade"]["text"], call] + cells) + " |")
     lines.append("")
-    warns = [_first_clause(p["grade"]["warns"][0]) for p in pairs if p["grade"]["warns"]]
-    if warns:
-        lines.append(f"Warning, for every arm: {_sentence(warns[0])}")
+    arms_of = {}
+    for p in pairs:
+        for w in p["grade"]["warns"]:
+            arms_of.setdefault(w, []).append(p["test"])
+    for w, arms in arms_of.items():
+        lines.append(f"Warning, {'for every arm' if len(arms) == len(pairs) else 'for ' + ', '.join(arms)}: {_sentence(w)}")
     lines.append("Arms are compared with control, not with each other; a difference between arms needs its own interval.")
     return lines
 
 
 def interval_note(pairs):
+    if all(p["grade"]["grade"] == "not_permitted" or _missing_primaries(p["decision"]) for p in pairs):
+        return None  # no call was made, so its intervals need no note
     levels = pairs[0]["decision"]["settings"].get("levels", {})
     base = pairs[0]["decision"]["settings"].get("ci_level", 0.95)
     if levels.get("primary") and abs(levels["primary"] - base) > 1e-9:
@@ -221,8 +244,12 @@ def interval_note(pairs):
     return None
 
 
-def render(display, control, pairs, confirmed, drafts, provenance, approvals, cfg_present):
+def render(display, control, pairs, confirmed, drafts, provenance, approvals, cfg_present, library=None):
     lines = [headline(pairs, display), ""]
+    asks = ask_engineer(pairs, cfg_present)
+    if library:
+        lines += brief.render(pairs, library, asks, control, confirmed)
+        lines += ["# Details", ""]
     shared = len(pairs) > 1
     if shared:
         lines += summary(pairs, control) + [""]
@@ -233,12 +260,18 @@ def render(display, control, pairs, confirmed, drafts, provenance, approvals, cf
     if note:
         lines += [note, ""]
     lines += ["## Before triage", ""] + ([f"- {_sentence(i)}" for i in before_triage(pairs)] or ["- Nothing open."]) + [""]
-    lines += ["## Ask the engineer", ""] + ([f"- {a}" for a in ask_engineer(pairs, cfg_present)] or ["- Nothing yet."]) + [""]
-    lines += ["## Similar experiments", ""] + similar_block(confirmed, drafts) + [""]
+    lines += ["## Ask the engineer", ""] + ([f"- {a}" for a in asks] or ["- Nothing yet."]) + [""]
+    if all(p["grade"]["grade"] == "not_permitted" for p in pairs):
+        lines += ["## Similar experiments", "", "- Not compared: the results can't be read until the blocking problem is fixed.", ""]
+    else:
+        lines += ["## Similar experiments", ""] + similar_block(confirmed, drafts) + [""]
     lines += ["---", f"Provenance: {provenance}", ""]
     text = "\n".join(lines)
-    body = text.split("\n---\n")[0]
-    leaked = [w for w in BANNED if w.lower() in body.lower()]
+    body = text.split("\n---\n")[0].lower()
+    # Metric and experiment names come from the team; only the agent's own words are checked.
+    for name in sorted({m["metric"] for p in pairs for m in p["metrics"]} | {display}, key=len, reverse=True):
+        body = body.replace(name.lower(), "")
+    leaked = [w for w in BANNED if w.lower() in body]
     if leaked:
         raise ValueError(f"internal state names in the readout body: {', '.join(leaked)}")
     return text

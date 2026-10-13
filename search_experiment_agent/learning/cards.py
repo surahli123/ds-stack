@@ -18,6 +18,8 @@ def draft(run_id, cfg, experiment, pairs, families):
     reverse = {m.lower(): f for f, m in families.items()}
     for p in pairs:
         for q in p["explained"]["questions"]:
+            if q["change"].startswith("didn't move"):
+                continue  # a metric that didn't move says nothing about what the flight is like
             moved.append({"pair": p["test"], "metric": q["metric"], "change": q["change"]})
             if q["metric"].lower() in reverse:
                 fam_moved.add(reverse[q["metric"].lower()])
@@ -70,8 +72,10 @@ def similar(cards, experiment, layer, tags, families, limit=2):
     for c in cards:
         if c["experiment_name"] == experiment:
             continue
-        score = (3 if layer and c.get("layer") == layer else 0) + len(set(tags or []) & set(c.get("tags") or [])) \
-            + len(set(families or []) & set(c.get("families_moved") or []))
+        shared = len(set(tags or []) & set(c.get("tags") or [])) + len(set(families or []) & set(c.get("families_moved") or []))
+        if not shared:
+            continue  # the same layer alone doesn't make two experiments similar
+        score = (3 if layer and c.get("layer") == layer else 0) + shared
         if score >= 2:
             scored.append((score, c))
     scored.sort(key=lambda sc: -sc[0])

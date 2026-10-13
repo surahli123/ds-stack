@@ -22,7 +22,7 @@ def _norm(text):
 
 
 class JsonDirConfig:
-    command = "a canonical config file in the configs folder"
+    command = "a config file in the configs folder"
 
     def __init__(self, folder):
         self.folder = folder
@@ -43,6 +43,23 @@ class JsonDirConfig:
         return hits
 
 
+class OneConfig:
+    """A single canonical config given by hand (or none)."""
+
+    command = "the config file, passed to analyze as config"
+
+    def __init__(self, cfg):
+        self.cfg = cfg
+
+    def get(self, config_id):
+        return self.cfg if self.cfg and self.cfg.get("id") == config_id else None
+
+    def find(self, name):
+        if self.cfg and _norm(name) in (_norm(self.cfg.get("experiment_name")), _norm(self.cfg.get("name"))):
+            return [self.cfg]
+        return []
+
+
 class CliConfig:
     """The work config CLI. Finish at work: run it outside the sandbox and map its JSON."""
 
@@ -58,18 +75,36 @@ class CliConfig:
         return []
 
 
-def for_decide(cfg, split=None):
+def _health_type(name):
+    """The vendor's check name -> the type checks.py knows (HEALTH in ds-experiment's checks.py)."""
+    low = str(name or "").lower()
+    for key, kind in (("balanced", "has_balanced_exposures"), ("crossover", "has_crossover"), ("bias", "pre_experimental_bias_check"),
+                      ("behind", "exposures_data_is_behind"), ("unit type", "has_valid_unit_type")):
+        if key in low:
+            return kind
+    return name
+
+
+def for_decide(cfg, split=None, keep=None):
     """Canonical config -> ds-experiment's config shape (checks.py and decide.py read it).
 
-    `split` is {group name: count of all exposed units} when the overlay names that count."""
+    `split` is {group name: count of all exposed units} when the overlay names that count.
+    `keep` is the pair's (control, test) names: decide.py then sees only those two groups, so
+    one bad arm never changes another arm's launch call. The vendor's balance check covers
+    every arm, so it's dropped when the pair's own counts can test the split."""
     if not cfg:
         return None
+    wanted = {str(k).lower() for k in keep} if keep else None
     groups = [{"id": g.get("id"), "name": g.get("name"), "size_pct": g.get("size"),
-               "parameters": g.get("parameters") or {}, "disabled": bool(g.get("disabled"))} for g in cfg.get("groups", [])]
+               "parameters": g.get("parameters") or {}, "disabled": bool(g.get("disabled"))} for g in cfg.get("groups", [])
+              if not wanted or str(g.get("name")).lower() in wanted or str(g.get("id")).lower() in wanted]
+    exposures = {k: v for k, v in (split or {}).items() if not wanted or str(k).lower() in wanted}
+    pair_counts = bool(wanted) and len(exposures) == len(wanted)
+    checks = [{"type": _health_type(h.get("name")), "name": h.get("name"), "status": h.get("status"), "metadata": {}}
+              for h in cfg.get("health_checks", [])]
+    if pair_counts:
+        checks = [h for h in checks if h["type"] != "has_balanced_exposures"]
     return {"experiment_id": cfg.get("id"), "name": cfg.get("name"), "hypothesis": cfg.get("hypothesis"),
             "groups": groups, "control_group": cfg.get("control_group"), "start": cfg.get("start"), "end": cfg.get("end"),
             "target_days": cfg.get("target_days"), "status": cfg.get("status"), "layer_id": cfg.get("layer"),
-            "health_checks": [{"type": "sample_split" if "balanced" in str(h.get("name", "")).lower() else h.get("name"),
-                               "name": h.get("name"), "status": h.get("status"), "metadata": {}}
-                              for h in cfg.get("health_checks", [])],
-            "settings": {}, "edits": [], "exposures": split or {}}
+            "health_checks": checks, "settings": {}, "edits": [], "exposures": exposures}

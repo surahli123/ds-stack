@@ -496,23 +496,65 @@ def evaluate_cut(dd, fam, band_of, segments, config_info):
 
     if holds(dd.get("refutes_when")):
         return "refutes", detail
+    rel = _relative(dd, fam)
+    if rel:
+        return rel, detail
     if holds(dd.get("confirms_when")):
         return "confirms", detail
     return "inconclusive", detail
 
 
-def apply_evidence(instances, fam, band_of, segments, config_info, evidence):
+def _relative(dd, fam):
+    """A control cut read against a reference effect ("relative_to": family, share, expect).
+    expect "absent": it confirms when its interval rules out `share` of the reference change
+    (the effect sits where the mechanism acts, not here). expect "present": it refutes when its
+    interval rules out `share` of the reference change (the effect isn't here, so it isn't
+    everywhere). Without the reference metric, the cut's own conditions decide."""
+    spec = dd.get("relative_to")
+    family = (dd.get("needs") or {}).get("metric")
+    if not spec or spec.get("family") not in fam or family not in fam:
+        return None
+    ref, _ = rel_interval(fam[spec["family"]])
+    _, ci = rel_interval(fam[family])
+    if ref is None or ci is None or ref == 0:
+        return None
+    edge = spec.get("share", 0.5) * ref
+    lo, hi = min(ci), max(ci)
+    rules_out = lo > edge if ref < 0 else hi < edge
+    if spec.get("expect") == "absent":
+        return "confirms" if rules_out else None
+    return "refutes" if rules_out else None
+
+
+def _explicit_match(e, inst, n, dd):
+    if e.get("pattern") and e["pattern"] != inst["id"]:
+        return False
+    if e.get("sql"):
+        return e["sql"] == dd.get("sql")
+    return e.get("cut") == n or (isinstance(e.get("cut"), str) and e["cut"].lower() in dd["cut"].lower())
+
+
+def apply_evidence(instances, fam, band_of, segments, config_info, evidence, needs_control=False):
+    """Score each candidate's cuts. A refuting cut rules it out. A confirming cut makes it
+    "confirmed by a cut", except: a result with a caveat (it compares different query sets)
+    can't confirm, and with needs_control the candidate also needs its control cut (the one
+    whose result separates it from the usual look-alikes, role "control") to confirm. Short of
+    that, a confirming result makes it "fits a cut", and `awaiting` names what's missing."""
     explicit = (evidence or {}).get("cuts") or []
     kept, refuted, run = [], [], []
     for inst in instances:
         results = []
         for n, dd in enumerate(inst["deep_dives"], 1):
             outcome, detail = evaluate_cut(dd, fam, band_of, segments, config_info)
+            caveat = None
             for e in explicit:
-                if e.get("pattern") == inst["id"] and (e.get("cut") == n or (isinstance(e.get("cut"), str) and e["cut"].lower() in dd["cut"].lower())):
-                    outcome, detail = e.get("outcome"), e.get("evidence", "explicit outcome")
+                if _explicit_match(e, inst, n, dd):
+                    if e.get("outcome"):
+                        outcome, detail = e["outcome"], e.get("evidence", "explicit outcome")
+                    caveat = e.get("caveat") or caveat
             if outcome:
-                results.append({"cut": dd["cut"], "outcome": outcome, "detail": detail})
+                results.append({"cut": dd["cut"], "outcome": outcome, "detail": detail, "role": dd.get("role", "where"),
+                                **({"caveat": caveat} if caveat else {})})
                 run.append(dd["cut"].lower())
         inst["cut_results"] = results
         if any(r["outcome"] == "refutes" for r in results):
@@ -520,9 +562,23 @@ def apply_evidence(instances, fam, band_of, segments, config_info, evidence):
             inst["ruled_out_by"] = [f"{r['cut']}: {r['detail']}" for r in results if r["outcome"] == "refutes"]
             refuted.append(inst)
             continue
-        if any(r["outcome"] == "confirms" for r in results):
+        agree = [r for r in results if r["outcome"] == "confirms"]
+        where = [r for r in agree if r["role"] != "control" and not r.get("caveat")]
+        controls = [dd for dd in inst["deep_dives"] if dd.get("role") == "control"]
+        control_ok = all(any(r["cut"] == dd["cut"] and r["outcome"] == "confirms" and not r.get("caveat") for r in results)
+                         for dd in controls)
+        if not needs_control:
+            control_ok, where = True, [r for r in agree if not r.get("caveat")]
+        if where and control_ok and (controls or not needs_control):
             inst["status"], inst["label"], inst["exploratory"] = "confirmed by a cut", "measured", False
-            inst["evidence"] = inst["evidence"] + [f"{r['cut']}: {r['detail']}" for r in results if r["outcome"] == "confirms"]
+        elif agree:
+            inst["status"], inst["label"], inst["exploratory"] = "fits a cut", "measured", False
+            missing = [dd["cut"] for dd in controls if not any(r["cut"] == dd["cut"] and r["outcome"] == "confirms" for r in results)]
+            caveats = sorted({r["caveat"] for r in agree if r.get("caveat")})
+            inst["awaiting"] = ([f"a check that compares the same query sets ({c})" for c in caveats]
+                                + (missing if controls else ["a control cut (none in the library)"] if needs_control else []))
+        if agree:
+            inst["evidence"] = inst["evidence"] + [f"{r['cut']}: {r['detail']}" for r in agree]
         kept.append(inst)
     return kept, refuted, set(run)
 
@@ -542,6 +598,8 @@ def build_questions(decision, comparison, instances, trusted, segment_instances)
                          key=lambda i: (not i["status"].startswith("confirmed"), -i["score"]))
         if any(i["status"].startswith("confirmed") for i in related):
             status = "confirmed by a cut" if any(i["status"] == "confirmed by a cut" for i in related) else "confirmed by the scorecard"
+        elif any(i["status"] == "fits a cut" for i in related):
+            status = "fits a cut, not yet confirmed"
         elif related:
             status = "untested"
         else:
@@ -789,7 +847,8 @@ def explain(decision, scorecard, prereg, library, evidence=None, config=None):
     found += check_patterns(library, decision)
     found += hypothesis_candidate(decision, prereg, fam, states, comparison)
     config_info = config_diff(config, prereg, library)
-    found, refuted, run = apply_evidence(found, fam, band_of, seg_results, config_info, evidence)
+    found, refuted, run = apply_evidence(found, fam, band_of, seg_results, config_info, evidence,
+                                         library.get("confirm_needs_control", False))
     ruled_out += refuted
     questions = build_questions(decision, comparison, found, trusted, seg_found)
     chance = chance_count(comparison, level)

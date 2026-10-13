@@ -26,7 +26,8 @@ def select_list(cols):
 
 def latest_sql(table, cols):
     return (f"SELECT {select_list(cols)} FROM {table} WHERE {cols['experiment']} = :experiment "
-            f"AND {cols['snapshot']} = (SELECT MAX({cols['snapshot']}) FROM {table} WHERE {cols['experiment']} = :experiment)")
+            f"AND {cols['snapshot']} = (SELECT MAX({cols['snapshot']}) FROM {table} WHERE {cols['experiment']} = :experiment) "
+            f"ORDER BY {cols['test_group']}, {cols['metric']}")
 
 
 def series_sql(table, cols):
@@ -77,7 +78,22 @@ def scorecard_from_rows(rows, cols, prefer_cuped=True, ci_level=0.95):
             metric["abs_ci"] = [b * metric["control_mean"] for b in metric["rel_ci"]]
         comparisons.setdefault(r["test_group"], []).append(metric)
     snapshot = str(rows[0]["snapshot"])[:10]
+    out = []
+    for g, ms in comparisons.items():
+        # One row per metric: decide.py reads the first and explain.py the last, so two rows for one
+        # name would put two different numbers in one readout. Keep the row with a p-value (else the
+        # first) and list the name, so the consistency check warns about it.
+        kept, dupes = {}, []
+        for m in ms:
+            key = m["metric"].lower()
+            if key in kept:
+                dupes.append(key)
+                if kept[key]["p_value"] is None and m["p_value"] is not None:
+                    kept[key] = m
+            else:
+                kept[key] = m
+        out.append({"test_group": g, "metrics": list(kept.values()), "duplicates": sorted(set(dupes))})
     return {"source": "t1", "experiment_id": rows[0].get("experiment"), "control_group": control,
             "analysis": {"ci_level": ci_level, "cuped": mode, "sequential": _flag(rows[0].get("sequential")),
                          "mc_correction": None, "as_of": snapshot},
-            "comparisons": [{"test_group": g, "metrics": ms} for g, ms in comparisons.items()]}
+            "comparisons": out}

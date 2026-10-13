@@ -373,7 +373,8 @@ def triage_prep(decision, explained):
             if not inst:
                 continue
             confirmed = inst["status"].startswith("confirmed")
-            strength = "Confirmed" if confirmed else ("Likely" if inst["score"] >= 1 else "Possible")
+            strength = ("Confirmed" if confirmed else "Fits a cut, not yet confirmed" if inst["status"] == "fits a cut"
+                        else "Likely" if inst["score"] >= 1 else "Possible")
             if cid in explained_at:
                 lines.append(f"   - {strength}: {inst['name']}, as in question {explained_at[cid]}.")
                 continue
@@ -382,6 +383,8 @@ def triage_prep(decision, explained):
             evidence = list(dict.fromkeys(inst["evidence"]))
             lines.append(f"     Evidence: {'; '.join(evidence[:4])}.")
             cuts = [cut_number[d["cut"]] for d in inst["deep_dives"] if d["cut"] in cut_number]
+            if inst.get("awaiting"):
+                lines.append(f"     Not confirmed until: {'; '.join(inst['awaiting'][:2])}.")
             if cuts and not confirmed:
                 lines.append(f"     To check: cut {', '.join(str(c) for c in cuts[:2])} below.")
         lines.append("")

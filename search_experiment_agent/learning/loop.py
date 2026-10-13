@@ -92,6 +92,10 @@ def main(argv=None):
             for case in sorted(glob.glob(os.path.join(args.cases, "*", "scorecard.json"))):
                 flight = os.path.basename(os.path.dirname(case))
                 found += lessons.propose_mappings(load(case), library, flight)
+                contract = load(os.path.join(os.path.dirname(case), "contract.json"))
+                if contract:
+                    found += lessons.propose_aliases(load(case), contract, flight,
+                                                     load(os.path.join(args.knowledge, "metric_aliases.json")) or {})
             found += lessons.propose_patterns(traces)
             for review in glob.glob(os.path.join(args.runs, "*", "review.json")):
                 r = load(review)

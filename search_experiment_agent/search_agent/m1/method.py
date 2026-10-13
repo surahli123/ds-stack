@@ -9,9 +9,12 @@ pattern's confirms_when and refutes_when. This module adds what an agent needs o
   each result back to explain.py, so a candidate becomes confirmed or refuted by data;
 - before the first full-page cut it checks that the full-page share of queries didn't move,
   since a filter on a surface the treatment shifts compares different query sets;
-- on a not_permitted pair it runs only cuts that diagnose the blocking checks;
+- on a not_permitted pair it runs only cuts that diagnose the blocking checks (the library
+  has none yet, so a blocked pair runs no deep dive and the readout says so);
+- once a cut agrees with a candidate, its control cut runs next, since only both together
+  confirm it, and a full-page cut taken while the full-page share moved can't confirm;
 - it records every cut as an action (falsifier, predicted outcomes, statement or access gap)
-  and recomputes the grade after each one;
+  with the grade at that point;
 - it turns explain.py's questions into structured claims, each with a support level and the
   statements behind it.
 """
@@ -21,6 +24,9 @@ import explain
 
 from search_agent.m0.grade import grade
 from search_agent.m1 import cuts as cutlib
+from search_agent.sources import config as cfgsrc
+
+NO_PRIMARY = "the primary metric (the contract names none)"
 
 
 def prereg_for(contract, test_group):
@@ -31,8 +37,8 @@ def action_record(dive, test, run_id):
     return {"kind": "cut", "owner": "agent", "run_id": run_id, "pair": test, "target_pattern": dive.get("pattern"),
             "tests": dive.get("tests"), "exact_next_task": dive["cut"], "template": dive.get("sql"),
             "falsifier": dive.get("refutes"), "predicted_outcomes": {"confirms": dive.get("confirms"), "refutes": dive.get("refutes")},
-            "diagnoses": dive.get("diagnoses", []), "status": "planned", "source_or_access_gap": None, "statement": None,
-            "outcome": None}
+            "diagnoses": dive.get("diagnoses", []), "role": dive.get("role", "where"), "status": "planned",
+            "source_or_access_gap": None, "statement": None, "outcome": None}
 
 
 def investigate(ctx, test, pair_checks, mid_flight, trace):
@@ -43,21 +49,32 @@ def investigate(ctx, test, pair_checks, mid_flight, trace):
     actions = []
     blocked = grade(pair_checks, mid_flight)["grade"] == "not_permitted"
     daily = None if blocked else durability_series(ctx, test, trace, actions)
+    # The launch call sees this pair's two groups only, so a bad arm never decides a clean one.
+    pair_config = cfgsrc.for_decide(ctx.get("config"), ctx.get("split"), keep=(sc["control_group"], test))
     try:
-        decision = decide.decide(sc, prereg, ctx["config_for_decide"], ctx["standards"], daily)
+        decision = decide.decide(sc, prereg, pair_config, ctx["standards"], daily)
     except decide.InputError as err:
-        trace.step("decide", pair=test, status="refused", reason=str(err))
-        raise
+        if "no primary" not in str(err):
+            trace.step("decide", pair=test, status="refused", reason=str(err))
+            raise
+        # No primary in the contract: the call isn't made, and everything else still runs.
+        trace.step("decide", pair=test, status="no call", reason=str(err))
+        prereg = {**prereg, "primaries": {**(prereg.get("primaries") or {}), "metrics": [
+            {"metric": NO_PRIMARY, "direction": "increase", "bar": 0.0}]}}
+        decision = decide.decide(sc, prereg, pair_config, ctx["standards"], daily)
     graded = grade(pair_checks, mid_flight)
     trace.grade(test, graded, after="M0")
-    evidence = {"metrics": []}
-    explained = explain.explain(decision, sc, prereg, ctx["library"], evidence, ctx["config_for_decide"])
+    evidence = {"metrics": [], "cuts": []}
+    explained = explain.explain(decision, sc, prereg, ctx["library"], evidence, pair_config)
     tried = set()
     surface = {"checked": False, "moved": None}
     for _ in range(ctx["max_cuts"]):
         planned = [d for d in explained["deep_dives"] if d.get("sql") and d["sql"] not in tried and d["sql"] in ctx["templates"]]
         if graded["grade"] == "not_permitted":
             planned = [d for d in planned if set(d.get("diagnoses", [])) & set(graded["blocks"])]
+        # Once a cut agrees with a candidate, its control cut goes next: it is what confirms it.
+        agreed = {a["target_pattern"] for a in actions if a.get("outcome") == "confirms" and a.get("role") != "control"}
+        planned.sort(key=lambda d: not (d.get("role") == "control" and d.get("pattern") in agreed))
         if not planned:
             break
         dive = planned[0]
@@ -86,20 +103,22 @@ def investigate(ctx, test, pair_checks, mid_flight, trace):
         elif out.get("problem"):
             action.update(status="no result", source_or_access_gap=out["problem"], statement=out.get("statement"))
         else:
+            caveat = (surface.get("text") if surface.get("moved") and tpl.get("full_page")
+                      and not tpl.get("surface_shift_is_the_question") else None)
             evidence["metrics"].append(out["metric"])
-            explained = explain.explain(decision, sc, prereg, ctx["library"], evidence, ctx["config_for_decide"])
+            if caveat:  # it compares different query sets, so it can't confirm anything
+                evidence["cuts"].append({"sql": dive["sql"], "caveat": caveat})
+            explained = explain.explain(decision, sc, prereg, ctx["library"], evidence, pair_config)
             hit = next((r for r in explained["cut_results"] if r["cut"] == dive["cut"]), None)
             action.update(status="ran", statement=out["statement"], produces=out["metric"]["metric"],
                           outcome=hit["outcome"] if hit else "inconclusive",
-                          detail=hit["detail"] if hit else None,
-                          caveat=surface.get("text") if surface.get("moved") and tpl.get("full_page")
-                          and not tpl.get("surface_shift_is_the_question") else None)
+                          detail=hit["detail"] if hit else None, caveat=caveat)
         graded = grade(pair_checks, mid_flight)
         trace.action(action, grade_after=graded["grade"])
         actions.append(action)
-    claims = build_claims(explained, actions, ctx["t1_statement"])
+    claims = build_claims(explained, actions, ctx["t1_statement"], ctx.get("series_statement"))
     return {"test": test, "decision": decision, "explained": explained, "grade": graded, "actions": actions,
-            "claims": claims, "evidence": evidence, "surface": surface}
+            "claims": claims, "evidence": evidence, "surface": surface, "config_for_decide": pair_config}
 
 
 def durability_series(ctx, test, trace, actions):
@@ -118,6 +137,7 @@ def durability_series(ctx, test, trace, actions):
                                  ctx["wh_cfg"].get("min_units_per_cell", 100))
             trace.receipt(res["statement"], origin="cut primary_by_exposure_day", source_role="durability")
             record.update(status="ran", statement=res["statement"], outcome="series")
+            ctx["series_statement"] = res["statement"]["statement_id"]
             cache["result"] = res["series"]
         except cutlib.AccessGap as gap:
             trace.gap("cut primary_by_exposure_day", str(gap))
@@ -143,13 +163,24 @@ def _run(ctx, template_id, test, trace):
     return {"metric": res["metrics"][0], "statement": res["statement"]}
 
 
-SUPPORT = {"confirmed by a cut": "confirmed", "confirmed by the scorecard": "confirmed", "confirmed by the checks": "confirmed"}
+SUPPORT = {"confirmed by a cut": "confirmed", "confirmed by the scorecard": "confirmed", "confirmed by the checks": "confirmed",
+           "fits a cut": "consistent"}
 
 
-def build_claims(explained, actions, t1_statement):
-    """One claim per question triage will ask. support_level: confirmed (a cut or the scorecard
-    confirmed the candidate, with the statements that did), inferred (a candidate from
-    co-movement only), exploratory, or none."""
+def _cut_statements(actions, inst, roles=None):
+    """Statements of the ran cuts that agreed with this candidate (optionally of some roles)."""
+    return [a["statement"]["statement_id"] for a in actions
+            if a["status"] == "ran" and a.get("target_pattern") == inst["id"] and a.get("outcome") == "confirms"
+            and (roles is None or a.get("role", "where") in roles)]
+
+
+def build_claims(explained, actions, t1_statement, series_statement=None):
+    """One claim per question triage will ask. support_level:
+    confirmed: a cut found the effect where the mechanism acts and its control cut ruled out the
+        look-alikes (or the scorecard's own numbers or the checks confirm it);
+    consistent: a cut agrees, but the control cut hasn't run, didn't agree, or the cut compared
+        different query sets;
+    inferred: a candidate from co-movement only; exploratory; or none."""
     live = {}
     for inst in explained["patterns"]:
         live.setdefault(inst["id"], inst)
@@ -158,14 +189,16 @@ def build_claims(explained, actions, t1_statement):
     for n, q in enumerate(explained["questions"], 1):
         candidates = [live[c] for c in q["candidates"] if c in live]
         top = candidates[0] if candidates else next((scouted[c] for c in q["candidates"] if c in scouted), None)
+        awaiting = []
         if top is None:
             level, statements = "none", []
         elif top["status"] in SUPPORT:
-            level = "confirmed"
-            if top["status"] == "confirmed by a cut":
-                text = " ".join(top["evidence"]).lower()
-                statements = [a["statement"]["statement_id"] for a in actions
-                              if a["status"] == "ran" and a.get("produces") and a["produces"].lower() in text]
+            level = SUPPORT[top["status"]]
+            if top["status"] in ("confirmed by a cut", "fits a cut"):
+                statements = _cut_statements(actions, top)
+                awaiting = top.get("awaiting") or []
+            elif top["id"] == "novelty" and series_statement:
+                statements = [series_statement]
             else:
                 statements = [t1_statement]
         elif top["id"] in scouted and top["id"] not in live:
@@ -175,10 +208,30 @@ def build_claims(explained, actions, t1_statement):
         claims.append({"claim_id": f"c{n}", "metric": q["metric"], "question": q["question"], "change": q["change"],
                        "candidate_id": top["id"] if top else None, "candidate": top["name"] if top else None,
                        "mechanism": top["mechanism"] if top else None, "support_level": level, "statement_ids": statements,
-                       "status": q["status"]})
+                       "awaiting": awaiting, "status": q["status"]})
     return claims
 
 
-def unsupported(claims):
-    """Claims stated as findings without the data behind them (the plan's second measure)."""
-    return [c for c in claims if c["support_level"] == "confirmed" and not c["statement_ids"]]
+def unsupported(claims, actions, library):
+    """Claims stated as confirmed that the action records don't back (the plan's second measure).
+    Re-derived from what ran, not from the claim's own fields: a cut-confirmed claim needs a ran,
+    uncaveated, agreeing cut where the mechanism acts, plus an agreeing control cut when the
+    library defines one; any other confirmed claim needs a statement."""
+    controls = {p["id"]: [d["cut"] for d in p.get("deep_dives", []) if d.get("role") == "control"] for p in library["patterns"]}
+    needs_control = library.get("confirm_needs_control", False)
+    out = []
+    for c in claims:
+        if c["support_level"] != "confirmed":
+            continue
+        ran = [a for a in actions if a["status"] == "ran" and a.get("target_pattern") == c["candidate_id"]
+               and a.get("outcome") == "confirms"]
+        if not ran:
+            if not c["statement_ids"]:
+                out.append(c)
+            continue
+        where = [a for a in ran if a.get("role", "where") != "control" and not a.get("caveat")]
+        control = {a["exact_next_task"] for a in ran if a.get("role") == "control" and not a.get("caveat")}
+        wanted = controls.get(c["candidate_id"]) or []
+        if not where or (needs_control and (not wanted or not set(wanted) <= control)):
+            out.append(c)
+    return out

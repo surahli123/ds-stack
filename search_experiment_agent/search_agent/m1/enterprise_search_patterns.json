@@ -1,5 +1,5 @@
 {
- "_note": "Enterprise search pattern library for the search experiment agent: one search box over first-party (1P) content and third-party (3P) connector content, a typeahead dropdown before Enter, a full results page after Enter, and an answer panel. Families map metric names; at work, metric_families.json in the overlay maps the team's names exactly. Deep dives with 'sql' name a cut template the agent can run; 'needs' and confirms_when / refutes_when let explain.py score the result.",
+ "_note": "Enterprise search pattern library for the search experiment agent: one search box over first-party (1P) content and third-party (3P) connector content, a typeahead dropdown before Enter, a full results page after Enter, and an answer panel. Families map metric names; at work, metric_families.json in the overlay maps the team's names exactly. Deep dives with 'sql' name a cut template the agent can run; 'needs' and confirms_when / refutes_when let explain.py score the result. A candidate is confirmed only when a cut finds the effect where the mechanism acts AND its control cut (role 'control') shows what the usual look-alikes would not: the effect absent where the mechanism can't act, or present in a group a look-alike can't reach. One agreeing cut alone makes it 'fits a cut'. A control cut with relative_to is read against the reference effect: 'absent' confirms when its interval rules out that share of the reference change; 'present' refutes when it does.",
  "families": {
   "success": {
    "match": [
@@ -168,6 +168,31 @@
    ],
    "exclude": [],
    "good": null,
+   "practical": 0.01,
+   "_why": "the guard counts the full-page share as moved only at 1% or more of itself: a smaller shift in the query mix can't bias a full-page ratio by more than a fraction of that"
+  },
+  "queries_per_unauthorized_user": {
+   "match": [
+    "^full-page queries per user without connected apps"
+   ],
+   "exclude": [],
+   "good": null,
+   "practical": 0.01
+  },
+  "ta_known_item_unauth": {
+   "match": [
+    "^typeahead resolution of known-item queries, users without connected apps"
+   ],
+   "exclude": [],
+   "good": "increase",
+   "practical": 0.01
+  },
+  "p1_long_no_answer": {
+   "match": [
+    "^1p long-click share, full-page queries with no answer"
+   ],
+   "exclude": [],
+   "good": "increase",
    "practical": 0.005
   }
  },
@@ -213,7 +238,8 @@
     "p1_long_click": "down",
     "p1_binary_ctr": "down",
     "p3_clicks": "up",
-    "success": "flat_or_down"
+    "success": "flat_or_down",
+    "success_weighted": "down"
    },
    "contradicted_by": {
     "p1_long_click": "up"
@@ -250,6 +276,12 @@
      },
      "refutes_when": {
       "p1_long_on_ineligible": "down"
+     },
+     "role": "control",
+     "relative_to": {
+      "family": "p1_long_on_eligible",
+      "share": 0.5,
+      "expect": "absent"
      }
     },
     {
@@ -262,7 +294,8 @@
      "confirms": "the loss spreads across tenants",
      "refutes": "one or two large tenants carry it"
     }
-   ]
+   ],
+   "owner_question": "Are more 3P clicks worth fewer 1P clicks on the same queries?"
   },
   {
    "id": "substitution_on_successful",
@@ -295,7 +328,8 @@
       "any_success_eligible": "up"
      }
     }
-   ]
+   ],
+   "owner_question": "If the extra 3P clicks don't add success, what does the change buy?"
   },
   {
    "id": "typeahead_funnel",
@@ -334,6 +368,27 @@
      }
     },
     {
+     "cut": "typeahead resolution of known-item queries for users without connected apps, by arm",
+     "sql": "ta_known_item_unauth",
+     "role": "control",
+     "confirms": "typeahead resolves fewer known-item queries for everyone, not only for users with connected apps",
+     "refutes": "it holds for users without connected apps (the drop comes from one group's extra queries)",
+     "needs": {
+      "metric": "ta_known_item_unauth"
+     },
+     "confirms_when": {
+      "ta_known_item_unauth": "down"
+     },
+     "refutes_when": {
+      "ta_known_item_unauth": "up_or_flat"
+     },
+     "relative_to": {
+      "family": "typeahead_ctr",
+      "share": 0.5,
+      "expect": "present"
+     }
+    },
+    {
      "cut": "full-page share of all queries, by arm",
      "sql": "full_page_share",
      "confirms": "a larger share of queries reaches the full page",
@@ -345,7 +400,8 @@
       "full_page_share": "flat_or_down"
      }
     }
-   ]
+   ],
+   "owner_question": "Typeahead now finds fewer known items; what does the new model gain in return?"
   },
   {
    "id": "answer_substitution",
@@ -381,8 +437,30 @@
      "refutes_when": {
       "answer_no_click_share": "flat_or_down"
      }
+    },
+    {
+     "cut": "1P long-click share on full-page queries with no answer shown, by arm",
+     "sql": "p1_long_no_answer",
+     "role": "control",
+     "confirms": "queries with no answer keep their 1P long clicks",
+     "refutes": "they lose 1P long clicks too (the cause is elsewhere)",
+     "needs": {
+      "metric": "p1_long_no_answer"
+     },
+     "confirms_when": {
+      "p1_long_no_answer": "up_or_flat"
+     },
+     "refutes_when": {
+      "p1_long_no_answer": "down"
+     },
+     "relative_to": {
+      "family": "p1_long_click",
+      "share": 0.5,
+      "expect": "absent"
+     }
     }
-   ]
+   ],
+   "owner_question": "Are answers a good replacement for the 1P clicks they take?"
   },
   {
    "id": "authorized_struggle",
@@ -416,8 +494,30 @@
      "refutes_when": {
       "queries_per_authorized_user": "flat_or_down"
      }
+    },
+    {
+     "cut": "full-page queries per user without connected apps, by arm",
+     "sql": "unauth_queries",
+     "role": "control",
+     "confirms": "users without connected apps search as often as before",
+     "refutes": "they search more too (the cause isn't the connected apps)",
+     "needs": {
+      "metric": "queries_per_unauthorized_user"
+     },
+     "confirms_when": {
+      "queries_per_unauthorized_user": "flat"
+     },
+     "refutes_when": {
+      "queries_per_unauthorized_user": "up"
+     },
+     "relative_to": {
+      "family": "queries_per_authorized_user",
+      "share": 0.5,
+      "expect": "absent"
+     }
     }
-   ]
+   ],
+   "owner_question": "Why do users with connected apps search again more, and is the change the cause?"
   },
   {
    "id": "speed_cost",
@@ -439,7 +539,8 @@
     }
    ],
    "reading": "bad",
-   "source": "Brutlag, Google, 2009 (400 ms delay: -0.44% searches in weeks 1-3, -0.76% in weeks 4-6, still -0.21% after removal); Dmitriev et al., A Dirty Dozen: Twelve Common Metric Interpretation Pitfalls, KDD 2017 (latency moved by page mix)"
+   "source": "Brutlag, Google, 2009 (400 ms delay: -0.44% searches in weeks 1-3, -0.76% in weeks 4-6, still -0.21% after removal); Dmitriev et al., A Dirty Dozen: Twelve Common Metric Interpretation Pitfalls, KDD 2017 (latency moved by page mix)",
+   "owner_question": "Is the latency cost worth what the change gains?"
   },
   {
    "id": "denominator_driven",
@@ -544,5 +645,6 @@
    "source": "Dmitriev et al., A Dirty Dozen: Twelve Common Metric Interpretation Pitfalls, KDD 2017 (telemetry loss in one arm, bot filters hitting engaged users, metric-level sample ratio mismatch)"
   }
  ],
- "_sources": "Base kinds (ratio, segment, check) copied from skills/ds-experiment/references/search_patterns.json; enterprise patterns from the Fable enterprise-search review (2026-10-13)."
+ "_sources": "Base kinds (ratio, segment, check) copied from skills/ds-experiment/references/search_patterns.json; enterprise patterns from the Fable enterprise-search review (2026-10-13).",
+ "confirm_needs_control": true
 }

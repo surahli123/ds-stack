@@ -11,7 +11,7 @@ import os
 
 from search_agent import CUTS, LIBRARY
 
-FILES = ("patterns.json", "metric_families.json", "cut_templates.json", "readout_rules.json")
+FILES = ("patterns.json", "metric_families.json", "metric_aliases.json", "cut_templates.json", "readout_rules.json")
 
 
 def files(knowledge_dir):
@@ -27,4 +27,22 @@ def version_hash(knowledge_dir):
         h.update(os.path.basename(path).encode())
         with open(path, "rb") as handle:
             h.update(handle.read())
+    return h.hexdigest()
+
+
+def run_version(knowledge_dir, overlay=None):
+    """Everything else that can change a result: the overlay's settings and the code (the agent,
+    the learning loop and the ds-experiment tools it runs). Contracts are frozen with each case,
+    so they are not part of it. Recorded beside the knowledge version in every trace."""
+    import search_agent
+    h = hashlib.sha256(version_hash(knowledge_dir).encode())
+    paths = [os.path.join(overlay, f) for f in ("standards.json", "warehouse.json")] if overlay else []
+    for root in (os.path.dirname(search_agent.__file__), os.path.dirname(os.path.abspath(__file__)), search_agent.TOOLS):
+        for folder, _, names in sorted(os.walk(root)):
+            paths += [os.path.join(folder, n) for n in sorted(names) if n.endswith(".py")]
+    for path in paths:
+        if os.path.exists(path):
+            h.update(os.path.basename(path).encode())
+            with open(path, "rb") as handle:
+                h.update(handle.read())
     return h.hexdigest()
