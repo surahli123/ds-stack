@@ -381,6 +381,9 @@ def triage_prep(decision, explained):
               f"Against it: {d['refutes']}." for n, d in enumerate(explained["deep_dives"], 1)] or ["- Nothing to run."]
     lines += ["", "Inferred explanations come from how metrics moved together. They become measured when a cut is run "
               "and its numbers are passed back to explain.py with --segments.", ""]
+    used = [i for i in explained["patterns"] if i.get("source") and i["id"] in explained_at]
+    if used:
+        lines += ["## Sources", ""] + [f"- {i['name']}: {i['source']}." for i in used] + [""]
     return "\n".join(lines)
 
 

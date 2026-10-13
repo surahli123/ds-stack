@@ -28,6 +28,7 @@ HERE = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, HERE)
 
 import decompose  # noqa: E402
+import expstats  # noqa: E402
 from decide import describe, moved  # noqa: E402
 
 PATTERNS = os.path.join(os.path.dirname(HERE), "references", "search_patterns.json")
@@ -114,6 +115,7 @@ def match_comovement(library, fam, states):
                    if f in states and states[f] in STATE_OK[s] and s != "any"]
         evidence = [f"{fam[f]['metric']} {change_text(fam[f])}" for f in list(need) + support]
         instance = {"id": p["id"], "name": p["name"], "label": "inferred", "mechanism": p["mechanism"], "reading": p.get("reading", "neutral"),
+                    "source": p.get("source"),
                     "families": list(need) + support, "metrics": [fam[f]["metric"] for f in list(need) + support],
                     "evidence": evidence, "score": len(support), "deep_dives": p.get("deep_dives", [])}
         if contra:
@@ -144,7 +146,7 @@ def ratio_patterns(library, fam, level):
         values = {"ratio": r["metric"], "numerator": n["metric"], "denominator": d["metric"],
                   "denominator_change": change_text(d)}
         out.append({"id": spec["id"], "name": spec["name"], "label": "measured", "mechanism": fill(spec["mechanism"], values),
-                    "reading": spec.get("reading", "neutral"),
+                    "reading": spec.get("reading", "neutral"), "source": spec.get("source"),
                     "families": [ratio_family, parts["numerator"], parts["denominator"]],
                     "metrics": [r["metric"], n["metric"], d["metric"]],
                     "evidence": [f"{r['metric']} {change_text(r)}", f"{n['metric']} {change_text(n)}",
@@ -202,7 +204,7 @@ def segment_patterns(library, comparison, extra, registered_names, level):
             values = {"metric": metric, "segment": top["segment"], "share": share}
             measured = any(p.get("measured") for p in parts)
             found.append({"id": spec["id"], "name": spec["name"], "label": "measured" if measured else "inferred",
-                          "reading": spec.get("reading", "neutral"),
+                          "reading": spec.get("reading", "neutral"), "source": spec.get("source"),
                           "mechanism": fill(spec["mechanism"], values), "families": [], "metrics": [metric],
                           "segment": top["segment"], "dimension": dim,
                           "evidence": [f"{metric} by {dim}: " + "; ".join(
@@ -222,7 +224,7 @@ def check_patterns(library, decision):
                      if v["role"] == "invariant" and v["verdict"] == "moved"]
         if hits:
             out.append({"id": spec["id"], "name": spec["name"], "label": "measured", "mechanism": spec["mechanism"],
-                        "reading": spec.get("reading", "bad"),
+                        "reading": spec.get("reading", "bad"), "source": spec.get("source"),
                         "families": [], "metrics": [], "evidence": [h["summary"] for h in hits], "score": 5,
                         "deep_dives": spec["deep_dives"], "blocking": spec["id"] == "artifact"
                         and any(h.get("status") == "fail" or h["check"] == "invariant" for h in hits)})
@@ -329,10 +331,17 @@ def readiness(decision, instances, questions):
             break
     if reasons:
         return {"verdict": "not_ready", "text": "Not ready", "reasons": reasons, "first": first}
+    borderline = []
+    for v in decision["verdicts"]:
+        if v["role"] == "primary" and v["verdict"] in ("better", "below_bar") and v.get("se"):
+            p = expstats.two_sided_p(v["point"], v["se"])
+            if p > 0.01:
+                borderline.append(f"{v['metric']}'s win is borderline (p about {p:.2f}); wins like this often fail a rerun, "
+                                  "so expect triage to ask for one")
     open_q = [q for q in questions if not q["candidates"]]
     weak = [q for q in registered if q["candidates"] and all(by_id[c]["score"] == 0 for c in q["candidates"] if c in by_id)]
-    if open_q or weak:
-        parts = []
+    if open_q or weak or borderline:
+        parts = list(borderline)
         if open_q:
             parts.append(f"{len(open_q)} of {len(questions)} movements have no candidate explanation yet")
         if weak:

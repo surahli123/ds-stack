@@ -110,9 +110,15 @@
      "cut": "success on triggered queries only (where the ranking actually changed)",
      "confirms": "a larger effect on triggered queries, diluted overall",
      "refutes": "the same effect on untouched queries, pointing to something other than ranking"
+    },
+    {
+     "cut": "the untriggered complement (queries where the ranking didn't change), by arm",
+     "confirms": "no difference there, as an A/A test would show",
+     "refutes": "a difference on untouched queries (logging or leakage)"
     }
    ],
-   "reading": "good"
+   "reading": "good",
+   "source": "Kohavi, Tang, Xu 2020, ch. 20 (triggered analysis needs counterfactual logging, and the untriggered complement must look like an A/A)"
   },
   {
    "id": "attractive_not_relevant",
@@ -133,14 +139,24 @@
    "mechanism": "Results look more clickable (titles, snippets or positions) but satisfy no more often, so CTR rises without long clicks.",
    "deep_dives": [
     {
+     "cut": "SAT clicks (dwell of 30 seconds or more) vs all clicks, by arm",
+     "confirms": "clicks rise but SAT clicks don't",
+     "refutes": "SAT clicks rise with clicks"
+    },
+    {
      "cut": "CTR and long-click rate by result position",
      "confirms": "the CTR gain sits in top positions and comes with short clicks",
      "refutes": "long clicks rise wherever CTR rises"
     },
     {
-     "cut": "short-click rate (back to results within about 10 seconds)",
-     "confirms": "short clicks rise in treatment",
-     "refutes": "short clicks are flat"
+     "cut": "a similar query issued again within 5 minutes, by arm",
+     "confirms": "quick re-queries rise after clicks",
+     "refutes": "re-queries are flat"
+    },
+    {
+     "cut": "whole-page CTR vs CTR on the element that changed",
+     "confirms": "element CTR rises while whole-page CTR is flat (clicks moved, not added)",
+     "refutes": "whole-page CTR rises too"
     },
     {
      "cut": "config diff of presentation parameters (titles, snippets, thumbnails)",
@@ -148,7 +164,8 @@
      "refutes": "only ranking differs"
     }
    ],
-   "reading": "bad"
+   "reading": "bad",
+   "source": "Hassan et al., CIKM 2013 (attractive snippets, SAT clicks at 30 s dwell); Dmitriev et al., A Dirty Dozen: Twelve Common Metric Interpretation Pitfalls, KDD 2017 (clicks shift between page elements)"
   },
   {
    "id": "struggling_users",
@@ -166,7 +183,7 @@
     "success": "up",
     "reformulation": "down"
    },
-   "mechanism": "Users search more because they retry: reformulations rise and success doesn't, so higher query volume is a cost, not engagement.",
+   "mechanism": "Users search more because they retry: reformulations rise and success doesn't, so higher query volume is a cost, not engagement. A worse ranker can raise queries and even sessions per user for days before engagement falls.",
    "deep_dives": [
     {
      "cut": "success per query vs per user",
@@ -174,9 +191,19 @@
      "refutes": "success per query holds while volume grows"
     },
     {
+     "cut": "a similar query issued again within 5 minutes, by arm",
+     "confirms": "quick similar re-queries rise in treatment",
+     "refutes": "re-queries are flat, so the extra queries are new needs"
+    },
+    {
      "cut": "reformulation rate by query class (head, torso, tail; navigational, informational)",
      "confirms": "reformulation rises on the classes the change touched",
      "refutes": "reformulation rises evenly, pointing to a logging or session change"
+    },
+    {
+     "cut": "navigational share of queries by arm, week by week",
+     "confirms": "treatment users drift toward easy navigational queries (giving up on hard ones)",
+     "refutes": "the query mix is stable"
     },
     {
      "cut": "distribution of queries per session by arm",
@@ -184,7 +211,8 @@
      "refutes": "more sessions, not longer ones"
     }
    ],
-   "reading": "bad"
+   "reading": "bad",
+   "source": "Kohavi et al., Five Puzzling Outcomes, KDD 2012 (a ranking bug raised queries per user 10% and revenue 30%); Song, Shi, Fu, WWW 2013 (a worse ranker raised sessions per user for days); Hassan et al., CIKM 2013 (re-query within 5 minutes)"
   },
   {
    "id": "real_engagement",
@@ -200,7 +228,7 @@
    "contradicted_by": {
     "reformulation": "up"
    },
-   "mechanism": "Users come back and search more because searches succeed more often.",
+   "mechanism": "Users come back and search more because searches succeed more often. Treat it with suspicion: sessions per user rarely improves, and a short-lived rise can come from a worse ranker.",
    "deep_dives": [
     {
      "cut": "sessions per user and return rate by arm",
@@ -213,7 +241,8 @@
      "refutes": "the gain is only in first-week users (novelty)"
     }
    ],
-   "reading": "good"
+   "reading": "good",
+   "source": "Kohavi, 2017 talk (sessions per user improves in about 1 in 5000 Bing experiments); Song, Shi, Fu, WWW 2013"
   },
   {
    "id": "speed_cost",
@@ -229,7 +258,7 @@
    "contradicted_by": {
     "abandonment": "down"
    },
-   "mechanism": "The treatment serves results more slowly, and slower pages lose clicks and raise abandonment, which can hide a relevance gain.",
+   "mechanism": "The treatment serves results more slowly, and slower pages lose clicks and raise abandonment, which can hide a relevance gain. Speed effects tend to grow over weeks rather than fade.",
    "deep_dives": [
     {
      "cut": "abandonment and CTR by latency bucket, per arm",
@@ -245,9 +274,15 @@
      "cut": "relevance metrics on queries where latency didn't change",
      "confirms": "relevance improves once latency is held fixed",
      "refutes": "no gain even at equal latency"
+    },
+    {
+     "cut": "latency by page type and load type (cached reloads vs fresh loads), by arm",
+     "confirms": "latency rises on the same page types",
+     "refutes": "the page mix changed, so latency moved without pages getting slower"
     }
    ],
-   "reading": "bad"
+   "reading": "bad",
+   "source": "Brutlag, Google, 2009 (400 ms delay: -0.44% searches in weeks 1-3, -0.76% in weeks 4-6, still -0.21% after removal); Dmitriev et al., A Dirty Dozen: Twelve Common Metric Interpretation Pitfalls, KDD 2017 (latency moved by page mix)"
   },
   {
    "id": "recall_over_precision",
@@ -276,7 +311,8 @@
      "refutes": "the drop is broad"
     }
    ],
-   "reading": "bad"
+   "reading": "bad",
+   "source": "Dmitriev et al., A Dirty Dozen: Twelve Common Metric Interpretation Pitfalls, KDD 2017 (ratio metrics move with their denominator); reasoned, no published case of this exact signature"
   },
   {
    "id": "good_abandonment",
@@ -309,9 +345,15 @@
      "cut": "reformulation and return-within-a-minute after an abandoned query",
      "confirms": "abandoned users don't come back to retry",
      "refutes": "abandoned users retry"
+    },
+    {
+     "cut": "abandonment by device",
+     "confirms": "the rise is larger on mobile, where good abandonment is common",
+     "refutes": "the rise is the same on desktop"
     }
    ],
-   "reading": "good"
+   "reading": "good",
+   "source": "Li, Huffman, Tokuda, SIGIR 2009 (good abandonment, higher on mobile); Pew Research 2025 (clicks 8% vs 15% with AI summaries)"
   },
   {
    "id": "mixed_wins_losses",
@@ -341,7 +383,8 @@
      "refutes": "abandonment rises evenly"
     }
    ],
-   "reading": "mixed"
+   "reading": "mixed",
+   "source": "Dmitriev et al., A Dirty Dozen: Twelve Common Metric Interpretation Pitfalls, KDD 2017 (heterogeneous effects); reasoned from averages hiding opposite effects"
   },
   {
    "id": "ads_displaced",
@@ -370,7 +413,8 @@
      "refutes": "fewer ads are shown (an ad-serving change)"
     }
    ],
-   "reading": "mixed"
+   "reading": "mixed",
+   "source": "Dmitriev et al., A Dirty Dozen: Twelve Common Metric Interpretation Pitfalls, KDD 2017 (ad load by page type); Kohavi et al. 2012 (bad organic results raise revenue)"
   },
   {
    "id": "denominator_driven",
@@ -387,9 +431,15 @@
      "cut": "what changed the {denominator} (query volume, sessions, logging of searches)",
      "confirms": "a volume or logging change explains it",
      "refutes": "volume is steady"
+    },
+    {
+     "cut": "the same clicks over the finest denominator that doesn't move itself (for example clicks per session)",
+     "confirms": "the effect disappears on a stable denominator",
+     "refutes": "the effect holds on a stable denominator"
     }
    ],
-   "reading": "neutral"
+   "reading": "neutral",
+   "source": "Dmitriev et al., A Dirty Dozen: Twelve Common Metric Interpretation Pitfalls, KDD 2017 (module CTR -40% while clicks +74% and impressions +200%)"
   },
   {
    "id": "concentrated_segment",
@@ -406,16 +456,22 @@
      "cut": "what the treatment changes for {segment} (ranking features, coverage, rendering)",
      "confirms": "a mechanism specific to {segment}",
      "refutes": "nothing in the change targets {segment}"
+    },
+    {
+     "cut": "sample split and event logging within {segment}, by arm",
+     "confirms": "the segment is balanced and logs the same way",
+     "refutes": "the segment itself is imbalanced or logs differently (an artifact)"
     }
    ],
-   "reading": "neutral"
+   "reading": "neutral",
+   "source": "Dmitriev et al., A Dirty Dozen: Twelve Common Metric Interpretation Pitfalls, KDD 2017 (effects confined to a country, browser or version); tail-query lifts reported for semantic retrieval (snippet-level)"
   },
   {
    "id": "novelty",
    "name": "The effect is fading",
    "kind": "check",
    "check": "novelty",
-   "mechanism": "The effect shrinks with each day users have had the treatment, so the long-run effect is likely smaller than the average.",
+   "mechanism": "The effect shrinks with each day users have had the treatment, so the long-run effect is likely smaller than the average. UI changes tend to fade; ranking, speed and ad-load effects tend to grow, so a fading ranking effect deserves a second look.",
    "deep_dives": [
     {
      "cut": "effect by days since first exposure, per weekly cohort",
@@ -428,7 +484,8 @@
      "refutes": "only new users differ"
     }
    ],
-   "reading": "bad"
+   "reading": "bad",
+   "source": "Song, Shi, Fu, WWW 2013; Brutlag 2009; Hohnhold, O'Brien, Tang, KDD 2015 (ads blindness grows over months)"
   },
   {
    "id": "artifact",
@@ -446,9 +503,20 @@
      "cut": "exposure counts by day, platform and browser",
      "confirms": "the imbalance sits in one slice",
      "refutes": "the imbalance is everywhere (assignment problem)"
+    },
+    {
+     "cut": "client-logged vs server-logged versions of the same metric, by arm",
+     "confirms": "only client events move (telemetry loss differs by arm)",
+     "refutes": "client and server agree"
+    },
+    {
+     "cut": "share of users removed by bot and spam filters, by arm",
+     "confirms": "filters remove different shares in each arm",
+     "refutes": "filter rates match"
     }
    ],
-   "reading": "bad"
+   "reading": "bad",
+   "source": "Dmitriev et al., A Dirty Dozen: Twelve Common Metric Interpretation Pitfalls, KDD 2017 (telemetry loss in one arm, bot filters hitting engaged users, metric-level sample ratio mismatch)"
   }
  ],
  "segment_dimensions": {
@@ -471,5 +539,6 @@
    "informational",
    "transactional"
   ]
- }
+ },
+ "_sources": "Research notes: research_notes/Experiment metric deep dives/search_metric_signatures.md (2026-10-13)."
 }
