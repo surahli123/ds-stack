@@ -91,8 +91,10 @@ def scorecard_invariants(metrics, analysis):
                   "(relative, absolute and intervals agree)")
 
 
-def sample_split(config, primary, alpha, explanations, warn_alpha=0.01):
-    """SRM on exposures if the config has them, else on the primary metric's units.
+def sample_split(config, primary, alpha, explanations, warn_alpha=0.01, unit_fallback=True):
+    """SRM on exposures if the config has them, else on the primary metric's units
+    (unless unit_fallback is False: a primary whose denominator the treatment moves,
+    such as queries or triggered users, would fail a good test).
 
     Two bands, as Statsig uses them: p below `alpha` (0.001) fails; p below
     `warn_alpha` (0.01) is flagged and listed as an open item without blocking.
@@ -105,7 +107,7 @@ def sample_split(config, primary, alpha, explanations, warn_alpha=0.01):
     if exposures and active and all(g.get("name") in exposures or g.get("id") in exposures for g in active):
         counts = [_count(exposures.get(g.get("name"), exposures.get(g.get("id")))) for g in active]
         source = "exposures"
-    elif primary and primary.get("control_units") and primary.get("test_units") and len(active) == 2:
+    elif unit_fallback and primary and primary.get("control_units") and primary.get("test_units") and len(active) == 2:
         control_first = (active[0].get("id") == (config or {}).get("control_group")
                          or (active[0].get("name") or "").lower() == "control")
         units = [int(primary["control_units"]), int(primary["test_units"])]

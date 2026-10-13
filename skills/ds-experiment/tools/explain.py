@@ -58,8 +58,10 @@ DEFAULT_BAND = 0.01
 
 # ---------- library and families ----------
 
-def load_library(overlay):
-    with open(PATTERNS, encoding="utf-8") as handle:
+def load_library(overlay, base=None):
+    """The pattern library: `base` (default references/search_patterns.json) plus the
+    overlay's patterns.json and metric_families.json."""
+    with open(base or PATTERNS, encoding="utf-8") as handle:
         library = json.load(handle)
     if overlay:
         extra = os.path.join(overlay, "patterns.json")

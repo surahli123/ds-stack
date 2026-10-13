@@ -318,7 +318,7 @@ def decide(scorecard, prereg, config=None, standards=None, daily=None):
     registered_metrics = [m for m in (find(metrics, s["metric"]) for s in primaries + guard_specs) if m]
     checks.append(chk.scorecard_invariants(registered_metrics, analysis))
     checks.append(chk.sample_split(config, primary_metric, std["srm_alpha"], prereg.get("explanations"),
-                                   std.get("srm_warn_alpha", 0.01)))
+                                   std.get("srm_warn_alpha", 0.01), std.get("srm_unit_fallback", True)))
     checks.extend(chk.config_checks(config, prereg, analysis.get("as_of")))
     checks.append(chk.pre_period(prereg, config, primaries[0]["metric"]))
 
