@@ -13,6 +13,7 @@ This repo holds only the generic core. Company facts live in a private overlay o
 | `ds-mode` | Analyses: pins the metric definition, checks the data, decomposes a movement, rules alternatives in or out, writes the readout with an interval and provenance | Four check scripts that log every run; a readout format the eval parser reads |
 | `ds-doc` | Doc structure and narrative: doc type, the spine (reader, decision, one-sentence answer, takeaways), answer-first drafting, DS claim rules | A step checklist; skipped steps stay visible |
 | `doc-tighten` | Format and concision: answer placement, bold, log drift, tables, clutter, length budget | `doc_lint.py`, 14 rules |
+| `ds-experiment` | Experiment readouts for search A/B tests: the launch call, why each metric moved, the next cuts, and whether it's ready for triage | `decide.py`, `explain.py` and `render.py`; see [its README](skills/ds-experiment/README.md) |
 | `cold-read` | Whether the doc works: a fresh reader must recover the answer and decision from a skim, and every takeaway from a full read | `cold_read.py`: a fresh `claude -p` reader, graded by script against `spine.json` |
 
 Each lint rule is tied to a count from 119 agent-written docs, or to the DS editing guide in ai-writing-suite (`tools/rules.json`). On that corpus, 76 docs open with method or status before any answer, 64 lean on bold, 27 restate points in new words, and 13 turn into logs. The lint's answer-first rule flags 77 of the 119.
@@ -30,7 +31,7 @@ codex plugin marketplace add surahli123/ds-stack && codex plugin add ds-stack
 
 For Cursor, the `.cursor-plugin/plugin.json` manifest points at `skills/`. To install a single skill instead, copy its folder from `skills/` into your tool's skills directory. The skills are plain SKILL.md files with standard-library Python tools.
 
-Status by tool: in Claude Code the plugin validates, installs, and exposes all four skills (`ds-stack:ds-mode`, `ds-doc`, `doc-tighten`, `cold-read`), and both evals ran there. Codex and Cursor have not been smoke-tested yet.
+Status by tool: in Claude Code the plugin validates, installs and exposes all five skills, and every eval ran there. Codex and Cursor have not been smoke-tested yet.
 
 ## Results so far
 
@@ -49,7 +50,7 @@ Both evals use synthetic tasks, 3 runs per setup, Sonnet as the agent, and clean
 | Cost per run | $0.055 | $0.080 |
 
 - The skills fix format and length. Plain prompting failed the lint on 7 of 9 docs, mostly on bold and bold-label bullets. The ds-doc docs are 16% shorter.
-- No comprehension gain is shown. Readers already understood the plain docs. The one skim gap is a grading artifact: the reader prompt asked a handover for its conclusion rather than its current state. That prompt is now fixed.
+- No comprehension gain is shown: readers already understood the plain docs.
 
 What the evals show: short tasks written from clean notes are too easy, both for analysis and for writing. The corpus failures came from long, multi-session docs written mid-work.
 
@@ -103,7 +104,7 @@ make eval && make grade RUN=eval/results/<dir>                       # analysis 
 make writing-eval && make writing-grade RUN=eval/writing/results/<dir>   # writing eval
 ```
 
-Transcripts stay local because they are bulky. A regrade without them fails closed as unverifiable.
+Transcripts stay local; a regrade without them fails closed.
 
 ## Other caveats
 
