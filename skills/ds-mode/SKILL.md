@@ -88,6 +88,7 @@ Headline: <signed number> <unit> (<95% interval>) [q<n> | check:<name>#<n>]   or
 - In Provenance, the logs are `.ds-queries.log` and `.ds-checks.log`, and a last line `- Verified: <the verify_readout.py result line, exactly as printed>` shows the reviewer the trace check passed.
 - The interval is required. `mix_shift` reports one for the overall change (`delta_ci95_pp`). For an experiment lift, use a two-proportion interval. When no interval can be computed, write `(no interval: <reason>)`.
 - Use causal words ("caused", "drove", "because of") only for a randomized test or a design that identifies the cause. Otherwise say "coincided with" or "is associated with", and name what would confirm it.
+- A design that can't identify the cause (a 100% rollout, no holdout) is not a reason to abstain. Headline the measured change, say what it coincided with, and name what would identify the cause. `can't tell` is for when the data can't support the number itself.
 - measured means computed from data in this session.
 - inferred means it follows from measured facts by reasoning.
 - guess means neither.

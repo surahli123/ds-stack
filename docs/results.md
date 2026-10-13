@@ -2,6 +2,23 @@
 
 What the evals, the real-case review and the research found, with numbers. The README keeps a summary.
 
+## Seed eval (2026-10-13, `v0.3` seed)
+
+The `v0.3` seed (traceable readouts) gets every analysis case right, and every full-arm readout passes `verify_readout.py`. The cases are still too easy to show a gain over plain prompting, so the verdict is `INSUFFICIENT_N`. Results: `eval/results/2026-10-13-seed/`. The setup is as before: Sonnet, 3 runs per setup, clean profiles.
+
+| Metric | Plain prompting | Checks only | Full ds-mode |
+|---|---|---|---|
+| Cases right (majority of 3) | 5 of 5 | 4 of 5 | 5 of 5 |
+| Runs right | 15 of 15 | 13 of 15 | 15 of 15 |
+| Readouts passing `verify_readout.py` | n/a | n/a | 15 of 15 |
+| Cost | $0.97 | $1.15 | $2.11 |
+
+- Checks-only abstained on the clean control (f3) in 2 of 3 runs, reasoning that a 100% rollout leaves the ranker's effect unidentified. Checks without the method push toward abstaining.
+- The first seed run found three problems, all fixed before the run above:
+  - The f3 clean control had byte-identical rows in both weeks, which a careful agent reads as a stale copy. The fixture generator now adds seeded noise.
+  - Full-arm agents searched the filesystem for `metrics.json` and read the repo's example overlay; the grader flagged 5 runs as contaminated. ds-mode now reads the overlay only from `$DS_OVERLAY_DIR`.
+  - The full arm abstained on f3 for the same reason checks-only did. ds-mode now says an unidentified cause is a reason for "coincided with", not for "can't tell". This was tuned on these five cases, which are a build set, not a holdout.
+
 ## Evals
 
 Both evals use synthetic tasks, 3 runs per setup, Sonnet as the agent, and clean profiles. Both report `INSUFFICIENT_N`, because the pre-registered rules need more tasks before they give a verdict.
