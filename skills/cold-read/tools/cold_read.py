@@ -1,9 +1,23 @@
 #!/usr/bin/env python3
-"""Run the cold read: a fresh reader answers fixed questions, graded against the spine.
+r"""Run the cold read: a fresh reader answers fixed questions, graded against the spine.
 
     python3 cold_read.py doc.md --spine spine.json              # runs the reader with `claude -p`
+    python3 cold_read.py doc.md --spine spine.json --agent-cmd 'my-agent --model {model}'
     python3 cold_read.py doc.md --spine spine.json --prompts-only   # prints the prompts for a subagent
     python3 cold_read.py doc.md --spine spine.json --replies replies.json   # grades replies you collected
+
+Any headless agent can be the reader, not only Claude Code. --agent-cmd (or the
+DS_AGENT_CMD environment variable) is a command template. The prompt is written
+to a temp file; `{prompt_file}` becomes its path and `{model}` the --reader-model
+value. If the template has no `{prompt_file}`, the prompt is sent on stdin. The
+reply is the command's stdout. The template is split with shlex and run without
+a shell, so wrap it in `sh -c '...'` if you need redirection or $(...). Examples:
+
+    DS_AGENT_CMD='my-agent --print --model {model}'             # prompt on stdin
+    DS_AGENT_CMD='my-agent --prompt-file {prompt_file}'         # prompt as a file
+    DS_AGENT_CMD='sh -c "my-agent -p \"$(cat {prompt_file})\""'   # prompt as an argument
+
+With neither set, the reader is `claude -p` with its tools disabled, as before.
 
 The spine is written before the draft (ds-doc step 2):
 
@@ -12,7 +26,7 @@ The spine is written before the draft (ds-doc step 2):
 
 Grading is done here, not by the author: each key item is matched against the
 reader's answer lines by shared content words and numbers, and items that
-don't match are checked by a separate grader call when `claude` is available.
+don't match are checked by a separate grader call (same agent) when it is available.
 Writes cold_read.json next to the doc. Exit 0 pass, 1 fail, 2 usage error.
 """
 
@@ -20,6 +34,7 @@ import argparse
 import json
 import os
 import re
+import shlex
 import shutil
 import subprocess
 import sys
@@ -57,12 +72,47 @@ def prompts(doc, spine):
     return {"skim": fill(skim_prompt, skim_view.skim(doc)), "full": fill(full_prompt, doc)}
 
 
-def ask(prompt, model):
+CLAUDE_DISALLOWED = "Bash,Read,Write,Edit,Glob,Grep,Task,Agent,WebFetch,WebSearch"
+
+
+def claude_argv(prompt, model):
+    """The default reader: `claude -p` with every tool switched off."""
+    return ["claude", "-p", prompt, "--model", model, "--disallowedTools", CLAUDE_DISALLOWED]
+
+
+def agent_argv(template, prompt_file, model):
+    """Expand an --agent-cmd template into (argv, prompt_on_stdin).
+
+    The template is split with shlex first and `{prompt_file}` / `{model}` are filled in token by token, so a
+    path with spaces or backslashes stays one argument. Never goes through a shell.
+    """
+    argv = [tok.replace("{prompt_file}", prompt_file).replace("{model}", model) for tok in shlex.split(template)]
+    if not argv:
+        raise ValueError("the agent command is empty")
+    return argv, "{prompt_file}" not in template
+
+
+def agent_available(agent_cmd):
+    """True when the program the reader would run is on PATH."""
+    return bool(shutil.which(shlex.split(agent_cmd)[0] if agent_cmd else "claude"))
+
+
+def ask(prompt, model, agent_cmd=None):
+    """One reader call. The reply is the agent's stdout, run in an empty temp directory."""
     work = tempfile.mkdtemp(prefix="cold-read-")
     try:
-        proc = subprocess.run(["claude", "-p", prompt, "--model", model, "--disallowedTools",
-                               "Bash,Read,Write,Edit,Glob,Grep,Task,Agent,WebFetch,WebSearch"],
-                              cwd=work, capture_output=True, text=True, timeout=300)
+        if agent_cmd:
+            prompt_file = os.path.join(work, "prompt.txt")
+            with open(prompt_file, "w", encoding="utf-8") as handle:
+                handle.write(prompt)
+            argv, on_stdin = agent_argv(agent_cmd, prompt_file, model)
+            feed = {"input": prompt} if on_stdin else {"stdin": subprocess.DEVNULL}
+            proc = subprocess.run(argv, cwd=work, capture_output=True, text=True, encoding="utf-8",
+                                  errors="replace", timeout=300, **feed)
+        else:
+            proc = subprocess.run(claude_argv(prompt, model), cwd=work, capture_output=True, text=True, timeout=300)
+        if proc.returncode != 0:
+            print(f"cold_read: the agent exited {proc.returncode}: {(proc.stderr or '').strip()[:200]}", file=sys.stderr)
         return proc.stdout
     finally:
         shutil.rmtree(work, ignore_errors=True)
@@ -93,12 +143,12 @@ def overlap(key, text):
     return len(want & have) / len(want)
 
 
-def judge(pairs, model):
+def judge(pairs, model, agent_cmd=None):
     """Ask a separate grader whether each reader answer conveys its key fact."""
     prompt = ("For each pair, say whether the reader's answer conveys the same fact as the key. "
               "Paraphrase is fine; a missing or different number is not. Reply with only a JSON list of true/false.\n\n"
               + json.dumps([{"key": k, "reader": r} for k, r in pairs], indent=1))
-    reply = ask(prompt, model)
+    reply = ask(prompt, model, agent_cmd)
     match = re.search(r"\[[^\]]*\]", reply)
     try:
         verdicts = json.loads(match.group(0)) if match else []
@@ -107,7 +157,7 @@ def judge(pairs, model):
     return verdicts if len(verdicts) == len(pairs) else [False] * len(pairs)
 
 
-def grade(spine, replies, model=None):
+def grade(spine, replies, model=None, agent_cmd=None):
     skim, full = answer_lines(replies["skim"]), answer_lines(replies["full"])
     items = [("skim", "answer", spine["answer"], skim.get("answer", "") + " " + skim.get("decision", "")),
              ("skim", "decision", spine["decision"], skim.get("decision", "") + " " + skim.get("answer", ""))]
@@ -119,8 +169,8 @@ def grade(spine, replies, model=None):
         results.append({"pass": mode, "item": name, "key": key, "reader": text.strip(),
                         "got": score >= 0.5, "how": f"overlap {score:.0%}"})
     unsure = [r for r in results if not r["got"] and r["reader"]]
-    if unsure and model and shutil.which("claude"):
-        for r, ok in zip(unsure, judge([(r["key"], r["reader"]) for r in unsure], model)):
+    if unsure and model and agent_available(agent_cmd):
+        for r, ok in zip(unsure, judge([(r["key"], r["reader"]) for r in unsure], model, agent_cmd)):
             if ok:
                 r["got"], r["how"] = True, r["how"] + "; grader: same fact"
     skim_got = sum(r["got"] for r in results if r["pass"] == "skim")
@@ -136,9 +186,17 @@ def main(argv=None):
     parser.add_argument("--spine", required=True)
     parser.add_argument("--replies", help="JSON {'skim': ..., 'full': ...} collected from a subagent")
     parser.add_argument("--prompts-only", action="store_true")
-    parser.add_argument("--reader-model", default="haiku")
+    parser.add_argument("--reader-model", default="haiku",
+                        help="passed to the agent as {model} (default: haiku)")
+    parser.add_argument("--agent-cmd", default=os.environ.get("DS_AGENT_CMD") or None,
+                        help="command template for the reader, e.g. 'my-agent --model {model}'. {prompt_file} is the "
+                             "prompt's path; without it the prompt goes on stdin. The reply is stdout. "
+                             "Default: $DS_AGENT_CMD, else `claude -p` with tools disabled")
     args = parser.parse_args(argv)
+    agent_cmd = args.agent_cmd or None
     try:
+        if agent_cmd:
+            agent_argv(agent_cmd, "", "")
         spine = load_spine(args.spine)
         with open(args.doc, encoding="utf-8") as handle:
             doc = handle.read()
@@ -155,13 +213,15 @@ def main(argv=None):
     if args.replies:
         with open(args.replies, encoding="utf-8") as handle:
             replies = json.load(handle)
-    elif shutil.which("claude"):
-        replies = {mode: ask(texts[mode], args.reader_model) for mode in ("skim", "full")}
+    elif agent_available(agent_cmd):
+        replies = {mode: ask(texts[mode], args.reader_model, agent_cmd) for mode in ("skim", "full")}
     else:
-        print("cold_read: no `claude` CLI here; rerun with --prompts-only, then --replies", file=sys.stderr)
+        what = f"`{shlex.split(agent_cmd)[0]}` (from --agent-cmd / DS_AGENT_CMD)" if agent_cmd else "the `claude` CLI"
+        print(f"cold_read: {what} is not on PATH; set DS_AGENT_CMD to a headless agent command, or rerun with "
+              "--prompts-only, then --replies", file=sys.stderr)
         return 2
 
-    result = grade(spine, replies, args.reader_model)
+    result = grade(spine, replies, args.reader_model, agent_cmd)
     result["replies"] = replies
     out = os.path.join(os.path.dirname(os.path.abspath(args.doc)), "cold_read.json")
     with open(out, "w", encoding="utf-8") as handle:

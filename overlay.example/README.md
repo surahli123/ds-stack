@@ -28,6 +28,7 @@ git config core.hooksPath .githooks                 # in this repo: enables the 
 - one statement per call
 - results of at most `max_rows` rows, `max_cell_chars` per text cell and `max_result_chars` in total, so only aggregates reach the conversation (search logs are untrusted text and can carry prompt injection). The caps reduce raw-text exposure but don't remove it. The structural fix is a warehouse view without free-text columns, granted to the agent's role
 - a time cap, plus a bytes-scanned cap where the warehouse supports one
-- read-only credentials outside scratch, enforced by the warehouse, not only by the runner
+- read-only credentials outside scratch, enforced by the warehouse, not only by the runner, and held only by the runner process
+- a log line for every statement, whether it ran, was blocked or failed: an id (`q1`, `q2`, ...), the SQL, parameters, as-of period, row count, time taken and the capped result rows, written to `.ds-queries.log` or `$DS_QUERIES_LOG`. Results computed outside the runner enter the same log through the pasted path. Readouts cite these ids and `verify_readout.py` resolves them, so an adapter without the log breaks review. The log holds SQL with table names, so keep it out of every repo
 
-Before any unsupervised session, run the adapter's copy of `safety/selftest.py`. It must exit 0.
+The reference adapter is `skills/ds-mode/tools/query.py` over `skills/ds-mode/tools/guarded_query.py` (SQLite). A warehouse adapter replaces its `connect()` and keeps the rest. Before any unsupervised session, run the adapter's copy of `safety/selftest.py`, including its log assertions. It must exit 0.

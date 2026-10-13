@@ -1,6 +1,6 @@
 {
   "name": "ds-stack",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "description": "Data-science skills that make agent work trustworthy: check scripts and a fixed readout for analyses (ds-mode), and structure, format, concision and reader tests for documents (ds-doc, doc-tighten, cold-read).",
   "author": {
     "name": "surahli123"

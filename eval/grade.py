@@ -1,12 +1,19 @@
 #!/usr/bin/env python3
 """Grade a results directory against gold, by script, and apply the pass rule.
 
-    python3 eval/grade.py eval/results/<run>
+    python3 eval/grade.py eval/results/<run> [--allow-no-transcript]
 
 Mechanics are graded by code: the headline number in the gold unit, abstention,
 and which alternatives were ruled in. Whether checks ran comes from each run's
 .ds-checks.log, not from the readout. Every pass-rule input is counted per
 fixture by majority vote, never per run. Writes summary.md and summary.json.
+
+A run with no transcript fails closed: isolation can't be verified. Runs made
+with a custom agent (run_arms.py --agent-cmd) have no transcript by design and
+say so in meta.json ("transcript": false). With --allow-no-transcript those runs
+are graded on their readout and reported as "unverified (custom agent)" for
+isolation and skill-read instead of failing, and counted per arm in
+runs_unverified_isolation. Without the flag nothing changes.
 """
 
 import json
@@ -22,6 +29,7 @@ from readout import parse  # noqa: E402
 
 ARMS = ("baseline", "checks", "full")
 CONTAMINATION_MARKERS = (ROOT, "/home/user/notes", "make_fixtures", "pass_rule", "/gold/")
+UNVERIFIED = "unverified (custom agent)"
 
 
 def load_gold(fixture):
@@ -100,7 +108,7 @@ def skill_read(run_dir):
     return False
 
 
-def grade_dir(results_dir):
+def grade_dir(results_dir, allow_no_transcript=False):
     runs = []
     for name in sorted(os.listdir(results_dir)):
         run_dir = os.path.join(results_dir, name)
@@ -113,12 +121,16 @@ def grade_dir(results_dir):
             readout = parse(handle.read())
         gold = load_gold(meta["fixture"])
         correct, reason, miss = grade_readout(readout, gold)
-        tainted = contamination(run_dir)
-        if tainted:
-            correct, reason, miss = False, "contaminated: " + tainted, "contaminated"
+        if allow_no_transcript and meta.get("transcript") is False:
+            isolation = skill = UNVERIFIED
+        else:
+            tainted = contamination(run_dir)
+            if tainted:
+                correct, reason, miss = False, "contaminated: " + tainted, "contaminated"
+            isolation, skill = tainted or "ok", skill_read(run_dir)
         runs.append({**meta, "correct": correct, "reason": reason, "miss": miss, "headline": readout.headline,
                      "dropped_alternative_lines": len(readout.dropped),
-                     "checks_ran": checks_that_ran(run_dir), "skill_read": skill_read(run_dir),
+                     "checks_ran": checks_that_ran(run_dir), "skill_read": skill, "isolation": isolation,
                      "kind": gold["kind"]})
     return runs
 
@@ -160,9 +172,10 @@ def summarize(runs, rule):
             "runs": len(arm_runs),
             "runs_unparseable": sum(r["miss"] == "unparseable" for r in arm_runs),
             "runs_contaminated": sum(r["miss"] == "contaminated" for r in arm_runs),
+            "runs_unverified_isolation": sum(r.get("isolation") == UNVERIFIED for r in arm_runs),
             "dropped_alternative_lines": sum(r["dropped_alternative_lines"] for r in arm_runs),
             "runs_with_any_check": sum(bool(r["checks_ran"]) for r in arm_runs),
-            "runs_reading_skill": sum(r["skill_read"] for r in arm_runs),
+            "runs_reading_skill": sum(r["skill_read"] is True for r in arm_runs),
             "cost_usd": round(sum(r.get("cost_usd") or 0 for r in arm_runs), 2),
         }
 
@@ -206,22 +219,31 @@ def render(results_dir, runs, fixtures, arms, cells, per_arm, verdict):
     lines += ["", "## Per arm", "", "| Metric | " + " | ".join(arms) + " |", "|---|" + "---|" * len(arms)]
     for metric in next(iter(per_arm.values())).keys():
         lines.append(f"| {metric} | " + " | ".join(str(per_arm[a][metric]) for a in arms) + " |")
-    lines += ["", "## Every run", "", "| Run | Correct | Headline | Reason | Checks that ran |", "|---|---|---|---|---|"]
+    unverified = any(r.get("isolation") == UNVERIFIED for r in runs)
+    head = "| Run | Correct | Headline | Reason | Checks that ran |" + (" Isolation | Skill read |" if unverified else "")
+    lines += ["", "## Every run", "", head, "|---|" + "---|" * (6 if unverified else 4)]
     for run in sorted(runs, key=lambda r: (r["fixture"], ARMS.index(r["arm"]), r["run"])):
         ran = ", ".join(f"{k}:{'/'.join(v)}" for k, v in run["checks_ran"].items()) or "none"
         headline = run["headline"].replace("|", "/")[:70]
-        lines.append(f"| {run['fixture']} {run['arm']} #{run['run']} | {'✓' if run['correct'] else '✗'} | {headline} | {run['reason']} | {ran} |")
+        row = f"| {run['fixture']} {run['arm']} #{run['run']} | {'✓' if run['correct'] else '✗'} | {headline} | {run['reason']} | {ran} |"
+        if unverified:
+            iso = run.get("isolation", "ok")
+            row += f" {iso if iso in ('ok', UNVERIFIED) else 'contaminated'} | {run['skill_read']} |"
+        lines.append(row)
     return "\n".join(lines) + "\n"
 
 
-def main():
-    if len(sys.argv) != 2:
+def main(argv=None):
+    argv = sys.argv[1:] if argv is None else argv
+    allow = "--allow-no-transcript" in argv
+    paths = [a for a in argv if a != "--allow-no-transcript"]
+    if len(paths) != 1:
         print(__doc__)
         return 3
-    results_dir = sys.argv[1]
+    results_dir = paths[0]
     with open(os.path.join(HERE, "pass_rule.json")) as handle:
         rule = json.load(handle)
-    runs = grade_dir(results_dir)
+    runs = grade_dir(results_dir, allow_no_transcript=allow)
     fixtures, arms, cells, per_arm, verdict = summarize(runs, rule)
     report = render(results_dir, runs, fixtures, arms, cells, per_arm, verdict)
     with open(os.path.join(results_dir, "summary.md"), "w") as handle:
