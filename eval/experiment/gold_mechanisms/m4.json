@@ -1,0 +1,20 @@
+{
+ "title": "more results for hard queries, lower precision",
+ "question_metric": "CTR",
+ "mechanism": "recall_over_precision",
+ "mechanism_keywords": [
+  "zero result",
+  "zero-result",
+  "recall",
+  "precision",
+  "no result"
+ ],
+ "cut_keywords": [
+  "zero result",
+  "zero-result",
+  "had zero",
+  "no result"
+ ],
+ "readiness": "ready",
+ "why": "zero results -12%, CTR -0.9%: weak results for queries that used to get none"
+}

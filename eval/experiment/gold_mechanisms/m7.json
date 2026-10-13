@@ -1,0 +1,15 @@
+{
+ "title": "the win sits in tail queries",
+ "question_metric": "Successful Search Rate",
+ "mechanism": "concentrated_segment",
+ "mechanism_keywords": [
+  "tail"
+ ],
+ "cut_keywords": [
+  "tail",
+  "triggered",
+  "query class"
+ ],
+ "readiness": "ready",
+ "why": "overall flat, tail +3.4%: a tail-only effect diluted overall"
+}

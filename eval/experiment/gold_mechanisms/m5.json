@@ -1,0 +1,20 @@
+{
+ "title": "answers on the page reduce clicks",
+ "question_metric": "Abandonment Rate",
+ "mechanism": "good_abandonment",
+ "mechanism_keywords": [
+  "answer",
+  "on the page",
+  "rich snippet",
+  "good abandonment",
+  "without click"
+ ],
+ "cut_keywords": [
+  "answer",
+  "rich snippet",
+  "retry",
+  "return"
+ ],
+ "readiness": "ready",
+ "why": "abandonment +2.1% with success up and reformulation flat: answers on the page"
+}

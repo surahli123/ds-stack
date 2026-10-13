@@ -246,7 +246,8 @@ def build_questions(decision, comparison, expected, instances, segment_found):
         if metric.lower() in seen or metric.lower() not in by_name:
             return
         seen.add(metric.lower())
-        related = [i for i in instances if metric in i["metrics"]]
+        related = sorted((i for i in instances if metric in i["metrics"]),
+                         key=lambda i: (i["label"] != "measured", -i["score"]))
         questions.append({"metric": metric, "question": text, "kind": kind, "change": change_text(by_name[metric.lower()]),
                           "candidates": [i["id"] for i in related]})
 

@@ -1,0 +1,19 @@
+{
+ "title": "volume primary up for the wrong reason",
+ "question_metric": "Queries per User",
+ "mechanism": "struggling_users",
+ "mechanism_keywords": [
+  "retry",
+  "retri",
+  "reformulat",
+  "struggl",
+  "worse results"
+ ],
+ "cut_keywords": [
+  "per query",
+  "query class",
+  "per session"
+ ],
+ "readiness": "not_ready",
+ "why": "queries per user is the primary and rose, but reformulation rose and success fell: two opposite readings"
+}

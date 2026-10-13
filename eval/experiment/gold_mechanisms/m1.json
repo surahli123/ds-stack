@@ -1,0 +1,22 @@
+{
+ "title": "clicks rise, satisfaction doesn't",
+ "question_metric": "CTR",
+ "mechanism": "attractive_not_relevant",
+ "mechanism_keywords": [
+  "clickab",
+  "attractive",
+  "snippet",
+  "title",
+  "short click",
+  "short-click",
+  "not satisf"
+ ],
+ "cut_keywords": [
+  "position",
+  "short click",
+  "short-click",
+  "back to result"
+ ],
+ "readiness": "ready",
+ "why": "CTR +2.4% with long clicks and success flat: more clickable, not more relevant"
+}

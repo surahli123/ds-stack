@@ -109,3 +109,13 @@ def test_triage_prep_renders_lint_clean(tmp_path):
     lint = subprocess.run([sys.executable, os.path.join(ROOT, "skills", "doc-tighten", "tools", "doc_lint.py"),
                            str(tmp_path / "triage_prep.md"), "--type", "reference"], capture_output=True, text=True)
     assert lint.returncode == 0, lint.stdout
+
+
+MECHANISMS = sorted(os.listdir(os.path.join(ROOT, "eval", "experiment", "mechanisms")))
+
+
+@pytest.mark.parametrize("cid", MECHANISMS)
+def test_mechanism_case_matches_gold(cid):
+    import mechanism_check
+    ok, gold, top, result = mechanism_check.compare(cid)
+    assert ok, f"{cid}: gold {gold['mechanism']}/{gold['readiness']}, got {top}/{result['readiness']['verdict']}"

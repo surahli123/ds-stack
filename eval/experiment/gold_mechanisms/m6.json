@@ -1,0 +1,21 @@
+{
+ "title": "CTR up because searches fell",
+ "question_metric": "CTR",
+ "mechanism": "denominator_driven",
+ "mechanism_keywords": [
+  "fewer searches",
+  "fewer queries",
+  "queries per user fell",
+  "denominator",
+  "search volume",
+  "fewer search"
+ ],
+ "cut_keywords": [
+  "per user",
+  "volume",
+  "queries per user",
+  "denominator"
+ ],
+ "readiness": "ready",
+ "why": "CTR +2.1% while clicks per user are flat and queries per user -1.9%"
+}

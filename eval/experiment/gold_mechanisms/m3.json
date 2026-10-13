@@ -1,0 +1,19 @@
+{
+ "title": "latency costs engagement",
+ "question_metric": "Abandonment Rate",
+ "mechanism": "speed_cost",
+ "mechanism_keywords": [
+  "latency",
+  "slow",
+  "speed",
+  "load time"
+ ],
+ "cut_keywords": [
+  "latency bucket",
+  "by latency",
+  "device",
+  "network"
+ ],
+ "readiness": "ready",
+ "why": "latency +1.4% inside its margin, abandonment +0.8% inside its margin, CTR down: speed cost"
+}

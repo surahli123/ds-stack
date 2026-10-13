@@ -123,7 +123,8 @@
    },
    "strengthened_by": {
     "success": "flat_or_down",
-    "short_click": "up"
+    "short_click": "up",
+    "clicks_per_user": "up"
    },
    "contradicted_by": {
     "long_click": "up",
@@ -287,13 +288,15 @@
    "strengthened_by": {
     "ctr": "flat_or_down",
     "time_to_click": "any",
-    "queries_per_user": "flat_or_down"
+    "queries_per_user": "flat_or_down",
+    "clicks_per_user": "flat_or_down"
    },
    "contradicted_by": {
     "reformulation": "up",
     "success": "down",
     "ctr": "up",
-    "clicks_per_user": "up"
+    "clicks_per_user": "up",
+    "latency": "up"
    },
    "mechanism": "More users get their answer from the results page itself (answers, richer snippets), so they leave without clicking and don't retry.",
    "deep_dives": [

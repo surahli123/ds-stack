@@ -1,0 +1,20 @@
+{
+ "title": "users retry because results got worse",
+ "question_metric": "Successful Search Rate",
+ "mechanism": "struggling_users",
+ "mechanism_keywords": [
+  "retry",
+  "retri",
+  "reformulat",
+  "struggl",
+  "searching more",
+  "search again"
+ ],
+ "cut_keywords": [
+  "per query",
+  "query class",
+  "per session"
+ ],
+ "readiness": "ready",
+ "why": "success -0.7%, queries per user +2.3%, reformulation +4.8%: users retry"
+}
