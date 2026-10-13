@@ -1,0 +1,53 @@
+{
+  "pass": false,
+  "skim": "2/2",
+  "full": "2/3",
+  "items": [
+    {
+      "pass": "skim",
+      "item": "answer",
+      "key": "No effect found: Successful Search Rate reads -0.05% (-0.34% to +0.24%), which rules out the 0.50% change the test was built to find.",
+      "reader": "Ranker v7 had no effect on Successful Search Rate: the difference was \u22120.0002 (95% CI [\u22120.0014, +0.0010], p=0.74), well short of the +0.005 bar. Don't ship Ranker v7. The document doesn't say what to do next, and Latency is listed as a guardrail with no result.",
+      "got": true,
+      "how": "overlap 0%; grader: same fact"
+    },
+    {
+      "pass": "skim",
+      "item": "decision",
+      "key": "Agree to stop the test without launching.",
+      "reader": "Don't ship Ranker v7. The document doesn't say what to do next, and Latency is listed as a guardrail with no result. Ranker v7 had no effect on Successful Search Rate: the difference was \u22120.0002 (95% CI [\u22120.0014, +0.0010], p=0.74), well short of the +0.005 bar.",
+      "got": true,
+      "how": "overlap 0%; grader: same fact"
+    },
+    {
+      "pass": "full",
+      "item": "takeaway 1",
+      "key": "Successful Search Rate -0.05% (-0.34% to +0.24%) against at least 0.50% higher.",
+      "reader": "The document concludes that Ranker v7 had no detectable effect on Successful Search Rate and recommends not launching it on this evidence. Current state: the 14-day test is complete, the primary metric is flat, and the guardrails are within their margins. The readout is written to `readout.md`. Don't launch Ranker v7. Decide whether to fund a follow-up test for the two unregistered secondary signals, Queries per User (+1.9%) and Ad Click Rate (\u22121.5%). The header says \"No effect found\" while the body recommends not launching, so the label doesn't state the action clearly. Successful Search Rate difference of \u22120.0002 (absolute, a proportion, 0.4120 \u2192 0.4118), with 95% CI [\u22120.0014, +0.0010]. The +0.005 bar sits outside that interval, so the test rules out the bar. The document's main risk is Revenue per User. Its CI lower bound is \u22120.8% against a \u22121% margin, so it has little room. Two of 56 secondary metrics were significant without correction, which is about what chance would produce, so they are hypotheses rather than findings.",
+      "got": true,
+      "how": "overlap 0%; grader: same fact"
+    },
+    {
+      "pass": "full",
+      "item": "takeaway 2",
+      "key": "Agree to stop the test without launching.",
+      "reader": "The document concludes that Ranker v7 had no detectable effect on Successful Search Rate and recommends not launching it on this evidence. Current state: the 14-day test is complete, the primary metric is flat, and the guardrails are within their margins. The readout is written to `readout.md`. Don't launch Ranker v7. Decide whether to fund a follow-up test for the two unregistered secondary signals, Queries per User (+1.9%) and Ad Click Rate (\u22121.5%). The header says \"No effect found\" while the body recommends not launching, so the label doesn't state the action clearly. Successful Search Rate difference of \u22120.0002 (absolute, a proportion, 0.4120 \u2192 0.4118), with 95% CI [\u22120.0014, +0.0010]. The +0.005 bar sits outside that interval, so the test rules out the bar. The document's main risk is Revenue per User. Its CI lower bound is \u22120.8% against a \u22121% margin, so it has little room. Two of 56 secondary metrics were significant without correction, which is about what chance would produce, so they are hypotheses rather than findings.",
+      "got": true,
+      "how": "overlap 60%"
+    },
+    {
+      "pass": "full",
+      "item": "takeaway 3",
+      "key": "Could reverse it: pre period could not be checked: no pre-period interval or platform check.",
+      "reader": "The document concludes that Ranker v7 had no detectable effect on Successful Search Rate and recommends not launching it on this evidence. Current state: the 14-day test is complete, the primary metric is flat, and the guardrails are within their margins. The readout is written to `readout.md`. Don't launch Ranker v7. Decide whether to fund a follow-up test for the two unregistered secondary signals, Queries per User (+1.9%) and Ad Click Rate (\u22121.5%). The header says \"No effect found\" while the body recommends not launching, so the label doesn't state the action clearly. Successful Search Rate difference of \u22120.0002 (absolute, a proportion, 0.4120 \u2192 0.4118), with 95% CI [\u22120.0014, +0.0010]. The +0.005 bar sits outside that interval, so the test rules out the bar. The document's main risk is Revenue per User. Its CI lower bound is \u22120.8% against a \u22121% margin, so it has little room. Two of 56 secondary metrics were significant without correction, which is about what chance would produce, so they are hypotheses rather than findings.",
+      "got": false,
+      "how": "overlap 12%"
+    }
+  ],
+  "lost": "Nowhere. The one unclear point was whether the bar was absolute or relative. The document says the pre-registration is silent on this, and the author checked that the conclusion holds either way.",
+  "question": "Will the follow-up test pre-register Queries per User and Ad Click Rate as primary metrics with a multiplicity correction, and will it keep the Revenue per User guardrail, given that those two metrics could trade off against revenue?",
+  "replies": {
+    "skim": "1. **Answer:** Ranker v7 had no effect on Successful Search Rate: the difference was \u22120.0002 (95% CI [\u22120.0014, +0.0010], p=0.74), well short of the +0.005 bar.\n2. **Decision:** Don't ship Ranker v7. The document doesn't say what to do next, and Latency is listed as a guardrail with no result.\n3. **Number:** \u22120.0002 absolute change in Successful Search Rate, against the +0.005 required lift.\n",
+    "full": "1. **Answer:** The document concludes that Ranker v7 had no detectable effect on Successful Search Rate and recommends not launching it on this evidence. Current state: the 14-day test is complete, the primary metric is flat, and the guardrails are within their margins. The readout is written to `readout.md`.\n\n2. **Decision:** Don't launch Ranker v7. Decide whether to fund a follow-up test for the two unregistered secondary signals, Queries per User (+1.9%) and Ad Click Rate (\u22121.5%). The header says \"No effect found\" while the body recommends not launching, so the label doesn't state the action clearly.\n\n3. **Number:** Successful Search Rate difference of \u22120.0002 (absolute, a proportion, 0.4120 \u2192 0.4118), with 95% CI [\u22120.0014, +0.0010]. The +0.005 bar sits outside that interval, so the test rules out the bar.\n\n4. **Caveat:** The document's main risk is Revenue per User. Its CI lower bound is \u22120.8% against a \u22121% margin, so it has little room. Two of 56 secondary metrics were significant without correction, which is about what chance would produce, so they are hypotheses rather than findings.\n\n5. **Lost:** Nowhere. The one unclear point was whether the bar was absolute or relative. The document says the pre-registration is silent on this, and the author checked that the conclusion holds either way.\n\n6. **Question:** Will the follow-up test pre-register Queries per User and Ad Click Rate as primary metrics with a multiplicity correction, and will it keep the Revenue per User guardrail, given that those two metrics could trade off against revenue?\n"
+  }
+}

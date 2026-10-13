@@ -1,0 +1,53 @@
+{
+  "pass": false,
+  "skim": "0/2",
+  "full": "1/3",
+  "items": [
+    {
+      "pass": "skim",
+      "item": "answer",
+      "key": "No effect found: Successful Search Rate reads +0.04% (-0.26% to +0.34%), which rules out the 0.50% change the test was built to find.",
+      "reader": "No effect found. Successful Search Rate moved +0.016 pp (95% CI \u22120.107 to +0.140 pp, p = 0.79), far below the +0.5 pp ship bar. Guardrails are within margin, and the experiment ran at 1.0M units per arm against 900k planned. Do not launch on this result. The pre-registered bar was not met, and the readout gives no case for shipping.",
+      "got": false,
+      "how": "overlap 0%"
+    },
+    {
+      "pass": "skim",
+      "item": "decision",
+      "key": "Agree to stop the test without launching.",
+      "reader": "Do not launch on this result. The pre-registered bar was not met, and the readout gives no case for shipping. No effect found. Successful Search Rate moved +0.016 pp (95% CI \u22120.107 to +0.140 pp, p = 0.79), far below the +0.5 pp ship bar. Guardrails are within margin, and the experiment ran at 1.0M units per arm against 900k planned.",
+      "got": false,
+      "how": "overlap 0%"
+    },
+    {
+      "pass": "full",
+      "item": "takeaway 1",
+      "key": "Successful Search Rate +0.04% (-0.26% to +0.34%) against at least 0.50% higher.",
+      "reader": "The primary metric shows no effect. Successful Search Rate moved +0.016 pp, and the CI tops out at +0.140 pp, well under the +0.5 pp ship bar. The guardrails held. The experiment is still marked `active` past its planned end, with 1.0M units per arm against 900k planned. Don't launch on this evidence. Stop the experiment, as the readout recommends. If the Revenue per User lift matters, run it as a new pre-registered test. Successful Search Rate, delta +0.016 pp (95% CI \u22120.107 to +0.140 pp). The Revenue per User gain (+3.1%, p = 0.004) was not a pre-registered primary. It does not survive correction across 57 metrics, so it's a hypothesis, not a result.",
+      "got": false,
+      "how": "overlap 0%"
+    },
+    {
+      "pass": "full",
+      "item": "takeaway 2",
+      "key": "Agree to stop the test without launching.",
+      "reader": "The primary metric shows no effect. Successful Search Rate moved +0.016 pp, and the CI tops out at +0.140 pp, well under the +0.5 pp ship bar. The guardrails held. The experiment is still marked `active` past its planned end, with 1.0M units per arm against 900k planned. Don't launch on this evidence. Stop the experiment, as the readout recommends. If the Revenue per User lift matters, run it as a new pre-registered test. Successful Search Rate, delta +0.016 pp (95% CI \u22120.107 to +0.140 pp). The Revenue per User gain (+3.1%, p = 0.004) was not a pre-registered primary. It does not survive correction across 57 metrics, so it's a hypothesis, not a result.",
+      "got": true,
+      "how": "overlap 40%; grader: same fact"
+    },
+    {
+      "pass": "full",
+      "item": "takeaway 3",
+      "key": "Could reverse it: pre period could not be checked: no pre-period interval or platform check.",
+      "reader": "The primary metric shows no effect. Successful Search Rate moved +0.016 pp, and the CI tops out at +0.140 pp, well under the +0.5 pp ship bar. The guardrails held. The experiment is still marked `active` past its planned end, with 1.0M units per arm against 900k planned. Don't launch on this evidence. Stop the experiment, as the readout recommends. If the Revenue per User lift matters, run it as a new pre-registered test. Successful Search Rate, delta +0.016 pp (95% CI \u22120.107 to +0.140 pp). The Revenue per User gain (+3.1%, p = 0.004) was not a pre-registered primary. It does not survive correction across 57 metrics, so it's a hypothesis, not a result.",
+      "got": false,
+      "how": "overlap 0%"
+    }
+  ],
+  "lost": "I couldn't read the file, so I can't say whether anything in it was confusing. The bullets themselves were clear. Whether the 1.0M-vs-900k overrun was planned is unclear from them.",
+  "question": "Was the overrun to 1.0M units per arm planned, or did the experiment run past its end by accident?",
+  "replies": {
+    "skim": "1. **Answer:** No effect found. Successful Search Rate moved +0.016 pp (95% CI \u22120.107 to +0.140 pp, p = 0.79), far below the +0.5 pp ship bar. Guardrails are within margin, and the experiment ran at 1.0M units per arm against 900k planned.\n2. **Decision:** Do not launch on this result. The pre-registered bar was not met, and the readout gives no case for shipping.\n3. **Number:** Successful Search Rate, +0.016 percentage points (pp).\n",
+    "full": "I could not open `readout.md`. This session has no file-reading tool, and the Artifact read action only takes a claude.ai URL. So these answers come from the bullets in your message, and I haven't checked them against the file or the sentence you fixed. If you paste the file's text, I'll redo this from it.\n\n1. **Answer:** The primary metric shows no effect. Successful Search Rate moved +0.016 pp, and the CI tops out at +0.140 pp, well under the +0.5 pp ship bar. The guardrails held. The experiment is still marked `active` past its planned end, with 1.0M units per arm against 900k planned.\n2. **Decision:** Don't launch on this evidence. Stop the experiment, as the readout recommends. If the Revenue per User lift matters, run it as a new pre-registered test.\n3. **Number:** Successful Search Rate, delta +0.016 pp (95% CI \u22120.107 to +0.140 pp).\n4. **Caveat:** The Revenue per User gain (+3.1%, p = 0.004) was not a pre-registered primary. It does not survive correction across 57 metrics, so it's a hypothesis, not a result.\n5. **Lost:** I couldn't read the file, so I can't say whether anything in it was confusing. The bullets themselves were clear. Whether the 1.0M-vs-900k overrun was planned is unclear from them.\n6. **Question:** Was the overrun to 1.0M units per arm planned, or did the experiment run past its end by accident?\n"
+  }
+}

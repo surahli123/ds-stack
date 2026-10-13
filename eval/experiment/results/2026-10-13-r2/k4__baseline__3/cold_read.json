@@ -1,0 +1,53 @@
+{
+  "pass": false,
+  "skim": "1/2",
+  "full": "3/3",
+  "items": [
+    {
+      "pass": "skim",
+      "item": "answer",
+      "key": "Keep running: It's day 7 of 14; Successful Search Rate reads +0.55% (-0.21% to +1.31%) so far, too early to call.",
+      "reader": "Keep running. The readout is based only on the day-7 interim snapshot, and the primary metric is below the ship bar. Don't ship yet. Get results from the full 14-day window (the snapshot is stale, with about 53% of planned users) and check the metric against the +0.005 bar.",
+      "got": false,
+      "how": "overlap 0%"
+    },
+    {
+      "pass": "skim",
+      "item": "decision",
+      "key": "Approve running the test longer.",
+      "reader": "Don't ship yet. Get results from the full 14-day window (the snapshot is stale, with about 53% of planned users) and check the metric against the +0.005 bar. Keep running. The readout is based only on the day-7 interim snapshot, and the primary metric is below the ship bar.",
+      "got": true,
+      "how": "overlap 25%; grader: same fact"
+    },
+    {
+      "pass": "full",
+      "item": "takeaway 1",
+      "key": "Successful Search Rate +0.55% (-0.21% to +1.31%) against at least 0.50% higher.",
+      "reader": "The readout recommends **keep running**. It does not support a launch. The primary metric, Successful Search Rate, is +0.00227 absolute (+0.55% relative) at day 7, below the +0.005 ship bar, with a sequential 95% CI of [-0.0009, +0.0054]. The experiment was planned to end 2026-09-26 but is still marked active on 2026-10-12. The Pulse data is from 2026-09-18 and covers about 53% of the planned users per arm. Keep the test running. Before the review: Successful Search Rate absolute lift, **+0.00227** (a difference in rate, i.e., proportion points), against a bar of **+0.005**. The result comes from an interim day-7 snapshot with about half the planned users, so the estimate may move. The CI still spans the ship bar. Abandonment and Revenue per User guardrails are not cleared, and the Pulse data is stale.",
+      "got": true,
+      "how": "overlap 0%; grader: same fact"
+    },
+    {
+      "pass": "full",
+      "item": "takeaway 2",
+      "key": "Approve running the test longer.",
+      "reader": "The readout recommends **keep running**. It does not support a launch. The primary metric, Successful Search Rate, is +0.00227 absolute (+0.55% relative) at day 7, below the +0.005 ship bar, with a sequential 95% CI of [-0.0009, +0.0054]. The experiment was planned to end 2026-09-26 but is still marked active on 2026-10-12. The Pulse data is from 2026-09-18 and covers about 53% of the planned users per arm. Keep the test running. Before the review: Successful Search Rate absolute lift, **+0.00227** (a difference in rate, i.e., proportion points), against a bar of **+0.005**. The result comes from an interim day-7 snapshot with about half the planned users, so the estimate may move. The CI still spans the ship bar. Abandonment and Revenue per User guardrails are not cleared, and the Pulse data is stale.",
+      "got": true,
+      "how": "overlap 50%"
+    },
+    {
+      "pass": "full",
+      "item": "takeaway 3",
+      "key": "Could reverse it: the remaining data; the call is made at the planned sample.",
+      "reader": "The readout recommends **keep running**. It does not support a launch. The primary metric, Successful Search Rate, is +0.00227 absolute (+0.55% relative) at day 7, below the +0.005 ship bar, with a sequential 95% CI of [-0.0009, +0.0054]. The experiment was planned to end 2026-09-26 but is still marked active on 2026-10-12. The Pulse data is from 2026-09-18 and covers about 53% of the planned users per arm. Keep the test running. Before the review: Successful Search Rate absolute lift, **+0.00227** (a difference in rate, i.e., proportion points), against a bar of **+0.005**. The result comes from an interim day-7 snapshot with about half the planned users, so the estimate may move. The CI still spans the ship bar. Abandonment and Revenue per User guardrails are not cleared, and the Pulse data is stale.",
+      "got": true,
+      "how": "overlap 29%; grader: same fact"
+    }
+  ],
+  "lost": "The guardrail margin units. The pre-reg doesn't say whether margins are relative or absolute, and the author assumed relative. Otherwise nothing.",
+  "question": "Was the analysis run with sequential testing, given that `experiment.json` has it off, and will the final read use the sequential CI as pre-registered?",
+  "replies": {
+    "skim": "1. **Answer:** Keep running. The readout is based only on the day-7 interim snapshot, and the primary metric is below the ship bar.\n2. **Decision:** Don't ship yet. Get results from the full 14-day window (the snapshot is stale, with about 53% of planned users) and check the metric against the +0.005 bar.\n3. **Number:** +0.00227 absolute lift in Successful Search Rate (+0.23 percentage points, +0.55% relative), versus the +0.005 ship bar.\n",
+    "full": "1. **Answer:** The readout recommends **keep running**. It does not support a launch. The primary metric, Successful Search Rate, is +0.00227 absolute (+0.55% relative) at day 7, below the +0.005 ship bar, with a sequential 95% CI of [-0.0009, +0.0054]. The experiment was planned to end 2026-09-26 but is still marked active on 2026-10-12. The Pulse data is from 2026-09-18 and covers about 53% of the planned users per arm.\n\n2. **Decision:** Keep the test running. Before the review:\n   - Re-pull Pulse data for the full 14-day window.\n   - Turn on sequential testing in `experiment.json`, matching the pre-reg.\n   - Restore or check `audit_logs.json` to confirm nothing changed mid-run.\n\n   Ship only if the final estimate reaches +0.005 and the guardrails clear. Don't cite the p = 0.007 from Pulse as a win.\n\n3. **Number:** Successful Search Rate absolute lift, **+0.00227** (a difference in rate, i.e., proportion points), against a bar of **+0.005**.\n\n4. **Caveat:** The result comes from an interim day-7 snapshot with about half the planned users, so the estimate may move. The CI still spans the ship bar. Abandonment and Revenue per User guardrails are not cleared, and the Pulse data is stale.\n\n5. **Lost:** The guardrail margin units. The pre-reg doesn't say whether margins are relative or absolute, and the author assumed relative. Otherwise nothing.\n\n6. **Question:** Was the analysis run with sequential testing, given that `experiment.json` has it off, and will the final read use the sequential CI as pre-registered?\n"
+  }
+}

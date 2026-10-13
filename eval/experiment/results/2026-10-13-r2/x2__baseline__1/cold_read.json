@@ -1,0 +1,53 @@
+{
+  "pass": false,
+  "skim": "0/2",
+  "full": "1/3",
+  "items": [
+    {
+      "pass": "skim",
+      "item": "answer",
+      "key": "Not an A/B test: This is a holdout test; the A/B launch rule doesn't apply.",
+      "reader": "Keep running. The lift is real (+0.00334 on Successful Search Rate, p = 7e-5), but the point estimate misses the pre-registered +0.005 ship bar, and all four guardrails are inside their margins. Don't ship yet. Re-pull Pulse, since the snapshot is 17 days old and covers only about 13 of 90 planned days, then reassess against the bar.",
+      "got": false,
+      "how": "overlap 0%"
+    },
+    {
+      "pass": "skim",
+      "item": "decision",
+      "key": "Use the readout for this test design instead.",
+      "reader": "Don't ship yet. Re-pull Pulse, since the snapshot is 17 days old and covers only about 13 of 90 planned days, then reassess against the bar. Keep running. The lift is real (+0.00334 on Successful Search Rate, p = 7e-5), but the point estimate misses the pre-registered +0.005 ship bar, and all four guardrails are inside their margins.",
+      "got": false,
+      "how": "overlap 0%"
+    },
+    {
+      "pass": "full",
+      "item": "takeaway 1",
+      "key": "Holdout",
+      "reader": "The readout recommends **keep running**. Successful Search Rate rose +0.00334 (+0.81% relative, 95% CI [+0.0017, +0.0050], p = 7e-5), but the pre-registered ship bar is +0.005, so the ship rule isn't met. The snapshot covers about 13 of 90 planned days. Guardrails are all within their margins. The state is an early, unfinished test with the primary metric real but short of the bar. Keep the test running to the planned end. Don't ship yet, and don't kill it, since the CI's upper bound just reaches the bar. Before the end, confirm the unit counts and the holdout's makeup, then re-pull Pulse and apply the pre-registered rule once, at the planned end. Roughly, that's mid-December if day 13 was 2026-09-25, but the start date isn't stated, so that's an estimate. Successful Search Rate, +0.00334 absolute, against a +0.005 bar. The unit of the rate isn't stated (per query or per session: unclear). The +0.81% relative figure implies a baseline near 41%, which I derived, not read from the document. The biggest risk is the early look. The snapshot is from day 13, sequential testing is off, and repeated checks inflate false positives. Two further issues compound it. Pulse shows 1M units per arm against a 95/5 config split and a 50k-per-arm plan, and the \"holdout\" is set against the quarter's combined ranking launches while only `ranker_model` visibly differs, so the lift may not belong to v7 alone.",
+      "got": true,
+      "how": "overlap 100%"
+    },
+    {
+      "pass": "full",
+      "item": "takeaway 2",
+      "key": "Use the readout for this test design instead.",
+      "reader": "The readout recommends **keep running**. Successful Search Rate rose +0.00334 (+0.81% relative, 95% CI [+0.0017, +0.0050], p = 7e-5), but the pre-registered ship bar is +0.005, so the ship rule isn't met. The snapshot covers about 13 of 90 planned days. Guardrails are all within their margins. The state is an early, unfinished test with the primary metric real but short of the bar. Keep the test running to the planned end. Don't ship yet, and don't kill it, since the CI's upper bound just reaches the bar. Before the end, confirm the unit counts and the holdout's makeup, then re-pull Pulse and apply the pre-registered rule once, at the planned end. Roughly, that's mid-December if day 13 was 2026-09-25, but the start date isn't stated, so that's an estimate. Successful Search Rate, +0.00334 absolute, against a +0.005 bar. The unit of the rate isn't stated (per query or per session: unclear). The +0.81% relative figure implies a baseline near 41%, which I derived, not read from the document. The biggest risk is the early look. The snapshot is from day 13, sequential testing is off, and repeated checks inflate false positives. Two further issues compound it. Pulse shows 1M units per arm against a 95/5 config split and a 50k-per-arm plan, and the \"holdout\" is set against the quarter's combined ranking launches while only `ranker_model` visibly differs, so the lift may not belong to v7 alone.",
+      "got": false,
+      "how": "overlap 40%"
+    },
+    {
+      "pass": "full",
+      "item": "takeaway 3",
+      "key": "Could reverse it: nothing here; this design needs its own readout.",
+      "reader": "The readout recommends **keep running**. Successful Search Rate rose +0.00334 (+0.81% relative, 95% CI [+0.0017, +0.0050], p = 7e-5), but the pre-registered ship bar is +0.005, so the ship rule isn't met. The snapshot covers about 13 of 90 planned days. Guardrails are all within their margins. The state is an early, unfinished test with the primary metric real but short of the bar. Keep the test running to the planned end. Don't ship yet, and don't kill it, since the CI's upper bound just reaches the bar. Before the end, confirm the unit counts and the holdout's makeup, then re-pull Pulse and apply the pre-registered rule once, at the planned end. Roughly, that's mid-December if day 13 was 2026-09-25, but the start date isn't stated, so that's an estimate. Successful Search Rate, +0.00334 absolute, against a +0.005 bar. The unit of the rate isn't stated (per query or per session: unclear). The +0.81% relative figure implies a baseline near 41%, which I derived, not read from the document. The biggest risk is the early look. The snapshot is from day 13, sequential testing is off, and repeated checks inflate false positives. Two further issues compound it. Pulse shows 1M units per arm against a 95/5 config split and a 50k-per-arm plan, and the \"holdout\" is set against the quarter's combined ranking launches while only `ranker_model` visibly differs, so the lift may not belong to v7 alone.",
+      "got": false,
+      "how": "overlap 17%"
+    }
+  ],
+  "lost": "Three things. The unit count conflict (1M per arm versus a 95/5 split and a 50k plan) was hard to square. The design section was unclear about whether the holdout measures v7 or the whole quarter's ranking launches. The document says the snapshot is 17 days old, but 2026-09-25 to 2026-10-13 is 18 days, a small mismatch.",
+  "question": "Does the 5% holdout measure v7 alone, or the combined effect of all Q3 ranking launches, and why do both arms show 1M units when the config says 95/5?",
+  "replies": {
+    "skim": "1. **Answer:** Keep running. The lift is real (+0.00334 on Successful Search Rate, p = 7e-5), but the point estimate misses the pre-registered +0.005 ship bar, and all four guardrails are inside their margins.\n2. **Decision:** Don't ship yet. Re-pull Pulse, since the snapshot is 17 days old and covers only about 13 of 90 planned days, then reassess against the bar.\n3. **Number:** +0.00334 absolute change in Successful Search Rate (about +0.33 percentage points), versus the +0.005 required.\n",
+    "full": "1. **Answer:** The readout recommends **keep running**. Successful Search Rate rose +0.00334 (+0.81% relative, 95% CI [+0.0017, +0.0050], p = 7e-5), but the pre-registered ship bar is +0.005, so the ship rule isn't met. The snapshot covers about 13 of 90 planned days. Guardrails are all within their margins. The state is an early, unfinished test with the primary metric real but short of the bar.\n\n2. **Decision:** Keep the test running to the planned end. Don't ship yet, and don't kill it, since the CI's upper bound just reaches the bar. Before the end, confirm the unit counts and the holdout's makeup, then re-pull Pulse and apply the pre-registered rule once, at the planned end. Roughly, that's mid-December if day 13 was 2026-09-25, but the start date isn't stated, so that's an estimate.\n\n3. **Number:** Successful Search Rate, +0.00334 absolute, against a +0.005 bar. The unit of the rate isn't stated (per query or per session: unclear). The +0.81% relative figure implies a baseline near 41%, which I derived, not read from the document.\n\n4. **Caveat:** The biggest risk is the early look. The snapshot is from day 13, sequential testing is off, and repeated checks inflate false positives. Two further issues compound it. Pulse shows 1M units per arm against a 95/5 config split and a 50k-per-arm plan, and the \"holdout\" is set against the quarter's combined ranking launches while only `ranker_model` visibly differs, so the lift may not belong to v7 alone.\n\n5. **Lost:** Three things. The unit count conflict (1M per arm versus a 95/5 split and a 50k plan) was hard to square. The design section was unclear about whether the holdout measures v7 or the whole quarter's ranking launches. The document says the snapshot is 17 days old, but 2026-09-25 to 2026-10-13 is 18 days, a small mismatch.\n\n6. **Question:** Does the 5% holdout measure v7 alone, or the combined effect of all Q3 ranking launches, and why do both arms show 1M units when the config says 95/5?\n"
+  }
+}

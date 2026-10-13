@@ -1,0 +1,53 @@
+{
+  "pass": false,
+  "skim": "1/2",
+  "full": "1/3",
+  "items": [
+    {
+      "pass": "skim",
+      "item": "answer",
+      "key": "No effect found: Successful Search Rate reads +0.04% (-0.26% to +0.34%), which rules out the 0.50% change the test was built to find.",
+      "reader": "No effect found. Successful Search Rate moved +0.016pp (95% CI \u22120.107pp to +0.140pp), well under the pre-registered +0.5pp bar, and no guardrail was breached. Don't launch on this result. Treat the +3.1% Revenue per User as exploratory and test it in a confirmatory experiment if it matters.",
+      "got": false,
+      "how": "overlap 0%"
+    },
+    {
+      "pass": "skim",
+      "item": "decision",
+      "key": "Agree to stop the test without launching.",
+      "reader": "Don't launch on this result. Treat the +3.1% Revenue per User as exploratory and test it in a confirmatory experiment if it matters. No effect found. Successful Search Rate moved +0.016pp (95% CI \u22120.107pp to +0.140pp), well under the pre-registered +0.5pp bar, and no guardrail was breached.",
+      "got": true,
+      "how": "overlap 20%; grader: same fact"
+    },
+    {
+      "pass": "full",
+      "item": "takeaway 1",
+      "key": "Successful Search Rate +0.04% (-0.26% to +0.34%) against at least 0.50% higher.",
+      "reader": "The document concludes that no effect was found. Successful Search Rate moved +0.016pp (95% CI \u22120.107 to +0.140pp), short of the pre-registered +0.5pp bar. The test ran its planned 14 days with guardrails intact. The one notable result, Revenue per User up 3.1%, is treated as exploratory. Don't launch on this evidence. The document doesn't state the action outright, but the primary metric missed its bar. If the business wants the revenue result, run a separate test with it pre-registered as the primary metric. Successful Search Rate change, +0.016 percentage points (95% CI \u22120.107 to +0.140pp). Only aggregated Pulse output was available, so novelty effects and day-level trends weren't checked. The CI also doesn't rule out small gains of up to about +0.14pp.",
+      "got": false,
+      "how": "overlap 0%"
+    },
+    {
+      "pass": "full",
+      "item": "takeaway 2",
+      "key": "Agree to stop the test without launching.",
+      "reader": "The document concludes that no effect was found. Successful Search Rate moved +0.016pp (95% CI \u22120.107 to +0.140pp), short of the pre-registered +0.5pp bar. The test ran its planned 14 days with guardrails intact. The one notable result, Revenue per User up 3.1%, is treated as exploratory. Don't launch on this evidence. The document doesn't state the action outright, but the primary metric missed its bar. If the business wants the revenue result, run a separate test with it pre-registered as the primary metric. Successful Search Rate change, +0.016 percentage points (95% CI \u22120.107 to +0.140pp). Only aggregated Pulse output was available, so novelty effects and day-level trends weren't checked. The CI also doesn't rule out small gains of up to about +0.14pp.",
+      "got": true,
+      "how": "overlap 20%; grader: same fact"
+    },
+    {
+      "pass": "full",
+      "item": "takeaway 3",
+      "key": "Could reverse it: pre period could not be checked: no pre-period interval or platform check.",
+      "reader": "The document concludes that no effect was found. Successful Search Rate moved +0.016pp (95% CI \u22120.107 to +0.140pp), short of the pre-registered +0.5pp bar. The test ran its planned 14 days with guardrails intact. The one notable result, Revenue per User up 3.1%, is treated as exploratory. Don't launch on this evidence. The document doesn't state the action outright, but the primary metric missed its bar. If the business wants the revenue result, run a separate test with it pre-registered as the primary metric. Successful Search Rate change, +0.016 percentage points (95% CI \u22120.107 to +0.140pp). Only aggregated Pulse output was available, so novelty effects and day-level trends weren't checked. The CI also doesn't rule out small gains of up to about +0.14pp.",
+      "got": false,
+      "how": "overlap 12%"
+    }
+  ],
+  "lost": "The arms have 1,000,000 users each against a planned 900,000. The document reports this but doesn't say whether it was intended or whether it affects the analysis. The abandonment guardrail line is also unclear, since no abandonment figures are given.",
+  "question": "Is the +0.5pp bar a hard floor for launch, or would a real gain of up to +0.14pp be worth shipping on cost or other grounds?",
+  "replies": {
+    "skim": "1. **Answer:** No effect found. Successful Search Rate moved +0.016pp (95% CI \u22120.107pp to +0.140pp), well under the pre-registered +0.5pp bar, and no guardrail was breached.\n2. **Decision:** Don't launch on this result. Treat the +3.1% Revenue per User as exploratory and test it in a confirmatory experiment if it matters.\n3. **Number:** +0.016 percentage points (Successful Search Rate change, against the +0.5pp bar).\n",
+    "full": "1. **Answer:** The document concludes that no effect was found. Successful Search Rate moved +0.016pp (95% CI \u22120.107 to +0.140pp), short of the pre-registered +0.5pp bar. The test ran its planned 14 days with guardrails intact. The one notable result, Revenue per User up 3.1%, is treated as exploratory.\n\n2. **Decision:** Don't launch on this evidence. The document doesn't state the action outright, but the primary metric missed its bar. If the business wants the revenue result, run a separate test with it pre-registered as the primary metric.\n\n3. **Number:** Successful Search Rate change, +0.016 percentage points (95% CI \u22120.107 to +0.140pp).\n\n4. **Caveat:** Only aggregated Pulse output was available, so novelty effects and day-level trends weren't checked. The CI also doesn't rule out small gains of up to about +0.14pp.\n\n5. **Lost:** The arms have 1,000,000 users each against a planned 900,000. The document reports this but doesn't say whether it was intended or whether it affects the analysis. The abandonment guardrail line is also unclear, since no abandonment figures are given.\n\n6. **Question:** Is the +0.5pp bar a hard floor for launch, or would a real gain of up to +0.14pp be worth shipping on cost or other grounds?\n"
+  }
+}

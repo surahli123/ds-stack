@@ -1,0 +1,53 @@
+{
+  "pass": true,
+  "skim": "2/2",
+  "full": "3/3",
+  "items": [
+    {
+      "pass": "skim",
+      "item": "answer",
+      "key": "Keep running: It's day 7 of 14; Successful Search Rate reads +0.55% (-0.21% to +1.31%) so far, too early to call.",
+      "reader": "The document concludes \"Keep running.\" The primary metric's +0.55% relative lift has a CI that includes zero, and two guardrails can't yet rule out harm. The data is an interim read about a week into a 14-day run. Don't launch yet. Keep the test running to its planned end and re-review with the full, current data.",
+      "got": true,
+      "how": "overlap 0%; grader: same fact"
+    },
+    {
+      "pass": "skim",
+      "item": "decision",
+      "key": "Approve running the test longer.",
+      "reader": "Don't launch yet. Keep the test running to its planned end and re-review with the full, current data. The document concludes \"Keep running.\" The primary metric's +0.55% relative lift has a CI that includes zero, and two guardrails can't yet rule out harm. The data is an interim read about a week into a 14-day run.",
+      "got": true,
+      "how": "overlap 50%"
+    },
+    {
+      "pass": "full",
+      "item": "takeaway 1",
+      "key": "Successful Search Rate +0.55% (-0.21% to +1.31%) against at least 0.50% higher.",
+      "reader": "The readout recommends **Keep running**, not launching. It is an interim read about a week into a 14-day run. The primary metric is +0.55% relative (+0.00227 absolute) with a sequential 95% CI of \u00b10.76% relative, so it includes zero. Abandonment and Revenue per User can't rule out harm. **Current state:** the Pulse is dated 2026-09-18 and holds about 481k of 900k planned units per arm. Today is 2026-10-12, and the config still says `active`. Don't ship on this readout. Re-pull the final Pulse with the same settings, and settle two things first: whether the 0.005 bar is relative or absolute, and whether the config (`sequentialTesting: false`) or the pre-registration (sequential) is correct. Ship only if the primary point estimate meets the bar and both guardrails clear their margins. The primary effect on Successful Search Rate, **+0.55% relative** (+0.00227 absolute), with its CI of \u00b10.76% relative. Its unit decides the outcome: the estimate clears a relative 0.5% bar but misses an absolute one. The read is interim and underpowered, with about 53% of planned sample, so the CI spans zero and the guardrails are inconclusive. The document flags the data as stale, but it doesn't say whether the run has already ended.",
+      "got": true,
+      "how": "overlap 0%; grader: same fact"
+    },
+    {
+      "pass": "full",
+      "item": "takeaway 2",
+      "key": "Approve running the test longer.",
+      "reader": "The readout recommends **Keep running**, not launching. It is an interim read about a week into a 14-day run. The primary metric is +0.55% relative (+0.00227 absolute) with a sequential 95% CI of \u00b10.76% relative, so it includes zero. Abandonment and Revenue per User can't rule out harm. **Current state:** the Pulse is dated 2026-09-18 and holds about 481k of 900k planned units per arm. Today is 2026-10-12, and the config still says `active`. Don't ship on this readout. Re-pull the final Pulse with the same settings, and settle two things first: whether the 0.005 bar is relative or absolute, and whether the config (`sequentialTesting: false`) or the pre-registration (sequential) is correct. Ship only if the primary point estimate meets the bar and both guardrails clear their margins. The primary effect on Successful Search Rate, **+0.55% relative** (+0.00227 absolute), with its CI of \u00b10.76% relative. Its unit decides the outcome: the estimate clears a relative 0.5% bar but misses an absolute one. The read is interim and underpowered, with about 53% of planned sample, so the CI spans zero and the guardrails are inconclusive. The document flags the data as stale, but it doesn't say whether the run has already ended.",
+      "got": true,
+      "how": "overlap 25%; grader: same fact"
+    },
+    {
+      "pass": "full",
+      "item": "takeaway 3",
+      "key": "Could reverse it: the remaining data; the call is made at the planned sample.",
+      "reader": "The readout recommends **Keep running**, not launching. It is an interim read about a week into a 14-day run. The primary metric is +0.55% relative (+0.00227 absolute) with a sequential 95% CI of \u00b10.76% relative, so it includes zero. Abandonment and Revenue per User can't rule out harm. **Current state:** the Pulse is dated 2026-09-18 and holds about 481k of 900k planned units per arm. Today is 2026-10-12, and the config still says `active`. Don't ship on this readout. Re-pull the final Pulse with the same settings, and settle two things first: whether the 0.005 bar is relative or absolute, and whether the config (`sequentialTesting: false`) or the pre-registration (sequential) is correct. Ship only if the primary point estimate meets the bar and both guardrails clear their margins. The primary effect on Successful Search Rate, **+0.55% relative** (+0.00227 absolute), with its CI of \u00b10.76% relative. Its unit decides the outcome: the estimate clears a relative 0.5% bar but misses an absolute one. The read is interim and underpowered, with about 53% of planned sample, so the CI spans zero and the guardrails are inconclusive. The document flags the data as stale, but it doesn't say whether the run has already ended.",
+      "got": true,
+      "how": "overlap 43%; grader: same fact"
+    }
+  ],
+  "lost": "The date doesn't reconcile. \"About a week into a 14-day run\" with a 2026-09-18 Pulse means the run should have closed by now, and the document never states the end date. I had to reread that. The relative-vs-absolute bar ambiguity is flagged by the author, so it was clear once I got there.",
+  "question": "Is the 0.005 success bar relative or absolute, and was that specified in the pre-registration? That answer decides whether the current estimate passes.",
+  "replies": {
+    "skim": "1. **Answer:** The document concludes \"Keep running.\" The primary metric's +0.55% relative lift has a CI that includes zero, and two guardrails can't yet rule out harm. The data is an interim read about a week into a 14-day run.\n2. **Decision:** Don't launch yet. Keep the test running to its planned end and re-review with the full, current data.\n3. **Number:** +0.55% relative change in Successful Search Rate (95% CI \u00b10.76%, so it includes zero).\n",
+    "full": "1. **Answer:** The readout recommends **Keep running**, not launching. It is an interim read about a week into a 14-day run. The primary metric is +0.55% relative (+0.00227 absolute) with a sequential 95% CI of \u00b10.76% relative, so it includes zero. Abandonment and Revenue per User can't rule out harm. **Current state:** the Pulse is dated 2026-09-18 and holds about 481k of 900k planned units per arm. Today is 2026-10-12, and the config still says `active`.\n\n2. **Decision:** Don't ship on this readout. Re-pull the final Pulse with the same settings, and settle two things first: whether the 0.005 bar is relative or absolute, and whether the config (`sequentialTesting: false`) or the pre-registration (sequential) is correct. Ship only if the primary point estimate meets the bar and both guardrails clear their margins.\n\n3. **Number:** The primary effect on Successful Search Rate, **+0.55% relative** (+0.00227 absolute), with its CI of \u00b10.76% relative. Its unit decides the outcome: the estimate clears a relative 0.5% bar but misses an absolute one.\n\n4. **Caveat:** The read is interim and underpowered, with about 53% of planned sample, so the CI spans zero and the guardrails are inconclusive. The document flags the data as stale, but it doesn't say whether the run has already ended.\n\n5. **Lost:** The date doesn't reconcile. \"About a week into a 14-day run\" with a 2026-09-18 Pulse means the run should have closed by now, and the document never states the end date. I had to reread that. The relative-vs-absolute bar ambiguity is flagged by the author, so it was clear once I got there.\n\n6. **Question:** Is the 0.005 success bar relative or absolute, and was that specified in the pre-registration? That answer decides whether the current estimate passes.\n"
+  }
+}

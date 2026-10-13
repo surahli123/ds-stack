@@ -25,7 +25,7 @@ Write it from the team's pre-registration (the experiment's hypothesis field, th
 | `direction` | the good direction: `increase` or `decrease`. A metric with none can only escalate |
 | `bar` | the smallest primary change worth launching, as a fraction (0.005 = 0.5%); `bar_unit: "absolute"` for absolute |
 | `ship_requires` | `point_at_bar` (default: the estimate clears the bar), `ci_at_bar` (the whole interval does) or `ci_excludes_zero` |
-| `rule` | `all` primaries must improve, or `any` (then the primaries share the error rate) |
+| `rule` | `any` (default, Spotify's published rule: one primary must improve and the primaries share the error rate) or `all` |
 | `margin` | the largest guardrail harm tolerated, as a fraction; leave it out for a regression check against zero |
 | `mass_share` | for a primary measured on triggered traffic: the triggered share of the control metric's total, to convert the lift to overall |
 | `intended_params` | the config parameters the test is meant to change; any other difference between arms fails the config check |

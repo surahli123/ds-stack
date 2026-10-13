@@ -1,0 +1,53 @@
+{
+  "pass": false,
+  "skim": "2/2",
+  "full": "0/3",
+  "items": [
+    {
+      "pass": "skim",
+      "item": "answer",
+      "key": "Ship: Successful Search Rate rose 0.81% (+0.41% to +1.21%), which clears the 0.50% bar and every guardrail held.",
+      "reader": "The document recommends shipping. Successful Search Rate rose from 0.4120 to 0.4153, a +0.81% relative lift (95% CI +0.41% to +1.21%), which clears the pre-registered 0.5% bar, and all four guardrails hold. Ship, as the opening states. The document says the call depends on a unit question \"covered below,\" but the outline is empty, so that question is unclear from this text.",
+      "got": true,
+      "how": "overlap 0%; grader: same fact"
+    },
+    {
+      "pass": "skim",
+      "item": "decision",
+      "key": "Approve the launch to all traffic.",
+      "reader": "Ship, as the opening states. The document says the call depends on a unit question \"covered below,\" but the outline is empty, so that question is unclear from this text. The document recommends shipping. Successful Search Rate rose from 0.4120 to 0.4153, a +0.81% relative lift (95% CI +0.41% to +1.21%), which clears the pre-registered 0.5% bar, and all four guardrails hold.",
+      "got": true,
+      "how": "overlap 0%; grader: same fact"
+    },
+    {
+      "pass": "full",
+      "item": "takeaway 1",
+      "key": "Successful Search Rate +0.81% (+0.41% to +1.21%) against at least 0.50% higher.",
+      "reader": "The readout recommends Ship. The experiment is complete and the primary metric cleared the bar, but the bar's unit is unstated, so the recommendation depends on it. Ship, if the review confirms the 0.005 bar means relative lift. If it meant 0.5 percentage points absolute, the result fails and the call becomes Don't ship. After launch, keep Ad Click Rate on watch. Successful Search Rate, +0.81% relative (0.4120 \u2192 0.4153; +0.00334 absolute), 95% CI +0.41% to +1.21%. The bar's unit is the biggest risk. Under the absolute reading the result is +0.33 pp with an upper CI of +0.50 pp, which misses the bar. Secondary risk: Ad Click Rate fell 2.8% (p = 0.022) across 56 uncorrected secondary metrics, and the CI includes lifts below 0.5%.",
+      "got": false,
+      "how": "overlap 0%"
+    },
+    {
+      "pass": "full",
+      "item": "takeaway 2",
+      "key": "Approve the launch to all traffic.",
+      "reader": "The readout recommends Ship. The experiment is complete and the primary metric cleared the bar, but the bar's unit is unstated, so the recommendation depends on it. Ship, if the review confirms the 0.005 bar means relative lift. If it meant 0.5 percentage points absolute, the result fails and the call becomes Don't ship. After launch, keep Ad Click Rate on watch. Successful Search Rate, +0.81% relative (0.4120 \u2192 0.4153; +0.00334 absolute), 95% CI +0.41% to +1.21%. The bar's unit is the biggest risk. Under the absolute reading the result is +0.33 pp with an upper CI of +0.50 pp, which misses the bar. Secondary risk: Ad Click Rate fell 2.8% (p = 0.022) across 56 uncorrected secondary metrics, and the CI includes lifts below 0.5%.",
+      "got": false,
+      "how": "overlap 33%"
+    },
+    {
+      "pass": "full",
+      "item": "takeaway 3",
+      "key": "Could reverse it: pre period could not be checked: no pre-period interval or platform check.",
+      "reader": "The readout recommends Ship. The experiment is complete and the primary metric cleared the bar, but the bar's unit is unstated, so the recommendation depends on it. Ship, if the review confirms the 0.005 bar means relative lift. If it meant 0.5 percentage points absolute, the result fails and the call becomes Don't ship. After launch, keep Ad Click Rate on watch. Successful Search Rate, +0.81% relative (0.4120 \u2192 0.4153; +0.00334 absolute), 95% CI +0.41% to +1.21%. The bar's unit is the biggest risk. Under the absolute reading the result is +0.33 pp with an upper CI of +0.50 pp, which misses the bar. Secondary risk: Ad Click Rate fell 2.8% (p = 0.022) across 56 uncorrected secondary metrics, and the CI includes lifts below 0.5%.",
+      "got": false,
+      "how": "overlap 0%"
+    }
+  ],
+  "lost": "Nowhere in the readout itself. The unit of the bar is unclear, because the pre-registration file is cited but its text is not in the document.",
+  "question": "Is the pre-registered 0.005 bar a relative lift (+0.5%) or an absolute lift (+0.5 pp)?",
+  "replies": {
+    "skim": "1. **Answer:** The document recommends shipping. Successful Search Rate rose from 0.4120 to 0.4153, a +0.81% relative lift (95% CI +0.41% to +1.21%), which clears the pre-registered 0.5% bar, and all four guardrails hold.\n2. **Decision:** Ship, as the opening states. The document says the call depends on a unit question \"covered below,\" but the outline is empty, so that question is unclear from this text.\n3. **Number:** Successful Search Rate, +0.81% relative (absolute +0.00334 on a 0.4120 base).\n",
+    "full": "1. **Answer:** The readout recommends Ship. The experiment is complete and the primary metric cleared the bar, but the bar's unit is unstated, so the recommendation depends on it.\n\n2. **Decision:** Ship, if the review confirms the 0.005 bar means relative lift. If it meant 0.5 percentage points absolute, the result fails and the call becomes Don't ship. After launch, keep Ad Click Rate on watch.\n\n3. **Number:** Successful Search Rate, +0.81% relative (0.4120 \u2192 0.4153; +0.00334 absolute), 95% CI +0.41% to +1.21%.\n\n4. **Caveat:** The bar's unit is the biggest risk. Under the absolute reading the result is +0.33 pp with an upper CI of +0.50 pp, which misses the bar. Secondary risk: Ad Click Rate fell 2.8% (p = 0.022) across 56 uncorrected secondary metrics, and the CI includes lifts below 0.5%.\n\n5. **Lost:** Nowhere in the readout itself. The unit of the bar is unclear, because the pre-registration file is cited but its text is not in the document.\n\n6. **Question:** Is the pre-registered 0.005 bar a relative lift (+0.5%) or an absolute lift (+0.5 pp)?\n"
+  }
+}

@@ -1,0 +1,53 @@
+{
+  "pass": false,
+  "skim": "0/2",
+  "full": "1/3",
+  "items": [
+    {
+      "pass": "skim",
+      "item": "answer",
+      "key": "Not an A/B test: This is a holdout test; the A/B launch rule doesn't apply.",
+      "reader": "The Pulse can't tell whether Ranker v7 meets its ship bar, and the readout recommends against shipping on this evidence. Don't launch v7 yet. Get results for the pre-registered ranker_v7 experiment, since the data provided is for a different holdout, and resolve the unit-count mismatch and the empty audit log first.",
+      "got": false,
+      "how": "overlap 33%"
+    },
+    {
+      "pass": "skim",
+      "item": "decision",
+      "key": "Use the readout for this test design instead.",
+      "reader": "Don't launch v7 yet. Get results for the pre-registered ranker_v7 experiment, since the data provided is for a different holdout, and resolve the unit-count mismatch and the empty audit log first. The Pulse can't tell whether Ranker v7 meets its ship bar, and the readout recommends against shipping on this evidence.",
+      "got": false,
+      "how": "overlap 20%"
+    },
+    {
+      "pass": "full",
+      "item": "takeaway 1",
+      "key": "Holdout",
+      "reader": "The readout concludes the Pulse can't tell whether Ranker v7 meets its ship bar, and recommends against shipping on this evidence. Current state: the decision is \"Can't tell.\" The Pulse is for the wrong experiment (a combined holdout, not `ranker_v7`), the unit counts don't match the pre-reg, and the run is early and stale. Don't ship. Next, confirm whether a clean v7-only comparison exists, explain the 1,000,000-units-per-arm mismatch against the planned 50,000 per arm, and get a fresh Pulse closer to the 90-day plan. The run started 2026-09-12, so it is about 31 days in today. Successful Search Rate lift of +0.0033 absolute (about +0.33 percentage points), 95% CI +0.0017 to +0.0050. The pre-registered bar is +0.005, so the point estimate falls short even though the interval excludes zero. The Pulse measures the combined effect of the quarter's ranking launches on a 5% holdout, so any lift can't be attributed to Ranker v7. The unit-count mismatch is also unexplained, and the audit log is empty.",
+      "got": true,
+      "how": "overlap 100%"
+    },
+    {
+      "pass": "full",
+      "item": "takeaway 2",
+      "key": "Use the readout for this test design instead.",
+      "reader": "The readout concludes the Pulse can't tell whether Ranker v7 meets its ship bar, and recommends against shipping on this evidence. Current state: the decision is \"Can't tell.\" The Pulse is for the wrong experiment (a combined holdout, not `ranker_v7`), the unit counts don't match the pre-reg, and the run is early and stale. Don't ship. Next, confirm whether a clean v7-only comparison exists, explain the 1,000,000-units-per-arm mismatch against the planned 50,000 per arm, and get a fresh Pulse closer to the 90-day plan. The run started 2026-09-12, so it is about 31 days in today. Successful Search Rate lift of +0.0033 absolute (about +0.33 percentage points), 95% CI +0.0017 to +0.0050. The pre-registered bar is +0.005, so the point estimate falls short even though the interval excludes zero. The Pulse measures the combined effect of the quarter's ranking launches on a 5% holdout, so any lift can't be attributed to Ranker v7. The unit-count mismatch is also unexplained, and the audit log is empty.",
+      "got": false,
+      "how": "overlap 20%"
+    },
+    {
+      "pass": "full",
+      "item": "takeaway 3",
+      "key": "Could reverse it: nothing here; this design needs its own readout.",
+      "reader": "The readout concludes the Pulse can't tell whether Ranker v7 meets its ship bar, and recommends against shipping on this evidence. Current state: the decision is \"Can't tell.\" The Pulse is for the wrong experiment (a combined holdout, not `ranker_v7`), the unit counts don't match the pre-reg, and the run is early and stale. Don't ship. Next, confirm whether a clean v7-only comparison exists, explain the 1,000,000-units-per-arm mismatch against the planned 50,000 per arm, and get a fresh Pulse closer to the 90-day plan. The run started 2026-09-12, so it is about 31 days in today. Successful Search Rate lift of +0.0033 absolute (about +0.33 percentage points), 95% CI +0.0017 to +0.0050. The pre-registered bar is +0.005, so the point estimate falls short even though the interval excludes zero. The Pulse measures the combined effect of the quarter's ranking launches on a 5% holdout, so any lift can't be attributed to Ranker v7. The unit-count mismatch is also unexplained, and the audit log is empty.",
+      "got": false,
+      "how": "overlap 17%"
+    }
+  ],
+  "lost": "Nowhere.",
+  "question": "Is there a pre-registered v7-only holdout, and why does each arm have 1,000,000 units when the pre-reg planned 50,000 per arm?",
+  "replies": {
+    "skim": "1. **Answer:** The Pulse can't tell whether Ranker v7 meets its ship bar, and the readout recommends against shipping on this evidence.\n2. **Decision:** Don't launch v7 yet. Get results for the pre-registered ranker_v7 experiment, since the data provided is for a different holdout, and resolve the unit-count mismatch and the empty audit log first.\n3. **Number:** 1,000,000 units per arm, against the 50,000 per arm the pre-registration planned.\n",
+    "full": "1. **Answer:** The readout concludes the Pulse can't tell whether Ranker v7 meets its ship bar, and recommends against shipping on this evidence. Current state: the decision is \"Can't tell.\" The Pulse is for the wrong experiment (a combined holdout, not `ranker_v7`), the unit counts don't match the pre-reg, and the run is early and stale.\n\n2. **Decision:** Don't ship. Next, confirm whether a clean v7-only comparison exists, explain the 1,000,000-units-per-arm mismatch against the planned 50,000 per arm, and get a fresh Pulse closer to the 90-day plan. The run started 2026-09-12, so it is about 31 days in today.\n\n3. **Number:** Successful Search Rate lift of +0.0033 absolute (about +0.33 percentage points), 95% CI +0.0017 to +0.0050. The pre-registered bar is +0.005, so the point estimate falls short even though the interval excludes zero.\n\n4. **Caveat:** The Pulse measures the combined effect of the quarter's ranking launches on a 5% holdout, so any lift can't be attributed to Ranker v7. The unit-count mismatch is also unexplained, and the audit log is empty.\n\n5. **Lost:** Nowhere.\n\n6. **Question:** Is there a pre-registered v7-only holdout, and why does each arm have 1,000,000 units when the pre-reg planned 50,000 per arm?\n"
+  }
+}

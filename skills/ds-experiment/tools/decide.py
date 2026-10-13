@@ -44,7 +44,7 @@ UNRUN = {"pre_period": "no pre-period comparison, so a difference between the ar
          "sample_split": "no exposure counts, so the split between the arms isn't checked",
          "config_params": "the pre-registration doesn't list the intended parameters, so other changes between the arms aren't ruled out",
          "config": "no experiment config, so parameters, unit and mid-flight edits aren't checked"}
-DEFAULT_STANDARDS = {"srm_alpha": 0.001, "min_days": 7, "harm_within_margin": "escalate", "below_bar": "escalate",
+DEFAULT_STANDARDS = {"srm_alpha": 0.001, "srm_warn_alpha": 0.01, "min_days": 7, "harm_within_margin": "escalate", "below_bar": "escalate",
                      "secondary_harm": "note", "secondary_q": 0.1, "max_extension_factor": 2.0,
                      "guardrails": [], "directions": {}}
 
@@ -288,7 +288,7 @@ def decide(scorecard, prereg, config=None, standards=None, daily=None):
     primaries = (prereg.get("primaries") or {}).get("metrics") or []
     if not primaries:
         raise InputError("the pre-registration names no primary metric")
-    rule = (prereg.get("primaries") or {}).get("rule", "all")
+    rule = (prereg.get("primaries") or {}).get("rule", "any")  # Spotify's published rule: any success metric, alpha split
     ship_requires = (prereg.get("primaries") or {}).get("ship_requires", "point_at_bar")
     guard_specs = prereg.get("guardrails")
     if guard_specs is None:
@@ -317,7 +317,8 @@ def decide(scorecard, prereg, config=None, standards=None, daily=None):
     primary_metric = find(metrics, primaries[0]["metric"])
     registered_metrics = [m for m in (find(metrics, s["metric"]) for s in primaries + guard_specs) if m]
     checks.append(chk.scorecard_invariants(registered_metrics, analysis))
-    checks.append(chk.sample_split(config, primary_metric, std["srm_alpha"], prereg.get("explanations")))
+    checks.append(chk.sample_split(config, primary_metric, std["srm_alpha"], prereg.get("explanations"),
+                                   std.get("srm_warn_alpha", 0.01)))
     checks.extend(chk.config_checks(config, prereg, analysis.get("as_of")))
     checks.append(chk.pre_period(prereg, config, primaries[0]["metric"]))
 
@@ -457,7 +458,8 @@ def rule_chain(design, checks, prim, guards, verdicts, status, sequential, std, 
     no_dir = [v for v in verdicts if v["verdict"] == "no_direction"]
     if no_dir:
         return "escalate", no_dir[0], f"{no_dir[0]['metric']} has no registered direction, so the rule can't say whether its move is good."
-    flagged = [c for c in checks if c["status"] == chk.FLAG and c["check"] in ("sample_split", "pre_period")]
+    flagged = [c for c in checks if c["status"] == chk.FLAG and c["check"] in ("sample_split", "pre_period")
+               and not c["details"].get("warning")]
     if flagged:
         return "escalate", {"check": flagged[0]["check"], "summary": flagged[0]["summary"]}, \
             f"{_sentence(flagged[0]['summary'])} Triage should confirm the explanation before any launch."

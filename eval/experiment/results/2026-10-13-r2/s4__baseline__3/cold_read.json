@@ -1,0 +1,53 @@
+{
+  "pass": false,
+  "skim": "0/2",
+  "full": "0/3",
+  "items": [
+    {
+      "pass": "skim",
+      "item": "answer",
+      "key": "Ship: Successful Search Rate rose 0.81% (+0.41% to +1.21%), which clears the 0.50% bar and every guardrail held.",
+      "reader": "Don't ship. The gain in Successful Search Rate is real, but the point estimate (+0.00334) is below the pre-registered +0.005 bar, and the top of the CI (0.00499) is just under it. Don't ship now. Confirm at the review whether the 0.005 bar is absolute or relative. If it is relative, the +0.81% lift clears it and the decision flips.",
+      "got": false,
+      "how": "overlap 0%"
+    },
+    {
+      "pass": "skim",
+      "item": "decision",
+      "key": "Approve the launch to all traffic.",
+      "reader": "Don't ship now. Confirm at the review whether the 0.005 bar is absolute or relative. If it is relative, the +0.81% lift clears it and the decision flips. Don't ship. The gain in Successful Search Rate is real, but the point estimate (+0.00334) is below the pre-registered +0.005 bar, and the top of the CI (0.00499) is just under it.",
+      "got": false,
+      "how": "overlap 0%"
+    },
+    {
+      "pass": "full",
+      "item": "takeaway 1",
+      "key": "Successful Search Rate +0.81% (+0.41% to +1.21%) against at least 0.50% higher.",
+      "reader": "The readout recommends not shipping. The primary metric, Successful Search Rate, rose from 0.4120 to 0.4134 (+0.00334, 95% CI +0.0017 to +0.0050). That gain is real, but the point estimate falls below the pre-registered +0.005 bar, and the top of the CI (0.00499) sits just under it. Current state: decision is \"Don't ship,\" with one open question about how the bar is read. Don't ship on the pre-registered rule as written. Before the review closes, confirm whether the +0.005 bar is absolute or relative. If the team did not agree on that before the test, don't reinterpret it after seeing the result, because a relative reading would flip the decision. Separately, look into the head-query success drop (-0.0038, p=0.011) as a follow-up. Successful Search Rate lift of **+0.00334 absolute** (a rate, fraction of searches), against a bar of +0.005. The biggest named risk is the bar's ambiguity: the decision flips depending on whether +0.005 is absolute or relative. A second risk is multiplicity. About 60 exploratory metrics were reported, so the nominal hits (head-query drop, reformulation, time to first click) may be chance.",
+      "got": false,
+      "how": "overlap 0%"
+    },
+    {
+      "pass": "full",
+      "item": "takeaway 2",
+      "key": "Approve the launch to all traffic.",
+      "reader": "The readout recommends not shipping. The primary metric, Successful Search Rate, rose from 0.4120 to 0.4134 (+0.00334, 95% CI +0.0017 to +0.0050). That gain is real, but the point estimate falls below the pre-registered +0.005 bar, and the top of the CI (0.00499) sits just under it. Current state: decision is \"Don't ship,\" with one open question about how the bar is read. Don't ship on the pre-registered rule as written. Before the review closes, confirm whether the +0.005 bar is absolute or relative. If the team did not agree on that before the test, don't reinterpret it after seeing the result, because a relative reading would flip the decision. Separately, look into the head-query success drop (-0.0038, p=0.011) as a follow-up. Successful Search Rate lift of **+0.00334 absolute** (a rate, fraction of searches), against a bar of +0.005. The biggest named risk is the bar's ambiguity: the decision flips depending on whether +0.005 is absolute or relative. A second risk is multiplicity. About 60 exploratory metrics were reported, so the nominal hits (head-query drop, reformulation, time to first click) may be chance.",
+      "got": false,
+      "how": "overlap 0%"
+    },
+    {
+      "pass": "full",
+      "item": "takeaway 3",
+      "key": "Could reverse it: pre period could not be checked: no pre-period interval or platform check.",
+      "reader": "The readout recommends not shipping. The primary metric, Successful Search Rate, rose from 0.4120 to 0.4134 (+0.00334, 95% CI +0.0017 to +0.0050). That gain is real, but the point estimate falls below the pre-registered +0.005 bar, and the top of the CI (0.00499) sits just under it. Current state: decision is \"Don't ship,\" with one open question about how the bar is read. Don't ship on the pre-registered rule as written. Before the review closes, confirm whether the +0.005 bar is absolute or relative. If the team did not agree on that before the test, don't reinterpret it after seeing the result, because a relative reading would flip the decision. Separately, look into the head-query success drop (-0.0038, p=0.011) as a follow-up. Successful Search Rate lift of **+0.00334 absolute** (a rate, fraction of searches), against a bar of +0.005. The biggest named risk is the bar's ambiguity: the decision flips depending on whether +0.005 is absolute or relative. A second risk is multiplicity. About 60 exploratory metrics were reported, so the nominal hits (head-query drop, reformulation, time to first click) may be chance.",
+      "got": false,
+      "how": "overlap 0%"
+    }
+  ],
+  "lost": "Two things were unclear. First, what \"Pulse reports 1.0M units per arm against 0.9M planned\" means, and whether the overshoot matters. Second, whether the guardrail margins are relative, which the readout says it assumed. I did not open `readout.md`; this answer comes from the summary you pasted.",
+  "question": "Is the +0.005 bar in `prereg.json` meant as an absolute change in Successful Search Rate (percentage points) or a relative lift over the 0.4120 baseline?",
+  "replies": {
+    "skim": "1. **Answer:** Don't ship. The gain in Successful Search Rate is real, but the point estimate (+0.00334) is below the pre-registered +0.005 bar, and the top of the CI (0.00499) is just under it.\n2. **Decision:** Don't ship now. Confirm at the review whether the 0.005 bar is absolute or relative. If it is relative, the +0.81% lift clears it and the decision flips.\n3. **Number:** +0.00334 absolute change in Successful Search Rate (0.4120 to 0.4134), against a bar of +0.005.\n",
+    "full": "1. **Answer:** The readout recommends not shipping. The primary metric, Successful Search Rate, rose from 0.4120 to 0.4134 (+0.00334, 95% CI +0.0017 to +0.0050). That gain is real, but the point estimate falls below the pre-registered +0.005 bar, and the top of the CI (0.00499) sits just under it. Current state: decision is \"Don't ship,\" with one open question about how the bar is read.\n\n2. **Decision:** Don't ship on the pre-registered rule as written. Before the review closes, confirm whether the +0.005 bar is absolute or relative. If the team did not agree on that before the test, don't reinterpret it after seeing the result, because a relative reading would flip the decision. Separately, look into the head-query success drop (-0.0038, p=0.011) as a follow-up.\n\n3. **Number:** Successful Search Rate lift of **+0.00334 absolute** (a rate, fraction of searches), against a bar of +0.005.\n\n4. **Caveat:** The biggest named risk is the bar's ambiguity: the decision flips depending on whether +0.005 is absolute or relative. A second risk is multiplicity. About 60 exploratory metrics were reported, so the nominal hits (head-query drop, reformulation, time to first click) may be chance.\n\n5. **Lost:** Two things were unclear. First, what \"Pulse reports 1.0M units per arm against 0.9M planned\" means, and whether the overshoot matters. Second, whether the guardrail margins are relative, which the readout says it assumed. I did not open `readout.md`; this answer comes from the summary you pasted.\n\n6. **Question:** Is the +0.005 bar in `prereg.json` meant as an absolute change in Successful Search Rate (percentage points) or a relative lift over the 0.4120 baseline?\n"
+  }
+}

@@ -1,0 +1,53 @@
+{
+  "pass": false,
+  "skim": "0/2",
+  "full": "0/3",
+  "items": [
+    {
+      "pass": "skim",
+      "item": "answer",
+      "key": "Keep running: It's day 4 of 14; Successful Search Rate reads +1.42% (+0.32% to +2.52%) so far, too early to call.",
+      "reader": "The document concludes \"Can't tell.\" The only data is an early Pulse from 2026-09-15 (about day 3\u20134 of a 14-day test), and its p-values are fixed-horizon, so they aren't valid for a ship decision. The experiment still shows as active on 2026-10-12, past its planned end of 2026-09-26, so no full-run readout is in hand. Don't launch on this Pulse. Get the pre-registered readout from the completed run, checking first that the experiment has actually stopped and reached the planned 900k units per arm (only about 260k so far).",
+      "got": false,
+      "how": "overlap 0%"
+    },
+    {
+      "pass": "skim",
+      "item": "decision",
+      "key": "Approve running the test longer.",
+      "reader": "Don't launch on this Pulse. Get the pre-registered readout from the completed run, checking first that the experiment has actually stopped and reached the planned 900k units per arm (only about 260k so far). The document concludes \"Can't tell.\" The only data is an early Pulse from 2026-09-15 (about day 3\u20134 of a 14-day test), and its p-values are fixed-horizon, so they aren't valid for a ship decision. The experiment still shows as active on 2026-10-12, past its planned end of 2026-09-26, so no full-run readout is in hand.",
+      "got": false,
+      "how": "overlap 25%"
+    },
+    {
+      "pass": "full",
+      "item": "takeaway 1",
+      "key": "Successful Search Rate +1.42% (+0.32% to +2.52%) against at least 0.50% higher.",
+      "reader": "The document concludes \"Can't tell.\" The Sep 15 Pulse is an interim peek at about day 3\u20134 and 29% of the planned sample. The experiment is still `active` on Oct 12, past its planned Sep 26 end, so there is no full-run readout yet. Don't ship or kill on the Sep 15 numbers. Re-pull Pulse for the full window (`cuped: false`, 95% confidence) and confirm about 900k units per arm. Then apply the pre-registered rule: ship if the Successful Search Rate point estimate is at least +0.005 and no guardrail breaches its margin. Also find out why the experiment is still active. Successful Search Rate absolute lift of **+0.00585** (0.4120 control \u2192 0.4179 test), a proportion unit. The 95% CI is [+0.0013, +0.0104], so the lower bound is well below the +0.005 bar. The estimate comes from an interim, fixed-horizon look with `sequentialTesting: false`, so the p-values and CIs aren't valid for a ship decision. Early point estimates at this sample size are noisy and tend to overstate effects. The data are also stale.",
+      "got": false,
+      "how": "overlap 0%"
+    },
+    {
+      "pass": "full",
+      "item": "takeaway 2",
+      "key": "Approve running the test longer.",
+      "reader": "The document concludes \"Can't tell.\" The Sep 15 Pulse is an interim peek at about day 3\u20134 and 29% of the planned sample. The experiment is still `active` on Oct 12, past its planned Sep 26 end, so there is no full-run readout yet. Don't ship or kill on the Sep 15 numbers. Re-pull Pulse for the full window (`cuped: false`, 95% confidence) and confirm about 900k units per arm. Then apply the pre-registered rule: ship if the Successful Search Rate point estimate is at least +0.005 and no guardrail breaches its margin. Also find out why the experiment is still active. Successful Search Rate absolute lift of **+0.00585** (0.4120 control \u2192 0.4179 test), a proportion unit. The 95% CI is [+0.0013, +0.0104], so the lower bound is well below the +0.005 bar. The estimate comes from an interim, fixed-horizon look with `sequentialTesting: false`, so the p-values and CIs aren't valid for a ship decision. Early point estimates at this sample size are noisy and tend to overstate effects. The data are also stale.",
+      "got": false,
+      "how": "overlap 25%"
+    },
+    {
+      "pass": "full",
+      "item": "takeaway 3",
+      "key": "Could reverse it: the remaining data; the call is made at the planned sample.",
+      "reader": "The document concludes \"Can't tell.\" The Sep 15 Pulse is an interim peek at about day 3\u20134 and 29% of the planned sample. The experiment is still `active` on Oct 12, past its planned Sep 26 end, so there is no full-run readout yet. Don't ship or kill on the Sep 15 numbers. Re-pull Pulse for the full window (`cuped: false`, 95% confidence) and confirm about 900k units per arm. Then apply the pre-registered rule: ship if the Successful Search Rate point estimate is at least +0.005 and no guardrail breaches its margin. Also find out why the experiment is still active. Successful Search Rate absolute lift of **+0.00585** (0.4120 control \u2192 0.4179 test), a proportion unit. The 95% CI is [+0.0013, +0.0104], so the lower bound is well below the +0.005 bar. The estimate comes from an interim, fixed-horizon look with `sequentialTesting: false`, so the p-values and CIs aren't valid for a ship decision. Early point estimates at this sample size are noisy and tend to overstate effects. The data are also stale.",
+      "got": false,
+      "how": "overlap 43%"
+    }
+  ],
+  "lost": "Nowhere significant. The one gap is that the pre-registration doesn't specify whether guardrail margins are absolute or relative. The document treats them as relative, and I took that as stated.",
+  "question": "Why is the experiment still `active` on 2026-10-12 when it was planned to end on 2026-09-26, and does a full-window Pulse exist?",
+  "replies": {
+    "skim": "1. **Answer:** The document concludes \"Can't tell.\" The only data is an early Pulse from 2026-09-15 (about day 3\u20134 of a 14-day test), and its p-values are fixed-horizon, so they aren't valid for a ship decision. The experiment still shows as active on 2026-10-12, past its planned end of 2026-09-26, so no full-run readout is in hand.\n2. **Decision:** Don't launch on this Pulse. Get the pre-registered readout from the completed run, checking first that the experiment has actually stopped and reached the planned 900k units per arm (only about 260k so far).\n3. **Number:** Successful Search Rate lift against the pre-registered bar of +0.005 absolute (0.5 percentage points). The observed lift isn't in this excerpt, so the actual result is unclear.\n",
+    "full": "1. **Answer:** The document concludes \"Can't tell.\" The Sep 15 Pulse is an interim peek at about day 3\u20134 and 29% of the planned sample. The experiment is still `active` on Oct 12, past its planned Sep 26 end, so there is no full-run readout yet.\n\n2. **Decision:** Don't ship or kill on the Sep 15 numbers. Re-pull Pulse for the full window (`cuped: false`, 95% confidence) and confirm about 900k units per arm. Then apply the pre-registered rule: ship if the Successful Search Rate point estimate is at least +0.005 and no guardrail breaches its margin. Also find out why the experiment is still active.\n\n3. **Number:** Successful Search Rate absolute lift of **+0.00585** (0.4120 control \u2192 0.4179 test), a proportion unit. The 95% CI is [+0.0013, +0.0104], so the lower bound is well below the +0.005 bar.\n\n4. **Caveat:** The estimate comes from an interim, fixed-horizon look with `sequentialTesting: false`, so the p-values and CIs aren't valid for a ship decision. Early point estimates at this sample size are noisy and tend to overstate effects. The data are also stale.\n\n5. **Lost:** Nowhere significant. The one gap is that the pre-registration doesn't specify whether guardrail margins are absolute or relative. The document treats them as relative, and I took that as stated.\n\n6. **Question:** Why is the experiment still `active` on 2026-10-12 when it was planned to end on 2026-09-26, and does a full-window Pulse exist?\n"
+  }
+}

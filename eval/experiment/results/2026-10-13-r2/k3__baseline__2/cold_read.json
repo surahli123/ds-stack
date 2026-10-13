@@ -1,0 +1,53 @@
+{
+  "pass": false,
+  "skim": "0/2",
+  "full": "0/3",
+  "items": [
+    {
+      "pass": "skim",
+      "item": "answer",
+      "key": "Keep running: Successful Search Rate reads +0.12% (-0.36% to +0.60%); ruling out the 0.50% bar needs about 1.9 times the users so far.",
+      "reader": "The test found no effect. Successful Search Rate moved +0.00049 (CI \u22120.0015 to +0.0025, p=0.62), below the pre-registered bar of +0.005, and the guardrails and validity checks passed. Don't launch on this result. The data rule out an effect of the size the team needed.",
+      "got": false,
+      "how": "overlap 0%"
+    },
+    {
+      "pass": "skim",
+      "item": "decision",
+      "key": "Approve running the test longer.",
+      "reader": "Don't launch on this result. The data rule out an effect of the size the team needed. The test found no effect. Successful Search Rate moved +0.00049 (CI \u22120.0015 to +0.0025, p=0.62), below the pre-registered bar of +0.005, and the guardrails and validity checks passed.",
+      "got": false,
+      "how": "overlap 25%"
+    },
+    {
+      "pass": "full",
+      "item": "takeaway 1",
+      "key": "Successful Search Rate +0.12% (-0.36% to +0.60%) against at least 0.50% higher.",
+      "reader": "The readout concludes that v7 showed no effect on Successful Search Rate. The change was +0.00049 (CI \u22120.0015 to +0.0025, p=0.62), against a pre-registered bar of +0.005. The guardrails are within margin and the test was valid. Current state: the test is finished and the result is negative. Don't launch v7. Any further iteration needs either a larger expected effect or a smaller pre-registered bar with a matching sample size. Successful Search Rate, +0.00049 (unit unclear; presumably an absolute change in rate). The upper CI bound of +0.0025 is what matters, because it is half the +0.005 bar. The document names about 70 uncorrected secondary and segment metrics. The few nominal hits point in both directions, and the author says they look like chance. The test can rule out large effects but cannot support smaller ones.",
+      "got": false,
+      "how": "overlap 0%"
+    },
+    {
+      "pass": "full",
+      "item": "takeaway 2",
+      "key": "Approve running the test longer.",
+      "reader": "The readout concludes that v7 showed no effect on Successful Search Rate. The change was +0.00049 (CI \u22120.0015 to +0.0025, p=0.62), against a pre-registered bar of +0.005. The guardrails are within margin and the test was valid. Current state: the test is finished and the result is negative. Don't launch v7. Any further iteration needs either a larger expected effect or a smaller pre-registered bar with a matching sample size. Successful Search Rate, +0.00049 (unit unclear; presumably an absolute change in rate). The upper CI bound of +0.0025 is what matters, because it is half the +0.005 bar. The document names about 70 uncorrected secondary and segment metrics. The few nominal hits point in both directions, and the author says they look like chance. The test can rule out large effects but cannot support smaller ones.",
+      "got": false,
+      "how": "overlap 25%"
+    },
+    {
+      "pass": "full",
+      "item": "takeaway 3",
+      "key": "Could reverse it: the remaining data; the call is made at the planned sample.",
+      "reader": "The readout concludes that v7 showed no effect on Successful Search Rate. The change was +0.00049 (CI \u22120.0015 to +0.0025, p=0.62), against a pre-registered bar of +0.005. The guardrails are within margin and the test was valid. Current state: the test is finished and the result is negative. Don't launch v7. Any further iteration needs either a larger expected effect or a smaller pre-registered bar with a matching sample size. Successful Search Rate, +0.00049 (unit unclear; presumably an absolute change in rate). The upper CI bound of +0.0025 is what matters, because it is half the +0.005 bar. The document names about 70 uncorrected secondary and segment metrics. The few nominal hits point in both directions, and the author says they look like chance. The test can rule out large effects but cannot support smaller ones.",
+      "got": false,
+      "how": "overlap 14%"
+    }
+  ],
+  "lost": "Two things. The guardrail margins: the author says \"I read the margins as relative changes,\" which suggests the margin definition was not stated by the test plan. And the unit of the primary metric, which isn't stated. Both matter for whether the bar and the guardrails are being compared like for like.",
+  "question": "Are the primary bar (+0.005) and the guardrail margins expressed in the same units, absolute or relative, and is the Successful Search Rate change also absolute?",
+  "replies": {
+    "skim": "1. **Answer:** The test found no effect. Successful Search Rate moved +0.00049 (CI \u22120.0015 to +0.0025, p=0.62), below the pre-registered bar of +0.005, and the guardrails and validity checks passed.\n2. **Decision:** Don't launch on this result. The data rule out an effect of the size the team needed.\n3. **Number:** +0.00049, the absolute change in Successful Search Rate. The text doesn't state the metric's unit, so \"unclear\" for the unit.\n",
+    "full": "1. **Answer:** The readout concludes that v7 showed no effect on Successful Search Rate. The change was +0.00049 (CI \u22120.0015 to +0.0025, p=0.62), against a pre-registered bar of +0.005. The guardrails are within margin and the test was valid. Current state: the test is finished and the result is negative.\n\n2. **Decision:** Don't launch v7. Any further iteration needs either a larger expected effect or a smaller pre-registered bar with a matching sample size.\n\n3. **Number:** Successful Search Rate, +0.00049 (unit unclear; presumably an absolute change in rate). The upper CI bound of +0.0025 is what matters, because it is half the +0.005 bar.\n\n4. **Caveat:** The document names about 70 uncorrected secondary and segment metrics. The few nominal hits point in both directions, and the author says they look like chance. The test can rule out large effects but cannot support smaller ones.\n\n5. **Lost:** Two things. The guardrail margins: the author says \"I read the margins as relative changes,\" which suggests the margin definition was not stated by the test plan. And the unit of the primary metric, which isn't stated. Both matter for whether the bar and the guardrails are being compared like for like.\n\n6. **Question:** Are the primary bar (+0.005) and the guardrail margins expressed in the same units, absolute or relative, and is the Successful Search Rate change also absolute?\n"
+  }
+}

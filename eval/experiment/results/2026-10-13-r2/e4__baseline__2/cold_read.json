@@ -1,0 +1,53 @@
+{
+  "pass": false,
+  "skim": "1/2",
+  "full": "1/3",
+  "items": [
+    {
+      "pass": "skim",
+      "item": "answer",
+      "key": "Escalate: Successful Search Rate rose 0.39% (+0.27% to +0.51%), a real change in the good direction but short of the 0.50% bar.",
+      "reader": "Don't ship. The primary metric's lift is about +0.39% relative (95% CI +0.27% to +0.51%), below the pre-registered 0.5% bar. Don't ship. Have the pre-registration authors confirm the bar's units; the text says the decision holds either way.",
+      "got": true,
+      "how": "overlap 0%; grader: same fact"
+    },
+    {
+      "pass": "skim",
+      "item": "decision",
+      "key": "Decide the trade-off at triage.",
+      "reader": "Don't ship. Have the pre-registration authors confirm the bar's units; the text says the decision holds either way. Don't ship. The primary metric's lift is about +0.39% relative (95% CI +0.27% to +0.51%), below the pre-registered 0.5% bar.",
+      "got": false,
+      "how": "overlap 0%"
+    },
+    {
+      "pass": "full",
+      "item": "takeaway 1",
+      "key": "Successful Search Rate +0.39% (+0.27% to +0.51%) against at least 0.50% higher.",
+      "reader": "The readout recommends not shipping. The overall Successful Search Rate lift is about +0.39% relative, below the 0.5% pre-registered bar. Extending the run won't change the point estimate. Shipping would require a documented change to the bar. Don't ship. Have the pre-registration authors confirm the units of the bar. Any change to the bar should be documented and agreed before anyone reconsiders the result. Overall Successful Search Rate lift of about +0.39% relative (95% CI roughly +0.27% to +0.51%), against a bar of 0.5% relative. The triggered-search lift of +1.9% is not the decision number. The point estimate sits just below the bar, and the CI straddles it. The document also says about 60 uncorrected metrics and cuts were examined, so the Queries per User result (\u22121.04%, p=0.024) is only a hypothesis.",
+      "got": true,
+      "how": "overlap 0%; grader: same fact"
+    },
+    {
+      "pass": "full",
+      "item": "takeaway 2",
+      "key": "Decide the trade-off at triage.",
+      "reader": "The readout recommends not shipping. The overall Successful Search Rate lift is about +0.39% relative, below the 0.5% pre-registered bar. Extending the run won't change the point estimate. Shipping would require a documented change to the bar. Don't ship. Have the pre-registration authors confirm the units of the bar. Any change to the bar should be documented and agreed before anyone reconsiders the result. Overall Successful Search Rate lift of about +0.39% relative (95% CI roughly +0.27% to +0.51%), against a bar of 0.5% relative. The triggered-search lift of +1.9% is not the decision number. The point estimate sits just below the bar, and the CI straddles it. The document also says about 60 uncorrected metrics and cuts were examined, so the Queries per User result (\u22121.04%, p=0.024) is only a hypothesis.",
+      "got": false,
+      "how": "overlap 0%"
+    },
+    {
+      "pass": "full",
+      "item": "takeaway 3",
+      "key": "Could reverse it: the primary is measured on triggered traffic, so its users aren't compared with the planned total.",
+      "reader": "The readout recommends not shipping. The overall Successful Search Rate lift is about +0.39% relative, below the 0.5% pre-registered bar. Extending the run won't change the point estimate. Shipping would require a documented change to the bar. Don't ship. Have the pre-registration authors confirm the units of the bar. Any change to the bar should be documented and agreed before anyone reconsiders the result. Overall Successful Search Rate lift of about +0.39% relative (95% CI roughly +0.27% to +0.51%), against a bar of 0.5% relative. The triggered-search lift of +1.9% is not the decision number. The point estimate sits just below the bar, and the CI straddles it. The document also says about 60 uncorrected metrics and cuts were examined, so the Queries per User result (\u22121.04%, p=0.024) is only a hypothesis.",
+      "got": false,
+      "how": "overlap 0%"
+    }
+  ],
+  "lost": "I had to work out the overall lift myself by scaling the triggered lift by the 20.5% share of control successes (1.9% \u00d7 0.205 \u2248 0.39%). The \"mass_share\" framing and the bar's definition come from the pre-registration, which the document doesn't include, so I couldn't check them directly.",
+  "question": "Is the 0.5% bar a relative lift on overall Successful Search Rate, as the pre-registration's `mass_share` framing implies, or an absolute one? The document doesn't say.",
+  "replies": {
+    "skim": "1. **Answer:** Don't ship. The primary metric's lift is about +0.39% relative (95% CI +0.27% to +0.51%), below the pre-registered 0.5% bar.\n2. **Decision:** Don't ship. Have the pre-registration authors confirm the bar's units; the text says the decision holds either way.\n3. **Number:** +0.39% relative lift in Successful Search Rate, against the 0.5% bar.\n",
+    "full": "1. **Answer:** The readout recommends not shipping. The overall Successful Search Rate lift is about +0.39% relative, below the 0.5% pre-registered bar. Extending the run won't change the point estimate. Shipping would require a documented change to the bar.\n\n2. **Decision:** Don't ship. Have the pre-registration authors confirm the units of the bar. Any change to the bar should be documented and agreed before anyone reconsiders the result.\n\n3. **Number:** Overall Successful Search Rate lift of about +0.39% relative (95% CI roughly +0.27% to +0.51%), against a bar of 0.5% relative. The triggered-search lift of +1.9% is not the decision number.\n\n4. **Caveat:** The point estimate sits just below the bar, and the CI straddles it. The document also says about 60 uncorrected metrics and cuts were examined, so the Queries per User result (\u22121.04%, p=0.024) is only a hypothesis.\n\n5. **Lost:** I had to work out the overall lift myself by scaling the triggered lift by the 20.5% share of control successes (1.9% \u00d7 0.205 \u2248 0.39%). The \"mass_share\" framing and the bar's definition come from the pre-registration, which the document doesn't include, so I couldn't check them directly.\n\n6. **Question:** Is the 0.5% bar a relative lift on overall Successful Search Rate, as the pre-registration's `mass_share` framing implies, or an absolute one? The document doesn't say.\n\nI answered from the text you pasted and didn't open `readout.md`.\n"
+  }
+}

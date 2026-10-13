@@ -1,0 +1,143 @@
+{
+  "_note": "Search metric co-movement patterns: each maps a signature in the scorecard to a candidate mechanism and the deep dives that would confirm or refute it. States are physical (up, down, flat), not good or bad. Extend or override in the overlay (patterns.json); company metric names belong in the overlay's metric_families.json, never here.",
+  "families": {
+    "success": ["successful search", "success rate", "\\bsat\\b", "satisf"],
+    "ctr": ["^ctr$", "^ctr\\b", "click[- ]?through"],
+    "long_click": ["long click", "dwell"],
+    "short_click": ["short click", "quick back", "pogo"],
+    "abandonment": ["abandon"],
+    "reformulation": ["reformulat", "requer", "rewrite"],
+    "queries_per_user": ["queries per user", "searches per user", "query volume"],
+    "sessions_per_user": ["sessions per user"],
+    "clicks_per_user": ["clicks per user"],
+    "time_to_click": ["time to first click", "time to click"],
+    "zero_result": ["zero result", "null result", "no result"],
+    "latency": ["latency", "load time", "page time"],
+    "ad_ctr": ["ad click", "ads? ctr", "sponsored"],
+    "revenue": ["revenue", "rpm", "monetiz"],
+    "pagination": ["pagination", "next page", "page 2"],
+    "autocomplete": ["autocomplete", "suggest"]
+  },
+  "ratios": {
+    "ctr": {"numerator": "clicks_per_user", "denominator": "queries_per_user"}
+  },
+  "patterns": [
+    {
+      "id": "attractive_not_relevant",
+      "name": "More clicks, not more satisfaction",
+      "when": {"ctr": "up", "long_click": "flat_or_down"},
+      "strengthened_by": {"success": "flat_or_down", "short_click": "up"},
+      "contradicted_by": {"long_click": "up", "success": "up"},
+      "mechanism": "Results look more clickable (titles, snippets or positions) but satisfy no more often, so CTR rises without long clicks.",
+      "deep_dives": [
+        {"cut": "CTR and long-click rate by result position", "confirms": "the CTR gain sits in top positions and comes with short clicks", "refutes": "long clicks rise wherever CTR rises"},
+        {"cut": "short-click rate (back to results within about 10 seconds)", "confirms": "short clicks rise in treatment", "refutes": "short clicks are flat"},
+        {"cut": "config diff of presentation parameters (titles, snippets, thumbnails)", "confirms": "a presentation parameter differs between arms", "refutes": "only ranking differs"}
+      ]
+    },
+    {
+      "id": "struggling_users",
+      "name": "More searching because results got worse",
+      "when": {"queries_per_user": "up", "reformulation": "up"},
+      "strengthened_by": {"success": "flat_or_down", "abandonment": "up", "time_to_click": "up"},
+      "contradicted_by": {"success": "up", "reformulation": "down"},
+      "mechanism": "Users search more because they retry: reformulations rise and success doesn't, so higher query volume is a cost, not engagement.",
+      "deep_dives": [
+        {"cut": "reformulation rate by query class (head, torso, tail; navigational, informational)", "confirms": "reformulation rises on the classes the change touched", "refutes": "reformulation rises evenly, pointing to a logging or session change"},
+        {"cut": "success per query vs per user", "confirms": "success per query falls", "refutes": "success per query holds while volume grows"},
+        {"cut": "distribution of queries per session by arm", "confirms": "more long retry chains in treatment", "refutes": "more sessions, not longer ones"}
+      ]
+    },
+    {
+      "id": "real_engagement",
+      "name": "More searching because search got better",
+      "when": {"queries_per_user": "up", "success": "up"},
+      "strengthened_by": {"sessions_per_user": "up", "reformulation": "flat_or_down"},
+      "contradicted_by": {"reformulation": "up"},
+      "mechanism": "Users come back and search more because searches succeed more often.",
+      "deep_dives": [
+        {"cut": "sessions per user and return rate by arm", "confirms": "more return visits, not longer sessions", "refutes": "the extra queries sit inside the same sessions"},
+        {"cut": "new vs returning users", "confirms": "the gain holds for returning users", "refutes": "the gain is only in first-week users (novelty)"}
+      ]
+    },
+    {
+      "id": "speed_cost",
+      "name": "Slower results cost engagement",
+      "when": {"latency": "up"},
+      "strengthened_by": {"abandonment": "up", "ctr": "flat_or_down", "success": "flat_or_down"},
+      "contradicted_by": {"abandonment": "down"},
+      "mechanism": "The treatment serves results more slowly, and slower pages lose clicks and raise abandonment, which can hide a relevance gain.",
+      "deep_dives": [
+        {"cut": "abandonment and CTR by latency bucket, per arm", "confirms": "the loss sits in the slow buckets", "refutes": "the loss is flat across latency buckets"},
+        {"cut": "effect by device and network type", "confirms": "mobile or slow networks carry the loss", "refutes": "the loss is the same everywhere"},
+        {"cut": "relevance metrics on queries where latency didn't change", "confirms": "relevance improves once latency is held fixed", "refutes": "no gain even at equal latency"}
+      ]
+    },
+    {
+      "id": "recall_over_precision",
+      "name": "More results for hard queries, lower precision",
+      "when": {"zero_result": "down"},
+      "strengthened_by": {"ctr": "flat_or_down", "success": "flat_or_down", "pagination": "up"},
+      "contradicted_by": {"success": "up"},
+      "mechanism": "The change returns results for queries that used to get none, but those results are weak, so averages over all queries fall.",
+      "deep_dives": [
+        {"cut": "success and CTR on queries that had zero results in control", "confirms": "these queries now get results but low success", "refutes": "they succeed at the normal rate"},
+        {"cut": "the same metrics excluding those queries", "confirms": "the rest of the traffic is flat", "refutes": "the drop is broad"}
+      ]
+    },
+    {
+      "id": "good_abandonment",
+      "name": "Answers on the page reduce clicks",
+      "when": {"abandonment": "up", "success": "up_or_flat"},
+      "strengthened_by": {"ctr": "flat_or_down", "time_to_click": "any", "queries_per_user": "flat_or_down"},
+      "contradicted_by": {"reformulation": "up", "success": "down"},
+      "mechanism": "More users get their answer from the results page itself (answers, richer snippets), so they leave without clicking and don't retry.",
+      "deep_dives": [
+        {"cut": "abandonment on queries with an answer or rich snippet vs without", "confirms": "the rise sits on answer-bearing queries", "refutes": "the rise is even"},
+        {"cut": "reformulation and return-within-a-minute after an abandoned query", "confirms": "abandoned users don't come back to retry", "refutes": "abandoned users retry"}
+      ]
+    },
+    {
+      "id": "denominator_driven",
+      "name": "A ratio moved because its denominator moved",
+      "kind": "ratio",
+      "mechanism": "{ratio} moved because {denominator} moved ({denominator_change}), not because {numerator} changed; the ratio's story is about volume, not quality.",
+      "deep_dives": [
+        {"cut": "{numerator} and {denominator} per user, side by side", "confirms": "the denominator carries the change", "refutes": "the numerator moves too"},
+        {"cut": "what changed the {denominator} (query volume, sessions, logging of searches)", "confirms": "a volume or logging change explains it", "refutes": "volume is steady"}
+      ]
+    },
+    {
+      "id": "concentrated_segment",
+      "name": "The effect sits in one segment",
+      "kind": "segment",
+      "mechanism": "{metric}'s change comes mostly from {segment} ({share} of the overall change), and segments differ more than noise allows.",
+      "deep_dives": [
+        {"cut": "{metric} for {segment} vs the rest, with triggered queries only", "confirms": "the change is real and confined to {segment}", "refutes": "the other segments move too once diluted traffic is removed"},
+        {"cut": "what the treatment changes for {segment} (ranking features, coverage, rendering)", "confirms": "a mechanism specific to {segment}", "refutes": "nothing in the change targets {segment}"}
+      ]
+    },
+    {
+      "id": "novelty",
+      "name": "The effect is fading",
+      "kind": "check",
+      "check": "novelty",
+      "mechanism": "The effect shrinks with each day users have had the treatment, so the long-run effect is likely smaller than the average.",
+      "deep_dives": [
+        {"cut": "effect by days since first exposure, per weekly cohort", "confirms": "every cohort fades the same way", "refutes": "late cohorts start lower (cohort mix, not novelty)"},
+        {"cut": "new vs returning users", "confirms": "returning users fade", "refutes": "only new users differ"}
+      ]
+    },
+    {
+      "id": "artifact",
+      "name": "A data or logging problem, not user behaviour",
+      "kind": "check",
+      "check": "sample_split|config_params|config_edits|scorecard|pre_period|invariant",
+      "mechanism": "A validity check flagged the data itself, so the movements may reflect logging, assignment or export problems rather than users.",
+      "deep_dives": [
+        {"cut": "event counts per user by arm for every logged event the change could touch", "confirms": "one arm logs differently", "refutes": "logging is identical"},
+        {"cut": "exposure counts by day, platform and browser", "confirms": "the imbalance sits in one slice", "refutes": "the imbalance is everywhere (assignment problem)"}
+      ]
+    }
+  ]
+}

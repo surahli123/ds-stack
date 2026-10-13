@@ -1,0 +1,53 @@
+{
+  "pass": false,
+  "skim": "2/2",
+  "full": "2/3",
+  "items": [
+    {
+      "pass": "skim",
+      "item": "answer",
+      "key": "No effect found: Successful Search Rate reads -0.05% (-0.34% to +0.24%), which rules out the 0.50% change the test was built to find.",
+      "reader": "Ranker v7 showed no effect on Successful Search Rate (control 0.4120, test 0.4118, p = 0.74), and the 95% CI tops out at +0.10 pp, so the pre-registered +0.5 pp bar is ruled out. Don't launch Ranker v7 on this result.",
+      "got": true,
+      "how": "overlap 0%; grader: same fact"
+    },
+    {
+      "pass": "skim",
+      "item": "decision",
+      "key": "Agree to stop the test without launching.",
+      "reader": "Don't launch Ranker v7 on this result. Ranker v7 showed no effect on Successful Search Rate (control 0.4120, test 0.4118, p = 0.74), and the 95% CI tops out at +0.10 pp, so the pre-registered +0.5 pp bar is ruled out.",
+      "got": true,
+      "how": "overlap 20%; grader: same fact"
+    },
+    {
+      "pass": "full",
+      "item": "takeaway 1",
+      "key": "Successful Search Rate -0.05% (-0.34% to +0.24%) against at least 0.50% higher.",
+      "reader": "Ranker v7 shows no change in Successful Search Rate (control 0.4120, test 0.4118, difference \u22120.02 pp, p = 0.74). The 95% CI of about \u22120.14 to +0.10 pp rules out the pre-registered bar. Guardrails are neutral. The experiment is still marked `status: active` as of 2026-10-12. Don't launch v7 as a search-quality win. Close out the experiment. If the team wants v7 for other reasons, that needs a new decision with a new hypothesis. If the Ad Click Rate dip (\u22121.5%) and the Queries per User rise (+1.9%) matter, test them in a follow-up with those metrics pre-registered. Successful Search Rate difference, \u22120.02 pp (absolute \u22120.0002), against a bar of +0.005. The unit of the bar is unclear. It is +0.5 pp if absolute, or about +0.2 pp if relative. The CI's upper end (+0.10 pp) is below both readings, so the call doesn't change. The document doesn't name one biggest limit. The most material open risk is the run window: the start date (2026-09-12) is inferred from `startTime`, the snapshot is dated 09-25, and the document doesn't say whether the test kept running after that. The secondary-metric hits are also likely chance, since 56 metrics were checked with no correction.",
+      "got": true,
+      "how": "overlap 0%; grader: same fact"
+    },
+    {
+      "pass": "full",
+      "item": "takeaway 2",
+      "key": "Agree to stop the test without launching.",
+      "reader": "Ranker v7 shows no change in Successful Search Rate (control 0.4120, test 0.4118, difference \u22120.02 pp, p = 0.74). The 95% CI of about \u22120.14 to +0.10 pp rules out the pre-registered bar. Guardrails are neutral. The experiment is still marked `status: active` as of 2026-10-12. Don't launch v7 as a search-quality win. Close out the experiment. If the team wants v7 for other reasons, that needs a new decision with a new hypothesis. If the Ad Click Rate dip (\u22121.5%) and the Queries per User rise (+1.9%) matter, test them in a follow-up with those metrics pre-registered. Successful Search Rate difference, \u22120.02 pp (absolute \u22120.0002), against a bar of +0.005. The unit of the bar is unclear. It is +0.5 pp if absolute, or about +0.2 pp if relative. The CI's upper end (+0.10 pp) is below both readings, so the call doesn't change. The document doesn't name one biggest limit. The most material open risk is the run window: the start date (2026-09-12) is inferred from `startTime`, the snapshot is dated 09-25, and the document doesn't say whether the test kept running after that. The secondary-metric hits are also likely chance, since 56 metrics were checked with no correction.",
+      "got": true,
+      "how": "overlap 20%; grader: same fact"
+    },
+    {
+      "pass": "full",
+      "item": "takeaway 3",
+      "key": "Could reverse it: pre period could not be checked: no pre-period interval or platform check.",
+      "reader": "Ranker v7 shows no change in Successful Search Rate (control 0.4120, test 0.4118, difference \u22120.02 pp, p = 0.74). The 95% CI of about \u22120.14 to +0.10 pp rules out the pre-registered bar. Guardrails are neutral. The experiment is still marked `status: active` as of 2026-10-12. Don't launch v7 as a search-quality win. Close out the experiment. If the team wants v7 for other reasons, that needs a new decision with a new hypothesis. If the Ad Click Rate dip (\u22121.5%) and the Queries per User rise (+1.9%) matter, test them in a follow-up with those metrics pre-registered. Successful Search Rate difference, \u22120.02 pp (absolute \u22120.0002), against a bar of +0.005. The unit of the bar is unclear. It is +0.5 pp if absolute, or about +0.2 pp if relative. The CI's upper end (+0.10 pp) is below both readings, so the call doesn't change. The document doesn't name one biggest limit. The most material open risk is the run window: the start date (2026-09-12) is inferred from `startTime`, the snapshot is dated 09-25, and the document doesn't say whether the test kept running after that. The secondary-metric hits are also likely chance, since 56 metrics were checked with no correction.",
+      "got": false,
+      "how": "overlap 12%"
+    }
+  ],
+  "lost": "Two places. The ship bar `+0.005` has no unit, so I had to check both readings. The guardrail table mixes relative % (for latency, abandonment and so on) with the pp used for the primary metric. The start date also needed inferring.",
+  "question": "Is the 09-25 snapshot the final read at the planned 14-day end, and was the test stopped there? Also, was the +0.005 bar meant as 0.5 pp absolute or 0.5% relative?",
+  "replies": {
+    "skim": "1. **Answer:** Ranker v7 showed no effect on Successful Search Rate (control 0.4120, test 0.4118, p = 0.74), and the 95% CI tops out at +0.10 pp, so the pre-registered +0.5 pp bar is ruled out.\n2. **Decision:** Don't launch Ranker v7 on this result.\n3. **Number:** +0.10 pp, the upper bound of the 95% CI on the Successful Search Rate difference, against the +0.5 pp ship bar.\n",
+    "full": "1. **Answer:** Ranker v7 shows no change in Successful Search Rate (control 0.4120, test 0.4118, difference \u22120.02 pp, p = 0.74). The 95% CI of about \u22120.14 to +0.10 pp rules out the pre-registered bar. Guardrails are neutral. The experiment is still marked `status: active` as of 2026-10-12.\n\n2. **Decision:** Don't launch v7 as a search-quality win. Close out the experiment. If the team wants v7 for other reasons, that needs a new decision with a new hypothesis. If the Ad Click Rate dip (\u22121.5%) and the Queries per User rise (+1.9%) matter, test them in a follow-up with those metrics pre-registered.\n\n3. **Number:** Successful Search Rate difference, \u22120.02 pp (absolute \u22120.0002), against a bar of +0.005. The unit of the bar is unclear. It is +0.5 pp if absolute, or about +0.2 pp if relative. The CI's upper end (+0.10 pp) is below both readings, so the call doesn't change.\n\n4. **Caveat:** The document doesn't name one biggest limit. The most material open risk is the run window: the start date (2026-09-12) is inferred from `startTime`, the snapshot is dated 09-25, and the document doesn't say whether the test kept running after that. The secondary-metric hits are also likely chance, since 56 metrics were checked with no correction.\n\n5. **Lost:** Two places. The ship bar `+0.005` has no unit, so I had to check both readings. The guardrail table mixes relative % (for latency, abandonment and so on) with the pp used for the primary metric. The start date also needed inferring.\n\n6. **Question:** Is the 09-25 snapshot the final read at the planned 14-day end, and was the test stopped there? Also, was the +0.005 bar meant as 0.5 pp absolute or 0.5% relative?\n"
+  }
+}

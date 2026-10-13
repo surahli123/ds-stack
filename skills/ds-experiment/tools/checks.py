@@ -62,7 +62,7 @@ def scorecard_invariants(metrics, analysis):
         rel_ci, abs_ci = m.get("rel_ci"), m.get("abs_ci")
         if c and rel_ci and abs_ci and not _close((rel_ci[1] - rel_ci[0]) * c, abs_ci[1] - abs_ci[0], rel=0.05, abs_tol=tol):
             problems.append(f"{name}: the relative and absolute intervals have different widths through the control mean")
-        if c is not None and t is not None and ab is not None and not analysis.get("cuped"):
+        if c is not None and t is not None and ab is not None and analysis.get("cuped") is False:
             if not _close(t - c, ab, rel=0.05, abs_tol=tol):
                 problems.append(f"{name}: test - control = {t - c:g} but the absolute change is {ab:g}")
         for point, ci, label in ((rel, rel_ci, "relative"), (ab, abs_ci, "absolute")):
@@ -91,8 +91,12 @@ def scorecard_invariants(metrics, analysis):
                   "(relative, absolute and intervals agree)")
 
 
-def sample_split(config, primary, alpha, explanations):
-    """SRM on exposures if the config has them, else on the primary metric's units."""
+def sample_split(config, primary, alpha, explanations, warn_alpha=0.01):
+    """SRM on exposures if the config has them, else on the primary metric's units.
+
+    Two bands, as Statsig uses them: p below `alpha` (0.001) fails; p below
+    `warn_alpha` (0.01) is flagged and listed as an open item without blocking.
+    """
     health = _health(config, "sample_split")
     counts, source = None, None
     groups = (config or {}).get("groups") or []
@@ -123,6 +127,9 @@ def sample_split(config, primary, alpha, explanations):
             return result("sample_split", FAIL, summary, **details)
         if health and health["status"] == "FAILED":
             return result("sample_split", FAIL, f"the platform's balance check failed (split {shares})", **details)
+        if p < warn_alpha:
+            return result("sample_split", FLAG, f"split {shares} against a planned {planned} is borderline; "
+                          "check exposure logging before triage", warning=True, **details)
         return result("sample_split", PASS, f"split {shares} matches the planned {planned}", **details)
     if health:
         status = {"PASSED": PASS, "FAILED": FAIL, "WARNING": FLAG}.get(health["status"], COULD_NOT_RUN)

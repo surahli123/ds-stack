@@ -1,0 +1,53 @@
+{
+  "pass": false,
+  "skim": "1/2",
+  "full": "2/3",
+  "items": [
+    {
+      "pass": "skim",
+      "item": "answer",
+      "key": "Keep running: It's day 4 of 14; Successful Search Rate reads +1.42% (+0.32% to +2.52%) so far, too early to call.",
+      "reader": "Keep running. The readout says don't ship on this snapshot: the test has covered about 3 of 14 planned days (roughly 260k of 900k units per arm), and the CI and p-value are from a fixed-horizon test with sequential testing off. Keep the test running to the full planned sample, then re-read the result before deciding to ship.",
+      "got": false,
+      "how": "overlap 0%"
+    },
+    {
+      "pass": "skim",
+      "item": "decision",
+      "key": "Approve running the test longer.",
+      "reader": "Keep the test running to the full planned sample, then re-read the result before deciding to ship. Keep running. The readout says don't ship on this snapshot: the test has covered about 3 of 14 planned days (roughly 260k of 900k units per arm), and the CI and p-value are from a fixed-horizon test with sequential testing off.",
+      "got": true,
+      "how": "overlap 50%"
+    },
+    {
+      "pass": "full",
+      "item": "takeaway 1",
+      "key": "Successful Search Rate +1.42% (+0.32% to +2.52%) against at least 0.50% higher.",
+      "reader": "The document recommends **keep running** and does not recommend shipping on this snapshot. The primary metric, Successful Search Rate, is +0.585 pp (95% CI +0.13 to +1.04, p = 0.011). That clears the +0.5 pp prereg threshold, but only just. The snapshot is a Pulse dated 2026-09-15 covering about 3 of 14 planned days (roughly 260k of 900k units per arm). The test is fixed-horizon with sequential testing off, so the CI and p-value are only valid at the planned end. The experiment still shows as active although its planned end was about 09-26. Whether a later Pulse exists is unclear. Keep the experiment running. Get a fresh Pulse covering the full window with the same settings (no CUPED, 95% confidence), then apply the prereg rule to that data. Separately, find out why the experiment is still active past its planned end. The Successful Search Rate lift, **+0.585 percentage points** (95% CI +0.13 to +1.04 pp). The biggest risk is that the decision rests on an early look, about 3 of 14 days and about 29% of the planned units. At that point the fixed-horizon CI and p-value are not valid. The segment cuts add further risk: about 60 unadjusted metrics, with one nominal hit (Desktop Time to First Click, p = 0.0499) that is not a reliable signal.",
+      "got": false,
+      "how": "overlap 0%"
+    },
+    {
+      "pass": "full",
+      "item": "takeaway 2",
+      "key": "Approve running the test longer.",
+      "reader": "The document recommends **keep running** and does not recommend shipping on this snapshot. The primary metric, Successful Search Rate, is +0.585 pp (95% CI +0.13 to +1.04, p = 0.011). That clears the +0.5 pp prereg threshold, but only just. The snapshot is a Pulse dated 2026-09-15 covering about 3 of 14 planned days (roughly 260k of 900k units per arm). The test is fixed-horizon with sequential testing off, so the CI and p-value are only valid at the planned end. The experiment still shows as active although its planned end was about 09-26. Whether a later Pulse exists is unclear. Keep the experiment running. Get a fresh Pulse covering the full window with the same settings (no CUPED, 95% confidence), then apply the prereg rule to that data. Separately, find out why the experiment is still active past its planned end. The Successful Search Rate lift, **+0.585 percentage points** (95% CI +0.13 to +1.04 pp). The biggest risk is that the decision rests on an early look, about 3 of 14 days and about 29% of the planned units. At that point the fixed-horizon CI and p-value are not valid. The segment cuts add further risk: about 60 unadjusted metrics, with one nominal hit (Desktop Time to First Click, p = 0.0499) that is not a reliable signal.",
+      "got": true,
+      "how": "overlap 50%"
+    },
+    {
+      "pass": "full",
+      "item": "takeaway 3",
+      "key": "Could reverse it: the remaining data; the call is made at the planned sample.",
+      "reader": "The document recommends **keep running** and does not recommend shipping on this snapshot. The primary metric, Successful Search Rate, is +0.585 pp (95% CI +0.13 to +1.04, p = 0.011). That clears the +0.5 pp prereg threshold, but only just. The snapshot is a Pulse dated 2026-09-15 covering about 3 of 14 planned days (roughly 260k of 900k units per arm). The test is fixed-horizon with sequential testing off, so the CI and p-value are only valid at the planned end. The experiment still shows as active although its planned end was about 09-26. Whether a later Pulse exists is unclear. Keep the experiment running. Get a fresh Pulse covering the full window with the same settings (no CUPED, 95% confidence), then apply the prereg rule to that data. Separately, find out why the experiment is still active past its planned end. The Successful Search Rate lift, **+0.585 percentage points** (95% CI +0.13 to +1.04 pp). The biggest risk is that the decision rests on an early look, about 3 of 14 days and about 29% of the planned units. At that point the fixed-horizon CI and p-value are not valid. The segment cuts add further risk: about 60 unadjusted metrics, with one nominal hit (Desktop Time to First Click, p = 0.0499) that is not a reliable signal.",
+      "got": true,
+      "how": "overlap 29%; grader: same fact"
+    }
+  ],
+  "lost": "Nowhere in the decision logic. \"Pulse\" is never defined, so I took it to mean a dated data snapshot. \"Units\" is also undefined. I did not open `readout.md`, since you asked me to read only the document below.",
+  "question": "Why is the experiment still showing as active past its planned end of about 09-26, and does a Pulse covering the full window already exist?",
+  "replies": {
+    "skim": "1. **Answer:** Keep running. The readout says don't ship on this snapshot: the test has covered about 3 of 14 planned days (roughly 260k of 900k units per arm), and the CI and p-value are from a fixed-horizon test with sequential testing off.\n2. **Decision:** Keep the test running to the full planned sample, then re-read the result before deciding to ship.\n3. **Number:** Successful Search Rate lift of +0.585 percentage points (95% CI +0.13 to +1.04 pp).\n",
+    "full": "1. **Answer:** The document recommends **keep running** and does not recommend shipping on this snapshot. The primary metric, Successful Search Rate, is +0.585 pp (95% CI +0.13 to +1.04, p = 0.011). That clears the +0.5 pp prereg threshold, but only just. The snapshot is a Pulse dated 2026-09-15 covering about 3 of 14 planned days (roughly 260k of 900k units per arm). The test is fixed-horizon with sequential testing off, so the CI and p-value are only valid at the planned end. The experiment still shows as active although its planned end was about 09-26. Whether a later Pulse exists is unclear.\n\n2. **Decision:** Keep the experiment running. Get a fresh Pulse covering the full window with the same settings (no CUPED, 95% confidence), then apply the prereg rule to that data. Separately, find out why the experiment is still active past its planned end.\n\n3. **Number:** The Successful Search Rate lift, **+0.585 percentage points** (95% CI +0.13 to +1.04 pp).\n\n4. **Caveat:** The biggest risk is that the decision rests on an early look, about 3 of 14 days and about 29% of the planned units. At that point the fixed-horizon CI and p-value are not valid. The segment cuts add further risk: about 60 unadjusted metrics, with one nominal hit (Desktop Time to First Click, p = 0.0499) that is not a reliable signal.\n\n5. **Lost:** Nowhere in the decision logic. \"Pulse\" is never defined, so I took it to mean a dated data snapshot. \"Units\" is also undefined. I did not open `readout.md`, since you asked me to read only the document below.\n\n6. **Question:** Why is the experiment still showing as active past its planned end of about 09-26, and does a Pulse covering the full window already exist?\n"
+  }
+}

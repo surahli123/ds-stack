@@ -1,21 +1,21 @@
 {
-  "pass": true,
+  "pass": false,
   "skim": "2/2",
-  "full": "3/3",
+  "full": "2/3",
   "items": [
     {
       "pass": "skim",
       "item": "answer",
       "key": "No effect found: Successful Search Rate reads +0.06% (-0.24% to +0.36%), which rules out the 0.50% change the test was built to find.",
-      "reader": "The document concludes no effect was found. Successful Search Rate rose +0.06% (95% interval -0.24% to +0.36%), which rules out the 0.50% lift the test was built to detect. Current state: day 14 of 14 complete, test finished. Agree to stop the test without launching. Before closing it out, check the pre-exposure comparison of Successful Search Rate, since the document says that check was never run and a mismatch would make this result unreliable.",
+      "reader": "The test found no effect. Successful Search Rate rose +0.06% (95% interval -0.24% to +0.36%), short of the 0.50% bar, so the document recommends stopping without launching. Agree to stop the test without launching. The pre-exposure check was never run, so the result could be unreliable.",
       "got": true,
-      "how": "overlap 81%"
+      "how": "overlap 62%"
     },
     {
       "pass": "skim",
       "item": "decision",
       "key": "Agree to stop the test without launching.",
-      "reader": "Agree to stop the test without launching. Before closing it out, check the pre-exposure comparison of Successful Search Rate, since the document says that check was never run and a mismatch would make this result unreliable. The document concludes no effect was found. Successful Search Rate rose +0.06% (95% interval -0.24% to +0.36%), which rules out the 0.50% lift the test was built to detect. Current state: day 14 of 14 complete, test finished.",
+      "reader": "Agree to stop the test without launching. The pre-exposure check was never run, so the result could be unreliable. The test found no effect. Successful Search Rate rose +0.06% (95% interval -0.24% to +0.36%), short of the 0.50% bar, so the document recommends stopping without launching.",
       "got": true,
       "how": "overlap 100%"
     },
@@ -23,7 +23,7 @@
       "pass": "full",
       "item": "takeaway 1",
       "key": "Successful Search Rate +0.06% (-0.24% to +0.36%) against at least 0.50% higher.",
-      "reader": "Don't launch. The document concludes \"No effect found\": Successful Search Rate moved +0.06% (95% interval \u22120.24% to +0.36%), which is below the 0.50% bar the test was built to detect. The current state is that the test has finished (day 14 of 14, 1M users per arm) and is ready to stop. Agree to stop the Ranker v7 test without launching. Before treating this as final, get the pre-period check and the novelty check run, since the document says neither was done and the pre-period one could overturn the result. +0.06% change in Successful Search Rate (unit: percent relative change, 95% CI \u22120.24% to +0.36%). The pre-period was never checked, so there is no evidence the arms were matched before exposure. If they weren't, the result is unreliable. The novelty check also wasn't run, because no daily series by days since exposure was available.",
+      "reader": "The document concludes that Ranker v7 had no detectable effect on Successful Search Rate. The test is finished (day 14 of 14, about 1,000,000 users per arm), and the result is too small to reach the 0.50% bar. Agree to stop the test without launching. The document says this result could be reversed if the pre-period check, which was not run, shows the arms were mismatched before exposure. Successful Search Rate change of +0.06% (95% interval \u22120.24% to +0.36%). The upper end of the interval is still below the +0.50% bar. The pre-period comparison and novelty check were not run, so the arms' balance before exposure is unverified. The one significant secondary result, Tail Queries at +3.10%, is exploratory after a false-discovery correction and does not change the call.",
       "got": true,
       "how": "overlap 70%"
     },
@@ -31,7 +31,7 @@
       "pass": "full",
       "item": "takeaway 2",
       "key": "Agree to stop the test without launching.",
-      "reader": "Don't launch. The document concludes \"No effect found\": Successful Search Rate moved +0.06% (95% interval \u22120.24% to +0.36%), which is below the 0.50% bar the test was built to detect. The current state is that the test has finished (day 14 of 14, 1M users per arm) and is ready to stop. Agree to stop the Ranker v7 test without launching. Before treating this as final, get the pre-period check and the novelty check run, since the document says neither was done and the pre-period one could overturn the result. +0.06% change in Successful Search Rate (unit: percent relative change, 95% CI \u22120.24% to +0.36%). The pre-period was never checked, so there is no evidence the arms were matched before exposure. If they weren't, the result is unreliable. The novelty check also wasn't run, because no daily series by days since exposure was available.",
+      "reader": "The document concludes that Ranker v7 had no detectable effect on Successful Search Rate. The test is finished (day 14 of 14, about 1,000,000 users per arm), and the result is too small to reach the 0.50% bar. Agree to stop the test without launching. The document says this result could be reversed if the pre-period check, which was not run, shows the arms were mismatched before exposure. Successful Search Rate change of +0.06% (95% interval \u22120.24% to +0.36%). The upper end of the interval is still below the +0.50% bar. The pre-period comparison and novelty check were not run, so the arms' balance before exposure is unverified. The one significant secondary result, Tail Queries at +3.10%, is exploratory after a false-discovery correction and does not change the call.",
       "got": true,
       "how": "overlap 100%"
     },
@@ -39,15 +39,15 @@
       "pass": "full",
       "item": "takeaway 3",
       "key": "Could reverse it: pre period could not be checked: no pre-period interval or platform check.",
-      "reader": "Don't launch. The document concludes \"No effect found\": Successful Search Rate moved +0.06% (95% interval \u22120.24% to +0.36%), which is below the 0.50% bar the test was built to detect. The current state is that the test has finished (day 14 of 14, 1M users per arm) and is ready to stop. Agree to stop the Ranker v7 test without launching. Before treating this as final, get the pre-period check and the novelty check run, since the document says neither was done and the pre-period one could overturn the result. +0.06% change in Successful Search Rate (unit: percent relative change, 95% CI \u22120.24% to +0.36%). The pre-period was never checked, so there is no evidence the arms were matched before exposure. If they weren't, the result is unreliable. The novelty check also wasn't run, because no daily series by days since exposure was available.",
-      "got": true,
-      "how": "overlap 50%"
+      "reader": "The document concludes that Ranker v7 had no detectable effect on Successful Search Rate. The test is finished (day 14 of 14, about 1,000,000 users per arm), and the result is too small to reach the 0.50% bar. Agree to stop the test without launching. The document says this result could be reversed if the pre-period check, which was not run, shows the arms were mismatched before exposure. Successful Search Rate change of +0.06% (95% interval \u22120.24% to +0.36%). The upper end of the interval is still below the +0.50% bar. The pre-period comparison and novelty check were not run, so the arms' balance before exposure is unverified. The one significant secondary result, Tail Queries at +3.10%, is exploratory after a false-discovery correction and does not change the call.",
+      "got": false,
+      "how": "overlap 38%"
     }
   ],
-  "lost": "Nowhere. The \"Could reverse it\" line and the \"What would change the call\" section were clear, though the fact that the pre-period check is missing sits in two places, which made it feel more serious than the table alone suggests.",
-  "question": "Can you run the pre-period comparison of Successful Search Rate (and provide the daily series by days since first exposure) before we sign off on stopping the test?",
+  "lost": "Mostly nowhere. The one snag is that the verdict column says \"unclear\" while the headline says \"No effect found.\" The appendix explains that \"unclear\" means the primary metric did not reach the bar, but the two labels still read as slightly conflicting. \"Could reverse it\" is also terse; I had to infer it refers to the missing pre-period check.",
+  "question": "Can the pre-exposure comparison of Successful Search Rate be run on existing data before the stop is approved, and does it show the arms matched before exposure began?",
   "replies": {
-    "skim": "1. Answer: The document concludes no effect was found. Successful Search Rate rose +0.06% (95% interval -0.24% to +0.36%), which rules out the 0.50% lift the test was built to detect. Current state: day 14 of 14 complete, test finished.\n\n2. Decision: Agree to stop the test without launching. Before closing it out, check the pre-exposure comparison of Successful Search Rate, since the document says that check was never run and a mismatch would make this result unreliable.\n\n3. Number: +0.06% change in Successful Search Rate (95% interval -0.24% to +0.36%).\n",
-    "full": "1. **Answer:** Don't launch. The document concludes \"No effect found\": Successful Search Rate moved +0.06% (95% interval \u22120.24% to +0.36%), which is below the 0.50% bar the test was built to detect. The current state is that the test has finished (day 14 of 14, 1M users per arm) and is ready to stop.\n\n2. **Decision:** Agree to stop the Ranker v7 test without launching. Before treating this as final, get the pre-period check and the novelty check run, since the document says neither was done and the pre-period one could overturn the result.\n\n3. **Number:** +0.06% change in Successful Search Rate (unit: percent relative change, 95% CI \u22120.24% to +0.36%).\n\n4. **Caveat:** The pre-period was never checked, so there is no evidence the arms were matched before exposure. If they weren't, the result is unreliable. The novelty check also wasn't run, because no daily series by days since exposure was available.\n\n5. **Lost:** Nowhere. The \"Could reverse it\" line and the \"What would change the call\" section were clear, though the fact that the pre-period check is missing sits in two places, which made it feel more serious than the table alone suggests.\n\n6. **Question:** Can you run the pre-period comparison of Successful Search Rate (and provide the daily series by days since first exposure) before we sign off on stopping the test?\n"
+    "skim": "1. **Answer:** The test found no effect. Successful Search Rate rose +0.06% (95% interval -0.24% to +0.36%), short of the 0.50% bar, so the document recommends stopping without launching.\n2. **Decision:** Agree to stop the test without launching. The pre-exposure check was never run, so the result could be unreliable.\n3. **Number:** +0.06%, the change in Successful Search Rate (primary metric).\n",
+    "full": "1. **Answer:** The document concludes that Ranker v7 had no detectable effect on Successful Search Rate. The test is finished (day 14 of 14, about 1,000,000 users per arm), and the result is too small to reach the 0.50% bar.\n\n2. **Decision:** Agree to stop the test without launching. The document says this result could be reversed if the pre-period check, which was not run, shows the arms were mismatched before exposure.\n\n3. **Number:** Successful Search Rate change of +0.06% (95% interval \u22120.24% to +0.36%). The upper end of the interval is still below the +0.50% bar.\n\n4. **Caveat:** The pre-period comparison and novelty check were not run, so the arms' balance before exposure is unverified. The one significant secondary result, Tail Queries at +3.10%, is exploratory after a false-discovery correction and does not change the call.\n\n5. **Lost:** Mostly nowhere. The one snag is that the verdict column says \"unclear\" while the headline says \"No effect found.\" The appendix explains that \"unclear\" means the primary metric did not reach the bar, but the two labels still read as slightly conflicting. \"Could reverse it\" is also terse; I had to infer it refers to the missing pre-period check.\n\n6. **Question:** Can the pre-exposure comparison of Successful Search Rate be run on existing data before the stop is approved, and does it show the arms matched before exposure began?\n"
   }
 }

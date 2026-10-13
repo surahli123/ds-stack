@@ -1,0 +1,53 @@
+{
+  "pass": false,
+  "skim": "0/2",
+  "full": "1/3",
+  "items": [
+    {
+      "pass": "skim",
+      "item": "answer",
+      "key": "Ship: Queries per User rose 2.40% (+1.50% to +3.30%), which clears the 1.00% bar and every guardrail held.",
+      "reader": "Escalate. Ranker v7 meets the pre-registered ship rule, but the primary metric (Queries per User) probably rose because users are reformulating, which is a bad sign. The document does not recommend ship or hold. Decide whether to launch, weighing the likely reformulation effect against the met rule. The text does not say how to resolve that.",
+      "got": false,
+      "how": "overlap 0%"
+    },
+    {
+      "pass": "skim",
+      "item": "decision",
+      "key": "Approve the launch to all traffic.",
+      "reader": "Decide whether to launch, weighing the likely reformulation effect against the met rule. The text does not say how to resolve that. Escalate. Ranker v7 meets the pre-registered ship rule, but the primary metric (Queries per User) probably rose because users are reformulating, which is a bad sign. The document does not recommend ship or hold.",
+      "got": false,
+      "how": "overlap 33%"
+    },
+    {
+      "pass": "full",
+      "item": "takeaway 1",
+      "key": "Queries per User +2.40% (+1.50% to +3.30%) against at least 1.00% higher.",
+      "reader": "The document recommends **Escalate**, not Ship. Ranker v7 meets the pre-registered rule (Queries per User +2.4%, latency +0.2%), but the author thinks the extra queries come from reformulation, not better results. Successful Search Rate is \u22120.35% (p=0.09), and Reformulation Rate is +5.1% (p<0.001), which is worse. The experiment is complete and the decision is open. The launch review should decide, and not ship on the pre-registered rule alone. Before deciding, check why Reformulation Rate moves in the opposite direction to its segments, and look at query-level reformulation sequences. If the reformulations are failed first searches, the author recommends Don't ship. Also check whether the Ad Click Rate drop (\u22122.0%) shows up in revenue over a longer window, and ask the prereg owner whether Queries per User is still the right criterion. Reformulation Rate, +5.1% (0.143 \u2192 0.150, a fraction of searches, lower is better). It is the clearest signal that users are working harder, and it is the number the decision turns on. The primary metric, Queries per User (+2.4%, queries per user per period), is the number the rule uses. The segment cuts don't reconcile with the overall numbers. Reformulation Rate falls in most segments, yet overall it rises 5.1%. Successful Search Rate overall is below both of its segment cuts. The author therefore puts little weight on the segments until the metric definitions and the Pulse export are checked. The second risk is about 50 secondary metrics at 95% with no multiplicity correction, so marginal results like Time to First Click (p=0.012) could be noise.",
+      "got": false,
+      "how": "overlap 0%"
+    },
+    {
+      "pass": "full",
+      "item": "takeaway 2",
+      "key": "Approve the launch to all traffic.",
+      "reader": "The document recommends **Escalate**, not Ship. Ranker v7 meets the pre-registered rule (Queries per User +2.4%, latency +0.2%), but the author thinks the extra queries come from reformulation, not better results. Successful Search Rate is \u22120.35% (p=0.09), and Reformulation Rate is +5.1% (p<0.001), which is worse. The experiment is complete and the decision is open. The launch review should decide, and not ship on the pre-registered rule alone. Before deciding, check why Reformulation Rate moves in the opposite direction to its segments, and look at query-level reformulation sequences. If the reformulations are failed first searches, the author recommends Don't ship. Also check whether the Ad Click Rate drop (\u22122.0%) shows up in revenue over a longer window, and ask the prereg owner whether Queries per User is still the right criterion. Reformulation Rate, +5.1% (0.143 \u2192 0.150, a fraction of searches, lower is better). It is the clearest signal that users are working harder, and it is the number the decision turns on. The primary metric, Queries per User (+2.4%, queries per user per period), is the number the rule uses. The segment cuts don't reconcile with the overall numbers. Reformulation Rate falls in most segments, yet overall it rises 5.1%. Successful Search Rate overall is below both of its segment cuts. The author therefore puts little weight on the segments until the metric definitions and the Pulse export are checked. The second risk is about 50 secondary metrics at 95% with no multiplicity correction, so marginal results like Time to First Click (p=0.012) could be noise.",
+      "got": false,
+      "how": "overlap 33%"
+    },
+    {
+      "pass": "full",
+      "item": "takeaway 3",
+      "key": "Could reverse it: secondary metric Reformulation Rate got worse after correction.",
+      "reader": "The document recommends **Escalate**, not Ship. Ranker v7 meets the pre-registered rule (Queries per User +2.4%, latency +0.2%), but the author thinks the extra queries come from reformulation, not better results. Successful Search Rate is \u22120.35% (p=0.09), and Reformulation Rate is +5.1% (p<0.001), which is worse. The experiment is complete and the decision is open. The launch review should decide, and not ship on the pre-registered rule alone. Before deciding, check why Reformulation Rate moves in the opposite direction to its segments, and look at query-level reformulation sequences. If the reformulations are failed first searches, the author recommends Don't ship. Also check whether the Ad Click Rate drop (\u22122.0%) shows up in revenue over a longer window, and ask the prereg owner whether Queries per User is still the right criterion. Reformulation Rate, +5.1% (0.143 \u2192 0.150, a fraction of searches, lower is better). It is the clearest signal that users are working harder, and it is the number the decision turns on. The primary metric, Queries per User (+2.4%, queries per user per period), is the number the rule uses. The segment cuts don't reconcile with the overall numbers. Reformulation Rate falls in most segments, yet overall it rises 5.1%. Successful Search Rate overall is below both of its segment cuts. The author therefore puts little weight on the segments until the metric definitions and the Pulse export are checked. The second risk is about 50 secondary metrics at 95% with no multiplicity correction, so marginal results like Time to First Click (p=0.012) could be noise.",
+      "got": true,
+      "how": "overlap 67%"
+    }
+  ],
+  "lost": "Nowhere in the sense of not understanding the argument. The segment-versus-overall mismatch stood out, since a +5.1% overall move alongside declines in most segments needs an explanation, and the document doesn't give one. I'd call that \"unclear\" rather than something I could resolve from the text.",
+  "question": "For the author: Are the segment and overall Reformulation Rate computed with the same definition and population, and does the Pulse export match the warehouse? If not, the reformulation finding can't yet support a Don't ship recommendation.",
+  "replies": {
+    "skim": "1. **Answer:** Escalate. Ranker v7 meets the pre-registered ship rule, but the primary metric (Queries per User) probably rose because users are reformulating, which is a bad sign. The document does not recommend ship or hold.\n2. **Decision:** Decide whether to launch, weighing the likely reformulation effect against the met rule. The text does not say how to resolve that.\n3. **Number:** Queries per User, +2.4% (11.80 \u2192 12.08, 95% CI about +1.5% to +3.3%).\n",
+    "full": "1. **Answer:** The document recommends **Escalate**, not Ship. Ranker v7 meets the pre-registered rule (Queries per User +2.4%, latency +0.2%), but the author thinks the extra queries come from reformulation, not better results. Successful Search Rate is \u22120.35% (p=0.09), and Reformulation Rate is +5.1% (p<0.001), which is worse. The experiment is complete and the decision is open.\n\n2. **Decision:** The launch review should decide, and not ship on the pre-registered rule alone. Before deciding, check why Reformulation Rate moves in the opposite direction to its segments, and look at query-level reformulation sequences. If the reformulations are failed first searches, the author recommends Don't ship. Also check whether the Ad Click Rate drop (\u22122.0%) shows up in revenue over a longer window, and ask the prereg owner whether Queries per User is still the right criterion.\n\n3. **Number:** Reformulation Rate, +5.1% (0.143 \u2192 0.150, a fraction of searches, lower is better). It is the clearest signal that users are working harder, and it is the number the decision turns on. The primary metric, Queries per User (+2.4%, queries per user per period), is the number the rule uses.\n\n4. **Caveat:** The segment cuts don't reconcile with the overall numbers. Reformulation Rate falls in most segments, yet overall it rises 5.1%. Successful Search Rate overall is below both of its segment cuts. The author therefore puts little weight on the segments until the metric definitions and the Pulse export are checked. The second risk is about 50 secondary metrics at 95% with no multiplicity correction, so marginal results like Time to First Click (p=0.012) could be noise.\n\n5. **Lost:** Nowhere in the sense of not understanding the argument. The segment-versus-overall mismatch stood out, since a +5.1% overall move alongside declines in most segments needs an explanation, and the document doesn't give one. I'd call that \"unclear\" rather than something I could resolve from the text.\n\n6. **Question:** For the author: Are the segment and overall Reformulation Rate computed with the same definition and population, and does the Pulse export match the warehouse? If not, the reformulation finding can't yet support a Don't ship recommendation.\n"
+  }
+}

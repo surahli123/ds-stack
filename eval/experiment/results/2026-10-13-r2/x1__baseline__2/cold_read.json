@@ -1,0 +1,53 @@
+{
+  "pass": false,
+  "skim": "1/2",
+  "full": "1/3",
+  "items": [
+    {
+      "pass": "skim",
+      "item": "answer",
+      "key": "Not an A/B test: This is a interleaving test; the A/B launch rule doesn't apply.",
+      "reader": "The readout doesn't support a launch call. The test ran as a v6 vs. v6+v7 blend, not the pre-registered team-draft interleaving, so no within-user v6 vs. v7 preference exists. Hold the launch. Either fix the experiment config to match the pre-registration and rerun, or treat the current Pulse numbers as observational only.",
+      "got": true,
+      "how": "overlap 67%"
+    },
+    {
+      "pass": "skim",
+      "item": "decision",
+      "key": "Use the readout for this test design instead.",
+      "reader": "Hold the launch. Either fix the experiment config to match the pre-registration and rerun, or treat the current Pulse numbers as observational only. The readout doesn't support a launch call. The test ran as a v6 vs. v6+v7 blend, not the pre-registered team-draft interleaving, so no within-user v6 vs. v7 preference exists.",
+      "got": false,
+      "how": "overlap 40%"
+    },
+    {
+      "pass": "full",
+      "item": "takeaway 1",
+      "key": "Interleaving",
+      "reader": "The readout concludes that this is not an A/B test as pre-registered, so the Pulse numbers can't answer whether v7 beats v6. It recommends re-analysing from the interleaving logs, or rerunning as a clean v6-only vs v7-only A/B test. Current state: no valid v7-vs-v6 result exists. Successful Search Rate moved +0.0033, which misses the +0.005 bar, and no guardrail moved outside its margin. Don't launch on this evidence. Next steps: (a) pull the interleaving logs and compute within-user preference, or (b) set up a clean v6-only vs v7-only A/B test. Before reading either result, agree the ship criterion and write it down. Also find out how the experiment config was set, since the audit log is empty. Successful Search Rate, +0.0033 absolute (0.4120 \u2192 0.4153), a change in rate with a 95% interval of about \u00b10.0016. The pre-registered bar is +0.005. The number is for the blend, so it isn't a v7 effect. The test arm is a v6/v7 blend, not v7, so the headline metric can't be scaled to v7's effect. The experiment also doesn't match its pre-registration, and nothing in the audit log explains the configuration. Segment results (~45 of them, no multiple-comparison correction) shouldn't be read.",
+      "got": true,
+      "how": "overlap 100%"
+    },
+    {
+      "pass": "full",
+      "item": "takeaway 2",
+      "key": "Use the readout for this test design instead.",
+      "reader": "The readout concludes that this is not an A/B test as pre-registered, so the Pulse numbers can't answer whether v7 beats v6. It recommends re-analysing from the interleaving logs, or rerunning as a clean v6-only vs v7-only A/B test. Current state: no valid v7-vs-v6 result exists. Successful Search Rate moved +0.0033, which misses the +0.005 bar, and no guardrail moved outside its margin. Don't launch on this evidence. Next steps: (a) pull the interleaving logs and compute within-user preference, or (b) set up a clean v6-only vs v7-only A/B test. Before reading either result, agree the ship criterion and write it down. Also find out how the experiment config was set, since the audit log is empty. Successful Search Rate, +0.0033 absolute (0.4120 \u2192 0.4153), a change in rate with a 95% interval of about \u00b10.0016. The pre-registered bar is +0.005. The number is for the blend, so it isn't a v7 effect. The test arm is a v6/v7 blend, not v7, so the headline metric can't be scaled to v7's effect. The experiment also doesn't match its pre-registration, and nothing in the audit log explains the configuration. Segment results (~45 of them, no multiple-comparison correction) shouldn't be read.",
+      "got": false,
+      "how": "overlap 40%"
+    },
+    {
+      "pass": "full",
+      "item": "takeaway 3",
+      "key": "Could reverse it: nothing here; this design needs its own readout.",
+      "reader": "The readout concludes that this is not an A/B test as pre-registered, so the Pulse numbers can't answer whether v7 beats v6. It recommends re-analysing from the interleaving logs, or rerunning as a clean v6-only vs v7-only A/B test. Current state: no valid v7-vs-v6 result exists. Successful Search Rate moved +0.0033, which misses the +0.005 bar, and no guardrail moved outside its margin. Don't launch on this evidence. Next steps: (a) pull the interleaving logs and compute within-user preference, or (b) set up a clean v6-only vs v7-only A/B test. Before reading either result, agree the ship criterion and write it down. Also find out how the experiment config was set, since the audit log is empty. Successful Search Rate, +0.0033 absolute (0.4120 \u2192 0.4153), a change in rate with a 95% interval of about \u00b10.0016. The pre-registered bar is +0.005. The number is for the blend, so it isn't a v7 effect. The test arm is a v6/v7 blend, not v7, so the headline metric can't be scaled to v7's effect. The experiment also doesn't match its pre-registration, and nothing in the audit log explains the configuration. Segment results (~45 of them, no multiple-comparison correction) shouldn't be read.",
+      "got": false,
+      "how": "overlap 33%"
+    }
+  ],
+  "lost": "I couldn't read the full file, so I worked from your summary. Nothing in the excerpt was confusing. The gap is anything in the document beyond what you quoted.",
+  "question": "Was the team-draft blend (`serving_mode=team_draft_interleaving` on the test arm only) an intended design change from the pre-registration, and who made it? The answer decides whether the interleaving logs can be used at all.",
+  "replies": {
+    "skim": "1. **Answer:** The readout doesn't support a launch call. The test ran as a v6 vs. v6+v7 blend, not the pre-registered team-draft interleaving, so no within-user v6 vs. v7 preference exists.\n2. **Decision:** Hold the launch. Either fix the experiment config to match the pre-registration and rerun, or treat the current Pulse numbers as observational only.\n3. **Number:** Successful Search Rate, +0.0033 absolute (0.4120 to 0.4153, i.e. about +0.33 points), but it compares pure v6 against the blend, not v7.\n",
+    "full": "I couldn't open `readout.md`: the file-read and shell tools are disabled in this session. So these answers come from the excerpt and figures in your message, not the full document.\n\n1. **Answer:** The readout concludes that this is not an A/B test as pre-registered, so the Pulse numbers can't answer whether v7 beats v6. It recommends re-analysing from the interleaving logs, or rerunning as a clean v6-only vs v7-only A/B test. Current state: no valid v7-vs-v6 result exists. Successful Search Rate moved +0.0033, which misses the +0.005 bar, and no guardrail moved outside its margin.\n\n2. **Decision:** Don't launch on this evidence. Next steps: (a) pull the interleaving logs and compute within-user preference, or (b) set up a clean v6-only vs v7-only A/B test. Before reading either result, agree the ship criterion and write it down. Also find out how the experiment config was set, since the audit log is empty.\n\n3. **Number:** Successful Search Rate, +0.0033 absolute (0.4120 \u2192 0.4153), a change in rate with a 95% interval of about \u00b10.0016. The pre-registered bar is +0.005. The number is for the blend, so it isn't a v7 effect.\n\n4. **Caveat:** The test arm is a v6/v7 blend, not v7, so the headline metric can't be scaled to v7's effect. The experiment also doesn't match its pre-registration, and nothing in the audit log explains the configuration. Segment results (~45 of them, no multiple-comparison correction) shouldn't be read.\n\n5. **Lost:** I couldn't read the full file, so I worked from your summary. Nothing in the excerpt was confusing. The gap is anything in the document beyond what you quoted.\n\n6. **Question:** Was the team-draft blend (`serving_mode=team_draft_interleaving` on the test arm only) an intended design change from the pre-registration, and who made it? The answer decides whether the interleaving logs can be used at all.\n"
+  }
+}

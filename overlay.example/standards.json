@@ -1,5 +1,5 @@
 {
-  "_note": "Team-wide launch standards for ds-experiment. Example values; replace with your triage meeting's.",
+  "_note": "Team-wide launch standards for ds-experiment. Defaults follow Statsig's guidance (sample-split fail at p<0.001, warn at p<0.01; 95% intervals) and Spotify's published rule (ship on any success metric, alpha split). Replace with your triage meeting's.",
   "srm_alpha": 0.001,
   "min_days": 7,
   "harm_within_margin": "escalate",
@@ -8,8 +8,21 @@
   "secondary_q": 0.1,
   "max_extension_factor": 2.0,
   "guardrails": [
-    {"metric": "Latency p95 (ms)", "direction": "decrease", "margin": 0.02},
-    {"metric": "Abandonment Rate", "direction": "decrease", "margin": 0.01}
+    {
+      "metric": "Latency p95 (ms)",
+      "direction": "decrease",
+      "margin": 0.02
+    },
+    {
+      "metric": "Abandonment Rate",
+      "direction": "decrease",
+      "margin": 0.01
+    }
   ],
-  "directions": {"Latency p95 (ms)": "decrease", "Abandonment Rate": "decrease", "Successful Search Rate": "increase"}
+  "directions": {
+    "Latency p95 (ms)": "decrease",
+    "Abandonment Rate": "decrease",
+    "Successful Search Rate": "increase"
+  },
+  "srm_warn_alpha": 0.01
 }

@@ -1,0 +1,53 @@
+{
+  "pass": false,
+  "skim": "1/2",
+  "full": "2/3",
+  "items": [
+    {
+      "pass": "skim",
+      "item": "answer",
+      "key": "No effect found: Successful Search Rate reads +0.04% (-0.26% to +0.34%), which rules out the 0.50% change the test was built to find.",
+      "reader": "Don't ship Ranker v7. Successful Search Rate did not move enough to meet the pre-registered +0.005 bar, and the CI rules out a lift that large. Don't launch v7 under the pre-registered rule.",
+      "got": false,
+      "how": "overlap 0%"
+    },
+    {
+      "pass": "skim",
+      "item": "decision",
+      "key": "Agree to stop the test without launching.",
+      "reader": "Don't launch v7 under the pre-registered rule. Don't ship Ranker v7. Successful Search Rate did not move enough to meet the pre-registered +0.005 bar, and the CI rules out a lift that large.",
+      "got": true,
+      "how": "overlap 0%; grader: same fact"
+    },
+    {
+      "pass": "full",
+      "item": "takeaway 1",
+      "key": "Successful Search Rate +0.04% (-0.26% to +0.34%) against at least 0.50% higher.",
+      "reader": "Don't ship Ranker v7. Successful Search Rate moved by +0.00016 (control 0.4120, test 0.4122, p = 0.79), and the 95% CI of about [\u22120.0011, +0.0014] excludes the +0.005 bar. No guardrail was breached, but the primary goal wasn't met. The test is complete and the experiment was valid. Reject v7 on this test. If the team still believes in the ranker, run a new pre-registered test, for example one aimed at Revenue per User or Mobile. Don't cite this result as support. Successful Search Rate difference, +0.00016 absolute (about +0.016 percentage points), against a bar of +0.005 absolute. The upper CI bound is +0.0014, so even the most favorable reading falls short. The only win is Revenue per User (+3.1%, p = 0.004), and it comes from roughly 70 metrics and segment cuts with no multiple-comparison correction. It wouldn't survive Bonferroni (about 0.0007), and no other metric supports it. The document treats it as a lead, not evidence.",
+      "got": true,
+      "how": "overlap 0%; grader: same fact"
+    },
+    {
+      "pass": "full",
+      "item": "takeaway 2",
+      "key": "Agree to stop the test without launching.",
+      "reader": "Don't ship Ranker v7. Successful Search Rate moved by +0.00016 (control 0.4120, test 0.4122, p = 0.79), and the 95% CI of about [\u22120.0011, +0.0014] excludes the +0.005 bar. No guardrail was breached, but the primary goal wasn't met. The test is complete and the experiment was valid. Reject v7 on this test. If the team still believes in the ranker, run a new pre-registered test, for example one aimed at Revenue per User or Mobile. Don't cite this result as support. Successful Search Rate difference, +0.00016 absolute (about +0.016 percentage points), against a bar of +0.005 absolute. The upper CI bound is +0.0014, so even the most favorable reading falls short. The only win is Revenue per User (+3.1%, p = 0.004), and it comes from roughly 70 metrics and segment cuts with no multiple-comparison correction. It wouldn't survive Bonferroni (about 0.0007), and no other metric supports it. The document treats it as a lead, not evidence.",
+      "got": true,
+      "how": "overlap 20%; grader: same fact"
+    },
+    {
+      "pass": "full",
+      "item": "takeaway 3",
+      "key": "Could reverse it: pre period could not be checked: no pre-period interval or platform check.",
+      "reader": "Don't ship Ranker v7. Successful Search Rate moved by +0.00016 (control 0.4120, test 0.4122, p = 0.79), and the 95% CI of about [\u22120.0011, +0.0014] excludes the +0.005 bar. No guardrail was breached, but the primary goal wasn't met. The test is complete and the experiment was valid. Reject v7 on this test. If the team still believes in the ranker, run a new pre-registered test, for example one aimed at Revenue per User or Mobile. Don't cite this result as support. Successful Search Rate difference, +0.00016 absolute (about +0.016 percentage points), against a bar of +0.005 absolute. The upper CI bound is +0.0014, so even the most favorable reading falls short. The only win is Revenue per User (+3.1%, p = 0.004), and it comes from roughly 70 metrics and segment cuts with no multiple-comparison correction. It wouldn't survive Bonferroni (about 0.0007), and no other metric supports it. The document treats it as a lead, not evidence.",
+      "got": false,
+      "how": "overlap 0%"
+    }
+  ],
+  "lost": "Nowhere. The absolute-versus-relative reading of the +0.005 bar looked ambiguous at first, but the document shows the decision holds under both.",
+  "question": "Did the pre-registration name Revenue per User as a secondary metric to monitor, or was it found only in the 70-metric scan after the test? The document says it was not pre-registered as a win condition, but it doesn't say whether it was pre-registered at all.",
+  "replies": {
+    "skim": "1. **Answer:** Don't ship Ranker v7. Successful Search Rate did not move enough to meet the pre-registered +0.005 bar, and the CI rules out a lift that large.\n2. **Decision:** Don't launch v7 under the pre-registered rule.\n3. **Number:** +0.00016 absolute change in Successful Search Rate (0.4122 test vs 0.4120 control), against a +0.005 bar.\n",
+    "full": "1. **Answer:** Don't ship Ranker v7. Successful Search Rate moved by +0.00016 (control 0.4120, test 0.4122, p = 0.79), and the 95% CI of about [\u22120.0011, +0.0014] excludes the +0.005 bar. No guardrail was breached, but the primary goal wasn't met. The test is complete and the experiment was valid.\n\n2. **Decision:** Reject v7 on this test. If the team still believes in the ranker, run a new pre-registered test, for example one aimed at Revenue per User or Mobile. Don't cite this result as support.\n\n3. **Number:** Successful Search Rate difference, +0.00016 absolute (about +0.016 percentage points), against a bar of +0.005 absolute. The upper CI bound is +0.0014, so even the most favorable reading falls short.\n\n4. **Caveat:** The only win is Revenue per User (+3.1%, p = 0.004), and it comes from roughly 70 metrics and segment cuts with no multiple-comparison correction. It wouldn't survive Bonferroni (about 0.0007), and no other metric supports it. The document treats it as a lead, not evidence.\n\n5. **Lost:** Nowhere. The absolute-versus-relative reading of the +0.005 bar looked ambiguous at first, but the document shows the decision holds under both.\n\n6. **Question:** Did the pre-registration name Revenue per User as a secondary metric to monitor, or was it found only in the 70-metric scan after the test? The document says it was not pre-registered as a win condition, but it doesn't say whether it was pre-registered at all.\n"
+  }
+}

@@ -1,0 +1,53 @@
+{
+  "pass": false,
+  "skim": "0/2",
+  "full": "0/3",
+  "items": [
+    {
+      "pass": "skim",
+      "item": "answer",
+      "key": "Keep running: Successful Search Rate reads +0.12% (-0.36% to +0.60%); ruling out the 0.50% bar needs about 1.9 times the users so far.",
+      "reader": "Ranker v7 had no measurable effect on Successful Search Rate: 41.25% in test vs 41.20% in control, +0.049 pt, 95% CI \u22120.15 to +0.25 pt, p = 0.62. Don't launch v7. It misses the pre-registered +0.5 pt ship bar, and the CI rules that bar out. The text cuts off before any next steps, so whether to iterate or drop v7 is unclear.",
+      "got": false,
+      "how": "overlap 0%"
+    },
+    {
+      "pass": "skim",
+      "item": "decision",
+      "key": "Approve running the test longer.",
+      "reader": "Don't launch v7. It misses the pre-registered +0.5 pt ship bar, and the CI rules that bar out. The text cuts off before any next steps, so whether to iterate or drop v7 is unclear. Ranker v7 had no measurable effect on Successful Search Rate: 41.25% in test vs 41.20% in control, +0.049 pt, 95% CI \u22120.15 to +0.25 pt, p = 0.62.",
+      "got": false,
+      "how": "overlap 25%"
+    },
+    {
+      "pass": "full",
+      "item": "takeaway 1",
+      "key": "Successful Search Rate +0.12% (-0.36% to +0.60%) against at least 0.50% higher.",
+      "reader": "The readout found no SSR effect. Ranker v7 moved SSR by +0.049 pt, which is within noise, and the pre-registered +0.5 pt bar is ruled out. Guardrails show no harm. The current state is a complete 14-day readout with no launch decision yet. Don't launch v7 on SSR grounds. Extending the run won't help. Launching for another reason, such as cost or maintainability, would be a separate decision. Before any v8 work, check whether v7's lower clicks per user and navigational SSR dip is real. SSR change of +0.049 pt (95% CI \u22120.15 to +0.25 pt), against a ship bar of +0.5 pt. About 55 unplanned secondary and segment metrics with no multiplicity correction. The notable ones lean negative, and none would survive correction. The intervals are also unadjusted because CUPED was off.",
+      "got": false,
+      "how": "overlap 0%"
+    },
+    {
+      "pass": "full",
+      "item": "takeaway 2",
+      "key": "Approve running the test longer.",
+      "reader": "The readout found no SSR effect. Ranker v7 moved SSR by +0.049 pt, which is within noise, and the pre-registered +0.5 pt bar is ruled out. Guardrails show no harm. The current state is a complete 14-day readout with no launch decision yet. Don't launch v7 on SSR grounds. Extending the run won't help. Launching for another reason, such as cost or maintainability, would be a separate decision. Before any v8 work, check whether v7's lower clicks per user and navigational SSR dip is real. SSR change of +0.049 pt (95% CI \u22120.15 to +0.25 pt), against a ship bar of +0.5 pt. About 55 unplanned secondary and segment metrics with no multiplicity correction. The notable ones lean negative, and none would survive correction. The intervals are also unadjusted because CUPED was off.",
+      "got": false,
+      "how": "overlap 0%"
+    },
+    {
+      "pass": "full",
+      "item": "takeaway 3",
+      "key": "Could reverse it: the remaining data; the call is made at the planned sample.",
+      "reader": "The readout found no SSR effect. Ranker v7 moved SSR by +0.049 pt, which is within noise, and the pre-registered +0.5 pt bar is ruled out. Guardrails show no harm. The current state is a complete 14-day readout with no launch decision yet. Don't launch v7 on SSR grounds. Extending the run won't help. Launching for another reason, such as cost or maintainability, would be a separate decision. Before any v8 work, check whether v7's lower clicks per user and navigational SSR dip is real. SSR change of +0.049 pt (95% CI \u22120.15 to +0.25 pt), against a ship bar of +0.5 pt. About 55 unplanned secondary and segment metrics with no multiplicity correction. The notable ones lean negative, and none would survive correction. The intervals are also unadjusted because CUPED was off.",
+      "got": false,
+      "how": "overlap 0%"
+    }
+  ],
+  "lost": "The abandonment margin (\"a relative or absolute 1%\") is unclear. I had to reread that line, and the document doesn't say which reading was pre-registered. I also couldn't find the exposure balance check's actual numbers, only that it passed.",
+  "question": "Where did the +0.5 pt bar come from (a power calculation, a prior launch, or a business target), and is there a non-SSR case for shipping v7?",
+  "replies": {
+    "skim": "1. **Answer:** Ranker v7 had no measurable effect on Successful Search Rate: 41.25% in test vs 41.20% in control, +0.049 pt, 95% CI \u22120.15 to +0.25 pt, p = 0.62.\n2. **Decision:** Don't launch v7. It misses the pre-registered +0.5 pt ship bar, and the CI rules that bar out. The text cuts off before any next steps, so whether to iterate or drop v7 is unclear.\n3. **Number:** +0.049 pt (SSR change, control vs test).\n",
+    "full": "1. **Answer:** The readout found no SSR effect. Ranker v7 moved SSR by +0.049 pt, which is within noise, and the pre-registered +0.5 pt bar is ruled out. Guardrails show no harm. The current state is a complete 14-day readout with no launch decision yet.\n\n2. **Decision:** Don't launch v7 on SSR grounds. Extending the run won't help. Launching for another reason, such as cost or maintainability, would be a separate decision. Before any v8 work, check whether v7's lower clicks per user and navigational SSR dip is real.\n\n3. **Number:** SSR change of +0.049 pt (95% CI \u22120.15 to +0.25 pt), against a ship bar of +0.5 pt.\n\n4. **Caveat:** About 55 unplanned secondary and segment metrics with no multiplicity correction. The notable ones lean negative, and none would survive correction. The intervals are also unadjusted because CUPED was off.\n\n5. **Lost:** The abandonment margin (\"a relative or absolute 1%\") is unclear. I had to reread that line, and the document doesn't say which reading was pre-registered. I also couldn't find the exposure balance check's actual numbers, only that it passed.\n\n6. **Question:** Where did the +0.5 pt bar come from (a power calculation, a prior launch, or a business target), and is there a non-SSR case for shipping v7?\n"
+  }
+}

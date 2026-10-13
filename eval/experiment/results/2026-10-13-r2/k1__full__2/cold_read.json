@@ -1,0 +1,53 @@
+{
+  "pass": true,
+  "skim": "2/2",
+  "full": "3/3",
+  "items": [
+    {
+      "pass": "skim",
+      "item": "answer",
+      "key": "Keep running: It's day 4 of 14; Successful Search Rate reads +1.42% (+0.32% to +2.52%) so far, too early to call.",
+      "reader": "Keep the test running. It is day 4 of 14, and Successful Search Rate is +1.42% (95% interval +0.32% to +2.52%), which is too early to call. Approve running the test to the planned 14 days and 900,000 users per arm. Do not launch yet.",
+      "got": true,
+      "how": "overlap 88%"
+    },
+    {
+      "pass": "skim",
+      "item": "decision",
+      "key": "Approve running the test longer.",
+      "reader": "Approve running the test to the planned 14 days and 900,000 users per arm. Do not launch yet. Keep the test running. It is day 4 of 14, and Successful Search Rate is +1.42% (95% interval +0.32% to +2.52%), which is too early to call.",
+      "got": true,
+      "how": "overlap 75%"
+    },
+    {
+      "pass": "full",
+      "item": "takeaway 1",
+      "key": "Successful Search Rate +1.42% (+0.32% to +2.52%) against at least 0.50% higher.",
+      "reader": "Keep the test running. At day 4 of 14, Successful Search Rate is +1.42% (95% interval +0.32% to +2.52%), against a +0.50% bar. The document calls it too early to decide. Each arm has 260,000 users of the 900,000 planned. Approve running the test to the full 14 days and the planned sample. Re-read then. Launch if Successful Search Rate is at least +0.5% and all guardrails stay within margin. Don't launch if it falls below +0.5% or any guardrail breaches its margin. Successful Search Rate, +1.42% relative change. The read covers only 4 days and 29% of the planned sample. The mechanism is a guess, and the lift may fade. The pre-period and novelty checks were not run.",
+      "got": true,
+      "how": "overlap 90%"
+    },
+    {
+      "pass": "full",
+      "item": "takeaway 2",
+      "key": "Approve running the test longer.",
+      "reader": "Keep the test running. At day 4 of 14, Successful Search Rate is +1.42% (95% interval +0.32% to +2.52%), against a +0.50% bar. The document calls it too early to decide. Each arm has 260,000 users of the 900,000 planned. Approve running the test to the full 14 days and the planned sample. Re-read then. Launch if Successful Search Rate is at least +0.5% and all guardrails stay within margin. Don't launch if it falls below +0.5% or any guardrail breaches its margin. Successful Search Rate, +1.42% relative change. The read covers only 4 days and 29% of the planned sample. The mechanism is a guess, and the lift may fade. The pre-period and novelty checks were not run.",
+      "got": true,
+      "how": "overlap 75%"
+    },
+    {
+      "pass": "full",
+      "item": "takeaway 3",
+      "key": "Could reverse it: the remaining data; the call is made at the planned sample.",
+      "reader": "Keep the test running. At day 4 of 14, Successful Search Rate is +1.42% (95% interval +0.32% to +2.52%), against a +0.50% bar. The document calls it too early to decide. Each arm has 260,000 users of the 900,000 planned. Approve running the test to the full 14 days and the planned sample. Re-read then. Launch if Successful Search Rate is at least +0.5% and all guardrails stay within margin. Don't launch if it falls below +0.5% or any guardrail breaches its margin. Successful Search Rate, +1.42% relative change. The read covers only 4 days and 29% of the planned sample. The mechanism is a guess, and the lift may fade. The pre-period and novelty checks were not run.",
+      "got": true,
+      "how": "overlap 29%; grader: same fact"
+    }
+  ],
+  "lost": "",
+  "question": "How can the overall +1.42% sit above both device-level lifts (+0.12% and \u22120.60%) when devices should partition users? Is the overall metric defined differently from the segments, or is the weighting different?",
+  "replies": {
+    "skim": "1. Answer: Keep the test running. It is day 4 of 14, and Successful Search Rate is +1.42% (95% interval +0.32% to +2.52%), which is too early to call.\n2. Decision: Approve running the test to the planned 14 days and 900,000 users per arm. Do not launch yet.\n3. Number: +1.42% change in Successful Search Rate (relative; the launch bar is at least +0.50%).\n",
+    "full": "1. **Answer:** Keep the test running. At day 4 of 14, Successful Search Rate is +1.42% (95% interval +0.32% to +2.52%), against a +0.50% bar. The document calls it too early to decide. Each arm has 260,000 users of the 900,000 planned.\n\n2. **Decision:** Approve running the test to the full 14 days and the planned sample. Re-read then. Launch if Successful Search Rate is at least +0.5% and all guardrails stay within margin. Don't launch if it falls below +0.5% or any guardrail breaches its margin.\n\n3. **Number:** Successful Search Rate, +1.42% relative change.\n\n4. **Caveat:** The read covers only 4 days and 29% of the planned sample. The mechanism is a guess, and the lift may fade. The pre-period and novelty checks were not run.\n\n5. **Lost:**\n   - The interval's lower bound (+0.32%) is below the +0.50% bar, yet the verdict is \"better.\" The point estimate clears the bar, but the evidence doesn't yet show it does.\n   - The device and query-type splits don't add up. Overall lift is +1.42%, but both device segments are lower (Mobile +0.12%, Desktop \u22120.60%). If devices split all users, the overall figure must fall between them. The \"devices do not explain it\" conclusion doesn't follow from these numbers.\n   - The pull is dated 2026-09-15, but today is 2026-10-12. Unclear whether this readout is current.\n\n6. **Question:** How can the overall +1.42% sit above both device-level lifts (+0.12% and \u22120.60%) when devices should partition users? Is the overall metric defined differently from the segments, or is the weighting different?\n"
+  }
+}

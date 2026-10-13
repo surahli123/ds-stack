@@ -7,7 +7,7 @@
       "pass": "skim",
       "item": "answer",
       "key": "No effect found: Successful Search Rate reads +0.06% (-0.24% to +0.36%), which rules out the 0.50% change the test was built to find.",
-      "reader": "No effect found. Successful Search Rate moved +0.06% (95% interval -0.24% to +0.36%), so the test rules out the 0.50% lift it was built to detect. Current state: day 14 of 14, finished, with 1,000,000 users per arm. The pre-period check was not available, so the result is not fully verified. Agree to stop the test without launching Ranker v7.",
+      "reader": "No effect found. Ranker v7 moved Successful Search Rate by +0.06% (95% interval -0.24% to +0.36%), which rules out the 0.50% lift the test was built to detect. Agree to stop the test without launching.",
       "got": true,
       "how": "overlap 81%"
     },
@@ -15,7 +15,7 @@
       "pass": "skim",
       "item": "decision",
       "key": "Agree to stop the test without launching.",
-      "reader": "Agree to stop the test without launching Ranker v7. No effect found. Successful Search Rate moved +0.06% (95% interval -0.24% to +0.36%), so the test rules out the 0.50% lift it was built to detect. Current state: day 14 of 14, finished, with 1,000,000 users per arm. The pre-period check was not available, so the result is not fully verified.",
+      "reader": "Agree to stop the test without launching. No effect found. Ranker v7 moved Successful Search Rate by +0.06% (95% interval -0.24% to +0.36%), which rules out the 0.50% lift the test was built to detect.",
       "got": true,
       "how": "overlap 100%"
     },
@@ -23,15 +23,15 @@
       "pass": "full",
       "item": "takeaway 1",
       "key": "Successful Search Rate +0.06% (-0.24% to +0.36%) against at least 0.50% higher.",
-      "reader": "No effect found. Ranker v7 did not move Successful Search Rate enough to clear the 0.50% bar. The measured change is +0.06% (95% interval -0.24% to +0.36%). The recommendation is to stop the test without launching. The state is day 14 of 14, with 1,000,000 users per arm, and all four other guardrails within margin. Agree to stop the test and not launch Ranker v7. Before that closes out, the pre-period check and novelty check were never run, and the document says a pre-period gap or fading effect would undermine the result. Someone should decide whether those checks are needed before the stop is final. +0.06% change in Successful Search Rate (primary metric, relative change, 95% interval -0.24% to +0.36%), against a bar of at least +0.50%. The pre-period and novelty checks were not run, so the result could be affected by a pre-existing gap or a fading effect. The document also says a bar below 0.50% would leave the result undecided, since the interval reaches +0.36%.",
+      "reader": "No effect found. The document recommends stopping the test without launching. The test is finished: day 14 of 14, about 1,000,000 users per arm. Agree to stop Ranker v7 without launching. Successful Search Rate change of +0.06% (95% interval \u22120.24% to +0.36%). The bar was at least +0.50%, and the upper end of the interval sits below it. The pre-period check and novelty check were not run, so there is no pre-period interval or platform check. A pre-period gap or a fading effect would call the result into question, and a bar below 0.50% would leave it undecided.",
       "got": true,
-      "how": "overlap 90%"
+      "how": "overlap 80%"
     },
     {
       "pass": "full",
       "item": "takeaway 2",
       "key": "Agree to stop the test without launching.",
-      "reader": "No effect found. Ranker v7 did not move Successful Search Rate enough to clear the 0.50% bar. The measured change is +0.06% (95% interval -0.24% to +0.36%). The recommendation is to stop the test without launching. The state is day 14 of 14, with 1,000,000 users per arm, and all four other guardrails within margin. Agree to stop the test and not launch Ranker v7. Before that closes out, the pre-period check and novelty check were never run, and the document says a pre-period gap or fading effect would undermine the result. Someone should decide whether those checks are needed before the stop is final. +0.06% change in Successful Search Rate (primary metric, relative change, 95% interval -0.24% to +0.36%), against a bar of at least +0.50%. The pre-period and novelty checks were not run, so the result could be affected by a pre-existing gap or a fading effect. The document also says a bar below 0.50% would leave the result undecided, since the interval reaches +0.36%.",
+      "reader": "No effect found. The document recommends stopping the test without launching. The test is finished: day 14 of 14, about 1,000,000 users per arm. Agree to stop Ranker v7 without launching. Successful Search Rate change of +0.06% (95% interval \u22120.24% to +0.36%). The bar was at least +0.50%, and the upper end of the interval sits below it. The pre-period check and novelty check were not run, so there is no pre-period interval or platform check. A pre-period gap or a fading effect would call the result into question, and a bar below 0.50% would leave it undecided.",
       "got": true,
       "how": "overlap 100%"
     },
@@ -39,15 +39,15 @@
       "pass": "full",
       "item": "takeaway 3",
       "key": "Could reverse it: pre period could not be checked: no pre-period interval or platform check.",
-      "reader": "No effect found. Ranker v7 did not move Successful Search Rate enough to clear the 0.50% bar. The measured change is +0.06% (95% interval -0.24% to +0.36%). The recommendation is to stop the test without launching. The state is day 14 of 14, with 1,000,000 users per arm, and all four other guardrails within margin. Agree to stop the test and not launch Ranker v7. Before that closes out, the pre-period check and novelty check were never run, and the document says a pre-period gap or fading effect would undermine the result. Someone should decide whether those checks are needed before the stop is final. +0.06% change in Successful Search Rate (primary metric, relative change, 95% interval -0.24% to +0.36%), against a bar of at least +0.50%. The pre-period and novelty checks were not run, so the result could be affected by a pre-existing gap or a fading effect. The document also says a bar below 0.50% would leave the result undecided, since the interval reaches +0.36%.",
+      "reader": "No effect found. The document recommends stopping the test without launching. The test is finished: day 14 of 14, about 1,000,000 users per arm. Agree to stop Ranker v7 without launching. Successful Search Rate change of +0.06% (95% interval \u22120.24% to +0.36%). The bar was at least +0.50%, and the upper end of the interval sits below it. The pre-period check and novelty check were not run, so there is no pre-period interval or platform check. A pre-period gap or a fading effect would call the result into question, and a bar below 0.50% would leave it undecided.",
       "got": true,
-      "how": "overlap 38%; grader: same fact"
+      "how": "overlap 50%"
     }
   ],
-  "lost": "Nowhere significant. The one thing that needed a second read was how the \"No effect found\" call relates to the interval: the interval includes values above zero, so the call rests on the interval not reaching the 0.50% bar, not on a zero effect.",
-  "question": "Can you run the pre-exposure comparison and the daily series by days since first exposure before we close this out, and if not, what is the basis for trusting the day-14 result?",
+  "lost": "The primary metric's verdict reads \"unclear,\" yet the decision is \"No effect found.\" I had to reread to see that \"unclear\" refers to the bar being unmet, not to the effect itself.",
+  "question": "Can the pre-exposure comparison and the days-since-first-exposure series be run before we stop? If they show a pre-period gap or fading, the call changes.",
   "replies": {
-    "skim": "1. **Answer:** No effect found. Successful Search Rate moved +0.06% (95% interval -0.24% to +0.36%), so the test rules out the 0.50% lift it was built to detect. Current state: day 14 of 14, finished, with 1,000,000 users per arm. The pre-period check was not available, so the result is not fully verified.\n2. **Decision:** Agree to stop the test without launching Ranker v7.\n3. **Number:** +0.06% (Successful Search Rate change, 95% interval -0.24% to +0.36%), against a bar of at least +0.50%.\n",
-    "full": "1. **Answer:** No effect found. Ranker v7 did not move Successful Search Rate enough to clear the 0.50% bar. The measured change is +0.06% (95% interval -0.24% to +0.36%). The recommendation is to stop the test without launching. The state is day 14 of 14, with 1,000,000 users per arm, and all four other guardrails within margin.\n\n2. **Decision:** Agree to stop the test and not launch Ranker v7. Before that closes out, the pre-period check and novelty check were never run, and the document says a pre-period gap or fading effect would undermine the result. Someone should decide whether those checks are needed before the stop is final.\n\n3. **Number:** +0.06% change in Successful Search Rate (primary metric, relative change, 95% interval -0.24% to +0.36%), against a bar of at least +0.50%.\n\n4. **Caveat:** The pre-period and novelty checks were not run, so the result could be affected by a pre-existing gap or a fading effect. The document also says a bar below 0.50% would leave the result undecided, since the interval reaches +0.36%.\n\n5. **Lost:** Nowhere significant. The one thing that needed a second read was how the \"No effect found\" call relates to the interval: the interval includes values above zero, so the call rests on the interval not reaching the 0.50% bar, not on a zero effect.\n\n6. **Question:** Can you run the pre-exposure comparison and the daily series by days since first exposure before we close this out, and if not, what is the basis for trusting the day-14 result?\n"
+    "skim": "1. **Answer:** No effect found. Ranker v7 moved Successful Search Rate by +0.06% (95% interval -0.24% to +0.36%), which rules out the 0.50% lift the test was built to detect.\n2. **Decision:** Agree to stop the test without launching.\n3. **Number:** +0.06% change in Successful Search Rate (95% interval -0.24% to +0.36%).\n",
+    "full": "1. **Conclusion:** No effect found. The document recommends stopping the test without launching. The test is finished: day 14 of 14, about 1,000,000 users per arm.\n2. **Decision:** Agree to stop Ranker v7 without launching.\n3. **Number:** Successful Search Rate change of +0.06% (95% interval \u22120.24% to +0.36%). The bar was at least +0.50%, and the upper end of the interval sits below it.\n4. **Caveat:** The pre-period check and novelty check were not run, so there is no pre-period interval or platform check. A pre-period gap or a fading effect would call the result into question, and a bar below 0.50% would leave it undecided.\n5. **Lost:** The primary metric's verdict reads \"unclear,\" yet the decision is \"No effect found.\" I had to reread to see that \"unclear\" refers to the bar being unmet, not to the effect itself.\n6. **Question:** Can the pre-exposure comparison and the days-since-first-exposure series be run before we stop? If they show a pre-period gap or fading, the call changes.\n"
   }
 }

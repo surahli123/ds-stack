@@ -7,15 +7,15 @@
       "pass": "skim",
       "item": "answer",
       "key": "No effect found: Successful Search Rate reads +0.04% (-0.26% to +0.34%), which rules out the 0.50% change the test was built to find.",
-      "reader": "No effect found. Successful Search Rate rose +0.04% (95% interval -0.26% to +0.34%), short of the 0.50% bar, and the test ran its full 14 days. Agree to stop the test without launching v7.",
+      "reader": "Ranker v7 showed no effect. Successful Search Rate rose +0.04% (95% interval -0.26% to +0.34%), short of the 0.50% bar, and no guardrail moved past its margin. The document recommends stopping the test without launching. Agree to stop the test without launching.",
       "got": true,
-      "how": "overlap 62%"
+      "how": "overlap 56%"
     },
     {
       "pass": "skim",
       "item": "decision",
       "key": "Agree to stop the test without launching.",
-      "reader": "Agree to stop the test without launching v7. No effect found. Successful Search Rate rose +0.04% (95% interval -0.26% to +0.34%), short of the 0.50% bar, and the test ran its full 14 days.",
+      "reader": "Agree to stop the test without launching. Ranker v7 showed no effect. Successful Search Rate rose +0.04% (95% interval -0.26% to +0.34%), short of the 0.50% bar, and no guardrail moved past its margin. The document recommends stopping the test without launching.",
       "got": true,
       "how": "overlap 100%"
     },
@@ -23,7 +23,7 @@
       "pass": "full",
       "item": "takeaway 1",
       "key": "Successful Search Rate +0.04% (-0.26% to +0.34%) against at least 0.50% higher.",
-      "reader": "The document concludes \"No effect found\" and recommends stopping the test without launching Ranker v7. The test is finished: day 14 of 14, with 1,000,000 users per arm, above the planned 900,000. Agree to stop the test without launching. The document asks for exactly this. The pre-period and novelty checks were not run, so the decision rests on the 14-day result alone. Successful Search Rate change of +0.04% (95% interval -0.26% to +0.34%), against a bar of at least +0.50%. The upper bound of the interval is below the bar. The main named risk is that the pre-period could not be checked: there is no pre-period interval or platform check. The document says this could reverse the call, but it does not say what a failed check would look like. Novelty was also not run.",
+      "reader": "No effect found. Ranker v7 did not move Successful Search Rate (+0.04%, interval -0.26% to +0.34%), so the 0.50% change the test was built to detect is ruled out. The test ran its full 14 days, 1,000,000 users per arm. The authors recommend stopping without launching. Agree to stop the test without launching v7. +0.04% change in Successful Search Rate, against a bar of at least +0.50%. The pre-period check and novelty check did not run, so the document cannot rule out a data problem that would reverse the call. The checks that did run (scorecard, sample split, config) passed. The revenue lift (+3.1% in Revenue per User) is unexplained, and no segment cuts were read.",
       "got": true,
       "how": "overlap 90%"
     },
@@ -31,7 +31,7 @@
       "pass": "full",
       "item": "takeaway 2",
       "key": "Agree to stop the test without launching.",
-      "reader": "The document concludes \"No effect found\" and recommends stopping the test without launching Ranker v7. The test is finished: day 14 of 14, with 1,000,000 users per arm, above the planned 900,000. Agree to stop the test without launching. The document asks for exactly this. The pre-period and novelty checks were not run, so the decision rests on the 14-day result alone. Successful Search Rate change of +0.04% (95% interval -0.26% to +0.34%), against a bar of at least +0.50%. The upper bound of the interval is below the bar. The main named risk is that the pre-period could not be checked: there is no pre-period interval or platform check. The document says this could reverse the call, but it does not say what a failed check would look like. Novelty was also not run.",
+      "reader": "No effect found. Ranker v7 did not move Successful Search Rate (+0.04%, interval -0.26% to +0.34%), so the 0.50% change the test was built to detect is ruled out. The test ran its full 14 days, 1,000,000 users per arm. The authors recommend stopping without launching. Agree to stop the test without launching v7. +0.04% change in Successful Search Rate, against a bar of at least +0.50%. The pre-period check and novelty check did not run, so the document cannot rule out a data problem that would reverse the call. The checks that did run (scorecard, sample split, config) passed. The revenue lift (+3.1% in Revenue per User) is unexplained, and no segment cuts were read.",
       "got": true,
       "how": "overlap 100%"
     },
@@ -39,15 +39,15 @@
       "pass": "full",
       "item": "takeaway 3",
       "key": "Could reverse it: pre period could not be checked: no pre-period interval or platform check.",
-      "reader": "The document concludes \"No effect found\" and recommends stopping the test without launching Ranker v7. The test is finished: day 14 of 14, with 1,000,000 users per arm, above the planned 900,000. Agree to stop the test without launching. The document asks for exactly this. The pre-period and novelty checks were not run, so the decision rests on the 14-day result alone. Successful Search Rate change of +0.04% (95% interval -0.26% to +0.34%), against a bar of at least +0.50%. The upper bound of the interval is below the bar. The main named risk is that the pre-period could not be checked: there is no pre-period interval or platform check. The document says this could reverse the call, but it does not say what a failed check would look like. Novelty was also not run.",
+      "reader": "No effect found. Ranker v7 did not move Successful Search Rate (+0.04%, interval -0.26% to +0.34%), so the 0.50% change the test was built to detect is ruled out. The test ran its full 14 days, 1,000,000 users per arm. The authors recommend stopping without launching. Agree to stop the test without launching v7. +0.04% change in Successful Search Rate, against a bar of at least +0.50%. The pre-period check and novelty check did not run, so the document cannot rule out a data problem that would reverse the call. The checks that did run (scorecard, sample split, config) passed. The revenue lift (+3.1% in Revenue per User) is unexplained, and no segment cuts were read.",
       "got": true,
-      "how": "overlap 75%"
+      "how": "overlap 50%"
     }
   ],
-  "lost": "I had to reread the \"Could reverse it\" line and the \"What would change the call\" section to see whether the unrun checks are blocking or optional. The table's verdict for the primary metric says \"unclear,\" while the header says \"No effect found,\" and I had to reconcile them. The +3.1% Revenue per User rise is confusing: it is listed as a guardrail \"within margin,\" but it is a large move with no explanation and no registered target.",
-  "question": "Would the pre-period check or the novelty check change the no-launch call if they were run now, and should the unexplained +3.1% Revenue per User rise be investigated before the test is closed?",
+  "lost": "Two spots. First, the 0.50% bar says \"at least 0.50% higher\" without saying whether it is relative or percentage points. Second, \"Could reverse it\" is unclear: it is not stated what result from the missing pre-period check would flip the decision.",
+  "question": "Was the 0.50% bar a relative or absolute change, and was it set before the test started?",
   "replies": {
-    "skim": "1. Answer: No effect found. Successful Search Rate rose +0.04% (95% interval -0.26% to +0.34%), short of the 0.50% bar, and the test ran its full 14 days.\n2. Decision: Agree to stop the test without launching v7.\n3. Number: +0.04% (change in Successful Search Rate, primary metric, 95% interval -0.26% to +0.34%).\n",
-    "full": "1. **Answer:** The document concludes \"No effect found\" and recommends stopping the test without launching Ranker v7. The test is finished: day 14 of 14, with 1,000,000 users per arm, above the planned 900,000.\n\n2. **Decision:** Agree to stop the test without launching. The document asks for exactly this. The pre-period and novelty checks were not run, so the decision rests on the 14-day result alone.\n\n3. **Number:** Successful Search Rate change of +0.04% (95% interval -0.26% to +0.34%), against a bar of at least +0.50%. The upper bound of the interval is below the bar.\n\n4. **Caveat:** The main named risk is that the pre-period could not be checked: there is no pre-period interval or platform check. The document says this could reverse the call, but it does not say what a failed check would look like. Novelty was also not run.\n\n5. **Lost:** I had to reread the \"Could reverse it\" line and the \"What would change the call\" section to see whether the unrun checks are blocking or optional. The table's verdict for the primary metric says \"unclear,\" while the header says \"No effect found,\" and I had to reconcile them. The +3.1% Revenue per User rise is confusing: it is listed as a guardrail \"within margin,\" but it is a large move with no explanation and no registered target.\n\n6. **Question:** Would the pre-period check or the novelty check change the no-launch call if they were run now, and should the unexplained +3.1% Revenue per User rise be investigated before the test is closed?\n"
+    "skim": "1. **Answer:** Ranker v7 showed no effect. Successful Search Rate rose +0.04% (95% interval -0.26% to +0.34%), short of the 0.50% bar, and no guardrail moved past its margin. The document recommends stopping the test without launching.\n2. **Decision:** Agree to stop the test without launching.\n3. **Number:** +0.04% change in Successful Search Rate (percent, 95% CI -0.26% to +0.34%).\n",
+    "full": "1. **Answer:** No effect found. Ranker v7 did not move Successful Search Rate (+0.04%, interval -0.26% to +0.34%), so the 0.50% change the test was built to detect is ruled out. The test ran its full 14 days, 1,000,000 users per arm. The authors recommend stopping without launching.\n\n2. **Decision:** Agree to stop the test without launching v7.\n\n3. **Number:** +0.04% change in Successful Search Rate, against a bar of at least +0.50%.\n\n4. **Caveat:** The pre-period check and novelty check did not run, so the document cannot rule out a data problem that would reverse the call. The checks that did run (scorecard, sample split, config) passed. The revenue lift (+3.1% in Revenue per User) is unexplained, and no segment cuts were read.\n\n5. **Lost:** Two spots. First, the 0.50% bar says \"at least 0.50% higher\" without saying whether it is relative or percentage points. Second, \"Could reverse it\" is unclear: it is not stated what result from the missing pre-period check would flip the decision.\n\n6. **Question:** Was the 0.50% bar a relative or absolute change, and was it set before the test started?\n"
   }
 }

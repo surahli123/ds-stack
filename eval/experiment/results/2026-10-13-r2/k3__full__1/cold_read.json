@@ -1,21 +1,21 @@
 {
-  "pass": false,
+  "pass": true,
   "skim": "2/2",
-  "full": "2/3",
+  "full": "3/3",
   "items": [
     {
       "pass": "skim",
       "item": "answer",
       "key": "Keep running: Successful Search Rate reads +0.12% (-0.36% to +0.60%); ruling out the 0.50% bar needs about 1.9 times the users so far.",
-      "reader": "Keep running. The primary metric, Successful Search Rate, is +0.12% (95% interval -0.36% to +0.60%), which doesn't clear the 0.50% bar, so the result is unclear. Approve running the test longer. Ruling out the 0.50% bar needs about 1.9 times the users so far.",
+      "reader": "Keep running the test. Successful Search Rate is +0.12% (95% range -0.36% to +0.60%), which can't yet rule out the 0.50% bar. It needs about 1.9 times the users so far. The test is at day 14 of 14 with 1,000,000 users per arm, past the planned 900,000. Approve running the test longer, until the Successful Search Rate range excludes the 0.50% bar.",
       "got": true,
-      "how": "overlap 94%"
+      "how": "overlap 89%"
     },
     {
       "pass": "skim",
       "item": "decision",
       "key": "Approve running the test longer.",
-      "reader": "Approve running the test longer. Ruling out the 0.50% bar needs about 1.9 times the users so far. Keep running. The primary metric, Successful Search Rate, is +0.12% (95% interval -0.36% to +0.60%), which doesn't clear the 0.50% bar, so the result is unclear.",
+      "reader": "Approve running the test longer, until the Successful Search Rate range excludes the 0.50% bar. Keep running the test. Successful Search Rate is +0.12% (95% range -0.36% to +0.60%), which can't yet rule out the 0.50% bar. It needs about 1.9 times the users so far. The test is at day 14 of 14 with 1,000,000 users per arm, past the planned 900,000.",
       "got": true,
       "how": "overlap 100%"
     },
@@ -23,7 +23,7 @@
       "pass": "full",
       "item": "takeaway 1",
       "key": "Successful Search Rate +0.12% (-0.36% to +0.60%) against at least 0.50% higher.",
-      "reader": "The document recommends keeping the test running. Successful Search Rate is +0.12% (95% interval -0.36% to +0.60%), which doesn't clear the 0.50% bar, so the verdict is \"unclear.\" The test is at day 14 of 14 with 1,000,000 users per arm, above the planned 900,000. Approve running the test longer. The document says about 1.9 times the current users are needed to rule out the 0.50% bar. Before approving, I'd want the extension's stopping rule and sample size written down in advance, since the original plan was to make the call at the planned sample. The +0.12% change in Successful Search Rate, read against the 0.50% bar. The upper interval bound (+0.60%) is the number that shows the bar is still plausible. The pre-exposure comparison and novelty check were not run, and the scorecard has no segment cuts, so the mechanism behind the small rise is unknown. The main risk is that extending the test to reach a result is a form of optional stopping, which inflates false positives.",
+      "reader": "Keep running Ranker v7. The test is at day 14 of 14 with 1,000,000 users per arm, above the planned 900,000. Successful Search Rate is +0.12% (95% interval -0.36% to +0.60%) against a 0.50% bar, so the verdict is unclear. No guardrail breaks its margin. Approve the longer run, but set a fixed end point and a stop rule before it starts. The document says the call is made at the planned sample, yet the test is already past that sample, so the rule needs to be restated. I'd also have the pre-period and novelty checks run during the extension. +0.12% Successful Search Rate (relative change, 95% interval -0.36% to +0.60%). The interval still includes the 0.50% bar. The result is inconclusive. Ruling out the bar needs about 1.9 times the current users, and two checks, pre-period and novelty, were not run. The scorecard has no segment cuts, so the cause of the small rise is unknown (the document marks this as a guess).",
       "got": true,
       "how": "overlap 80%"
     },
@@ -31,7 +31,7 @@
       "pass": "full",
       "item": "takeaway 2",
       "key": "Approve running the test longer.",
-      "reader": "The document recommends keeping the test running. Successful Search Rate is +0.12% (95% interval -0.36% to +0.60%), which doesn't clear the 0.50% bar, so the verdict is \"unclear.\" The test is at day 14 of 14 with 1,000,000 users per arm, above the planned 900,000. Approve running the test longer. The document says about 1.9 times the current users are needed to rule out the 0.50% bar. Before approving, I'd want the extension's stopping rule and sample size written down in advance, since the original plan was to make the call at the planned sample. The +0.12% change in Successful Search Rate, read against the 0.50% bar. The upper interval bound (+0.60%) is the number that shows the bar is still plausible. The pre-exposure comparison and novelty check were not run, and the scorecard has no segment cuts, so the mechanism behind the small rise is unknown. The main risk is that extending the test to reach a result is a form of optional stopping, which inflates false positives.",
+      "reader": "Keep running Ranker v7. The test is at day 14 of 14 with 1,000,000 users per arm, above the planned 900,000. Successful Search Rate is +0.12% (95% interval -0.36% to +0.60%) against a 0.50% bar, so the verdict is unclear. No guardrail breaks its margin. Approve the longer run, but set a fixed end point and a stop rule before it starts. The document says the call is made at the planned sample, yet the test is already past that sample, so the rule needs to be restated. I'd also have the pre-period and novelty checks run during the extension. +0.12% Successful Search Rate (relative change, 95% interval -0.36% to +0.60%). The interval still includes the 0.50% bar. The result is inconclusive. Ruling out the bar needs about 1.9 times the current users, and two checks, pre-period and novelty, were not run. The scorecard has no segment cuts, so the cause of the small rise is unknown (the document marks this as a guess).",
       "got": true,
       "how": "overlap 100%"
     },
@@ -39,15 +39,15 @@
       "pass": "full",
       "item": "takeaway 3",
       "key": "Could reverse it: the remaining data; the call is made at the planned sample.",
-      "reader": "The document recommends keeping the test running. Successful Search Rate is +0.12% (95% interval -0.36% to +0.60%), which doesn't clear the 0.50% bar, so the verdict is \"unclear.\" The test is at day 14 of 14 with 1,000,000 users per arm, above the planned 900,000. Approve running the test longer. The document says about 1.9 times the current users are needed to rule out the 0.50% bar. Before approving, I'd want the extension's stopping rule and sample size written down in advance, since the original plan was to make the call at the planned sample. The +0.12% change in Successful Search Rate, read against the 0.50% bar. The upper interval bound (+0.60%) is the number that shows the bar is still plausible. The pre-exposure comparison and novelty check were not run, and the scorecard has no segment cuts, so the mechanism behind the small rise is unknown. The main risk is that extending the test to reach a result is a form of optional stopping, which inflates false positives.",
-      "got": false,
-      "how": "overlap 43%"
+      "reader": "Keep running Ranker v7. The test is at day 14 of 14 with 1,000,000 users per arm, above the planned 900,000. Successful Search Rate is +0.12% (95% interval -0.36% to +0.60%) against a 0.50% bar, so the verdict is unclear. No guardrail breaks its margin. Approve the longer run, but set a fixed end point and a stop rule before it starts. The document says the call is made at the planned sample, yet the test is already past that sample, so the rule needs to be restated. I'd also have the pre-period and novelty checks run during the extension. +0.12% Successful Search Rate (relative change, 95% interval -0.36% to +0.60%). The interval still includes the 0.50% bar. The result is inconclusive. Ruling out the bar needs about 1.9 times the current users, and two checks, pre-period and novelty, were not run. The scorecard has no segment cuts, so the cause of the small rise is unknown (the document marks this as a guess).",
+      "got": true,
+      "how": "overlap 57%"
     }
   ],
-  "lost": "I reread the \"Could reverse it\" line, which says \"the remaining data; the call is made at the planned sample,\" and it conflicts with the test already being past the planned sample. I also had to work out how the 1.9x figure was derived; the document doesn't say.",
-  "question": "Why was the planned sample of 900,000 not the decision point, and what stopping rule governs the extension to about 1.9 times the current users?",
+  "lost": "I had to reread the \"Could reverse it\" line, which says the call is made at the planned sample even though the test is past it. The \"What would change the call\" bullets also took a second read: the first bullet's \"excludes the 0.50% bar\" means the whole interval falls below the bar, which is not the case yet. The meaning of \"Can't tell\" versus \"No effect found\" in the appendix also needed a second read.",
+  "question": "If the extended run still leaves the interval spanning 0.50%, do we ship, kill, or escalate, and what is the user or cost trade-off that would make that call?",
   "replies": {
-    "skim": "1. Answer: Keep running. The primary metric, Successful Search Rate, is +0.12% (95% interval -0.36% to +0.60%), which doesn't clear the 0.50% bar, so the result is unclear.\n2. Decision: Approve running the test longer. Ruling out the 0.50% bar needs about 1.9 times the users so far.\n3. Number: +0.12% change in Successful Search Rate (95% interval -0.36% to +0.60%).\n",
-    "full": "1. **Answer:** The document recommends keeping the test running. Successful Search Rate is +0.12% (95% interval -0.36% to +0.60%), which doesn't clear the 0.50% bar, so the verdict is \"unclear.\" The test is at day 14 of 14 with 1,000,000 users per arm, above the planned 900,000.\n\n2. **Decision:** Approve running the test longer. The document says about 1.9 times the current users are needed to rule out the 0.50% bar. Before approving, I'd want the extension's stopping rule and sample size written down in advance, since the original plan was to make the call at the planned sample.\n\n3. **Number:** The +0.12% change in Successful Search Rate, read against the 0.50% bar. The upper interval bound (+0.60%) is the number that shows the bar is still plausible.\n\n4. **Caveat:** The pre-exposure comparison and novelty check were not run, and the scorecard has no segment cuts, so the mechanism behind the small rise is unknown. The main risk is that extending the test to reach a result is a form of optional stopping, which inflates false positives.\n\n5. **Lost:** I reread the \"Could reverse it\" line, which says \"the remaining data; the call is made at the planned sample,\" and it conflicts with the test already being past the planned sample. I also had to work out how the 1.9x figure was derived; the document doesn't say.\n\n6. **Question:** Why was the planned sample of 900,000 not the decision point, and what stopping rule governs the extension to about 1.9 times the current users?\n"
+    "skim": "1. Answer: Keep running the test. Successful Search Rate is +0.12% (95% range -0.36% to +0.60%), which can't yet rule out the 0.50% bar. It needs about 1.9 times the users so far. The test is at day 14 of 14 with 1,000,000 users per arm, past the planned 900,000.\n2. Decision: Approve running the test longer, until the Successful Search Rate range excludes the 0.50% bar.\n3. Number: +0.12% (Successful Search Rate lift, percent change).\n",
+    "full": "1. **Answer:** Keep running Ranker v7. The test is at day 14 of 14 with 1,000,000 users per arm, above the planned 900,000. Successful Search Rate is +0.12% (95% interval -0.36% to +0.60%) against a 0.50% bar, so the verdict is unclear. No guardrail breaks its margin.\n\n2. **Decision:** Approve the longer run, but set a fixed end point and a stop rule before it starts. The document says the call is made at the planned sample, yet the test is already past that sample, so the rule needs to be restated. I'd also have the pre-period and novelty checks run during the extension.\n\n3. **Number:** +0.12% Successful Search Rate (relative change, 95% interval -0.36% to +0.60%). The interval still includes the 0.50% bar.\n\n4. **Caveat:** The result is inconclusive. Ruling out the bar needs about 1.9 times the current users, and two checks, pre-period and novelty, were not run. The scorecard has no segment cuts, so the cause of the small rise is unknown (the document marks this as a guess).\n\n5. **Lost:** I had to reread the \"Could reverse it\" line, which says the call is made at the planned sample even though the test is past it. The \"What would change the call\" bullets also took a second read: the first bullet's \"excludes the 0.50% bar\" means the whole interval falls below the bar, which is not the case yet. The meaning of \"Can't tell\" versus \"No effect found\" in the appendix also needed a second read.\n\n6. **Question:** If the extended run still leaves the interval spanning 0.50%, do we ship, kill, or escalate, and what is the user or cost trade-off that would make that call?\n"
   }
 }

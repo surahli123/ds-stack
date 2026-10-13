@@ -10,6 +10,11 @@ Correct and mean cost are per case, on the majority call across runs; the rest a
 | baseline | 48% | 1.28 | 2 | 75% | 46% | 327 | 9.0 | 0.110 | FAIL |
 | full | 100% | 0.00 | 0 | 100% | 100% | 202 | 1.3 | 0.136 | PASS |
 
+| Arm | Skim 2/2 | Full 3/3 |
+|---|---|---|
+| baseline | 9% | 9% |
+| full | 79% | 63% |
+
 | Case | Gold | baseline | full |
 |---|---|---|---|
 | c1 | cant_tell | MISS dont_ship, MISS dont_ship, ok cant_tell | ok cant_tell, ok cant_tell, ok cant_tell |

@@ -1,0 +1,53 @@
+{
+  "pass": false,
+  "skim": "0/2",
+  "full": "1/3",
+  "items": [
+    {
+      "pass": "skim",
+      "item": "answer",
+      "key": "Escalate: Successful Search Rate rose 0.31% (+0.13% to +0.49%), a real change in the good direction but short of the 0.50% bar.",
+      "reader": "Don't ship Ranker v7. It gives a real but small lift in Successful Search Rate, and the result is below the pre-registered bar. Don't launch. The bar is missed, and the document says extending the run would not change that.",
+      "got": false,
+      "how": "overlap 0%"
+    },
+    {
+      "pass": "skim",
+      "item": "decision",
+      "key": "Decide the trade-off at triage.",
+      "reader": "Don't launch. The bar is missed, and the document says extending the run would not change that. Don't ship Ranker v7. It gives a real but small lift in Successful Search Rate, and the result is below the pre-registered bar.",
+      "got": false,
+      "how": "overlap 0%"
+    },
+    {
+      "pass": "full",
+      "item": "takeaway 1",
+      "key": "Successful Search Rate +0.31% (+0.13% to +0.49%) against at least 0.50% higher.",
+      "reader": "The document recommends not shipping Ranker v7. The lift in Successful Search Rate is real but small, +0.00128 absolute (CI [+0.00054, +0.00202]), and it is well short of the pre-registered +0.005 bar. Guardrails pass, and the test was valid. Current state: the test is complete and the readout is written. Don't ship v7 under the pre-registered bar. Shipping it would be a deliberate exception that the test does not support. The document implies a follow-up check on the navigational-query CTR hypothesis, but it doesn't say who owns that or when it happens (unclear). Successful Search Rate lift, +0.00128 absolute (a change in a rate, 0.4120 \u2192 0.4133), against a bar of +0.005 absolute. The point estimate is about 26% of the bar. The effect is too small to meet the bar, and the CI's upper end (+0.00202) also falls below it, so a longer run won't change the outcome. Secondary risk: about 50 exploratory metrics were tested without correction, so the one nominal hit (navigational CTR, p=0.023) could be chance. Revenue per User is the closest guardrail, with a worst case of about \u22120.8% against a 1% margin.",
+      "got": true,
+      "how": "overlap 0%; grader: same fact"
+    },
+    {
+      "pass": "full",
+      "item": "takeaway 2",
+      "key": "Decide the trade-off at triage.",
+      "reader": "The document recommends not shipping Ranker v7. The lift in Successful Search Rate is real but small, +0.00128 absolute (CI [+0.00054, +0.00202]), and it is well short of the pre-registered +0.005 bar. Guardrails pass, and the test was valid. Current state: the test is complete and the readout is written. Don't ship v7 under the pre-registered bar. Shipping it would be a deliberate exception that the test does not support. The document implies a follow-up check on the navigational-query CTR hypothesis, but it doesn't say who owns that or when it happens (unclear). Successful Search Rate lift, +0.00128 absolute (a change in a rate, 0.4120 \u2192 0.4133), against a bar of +0.005 absolute. The point estimate is about 26% of the bar. The effect is too small to meet the bar, and the CI's upper end (+0.00202) also falls below it, so a longer run won't change the outcome. Secondary risk: about 50 exploratory metrics were tested without correction, so the one nominal hit (navigational CTR, p=0.023) could be chance. Revenue per User is the closest guardrail, with a worst case of about \u22120.8% against a 1% margin.",
+      "got": false,
+      "how": "overlap 0%"
+    },
+    {
+      "pass": "full",
+      "item": "takeaway 3",
+      "key": "Could reverse it: pre period could not be checked: no pre-period interval or platform check.",
+      "reader": "The document recommends not shipping Ranker v7. The lift in Successful Search Rate is real but small, +0.00128 absolute (CI [+0.00054, +0.00202]), and it is well short of the pre-registered +0.005 bar. Guardrails pass, and the test was valid. Current state: the test is complete and the readout is written. Don't ship v7 under the pre-registered bar. Shipping it would be a deliberate exception that the test does not support. The document implies a follow-up check on the navigational-query CTR hypothesis, but it doesn't say who owns that or when it happens (unclear). Successful Search Rate lift, +0.00128 absolute (a change in a rate, 0.4120 \u2192 0.4133), against a bar of +0.005 absolute. The point estimate is about 26% of the bar. The effect is too small to meet the bar, and the CI's upper end (+0.00202) also falls below it, so a longer run won't change the outcome. Secondary risk: about 50 exploratory metrics were tested without correction, so the one nominal hit (navigational CTR, p=0.023) could be chance. Revenue per User is the closest guardrail, with a worst case of about \u22120.8% against a 1% margin.",
+      "got": false,
+      "how": "overlap 12%"
+    }
+  ],
+  "lost": "I had to stop on the bar's units. The document says +0.005 but also checks a \"0.5% relative\" reading, which is about +0.00206 absolute. The text doesn't say which one was pre-registered. The rest was clear, and I checked that the CI and p-value agree.",
+  "question": "Was the +0.005 bar pre-registered as an absolute change in the rate, and how was it set (for example, from power or expected business value)?",
+  "replies": {
+    "skim": "1. Answer: Don't ship Ranker v7. It gives a real but small lift in Successful Search Rate, and the result is below the pre-registered bar.\n2. Decision: Don't launch. The bar is missed, and the document says extending the run would not change that.\n3. Number: +0.00128 absolute lift in Successful Search Rate (0.4120 to 0.4133), against a +0.005 bar.\n",
+    "full": "1. **Answer:** The document recommends not shipping Ranker v7. The lift in Successful Search Rate is real but small, +0.00128 absolute (CI [+0.00054, +0.00202]), and it is well short of the pre-registered +0.005 bar. Guardrails pass, and the test was valid. Current state: the test is complete and the readout is written.\n\n2. **Decision:** Don't ship v7 under the pre-registered bar. Shipping it would be a deliberate exception that the test does not support. The document implies a follow-up check on the navigational-query CTR hypothesis, but it doesn't say who owns that or when it happens (unclear).\n\n3. **Number:** Successful Search Rate lift, +0.00128 absolute (a change in a rate, 0.4120 \u2192 0.4133), against a bar of +0.005 absolute. The point estimate is about 26% of the bar.\n\n4. **Caveat:** The effect is too small to meet the bar, and the CI's upper end (+0.00202) also falls below it, so a longer run won't change the outcome. Secondary risk: about 50 exploratory metrics were tested without correction, so the one nominal hit (navigational CTR, p=0.023) could be chance. Revenue per User is the closest guardrail, with a worst case of about \u22120.8% against a 1% margin.\n\n5. **Lost:** I had to stop on the bar's units. The document says +0.005 but also checks a \"0.5% relative\" reading, which is about +0.00206 absolute. The text doesn't say which one was pre-registered. The rest was clear, and I checked that the CI and p-value agree.\n\n6. **Question:** Was the +0.005 bar pre-registered as an absolute change in the rate, and how was it set (for example, from power or expected business value)?\n"
+  }
+}

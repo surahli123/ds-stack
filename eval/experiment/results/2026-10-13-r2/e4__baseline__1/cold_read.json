@@ -1,0 +1,53 @@
+{
+  "pass": false,
+  "skim": "0/2",
+  "full": "0/3",
+  "items": [
+    {
+      "pass": "skim",
+      "item": "answer",
+      "key": "Escalate: Successful Search Rate rose 0.39% (+0.27% to +0.51%), a real change in the good direction but short of the 0.50% bar.",
+      "reader": "Don't ship. Ranker v7 misses the pre-registered bar: the overall lift is about +0.16 pt (CI +0.11 to +0.21) against a +0.5 pt bar, and guardrails show no harm. Don't launch v7. Treat the Queries per User drop (-1.04%, p=0.024, not pre-registered) as a signal to investigate before any rework or re-test.",
+      "got": false,
+      "how": "overlap 0%"
+    },
+    {
+      "pass": "skim",
+      "item": "decision",
+      "key": "Decide the trade-off at triage.",
+      "reader": "Don't launch v7. Treat the Queries per User drop (-1.04%, p=0.024, not pre-registered) as a signal to investigate before any rework or re-test. Don't ship. Ranker v7 misses the pre-registered bar: the overall lift is about +0.16 pt (CI +0.11 to +0.21) against a +0.5 pt bar, and guardrails show no harm.",
+      "got": false,
+      "how": "overlap 0%"
+    },
+    {
+      "pass": "full",
+      "item": "takeaway 1",
+      "key": "Successful Search Rate +0.39% (+0.27% to +0.51%) against at least 0.50% higher.",
+      "reader": "The document recommends **not shipping** Ranker v7. The headline +0.78 pt lift applies only to triggered searches, which are 20.5% of control successes. Scaled to overall search, the lift is about +0.16 pt (95% CI about +0.11 to +0.21). That misses the pre-registered +0.5 pt bar, and even the top of the CI falls short. Guardrails show no harm, and the experiment looks valid. Don't ship v7. If the team wants to launch anyway, it has to argue for changing the bar openly at the review, not cite the triggered-only number. Overall Successful Search Rate lift, about **+0.16 percentage points** (CI +0.11 to +0.21), against a **+0.5 pt** bar. The Queries per User drop (\u22121.04%, p=0.024) was not pre-registered and is one of about 60 metrics and segments, so it is probably chance. The document says it is worth watching. The overall figure is also a scaled estimate, not a direct one, but this doesn't change the call.",
+      "got": false,
+      "how": "overlap 0%"
+    },
+    {
+      "pass": "full",
+      "item": "takeaway 2",
+      "key": "Decide the trade-off at triage.",
+      "reader": "The document recommends **not shipping** Ranker v7. The headline +0.78 pt lift applies only to triggered searches, which are 20.5% of control successes. Scaled to overall search, the lift is about +0.16 pt (95% CI about +0.11 to +0.21). That misses the pre-registered +0.5 pt bar, and even the top of the CI falls short. Guardrails show no harm, and the experiment looks valid. Don't ship v7. If the team wants to launch anyway, it has to argue for changing the bar openly at the review, not cite the triggered-only number. Overall Successful Search Rate lift, about **+0.16 percentage points** (CI +0.11 to +0.21), against a **+0.5 pt** bar. The Queries per User drop (\u22121.04%, p=0.024) was not pre-registered and is one of about 60 metrics and segments, so it is probably chance. The document says it is worth watching. The overall figure is also a scaled estimate, not a direct one, but this doesn't change the call.",
+      "got": false,
+      "how": "overlap 0%"
+    },
+    {
+      "pass": "full",
+      "item": "takeaway 3",
+      "key": "Could reverse it: the primary is measured on triggered traffic, so its users aren't compared with the planned total.",
+      "reader": "The document recommends **not shipping** Ranker v7. The headline +0.78 pt lift applies only to triggered searches, which are 20.5% of control successes. Scaled to overall search, the lift is about +0.16 pt (95% CI about +0.11 to +0.21). That misses the pre-registered +0.5 pt bar, and even the top of the CI falls short. Guardrails show no harm, and the experiment looks valid. Don't ship v7. If the team wants to launch anyway, it has to argue for changing the bar openly at the review, not cite the triggered-only number. Overall Successful Search Rate lift, about **+0.16 percentage points** (CI +0.11 to +0.21), against a **+0.5 pt** bar. The Queries per User drop (\u22121.04%, p=0.024) was not pre-registered and is one of about 60 metrics and segments, so it is probably chance. The document says it is worth watching. The overall figure is also a scaled estimate, not a direct one, but this doesn't change the call.",
+      "got": false,
+      "how": "overlap 10%"
+    }
+  ],
+  "lost": "Nowhere confusing. The scaling step is stated but not shown. I checked it: 0.78 \u00d7 0.205 \u2248 0.16, 0.54 \u00d7 0.205 \u2248 0.11, and 1.03 \u00d7 0.205 \u2248 0.21, so the numbers hold.",
+  "question": "Is the overall +0.16 pt figure a direct overall estimate with its own CI, or the triggered estimate scaled by 20.5%? If it is scaled, what does the direct overall estimate show?",
+  "replies": {
+    "skim": "1. Answer: Don't ship. Ranker v7 misses the pre-registered bar: the overall lift is about +0.16 pt (CI +0.11 to +0.21) against a +0.5 pt bar, and guardrails show no harm.\n2. Decision: Don't launch v7. Treat the Queries per User drop (-1.04%, p=0.024, not pre-registered) as a signal to investigate before any rework or re-test.\n3. Number: +0.16 pt overall Successful Search Rate lift (95% CI +0.11 to +0.21), versus the +0.5 pt bar.\n",
+    "full": "1. **Answer:** The document recommends **not shipping** Ranker v7. The headline +0.78 pt lift applies only to triggered searches, which are 20.5% of control successes. Scaled to overall search, the lift is about +0.16 pt (95% CI about +0.11 to +0.21). That misses the pre-registered +0.5 pt bar, and even the top of the CI falls short. Guardrails show no harm, and the experiment looks valid.\n\n2. **Decision:** Don't ship v7. If the team wants to launch anyway, it has to argue for changing the bar openly at the review, not cite the triggered-only number.\n\n3. **Number:** Overall Successful Search Rate lift, about **+0.16 percentage points** (CI +0.11 to +0.21), against a **+0.5 pt** bar.\n\n4. **Caveat:** The Queries per User drop (\u22121.04%, p=0.024) was not pre-registered and is one of about 60 metrics and segments, so it is probably chance. The document says it is worth watching. The overall figure is also a scaled estimate, not a direct one, but this doesn't change the call.\n\n5. **Lost:** Nowhere confusing. The scaling step is stated but not shown. I checked it: 0.78 \u00d7 0.205 \u2248 0.16, 0.54 \u00d7 0.205 \u2248 0.11, and 1.03 \u00d7 0.205 \u2248 0.21, so the numbers hold.\n\n6. **Question:** Is the overall +0.16 pt figure a direct overall estimate with its own CI, or the triggered estimate scaled by 20.5%? If it is scaled, what does the direct overall estimate show?\n"
+  }
+}

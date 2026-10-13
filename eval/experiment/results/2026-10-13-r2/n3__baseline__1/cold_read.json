@@ -1,0 +1,53 @@
+{
+  "pass": false,
+  "skim": "1/2",
+  "full": "1/3",
+  "items": [
+    {
+      "pass": "skim",
+      "item": "answer",
+      "key": "No effect found: Successful Search Rate reads -0.05% (-0.34% to +0.24%), which rules out the 0.50% change the test was built to find.",
+      "reader": "Ranker v7 did not move Successful Search Rate (test 0.4118 vs control 0.4120, \u22120.0002, p=0.74), so it does not meet the +0.5 pp ship bar; the recommendation is not to launch on search-success grounds, with no guardrail harm found. Make a \"no effect, don't ship v7\" call and move on. Keep the pre-registered bar, and only revisit with a new hypothesis, treating the ~58 exploratory metrics as hypotheses to test rather than wins.",
+      "got": false,
+      "how": "overlap 0%"
+    },
+    {
+      "pass": "skim",
+      "item": "decision",
+      "key": "Agree to stop the test without launching.",
+      "reader": "Make a \"no effect, don't ship v7\" call and move on. Keep the pre-registered bar, and only revisit with a new hypothesis, treating the ~58 exploratory metrics as hypotheses to test rather than wins. Ranker v7 did not move Successful Search Rate (test 0.4118 vs control 0.4120, \u22120.0002, p=0.74), so it does not meet the +0.5 pp ship bar; the recommendation is not to launch on search-success grounds, with no guardrail harm found.",
+      "got": true,
+      "how": "overlap 20%; grader: same fact"
+    },
+    {
+      "pass": "full",
+      "item": "takeaway 1",
+      "key": "Successful Search Rate -0.05% (-0.34% to +0.24%) against at least 0.50% higher.",
+      "reader": "The document concludes that Ranker v7 had no detectable effect on Successful Search Rate (\u22120.0002, CI [\u22120.0014, +0.0010], p=0.74). It misses the pre-registered +0.5 pp ship bar and does not launch on search success. Guardrails are clean, so this is \"no effect,\" not \"harm.\" Current state: the 14-day test is complete and valid. Don't ship v7 for search success. If the team wants it for infrastructure or maintainability, make that a separate decision. If they still believe in v7, redesign for a larger effect rather than extending the test. Watch Ad Click Rate (\u22121.5%, p=0.013). Successful Search Rate CI upper bound, +0.0010 absolute (+0.1 pp), against the +0.005 (0.5 pp) bar. The point estimate is \u22120.0002 (\u22120.02 pp). The document names uncorrected multiplicity. About 58 secondary and segment metrics are tested at 95% with no correction, so some reported movements, such as Ad Click Rate and Queries per User, may be false positives. The test also can't rule out a true effect of about \u00b10.1 pp.",
+      "got": false,
+      "how": "overlap 0%"
+    },
+    {
+      "pass": "full",
+      "item": "takeaway 2",
+      "key": "Agree to stop the test without launching.",
+      "reader": "The document concludes that Ranker v7 had no detectable effect on Successful Search Rate (\u22120.0002, CI [\u22120.0014, +0.0010], p=0.74). It misses the pre-registered +0.5 pp ship bar and does not launch on search success. Guardrails are clean, so this is \"no effect,\" not \"harm.\" Current state: the 14-day test is complete and valid. Don't ship v7 for search success. If the team wants it for infrastructure or maintainability, make that a separate decision. If they still believe in v7, redesign for a larger effect rather than extending the test. Watch Ad Click Rate (\u22121.5%, p=0.013). Successful Search Rate CI upper bound, +0.0010 absolute (+0.1 pp), against the +0.005 (0.5 pp) bar. The point estimate is \u22120.0002 (\u22120.02 pp). The document names uncorrected multiplicity. About 58 secondary and segment metrics are tested at 95% with no correction, so some reported movements, such as Ad Click Rate and Queries per User, may be false positives. The test also can't rule out a true effect of about \u00b10.1 pp.",
+      "got": true,
+      "how": "overlap 20%; grader: same fact"
+    },
+    {
+      "pass": "full",
+      "item": "takeaway 3",
+      "key": "Could reverse it: pre period could not be checked: no pre-period interval or platform check.",
+      "reader": "The document concludes that Ranker v7 had no detectable effect on Successful Search Rate (\u22120.0002, CI [\u22120.0014, +0.0010], p=0.74). It misses the pre-registered +0.5 pp ship bar and does not launch on search success. Guardrails are clean, so this is \"no effect,\" not \"harm.\" Current state: the 14-day test is complete and valid. Don't ship v7 for search success. If the team wants it for infrastructure or maintainability, make that a separate decision. If they still believe in v7, redesign for a larger effect rather than extending the test. Watch Ad Click Rate (\u22121.5%, p=0.013). Successful Search Rate CI upper bound, +0.0010 absolute (+0.1 pp), against the +0.005 (0.5 pp) bar. The point estimate is \u22120.0002 (\u22120.02 pp). The document names uncorrected multiplicity. About 58 secondary and segment metrics are tested at 95% with no correction, so some reported movements, such as Ad Click Rate and Queries per User, may be false positives. The test also can't rule out a true effect of about \u00b10.1 pp.",
+      "got": false,
+      "how": "overlap 0%"
+    }
+  ],
+  "lost": "Two things. First, Pulse data is dated 2026-09-25, but the test ran through 2026-09-26, so I can't tell whether the last day is included. Second, the guardrail \"worse end\" values are approximate (marked \"~\"), and they mix relative changes with the absolute primary metric. Nothing else made me reread.",
+  "question": "Does the 2026-09-25 Pulse snapshot include the full 14 days (through 09-26), and if not, does rerunning on the complete data change the primary CI?",
+  "replies": {
+    "skim": "1. Answer: Ranker v7 did not move Successful Search Rate (test 0.4118 vs control 0.4120, \u22120.0002, p=0.74), so it does not meet the +0.5 pp ship bar; the recommendation is not to launch on search-success grounds, with no guardrail harm found.\n2. Decision: Make a \"no effect, don't ship v7\" call and move on. Keep the pre-registered bar, and only revisit with a new hypothesis, treating the ~58 exploratory metrics as hypotheses to test rather than wins.\n3. Number: Successful Search Rate absolute change, \u22120.0002 (\u22120.02 pp), 95% CI [\u22120.0014, +0.0010].\n",
+    "full": "1. **Answer:** The document concludes that Ranker v7 had no detectable effect on Successful Search Rate (\u22120.0002, CI [\u22120.0014, +0.0010], p=0.74). It misses the pre-registered +0.5 pp ship bar and does not launch on search success. Guardrails are clean, so this is \"no effect,\" not \"harm.\" Current state: the 14-day test is complete and valid.\n\n2. **Decision:** Don't ship v7 for search success. If the team wants it for infrastructure or maintainability, make that a separate decision. If they still believe in v7, redesign for a larger effect rather than extending the test. Watch Ad Click Rate (\u22121.5%, p=0.013).\n\n3. **Number:** Successful Search Rate CI upper bound, +0.0010 absolute (+0.1 pp), against the +0.005 (0.5 pp) bar. The point estimate is \u22120.0002 (\u22120.02 pp).\n\n4. **Caveat:** The document names uncorrected multiplicity. About 58 secondary and segment metrics are tested at 95% with no correction, so some reported movements, such as Ad Click Rate and Queries per User, may be false positives. The test also can't rule out a true effect of about \u00b10.1 pp.\n\n5. **Lost:** Two things. First, Pulse data is dated 2026-09-25, but the test ran through 2026-09-26, so I can't tell whether the last day is included. Second, the guardrail \"worse end\" values are approximate (marked \"~\"), and they mix relative changes with the absolute primary metric. Nothing else made me reread.\n\n6. **Question:** Does the 2026-09-25 Pulse snapshot include the full 14 days (through 09-26), and if not, does rerunning on the complete data change the primary CI?\n"
+  }
+}

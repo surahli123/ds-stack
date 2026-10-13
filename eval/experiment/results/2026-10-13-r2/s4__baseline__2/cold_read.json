@@ -1,0 +1,53 @@
+{
+  "pass": false,
+  "skim": "1/2",
+  "full": "0/3",
+  "items": [
+    {
+      "pass": "skim",
+      "item": "answer",
+      "key": "Ship: Successful Search Rate rose 0.81% (+0.41% to +1.21%), which clears the 0.50% bar and every guardrail held.",
+      "reader": "Ship Ranker v7. The readout recommends launch because its primary metric clears the pre-registered bar and all four guardrails pass. Launch Ranker v7.",
+      "got": false,
+      "how": "overlap 0%"
+    },
+    {
+      "pass": "skim",
+      "item": "decision",
+      "key": "Approve the launch to all traffic.",
+      "reader": "Launch Ranker v7. Ship Ranker v7. The readout recommends launch because its primary metric clears the pre-registered bar and all four guardrails pass.",
+      "got": true,
+      "how": "overlap 33%; grader: same fact"
+    },
+    {
+      "pass": "full",
+      "item": "takeaway 1",
+      "key": "Successful Search Rate +0.81% (+0.41% to +1.21%) against at least 0.50% higher.",
+      "reader": "The document concludes **Ship**. Ranker v7 is a finished, clean 14-day test. The author reads the primary result as passing the bar and all four guardrails passing. The handover state is that the decision depends on a unit assumption the author flagged but hasn't resolved. **Hold, don't ship yet.** The stated endpoints don't match the stated lift (see 5). Confirm the correct point estimate and the bar's unit, then decide. If the corrected lift is under 0.5% relative, or under 0.5 pp, the result misses the bar under either reading. Treat the segment findings as post-launch monitoring, as the author proposes. Successful Search Rate lift. The document gives it as **+0.81% relative (+0.33 pp)**. Its endpoints, 0.4120 \u2192 0.4134, imply **+0.14 pp (+0.34% relative)**. The document's main named risk is that the bar `0.005` has no unit, so the pass/fail call depends on reading it as relative. Its exploratory segment results come from about 60 comparisons with no multiplicity correction, so some are probably false positives. The head and tail segments are both negative while the total is positive, which the author attributes to segment definitions.",
+      "got": false,
+      "how": "overlap 0%"
+    },
+    {
+      "pass": "full",
+      "item": "takeaway 2",
+      "key": "Approve the launch to all traffic.",
+      "reader": "The document concludes **Ship**. Ranker v7 is a finished, clean 14-day test. The author reads the primary result as passing the bar and all four guardrails passing. The handover state is that the decision depends on a unit assumption the author flagged but hasn't resolved. **Hold, don't ship yet.** The stated endpoints don't match the stated lift (see 5). Confirm the correct point estimate and the bar's unit, then decide. If the corrected lift is under 0.5% relative, or under 0.5 pp, the result misses the bar under either reading. Treat the segment findings as post-launch monitoring, as the author proposes. Successful Search Rate lift. The document gives it as **+0.81% relative (+0.33 pp)**. Its endpoints, 0.4120 \u2192 0.4134, imply **+0.14 pp (+0.34% relative)**. The document's main named risk is that the bar `0.005` has no unit, so the pass/fail call depends on reading it as relative. Its exploratory segment results come from about 60 comparisons with no multiplicity correction, so some are probably false positives. The head and tail segments are both negative while the total is positive, which the author attributes to segment definitions.",
+      "got": false,
+      "how": "overlap 0%"
+    },
+    {
+      "pass": "full",
+      "item": "takeaway 3",
+      "key": "Could reverse it: pre period could not be checked: no pre-period interval or platform check.",
+      "reader": "The document concludes **Ship**. Ranker v7 is a finished, clean 14-day test. The author reads the primary result as passing the bar and all four guardrails passing. The handover state is that the decision depends on a unit assumption the author flagged but hasn't resolved. **Hold, don't ship yet.** The stated endpoints don't match the stated lift (see 5). Confirm the correct point estimate and the bar's unit, then decide. If the corrected lift is under 0.5% relative, or under 0.5 pp, the result misses the bar under either reading. Treat the segment findings as post-launch monitoring, as the author proposes. Successful Search Rate lift. The document gives it as **+0.81% relative (+0.33 pp)**. Its endpoints, 0.4120 \u2192 0.4134, imply **+0.14 pp (+0.34% relative)**. The document's main named risk is that the bar `0.005` has no unit, so the pass/fail call depends on reading it as relative. Its exploratory segment results come from about 60 comparisons with no multiplicity correction, so some are probably false positives. The head and tail segments are both negative while the total is positive, which the author attributes to segment definitions.",
+      "got": false,
+      "how": "overlap 0%"
+    }
+  ],
+  "lost": "Yes. The primary result doesn't reconcile. 0.4134 \u2212 0.4120 = 0.0014, which is 0.14 pp, not 0.33 pp. Relative, that's about 0.34%, not 0.81%. The CI (+0.41% to +1.21%) is centered on 0.81%, so the endpoints may be the typo, but I can't tell from the document. The document also doesn't say which segments the middle slice covers.",
+  "question": "For the primary metric, which is correct: 0.4120 \u2192 0.4134 (+0.34% relative), or a point estimate of +0.81% relative (+0.33 pp)? And is the 0.005 bar relative or in percentage points?",
+  "replies": {
+    "skim": "1. **Answer:** Ship Ranker v7. The readout recommends launch because its primary metric clears the pre-registered bar and all four guardrails pass.\n2. **Decision:** Launch Ranker v7.\n3. **Number:** Successful Search Rate, +0.81% relative (0.4120 \u2192 0.4134, +0.33 percentage points).\n",
+    "full": "1. **Answer:** The document concludes **Ship**. Ranker v7 is a finished, clean 14-day test. The author reads the primary result as passing the bar and all four guardrails passing. The handover state is that the decision depends on a unit assumption the author flagged but hasn't resolved.\n\n2. **Decision:** **Hold, don't ship yet.** The stated endpoints don't match the stated lift (see 5). Confirm the correct point estimate and the bar's unit, then decide. If the corrected lift is under 0.5% relative, or under 0.5 pp, the result misses the bar under either reading. Treat the segment findings as post-launch monitoring, as the author proposes.\n\n3. **Number:** Successful Search Rate lift. The document gives it as **+0.81% relative (+0.33 pp)**. Its endpoints, 0.4120 \u2192 0.4134, imply **+0.14 pp (+0.34% relative)**.\n\n4. **Caveat:** The document's main named risk is that the bar `0.005` has no unit, so the pass/fail call depends on reading it as relative. Its exploratory segment results come from about 60 comparisons with no multiplicity correction, so some are probably false positives. The head and tail segments are both negative while the total is positive, which the author attributes to segment definitions.\n\n5. **Lost:** Yes. The primary result doesn't reconcile. 0.4134 \u2212 0.4120 = 0.0014, which is 0.14 pp, not 0.33 pp. Relative, that's about 0.34%, not 0.81%. The CI (+0.41% to +1.21%) is centered on 0.81%, so the endpoints may be the typo, but I can't tell from the document. The document also doesn't say which segments the middle slice covers.\n\n6. **Question:** For the primary metric, which is correct: 0.4120 \u2192 0.4134 (+0.34% relative), or a point estimate of +0.81% relative (+0.33 pp)? And is the 0.005 bar relative or in percentage points?\n"
+  }
+}

@@ -1,0 +1,53 @@
+{
+  "pass": false,
+  "skim": "1/2",
+  "full": "1/3",
+  "items": [
+    {
+      "pass": "skim",
+      "item": "answer",
+      "key": "Ship: Successful Search Rate rose 0.81% (+0.41% to +1.21%), which clears the 0.50% bar and every guardrail held.",
+      "reader": "Ship. The opening says \"Decision: Ship,\" but it depends on a caveat about reading the pre-registered bar that is not in this text. Ship only if the bar is met on the point estimate. The +0.81% estimate clears 0.5%, but the CI lower bound (+0.41%) does not. That is my inference about the missing caveat, not something the text says.",
+      "got": false,
+      "how": "overlap 0%"
+    },
+    {
+      "pass": "skim",
+      "item": "decision",
+      "key": "Approve the launch to all traffic.",
+      "reader": "Ship only if the bar is met on the point estimate. The +0.81% estimate clears 0.5%, but the CI lower bound (+0.41%) does not. That is my inference about the missing caveat, not something the text says. Ship. The opening says \"Decision: Ship,\" but it depends on a caveat about reading the pre-registered bar that is not in this text.",
+      "got": true,
+      "how": "overlap 0%; grader: same fact"
+    },
+    {
+      "pass": "full",
+      "item": "takeaway 1",
+      "key": "Successful Search Rate +0.81% (+0.41% to +1.21%) against at least 0.50% higher.",
+      "reader": "The readout recommends shipping. The primary metric clears the bar if the 0.5% threshold is relative, and all four guardrails hold. The experiment is still \"active\" and the readout recommends closing it out. Handover state: analysis done, decision pending the unit check, experiment not yet closed. Confirm the unit of the `0.005` bar in `prereg.json` before shipping. If it is relative (0.5%), ship and close out the experiment. If it is absolute (0.5 pp), the observed +0.33 pp misses the bar, so don't ship. Successful Search Rate, +0.81% relative (+0.33 pp absolute), 95% CI +0.41% to +1.21%, p = 7e-5. The bar's unit is unspecified, and it flips the decision. The head-query Successful Search Rate moved \u22120.95% (p = 0.011), the opposite sign, and doesn't survive correction across six segments.",
+      "got": true,
+      "how": "overlap 0%; grader: same fact"
+    },
+    {
+      "pass": "full",
+      "item": "takeaway 2",
+      "key": "Approve the launch to all traffic.",
+      "reader": "The readout recommends shipping. The primary metric clears the bar if the 0.5% threshold is relative, and all four guardrails hold. The experiment is still \"active\" and the readout recommends closing it out. Handover state: analysis done, decision pending the unit check, experiment not yet closed. Confirm the unit of the `0.005` bar in `prereg.json` before shipping. If it is relative (0.5%), ship and close out the experiment. If it is absolute (0.5 pp), the observed +0.33 pp misses the bar, so don't ship. Successful Search Rate, +0.81% relative (+0.33 pp absolute), 95% CI +0.41% to +1.21%, p = 7e-5. The bar's unit is unspecified, and it flips the decision. The head-query Successful Search Rate moved \u22120.95% (p = 0.011), the opposite sign, and doesn't survive correction across six segments.",
+      "got": false,
+      "how": "overlap 0%"
+    },
+    {
+      "pass": "full",
+      "item": "takeaway 3",
+      "key": "Could reverse it: pre period could not be checked: no pre-period interval or platform check.",
+      "reader": "The readout recommends shipping. The primary metric clears the bar if the 0.5% threshold is relative, and all four guardrails hold. The experiment is still \"active\" and the readout recommends closing it out. Handover state: analysis done, decision pending the unit check, experiment not yet closed. Confirm the unit of the `0.005` bar in `prereg.json` before shipping. If it is relative (0.5%), ship and close out the experiment. If it is absolute (0.5 pp), the observed +0.33 pp misses the bar, so don't ship. Successful Search Rate, +0.81% relative (+0.33 pp absolute), 95% CI +0.41% to +1.21%, p = 7e-5. The bar's unit is unspecified, and it flips the decision. The head-query Successful Search Rate moved \u22120.95% (p = 0.011), the opposite sign, and doesn't survive correction across six segments.",
+      "got": false,
+      "how": "overlap 12%"
+    }
+  ],
+  "lost": "Nowhere in the pasted text. The only gap is the unitless `0.005` bar, which the readout itself flags.",
+  "question": "Is the pre-registered 0.5% bar relative to baseline or 0.5 percentage points absolute?",
+  "replies": {
+    "skim": "1. **Answer:** Ship. The opening says \"Decision: Ship,\" but it depends on a caveat about reading the pre-registered bar that is not in this text.\n2. **Decision:** Ship only if the bar is met on the point estimate. The +0.81% estimate clears 0.5%, but the CI lower bound (+0.41%) does not. That is my inference about the missing caveat, not something the text says.\n3. **Number:** +0.81% relative lift in Successful Search Rate (+0.33 pp; 95% CI +0.41% to +1.21%).\n",
+    "full": "The docs skill points to a docs connector, and none is available in this session, so I can't use it. I also can't open `readout.md` from the working directory: I have no file-reading tool here. The artifact I opened (`ds-stack`) is an unrelated page, not your readout, so it tells us nothing about this experiment. The answers below come only from the text you pasted.\n\n1. **Answer:** The readout recommends shipping. The primary metric clears the bar if the 0.5% threshold is relative, and all four guardrails hold. The experiment is still \"active\" and the readout recommends closing it out. Handover state: analysis done, decision pending the unit check, experiment not yet closed.\n2. **Decision:** Confirm the unit of the `0.005` bar in `prereg.json` before shipping. If it is relative (0.5%), ship and close out the experiment. If it is absolute (0.5 pp), the observed +0.33 pp misses the bar, so don't ship.\n3. **Number:** Successful Search Rate, +0.81% relative (+0.33 pp absolute), 95% CI +0.41% to +1.21%, p = 7e-5.\n4. **Caveat:** The bar's unit is unspecified, and it flips the decision. The head-query Successful Search Rate moved \u22120.95% (p = 0.011), the opposite sign, and doesn't survive correction across six segments.\n5. **Lost:** Nowhere in the pasted text. The only gap is the unitless `0.005` bar, which the readout itself flags.\n6. **Question:** Is the pre-registered 0.5% bar relative to baseline or 0.5 percentage points absolute?\n"
+  }
+}

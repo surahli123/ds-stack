@@ -1,0 +1,53 @@
+{
+  "pass": false,
+  "skim": "0/2",
+  "full": "0/3",
+  "items": [
+    {
+      "pass": "skim",
+      "item": "answer",
+      "key": "Escalate: Successful Search Rate improved but Long Click Rate is undetermined, +0.12% (-0.48% to +0.72%); the test needs every primary to improve.",
+      "reader": "The document recommends not shipping. Neither primary metric reaches its +0.5 pt bar, though Successful Search Rate shows a real but smaller lift. Don't ship. The pre-registration requires both bars to be met, and it isn't.",
+      "got": false,
+      "how": "overlap 0%"
+    },
+    {
+      "pass": "skim",
+      "item": "decision",
+      "key": "Decide the trade-off at triage.",
+      "reader": "Don't ship. The pre-registration requires both bars to be met, and it isn't. The document recommends not shipping. Neither primary metric reaches its +0.5 pt bar, though Successful Search Rate shows a real but smaller lift.",
+      "got": false,
+      "how": "overlap 0%"
+    },
+    {
+      "pass": "full",
+      "item": "takeaway 1",
+      "key": "Long Click Rate +0.12% (-0.48% to +0.72%) against at least 0.50% higher.",
+      "reader": "The document recommends **not shipping**. Successful Search Rate rose +0.33 pt (95% CI +0.17 to +0.50), a real lift but below the +0.5 pt bar. Long Click Rate was flat at +0.03 pt (CI \u22120.11 to +0.16). All four guardrails are within margin. The test has read out at its planned end. Don't ship, per the pre-registration. If the review wants to ship anyway, that needs an explicit escalation to override it. Separately, the Statsig config should list both primaries, and the head-query Long Click Rate drop needs a follow-up. Long Click Rate, +0.03 pt (95% CI \u22120.11 to +0.16). Its CI excludes the +0.5 pt bar, so it is the main reason the ship fails. The unit is percentage points. About 60 secondary and segment metrics were read with no multiplicity correction. The few that cleared p<0.05, including the head-query Long Click Rate drop, are about what chance would produce.",
+      "got": false,
+      "how": "overlap 0%"
+    },
+    {
+      "pass": "full",
+      "item": "takeaway 2",
+      "key": "Successful Search Rate +0.81% (+0.41% to +1.21%) against at least 0.50% higher.",
+      "reader": "The document recommends **not shipping**. Successful Search Rate rose +0.33 pt (95% CI +0.17 to +0.50), a real lift but below the +0.5 pt bar. Long Click Rate was flat at +0.03 pt (CI \u22120.11 to +0.16). All four guardrails are within margin. The test has read out at its planned end. Don't ship, per the pre-registration. If the review wants to ship anyway, that needs an explicit escalation to override it. Separately, the Statsig config should list both primaries, and the head-query Long Click Rate drop needs a follow-up. Long Click Rate, +0.03 pt (95% CI \u22120.11 to +0.16). Its CI excludes the +0.5 pt bar, so it is the main reason the ship fails. The unit is percentage points. About 60 secondary and segment metrics were read with no multiplicity correction. The few that cleared p<0.05, including the head-query Long Click Rate drop, are about what chance would produce.",
+      "got": false,
+      "how": "overlap 0%"
+    },
+    {
+      "pass": "full",
+      "item": "takeaway 3",
+      "key": "Could reverse it: pre period could not be checked: no pre-period interval or platform check.",
+      "reader": "The document recommends **not shipping**. Successful Search Rate rose +0.33 pt (95% CI +0.17 to +0.50), a real lift but below the +0.5 pt bar. Long Click Rate was flat at +0.03 pt (CI \u22120.11 to +0.16). All four guardrails are within margin. The test has read out at its planned end. Don't ship, per the pre-registration. If the review wants to ship anyway, that needs an explicit escalation to override it. Separately, the Statsig config should list both primaries, and the head-query Long Click Rate drop needs a follow-up. Long Click Rate, +0.03 pt (95% CI \u22120.11 to +0.16). Its CI excludes the +0.5 pt bar, so it is the main reason the ship fails. The unit is percentage points. About 60 secondary and segment metrics were read with no multiplicity correction. The few that cleared p<0.05, including the head-query Long Click Rate drop, are about what chance would produce.",
+      "got": false,
+      "how": "overlap 0%"
+    }
+  ],
+  "lost": "Nowhere.",
+  "question": "Is +0.5 pt the minimum gain that justifies shipping, and if so, why must Long Click Rate clear it too when Successful Search Rate alone shows a significant lift?",
+  "replies": {
+    "skim": "1. **Answer:** The document recommends not shipping. Neither primary metric reaches its +0.5 pt bar, though Successful Search Rate shows a real but smaller lift.\n2. **Decision:** Don't ship. The pre-registration requires both bars to be met, and it isn't.\n3. **Number:** Successful Search Rate change of +0.33 pt (95% CI +0.17 to +0.50), short of the +0.50 pt bar.\n",
+    "full": "1. **Answer:** The document recommends **not shipping**. Successful Search Rate rose +0.33 pt (95% CI +0.17 to +0.50), a real lift but below the +0.5 pt bar. Long Click Rate was flat at +0.03 pt (CI \u22120.11 to +0.16). All four guardrails are within margin. The test has read out at its planned end.\n2. **Decision:** Don't ship, per the pre-registration. If the review wants to ship anyway, that needs an explicit escalation to override it. Separately, the Statsig config should list both primaries, and the head-query Long Click Rate drop needs a follow-up.\n3. **Number:** Long Click Rate, +0.03 pt (95% CI \u22120.11 to +0.16). Its CI excludes the +0.5 pt bar, so it is the main reason the ship fails. The unit is percentage points.\n4. **Caveat:** About 60 secondary and segment metrics were read with no multiplicity correction. The few that cleared p<0.05, including the head-query Long Click Rate drop, are about what chance would produce.\n5. **Lost:** Nowhere.\n6. **Question:** Is +0.5 pt the minimum gain that justifies shipping, and if so, why must Long Click Rate clear it too when Successful Search Rate alone shows a significant lift?\n"
+  }
+}

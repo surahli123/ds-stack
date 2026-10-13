@@ -1,0 +1,53 @@
+{
+  "pass": false,
+  "skim": "0/2",
+  "full": "0/3",
+  "items": [
+    {
+      "pass": "skim",
+      "item": "answer",
+      "key": "Ship: Successful Search Rate rose 0.81% (+0.41% to +1.21%), which clears the 0.50% bar and every guardrail held.",
+      "reader": "Don't ship. Ranker v7 produced a statistically significant lift in Successful Search Rate, but the point estimate (+0.00334) falls short of the pre-registered +0.005 bar. Don't launch Ranker v7 under the pre-registered rule. The text doesn't say what to do next.",
+      "got": false,
+      "how": "overlap 0%"
+    },
+    {
+      "pass": "skim",
+      "item": "decision",
+      "key": "Approve the launch to all traffic.",
+      "reader": "Don't launch Ranker v7 under the pre-registered rule. The text doesn't say what to do next. Don't ship. Ranker v7 produced a statistically significant lift in Successful Search Rate, but the point estimate (+0.00334) falls short of the pre-registered +0.005 bar.",
+      "got": false,
+      "how": "overlap 33%"
+    },
+    {
+      "pass": "full",
+      "item": "takeaway 1",
+      "key": "Successful Search Rate +0.81% (+0.41% to +1.21%) against at least 0.50% higher.",
+      "reader": "The doc concludes \"don't ship\" for Ranker v7. The primary metric rose, but the lift (+0.00334 absolute) is below the pre-registered bar (+0.005). Guardrails all pass. The test is complete, and the call depends on one unconfirmed assumption about the bar's unit. Don't ship v7 as is. Before the meeting, confirm with the pre-registration author whether the 0.005 bar is absolute (0.5 percentage points) or relative (0.5%). If it's relative, the point estimate (+0.81%) clears it and the call flips to ship. Don't extend the test to chase the bar. Successful Search Rate absolute lift, +0.00334 (0.4120 \u2192 0.4153), 95% CI +0.0017 to +0.0050, in absolute rate units (percentage points). The relative lift is +0.81%. The pre-registration doesn't state the bar's unit, and the decision turns on it. Secondary signals may show that some extra \"successes\" are shallow clicks: Reformulation Rate rose (worse, p = 0.018) and head-query success fell (not significant). The doc ran no multiplicity correction across about 30 metrics, so those are hypotheses only.",
+      "got": false,
+      "how": "overlap 0%"
+    },
+    {
+      "pass": "full",
+      "item": "takeaway 2",
+      "key": "Approve the launch to all traffic.",
+      "reader": "The doc concludes \"don't ship\" for Ranker v7. The primary metric rose, but the lift (+0.00334 absolute) is below the pre-registered bar (+0.005). Guardrails all pass. The test is complete, and the call depends on one unconfirmed assumption about the bar's unit. Don't ship v7 as is. Before the meeting, confirm with the pre-registration author whether the 0.005 bar is absolute (0.5 percentage points) or relative (0.5%). If it's relative, the point estimate (+0.81%) clears it and the call flips to ship. Don't extend the test to chase the bar. Successful Search Rate absolute lift, +0.00334 (0.4120 \u2192 0.4153), 95% CI +0.0017 to +0.0050, in absolute rate units (percentage points). The relative lift is +0.81%. The pre-registration doesn't state the bar's unit, and the decision turns on it. Secondary signals may show that some extra \"successes\" are shallow clicks: Reformulation Rate rose (worse, p = 0.018) and head-query success fell (not significant). The doc ran no multiplicity correction across about 30 metrics, so those are hypotheses only.",
+      "got": false,
+      "how": "overlap 0%"
+    },
+    {
+      "pass": "full",
+      "item": "takeaway 3",
+      "key": "Could reverse it: pre period could not be checked: no pre-period interval or platform check.",
+      "reader": "The doc concludes \"don't ship\" for Ranker v7. The primary metric rose, but the lift (+0.00334 absolute) is below the pre-registered bar (+0.005). Guardrails all pass. The test is complete, and the call depends on one unconfirmed assumption about the bar's unit. Don't ship v7 as is. Before the meeting, confirm with the pre-registration author whether the 0.005 bar is absolute (0.5 percentage points) or relative (0.5%). If it's relative, the point estimate (+0.81%) clears it and the call flips to ship. Don't extend the test to chase the bar. Successful Search Rate absolute lift, +0.00334 (0.4120 \u2192 0.4153), 95% CI +0.0017 to +0.0050, in absolute rate units (percentage points). The relative lift is +0.81%. The pre-registration doesn't state the bar's unit, and the decision turns on it. Secondary signals may show that some extra \"successes\" are shallow clicks: Reformulation Rate rose (worse, p = 0.018) and head-query success fell (not significant). The doc ran no multiplicity correction across about 30 metrics, so those are hypotheses only.",
+      "got": false,
+      "how": "overlap 0%"
+    }
+  ],
+  "lost": "Nowhere significant. The guardrail margins are read as relative changes, which the doc states as an assumption rather than a confirmed fact. That only matters if the margins are meant as absolute.",
+  "question": "Is the pre-registered bar of +0.005 an absolute change in Successful Search Rate (0.5 percentage points) or a relative lift (0.5%)?",
+  "replies": {
+    "skim": "1. **Answer:** Don't ship. Ranker v7 produced a statistically significant lift in Successful Search Rate, but the point estimate (+0.00334) falls short of the pre-registered +0.005 bar.\n2. **Decision:** Don't launch Ranker v7 under the pre-registered rule. The text doesn't say what to do next.\n3. **Number:** Absolute lift in Successful Search Rate, +0.00334 (proportion, 0.4120 \u2192 0.4153; 95% CI +0.0017 to +0.0050).\n",
+    "full": "1. **Answer:** The doc concludes \"don't ship\" for Ranker v7. The primary metric rose, but the lift (+0.00334 absolute) is below the pre-registered bar (+0.005). Guardrails all pass. The test is complete, and the call depends on one unconfirmed assumption about the bar's unit.\n\n2. **Decision:** Don't ship v7 as is. Before the meeting, confirm with the pre-registration author whether the 0.005 bar is absolute (0.5 percentage points) or relative (0.5%). If it's relative, the point estimate (+0.81%) clears it and the call flips to ship. Don't extend the test to chase the bar.\n\n3. **Number:** Successful Search Rate absolute lift, +0.00334 (0.4120 \u2192 0.4153), 95% CI +0.0017 to +0.0050, in absolute rate units (percentage points). The relative lift is +0.81%.\n\n4. **Caveat:** The pre-registration doesn't state the bar's unit, and the decision turns on it. Secondary signals may show that some extra \"successes\" are shallow clicks: Reformulation Rate rose (worse, p = 0.018) and head-query success fell (not significant). The doc ran no multiplicity correction across about 30 metrics, so those are hypotheses only.\n\n5. **Lost:** Nowhere significant. The guardrail margins are read as relative changes, which the doc states as an assumption rather than a confirmed fact. That only matters if the margins are meant as absolute.\n\n6. **Question:** Is the pre-registered bar of +0.005 an absolute change in Successful Search Rate (0.5 percentage points) or a relative lift (0.5%)?\n"
+  }
+}

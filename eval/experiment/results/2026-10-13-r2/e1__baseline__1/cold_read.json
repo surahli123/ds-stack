@@ -1,0 +1,53 @@
+{
+  "pass": false,
+  "skim": "0/2",
+  "full": "2/3",
+  "items": [
+    {
+      "pass": "skim",
+      "item": "answer",
+      "key": "Escalate: Successful Search Rate rose 0.81% (+0.41% to +1.21%), but Abandonment Rate (+0.60% (-0.40% to +1.60%)) isn't shown within its 1.00% margin.",
+      "reader": "The document's decision is \"Escalate.\" The primary metric, Successful Search Rate, rose 41.20% \u2192 41.53% (+0.81% relative), and the point estimate clears the +0.5% bar, but the CI lower bound (+0.41%) does not. Abandonment Rate is not cleared: its upper bound is past the 1% margin, so the result is inconclusive. Escalate for a launch decision, since the primary metric's point estimate passes but its CI lower bound does not and the Abandonment guardrail is unresolved. The text does not name who should receive the escalation or what additional data would settle it.",
+      "got": false,
+      "how": "overlap 0%"
+    },
+    {
+      "pass": "skim",
+      "item": "decision",
+      "key": "Decide the trade-off at triage.",
+      "reader": "Escalate for a launch decision, since the primary metric's point estimate passes but its CI lower bound does not and the Abandonment guardrail is unresolved. The text does not name who should receive the escalation or what additional data would settle it. The document's decision is \"Escalate.\" The primary metric, Successful Search Rate, rose 41.20% \u2192 41.53% (+0.81% relative), and the point estimate clears the +0.5% bar, but the CI lower bound (+0.41%) does not. Abandonment Rate is not cleared: its upper bound is past the 1% margin, so the result is inconclusive.",
+      "got": false,
+      "how": "overlap 0%"
+    },
+    {
+      "pass": "full",
+      "item": "takeaway 1",
+      "key": "Abandonment Rate +0.60% (-0.40% to +1.60%) against at most 1.00% higher.",
+      "reader": "The readout concludes **Escalate**. The primary metric, Successful Search Rate, rose 41.20% \u2192 41.53%, a +0.81% relative lift (95% CI +0.41% to +1.21%). The point estimate clears the +0.5% bar, but the CI's lower bound does not. Abandonment Rate is inconclusive: +0.6% with a CI of \u22120.4% to +1.6%, which crosses the 1% margin. The test is complete (14 days, arms balanced, no mid-test changes). Escalate, and settle two things first. (a) Confirm whether the bar and margins are relative or absolute. If absolute, the primary misses (+0.33pp against 0.5pp), and the answer becomes Don't ship or Keep running. (b) Decide whether the abandonment margin is a hard gate. If it is, extend the test to narrow that CI. If the team accepts the risk, ship with abandonment monitored and a holdback. +0.81% relative lift in Successful Search Rate (about +0.33pp absolute, 41.20% \u2192 41.53%). The main risk is abandonment. It could be up to about 1.6% worse, and the prereg doesn't say what to do when a guardrail is inconclusive. Secondary risks are the unconfirmed units and the ~40 uncorrected segment cuts, which are hypotheses only.",
+      "got": true,
+      "how": "overlap 0%; grader: same fact"
+    },
+    {
+      "pass": "full",
+      "item": "takeaway 2",
+      "key": "Successful Search Rate +0.81% (+0.41% to +1.21%) against at least 0.50% higher.",
+      "reader": "The readout concludes **Escalate**. The primary metric, Successful Search Rate, rose 41.20% \u2192 41.53%, a +0.81% relative lift (95% CI +0.41% to +1.21%). The point estimate clears the +0.5% bar, but the CI's lower bound does not. Abandonment Rate is inconclusive: +0.6% with a CI of \u22120.4% to +1.6%, which crosses the 1% margin. The test is complete (14 days, arms balanced, no mid-test changes). Escalate, and settle two things first. (a) Confirm whether the bar and margins are relative or absolute. If absolute, the primary misses (+0.33pp against 0.5pp), and the answer becomes Don't ship or Keep running. (b) Decide whether the abandonment margin is a hard gate. If it is, extend the test to narrow that CI. If the team accepts the risk, ship with abandonment monitored and a holdback. +0.81% relative lift in Successful Search Rate (about +0.33pp absolute, 41.20% \u2192 41.53%). The main risk is abandonment. It could be up to about 1.6% worse, and the prereg doesn't say what to do when a guardrail is inconclusive. Secondary risks are the unconfirmed units and the ~40 uncorrected segment cuts, which are hypotheses only.",
+      "got": true,
+      "how": "overlap 0%; grader: same fact"
+    },
+    {
+      "pass": "full",
+      "item": "takeaway 3",
+      "key": "Could reverse it: pre period could not be checked: no pre-period interval or platform check.",
+      "reader": "The readout concludes **Escalate**. The primary metric, Successful Search Rate, rose 41.20% \u2192 41.53%, a +0.81% relative lift (95% CI +0.41% to +1.21%). The point estimate clears the +0.5% bar, but the CI's lower bound does not. Abandonment Rate is inconclusive: +0.6% with a CI of \u22120.4% to +1.6%, which crosses the 1% margin. The test is complete (14 days, arms balanced, no mid-test changes). Escalate, and settle two things first. (a) Confirm whether the bar and margins are relative or absolute. If absolute, the primary misses (+0.33pp against 0.5pp), and the answer becomes Don't ship or Keep running. (b) Decide whether the abandonment margin is a hard gate. If it is, extend the test to narrow that CI. If the team accepts the risk, ship with abandonment monitored and a holdback. +0.81% relative lift in Successful Search Rate (about +0.33pp absolute, 41.20% \u2192 41.53%). The main risk is abandonment. It could be up to about 1.6% worse, and the prereg doesn't say what to do when a guardrail is inconclusive. Secondary risks are the unconfirmed units and the ~40 uncorrected segment cuts, which are hypotheses only.",
+      "got": false,
+      "how": "overlap 0%"
+    }
+  ],
+  "lost": "The units of the bar and margins, and the rule for an inconclusive guardrail. I'm working from the summary you pasted, not from `readout.md` itself.",
+  "question": "Are the +0.5% bar and the margins relative or absolute, and what does the prereg say when a guardrail's CI crosses its margin?",
+  "replies": {
+    "skim": "1. Answer: The document's decision is \"Escalate.\" The primary metric, Successful Search Rate, rose 41.20% \u2192 41.53% (+0.81% relative), and the point estimate clears the +0.5% bar, but the CI lower bound (+0.41%) does not. Abandonment Rate is not cleared: its upper bound is past the 1% margin, so the result is inconclusive.\n2. Decision: Escalate for a launch decision, since the primary metric's point estimate passes but its CI lower bound does not and the Abandonment guardrail is unresolved. The text does not name who should receive the escalation or what additional data would settle it.\n3. Number: +0.81% relative lift in Successful Search Rate (95% CI +0.41% to +1.21%).\n",
+    "full": "1. **Answer:** The readout concludes **Escalate**. The primary metric, Successful Search Rate, rose 41.20% \u2192 41.53%, a +0.81% relative lift (95% CI +0.41% to +1.21%). The point estimate clears the +0.5% bar, but the CI's lower bound does not. Abandonment Rate is inconclusive: +0.6% with a CI of \u22120.4% to +1.6%, which crosses the 1% margin. The test is complete (14 days, arms balanced, no mid-test changes).\n\n2. **Decision:** Escalate, and settle two things first. (a) Confirm whether the bar and margins are relative or absolute. If absolute, the primary misses (+0.33pp against 0.5pp), and the answer becomes Don't ship or Keep running. (b) Decide whether the abandonment margin is a hard gate. If it is, extend the test to narrow that CI. If the team accepts the risk, ship with abandonment monitored and a holdback.\n\n3. **Number:** +0.81% relative lift in Successful Search Rate (about +0.33pp absolute, 41.20% \u2192 41.53%).\n\n4. **Caveat:** The main risk is abandonment. It could be up to about 1.6% worse, and the prereg doesn't say what to do when a guardrail is inconclusive. Secondary risks are the unconfirmed units and the ~40 uncorrected segment cuts, which are hypotheses only.\n\n5. **Lost:** The units of the bar and margins, and the rule for an inconclusive guardrail. I'm working from the summary you pasted, not from `readout.md` itself.\n\n6. **Question:** Are the +0.5% bar and the margins relative or absolute, and what does the prereg say when a guardrail's CI crosses its margin?\n"
+  }
+}

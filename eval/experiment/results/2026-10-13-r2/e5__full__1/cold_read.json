@@ -1,0 +1,53 @@
+{
+  "pass": false,
+  "skim": "2/2",
+  "full": "2/3",
+  "items": [
+    {
+      "pass": "skim",
+      "item": "answer",
+      "key": "Escalate: Successful Search Rate improved but Long Click Rate is undetermined, +0.12% (-0.48% to +0.72%); the test needs every primary to improve.",
+      "reader": "The test does not clear. Successful Search Rate rose +0.81%, but Long Click Rate was +0.12% (95% interval -0.48% to +0.72%), short of the +0.50% bar, and the test needs both primaries to improve. The document recommends escalating. Decide the trade-off at triage. On this evidence I would not launch, because Long Click Rate is not shown to improve. The pre-period check is also missing, so the call could be reversed.",
+      "got": true,
+      "how": "overlap 69%"
+    },
+    {
+      "pass": "skim",
+      "item": "decision",
+      "key": "Decide the trade-off at triage.",
+      "reader": "Decide the trade-off at triage. On this evidence I would not launch, because Long Click Rate is not shown to improve. The pre-period check is also missing, so the call could be reversed. The test does not clear. Successful Search Rate rose +0.81%, but Long Click Rate was +0.12% (95% interval -0.48% to +0.72%), short of the +0.50% bar, and the test needs both primaries to improve. The document recommends escalating.",
+      "got": true,
+      "how": "overlap 100%"
+    },
+    {
+      "pass": "full",
+      "item": "takeaway 1",
+      "key": "Long Click Rate +0.12% (-0.48% to +0.72%) against at least 0.50% higher.",
+      "reader": "Escalate, with no launch call. Successful Search Rate improved (+0.81%, 95% interval +0.41% to +1.21%). Long Click Rate is unclear (+0.12%, -0.48% to +0.72%) and does not clear its +0.50% bar. The test is complete (day 14 of 14, 1,000,000 users per arm). Decide the trade-off at triage: launch on the Successful Search gain while Long Click Rate is unresolved, or hold. The document doesn't recommend either. Its options are to collect more data showing Long Click Rate up at least 0.5%, to have the owner confirm whether Long Click Rate is a primary, and to run the pre-period and novelty checks, which weren't possible here. Long Click Rate change of +0.12% (percent), against a bar of at least +0.50%. The interval reaches -0.48%, so the data can't rule out a drop. The result could be reversed. The pre-period check and novelty check were not run, and the document says the pre-period comparison could not be made. The mechanism behind the Successful Search gain is an unverified guess, and no segment cuts were provided.",
+      "got": true,
+      "how": "overlap 90%"
+    },
+    {
+      "pass": "full",
+      "item": "takeaway 2",
+      "key": "Successful Search Rate +0.81% (+0.41% to +1.21%) against at least 0.50% higher.",
+      "reader": "Escalate, with no launch call. Successful Search Rate improved (+0.81%, 95% interval +0.41% to +1.21%). Long Click Rate is unclear (+0.12%, -0.48% to +0.72%) and does not clear its +0.50% bar. The test is complete (day 14 of 14, 1,000,000 users per arm). Decide the trade-off at triage: launch on the Successful Search gain while Long Click Rate is unresolved, or hold. The document doesn't recommend either. Its options are to collect more data showing Long Click Rate up at least 0.5%, to have the owner confirm whether Long Click Rate is a primary, and to run the pre-period and novelty checks, which weren't possible here. Long Click Rate change of +0.12% (percent), against a bar of at least +0.50%. The interval reaches -0.48%, so the data can't rule out a drop. The result could be reversed. The pre-period check and novelty check were not run, and the document says the pre-period comparison could not be made. The mechanism behind the Successful Search gain is an unverified guess, and no segment cuts were provided.",
+      "got": true,
+      "how": "overlap 90%"
+    },
+    {
+      "pass": "full",
+      "item": "takeaway 3",
+      "key": "Could reverse it: pre period could not be checked: no pre-period interval or platform check.",
+      "reader": "Escalate, with no launch call. Successful Search Rate improved (+0.81%, 95% interval +0.41% to +1.21%). Long Click Rate is unclear (+0.12%, -0.48% to +0.72%) and does not clear its +0.50% bar. The test is complete (day 14 of 14, 1,000,000 users per arm). Decide the trade-off at triage: launch on the Successful Search gain while Long Click Rate is unresolved, or hold. The document doesn't recommend either. Its options are to collect more data showing Long Click Rate up at least 0.5%, to have the owner confirm whether Long Click Rate is a primary, and to run the pre-period and novelty checks, which weren't possible here. Long Click Rate change of +0.12% (percent), against a bar of at least +0.50%. The interval reaches -0.48%, so the data can't rule out a drop. The result could be reversed. The pre-period check and novelty check were not run, and the document says the pre-period comparison could not be made. The mechanism behind the Successful Search gain is an unverified guess, and no segment cuts were provided.",
+      "got": false,
+      "how": "overlap 38%"
+    }
+  ],
+  "lost": "I had to reread the primary-metric question. The table lists Long Click Rate as a primary, but the \"What would change the call\" section says the Statsig config lists only Successful Search Rate, so it's unclear which bar governs the call. The note that the pre-period and novelty checks were not run is also easy to skip past.",
+  "question": "Was Long Click Rate meant to be a primary metric with the +0.50% bar, given that the Statsig config lists only Successful Search Rate?",
+  "replies": {
+    "skim": "1. **Answer:** The test does not clear. Successful Search Rate rose +0.81%, but Long Click Rate was +0.12% (95% interval -0.48% to +0.72%), short of the +0.50% bar, and the test needs both primaries to improve. The document recommends escalating.\n2. **Decision:** Decide the trade-off at triage. On this evidence I would not launch, because Long Click Rate is not shown to improve. The pre-period check is also missing, so the call could be reversed.\n3. **Number:** Long Click Rate change of +0.12% (versus the +0.50% bar).\n",
+    "full": "1. **Answer:** Escalate, with no launch call. Successful Search Rate improved (+0.81%, 95% interval +0.41% to +1.21%). Long Click Rate is unclear (+0.12%, -0.48% to +0.72%) and does not clear its +0.50% bar. The test is complete (day 14 of 14, 1,000,000 users per arm).\n\n2. **Decision:** Decide the trade-off at triage: launch on the Successful Search gain while Long Click Rate is unresolved, or hold. The document doesn't recommend either. Its options are to collect more data showing Long Click Rate up at least 0.5%, to have the owner confirm whether Long Click Rate is a primary, and to run the pre-period and novelty checks, which weren't possible here.\n\n3. **Number:** Long Click Rate change of +0.12% (percent), against a bar of at least +0.50%. The interval reaches -0.48%, so the data can't rule out a drop.\n\n4. **Caveat:** The result could be reversed. The pre-period check and novelty check were not run, and the document says the pre-period comparison could not be made. The mechanism behind the Successful Search gain is an unverified guess, and no segment cuts were provided.\n\n5. **Lost:** I had to reread the primary-metric question. The table lists Long Click Rate as a primary, but the \"What would change the call\" section says the Statsig config lists only Successful Search Rate, so it's unclear which bar governs the call. The note that the pre-period and novelty checks were not run is also easy to skip past.\n\n6. **Question:** Was Long Click Rate meant to be a primary metric with the +0.50% bar, given that the Statsig config lists only Successful Search Rate?\n"
+  }
+}

@@ -1,0 +1,53 @@
+{
+  "pass": true,
+  "skim": "2/2",
+  "full": "3/3",
+  "items": [
+    {
+      "pass": "skim",
+      "item": "answer",
+      "key": "No effect found: Successful Search Rate reads -0.05% (-0.34% to +0.24%), which rules out the 0.50% change the test was built to find.",
+      "reader": "Ranker v7 shows no effect. Successful Search Rate moved -0.05% (95% interval -0.34% to +0.24%), which rules out the 0.50% change the test was built to detect. The document recommends stopping the test without launching. Agree to stop the test without launching.",
+      "got": true,
+      "how": "overlap 81%"
+    },
+    {
+      "pass": "skim",
+      "item": "decision",
+      "key": "Agree to stop the test without launching.",
+      "reader": "Agree to stop the test without launching. Ranker v7 shows no effect. Successful Search Rate moved -0.05% (95% interval -0.34% to +0.24%), which rules out the 0.50% change the test was built to detect. The document recommends stopping the test without launching.",
+      "got": true,
+      "how": "overlap 100%"
+    },
+    {
+      "pass": "full",
+      "item": "takeaway 1",
+      "key": "Successful Search Rate -0.05% (-0.34% to +0.24%) against at least 0.50% higher.",
+      "reader": "The test found no effect. Successful Search Rate moved -0.05% (95% interval -0.34% to +0.24%), and the upper end is below the 0.50% bar the test was built to detect. The document recommends stopping Ranker v7 without launching. Status: the test finished at day 14 of 14 with 1,000,000 users per arm. Agree to stop the test without launching. The document says the pre-period check and the novelty check could not be run, and it does not say whether anyone plans to rerun them or test a smaller effect. Successful Search Rate change, -0.05% (interval -0.34% to +0.24%), against the 0.50% bar. The pre-period and novelty checks were not run, so the result is not fully validated. The document also guesses that the ranker may reorder results without changing which result gets clicked, which the scorecard cannot show.",
+      "got": true,
+      "how": "overlap 80%"
+    },
+    {
+      "pass": "full",
+      "item": "takeaway 2",
+      "key": "Agree to stop the test without launching.",
+      "reader": "The test found no effect. Successful Search Rate moved -0.05% (95% interval -0.34% to +0.24%), and the upper end is below the 0.50% bar the test was built to detect. The document recommends stopping Ranker v7 without launching. Status: the test finished at day 14 of 14 with 1,000,000 users per arm. Agree to stop the test without launching. The document says the pre-period check and the novelty check could not be run, and it does not say whether anyone plans to rerun them or test a smaller effect. Successful Search Rate change, -0.05% (interval -0.34% to +0.24%), against the 0.50% bar. The pre-period and novelty checks were not run, so the result is not fully validated. The document also guesses that the ranker may reorder results without changing which result gets clicked, which the scorecard cannot show.",
+      "got": true,
+      "how": "overlap 100%"
+    },
+    {
+      "pass": "full",
+      "item": "takeaway 3",
+      "key": "Could reverse it: pre period could not be checked: no pre-period interval or platform check.",
+      "reader": "The test found no effect. Successful Search Rate moved -0.05% (95% interval -0.34% to +0.24%), and the upper end is below the 0.50% bar the test was built to detect. The document recommends stopping Ranker v7 without launching. Status: the test finished at day 14 of 14 with 1,000,000 users per arm. Agree to stop the test without launching. The document says the pre-period check and the novelty check could not be run, and it does not say whether anyone plans to rerun them or test a smaller effect. Successful Search Rate change, -0.05% (interval -0.34% to +0.24%), against the 0.50% bar. The pre-period and novelty checks were not run, so the result is not fully validated. The document also guesses that the ranker may reorder results without changing which result gets clicked, which the scorecard cannot show.",
+      "got": true,
+      "how": "overlap 38%; grader: same fact"
+    }
+  ],
+  "lost": "I had to reread the table's \"unclear\" verdict against the headline's \"No effect found.\" The headline is the call, but the table should match it. The \"Could reverse it\" line is also unclear: it is not stated whether the missing pre-period check blocks the decision or just leaves a gap.",
+  "question": "Why could the pre-period check not run, and can it be run before the test is closed?",
+  "replies": {
+    "skim": "1. Answer: Ranker v7 shows no effect. Successful Search Rate moved -0.05% (95% interval -0.34% to +0.24%), which rules out the 0.50% change the test was built to detect. The document recommends stopping the test without launching.\n2. Decision: Agree to stop the test without launching.\n3. Number: -0.05% (change in Successful Search Rate, the primary metric).\n",
+    "full": "1. **Answer:** The test found no effect. Successful Search Rate moved -0.05% (95% interval -0.34% to +0.24%), and the upper end is below the 0.50% bar the test was built to detect. The document recommends stopping Ranker v7 without launching. Status: the test finished at day 14 of 14 with 1,000,000 users per arm.\n\n2. **Decision:** Agree to stop the test without launching. The document says the pre-period check and the novelty check could not be run, and it does not say whether anyone plans to rerun them or test a smaller effect.\n\n3. **Number:** Successful Search Rate change, -0.05% (interval -0.34% to +0.24%), against the 0.50% bar.\n\n4. **Caveat:** The pre-period and novelty checks were not run, so the result is not fully validated. The document also guesses that the ranker may reorder results without changing which result gets clicked, which the scorecard cannot show.\n\n5. **Lost:** I had to reread the table's \"unclear\" verdict against the headline's \"No effect found.\" The headline is the call, but the table should match it. The \"Could reverse it\" line is also unclear: it is not stated whether the missing pre-period check blocks the decision or just leaves a gap.\n\n6. **Question:** Why could the pre-period check not run, and can it be run before the test is closed?\n"
+  }
+}

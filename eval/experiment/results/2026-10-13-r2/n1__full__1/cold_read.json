@@ -1,37 +1,37 @@
 {
-  "pass": false,
-  "skim": "1/2",
+  "pass": true,
+  "skim": "2/2",
   "full": "3/3",
   "items": [
     {
       "pass": "skim",
       "item": "answer",
       "key": "No effect found: Successful Search Rate reads +0.04% (-0.26% to +0.34%), which rules out the 0.50% change the test was built to find.",
-      "reader": "No effect found. The test is at day 14 of 14 and its +0.04% primary result rules out the 0.50% bar, but the pre-period check was never run, so the result could be invalid. Do not launch. Agree to stop the test, but first run the pre-exposure comparison for Successful Search Rate. If the arms differed before exposure, the test is broken and must be rerun.",
-      "got": false,
-      "how": "overlap 0%"
+      "reader": "No effect found. Successful Search Rate moved +0.04% (95% interval -0.26% to +0.34%), short of the 0.50% bar, so the test is recommended for stopping without launch. Agree to stop Ranker v7 without launching. Before closing, check the pre-exposure comparison for Successful Search Rate, since a pre-period imbalance would mean the test was broken.",
+      "got": true,
+      "how": "overlap 62%"
     },
     {
       "pass": "skim",
       "item": "decision",
       "key": "Agree to stop the test without launching.",
-      "reader": "Do not launch. Agree to stop the test, but first run the pre-exposure comparison for Successful Search Rate. If the arms differed before exposure, the test is broken and must be rerun. No effect found. The test is at day 14 of 14 and its +0.04% primary result rules out the 0.50% bar, but the pre-period check was never run, so the result could be invalid.",
+      "reader": "Agree to stop Ranker v7 without launching. Before closing, check the pre-exposure comparison for Successful Search Rate, since a pre-period imbalance would mean the test was broken. No effect found. Successful Search Rate moved +0.04% (95% interval -0.26% to +0.34%), short of the 0.50% bar, so the test is recommended for stopping without launch.",
       "got": true,
-      "how": "overlap 60%"
+      "how": "overlap 100%"
     },
     {
       "pass": "full",
       "item": "takeaway 1",
       "key": "Successful Search Rate +0.04% (-0.26% to +0.34%) against at least 0.50% higher.",
-      "reader": "The document concludes \"No effect found\" and recommends stopping the test without launching. The test is finished: day 14 of 14, 1,000,000 users per arm, above the planned 900,000. Agree to stop without launching, but only after someone runs the pre-period check for Successful Search Rate. The document says that check was not run, and a pre-exposure imbalance would make the test broken, so the no-launch call is not yet safe to accept. Successful Search Rate change of +0.04% (95% interval -0.26% to +0.34%). The bar was +0.50%, so the upper bound is below it. The unit is unclear: the document doesn't say whether the change is relative or percentage points. The pre period was not checked, so arm balance is unverified and the result could be invalid. The scorecard also has no segment cuts, so the flat result has no explanation.",
+      "reader": "No effect found. Ranker v7 did not move Successful Search Rate by the 0.50% the test was built to detect. The test ran its full 14 days with 1,000,000 users per arm. Agree to stop the test without launching. The pre-period check and novelty check were not run, so this could be reversed if the pre-period check shows the arms differed before exposure. +0.04% change in Successful Search Rate (95% interval -0.26% to +0.34%), against a bar of at least +0.50%. The pre-period check was not run, so the test's validity is unconfirmed. The novelty check was also skipped. Revenue per User rose +3.10% with no explanation, and the scorecard has no segment cuts.",
       "got": true,
-      "how": "overlap 70%"
+      "how": "overlap 90%"
     },
     {
       "pass": "full",
       "item": "takeaway 2",
       "key": "Agree to stop the test without launching.",
-      "reader": "The document concludes \"No effect found\" and recommends stopping the test without launching. The test is finished: day 14 of 14, 1,000,000 users per arm, above the planned 900,000. Agree to stop without launching, but only after someone runs the pre-period check for Successful Search Rate. The document says that check was not run, and a pre-exposure imbalance would make the test broken, so the no-launch call is not yet safe to accept. Successful Search Rate change of +0.04% (95% interval -0.26% to +0.34%). The bar was +0.50%, so the upper bound is below it. The unit is unclear: the document doesn't say whether the change is relative or percentage points. The pre period was not checked, so arm balance is unverified and the result could be invalid. The scorecard also has no segment cuts, so the flat result has no explanation.",
+      "reader": "No effect found. Ranker v7 did not move Successful Search Rate by the 0.50% the test was built to detect. The test ran its full 14 days with 1,000,000 users per arm. Agree to stop the test without launching. The pre-period check and novelty check were not run, so this could be reversed if the pre-period check shows the arms differed before exposure. +0.04% change in Successful Search Rate (95% interval -0.26% to +0.34%), against a bar of at least +0.50%. The pre-period check was not run, so the test's validity is unconfirmed. The novelty check was also skipped. Revenue per User rose +3.10% with no explanation, and the scorecard has no segment cuts.",
       "got": true,
       "how": "overlap 100%"
     },
@@ -39,15 +39,15 @@
       "pass": "full",
       "item": "takeaway 3",
       "key": "Could reverse it: pre period could not be checked: no pre-period interval or platform check.",
-      "reader": "The document concludes \"No effect found\" and recommends stopping the test without launching. The test is finished: day 14 of 14, 1,000,000 users per arm, above the planned 900,000. Agree to stop without launching, but only after someone runs the pre-period check for Successful Search Rate. The document says that check was not run, and a pre-exposure imbalance would make the test broken, so the no-launch call is not yet safe to accept. Successful Search Rate change of +0.04% (95% interval -0.26% to +0.34%). The bar was +0.50%, so the upper bound is below it. The unit is unclear: the document doesn't say whether the change is relative or percentage points. The pre period was not checked, so arm balance is unverified and the result could be invalid. The scorecard also has no segment cuts, so the flat result has no explanation.",
+      "reader": "No effect found. Ranker v7 did not move Successful Search Rate by the 0.50% the test was built to detect. The test ran its full 14 days with 1,000,000 users per arm. Agree to stop the test without launching. The pre-period check and novelty check were not run, so this could be reversed if the pre-period check shows the arms differed before exposure. +0.04% change in Successful Search Rate (95% interval -0.26% to +0.34%), against a bar of at least +0.50%. The pre-period check was not run, so the test's validity is unconfirmed. The novelty check was also skipped. Revenue per User rose +3.10% with no explanation, and the scorecard has no segment cuts.",
       "got": true,
-      "how": "overlap 75%"
+      "how": "overlap 38%; grader: same fact"
     }
   ],
-  "lost": "",
-  "question": "Did the pre-exposure comparison for Successful Search Rate show the two arms were balanced before exposure? And what is the margin used for the guardrails, given that Revenue per User rose +3.10% yet counts as within margin?",
+  "lost": "The verdict column says \"unclear\" for the primary metric, while the headline says \"No effect found.\" The \"Could reverse it\" line is hard to parse. I also couldn't tell whether \"within margin\" applies to Revenue per User, which rose 3.10%.",
+  "question": "Did the pre-exposure comparison for Successful Search Rate show the arms were balanced, and what explains the Revenue per User rise while search success stayed flat?",
   "replies": {
-    "skim": "1. Answer: No effect found. The test is at day 14 of 14 and its +0.04% primary result rules out the 0.50% bar, but the pre-period check was never run, so the result could be invalid.\n\n2. Decision: Do not launch. Agree to stop the test, but first run the pre-exposure comparison for Successful Search Rate. If the arms differed before exposure, the test is broken and must be rerun.\n\n3. Number: +0.04% (Successful Search Rate change, 95% interval -0.26% to +0.34%).\n",
-    "full": "1. **Answer:** The document concludes \"No effect found\" and recommends stopping the test without launching. The test is finished: day 14 of 14, 1,000,000 users per arm, above the planned 900,000.\n\n2. **Decision:** Agree to stop without launching, but only after someone runs the pre-period check for Successful Search Rate. The document says that check was not run, and a pre-exposure imbalance would make the test broken, so the no-launch call is not yet safe to accept.\n\n3. **Number:** Successful Search Rate change of +0.04% (95% interval -0.26% to +0.34%). The bar was +0.50%, so the upper bound is below it. The unit is unclear: the document doesn't say whether the change is relative or percentage points.\n\n4. **Caveat:** The pre period was not checked, so arm balance is unverified and the result could be invalid. The scorecard also has no segment cuts, so the flat result has no explanation.\n\n5. **Lost:**\n   - The Verdict column says \"unclear\" for the primary, while the call is \"No effect found.\" I had to reread the call definitions to reconcile them.\n   - Revenue per User is listed as \"within margin\" in the guardrails, but \"Why it moved\" reports it rose +3.10%. The margin is never defined, so I can't tell whether this is a real conflict.\n   - \"Harm inside a margin goes to escalate\" uses \"margin\" without defining it.\n\n6. **Question:** Did the pre-exposure comparison for Successful Search Rate show the two arms were balanced before exposure? And what is the margin used for the guardrails, given that Revenue per User rose +3.10% yet counts as within margin?\n"
+    "skim": "1. **Answer:** No effect found. Successful Search Rate moved +0.04% (95% interval -0.26% to +0.34%), short of the 0.50% bar, so the test is recommended for stopping without launch.\n2. **Decision:** Agree to stop Ranker v7 without launching. Before closing, check the pre-exposure comparison for Successful Search Rate, since a pre-period imbalance would mean the test was broken.\n3. **Number:** +0.04% change in Successful Search Rate (95% interval -0.26% to +0.34%).\n",
+    "full": "1. **Answer:** No effect found. Ranker v7 did not move Successful Search Rate by the 0.50% the test was built to detect. The test ran its full 14 days with 1,000,000 users per arm.\n2. **Decision:** Agree to stop the test without launching. The pre-period check and novelty check were not run, so this could be reversed if the pre-period check shows the arms differed before exposure.\n3. **Number:** +0.04% change in Successful Search Rate (95% interval -0.26% to +0.34%), against a bar of at least +0.50%.\n4. **Caveat:** The pre-period check was not run, so the test's validity is unconfirmed. The novelty check was also skipped. Revenue per User rose +3.10% with no explanation, and the scorecard has no segment cuts.\n5. **Lost:** The verdict column says \"unclear\" for the primary metric, while the headline says \"No effect found.\" The \"Could reverse it\" line is hard to parse. I also couldn't tell whether \"within margin\" applies to Revenue per User, which rose 3.10%.\n6. **Question:** Did the pre-exposure comparison for Successful Search Rate show the arms were balanced, and what explains the Revenue per User rise while search success stayed flat?\n"
   }
 }

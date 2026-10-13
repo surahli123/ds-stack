@@ -1,0 +1,53 @@
+{
+  "pass": false,
+  "skim": "0/2",
+  "full": "1/3",
+  "items": [
+    {
+      "pass": "skim",
+      "item": "answer",
+      "key": "Keep running: It's day 4 of 14; Successful Search Rate reads +1.42% (+0.32% to +2.52%) so far, too early to call.",
+      "reader": "The readout concludes \"Can't tell\" on whether to launch. The primary metric clears the bar on the snapshot, but that snapshot is 3 of 14 days in, with about 261k of 900k planned users per arm, and it has no sequential testing. Don't ship on this snapshot. Pull the full-run data, since the 14-day window ended before today (2026-10-12), and confirm with the pre-registration whether the +0.005 bar is absolute.",
+      "got": false,
+      "how": "overlap 0%"
+    },
+    {
+      "pass": "skim",
+      "item": "decision",
+      "key": "Approve running the test longer.",
+      "reader": "Don't ship on this snapshot. Pull the full-run data, since the 14-day window ended before today (2026-10-12), and confirm with the pre-registration whether the +0.005 bar is absolute. The readout concludes \"Can't tell\" on whether to launch. The primary metric clears the bar on the snapshot, but that snapshot is 3 of 14 days in, with about 261k of 900k planned users per arm, and it has no sequential testing.",
+      "got": false,
+      "how": "overlap 0%"
+    },
+    {
+      "pass": "full",
+      "item": "takeaway 1",
+      "key": "Successful Search Rate +1.42% (+0.32% to +2.52%) against at least 0.50% higher.",
+      "reader": "The readout can't yet support a ship call. Its recommendation is to re-pull Pulse with the same settings and decide against the pre-registered bar. Current state: a day-3 snapshot of a 14-day experiment, about 261k of 900k planned users per arm, still marked active past its planned end. Can't tell. Don't ship yet. Re-pull Pulse once the experiment has run its full length and reached planned sample size, then judge the primary metric against the bar. Ask someone to explain why the experiment is still active. Successful Search Rate lift of +0.00585 (p=0.011), with a 95% CI of about +0.0013 to +0.0104 against a +0.005 bar. Unit: unclear. You read the bar as an absolute change, but the pre-registration doesn't say. The result is from an early, unsequential snapshot. The CI's lower bound sits well below the bar, so the true lift may not clear it. A mid-run p-value isn't valid for a ship decision.",
+      "got": false,
+      "how": "overlap 0%"
+    },
+    {
+      "pass": "full",
+      "item": "takeaway 2",
+      "key": "Approve running the test longer.",
+      "reader": "The readout can't yet support a ship call. Its recommendation is to re-pull Pulse with the same settings and decide against the pre-registered bar. Current state: a day-3 snapshot of a 14-day experiment, about 261k of 900k planned users per arm, still marked active past its planned end. Can't tell. Don't ship yet. Re-pull Pulse once the experiment has run its full length and reached planned sample size, then judge the primary metric against the bar. Ask someone to explain why the experiment is still active. Successful Search Rate lift of +0.00585 (p=0.011), with a 95% CI of about +0.0013 to +0.0104 against a +0.005 bar. Unit: unclear. You read the bar as an absolute change, but the pre-registration doesn't say. The result is from an early, unsequential snapshot. The CI's lower bound sits well below the bar, so the true lift may not clear it. A mid-run p-value isn't valid for a ship decision.",
+      "got": true,
+      "how": "overlap 0%; grader: same fact"
+    },
+    {
+      "pass": "full",
+      "item": "takeaway 3",
+      "key": "Could reverse it: the remaining data; the call is made at the planned sample.",
+      "reader": "The readout can't yet support a ship call. Its recommendation is to re-pull Pulse with the same settings and decide against the pre-registered bar. Current state: a day-3 snapshot of a 14-day experiment, about 261k of 900k planned users per arm, still marked active past its planned end. Can't tell. Don't ship yet. Re-pull Pulse once the experiment has run its full length and reached planned sample size, then judge the primary metric against the bar. Ask someone to explain why the experiment is still active. Successful Search Rate lift of +0.00585 (p=0.011), with a 95% CI of about +0.0013 to +0.0104 against a +0.005 bar. Unit: unclear. You read the bar as an absolute change, but the pre-registration doesn't say. The result is from an early, unsequential snapshot. The CI's lower bound sits well below the bar, so the true lift may not clear it. A mid-run p-value isn't valid for a ship decision.",
+      "got": false,
+      "how": "overlap 43%"
+    }
+  ],
+  "lost": "Unclear whether the bar and guardrail margins are absolute or relative. You assumed absolute for the bar and relative for the margins, and the pre-registration doesn't say. I could not read the document itself.",
+  "question": "Does the pre-registration define the +0.005 bar as absolute or relative, and why is the experiment still active past its planned end?",
+  "replies": {
+    "skim": "1. **Answer:** The readout concludes \"Can't tell\" on whether to launch. The primary metric clears the bar on the snapshot, but that snapshot is 3 of 14 days in, with about 261k of 900k planned users per arm, and it has no sequential testing.\n2. **Decision:** Don't ship on this snapshot. Pull the full-run data, since the 14-day window ended before today (2026-10-12), and confirm with the pre-registration whether the +0.005 bar is absolute.\n3. **Number:** Successful Search Rate lift of +0.00585 (absolute change in rate, about +0.59 pp), with a 95% CI of roughly +0.0013 to +0.0104 against the +0.005 bar.\n",
+    "full": "I couldn't open `readout.md`: the file-read tool is disabled in this session. These answers come from your summary, so check them against the file.\n\n1. **Answer:** The readout can't yet support a ship call. Its recommendation is to re-pull Pulse with the same settings and decide against the pre-registered bar. Current state: a day-3 snapshot of a 14-day experiment, about 261k of 900k planned users per arm, still marked active past its planned end.\n2. **Decision:** Can't tell. Don't ship yet. Re-pull Pulse once the experiment has run its full length and reached planned sample size, then judge the primary metric against the bar. Ask someone to explain why the experiment is still active.\n3. **Number:** Successful Search Rate lift of +0.00585 (p=0.011), with a 95% CI of about +0.0013 to +0.0104 against a +0.005 bar. Unit: unclear. You read the bar as an absolute change, but the pre-registration doesn't say.\n4. **Caveat:** The result is from an early, unsequential snapshot. The CI's lower bound sits well below the bar, so the true lift may not clear it. A mid-run p-value isn't valid for a ship decision.\n5. **Lost:** Unclear whether the bar and guardrail margins are absolute or relative. You assumed absolute for the bar and relative for the margins, and the pre-registration doesn't say. I could not read the document itself.\n6. **Question:** Does the pre-registration define the +0.005 bar as absolute or relative, and why is the experiment still active past its planned end?\n"
+  }
+}

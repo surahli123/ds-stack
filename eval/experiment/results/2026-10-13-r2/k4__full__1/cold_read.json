@@ -1,21 +1,21 @@
 {
   "pass": false,
-  "skim": "2/2",
-  "full": "2/3",
+  "skim": "1/2",
+  "full": "3/3",
   "items": [
     {
       "pass": "skim",
       "item": "answer",
       "key": "Keep running: It's day 7 of 14; Successful Search Rate reads +0.55% (-0.21% to +1.31%) so far, too early to call.",
-      "reader": "Keep running. The test is at day 7 of 14 with 480,000 of the planned 900,000 users per arm. Successful Search Rate is +0.55% (95% interval -0.21% to +1.31%), which is too early to call. Approve running the test to the planned sample. The primary metric must hold at or above +0.50% with no guardrail harm past its margin.",
-      "got": true,
-      "how": "overlap 88%"
+      "reader": "Keep the test running. It is day 7 of 14 with 480,000 users per arm (planned 900,000), and the primary metric is too early to call. Approve running the test to day 14 or the planned sample, then decide. The call moves to positive if Successful Search Rate holds at or above +0.50% and no guardrail shows harm.",
+      "got": false,
+      "how": "overlap 0%"
     },
     {
       "pass": "skim",
       "item": "decision",
       "key": "Approve running the test longer.",
-      "reader": "Approve running the test to the planned sample. The primary metric must hold at or above +0.50% with no guardrail harm past its margin. Keep running. The test is at day 7 of 14 with 480,000 of the planned 900,000 users per arm. Successful Search Rate is +0.55% (95% interval -0.21% to +1.31%), which is too early to call.",
+      "reader": "Approve running the test to day 14 or the planned sample, then decide. The call moves to positive if Successful Search Rate holds at or above +0.50% and no guardrail shows harm. Keep the test running. It is day 7 of 14 with 480,000 users per arm (planned 900,000), and the primary metric is too early to call.",
       "got": true,
       "how": "overlap 75%"
     },
@@ -23,7 +23,7 @@
       "pass": "full",
       "item": "takeaway 1",
       "key": "Successful Search Rate +0.55% (-0.21% to +1.31%) against at least 0.50% higher.",
-      "reader": "The document recommends continuing the test. It is on day 7 of 14 with 480,000 users per arm, short of the planned 900,000. The primary metric, Successful Search Rate, is +0.55% (95% interval -0.21% to +1.31%) against a bar of at least +0.50%, so the verdict is unclear. Two guardrails are also unclear, and the other two are within margin. Approve running the test longer, to day 14. Make the launch call at the planned sample. The doc does not say what happens if the sample falls short by day 14. Successful Search Rate, +0.55% relative change (interval -0.21% to +1.31%), against a bar of \u2265 +0.50%. The interval includes zero, so the effect is not yet established. The novelty check and the pre-period comparison have not been run. The mechanism is a guess, since there are no segment cuts or daily series. Abandonment's upper bound (+1.24%) and Revenue per User's lower bound (-1.43%) both extend past their 1.00% margins, though the verdict is still marked unclear rather than harmful.",
+      "reader": "Keep the test running. It is day 7 of 14, and Successful Search Rate is +0.55% (95% interval -0.21% to +1.31%), which is too early to call. Current state: 480,000 users per arm of the planned 900,000. Approve running the test to day 14, or to the planned sample. The call gets made at that point. Successful Search Rate change, +0.55% (percent change in the metric), against a bar of at least +0.50%. The interval includes zero, and the point estimate clears the bar by only 0.05 points. The document also says the mechanism is unknown because there are no segment cuts or daily series, and the novelty and pre-period checks were not run.",
       "got": true,
       "how": "overlap 90%"
     },
@@ -31,23 +31,23 @@
       "pass": "full",
       "item": "takeaway 2",
       "key": "Approve running the test longer.",
-      "reader": "The document recommends continuing the test. It is on day 7 of 14 with 480,000 users per arm, short of the planned 900,000. The primary metric, Successful Search Rate, is +0.55% (95% interval -0.21% to +1.31%) against a bar of at least +0.50%, so the verdict is unclear. Two guardrails are also unclear, and the other two are within margin. Approve running the test longer, to day 14. Make the launch call at the planned sample. The doc does not say what happens if the sample falls short by day 14. Successful Search Rate, +0.55% relative change (interval -0.21% to +1.31%), against a bar of \u2265 +0.50%. The interval includes zero, so the effect is not yet established. The novelty check and the pre-period comparison have not been run. The mechanism is a guess, since there are no segment cuts or daily series. Abandonment's upper bound (+1.24%) and Revenue per User's lower bound (-1.43%) both extend past their 1.00% margins, though the verdict is still marked unclear rather than harmful.",
+      "reader": "Keep the test running. It is day 7 of 14, and Successful Search Rate is +0.55% (95% interval -0.21% to +1.31%), which is too early to call. Current state: 480,000 users per arm of the planned 900,000. Approve running the test to day 14, or to the planned sample. The call gets made at that point. Successful Search Rate change, +0.55% (percent change in the metric), against a bar of at least +0.50%. The interval includes zero, and the point estimate clears the bar by only 0.05 points. The document also says the mechanism is unknown because there are no segment cuts or daily series, and the novelty and pre-period checks were not run.",
       "got": true,
-      "how": "overlap 100%"
+      "how": "overlap 75%"
     },
     {
       "pass": "full",
       "item": "takeaway 3",
       "key": "Could reverse it: the remaining data; the call is made at the planned sample.",
-      "reader": "The document recommends continuing the test. It is on day 7 of 14 with 480,000 users per arm, short of the planned 900,000. The primary metric, Successful Search Rate, is +0.55% (95% interval -0.21% to +1.31%) against a bar of at least +0.50%, so the verdict is unclear. Two guardrails are also unclear, and the other two are within margin. Approve running the test longer, to day 14. Make the launch call at the planned sample. The doc does not say what happens if the sample falls short by day 14. Successful Search Rate, +0.55% relative change (interval -0.21% to +1.31%), against a bar of \u2265 +0.50%. The interval includes zero, so the effect is not yet established. The novelty check and the pre-period comparison have not been run. The mechanism is a guess, since there are no segment cuts or daily series. Abandonment's upper bound (+1.24%) and Revenue per User's lower bound (-1.43%) both extend past their 1.00% margins, though the verdict is still marked unclear rather than harmful.",
-      "got": false,
-      "how": "overlap 43%"
+      "reader": "Keep the test running. It is day 7 of 14, and Successful Search Rate is +0.55% (95% interval -0.21% to +1.31%), which is too early to call. Current state: 480,000 users per arm of the planned 900,000. Approve running the test to day 14, or to the planned sample. The call gets made at that point. Successful Search Rate change, +0.55% (percent change in the metric), against a bar of at least +0.50%. The interval includes zero, and the point estimate clears the bar by only 0.05 points. The document also says the mechanism is unknown because there are no segment cuts or daily series, and the novelty and pre-period checks were not run.",
+      "got": true,
+      "how": "overlap 57%"
     }
   ],
-  "lost": "",
-  "question": "If day 14 ends with fewer than 900,000 users per arm, will you still make the call, and can the novelty and pre-period checks run before then?",
+  "lost": "I had to reread \"Could reverse it: the remaining data; the call is made at the planned sample.\" It doesn't say which direction the remaining data could reverse. I also had to check the \"Calls\" definitions in the appendix to confirm that \"Keep running\" means not enough data yet. \"Whole weeks\" in the Status line was unclear.",
+  "question": "If day 14 lands between -0.21% and +0.50%, what is the call? The document only says the call moves to positive if the metric holds at or above +0.50%, and it doesn't say what happens otherwise.",
   "replies": {
-    "skim": "1. Answer: Keep running. The test is at day 7 of 14 with 480,000 of the planned 900,000 users per arm. Successful Search Rate is +0.55% (95% interval -0.21% to +1.31%), which is too early to call.\n2. Decision: Approve running the test to the planned sample. The primary metric must hold at or above +0.50% with no guardrail harm past its margin.\n3. Number: +0.55% (change in Successful Search Rate, relative to control).\n",
-    "full": "1. **Answer:** The document recommends continuing the test. It is on day 7 of 14 with 480,000 users per arm, short of the planned 900,000. The primary metric, Successful Search Rate, is +0.55% (95% interval -0.21% to +1.31%) against a bar of at least +0.50%, so the verdict is unclear. Two guardrails are also unclear, and the other two are within margin.\n\n2. **Decision:** Approve running the test longer, to day 14. Make the launch call at the planned sample. The doc does not say what happens if the sample falls short by day 14.\n\n3. **Number:** Successful Search Rate, +0.55% relative change (interval -0.21% to +1.31%), against a bar of \u2265 +0.50%.\n\n4. **Caveat:** The interval includes zero, so the effect is not yet established. The novelty check and the pre-period comparison have not been run. The mechanism is a guess, since there are no segment cuts or daily series. Abandonment's upper bound (+1.24%) and Revenue per User's lower bound (-1.43%) both extend past their 1.00% margins, though the verdict is still marked unclear rather than harmful.\n\n5. **Lost:**\n   - The \"Could reverse it\" line (\"the remaining data; the call is made at the planned sample\") does not say what would reverse the decision.\n   - It is unclear whether day 14 will reach 900,000 per arm. At the current pace it would, but the doc says \"whole weeks,\" which may leave the sample short.\n   - The sequential-interval note says results stay valid under early checks, yet the doc still calls it too early. I could not tell whether that is intentional.\n   - The \"Calls\" definitions (Can't tell vs. Keep running vs. Escalate) were hard to map onto this case.\n\n6. **Question:** If day 14 ends with fewer than 900,000 users per arm, will you still make the call, and can the novelty and pre-period checks run before then?\n"
+    "skim": "1. **Answer:** Keep the test running. It is day 7 of 14 with 480,000 users per arm (planned 900,000), and the primary metric is too early to call.\n2. **Decision:** Approve running the test to day 14 or the planned sample, then decide. The call moves to positive if Successful Search Rate holds at or above +0.50% and no guardrail shows harm.\n3. **Number:** +0.55% change in Successful Search Rate (95% interval -0.21% to +1.31%).\n",
+    "full": "1. **Answer:** Keep the test running. It is day 7 of 14, and Successful Search Rate is +0.55% (95% interval -0.21% to +1.31%), which is too early to call. Current state: 480,000 users per arm of the planned 900,000.\n\n2. **Decision:** Approve running the test to day 14, or to the planned sample. The call gets made at that point.\n\n3. **Number:** Successful Search Rate change, +0.55% (percent change in the metric), against a bar of at least +0.50%.\n\n4. **Caveat:** The interval includes zero, and the point estimate clears the bar by only 0.05 points. The document also says the mechanism is unknown because there are no segment cuts or daily series, and the novelty and pre-period checks were not run.\n\n5. **Lost:** I had to reread \"Could reverse it: the remaining data; the call is made at the planned sample.\" It doesn't say which direction the remaining data could reverse. I also had to check the \"Calls\" definitions in the appendix to confirm that \"Keep running\" means not enough data yet. \"Whole weeks\" in the Status line was unclear.\n\n6. **Question:** If day 14 lands between -0.21% and +0.50%, what is the call? The document only says the call moves to positive if the metric holds at or above +0.50%, and it doesn't say what happens otherwise.\n"
   }
 }

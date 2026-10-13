@@ -1,0 +1,53 @@
+{
+  "pass": false,
+  "skim": "0/2",
+  "full": "1/3",
+  "items": [
+    {
+      "pass": "skim",
+      "item": "answer",
+      "key": "Not an A/B test: This is a interleaving test; the A/B launch rule doesn't apply.",
+      "reader": "The readout concludes \"Can't tell.\" The Pulse numbers don't answer the pre-registered question, because the experiment is a between-user split, not the within-user team-draft interleaving the prereg specifies. Don't ship or kill v7 on these numbers. The text doesn't state a next step explicitly.",
+      "got": false,
+      "how": "overlap 33%"
+    },
+    {
+      "pass": "skim",
+      "item": "decision",
+      "key": "Use the readout for this test design instead.",
+      "reader": "Don't ship or kill v7 on these numbers. The text doesn't state a next step explicitly. The readout concludes \"Can't tell.\" The Pulse numbers don't answer the pre-registered question, because the experiment is a between-user split, not the within-user team-draft interleaving the prereg specifies.",
+      "got": false,
+      "how": "overlap 20%"
+    },
+    {
+      "pass": "full",
+      "item": "takeaway 1",
+      "key": "Interleaving",
+      "reader": "The document concludes \"Can't tell.\" It doesn't recommend shipping or killing v7. Successful Search Rate is +0.0033 (CI about +0.0017 to +0.0050), below the prereg bar of +0.005. The experiment is a between-user split, not the team-draft interleaving the prereg specified, so the lift isn't a clean v7-vs-v6 estimate. No guardrail is breached. Current state: the readout is written to `readout.md`, and the config and audit log are unresolved. Don't launch or kill v7 on these numbers. Next steps: compute the interleaving preference win rate from the raw logs and check it against the bar. Also get someone to explain why control has no `serving_mode` and what the test arm's blend is. Successful Search Rate absolute lift, +0.0033 (a difference in rate, against a bar of +0.005). The document doesn't give the baseline rate, so I can't convert it to a relative lift. The test doesn't measure what the prereg asked. The control is plain v6, and the test is an interleaved mix of v7 and v6, so the lift is diluted by an unknown amount. The serving-path change is also confounded with the ranker change.",
+      "got": true,
+      "how": "overlap 100%"
+    },
+    {
+      "pass": "full",
+      "item": "takeaway 2",
+      "key": "Use the readout for this test design instead.",
+      "reader": "The document concludes \"Can't tell.\" It doesn't recommend shipping or killing v7. Successful Search Rate is +0.0033 (CI about +0.0017 to +0.0050), below the prereg bar of +0.005. The experiment is a between-user split, not the team-draft interleaving the prereg specified, so the lift isn't a clean v7-vs-v6 estimate. No guardrail is breached. Current state: the readout is written to `readout.md`, and the config and audit log are unresolved. Don't launch or kill v7 on these numbers. Next steps: compute the interleaving preference win rate from the raw logs and check it against the bar. Also get someone to explain why control has no `serving_mode` and what the test arm's blend is. Successful Search Rate absolute lift, +0.0033 (a difference in rate, against a bar of +0.005). The document doesn't give the baseline rate, so I can't convert it to a relative lift. The test doesn't measure what the prereg asked. The control is plain v6, and the test is an interleaved mix of v7 and v6, so the lift is diluted by an unknown amount. The serving-path change is also confounded with the ranker change.",
+      "got": false,
+      "how": "overlap 40%"
+    },
+    {
+      "pass": "full",
+      "item": "takeaway 3",
+      "key": "Could reverse it: nothing here; this design needs its own readout.",
+      "reader": "The document concludes \"Can't tell.\" It doesn't recommend shipping or killing v7. Successful Search Rate is +0.0033 (CI about +0.0017 to +0.0050), below the prereg bar of +0.005. The experiment is a between-user split, not the team-draft interleaving the prereg specified, so the lift isn't a clean v7-vs-v6 estimate. No guardrail is breached. Current state: the readout is written to `readout.md`, and the config and audit log are unresolved. Don't launch or kill v7 on these numbers. Next steps: compute the interleaving preference win rate from the raw logs and check it against the bar. Also get someone to explain why control has no `serving_mode` and what the test arm's blend is. Successful Search Rate absolute lift, +0.0033 (a difference in rate, against a bar of +0.005). The document doesn't give the baseline rate, so I can't convert it to a relative lift. The test doesn't measure what the prereg asked. The control is plain v6, and the test is an interleaved mix of v7 and v6, so the lift is diluted by an unknown amount. The serving-path change is also confounded with the ranker change.",
+      "got": false,
+      "how": "overlap 17%"
+    }
+  ],
+  "lost": "Nowhere in the text itself. \"Pulse\" and the test arm's \"blend\" are never defined. I didn't open `readout.md` because the document was included inline.",
+  "question": "Was the experiment configured as the prereg's team-draft interleaving, and if not, when and by whom was it changed? Why does control have no `serving_mode`?",
+  "replies": {
+    "skim": "1. **Answer:** The readout concludes \"Can't tell.\" The Pulse numbers don't answer the pre-registered question, because the experiment is a between-user split, not the within-user team-draft interleaving the prereg specifies.\n2. **Decision:** Don't ship or kill v7 on these numbers. The text doesn't state a next step explicitly.\n3. **Number:** Successful Search Rate, +0.0033 (95% CI +0.0017 to +0.0050, p = 7e-5). The unit isn't stated, and the lift is diluted and confounded by the design mismatch, so it isn't a valid v7-vs-v6 estimate.\n",
+    "full": "1. **Answer:** The document concludes \"Can't tell.\" It doesn't recommend shipping or killing v7. Successful Search Rate is +0.0033 (CI about +0.0017 to +0.0050), below the prereg bar of +0.005. The experiment is a between-user split, not the team-draft interleaving the prereg specified, so the lift isn't a clean v7-vs-v6 estimate. No guardrail is breached. Current state: the readout is written to `readout.md`, and the config and audit log are unresolved.\n\n2. **Decision:** Don't launch or kill v7 on these numbers. Next steps: compute the interleaving preference win rate from the raw logs and check it against the bar. Also get someone to explain why control has no `serving_mode` and what the test arm's blend is.\n\n3. **Number:** Successful Search Rate absolute lift, +0.0033 (a difference in rate, against a bar of +0.005). The document doesn't give the baseline rate, so I can't convert it to a relative lift.\n\n4. **Caveat:** The test doesn't measure what the prereg asked. The control is plain v6, and the test is an interleaved mix of v7 and v6, so the lift is diluted by an unknown amount. The serving-path change is also confounded with the ranker change.\n\n5. **Lost:** Nowhere in the text itself. \"Pulse\" and the test arm's \"blend\" are never defined. I didn't open `readout.md` because the document was included inline.\n\n6. **Question:** Was the experiment configured as the prereg's team-draft interleaving, and if not, when and by whom was it changed? Why does control have no `serving_mode`?\n"
+  }
+}

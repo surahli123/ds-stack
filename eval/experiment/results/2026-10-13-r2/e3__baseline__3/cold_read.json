@@ -1,0 +1,53 @@
+{
+  "pass": false,
+  "skim": "0/2",
+  "full": "1/3",
+  "items": [
+    {
+      "pass": "skim",
+      "item": "answer",
+      "key": "Escalate: Successful Search Rate rose 0.31% (+0.13% to +0.49%), a real change in the good direction but short of the 0.50% bar.",
+      "reader": "Don't ship Ranker v7. It improves Successful Search Rate, but the lift (+0.00128) is well below the pre-registered bar (+0.005), and the CI's upper bound is also below the bar. Don't ship Ranker v7.",
+      "got": false,
+      "how": "overlap 0%"
+    },
+    {
+      "pass": "skim",
+      "item": "decision",
+      "key": "Decide the trade-off at triage.",
+      "reader": "Don't ship Ranker v7. Don't ship Ranker v7. It improves Successful Search Rate, but the lift (+0.00128) is well below the pre-registered bar (+0.005), and the CI's upper bound is also below the bar.",
+      "got": false,
+      "how": "overlap 0%"
+    },
+    {
+      "pass": "full",
+      "item": "takeaway 1",
+      "key": "Successful Search Rate +0.31% (+0.13% to +0.49%) against at least 0.50% higher.",
+      "reader": "The document recommends not shipping. Ranker v7 improves Successful Search Rate by a statistically significant but small amount (+0.00128, 95% CI +0.00054 to +0.00202), below the pre-registered +0.005 bar. The guardrails hold. The test ran cleanly for 14 days. If the team still wants the ~0.1 pp gain, the bar has to be changed explicitly and recorded. Don't ship Ranker v7 against the current bar. Any move to ship it would need a separate, explicit decision to change the bar, recorded in the review. Successful Search Rate lift of +0.00128 absolute (about +0.31% relative), against a bar of +0.005. The unit is the rate difference, so about 0.13 percentage points. The effect is well below the bar, and even the top of the CI misses it. The thinnest guardrail margins are Abandonment (worst case 0.7% vs a 1% margin) and Revenue per User (0.8% vs 1%). The secondary metrics are not treated as evidence.",
+      "got": true,
+      "how": "overlap 0%; grader: same fact"
+    },
+    {
+      "pass": "full",
+      "item": "takeaway 2",
+      "key": "Decide the trade-off at triage.",
+      "reader": "The document recommends not shipping. Ranker v7 improves Successful Search Rate by a statistically significant but small amount (+0.00128, 95% CI +0.00054 to +0.00202), below the pre-registered +0.005 bar. The guardrails hold. The test ran cleanly for 14 days. If the team still wants the ~0.1 pp gain, the bar has to be changed explicitly and recorded. Don't ship Ranker v7 against the current bar. Any move to ship it would need a separate, explicit decision to change the bar, recorded in the review. Successful Search Rate lift of +0.00128 absolute (about +0.31% relative), against a bar of +0.005. The unit is the rate difference, so about 0.13 percentage points. The effect is well below the bar, and even the top of the CI misses it. The thinnest guardrail margins are Abandonment (worst case 0.7% vs a 1% margin) and Revenue per User (0.8% vs 1%). The secondary metrics are not treated as evidence.",
+      "got": false,
+      "how": "overlap 0%"
+    },
+    {
+      "pass": "full",
+      "item": "takeaway 3",
+      "key": "Could reverse it: pre period could not be checked: no pre-period interval or platform check.",
+      "reader": "The document recommends not shipping. Ranker v7 improves Successful Search Rate by a statistically significant but small amount (+0.00128, 95% CI +0.00054 to +0.00202), below the pre-registered +0.005 bar. The guardrails hold. The test ran cleanly for 14 days. If the team still wants the ~0.1 pp gain, the bar has to be changed explicitly and recorded. Don't ship Ranker v7 against the current bar. Any move to ship it would need a separate, explicit decision to change the bar, recorded in the review. Successful Search Rate lift of +0.00128 absolute (about +0.31% relative), against a bar of +0.005. The unit is the rate difference, so about 0.13 percentage points. The effect is well below the bar, and even the top of the CI misses it. The thinnest guardrail margins are Abandonment (worst case 0.7% vs a 1% margin) and Revenue per User (0.8% vs 1%). The secondary metrics are not treated as evidence.",
+      "got": false,
+      "how": "overlap 0%"
+    }
+  ],
+  "lost": "Nowhere significant. The only gap is that the pre-registration doesn't say whether the bar is absolute or relative. The document says the conclusion holds either way, so this doesn't change the decision. I answered from the text in your message and didn't open `readout.md`.",
+  "question": "Is the pre-registered +0.005 bar absolute or relative to the baseline rate?",
+  "replies": {
+    "skim": "1. Answer: Don't ship Ranker v7. It improves Successful Search Rate, but the lift (+0.00128) is well below the pre-registered bar (+0.005), and the CI's upper bound is also below the bar.\n2. Decision: Don't ship Ranker v7.\n3. Number: +0.00128 absolute lift in Successful Search Rate (a rate change; about +0.31% relative).\n",
+    "full": "1. **Answer:** The document recommends not shipping. Ranker v7 improves Successful Search Rate by a statistically significant but small amount (+0.00128, 95% CI +0.00054 to +0.00202), below the pre-registered +0.005 bar. The guardrails hold. The test ran cleanly for 14 days. If the team still wants the ~0.1 pp gain, the bar has to be changed explicitly and recorded.\n\n2. **Decision:** Don't ship Ranker v7 against the current bar. Any move to ship it would need a separate, explicit decision to change the bar, recorded in the review.\n\n3. **Number:** Successful Search Rate lift of +0.00128 absolute (about +0.31% relative), against a bar of +0.005. The unit is the rate difference, so about 0.13 percentage points.\n\n4. **Caveat:** The effect is well below the bar, and even the top of the CI misses it. The thinnest guardrail margins are Abandonment (worst case 0.7% vs a 1% margin) and Revenue per User (0.8% vs 1%). The secondary metrics are not treated as evidence.\n\n5. **Lost:** Nowhere significant. The only gap is that the pre-registration doesn't say whether the bar is absolute or relative. The document says the conclusion holds either way, so this doesn't change the decision. I answered from the text in your message and didn't open `readout.md`.\n\n6. **Question:** Is the pre-registered +0.005 bar absolute or relative to the baseline rate?\n"
+  }
+}

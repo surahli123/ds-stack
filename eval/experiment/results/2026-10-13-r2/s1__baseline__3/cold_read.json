@@ -1,0 +1,53 @@
+{
+  "pass": false,
+  "skim": "1/2",
+  "full": "2/3",
+  "items": [
+    {
+      "pass": "skim",
+      "item": "answer",
+      "key": "Ship: Successful Search Rate rose 0.81% (+0.41% to +1.21%), which clears the 0.50% bar and every guardrail held.",
+      "reader": "The document recommends shipping (\"Decision: Ship\"), on the basis that the primary metric passes the pre-registered bar and all four guardrails hold. Confirm at the review how the pre-registered bar is read. The point estimate clears +0.5%, but the CI's lower bound (+0.41%) does not. If the point-estimate reading stands, ship. The Design section is cut off, so its soundness is unclear.",
+      "got": false,
+      "how": "overlap 0%"
+    },
+    {
+      "pass": "skim",
+      "item": "decision",
+      "key": "Approve the launch to all traffic.",
+      "reader": "Confirm at the review how the pre-registered bar is read. The point estimate clears +0.5%, but the CI's lower bound (+0.41%) does not. If the point-estimate reading stands, ship. The Design section is cut off, so its soundness is unclear. The document recommends shipping (\"Decision: Ship\"), on the basis that the primary metric passes the pre-registered bar and all four guardrails hold.",
+      "got": true,
+      "how": "overlap 0%; grader: same fact"
+    },
+    {
+      "pass": "full",
+      "item": "takeaway 1",
+      "key": "Successful Search Rate +0.81% (+0.41% to +1.21%) against at least 0.50% higher.",
+      "reader": "The document recommends **Ship**. The test finished as planned (14 days, 1M users per arm). The primary metric passes under a point-estimate reading of the pre-registered rule, and all four guardrails stay within margin. Confirm at the review that `bar: 0.005` means relative (+0.5%), not absolute. If it's absolute, the answer flips to Don't ship. If it's relative, ship and monitor Reformulation Rate after launch. Successful Search Rate relative lift of **+0.81%** (0.4120 \u2192 0.4153, 95% CI +0.41% to +1.21%). The bar's units. The point estimate clears +0.5% relative, but the CI's lower bound doesn't, so the true lift could be under the bar. Reformulation Rate is also worse (+0.96%, p=0.018), but it isn't pre-registered and there are 60+ uncorrected secondary comparisons, so this may be chance.",
+      "got": true,
+      "how": "overlap 0%; grader: same fact"
+    },
+    {
+      "pass": "full",
+      "item": "takeaway 2",
+      "key": "Approve the launch to all traffic.",
+      "reader": "The document recommends **Ship**. The test finished as planned (14 days, 1M users per arm). The primary metric passes under a point-estimate reading of the pre-registered rule, and all four guardrails stay within margin. Confirm at the review that `bar: 0.005` means relative (+0.5%), not absolute. If it's absolute, the answer flips to Don't ship. If it's relative, ship and monitor Reformulation Rate after launch. Successful Search Rate relative lift of **+0.81%** (0.4120 \u2192 0.4153, 95% CI +0.41% to +1.21%). The bar's units. The point estimate clears +0.5% relative, but the CI's lower bound doesn't, so the true lift could be under the bar. Reformulation Rate is also worse (+0.96%, p=0.018), but it isn't pre-registered and there are 60+ uncorrected secondary comparisons, so this may be chance.",
+      "got": true,
+      "how": "overlap 33%; grader: same fact"
+    },
+    {
+      "pass": "full",
+      "item": "takeaway 3",
+      "key": "Could reverse it: pre period could not be checked: no pre-period interval or platform check.",
+      "reader": "The document recommends **Ship**. The test finished as planned (14 days, 1M users per arm). The primary metric passes under a point-estimate reading of the pre-registered rule, and all four guardrails stay within margin. Confirm at the review that `bar: 0.005` means relative (+0.5%), not absolute. If it's absolute, the answer flips to Don't ship. If it's relative, ship and monitor Reformulation Rate after launch. Successful Search Rate relative lift of **+0.81%** (0.4120 \u2192 0.4153, 95% CI +0.41% to +1.21%). The bar's units. The point estimate clears +0.5% relative, but the CI's lower bound doesn't, so the true lift could be under the bar. Reformulation Rate is also worse (+0.96%, p=0.018), but it isn't pre-registered and there are 60+ uncorrected secondary comparisons, so this may be chance.",
+      "got": false,
+      "how": "overlap 0%"
+    }
+  ],
+  "lost": "The bar's units. `prereg.json` gives `0.5` with no unit, so the call depends on an interpretation the document makes rather than states. I worked from the text pasted in your message and didn't open `readout.md`.",
+  "question": "Was the bar in `prereg.json` meant as relative (+0.5%) or absolute (+0.005 points), and was that written down before the test started?",
+  "replies": {
+    "skim": "1. **Answer:** The document recommends shipping (\"Decision: Ship\"), on the basis that the primary metric passes the pre-registered bar and all four guardrails hold.\n2. **Decision:** Confirm at the review how the pre-registered bar is read. The point estimate clears +0.5%, but the CI's lower bound (+0.41%) does not. If the point-estimate reading stands, ship. The Design section is cut off, so its soundness is unclear.\n3. **Number:** Successful Search Rate relative lift of +0.81% (95% CI +0.41% to +1.21%).\n",
+    "full": "1. **Answer:** The document recommends **Ship**. The test finished as planned (14 days, 1M users per arm). The primary metric passes under a point-estimate reading of the pre-registered rule, and all four guardrails stay within margin.\n\n2. **Decision:** Confirm at the review that `bar: 0.005` means relative (+0.5%), not absolute. If it's absolute, the answer flips to Don't ship. If it's relative, ship and monitor Reformulation Rate after launch.\n\n3. **Number:** Successful Search Rate relative lift of **+0.81%** (0.4120 \u2192 0.4153, 95% CI +0.41% to +1.21%).\n\n4. **Caveat:** The bar's units. The point estimate clears +0.5% relative, but the CI's lower bound doesn't, so the true lift could be under the bar. Reformulation Rate is also worse (+0.96%, p=0.018), but it isn't pre-registered and there are 60+ uncorrected secondary comparisons, so this may be chance.\n\n5. **Lost:** The bar's units. `prereg.json` gives `0.5` with no unit, so the call depends on an interpretation the document makes rather than states. I worked from the text pasted in your message and didn't open `readout.md`.\n\n6. **Question:** Was the bar in `prereg.json` meant as relative (+0.5%) or absolute (+0.005 points), and was that written down before the test started?\n"
+  }
+}

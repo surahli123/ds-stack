@@ -1,0 +1,53 @@
+{
+  "pass": false,
+  "skim": "0/2",
+  "full": "0/3",
+  "items": [
+    {
+      "pass": "skim",
+      "item": "answer",
+      "key": "Escalate: Successful Search Rate improved but Long Click Rate is undetermined, +0.12% (-0.48% to +0.72%); the test needs every primary to improve.",
+      "reader": "Don't ship. Long Click Rate missed the pre-registered bar (+0.0003, 95% CI \u22120.0011 to +0.0016), and its upper bound is below 0.005, so more data wouldn't change that. Successful Search Rate rose +0.0033 (p=7e-5), but whether that clears the bar depends on whether 0.005 is absolute or relative, which the pre-reg doesn't specify. Reject the launch now. The review should still settle whether the 0.005 bar is absolute or relative for future pre-registrations, though the outcome doesn't change either way.",
+      "got": false,
+      "how": "overlap 0%"
+    },
+    {
+      "pass": "skim",
+      "item": "decision",
+      "key": "Decide the trade-off at triage.",
+      "reader": "Reject the launch now. The review should still settle whether the 0.005 bar is absolute or relative for future pre-registrations, though the outcome doesn't change either way. Don't ship. Long Click Rate missed the pre-registered bar (+0.0003, 95% CI \u22120.0011 to +0.0016), and its upper bound is below 0.005, so more data wouldn't change that. Successful Search Rate rose +0.0033 (p=7e-5), but whether that clears the bar depends on whether 0.005 is absolute or relative, which the pre-reg doesn't specify.",
+      "got": false,
+      "how": "overlap 0%"
+    },
+    {
+      "pass": "full",
+      "item": "takeaway 1",
+      "key": "Long Click Rate +0.12% (-0.48% to +0.72%) against at least 0.50% higher.",
+      "reader": "The readout recommends not shipping. Long Click Rate, a pre-registered primary metric, did not reach the 0.005 bar: +0.0003, 95% CI \u22120.0011 to +0.0016. Successful Search Rate rose +0.0033 (+0.81% relative, p=7e-5), which is real but may not clear the bar. The test looks valid, and all four guardrails held. Don't ship as pre-registered. Shipping on Successful Search Rate alone would change the pre-registered rule, so it needs explicit sign-off from the metric owners. Before that conversation, the team should settle whether 0.005 is absolute or relative and fix the Statsig config so it lists both primaries. The Long Click Rate delta, +0.0003 (absolute change in a rate), against the 0.005 bar. Its CI's upper end (+0.0016) is well below the bar, so more data would not change the outcome. The biggest risk is the roughly 55 uncorrected secondary and segment tests. A few nominal hits point in different directions, so they should not drive a decision. The absolute-versus-relative ambiguity is the other open risk.",
+      "got": false,
+      "how": "overlap 0%"
+    },
+    {
+      "pass": "full",
+      "item": "takeaway 2",
+      "key": "Successful Search Rate +0.81% (+0.41% to +1.21%) against at least 0.50% higher.",
+      "reader": "The readout recommends not shipping. Long Click Rate, a pre-registered primary metric, did not reach the 0.005 bar: +0.0003, 95% CI \u22120.0011 to +0.0016. Successful Search Rate rose +0.0033 (+0.81% relative, p=7e-5), which is real but may not clear the bar. The test looks valid, and all four guardrails held. Don't ship as pre-registered. Shipping on Successful Search Rate alone would change the pre-registered rule, so it needs explicit sign-off from the metric owners. Before that conversation, the team should settle whether 0.005 is absolute or relative and fix the Statsig config so it lists both primaries. The Long Click Rate delta, +0.0003 (absolute change in a rate), against the 0.005 bar. Its CI's upper end (+0.0016) is well below the bar, so more data would not change the outcome. The biggest risk is the roughly 55 uncorrected secondary and segment tests. A few nominal hits point in different directions, so they should not drive a decision. The absolute-versus-relative ambiguity is the other open risk.",
+      "got": false,
+      "how": "overlap 0%"
+    },
+    {
+      "pass": "full",
+      "item": "takeaway 3",
+      "key": "Could reverse it: pre period could not be checked: no pre-period interval or platform check.",
+      "reader": "The readout recommends not shipping. Long Click Rate, a pre-registered primary metric, did not reach the 0.005 bar: +0.0003, 95% CI \u22120.0011 to +0.0016. Successful Search Rate rose +0.0033 (+0.81% relative, p=7e-5), which is real but may not clear the bar. The test looks valid, and all four guardrails held. Don't ship as pre-registered. Shipping on Successful Search Rate alone would change the pre-registered rule, so it needs explicit sign-off from the metric owners. Before that conversation, the team should settle whether 0.005 is absolute or relative and fix the Statsig config so it lists both primaries. The Long Click Rate delta, +0.0003 (absolute change in a rate), against the 0.005 bar. Its CI's upper end (+0.0016) is well below the bar, so more data would not change the outcome. The biggest risk is the roughly 55 uncorrected secondary and segment tests. A few nominal hits point in different directions, so they should not drive a decision. The absolute-versus-relative ambiguity is the other open risk.",
+      "got": false,
+      "how": "overlap 0%"
+    }
+  ],
+  "lost": "The bar's unit. The text says the pre-reg does not specify whether 0.005 is absolute or relative, and that single gap decides whether Successful Search Rate passes. I also had to reconcile the primary-metric list between the Statsig config and the pre-reg. I worked from the summary you pasted and did not open `readout.md`.",
+  "question": "Is the 0.005 bar absolute or relative to baseline?",
+  "replies": {
+    "skim": "1. **Answer:** Don't ship. Long Click Rate missed the pre-registered bar (+0.0003, 95% CI \u22120.0011 to +0.0016), and its upper bound is below 0.005, so more data wouldn't change that. Successful Search Rate rose +0.0033 (p=7e-5), but whether that clears the bar depends on whether 0.005 is absolute or relative, which the pre-reg doesn't specify.\n2. **Decision:** Reject the launch now. The review should still settle whether the 0.005 bar is absolute or relative for future pre-registrations, though the outcome doesn't change either way.\n3. **Number:** +0.0003 change in Long Click Rate, against a 0.005 bar. The text gives no explicit unit, so it's a rate difference in the metric's own units.\n",
+    "full": "1. **Answer:** The readout recommends not shipping. Long Click Rate, a pre-registered primary metric, did not reach the 0.005 bar: +0.0003, 95% CI \u22120.0011 to +0.0016. Successful Search Rate rose +0.0033 (+0.81% relative, p=7e-5), which is real but may not clear the bar. The test looks valid, and all four guardrails held.\n\n2. **Decision:** Don't ship as pre-registered. Shipping on Successful Search Rate alone would change the pre-registered rule, so it needs explicit sign-off from the metric owners. Before that conversation, the team should settle whether 0.005 is absolute or relative and fix the Statsig config so it lists both primaries.\n\n3. **Number:** The Long Click Rate delta, +0.0003 (absolute change in a rate), against the 0.005 bar. Its CI's upper end (+0.0016) is well below the bar, so more data would not change the outcome.\n\n4. **Caveat:** The biggest risk is the roughly 55 uncorrected secondary and segment tests. A few nominal hits point in different directions, so they should not drive a decision. The absolute-versus-relative ambiguity is the other open risk.\n\n5. **Lost:** The bar's unit. The text says the pre-reg does not specify whether 0.005 is absolute or relative, and that single gap decides whether Successful Search Rate passes. I also had to reconcile the primary-metric list between the Statsig config and the pre-reg. I worked from the summary you pasted and did not open `readout.md`.\n\n6. **Question:** Is the 0.005 bar absolute or relative to baseline?\n"
+  }
+}

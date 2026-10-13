@@ -1,21 +1,21 @@
 {
   "pass": false,
-  "skim": "2/2",
+  "skim": "1/2",
   "full": "2/3",
   "items": [
     {
       "pass": "skim",
       "item": "answer",
       "key": "Keep running: Successful Search Rate reads +0.12% (-0.36% to +0.60%); ruling out the 0.50% bar needs about 1.9 times the users so far.",
-      "reader": "Keep running the test. Successful Search Rate is +0.12% (95% interval -0.36% to +0.60%), short of the 0.50% bar, so the result is unclear. Approve running the test longer, since about 1.9 times the current users are needed to rule out the 0.50% bar.",
-      "got": true,
-      "how": "overlap 78%"
+      "reader": "The document recommends continuing the test. It is at day 14 of 14 with 1,000,000 users per arm, and Successful Search Rate is +0.12% (95% interval -0.36% to +0.60%), so the 0.50% bar is unresolved. Approve running the test longer.",
+      "got": false,
+      "how": "overlap 0%"
     },
     {
       "pass": "skim",
       "item": "decision",
       "key": "Approve running the test longer.",
-      "reader": "Approve running the test longer, since about 1.9 times the current users are needed to rule out the 0.50% bar. Keep running the test. Successful Search Rate is +0.12% (95% interval -0.36% to +0.60%), short of the 0.50% bar, so the result is unclear.",
+      "reader": "Approve running the test longer. The document recommends continuing the test. It is at day 14 of 14 with 1,000,000 users per arm, and Successful Search Rate is +0.12% (95% interval -0.36% to +0.60%), so the 0.50% bar is unresolved.",
       "got": true,
       "how": "overlap 100%"
     },
@@ -23,31 +23,31 @@
       "pass": "full",
       "item": "takeaway 1",
       "key": "Successful Search Rate +0.12% (-0.36% to +0.60%) against at least 0.50% higher.",
-      "reader": "The document recommends continuing the test, not launching Ranker v7. Current state: day 14 of 14, 1,000,000 users per arm (above the planned 900,000). Successful Search Rate is +0.12% (95% interval -0.36% to +0.60%) against a bar of at least +0.50%, so the verdict is unclear. Four guardrails are within margin. Don't launch on this evidence. Approve extending the test only if the author first runs the two skipped checks (pre-period and novelty) and sets a stop rule. Extending needs about 1.9 times the current users, and the document's own logic says that if the lift stays near +0.12%, the test ends with no win. +0.12% change in Successful Search Rate, against the 0.50% bar. The primary result is inconclusive, and the bar may be out of reach. The pre-period and novelty checks did not run, and there are no segment cuts, so the mechanism behind the small lift is unknown (labelled as a guess).",
+      "reader": "The document recommends running the test longer. Successful Search Rate is +0.12% (95% interval -0.36% to +0.60%), so the 0.50% bar is neither met nor ruled out. The test is at day 14 of 14 with 1,000,000 users per arm, above the planned 900,000. Approve running the test longer. It is unclear whether \"longer\" means past the planned end or only until the decision is made. Successful Search Rate, +0.12% (relative or absolute is unclear), against the 0.50% bar. The interval still includes the bar, and about 1.9 times the current users would be needed to rule it out. The pre-period and novelty checks were not run, and the scorecard has no segment cuts, so the cause of the lift is unknown.",
       "got": true,
-      "how": "overlap 90%"
+      "how": "overlap 80%"
     },
     {
       "pass": "full",
       "item": "takeaway 2",
       "key": "Approve running the test longer.",
-      "reader": "The document recommends continuing the test, not launching Ranker v7. Current state: day 14 of 14, 1,000,000 users per arm (above the planned 900,000). Successful Search Rate is +0.12% (95% interval -0.36% to +0.60%) against a bar of at least +0.50%, so the verdict is unclear. Four guardrails are within margin. Don't launch on this evidence. Approve extending the test only if the author first runs the two skipped checks (pre-period and novelty) and sets a stop rule. Extending needs about 1.9 times the current users, and the document's own logic says that if the lift stays near +0.12%, the test ends with no win. +0.12% change in Successful Search Rate, against the 0.50% bar. The primary result is inconclusive, and the bar may be out of reach. The pre-period and novelty checks did not run, and there are no segment cuts, so the mechanism behind the small lift is unknown (labelled as a guess).",
+      "reader": "The document recommends running the test longer. Successful Search Rate is +0.12% (95% interval -0.36% to +0.60%), so the 0.50% bar is neither met nor ruled out. The test is at day 14 of 14 with 1,000,000 users per arm, above the planned 900,000. Approve running the test longer. It is unclear whether \"longer\" means past the planned end or only until the decision is made. Successful Search Rate, +0.12% (relative or absolute is unclear), against the 0.50% bar. The interval still includes the bar, and about 1.9 times the current users would be needed to rule it out. The pre-period and novelty checks were not run, and the scorecard has no segment cuts, so the cause of the lift is unknown.",
       "got": true,
-      "how": "overlap 50%"
+      "how": "overlap 100%"
     },
     {
       "pass": "full",
       "item": "takeaway 3",
       "key": "Could reverse it: the remaining data; the call is made at the planned sample.",
-      "reader": "The document recommends continuing the test, not launching Ranker v7. Current state: day 14 of 14, 1,000,000 users per arm (above the planned 900,000). Successful Search Rate is +0.12% (95% interval -0.36% to +0.60%) against a bar of at least +0.50%, so the verdict is unclear. Four guardrails are within margin. Don't launch on this evidence. Approve extending the test only if the author first runs the two skipped checks (pre-period and novelty) and sets a stop rule. Extending needs about 1.9 times the current users, and the document's own logic says that if the lift stays near +0.12%, the test ends with no win. +0.12% change in Successful Search Rate, against the 0.50% bar. The primary result is inconclusive, and the bar may be out of reach. The pre-period and novelty checks did not run, and there are no segment cuts, so the mechanism behind the small lift is unknown (labelled as a guess).",
+      "reader": "The document recommends running the test longer. Successful Search Rate is +0.12% (95% interval -0.36% to +0.60%), so the 0.50% bar is neither met nor ruled out. The test is at day 14 of 14 with 1,000,000 users per arm, above the planned 900,000. Approve running the test longer. It is unclear whether \"longer\" means past the planned end or only until the decision is made. Successful Search Rate, +0.12% (relative or absolute is unclear), against the 0.50% bar. The interval still includes the bar, and about 1.9 times the current users would be needed to rule it out. The pre-period and novelty checks were not run, and the scorecard has no segment cuts, so the cause of the lift is unknown.",
       "got": false,
-      "how": "overlap 14%"
+      "how": "overlap 29%"
     }
   ],
-  "lost": "I had to reread the decision line. \"Keep running\" plus \"Approve running the test longer\" reads as extending the test, but \"the call is made at the planned sample\" suggests the test is already at its planned end. \"Keep running\" could also be misread as keeping Ranker v7 live. The document also doesn't say whether \"at least 0.50% higher\" is relative or percentage points. The \"Calls\" definitions don't match the verdict wording: \"Keep running means not enough data yet,\" yet the verdict is \"unclear.\"",
-  "question": "Will you run the pre-exposure comparison and the daily series by days since first exposure before we commit more users, and what stop rule applies if we extend?",
+  "lost": "",
+  "question": "At day 14 of 14, does \"Keep running\" mean extending the test to about 1.9 times the current users, and if so, what happens to the change in the meantime?",
   "replies": {
-    "skim": "1. Answer: Keep running the test. Successful Search Rate is +0.12% (95% interval -0.36% to +0.60%), short of the 0.50% bar, so the result is unclear.\n2. Decision: Approve running the test longer, since about 1.9 times the current users are needed to rule out the 0.50% bar.\n3. Number: +0.12% (change in Successful Search Rate, percent).\n",
-    "full": "1. **Answer:** The document recommends continuing the test, not launching Ranker v7. Current state: day 14 of 14, 1,000,000 users per arm (above the planned 900,000). Successful Search Rate is +0.12% (95% interval -0.36% to +0.60%) against a bar of at least +0.50%, so the verdict is unclear. Four guardrails are within margin.\n\n2. **Decision:** Don't launch on this evidence. Approve extending the test only if the author first runs the two skipped checks (pre-period and novelty) and sets a stop rule. Extending needs about 1.9 times the current users, and the document's own logic says that if the lift stays near +0.12%, the test ends with no win.\n\n3. **Number:** +0.12% change in Successful Search Rate, against the 0.50% bar.\n\n4. **Caveat:** The primary result is inconclusive, and the bar may be out of reach. The pre-period and novelty checks did not run, and there are no segment cuts, so the mechanism behind the small lift is unknown (labelled as a guess).\n\n5. **Lost:** I had to reread the decision line. \"Keep running\" plus \"Approve running the test longer\" reads as extending the test, but \"the call is made at the planned sample\" suggests the test is already at its planned end. \"Keep running\" could also be misread as keeping Ranker v7 live. The document also doesn't say whether \"at least 0.50% higher\" is relative or percentage points. The \"Calls\" definitions don't match the verdict wording: \"Keep running means not enough data yet,\" yet the verdict is \"unclear.\"\n\n6. **Question:** Will you run the pre-exposure comparison and the daily series by days since first exposure before we commit more users, and what stop rule applies if we extend?\n"
+    "skim": "1. **Answer:** The document recommends continuing the test. It is at day 14 of 14 with 1,000,000 users per arm, and Successful Search Rate is +0.12% (95% interval -0.36% to +0.60%), so the 0.50% bar is unresolved.\n2. **Decision:** Approve running the test longer.\n3. **Number:** +0.12% change in Successful Search Rate (bar: at least +0.50%).\n",
+    "full": "1. **Answer:** The document recommends running the test longer. Successful Search Rate is +0.12% (95% interval -0.36% to +0.60%), so the 0.50% bar is neither met nor ruled out. The test is at day 14 of 14 with 1,000,000 users per arm, above the planned 900,000.\n2. **Decision:** Approve running the test longer. It is unclear whether \"longer\" means past the planned end or only until the decision is made.\n3. **Number:** Successful Search Rate, +0.12% (relative or absolute is unclear), against the 0.50% bar.\n4. **Caveat:** The interval still includes the bar, and about 1.9 times the current users would be needed to rule it out. The pre-period and novelty checks were not run, and the scorecard has no segment cuts, so the cause of the lift is unknown.\n5. **Lost:**\n   - \"Keep running\" versus \"day 14 of 14\", which looks like the planned end.\n   - \"Could reverse it: the remaining data; the call is made at the planned sample.\" I could not tell what it means.\n   - \"Keep running\" is defined only in the appendix.\n   - What the \"margin\" is, and what \"harm inside a margin goes to escalate\" means.\n   - What \"pre period\" and \"novelty\" are.\n   - How the \"1.9 times\" figure was calculated.\n6. **Question:** At day 14 of 14, does \"Keep running\" mean extending the test to about 1.9 times the current users, and if so, what happens to the change in the meantime?\n"
   }
 }

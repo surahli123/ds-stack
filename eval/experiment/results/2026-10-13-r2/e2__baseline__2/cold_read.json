@@ -1,0 +1,53 @@
+{
+  "pass": false,
+  "skim": "0/2",
+  "full": "0/3",
+  "items": [
+    {
+      "pass": "skim",
+      "item": "answer",
+      "key": "Escalate: Successful Search Rate rose 0.81% (+0.41% to +1.21%), but Latency p95 (ms) rose 1.20% (+0.70% to +1.70%), the wrong way, though inside its 2.00% margin.",
+      "reader": "Don't ship Ranker v7. Its Successful Search Rate lift is real (CI excludes zero), but the point estimate misses the pre-registered bar, and even the CI's upper end doesn't reach it. Don't launch Ranker v7. The text doesn't say what to do next, so the follow-up is unclear.",
+      "got": false,
+      "how": "overlap 0%"
+    },
+    {
+      "pass": "skim",
+      "item": "decision",
+      "key": "Decide the trade-off at triage.",
+      "reader": "Don't launch Ranker v7. The text doesn't say what to do next, so the follow-up is unclear. Don't ship Ranker v7. Its Successful Search Rate lift is real (CI excludes zero), but the point estimate misses the pre-registered bar, and even the CI's upper end doesn't reach it.",
+      "got": false,
+      "how": "overlap 0%"
+    },
+    {
+      "pass": "full",
+      "item": "takeaway 1",
+      "key": "Latency p95 (ms) +1.20% (+0.70% to +1.70%) against at most 2.00% higher.",
+      "reader": "Ranker v7 raises Successful Search Rate by a real but small amount (+0.00334 absolute, CI +0.0017 to +0.0050). That misses the pre-registered bar of +0.005, and the rule requires the point estimate to reach it. No guardrail is breached, but latency has a significant regression (+1.2%, worst case +1.7% against a 2% margin). Current state: the test is complete and the recommendation is not to ship v7 as tested. Don't ship v7 as tested. If the team wants a smaller gain shipped, that's an explicit exception to the prereg rule. The more useful next step is a v7.1 that cuts latency and recovers more lift, plus an investigation of why CTR fell while success rate rose. Successful Search Rate absolute change, +0.00334 (about 0.33 points), against a bar of +0.005. The effect may be too small to meet the bar, and the CI's upper end (+0.00498) doesn't reach it either, so more data won't change the outcome. Latency is significantly worse and close to its guardrail. The document also flags the CTR drop (\u22120.71% relative, p=0.005) as unexplained.",
+      "got": false,
+      "how": "overlap 0%"
+    },
+    {
+      "pass": "full",
+      "item": "takeaway 2",
+      "key": "Successful Search Rate +0.81% (+0.41% to +1.21%) against at least 0.50% higher.",
+      "reader": "Ranker v7 raises Successful Search Rate by a real but small amount (+0.00334 absolute, CI +0.0017 to +0.0050). That misses the pre-registered bar of +0.005, and the rule requires the point estimate to reach it. No guardrail is breached, but latency has a significant regression (+1.2%, worst case +1.7% against a 2% margin). Current state: the test is complete and the recommendation is not to ship v7 as tested. Don't ship v7 as tested. If the team wants a smaller gain shipped, that's an explicit exception to the prereg rule. The more useful next step is a v7.1 that cuts latency and recovers more lift, plus an investigation of why CTR fell while success rate rose. Successful Search Rate absolute change, +0.00334 (about 0.33 points), against a bar of +0.005. The effect may be too small to meet the bar, and the CI's upper end (+0.00498) doesn't reach it either, so more data won't change the outcome. Latency is significantly worse and close to its guardrail. The document also flags the CTR drop (\u22120.71% relative, p=0.005) as unexplained.",
+      "got": false,
+      "how": "overlap 0%"
+    },
+    {
+      "pass": "full",
+      "item": "takeaway 3",
+      "key": "Could reverse it: pre period could not be checked: no pre-period interval or platform check.",
+      "reader": "Ranker v7 raises Successful Search Rate by a real but small amount (+0.00334 absolute, CI +0.0017 to +0.0050). That misses the pre-registered bar of +0.005, and the rule requires the point estimate to reach it. No guardrail is breached, but latency has a significant regression (+1.2%, worst case +1.7% against a 2% margin). Current state: the test is complete and the recommendation is not to ship v7 as tested. Don't ship v7 as tested. If the team wants a smaller gain shipped, that's an explicit exception to the prereg rule. The more useful next step is a v7.1 that cuts latency and recovers more lift, plus an investigation of why CTR fell while success rate rose. Successful Search Rate absolute change, +0.00334 (about 0.33 points), against a bar of +0.005. The effect may be too small to meet the bar, and the CI's upper end (+0.00498) doesn't reach it either, so more data won't change the outcome. Latency is significantly worse and close to its guardrail. The document also flags the CTR drop (\u22120.71% relative, p=0.005) as unexplained.",
+      "got": false,
+      "how": "overlap 0%"
+    }
+  ],
+  "lost": "Mostly nowhere. Small things I had to reconcile:",
+  "question": "Is the +0.005 bar a hard business threshold, or a planning number that a +0.0033 lift with a latency cost could still justify as an exception?",
+  "replies": {
+    "skim": "1. Answer: Don't ship Ranker v7. Its Successful Search Rate lift is real (CI excludes zero), but the point estimate misses the pre-registered bar, and even the CI's upper end doesn't reach it.\n2. Decision: Don't launch Ranker v7. The text doesn't say what to do next, so the follow-up is unclear.\n3. Number: +0.00334 absolute change in Successful Search Rate (bar: +0.005).\n",
+    "full": "1. **Answer:** Ranker v7 raises Successful Search Rate by a real but small amount (+0.00334 absolute, CI +0.0017 to +0.0050). That misses the pre-registered bar of +0.005, and the rule requires the point estimate to reach it. No guardrail is breached, but latency has a significant regression (+1.2%, worst case +1.7% against a 2% margin). Current state: the test is complete and the recommendation is not to ship v7 as tested.\n\n2. **Decision:** Don't ship v7 as tested. If the team wants a smaller gain shipped, that's an explicit exception to the prereg rule. The more useful next step is a v7.1 that cuts latency and recovers more lift, plus an investigation of why CTR fell while success rate rose.\n\n3. **Number:** Successful Search Rate absolute change, +0.00334 (about 0.33 points), against a bar of +0.005.\n\n4. **Caveat:** The effect may be too small to meet the bar, and the CI's upper end (+0.00498) doesn't reach it either, so more data won't change the outcome. Latency is significantly worse and close to its guardrail. The document also flags the CTR drop (\u22120.71% relative, p=0.005) as unexplained.\n\n5. **Lost:** Mostly nowhere. Small things I had to reconcile:\n   - The primary CI is shown as +0.0050 in the table but +0.00498 in the text. That's just rounding.\n   - Exposures are 1.0M per arm against 900k planned, and the document says the health check passed but doesn't explain the overage.\n   - The experiment still shows \"active\" past its planned end. The document doesn't say whether that affects the data.\n\n6. **Question:** Is the +0.005 bar a hard business threshold, or a planning number that a +0.0033 lift with a latency cost could still justify as an exception?\n"
+  }
+}

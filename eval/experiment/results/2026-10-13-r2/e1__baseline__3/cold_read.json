@@ -1,0 +1,53 @@
+{
+  "pass": false,
+  "skim": "0/2",
+  "full": "0/3",
+  "items": [
+    {
+      "pass": "skim",
+      "item": "answer",
+      "key": "Escalate: Successful Search Rate rose 0.81% (+0.41% to +1.21%), but Abandonment Rate (+0.60% (-0.40% to +1.60%)) isn't shown within its 1.00% margin.",
+      "reader": "Escalate, don't ship automatically. Ranker v7 clears the primary bar (Successful Search Rate, +0.5% relative) at the point estimate, but the Abandonment Rate guardrail isn't cleared. Its confidence interval allows harm larger than the pre-registered margin, and the point estimate leans the wrong way. The pre-registration doesn't say what to do in that case. Decide whether to accept the Abandonment Rate risk, or hold the launch until that guardrail is resolved.",
+      "got": false,
+      "how": "overlap 0%"
+    },
+    {
+      "pass": "skim",
+      "item": "decision",
+      "key": "Decide the trade-off at triage.",
+      "reader": "Decide whether to accept the Abandonment Rate risk, or hold the launch until that guardrail is resolved. Escalate, don't ship automatically. Ranker v7 clears the primary bar (Successful Search Rate, +0.5% relative) at the point estimate, but the Abandonment Rate guardrail isn't cleared. Its confidence interval allows harm larger than the pre-registered margin, and the point estimate leans the wrong way. The pre-registration doesn't say what to do in that case.",
+      "got": false,
+      "how": "overlap 33%"
+    },
+    {
+      "pass": "full",
+      "item": "takeaway 1",
+      "key": "Abandonment Rate +0.60% (-0.40% to +1.60%) against at most 1.00% higher.",
+      "reader": "The document recommends against automatic shipping. Ranker v7 clears the primary metric at the point estimate (+0.81% Successful Search Rate, bar +0.5%). Abandonment Rate isn't cleared: its worst-case CI end (+1.6%) exceeds the 1% margin. The current state is \"Escalate\" for an explicit risk decision. Don't ship automatically. First confirm whether `bar` and `margin` are relative. If they're absolute, the primary metric misses and the answer is don't ship. If they're relative, choose between accepting the abandonment risk with a staged rollout and an abandonment monitor, or holding for a larger confirmation test. I'd hold until the units are confirmed, then lean toward a staged rollout with a monitor over a 6\u00d7 longer test. Abandonment Rate relative change, +0.6% point estimate (0.1881 vs 0.1870), with a worst-case CI end of +1.6% against a 1% margin. The unit matters most here because it decides whether the primary metric passes at all. The document flags that the data can't rule out an abandonment increase above the pre-registered margin, and resolving that would need about 6\u00d7 more data. It also notes that results are unadjusted (no CUPED, sequential testing or Bonferroni), and that the segment findings are exploratory, with about 60 uncorrected cuts.",
+      "got": false,
+      "how": "overlap 0%"
+    },
+    {
+      "pass": "full",
+      "item": "takeaway 2",
+      "key": "Successful Search Rate +0.81% (+0.41% to +1.21%) against at least 0.50% higher.",
+      "reader": "The document recommends against automatic shipping. Ranker v7 clears the primary metric at the point estimate (+0.81% Successful Search Rate, bar +0.5%). Abandonment Rate isn't cleared: its worst-case CI end (+1.6%) exceeds the 1% margin. The current state is \"Escalate\" for an explicit risk decision. Don't ship automatically. First confirm whether `bar` and `margin` are relative. If they're absolute, the primary metric misses and the answer is don't ship. If they're relative, choose between accepting the abandonment risk with a staged rollout and an abandonment monitor, or holding for a larger confirmation test. I'd hold until the units are confirmed, then lean toward a staged rollout with a monitor over a 6\u00d7 longer test. Abandonment Rate relative change, +0.6% point estimate (0.1881 vs 0.1870), with a worst-case CI end of +1.6% against a 1% margin. The unit matters most here because it decides whether the primary metric passes at all. The document flags that the data can't rule out an abandonment increase above the pre-registered margin, and resolving that would need about 6\u00d7 more data. It also notes that results are unadjusted (no CUPED, sequential testing or Bonferroni), and that the segment findings are exploratory, with about 60 uncorrected cuts.",
+      "got": false,
+      "how": "overlap 0%"
+    },
+    {
+      "pass": "full",
+      "item": "takeaway 3",
+      "key": "Could reverse it: pre period could not be checked: no pre-period interval or platform check.",
+      "reader": "The document recommends against automatic shipping. Ranker v7 clears the primary metric at the point estimate (+0.81% Successful Search Rate, bar +0.5%). Abandonment Rate isn't cleared: its worst-case CI end (+1.6%) exceeds the 1% margin. The current state is \"Escalate\" for an explicit risk decision. Don't ship automatically. First confirm whether `bar` and `margin` are relative. If they're absolute, the primary metric misses and the answer is don't ship. If they're relative, choose between accepting the abandonment risk with a staged rollout and an abandonment monitor, or holding for a larger confirmation test. I'd hold until the units are confirmed, then lean toward a staged rollout with a monitor over a 6\u00d7 longer test. Abandonment Rate relative change, +0.6% point estimate (0.1881 vs 0.1870), with a worst-case CI end of +1.6% against a 1% margin. The unit matters most here because it decides whether the primary metric passes at all. The document flags that the data can't rule out an abandonment increase above the pre-registered margin, and resolving that would need about 6\u00d7 more data. It also notes that results are unadjusted (no CUPED, sequential testing or Bonferroni), and that the segment findings are exploratory, with about 60 uncorrected cuts.",
+      "got": false,
+      "how": "overlap 0%"
+    }
+  ],
+  "lost": "Nowhere significant. I did have to infer the units of `bar` and `margin`. The document says it assumed relative, and the Successful Search Rate result reads differently under an absolute reading (+0.33 pp, which misses +0.5 pp).",
+  "question": "Were `bar` and `margin` pre-registered as relative changes, and what was the rule for a guardrail whose CI straddles its margin, since the pre-registration says nothing about that case?",
+  "replies": {
+    "skim": "1. **Answer:** Escalate, don't ship automatically. Ranker v7 clears the primary bar (Successful Search Rate, +0.5% relative) at the point estimate, but the Abandonment Rate guardrail isn't cleared. Its confidence interval allows harm larger than the pre-registered margin, and the point estimate leans the wrong way. The pre-registration doesn't say what to do in that case.\n2. **Decision:** Decide whether to accept the Abandonment Rate risk, or hold the launch until that guardrail is resolved.\n3. **Number:** Unclear. The excerpt gives no values. The one that matters is the upper bound of the Abandonment Rate confidence interval (relative %) compared with the pre-registered margin.\n",
+    "full": "1. **Answer:** The document recommends against automatic shipping. Ranker v7 clears the primary metric at the point estimate (+0.81% Successful Search Rate, bar +0.5%). Abandonment Rate isn't cleared: its worst-case CI end (+1.6%) exceeds the 1% margin. The current state is \"Escalate\" for an explicit risk decision.\n\n2. **Decision:** Don't ship automatically. First confirm whether `bar` and `margin` are relative. If they're absolute, the primary metric misses and the answer is don't ship. If they're relative, choose between accepting the abandonment risk with a staged rollout and an abandonment monitor, or holding for a larger confirmation test. I'd hold until the units are confirmed, then lean toward a staged rollout with a monitor over a 6\u00d7 longer test.\n\n3. **Number:** Abandonment Rate relative change, +0.6% point estimate (0.1881 vs 0.1870), with a worst-case CI end of +1.6% against a 1% margin. The unit matters most here because it decides whether the primary metric passes at all.\n\n4. **Caveat:** The document flags that the data can't rule out an abandonment increase above the pre-registered margin, and resolving that would need about 6\u00d7 more data. It also notes that results are unadjusted (no CUPED, sequential testing or Bonferroni), and that the segment findings are exploratory, with about 60 uncorrected cuts.\n\n5. **Lost:** Nowhere significant. I did have to infer the units of `bar` and `margin`. The document says it assumed relative, and the Successful Search Rate result reads differently under an absolute reading (+0.33 pp, which misses +0.5 pp).\n\n6. **Question:** Were `bar` and `margin` pre-registered as relative changes, and what was the rule for a guardrail whose CI straddles its margin, since the pre-registration says nothing about that case?\n"
+  }
+}

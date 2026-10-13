@@ -1,0 +1,53 @@
+{
+  "pass": false,
+  "skim": "1/2",
+  "full": "2/3",
+  "items": [
+    {
+      "pass": "skim",
+      "item": "answer",
+      "key": "Ship: Successful Search Rate rose 0.81% (+0.41% to +1.21%), which clears the 0.50% bar and every guardrail held.",
+      "reader": "Ranker v7 beats the pre-registered primary bar, no guardrail is breached, and the readout recommends shipping. Ship Ranker v7.",
+      "got": false,
+      "how": "overlap 0%"
+    },
+    {
+      "pass": "skim",
+      "item": "decision",
+      "key": "Approve the launch to all traffic.",
+      "reader": "Ship Ranker v7. Ranker v7 beats the pre-registered primary bar, no guardrail is breached, and the readout recommends shipping.",
+      "got": true,
+      "how": "overlap 0%; grader: same fact"
+    },
+    {
+      "pass": "full",
+      "item": "takeaway 1",
+      "key": "Successful Search Rate +0.81% (+0.41% to +1.21%) against at least 0.50% higher.",
+      "reader": "Ranker v7 beats the pre-registered primary bar, and no guardrail is breached. The header says \"Decision: Ship\" and the body recommends shipping. The document doesn't say whether it has launched. Ship. Before the room confirms the bar's unit (see 6), and after launch, check the platform cut and keep a holdback if it's cheap. Successful Search Rate, +0.81% relative (+0.33pp), 95% CI +0.41% to +1.21%. The platform split. Mobile (\u22120.83%) and Desktop (\u22120.68%) are both nominally negative while overall is +0.81%. That can't happen if the segments cover all traffic. The overall test rate (41.53%) is also above both platform rates (41.37% and 34.07%), which a true split can't produce. The author says the segments can't be reconciled from these files. None of the subgroup results is significant. The second limit is the lower CI bound (+0.41%) sitting below the +0.5% bar.",
+      "got": true,
+      "how": "overlap 0%; grader: same fact"
+    },
+    {
+      "pass": "full",
+      "item": "takeaway 2",
+      "key": "Approve the launch to all traffic.",
+      "reader": "Ranker v7 beats the pre-registered primary bar, and no guardrail is breached. The header says \"Decision: Ship\" and the body recommends shipping. The document doesn't say whether it has launched. Ship. Before the room confirms the bar's unit (see 6), and after launch, check the platform cut and keep a holdback if it's cheap. Successful Search Rate, +0.81% relative (+0.33pp), 95% CI +0.41% to +1.21%. The platform split. Mobile (\u22120.83%) and Desktop (\u22120.68%) are both nominally negative while overall is +0.81%. That can't happen if the segments cover all traffic. The overall test rate (41.53%) is also above both platform rates (41.37% and 34.07%), which a true split can't produce. The author says the segments can't be reconciled from these files. None of the subgroup results is significant. The second limit is the lower CI bound (+0.41%) sitting below the +0.5% bar.",
+      "got": true,
+      "how": "overlap 67%"
+    },
+    {
+      "pass": "full",
+      "item": "takeaway 3",
+      "key": "Could reverse it: pre period could not be checked: no pre-period interval or platform check.",
+      "reader": "Ranker v7 beats the pre-registered primary bar, and no guardrail is breached. The header says \"Decision: Ship\" and the body recommends shipping. The document doesn't say whether it has launched. Ship. Before the room confirms the bar's unit (see 6), and after launch, check the platform cut and keep a holdback if it's cheap. Successful Search Rate, +0.81% relative (+0.33pp), 95% CI +0.41% to +1.21%. The platform split. Mobile (\u22120.83%) and Desktop (\u22120.68%) are both nominally negative while overall is +0.81%. That can't happen if the segments cover all traffic. The overall test rate (41.53%) is also above both platform rates (41.37% and 34.07%), which a true split can't produce. The author says the segments can't be reconciled from these files. None of the subgroup results is significant. The second limit is the lower CI bound (+0.41%) sitting below the +0.5% bar.",
+      "got": false,
+      "how": "overlap 25%"
+    }
+  ],
+  "lost": "I reread three places:",
+  "question": "Was the pre-registered +0.5% bar meant as relative or as absolute percentage points? That decides whether the primary is met.",
+  "replies": {
+    "skim": "1. **Answer:** Ranker v7 beats the pre-registered primary bar, no guardrail is breached, and the readout recommends shipping.\n2. **Decision:** Ship Ranker v7.\n3. **Number:** Successful Search Rate, relative % lift over control (bar: at or above +0.5%). The observed lift isn't stated in this excerpt.\n",
+    "full": "1. **Answer:** Ranker v7 beats the pre-registered primary bar, and no guardrail is breached. The header says \"Decision: Ship\" and the body recommends shipping. The document doesn't say whether it has launched.\n\n2. **Decision:** Ship. Before the room confirms the bar's unit (see 6), and after launch, check the platform cut and keep a holdback if it's cheap.\n\n3. **Number:** Successful Search Rate, +0.81% relative (+0.33pp), 95% CI +0.41% to +1.21%.\n\n4. **Caveat:** The platform split. Mobile (\u22120.83%) and Desktop (\u22120.68%) are both nominally negative while overall is +0.81%. That can't happen if the segments cover all traffic. The overall test rate (41.53%) is also above both platform rates (41.37% and 34.07%), which a true split can't produce. The author says the segments can't be reconciled from these files. None of the subgroup results is significant. The second limit is the lower CI bound (+0.41%) sitting below the +0.5% bar.\n\n5. **Lost:** I reread three places:\n   - The bar's unit. \"Relative\" is the author's reading, and the prereg doesn't settle it. At +0.5pp absolute, the primary fails (+0.33pp).\n   - The platform numbers, which don't add up to the overall.\n   - The calendar-day decay. The exposure-day curve is flat at about +0.8%, yet the calendar-day lift falls to about +0.6%. The author explains this as cohort mix but shows no cohort-level breakdown.\n\n6. **Question:** Was the pre-registered +0.5% bar meant as relative or as absolute percentage points? That decides whether the primary is met.\n"
+  }
+}

@@ -1,0 +1,53 @@
+{
+  "pass": false,
+  "skim": "0/2",
+  "full": "0/3",
+  "items": [
+    {
+      "pass": "skim",
+      "item": "answer",
+      "key": "No effect found: Successful Search Rate reads +0.06% (-0.24% to +0.36%), which rules out the 0.50% change the test was built to find.",
+      "reader": "Ranker v7 did not move the pre-registered primary metric (Successful Search Rate). Its estimated lift is about one-twentieth of the ship bar, so the document recommends against shipping. Don't ship v7 on this evidence. Consider a follow-up test on tail queries, since the possible gain there is unconfirmed.",
+      "got": false,
+      "how": "overlap 0%"
+    },
+    {
+      "pass": "skim",
+      "item": "decision",
+      "key": "Agree to stop the test without launching.",
+      "reader": "Don't ship v7 on this evidence. Consider a follow-up test on tail queries, since the possible gain there is unconfirmed. Ranker v7 did not move the pre-registered primary metric (Successful Search Rate). Its estimated lift is about one-twentieth of the ship bar, so the document recommends against shipping.",
+      "got": false,
+      "how": "overlap 20%"
+    },
+    {
+      "pass": "full",
+      "item": "takeaway 1",
+      "key": "Successful Search Rate +0.06% (-0.24% to +0.36%) against at least 0.50% higher.",
+      "reader": "Ranker v7 did not move the pre-registered primary metric, Successful Search Rate (+0.025 pp, p = 0.70). That misses the +0.5 pp ship bar, and the CI excludes it. The authors recommend not shipping. A tail-query gain (+1.46 pp, not pre-registered) is a hypothesis for a follow-up test. The test is complete, ran its full 14 days, and no guardrail is breached. Don't ship v7 on the pre-registered criterion. Optionally, run a new pre-registered test on tail queries with a defined traffic share and ship bar. Treat v7 as \"no regression, no lift\" unless there are non-metric reasons to prefer it, which would be a separate decision. Successful Search Rate difference, +0.025 percentage points (95% CI \u22120.099 to +0.148 pp), against a +0.5 pp bar. The tail-query lift can't be reconciled with the flat overall result, because segment traffic shares and metric definitions aren't in the document. The authors say the tail finding is a hypothesis, not a result.",
+      "got": false,
+      "how": "overlap 0%"
+    },
+    {
+      "pass": "full",
+      "item": "takeaway 2",
+      "key": "Agree to stop the test without launching.",
+      "reader": "Ranker v7 did not move the pre-registered primary metric, Successful Search Rate (+0.025 pp, p = 0.70). That misses the +0.5 pp ship bar, and the CI excludes it. The authors recommend not shipping. A tail-query gain (+1.46 pp, not pre-registered) is a hypothesis for a follow-up test. The test is complete, ran its full 14 days, and no guardrail is breached. Don't ship v7 on the pre-registered criterion. Optionally, run a new pre-registered test on tail queries with a defined traffic share and ship bar. Treat v7 as \"no regression, no lift\" unless there are non-metric reasons to prefer it, which would be a separate decision. Successful Search Rate difference, +0.025 percentage points (95% CI \u22120.099 to +0.148 pp), against a +0.5 pp bar. The tail-query lift can't be reconciled with the flat overall result, because segment traffic shares and metric definitions aren't in the document. The authors say the tail finding is a hypothesis, not a result.",
+      "got": false,
+      "how": "overlap 20%"
+    },
+    {
+      "pass": "full",
+      "item": "takeaway 3",
+      "key": "Could reverse it: pre period could not be checked: no pre-period interval or platform check.",
+      "reader": "Ranker v7 did not move the pre-registered primary metric, Successful Search Rate (+0.025 pp, p = 0.70). That misses the +0.5 pp ship bar, and the CI excludes it. The authors recommend not shipping. A tail-query gain (+1.46 pp, not pre-registered) is a hypothesis for a follow-up test. The test is complete, ran its full 14 days, and no guardrail is breached. Don't ship v7 on the pre-registered criterion. Optionally, run a new pre-registered test on tail queries with a defined traffic share and ship bar. Treat v7 as \"no regression, no lift\" unless there are non-metric reasons to prefer it, which would be a separate decision. Successful Search Rate difference, +0.025 percentage points (95% CI \u22120.099 to +0.148 pp), against a +0.5 pp bar. The tail-query lift can't be reconciled with the flat overall result, because segment traffic shares and metric definitions aren't in the document. The authors say the tail finding is a hypothesis, not a result.",
+      "got": false,
+      "how": "overlap 0%"
+    }
+  ],
+  "lost": "The guardrail margins. The document reads them as relative changes, then says the conclusion holds if they're absolute. I had to reread to see that this is the author's own uncertainty, not something I'd missed. Also, \"the point estimate required to be at the bar\" is unclear. Otherwise nowhere.",
+  "question": "What share of traffic are tail queries, and what happens to Successful Search Rate on everything else? Those two numbers would show whether the tail gain is real and whether it's being offset elsewhere.",
+  "replies": {
+    "skim": "1. **Answer:** Ranker v7 did not move the pre-registered primary metric (Successful Search Rate). Its estimated lift is about one-twentieth of the ship bar, so the document recommends against shipping.\n2. **Decision:** Don't ship v7 on this evidence. Consider a follow-up test on tail queries, since the possible gain there is unconfirmed.\n3. **Number:** About 1/20 of the bar (the primary metric's point estimate versus the ship bar). The metric's absolute value and unit are unclear from this text.\n",
+    "full": "1. **Answer:** Ranker v7 did not move the pre-registered primary metric, Successful Search Rate (+0.025 pp, p = 0.70). That misses the +0.5 pp ship bar, and the CI excludes it. The authors recommend not shipping. A tail-query gain (+1.46 pp, not pre-registered) is a hypothesis for a follow-up test. The test is complete, ran its full 14 days, and no guardrail is breached.\n\n2. **Decision:** Don't ship v7 on the pre-registered criterion. Optionally, run a new pre-registered test on tail queries with a defined traffic share and ship bar. Treat v7 as \"no regression, no lift\" unless there are non-metric reasons to prefer it, which would be a separate decision.\n\n3. **Number:** Successful Search Rate difference, +0.025 percentage points (95% CI \u22120.099 to +0.148 pp), against a +0.5 pp bar.\n\n4. **Caveat:** The tail-query lift can't be reconciled with the flat overall result, because segment traffic shares and metric definitions aren't in the document. The authors say the tail finding is a hypothesis, not a result.\n\n5. **Lost:** The guardrail margins. The document reads them as relative changes, then says the conclusion holds if they're absolute. I had to reread to see that this is the author's own uncertainty, not something I'd missed. Also, \"the point estimate required to be at the bar\" is unclear. Otherwise nowhere.\n\n6. **Question:** What share of traffic are tail queries, and what happens to Successful Search Rate on everything else? Those two numbers would show whether the tail gain is real and whether it's being offset elsewhere.\n"
+  }
+}

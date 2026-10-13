@@ -1,0 +1,53 @@
+{
+  "pass": false,
+  "skim": "1/2",
+  "full": "1/3",
+  "items": [
+    {
+      "pass": "skim",
+      "item": "answer",
+      "key": "Ship: Successful Search Rate rose 0.81% (+0.41% to +1.21%), which clears the 0.50% bar and every guardrail held.",
+      "reader": "Ship. Ranker v7 raised Successful Search Rate, the pre-registered primary metric, from 41.20% to 41.53% (+0.334 points, +0.81% relative). The 95% CI is +0.17 to +0.50 points, p = 7e-05. Ship, provided `prereg.json` defines the 0.005 bar as relative (0.5%). If it means 0.5 points absolute, the +0.33-point estimate misses the bar and the call becomes Don't ship or Escalate. The document is cut off mid-sentence at that point, so confirm the unit before launch.",
+      "got": false,
+      "how": "overlap 0%"
+    },
+    {
+      "pass": "skim",
+      "item": "decision",
+      "key": "Approve the launch to all traffic.",
+      "reader": "Ship, provided `prereg.json` defines the 0.005 bar as relative (0.5%). If it means 0.5 points absolute, the +0.33-point estimate misses the bar and the call becomes Don't ship or Escalate. The document is cut off mid-sentence at that point, so confirm the unit before launch. Ship. Ranker v7 raised Successful Search Rate, the pre-registered primary metric, from 41.20% to 41.53% (+0.334 points, +0.81% relative). The 95% CI is +0.17 to +0.50 points, p = 7e-05.",
+      "got": true,
+      "how": "overlap 33%; grader: same fact"
+    },
+    {
+      "pass": "full",
+      "item": "takeaway 1",
+      "key": "Successful Search Rate +0.81% (+0.41% to +1.21%) against at least 0.50% higher.",
+      "reader": "The document recommends **Ship**, conditional on the review confirming that the pre-registered bar is relative. Current state: the readout is complete. Ranker v7 lifted the primary metric, Successful Search Rate, by +0.334 points (+0.81% relative, p = 7e-05). All guardrails pass. Ship, once the review confirms the bar's unit. If the bar is absolute (0.5 points), the +0.33-point estimate misses it, and the call becomes Don't ship or Escalate. After rollout, monitor Revenue per User and Ad Click Rate. The +0.334-point lift (+0.81% relative) against the 0.5% bar. The unit decides the outcome, so the unit matters as much as the value. The biggest risk is the unconfirmed unit of the bar, since `prereg.json` doesn't state it. Two smaller risks: Revenue per User has little headroom (worst case \u22120.8% against a \u22121% margin), and the unplanned Ad Click Rate drop could be chance. The lower CI bound (+0.41% relative) also sits below the 0.5% bar, so only the point estimate clears it.",
+      "got": false,
+      "how": "overlap 0%"
+    },
+    {
+      "pass": "full",
+      "item": "takeaway 2",
+      "key": "Approve the launch to all traffic.",
+      "reader": "The document recommends **Ship**, conditional on the review confirming that the pre-registered bar is relative. Current state: the readout is complete. Ranker v7 lifted the primary metric, Successful Search Rate, by +0.334 points (+0.81% relative, p = 7e-05). All guardrails pass. Ship, once the review confirms the bar's unit. If the bar is absolute (0.5 points), the +0.33-point estimate misses it, and the call becomes Don't ship or Escalate. After rollout, monitor Revenue per User and Ad Click Rate. The +0.334-point lift (+0.81% relative) against the 0.5% bar. The unit decides the outcome, so the unit matters as much as the value. The biggest risk is the unconfirmed unit of the bar, since `prereg.json` doesn't state it. Two smaller risks: Revenue per User has little headroom (worst case \u22120.8% against a \u22121% margin), and the unplanned Ad Click Rate drop could be chance. The lower CI bound (+0.41% relative) also sits below the 0.5% bar, so only the point estimate clears it.",
+      "got": true,
+      "how": "overlap 0%; grader: same fact"
+    },
+    {
+      "pass": "full",
+      "item": "takeaway 3",
+      "key": "Could reverse it: pre period could not be checked: no pre-period interval or platform check.",
+      "reader": "The document recommends **Ship**, conditional on the review confirming that the pre-registered bar is relative. Current state: the readout is complete. Ranker v7 lifted the primary metric, Successful Search Rate, by +0.334 points (+0.81% relative, p = 7e-05). All guardrails pass. Ship, once the review confirms the bar's unit. If the bar is absolute (0.5 points), the +0.33-point estimate misses it, and the call becomes Don't ship or Escalate. After rollout, monitor Revenue per User and Ad Click Rate. The +0.334-point lift (+0.81% relative) against the 0.5% bar. The unit decides the outcome, so the unit matters as much as the value. The biggest risk is the unconfirmed unit of the bar, since `prereg.json` doesn't state it. Two smaller risks: Revenue per User has little headroom (worst case \u22120.8% against a \u22121% margin), and the unplanned Ad Click Rate drop could be chance. The lower CI bound (+0.41% relative) also sits below the 0.5% bar, so only the point estimate clears it.",
+      "got": false,
+      "how": "overlap 0%"
+    }
+  ],
+  "lost": "Nowhere in the prose, but the bar's unit is the crux. The document flags it as an assumption and justifies the relative reading only through the guardrail margins. I also noticed the snapshot is labelled ds 2026-09-25 while the window runs to 09-26, which the document doesn't explain.",
+  "question": "\"Is the pre-registered bar of 0.005 relative (0.5%) or absolute (0.5 points)? And why does the snapshot say ds 2026-09-25 when the window runs to 09-26?\"",
+  "replies": {
+    "skim": "1. **Answer:** Ship. Ranker v7 raised Successful Search Rate, the pre-registered primary metric, from 41.20% to 41.53% (+0.334 points, +0.81% relative). The 95% CI is +0.17 to +0.50 points, p = 7e-05.\n2. **Decision:** Ship, provided `prereg.json` defines the 0.005 bar as relative (0.5%). If it means 0.5 points absolute, the +0.33-point estimate misses the bar and the call becomes Don't ship or Escalate. The document is cut off mid-sentence at that point, so confirm the unit before launch.\n3. **Number:** +0.81% relative lift in Successful Search Rate (point estimate vs. the 0.5% relative bar).\n",
+    "full": "1. **Answer:** The document recommends **Ship**, conditional on the review confirming that the pre-registered bar is relative. Current state: the readout is complete. Ranker v7 lifted the primary metric, Successful Search Rate, by +0.334 points (+0.81% relative, p = 7e-05). All guardrails pass.\n\n2. **Decision:** Ship, once the review confirms the bar's unit. If the bar is absolute (0.5 points), the +0.33-point estimate misses it, and the call becomes Don't ship or Escalate. After rollout, monitor Revenue per User and Ad Click Rate.\n\n3. **Number:** The +0.334-point lift (+0.81% relative) against the 0.5% bar. The unit decides the outcome, so the unit matters as much as the value.\n\n4. **Caveat:** The biggest risk is the unconfirmed unit of the bar, since `prereg.json` doesn't state it. Two smaller risks: Revenue per User has little headroom (worst case \u22120.8% against a \u22121% margin), and the unplanned Ad Click Rate drop could be chance. The lower CI bound (+0.41% relative) also sits below the 0.5% bar, so only the point estimate clears it.\n\n5. **Lost:** Nowhere in the prose, but the bar's unit is the crux. The document flags it as an assumption and justifies the relative reading only through the guardrail margins. I also noticed the snapshot is labelled ds 2026-09-25 while the window runs to 09-26, which the document doesn't explain.\n\n6. **Question:** \"Is the pre-registered bar of 0.005 relative (0.5%) or absolute (0.5 points)? And why does the snapshot say ds 2026-09-25 when the window runs to 09-26?\"\n"
+  }
+}

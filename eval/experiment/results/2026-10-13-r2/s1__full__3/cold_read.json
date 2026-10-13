@@ -1,21 +1,21 @@
 {
-  "pass": true,
+  "pass": false,
   "skim": "2/2",
-  "full": "3/3",
+  "full": "2/3",
   "items": [
     {
       "pass": "skim",
       "item": "answer",
       "key": "Ship: Successful Search Rate rose 0.81% (+0.41% to +1.21%), which clears the 0.50% bar and every guardrail held.",
-      "reader": "Ship. The document recommends launching Ranker v7 to all traffic: Successful Search Rate rose 0.81% (95% interval +0.41% to +1.21%), clearing the 0.50% bar with guardrails held. The pre-period check and novelty check were not run, so the result is not fully verified. Approve the launch to all traffic, but first run the pre-exposure comparison. If the arms already differed on Successful Search Rate before exposure, the test is broken and the ship call should be withdrawn.",
+      "reader": "Ship Ranker v7 to all traffic: Successful Search Rate rose 0.81% (95% interval +0.41% to +1.21%), clearing the 0.50% bar with every guardrail within margin. Approve the full launch, but first run the pre-exposure check (pre period was never tested) since a pre-existing imbalance would invalidate the result.",
       "got": true,
-      "how": "overlap 79%"
+      "how": "overlap 86%"
     },
     {
       "pass": "skim",
       "item": "decision",
       "key": "Approve the launch to all traffic.",
-      "reader": "Approve the launch to all traffic, but first run the pre-exposure comparison. If the arms already differed on Successful Search Rate before exposure, the test is broken and the ship call should be withdrawn. Ship. The document recommends launching Ranker v7 to all traffic: Successful Search Rate rose 0.81% (95% interval +0.41% to +1.21%), clearing the 0.50% bar with guardrails held. The pre-period check and novelty check were not run, so the result is not fully verified.",
+      "reader": "Approve the full launch, but first run the pre-exposure check (pre period was never tested) since a pre-existing imbalance would invalidate the result. Ship Ranker v7 to all traffic: Successful Search Rate rose 0.81% (95% interval +0.41% to +1.21%), clearing the 0.50% bar with every guardrail within margin.",
       "got": true,
       "how": "overlap 100%"
     },
@@ -23,15 +23,15 @@
       "pass": "full",
       "item": "takeaway 1",
       "key": "Successful Search Rate +0.81% (+0.41% to +1.21%) against at least 0.50% higher.",
-      "reader": "The document recommends shipping Ranker v7 to all traffic. The test is finished: day 14 of 14, 1,000,000 users per arm, over two whole weeks. Successful Search Rate rose 0.81% (95% interval +0.41% to +1.21%), the bar is at least +0.50%, and the four guardrails stayed within margin. Approve the full launch, but only after someone runs the two checks the document skipped: the pre-period comparison and the novelty check (daily lift by days since first exposure). The document says either one could reverse the call. If the arms already differed before the test, the result is untrustworthy. If the lift is fading toward zero, the test needs more time. +0.81% Successful Search Rate, a percent change. The interval is +0.41% to +1.21%. The document doesn't say whether this is relative or percentage points. The pre-period and novelty checks were not run. The document also says the mechanism is unknown, because no segment (mobile, desktop, head, tail) clearly carries the lift.",
+      "reader": "Ship. Successful Search Rate rose 0.81% (95% interval +0.41% to +1.21%), clearing the 0.50% bar, and all guardrails held. The test is complete: day 14 of 14, with 1,000,000 users per arm. Approve the launch to all traffic. +0.81%, the relative change in Successful Search Rate (the primary metric). The bar is +0.50%. The pre-period check was not run, so the document cannot rule out that the arms already differed before the test. It also did not run the novelty check, so it cannot rule out a lift that is fading. The mechanism is marked as a guess.",
       "got": true,
-      "how": "overlap 80%"
+      "how": "overlap 70%"
     },
     {
       "pass": "full",
       "item": "takeaway 2",
       "key": "Approve the launch to all traffic.",
-      "reader": "The document recommends shipping Ranker v7 to all traffic. The test is finished: day 14 of 14, 1,000,000 users per arm, over two whole weeks. Successful Search Rate rose 0.81% (95% interval +0.41% to +1.21%), the bar is at least +0.50%, and the four guardrails stayed within margin. Approve the full launch, but only after someone runs the two checks the document skipped: the pre-period comparison and the novelty check (daily lift by days since first exposure). The document says either one could reverse the call. If the arms already differed before the test, the result is untrustworthy. If the lift is fading toward zero, the test needs more time. +0.81% Successful Search Rate, a percent change. The interval is +0.41% to +1.21%. The document doesn't say whether this is relative or percentage points. The pre-period and novelty checks were not run. The document also says the mechanism is unknown, because no segment (mobile, desktop, head, tail) clearly carries the lift.",
+      "reader": "Ship. Successful Search Rate rose 0.81% (95% interval +0.41% to +1.21%), clearing the 0.50% bar, and all guardrails held. The test is complete: day 14 of 14, with 1,000,000 users per arm. Approve the launch to all traffic. +0.81%, the relative change in Successful Search Rate (the primary metric). The bar is +0.50%. The pre-period check was not run, so the document cannot rule out that the arms already differed before the test. It also did not run the novelty check, so it cannot rule out a lift that is fading. The mechanism is marked as a guess.",
       "got": true,
       "how": "overlap 100%"
     },
@@ -39,15 +39,15 @@
       "pass": "full",
       "item": "takeaway 3",
       "key": "Could reverse it: pre period could not be checked: no pre-period interval or platform check.",
-      "reader": "The document recommends shipping Ranker v7 to all traffic. The test is finished: day 14 of 14, 1,000,000 users per arm, over two whole weeks. Successful Search Rate rose 0.81% (95% interval +0.41% to +1.21%), the bar is at least +0.50%, and the four guardrails stayed within margin. Approve the full launch, but only after someone runs the two checks the document skipped: the pre-period comparison and the novelty check (daily lift by days since first exposure). The document says either one could reverse the call. If the arms already differed before the test, the result is untrustworthy. If the lift is fading toward zero, the test needs more time. +0.81% Successful Search Rate, a percent change. The interval is +0.41% to +1.21%. The document doesn't say whether this is relative or percentage points. The pre-period and novelty checks were not run. The document also says the mechanism is unknown, because no segment (mobile, desktop, head, tail) clearly carries the lift.",
-      "got": true,
-      "how": "overlap 50%"
+      "reader": "Ship. Successful Search Rate rose 0.81% (95% interval +0.41% to +1.21%), clearing the 0.50% bar, and all guardrails held. The test is complete: day 14 of 14, with 1,000,000 users per arm. Approve the launch to all traffic. +0.81%, the relative change in Successful Search Rate (the primary metric). The bar is +0.50%. The pre-period check was not run, so the document cannot rule out that the arms already differed before the test. It also did not run the novelty check, so it cannot rule out a lift that is fading. The mechanism is marked as a guess.",
+      "got": false,
+      "how": "overlap 38%"
     }
   ],
-  "lost": "",
-  "question": "Does the 0.50% bar apply to the point estimate (+0.81%) or to the lower bound of the interval (+0.41%)? If it's the lower bound, the result does not clear the bar. Also, have the pre-period and novelty checks been run since the document was written?",
+  "lost": "The \"Could reverse it\" line reads as a reason the decision might be wrong, not as a condition for reversing it. The reader has to work out from \"What would change the call\" that the two unrun checks are the things that could flip it.",
+  "question": "Can you run the pre-exposure comparison and the daily lift series by days since first exposure before the full rollout, and what do they show?",
   "replies": {
-    "skim": "1. Answer: Ship. The document recommends launching Ranker v7 to all traffic: Successful Search Rate rose 0.81% (95% interval +0.41% to +1.21%), clearing the 0.50% bar with guardrails held. The pre-period check and novelty check were not run, so the result is not fully verified.\n\n2. Decision: Approve the launch to all traffic, but first run the pre-exposure comparison. If the arms already differed on Successful Search Rate before exposure, the test is broken and the ship call should be withdrawn.\n\n3. Number: +0.81% change in Successful Search Rate (95% interval +0.41% to +1.21%).\n",
-    "full": "1. **Answer:** The document recommends shipping Ranker v7 to all traffic. The test is finished: day 14 of 14, 1,000,000 users per arm, over two whole weeks. Successful Search Rate rose 0.81% (95% interval +0.41% to +1.21%), the bar is at least +0.50%, and the four guardrails stayed within margin.\n\n2. **Decision:** Approve the full launch, but only after someone runs the two checks the document skipped: the pre-period comparison and the novelty check (daily lift by days since first exposure). The document says either one could reverse the call. If the arms already differed before the test, the result is untrustworthy. If the lift is fading toward zero, the test needs more time.\n\n3. **Number:** +0.81% Successful Search Rate, a percent change. The interval is +0.41% to +1.21%. The document doesn't say whether this is relative or percentage points.\n\n4. **Caveat:** The pre-period and novelty checks were not run. The document also says the mechanism is unknown, because no segment (mobile, desktop, head, tail) clearly carries the lift.\n\n5. **Lost:**\n   - The lower bound of the interval (+0.41%) is below the +0.50% bar. The document says the bar is cleared, which is true only for the point estimate. I had to reconcile this myself.\n   - The guardrail margins are never stated, so \"within margin\" can't be checked.\n   - \"Could reverse it\" means \"reasons the call could be reversed,\" which is unclear on first read.\n   - The \"Calls\" definitions are in the appendix, so I had to map \"Ship\" onto them myself.\n\n6. **Question:** Does the 0.50% bar apply to the point estimate (+0.81%) or to the lower bound of the interval (+0.41%)? If it's the lower bound, the result does not clear the bar. Also, have the pre-period and novelty checks been run since the document was written?\n"
+    "skim": "1. Answer: Ship Ranker v7 to all traffic: Successful Search Rate rose 0.81% (95% interval +0.41% to +1.21%), clearing the 0.50% bar with every guardrail within margin.\n2. Decision: Approve the full launch, but first run the pre-exposure check (pre period was never tested) since a pre-existing imbalance would invalidate the result.\n3. Number: +0.81% (Successful Search Rate lift, relative change).\n",
+    "full": "1. **Answer:** Ship. Successful Search Rate rose 0.81% (95% interval +0.41% to +1.21%), clearing the 0.50% bar, and all guardrails held. The test is complete: day 14 of 14, with 1,000,000 users per arm.\n2. **Decision:** Approve the launch to all traffic.\n3. **Number:** +0.81%, the relative change in Successful Search Rate (the primary metric). The bar is +0.50%.\n4. **Caveat:** The pre-period check was not run, so the document cannot rule out that the arms already differed before the test. It also did not run the novelty check, so it cannot rule out a lift that is fading. The mechanism is marked as a guess.\n5. **Lost:** The \"Could reverse it\" line reads as a reason the decision might be wrong, not as a condition for reversing it. The reader has to work out from \"What would change the call\" that the two unrun checks are the things that could flip it.\n6. **Question:** Can you run the pre-exposure comparison and the daily lift series by days since first exposure before the full rollout, and what do they show?\n"
   }
 }

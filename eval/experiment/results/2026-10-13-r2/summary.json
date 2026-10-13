@@ -27,6 +27,8 @@
       "mean_words": 326.7283950617284,
       "mean_stat_speak": 8.950617283950617,
       "mean_usd": 0.11035746172839506,
+      "skim_2of2": 0.08641975308641975,
+      "full_3of3": 0.08641975308641975,
       "pass_rule": {
         "mean_cost": false,
         "margin_below_best_constant": false,
@@ -58,6 +60,8 @@
       "mean_words": 202.08641975308643,
       "mean_stat_speak": 1.3333333333333333,
       "mean_usd": 0.13638108148148148,
+      "skim_2of2": 0.7901234567901234,
+      "full_3of3": 0.6296296296296297,
       "pass_rule": {
         "mean_cost": true,
         "margin_below_best_constant": true,
@@ -84,7 +88,9 @@
       "stat_speak": 5,
       "usd": 0.1089005,
       "seconds": 37.7,
-      "contaminated": false
+      "contaminated": false,
+      "skim": 0,
+      "full": 1
     },
     {
       "case": "c1",
@@ -101,7 +107,9 @@
       "stat_speak": 9,
       "usd": 0.1161006,
       "seconds": 32.1,
-      "contaminated": false
+      "contaminated": false,
+      "skim": 0,
+      "full": 0
     },
     {
       "case": "c1",
@@ -118,7 +126,9 @@
       "stat_speak": 6,
       "usd": 0.11619549999999998,
       "seconds": 42.4,
-      "contaminated": false
+      "contaminated": false,
+      "skim": 1,
+      "full": 1
     },
     {
       "case": "c1",
@@ -135,7 +145,9 @@
       "stat_speak": 1,
       "usd": 0.12448409999999999,
       "seconds": 59.6,
-      "contaminated": false
+      "contaminated": false,
+      "skim": 2,
+      "full": 3
     },
     {
       "case": "c1",
@@ -152,7 +164,9 @@
       "stat_speak": 1,
       "usd": 0.12583940000000002,
       "seconds": 58.0,
-      "contaminated": false
+      "contaminated": false,
+      "skim": 2,
+      "full": 3
     },
     {
       "case": "c1",
@@ -169,7 +183,9 @@
       "stat_speak": 1,
       "usd": 0.136629,
       "seconds": 84.2,
-      "contaminated": false
+      "contaminated": false,
+      "skim": 2,
+      "full": 3
     },
     {
       "case": "c2",
@@ -186,7 +202,9 @@
       "stat_speak": 5,
       "usd": 0.1381648,
       "seconds": 35.3,
-      "contaminated": false
+      "contaminated": false,
+      "skim": 1,
+      "full": 1
     },
     {
       "case": "c2",
@@ -203,7 +221,9 @@
       "stat_speak": 3,
       "usd": 0.1302096,
       "seconds": 33.9,
-      "contaminated": false
+      "contaminated": false,
+      "skim": 1,
+      "full": 3
     },
     {
       "case": "c2",
@@ -220,7 +240,9 @@
       "stat_speak": 15,
       "usd": 0.0905661,
       "seconds": 28.3,
-      "contaminated": false
+      "contaminated": false,
+      "skim": 0,
+      "full": 2
     },
     {
       "case": "c2",
@@ -237,7 +259,9 @@
       "stat_speak": 1,
       "usd": 0.11576540000000002,
       "seconds": 52.0,
-      "contaminated": false
+      "contaminated": false,
+      "skim": 2,
+      "full": 2
     },
     {
       "case": "c2",
@@ -254,7 +278,9 @@
       "stat_speak": 1,
       "usd": 0.1255985,
       "seconds": 46.9,
-      "contaminated": false
+      "contaminated": false,
+      "skim": 2,
+      "full": 3
     },
     {
       "case": "c2",
@@ -271,7 +297,9 @@
       "stat_speak": 1,
       "usd": 0.13929270000000002,
       "seconds": 82.9,
-      "contaminated": false
+      "contaminated": false,
+      "skim": 2,
+      "full": 3
     },
     {
       "case": "c3",
@@ -288,7 +316,9 @@
       "stat_speak": 7,
       "usd": 0.1273149,
       "seconds": 30.8,
-      "contaminated": false
+      "contaminated": false,
+      "skim": 0,
+      "full": 0
     },
     {
       "case": "c3",
@@ -305,7 +335,9 @@
       "stat_speak": 10,
       "usd": 0.1143027,
       "seconds": 36.2,
-      "contaminated": false
+      "contaminated": false,
+      "skim": 0,
+      "full": 3
     },
     {
       "case": "c3",
@@ -322,7 +354,9 @@
       "stat_speak": 8,
       "usd": 0.1106085,
       "seconds": 37.0,
-      "contaminated": false
+      "contaminated": false,
+      "skim": 2,
+      "full": 2
     },
     {
       "case": "c3",
@@ -339,7 +373,9 @@
       "stat_speak": 1,
       "usd": 0.10881610000000001,
       "seconds": 52.5,
-      "contaminated": false
+      "contaminated": false,
+      "skim": 2,
+      "full": 2
     },
     {
       "case": "c3",
@@ -356,7 +392,9 @@
       "stat_speak": 1,
       "usd": 0.1224371,
       "seconds": 49.0,
-      "contaminated": false
+      "contaminated": false,
+      "skim": 1,
+      "full": 1
     },
     {
       "case": "c3",
@@ -373,7 +411,9 @@
       "stat_speak": 1,
       "usd": 0.1301032,
       "seconds": 51.4,
-      "contaminated": false
+      "contaminated": false,
+      "skim": 2,
+      "full": 2
     },
     {
       "case": "c4",
@@ -390,7 +430,9 @@
       "stat_speak": 16,
       "usd": 0.105991,
       "seconds": 34.5,
-      "contaminated": false
+      "contaminated": false,
+      "skim": 0,
+      "full": 0
     },
     {
       "case": "c4",
@@ -407,7 +449,9 @@
       "stat_speak": 5,
       "usd": 0.1408557,
       "seconds": 48.9,
-      "contaminated": false
+      "contaminated": false,
+      "skim": 0,
+      "full": 0
     },
     {
       "case": "c4",
@@ -424,7 +468,9 @@
       "stat_speak": 5,
       "usd": 0.1183129,
       "seconds": 41.0,
-      "contaminated": false
+      "contaminated": false,
+      "skim": 0,
+      "full": 0
     },
     {
       "case": "c4",
@@ -441,7 +487,9 @@
       "stat_speak": 1,
       "usd": 0.1264615,
       "seconds": 52.2,
-      "contaminated": false
+      "contaminated": false,
+      "skim": 2,
+      "full": 2
     },
     {
       "case": "c4",
@@ -458,7 +506,9 @@
       "stat_speak": 1,
       "usd": 0.12988940000000002,
       "seconds": 52.4,
-      "contaminated": false
+      "contaminated": false,
+      "skim": 2,
+      "full": 2
     },
     {
       "case": "c4",
@@ -475,7 +525,9 @@
       "stat_speak": 1,
       "usd": 0.1252681,
       "seconds": 57.0,
-      "contaminated": false
+      "contaminated": false,
+      "skim": 2,
+      "full": 3
     },
     {
       "case": "c5",
@@ -492,7 +544,9 @@
       "stat_speak": 5,
       "usd": 0.14192290000000002,
       "seconds": 37.5,
-      "contaminated": false
+      "contaminated": false,
+      "skim": 0,
+      "full": 1
     },
     {
       "case": "c5",
@@ -509,7 +563,9 @@
       "stat_speak": 5,
       "usd": 0.11477109999999999,
       "seconds": 38.8,
-      "contaminated": false
+      "contaminated": false,
+      "skim": 0,
+      "full": 1
     },
     {
       "case": "c5",
@@ -526,7 +582,9 @@
       "stat_speak": 7,
       "usd": 0.1179608,
       "seconds": 40.0,
-      "contaminated": false
+      "contaminated": false,
+      "skim": 0,
+      "full": 1
     },
     {
       "case": "c5",
@@ -543,7 +601,9 @@
       "stat_speak": 1,
       "usd": 0.12678319999999998,
       "seconds": 51.6,
-      "contaminated": false
+      "contaminated": false,
+      "skim": 2,
+      "full": 2
     },
     {
       "case": "c5",
@@ -560,7 +620,9 @@
       "stat_speak": 1,
       "usd": 0.10990130000000002,
       "seconds": 49.1,
-      "contaminated": false
+      "contaminated": false,
+      "skim": 2,
+      "full": 2
     },
     {
       "case": "c5",
@@ -577,7 +639,9 @@
       "stat_speak": 1,
       "usd": 0.1231127,
       "seconds": 50.2,
-      "contaminated": false
+      "contaminated": false,
+      "skim": 2,
+      "full": 2
     },
     {
       "case": "d1",
@@ -594,7 +658,9 @@
       "stat_speak": 6,
       "usd": 0.08813950000000001,
       "seconds": 27.0,
-      "contaminated": false
+      "contaminated": false,
+      "skim": 1,
+      "full": 2
     },
     {
       "case": "d1",
@@ -611,7 +677,9 @@
       "stat_speak": 11,
       "usd": 0.11306250000000001,
       "seconds": 29.5,
-      "contaminated": false
+      "contaminated": false,
+      "skim": 0,
+      "full": 3
     },
     {
       "case": "d1",
@@ -628,7 +696,9 @@
       "stat_speak": 7,
       "usd": 0.1151403,
       "seconds": 32.8,
-      "contaminated": false
+      "contaminated": false,
+      "skim": 0,
+      "full": 1
     },
     {
       "case": "d1",
@@ -645,7 +715,9 @@
       "stat_speak": 1,
       "usd": 0.1288811,
       "seconds": 44.7,
-      "contaminated": false
+      "contaminated": false,
+      "skim": 1,
+      "full": 3
     },
     {
       "case": "d1",
@@ -662,7 +734,9 @@
       "stat_speak": 1,
       "usd": 0.1598225,
       "seconds": 96.0,
-      "contaminated": false
+      "contaminated": false,
+      "skim": 2,
+      "full": 3
     },
     {
       "case": "d1",
@@ -679,7 +753,9 @@
       "stat_speak": 1,
       "usd": 0.1311358,
       "seconds": 58.5,
-      "contaminated": false
+      "contaminated": false,
+      "skim": 1,
+      "full": 3
     },
     {
       "case": "d2",
@@ -696,7 +772,9 @@
       "stat_speak": 5,
       "usd": 0.0826168,
       "seconds": 22.3,
-      "contaminated": false
+      "contaminated": false,
+      "skim": 1,
+      "full": 1
     },
     {
       "case": "d2",
@@ -713,7 +791,9 @@
       "stat_speak": 5,
       "usd": 0.0954752,
       "seconds": 30.1,
-      "contaminated": false
+      "contaminated": false,
+      "skim": 0,
+      "full": 1
     },
     {
       "case": "d2",
@@ -730,7 +810,9 @@
       "stat_speak": 12,
       "usd": 0.1252326,
       "seconds": 29.6,
-      "contaminated": false
+      "contaminated": false,
+      "skim": 0,
+      "full": 2
     },
     {
       "case": "d2",
@@ -747,7 +829,9 @@
       "stat_speak": 1,
       "usd": 0.16791870000000003,
       "seconds": 46.2,
-      "contaminated": false
+      "contaminated": false,
+      "skim": 2,
+      "full": 3
     },
     {
       "case": "d2",
@@ -764,7 +848,9 @@
       "stat_speak": 1,
       "usd": 0.1202635,
       "seconds": 62.9,
-      "contaminated": false
+      "contaminated": false,
+      "skim": 2,
+      "full": 3
     },
     {
       "case": "d2",
@@ -781,7 +867,9 @@
       "stat_speak": 1,
       "usd": 0.1422405,
       "seconds": 57.9,
-      "contaminated": false
+      "contaminated": false,
+      "skim": 2,
+      "full": 3
     },
     {
       "case": "d3",
@@ -798,7 +886,9 @@
       "stat_speak": 8,
       "usd": 0.0786815,
       "seconds": 23.2,
-      "contaminated": false
+      "contaminated": false,
+      "skim": 0,
+      "full": 1
     },
     {
       "case": "d3",
@@ -815,7 +905,9 @@
       "stat_speak": 3,
       "usd": 0.10401239999999999,
       "seconds": 32.2,
-      "contaminated": false
+      "contaminated": false,
+      "skim": 0,
+      "full": 3
     },
     {
       "case": "d3",
@@ -832,7 +924,9 @@
       "stat_speak": 8,
       "usd": 0.1124526,
       "seconds": 31.4,
-      "contaminated": false
+      "contaminated": false,
+      "skim": 0,
+      "full": 1
     },
     {
       "case": "d3",
@@ -849,7 +943,9 @@
       "stat_speak": 1,
       "usd": 0.12398409999999999,
       "seconds": 38.7,
-      "contaminated": false
+      "contaminated": false,
+      "skim": 2,
+      "full": 3
     },
     {
       "case": "d3",
@@ -866,7 +962,9 @@
       "stat_speak": 1,
       "usd": 0.143635,
       "seconds": 54.1,
-      "contaminated": false
+      "contaminated": false,
+      "skim": 2,
+      "full": 3
     },
     {
       "case": "d3",
@@ -883,7 +981,9 @@
       "stat_speak": 1,
       "usd": 0.16574810000000006,
       "seconds": 57.8,
-      "contaminated": false
+      "contaminated": false,
+      "skim": 2,
+      "full": 3
     },
     {
       "case": "e1",
@@ -900,7 +1000,9 @@
       "stat_speak": 6,
       "usd": 0.11622840000000001,
       "seconds": 36.3,
-      "contaminated": false
+      "contaminated": false,
+      "skim": 0,
+      "full": 2
     },
     {
       "case": "e1",
@@ -917,7 +1019,9 @@
       "stat_speak": 19,
       "usd": 0.1077996,
       "seconds": 25.6,
-      "contaminated": false
+      "contaminated": false,
+      "skim": 0,
+      "full": 1
     },
     {
       "case": "e1",
@@ -934,7 +1038,9 @@
       "stat_speak": 19,
       "usd": 0.0991387,
       "seconds": 31.9,
-      "contaminated": false
+      "contaminated": false,
+      "skim": 0,
+      "full": 0
     },
     {
       "case": "e1",
@@ -951,7 +1057,9 @@
       "stat_speak": 2,
       "usd": 0.136052,
       "seconds": 61.5,
-      "contaminated": false
+      "contaminated": false,
+      "skim": 2,
+      "full": 1
     },
     {
       "case": "e1",
@@ -968,7 +1076,9 @@
       "stat_speak": 2,
       "usd": 0.1426318,
       "seconds": 59.2,
-      "contaminated": false
+      "contaminated": false,
+      "skim": 1,
+      "full": 2
     },
     {
       "case": "e1",
@@ -985,7 +1095,9 @@
       "stat_speak": 2,
       "usd": 0.13740159999999998,
       "seconds": 57.3,
-      "contaminated": false
+      "contaminated": false,
+      "skim": 2,
+      "full": 1
     },
     {
       "case": "e2",
@@ -1002,7 +1114,9 @@
       "stat_speak": 8,
       "usd": 0.1339678,
       "seconds": 32.0,
-      "contaminated": false
+      "contaminated": false,
+      "skim": 0,
+      "full": 1
     },
     {
       "case": "e2",
@@ -1019,7 +1133,9 @@
       "stat_speak": 17,
       "usd": 0.08231859999999999,
       "seconds": 22.0,
-      "contaminated": false
+      "contaminated": false,
+      "skim": 0,
+      "full": 0
     },
     {
       "case": "e2",
@@ -1036,7 +1152,9 @@
       "stat_speak": 4,
       "usd": 0.1037763,
       "seconds": 31.7,
-      "contaminated": false
+      "contaminated": false,
+      "skim": 0,
+      "full": 2
     },
     {
       "case": "e2",
@@ -1053,7 +1171,9 @@
       "stat_speak": 2,
       "usd": 0.1505435,
       "seconds": 63.2,
-      "contaminated": false
+      "contaminated": false,
+      "skim": 1,
+      "full": 1
     },
     {
       "case": "e2",
@@ -1070,7 +1190,9 @@
       "stat_speak": 2,
       "usd": 0.0993839,
       "seconds": 57.1,
-      "contaminated": false
+      "contaminated": false,
+      "skim": 2,
+      "full": 3
     },
     {
       "case": "e2",
@@ -1087,7 +1209,9 @@
       "stat_speak": 2,
       "usd": 0.19333069999999997,
       "seconds": 82.1,
-      "contaminated": false
+      "contaminated": false,
+      "skim": 2,
+      "full": 2
     },
     {
       "case": "e3",
@@ -1104,7 +1228,9 @@
       "stat_speak": 7,
       "usd": 0.10384860000000001,
       "seconds": 31.2,
-      "contaminated": false
+      "contaminated": false,
+      "skim": 0,
+      "full": 0
     },
     {
       "case": "e3",
@@ -1121,7 +1247,9 @@
       "stat_speak": 6,
       "usd": 0.1261726,
       "seconds": 29.9,
-      "contaminated": false
+      "contaminated": false,
+      "skim": 0,
+      "full": 1
     },
     {
       "case": "e3",
@@ -1138,7 +1266,9 @@
       "stat_speak": 4,
       "usd": 0.09777570000000001,
       "seconds": 29.9,
-      "contaminated": false
+      "contaminated": false,
+      "skim": 0,
+      "full": 1
     },
     {
       "case": "e3",
@@ -1155,7 +1285,9 @@
       "stat_speak": 2,
       "usd": 0.1288314,
       "seconds": 43.9,
-      "contaminated": false
+      "contaminated": false,
+      "skim": 2,
+      "full": 3
     },
     {
       "case": "e3",
@@ -1172,7 +1304,9 @@
       "stat_speak": 2,
       "usd": 0.1298078,
       "seconds": 54.5,
-      "contaminated": false
+      "contaminated": false,
+      "skim": 2,
+      "full": 3
     },
     {
       "case": "e3",
@@ -1189,7 +1323,9 @@
       "stat_speak": 2,
       "usd": 0.1346504,
       "seconds": 54.4,
-      "contaminated": false
+      "contaminated": false,
+      "skim": 2,
+      "full": 2
     },
     {
       "case": "e4",
@@ -1206,7 +1342,9 @@
       "stat_speak": 4,
       "usd": 0.0948285,
       "seconds": 27.3,
-      "contaminated": false
+      "contaminated": false,
+      "skim": 0,
+      "full": 0
     },
     {
       "case": "e4",
@@ -1223,7 +1361,9 @@
       "stat_speak": 3,
       "usd": 0.1235879,
       "seconds": 33.9,
-      "contaminated": false
+      "contaminated": false,
+      "skim": 1,
+      "full": 1
     },
     {
       "case": "e4",
@@ -1240,7 +1380,9 @@
       "stat_speak": 6,
       "usd": 0.11208459999999998,
       "seconds": 35.8,
-      "contaminated": false
+      "contaminated": false,
+      "skim": 0,
+      "full": 2
     },
     {
       "case": "e4",
@@ -1257,7 +1399,9 @@
       "stat_speak": 1,
       "usd": 0.1328117,
       "seconds": 58.4,
-      "contaminated": false
+      "contaminated": false,
+      "skim": 2,
+      "full": 2
     },
     {
       "case": "e4",
@@ -1274,7 +1418,9 @@
       "stat_speak": 1,
       "usd": 0.122033,
       "seconds": 58.0,
-      "contaminated": false
+      "contaminated": false,
+      "skim": 2,
+      "full": 3
     },
     {
       "case": "e4",
@@ -1291,7 +1437,9 @@
       "stat_speak": 1,
       "usd": 0.12415640000000001,
       "seconds": 48.1,
-      "contaminated": false
+      "contaminated": false,
+      "skim": 2,
+      "full": 2
     },
     {
       "case": "e5",
@@ -1308,7 +1456,9 @@
       "stat_speak": 7,
       "usd": 0.0968203,
       "seconds": 29.8,
-      "contaminated": false
+      "contaminated": false,
+      "skim": 0,
+      "full": 0
     },
     {
       "case": "e5",
@@ -1325,7 +1475,9 @@
       "stat_speak": 4,
       "usd": 0.11059,
       "seconds": 32.8,
-      "contaminated": false
+      "contaminated": false,
+      "skim": 0,
+      "full": 0
     },
     {
       "case": "e5",
@@ -1342,7 +1494,9 @@
       "stat_speak": 3,
       "usd": 0.1093151,
       "seconds": 34.1,
-      "contaminated": false
+      "contaminated": false,
+      "skim": 0,
+      "full": 0
     },
     {
       "case": "e5",
@@ -1359,7 +1513,9 @@
       "stat_speak": 2,
       "usd": 0.1429625,
       "seconds": 58.5,
-      "contaminated": false
+      "contaminated": false,
+      "skim": 2,
+      "full": 2
     },
     {
       "case": "e5",
@@ -1376,7 +1532,9 @@
       "stat_speak": 2,
       "usd": 0.13198320000000002,
       "seconds": 58.1,
-      "contaminated": false
+      "contaminated": false,
+      "skim": 2,
+      "full": 3
     },
     {
       "case": "e5",
@@ -1393,7 +1551,9 @@
       "stat_speak": 2,
       "usd": 0.13199499999999997,
       "seconds": 61.8,
-      "contaminated": false
+      "contaminated": false,
+      "skim": 2,
+      "full": 3
     },
     {
       "case": "e6",
@@ -1410,7 +1570,9 @@
       "stat_speak": 7,
       "usd": 0.1283474,
       "seconds": 33.5,
-      "contaminated": false
+      "contaminated": false,
+      "skim": 0,
+      "full": 1
     },
     {
       "case": "e6",
@@ -1427,7 +1589,9 @@
       "stat_speak": 5,
       "usd": 0.1006385,
       "seconds": 32.4,
-      "contaminated": false
+      "contaminated": false,
+      "skim": 0,
+      "full": 1
     },
     {
       "case": "e6",
@@ -1444,7 +1608,9 @@
       "stat_speak": 20,
       "usd": 0.0887202,
       "seconds": 30.4,
-      "contaminated": false
+      "contaminated": false,
+      "skim": 0,
+      "full": 1
     },
     {
       "case": "e6",
@@ -1461,7 +1627,9 @@
       "stat_speak": 1,
       "usd": 0.17338130000000002,
       "seconds": 62.9,
-      "contaminated": false
+      "contaminated": false,
+      "skim": 1,
+      "full": 3
     },
     {
       "case": "e6",
@@ -1478,7 +1646,9 @@
       "stat_speak": 1,
       "usd": 0.1735297,
       "seconds": 65.1,
-      "contaminated": false
+      "contaminated": false,
+      "skim": 1,
+      "full": 3
     },
     {
       "case": "e6",
@@ -1495,7 +1665,9 @@
       "stat_speak": 1,
       "usd": 0.1355461,
       "seconds": 53.1,
-      "contaminated": false
+      "contaminated": false,
+      "skim": 1,
+      "full": 3
     },
     {
       "case": "k1",
@@ -1512,7 +1684,9 @@
       "stat_speak": 9,
       "usd": 0.12568479999999999,
       "seconds": 30.8,
-      "contaminated": false
+      "contaminated": false,
+      "skim": 1,
+      "full": 2
     },
     {
       "case": "k1",
@@ -1529,7 +1703,9 @@
       "stat_speak": 13,
       "usd": 0.110871,
       "seconds": 27.8,
-      "contaminated": false
+      "contaminated": false,
+      "skim": 0,
+      "full": 0
     },
     {
       "case": "k1",
@@ -1546,7 +1722,9 @@
       "stat_speak": 5,
       "usd": 0.1029869,
       "seconds": 35.5,
-      "contaminated": false
+      "contaminated": false,
+      "skim": 0,
+      "full": 1
     },
     {
       "case": "k1",
@@ -1563,7 +1741,9 @@
       "stat_speak": 1,
       "usd": 0.1410005,
       "seconds": 54.3,
-      "contaminated": false
+      "contaminated": false,
+      "skim": 2,
+      "full": 3
     },
     {
       "case": "k1",
@@ -1580,7 +1760,9 @@
       "stat_speak": 1,
       "usd": 0.2203918,
       "seconds": 56.8,
-      "contaminated": false
+      "contaminated": false,
+      "skim": 2,
+      "full": 3
     },
     {
       "case": "k1",
@@ -1597,7 +1779,9 @@
       "stat_speak": 1,
       "usd": 0.14535340000000002,
       "seconds": 67.4,
-      "contaminated": false
+      "contaminated": false,
+      "skim": 2,
+      "full": 2
     },
     {
       "case": "k2",
@@ -1614,7 +1798,9 @@
       "stat_speak": 5,
       "usd": 0.14647529999999997,
       "seconds": 38.8,
-      "contaminated": false
+      "contaminated": false,
+      "skim": 1,
+      "full": 1
     },
     {
       "case": "k2",
@@ -1631,7 +1817,9 @@
       "stat_speak": 7,
       "usd": 0.1135623,
       "seconds": 37.4,
-      "contaminated": false
+      "contaminated": false,
+      "skim": 1,
+      "full": 1
     },
     {
       "case": "k2",
@@ -1648,7 +1836,9 @@
       "stat_speak": 13,
       "usd": 0.1547979,
       "seconds": 40.1,
-      "contaminated": false
+      "contaminated": false,
+      "skim": 2,
+      "full": 1
     },
     {
       "case": "k2",
@@ -1665,7 +1855,9 @@
       "stat_speak": 1,
       "usd": 0.1140892,
       "seconds": 54.6,
-      "contaminated": false
+      "contaminated": false,
+      "skim": 1,
+      "full": 1
     },
     {
       "case": "k2",
@@ -1682,7 +1874,9 @@
       "stat_speak": 1,
       "usd": 0.1640216,
       "seconds": 60.8,
-      "contaminated": false
+      "contaminated": false,
+      "skim": 2,
+      "full": 1
     },
     {
       "case": "k2",
@@ -1699,7 +1893,9 @@
       "stat_speak": 1,
       "usd": 0.1327756,
       "seconds": 52.3,
-      "contaminated": false
+      "contaminated": false,
+      "skim": 2,
+      "full": 1
     },
     {
       "case": "k3",
@@ -1716,7 +1912,9 @@
       "stat_speak": 18,
       "usd": 0.0836896,
       "seconds": 23.9,
-      "contaminated": false
+      "contaminated": false,
+      "skim": 0,
+      "full": 0
     },
     {
       "case": "k3",
@@ -1733,7 +1931,9 @@
       "stat_speak": 3,
       "usd": 0.11581280000000002,
       "seconds": 31.5,
-      "contaminated": false
+      "contaminated": false,
+      "skim": 0,
+      "full": 0
     },
     {
       "case": "k3",
@@ -1750,7 +1950,9 @@
       "stat_speak": 17,
       "usd": 0.08202960000000001,
       "seconds": 25.6,
-      "contaminated": false
+      "contaminated": false,
+      "skim": 0,
+      "full": 0
     },
     {
       "case": "k3",
@@ -1767,7 +1969,9 @@
       "stat_speak": 1,
       "usd": 0.1227729,
       "seconds": 59.2,
-      "contaminated": false
+      "contaminated": false,
+      "skim": 2,
+      "full": 3
     },
     {
       "case": "k3",
@@ -1784,7 +1988,9 @@
       "stat_speak": 1,
       "usd": 0.1473746,
       "seconds": 87.1,
-      "contaminated": false
+      "contaminated": false,
+      "skim": 2,
+      "full": 2
     },
     {
       "case": "k3",
@@ -1801,7 +2007,9 @@
       "stat_speak": 1,
       "usd": 0.1603116,
       "seconds": 52.4,
-      "contaminated": false
+      "contaminated": false,
+      "skim": 1,
+      "full": 2
     },
     {
       "case": "k4",
@@ -1818,7 +2026,9 @@
       "stat_speak": 9,
       "usd": 0.1062596,
       "seconds": 32.0,
-      "contaminated": false
+      "contaminated": false,
+      "skim": 2,
+      "full": 3
     },
     {
       "case": "k4",
@@ -1835,7 +2045,9 @@
       "stat_speak": 30,
       "usd": 0.0983151,
       "seconds": 29.4,
-      "contaminated": false
+      "contaminated": false,
+      "skim": 1,
+      "full": 2
     },
     {
       "case": "k4",
@@ -1852,7 +2064,9 @@
       "stat_speak": 8,
       "usd": 0.109895,
       "seconds": 32.7,
-      "contaminated": false
+      "contaminated": false,
+      "skim": 1,
+      "full": 3
     },
     {
       "case": "k4",
@@ -1869,7 +2083,9 @@
       "stat_speak": 1,
       "usd": 0.1409809,
       "seconds": 58.7,
-      "contaminated": false
+      "contaminated": false,
+      "skim": 1,
+      "full": 3
     },
     {
       "case": "k4",
@@ -1886,7 +2102,9 @@
       "stat_speak": 1,
       "usd": 0.12160379999999998,
       "seconds": 50.8,
-      "contaminated": false
+      "contaminated": false,
+      "skim": 1,
+      "full": 3
     },
     {
       "case": "k4",
@@ -1903,7 +2121,9 @@
       "stat_speak": 1,
       "usd": 0.12560340000000003,
       "seconds": 46.8,
-      "contaminated": false
+      "contaminated": false,
+      "skim": 2,
+      "full": 3
     },
     {
       "case": "n1",
@@ -1920,7 +2140,9 @@
       "stat_speak": 22,
       "usd": 0.0837879,
       "seconds": 30.2,
-      "contaminated": false
+      "contaminated": false,
+      "skim": 1,
+      "full": 2
     },
     {
       "case": "n1",
@@ -1937,7 +2159,9 @@
       "stat_speak": 4,
       "usd": 0.10648170000000001,
       "seconds": 33.8,
-      "contaminated": false
+      "contaminated": false,
+      "skim": 0,
+      "full": 1
     },
     {
       "case": "n1",
@@ -1954,7 +2178,9 @@
       "stat_speak": 9,
       "usd": 0.1019855,
       "seconds": 31.3,
-      "contaminated": false
+      "contaminated": false,
+      "skim": 1,
+      "full": 1
     },
     {
       "case": "n1",
@@ -1971,7 +2197,9 @@
       "stat_speak": 2,
       "usd": 0.1373166,
       "seconds": 51.0,
-      "contaminated": false
+      "contaminated": false,
+      "skim": 2,
+      "full": 3
     },
     {
       "case": "n1",
@@ -1988,7 +2216,9 @@
       "stat_speak": 2,
       "usd": 0.1179811,
       "seconds": 42.9,
-      "contaminated": false
+      "contaminated": false,
+      "skim": 2,
+      "full": 3
     },
     {
       "case": "n1",
@@ -2005,7 +2235,9 @@
       "stat_speak": 2,
       "usd": 0.1046535,
       "seconds": 38.6,
-      "contaminated": false
+      "contaminated": false,
+      "skim": 2,
+      "full": 3
     },
     {
       "case": "n2",
@@ -2022,7 +2254,9 @@
       "stat_speak": 18,
       "usd": 0.090557,
       "seconds": 26.4,
-      "contaminated": false
+      "contaminated": false,
+      "skim": 0,
+      "full": 0
     },
     {
       "case": "n2",
@@ -2039,7 +2273,9 @@
       "stat_speak": 10,
       "usd": 0.1315215,
       "seconds": 35.9,
-      "contaminated": false
+      "contaminated": false,
+      "skim": 1,
+      "full": 2
     },
     {
       "case": "n2",
@@ -2056,7 +2292,9 @@
       "stat_speak": 4,
       "usd": 0.09645019999999999,
       "seconds": 27.7,
-      "contaminated": false
+      "contaminated": false,
+      "skim": 1,
+      "full": 1
     },
     {
       "case": "n2",
@@ -2073,7 +2311,9 @@
       "stat_speak": 2,
       "usd": 0.1246036,
       "seconds": 47.1,
-      "contaminated": false
+      "contaminated": false,
+      "skim": 2,
+      "full": 3
     },
     {
       "case": "n2",
@@ -2090,7 +2330,9 @@
       "stat_speak": 2,
       "usd": 0.1352374,
       "seconds": 38.3,
-      "contaminated": false
+      "contaminated": false,
+      "skim": 2,
+      "full": 2
     },
     {
       "case": "n2",
@@ -2107,7 +2349,9 @@
       "stat_speak": 2,
       "usd": 0.12125070000000002,
       "seconds": 40.0,
-      "contaminated": false
+      "contaminated": false,
+      "skim": 2,
+      "full": 3
     },
     {
       "case": "n3",
@@ -2124,7 +2368,9 @@
       "stat_speak": 14,
       "usd": 0.0789034,
       "seconds": 23.2,
-      "contaminated": false
+      "contaminated": false,
+      "skim": 1,
+      "full": 1
     },
     {
       "case": "n3",
@@ -2141,7 +2387,9 @@
       "stat_speak": 15,
       "usd": 0.076645,
       "seconds": 22.4,
-      "contaminated": false
+      "contaminated": false,
+      "skim": 2,
+      "full": 2
     },
     {
       "case": "n3",
@@ -2158,7 +2406,9 @@
       "stat_speak": 6,
       "usd": 0.1032766,
       "seconds": 35.2,
-      "contaminated": false
+      "contaminated": false,
+      "skim": 2,
+      "full": 2
     },
     {
       "case": "n3",
@@ -2175,7 +2425,9 @@
       "stat_speak": 2,
       "usd": 0.1654557,
       "seconds": 54.4,
-      "contaminated": false
+      "contaminated": false,
+      "skim": 2,
+      "full": 3
     },
     {
       "case": "n3",
@@ -2192,7 +2444,9 @@
       "stat_speak": 2,
       "usd": 0.1374804,
       "seconds": 37.4,
-      "contaminated": false
+      "contaminated": false,
+      "skim": 2,
+      "full": 3
     },
     {
       "case": "n3",
@@ -2209,7 +2463,9 @@
       "stat_speak": 2,
       "usd": 0.15021489999999998,
       "seconds": 47.2,
-      "contaminated": false
+      "contaminated": false,
+      "skim": 2,
+      "full": 3
     },
     {
       "case": "s1",
@@ -2226,7 +2482,9 @@
       "stat_speak": 18,
       "usd": 0.124431,
       "seconds": 29.2,
-      "contaminated": false
+      "contaminated": false,
+      "skim": 1,
+      "full": 2
     },
     {
       "case": "s1",
@@ -2243,7 +2501,9 @@
       "stat_speak": 17,
       "usd": 0.0861316,
       "seconds": 27.6,
-      "contaminated": false
+      "contaminated": false,
+      "skim": 0,
+      "full": 0
     },
     {
       "case": "s1",
@@ -2260,7 +2520,9 @@
       "stat_speak": 7,
       "usd": 0.11734549999999999,
       "seconds": 34.8,
-      "contaminated": false
+      "contaminated": false,
+      "skim": 1,
+      "full": 2
     },
     {
       "case": "s1",
@@ -2277,7 +2539,9 @@
       "stat_speak": 2,
       "usd": 0.16813180000000003,
       "seconds": 84.4,
-      "contaminated": false
+      "contaminated": false,
+      "skim": 2,
+      "full": 3
     },
     {
       "case": "s1",
@@ -2294,7 +2558,9 @@
       "stat_speak": 2,
       "usd": 0.12123099999999999,
       "seconds": 35.9,
-      "contaminated": false
+      "contaminated": false,
+      "skim": 2,
+      "full": 3
     },
     {
       "case": "s1",
@@ -2311,7 +2577,9 @@
       "stat_speak": 2,
       "usd": 0.14761580000000002,
       "seconds": 49.7,
-      "contaminated": false
+      "contaminated": false,
+      "skim": 2,
+      "full": 2
     },
     {
       "case": "s2",
@@ -2328,7 +2596,9 @@
       "stat_speak": 6,
       "usd": 0.1515811,
       "seconds": 39.7,
-      "contaminated": false
+      "contaminated": false,
+      "skim": 2,
+      "full": 2
     },
     {
       "case": "s2",
@@ -2345,7 +2615,9 @@
       "stat_speak": 9,
       "usd": 0.12296159999999999,
       "seconds": 39.9,
-      "contaminated": false
+      "contaminated": false,
+      "skim": 2,
+      "full": 0
     },
     {
       "case": "s2",
@@ -2362,7 +2634,9 @@
       "stat_speak": 12,
       "usd": 0.0883261,
       "seconds": 25.4,
-      "contaminated": false
+      "contaminated": false,
+      "skim": 1,
+      "full": 1
     },
     {
       "case": "s2",
@@ -2379,7 +2653,9 @@
       "stat_speak": 2,
       "usd": 0.13339689999999998,
       "seconds": 46.0,
-      "contaminated": false
+      "contaminated": false,
+      "skim": 2,
+      "full": 3
     },
     {
       "case": "s2",
@@ -2396,7 +2672,9 @@
       "stat_speak": 2,
       "usd": 0.15742180000000003,
       "seconds": 75.6,
-      "contaminated": false
+      "contaminated": false,
+      "skim": 2,
+      "full": 2
     },
     {
       "case": "s2",
@@ -2413,7 +2691,9 @@
       "stat_speak": 2,
       "usd": 0.149762,
       "seconds": 61.2,
-      "contaminated": false
+      "contaminated": false,
+      "skim": 2,
+      "full": 3
     },
     {
       "case": "s3",
@@ -2430,7 +2710,9 @@
       "stat_speak": 12,
       "usd": 0.1166779,
       "seconds": 34.6,
-      "contaminated": false
+      "contaminated": false,
+      "skim": 1,
+      "full": 1
     },
     {
       "case": "s3",
@@ -2447,7 +2729,9 @@
       "stat_speak": 15,
       "usd": 0.1223144,
       "seconds": 28.6,
-      "contaminated": false
+      "contaminated": false,
+      "skim": 1,
+      "full": 2
     },
     {
       "case": "s3",
@@ -2464,7 +2748,9 @@
       "stat_speak": 6,
       "usd": 0.1286894,
       "seconds": 41.7,
-      "contaminated": false
+      "contaminated": false,
+      "skim": 0,
+      "full": 1
     },
     {
       "case": "s3",
@@ -2481,7 +2767,9 @@
       "stat_speak": 2,
       "usd": 0.1293406,
       "seconds": 56.8,
-      "contaminated": false
+      "contaminated": false,
+      "skim": 2,
+      "full": 3
     },
     {
       "case": "s3",
@@ -2498,7 +2786,9 @@
       "stat_speak": 2,
       "usd": 0.1264792,
       "seconds": 48.4,
-      "contaminated": false
+      "contaminated": false,
+      "skim": 2,
+      "full": 3
     },
     {
       "case": "s3",
@@ -2515,7 +2805,9 @@
       "stat_speak": 2,
       "usd": 0.1566111,
       "seconds": 54.1,
-      "contaminated": false
+      "contaminated": false,
+      "skim": 2,
+      "full": 3
     },
     {
       "case": "s4",
@@ -2532,7 +2824,9 @@
       "stat_speak": 6,
       "usd": 0.1295225,
       "seconds": 42.3,
-      "contaminated": false
+      "contaminated": false,
+      "skim": 1,
+      "full": 1
     },
     {
       "case": "s4",
@@ -2549,7 +2843,9 @@
       "stat_speak": 8,
       "usd": 0.14265,
       "seconds": 38.4,
-      "contaminated": false
+      "contaminated": false,
+      "skim": 1,
+      "full": 0
     },
     {
       "case": "s4",
@@ -2566,7 +2862,9 @@
       "stat_speak": 9,
       "usd": 0.11532790000000001,
       "seconds": 39.2,
-      "contaminated": false
+      "contaminated": false,
+      "skim": 0,
+      "full": 0
     },
     {
       "case": "s4",
@@ -2583,7 +2881,9 @@
       "stat_speak": 2,
       "usd": 0.14504300000000003,
       "seconds": 50.0,
-      "contaminated": false
+      "contaminated": false,
+      "skim": 2,
+      "full": 2
     },
     {
       "case": "s4",
@@ -2600,7 +2900,9 @@
       "stat_speak": 2,
       "usd": 0.16254110000000002,
       "seconds": 56.1,
-      "contaminated": false
+      "contaminated": false,
+      "skim": 2,
+      "full": 3
     },
     {
       "case": "s4",
@@ -2617,7 +2919,9 @@
       "stat_speak": 2,
       "usd": 0.1310519,
       "seconds": 41.5,
-      "contaminated": false
+      "contaminated": false,
+      "skim": 1,
+      "full": 3
     },
     {
       "case": "x1",
@@ -2634,7 +2938,9 @@
       "stat_speak": 5,
       "usd": 0.1025599,
       "seconds": 33.0,
-      "contaminated": false
+      "contaminated": false,
+      "skim": 0,
+      "full": 1
     },
     {
       "case": "x1",
@@ -2651,7 +2957,9 @@
       "stat_speak": 1,
       "usd": 0.09684299999999998,
       "seconds": 32.8,
-      "contaminated": false
+      "contaminated": false,
+      "skim": 1,
+      "full": 1
     },
     {
       "case": "x1",
@@ -2668,7 +2976,9 @@
       "stat_speak": 13,
       "usd": 0.0745127,
       "seconds": 23.4,
-      "contaminated": false
+      "contaminated": false,
+      "skim": 1,
+      "full": 3
     },
     {
       "case": "x1",
@@ -2685,7 +2995,9 @@
       "stat_speak": 0,
       "usd": 0.1137945,
       "seconds": 56.8,
-      "contaminated": false
+      "contaminated": false,
+      "skim": 1,
+      "full": 3
     },
     {
       "case": "x1",
@@ -2702,7 +3014,9 @@
       "stat_speak": 0,
       "usd": 0.1219573,
       "seconds": 55.1,
-      "contaminated": false
+      "contaminated": false,
+      "skim": 2,
+      "full": 3
     },
     {
       "case": "x1",
@@ -2719,7 +3033,9 @@
       "stat_speak": 0,
       "usd": 0.1251718,
       "seconds": 58.8,
-      "contaminated": false
+      "contaminated": false,
+      "skim": 1,
+      "full": 3
     },
     {
       "case": "x2",
@@ -2736,7 +3052,9 @@
       "stat_speak": 6,
       "usd": 0.1326584,
       "seconds": 34.1,
-      "contaminated": false
+      "contaminated": false,
+      "skim": 0,
+      "full": 1
     },
     {
       "case": "x2",
@@ -2753,7 +3071,9 @@
       "stat_speak": 6,
       "usd": 0.11240250000000002,
       "seconds": 36.3,
-      "contaminated": false
+      "contaminated": false,
+      "skim": 0,
+      "full": 1
     },
     {
       "case": "x2",
@@ -2770,7 +3090,9 @@
       "stat_speak": 5,
       "usd": 0.1110804,
       "seconds": 35.4,
-      "contaminated": false
+      "contaminated": false,
+      "skim": 0,
+      "full": 1
     },
     {
       "case": "x2",
@@ -2787,7 +3109,9 @@
       "stat_speak": 0,
       "usd": 0.12177410000000001,
       "seconds": 53.5,
-      "contaminated": false
+      "contaminated": false,
+      "skim": 1,
+      "full": 3
     },
     {
       "case": "x2",
@@ -2804,7 +3128,9 @@
       "stat_speak": 0,
       "usd": 0.11221969999999998,
       "seconds": 54.8,
-      "contaminated": false
+      "contaminated": false,
+      "skim": 1,
+      "full": 2
     },
     {
       "case": "x2",
@@ -2821,7 +3147,9 @@
       "stat_speak": 0,
       "usd": 0.11780779999999999,
       "seconds": 45.8,
-      "contaminated": false
+      "contaminated": false,
+      "skim": 2,
+      "full": 1
     }
   ]
 }

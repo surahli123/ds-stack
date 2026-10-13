@@ -1,0 +1,53 @@
+{
+  "pass": false,
+  "skim": "1/2",
+  "full": "2/3",
+  "items": [
+    {
+      "pass": "skim",
+      "item": "answer",
+      "key": "Ship: Successful Search Rate rose 0.81% (+0.41% to +1.21%), which clears the 0.50% bar and every guardrail held.",
+      "reader": "The document recommends shipping Ranker v7 (lambdamart_v7 vs. lambdamart_v6). The primary metric clears its bar at the point estimate, all four pre-registered guardrails stay within margin, and Reformulation Rate is worse but was not pre-registered as a guardrail. Ship Ranker v7.",
+      "got": false,
+      "how": "overlap 0%"
+    },
+    {
+      "pass": "skim",
+      "item": "decision",
+      "key": "Approve the launch to all traffic.",
+      "reader": "Ship Ranker v7. The document recommends shipping Ranker v7 (lambdamart_v7 vs. lambdamart_v6). The primary metric clears its bar at the point estimate, all four pre-registered guardrails stay within margin, and Reformulation Rate is worse but was not pre-registered as a guardrail.",
+      "got": true,
+      "how": "overlap 0%; grader: same fact"
+    },
+    {
+      "pass": "full",
+      "item": "takeaway 1",
+      "key": "Successful Search Rate +0.81% (+0.41% to +1.21%) against at least 0.50% higher.",
+      "reader": "Ship. The primary metric, Successful Search Rate, rose +0.81% relative (CI +0.41% to +1.21%) against a +0.5% bar. All four guardrails pass. The open concern is Reformulation Rate, which rose +0.96% (p=0.018), but it wasn't a pre-registered guardrail. The readout is finished and the decision is pending. Ship, as the document recommends. Before or just after launch, confirm that the +0.5% bar is relative, not absolute. Then keep a holdout or monitor Successful Search Rate and Reformulation Rate, with Reformulation on Informational queries as the first thing to check. +0.81% relative change in Successful Search Rate. The unit is relative percent, and the bar is +0.5% in the same unit. The primary metric clears the bar only at the point estimate. The CI's lower bound (+0.41%) is below +0.5%, so the data don't prove the lift meets the bar. The 14-day run is also short for novelty effects, and the rise in Reformulation may mean some of the success lift comes from shallower wins.",
+      "got": true,
+      "how": "overlap 0%; grader: same fact"
+    },
+    {
+      "pass": "full",
+      "item": "takeaway 2",
+      "key": "Approve the launch to all traffic.",
+      "reader": "Ship. The primary metric, Successful Search Rate, rose +0.81% relative (CI +0.41% to +1.21%) against a +0.5% bar. All four guardrails pass. The open concern is Reformulation Rate, which rose +0.96% (p=0.018), but it wasn't a pre-registered guardrail. The readout is finished and the decision is pending. Ship, as the document recommends. Before or just after launch, confirm that the +0.5% bar is relative, not absolute. Then keep a holdout or monitor Successful Search Rate and Reformulation Rate, with Reformulation on Informational queries as the first thing to check. +0.81% relative change in Successful Search Rate. The unit is relative percent, and the bar is +0.5% in the same unit. The primary metric clears the bar only at the point estimate. The CI's lower bound (+0.41%) is below +0.5%, so the data don't prove the lift meets the bar. The 14-day run is also short for novelty effects, and the rise in Reformulation may mean some of the success lift comes from shallower wins.",
+      "got": true,
+      "how": "overlap 33%; grader: same fact"
+    },
+    {
+      "pass": "full",
+      "item": "takeaway 3",
+      "key": "Could reverse it: pre period could not be checked: no pre-period interval or platform check.",
+      "reader": "Ship. The primary metric, Successful Search Rate, rose +0.81% relative (CI +0.41% to +1.21%) against a +0.5% bar. All four guardrails pass. The open concern is Reformulation Rate, which rose +0.96% (p=0.018), but it wasn't a pre-registered guardrail. The readout is finished and the decision is pending. Ship, as the document recommends. Before or just after launch, confirm that the +0.5% bar is relative, not absolute. Then keep a holdout or monitor Successful Search Rate and Reformulation Rate, with Reformulation on Informational queries as the first thing to check. +0.81% relative change in Successful Search Rate. The unit is relative percent, and the bar is +0.5% in the same unit. The primary metric clears the bar only at the point estimate. The CI's lower bound (+0.41%) is below +0.5%, so the data don't prove the lift meets the bar. The 14-day run is also short for novelty effects, and the rise in Reformulation may mean some of the success lift comes from shallower wins.",
+      "got": false,
+      "how": "overlap 12%"
+    }
+  ],
+  "lost": "Nowhere serious. The only place I slowed down was the bar's unit. The document flags it as an assumption, and the call depends on it. The Revenue guardrail's signs (a \u22121% margin with a \u22120.8% bound) took a moment to parse, but the document's wording is clear enough.",
+  "question": "Was the +0.5% bar written in the pre-registration as a relative change, and if so, why did the document choose relative over absolute?",
+  "replies": {
+    "skim": "1. **Answer:** The document recommends shipping Ranker v7 (lambdamart_v7 vs. lambdamart_v6). The primary metric clears its bar at the point estimate, all four pre-registered guardrails stay within margin, and Reformulation Rate is worse but was not pre-registered as a guardrail.\n2. **Decision:** Ship Ranker v7.\n3. **Number:** unclear. The primary metric's lift and CI aren't in the text. The only figure shown is 1.0M users per arm.\n",
+    "full": "1. **Answer:** Ship. The primary metric, Successful Search Rate, rose +0.81% relative (CI +0.41% to +1.21%) against a +0.5% bar. All four guardrails pass. The open concern is Reformulation Rate, which rose +0.96% (p=0.018), but it wasn't a pre-registered guardrail. The readout is finished and the decision is pending.\n\n2. **Decision:** Ship, as the document recommends. Before or just after launch, confirm that the +0.5% bar is relative, not absolute. Then keep a holdout or monitor Successful Search Rate and Reformulation Rate, with Reformulation on Informational queries as the first thing to check.\n\n3. **Number:** +0.81% relative change in Successful Search Rate. The unit is relative percent, and the bar is +0.5% in the same unit.\n\n4. **Caveat:** The primary metric clears the bar only at the point estimate. The CI's lower bound (+0.41%) is below +0.5%, so the data don't prove the lift meets the bar. The 14-day run is also short for novelty effects, and the rise in Reformulation may mean some of the success lift comes from shallower wins.\n\n5. **Lost:** Nowhere serious. The only place I slowed down was the bar's unit. The document flags it as an assumption, and the call depends on it. The Revenue guardrail's signs (a \u22121% margin with a \u22120.8% bound) took a moment to parse, but the document's wording is clear enough.\n\n6. **Question:** Was the +0.5% bar written in the pre-registration as a relative change, and if so, why did the document choose relative over absolute?\n"
+  }
+}

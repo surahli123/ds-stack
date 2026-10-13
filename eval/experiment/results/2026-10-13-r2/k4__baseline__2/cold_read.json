@@ -1,0 +1,53 @@
+{
+  "pass": false,
+  "skim": "1/2",
+  "full": "2/3",
+  "items": [
+    {
+      "pass": "skim",
+      "item": "answer",
+      "key": "Keep running: It's day 7 of 14; Successful Search Rate reads +0.55% (-0.21% to +1.31%) so far, too early to call.",
+      "reader": "The document doesn't support shipping or killing Ranker v7. Its only data is an interim snapshot from 2026-09-18 (day 7 of 14, about 53% of planned sample). The experiment is still active two weeks past its planned end, and no final readout exists. Keep running the experiment, and get the final data before any ship or kill decision.",
+      "got": false,
+      "how": "overlap 0%"
+    },
+    {
+      "pass": "skim",
+      "item": "decision",
+      "key": "Approve running the test longer.",
+      "reader": "Keep running the experiment, and get the final data before any ship or kill decision. The document doesn't support shipping or killing Ranker v7. Its only data is an interim snapshot from 2026-09-18 (day 7 of 14, about 53% of planned sample). The experiment is still active two weeks past its planned end, and no final readout exists.",
+      "got": true,
+      "how": "overlap 25%; grader: same fact"
+    },
+    {
+      "pass": "full",
+      "item": "takeaway 1",
+      "key": "Successful Search Rate +0.55% (-0.21% to +1.31%) against at least 0.50% higher.",
+      "reader": "The document doesn't recommend shipping or killing Ranker v7. Its header says \"Keep running.\" The only data is an interim snapshot from 2026-09-18, about day 7 of 14 and roughly 53% of the planned sample. The experiment should have ended 2026-09-26 but still shows `status: active`, and no final Pulse is in the files. Keep running. Pull a fresh Pulse for the full experiment with the same settings (95%, no CUPED, sequential). Then apply the ship rules, and resolve the open items: the sequential-setting mismatch, the abandonment margin definition, and whether the snapshot is the latest data. Successful Search Rate lift of +0.00227 absolute (+0.55% relative). The pre-registered bar is +0.005. The 95% sequential CI is \u22120.00087 to +0.00540. The data is too early to decide. The sequential CI includes zero and also includes values above the bar. Revenue per user isn't cleared: its CI can't rule out a drop larger than the 1% margin. The document also warns against quoting the p = 0.007, since it comes from a fixed-horizon interval that's invalid under peeking.",
+      "got": false,
+      "how": "overlap 0%"
+    },
+    {
+      "pass": "full",
+      "item": "takeaway 2",
+      "key": "Approve running the test longer.",
+      "reader": "The document doesn't recommend shipping or killing Ranker v7. Its header says \"Keep running.\" The only data is an interim snapshot from 2026-09-18, about day 7 of 14 and roughly 53% of the planned sample. The experiment should have ended 2026-09-26 but still shows `status: active`, and no final Pulse is in the files. Keep running. Pull a fresh Pulse for the full experiment with the same settings (95%, no CUPED, sequential). Then apply the ship rules, and resolve the open items: the sequential-setting mismatch, the abandonment margin definition, and whether the snapshot is the latest data. Successful Search Rate lift of +0.00227 absolute (+0.55% relative). The pre-registered bar is +0.005. The 95% sequential CI is \u22120.00087 to +0.00540. The data is too early to decide. The sequential CI includes zero and also includes values above the bar. Revenue per user isn't cleared: its CI can't rule out a drop larger than the 1% margin. The document also warns against quoting the p = 0.007, since it comes from a fixed-horizon interval that's invalid under peeking.",
+      "got": true,
+      "how": "overlap 25%; grader: same fact"
+    },
+    {
+      "pass": "full",
+      "item": "takeaway 3",
+      "key": "Could reverse it: the remaining data; the call is made at the planned sample.",
+      "reader": "The document doesn't recommend shipping or killing Ranker v7. Its header says \"Keep running.\" The only data is an interim snapshot from 2026-09-18, about day 7 of 14 and roughly 53% of the planned sample. The experiment should have ended 2026-09-26 but still shows `status: active`, and no final Pulse is in the files. Keep running. Pull a fresh Pulse for the full experiment with the same settings (95%, no CUPED, sequential). Then apply the ship rules, and resolve the open items: the sequential-setting mismatch, the abandonment margin definition, and whether the snapshot is the latest data. Successful Search Rate lift of +0.00227 absolute (+0.55% relative). The pre-registered bar is +0.005. The 95% sequential CI is \u22120.00087 to +0.00540. The data is too early to decide. The sequential CI includes zero and also includes values above the bar. Revenue per user isn't cleared: its CI can't rule out a drop larger than the 1% margin. The document also warns against quoting the p = 0.007, since it comes from a fixed-horizon interval that's invalid under peeking.",
+      "got": true,
+      "how": "overlap 43%; grader: same fact"
+    }
+  ],
+  "lost": "Nowhere serious on one read. Two things stayed unclear: whether the abandonment margin is relative or absolute (it changes whether that guardrail passes), and whether \"point_at_bar\" means the point estimate or the lower bound. The document says to read it as the point estimate, pending confirmation.",
+  "question": "Does final Pulse data exist for the full 14-day run, or was the experiment left active by mistake?",
+  "replies": {
+    "skim": "1. **Answer:** The document doesn't support shipping or killing Ranker v7. Its only data is an interim snapshot from 2026-09-18 (day 7 of 14, about 53% of planned sample). The experiment is still active two weeks past its planned end, and no final readout exists.\n2. **Decision:** Keep running the experiment, and get the final data before any ship or kill decision.\n3. **Number:** +0.005 absolute, the Successful Search Rate threshold the pre-registered ship rule requires. The observed effect size isn't in this text, so the result against that bar is unclear.\n",
+    "full": "1. **Answer:** The document doesn't recommend shipping or killing Ranker v7. Its header says \"Keep running.\" The only data is an interim snapshot from 2026-09-18, about day 7 of 14 and roughly 53% of the planned sample. The experiment should have ended 2026-09-26 but still shows `status: active`, and no final Pulse is in the files.\n\n2. **Decision:** Keep running. Pull a fresh Pulse for the full experiment with the same settings (95%, no CUPED, sequential). Then apply the ship rules, and resolve the open items: the sequential-setting mismatch, the abandonment margin definition, and whether the snapshot is the latest data.\n\n3. **Number:** Successful Search Rate lift of +0.00227 absolute (+0.55% relative). The pre-registered bar is +0.005. The 95% sequential CI is \u22120.00087 to +0.00540.\n\n4. **Caveat:** The data is too early to decide. The sequential CI includes zero and also includes values above the bar. Revenue per user isn't cleared: its CI can't rule out a drop larger than the 1% margin. The document also warns against quoting the p = 0.007, since it comes from a fixed-horizon interval that's invalid under peeking.\n\n5. **Lost:** Nowhere serious on one read. Two things stayed unclear: whether the abandonment margin is relative or absolute (it changes whether that guardrail passes), and whether \"point_at_bar\" means the point estimate or the lower bound. The document says to read it as the point estimate, pending confirmation.\n\n6. **Question:** Does final Pulse data exist for the full 14-day run, or was the experiment left active by mistake?\n"
+  }
+}

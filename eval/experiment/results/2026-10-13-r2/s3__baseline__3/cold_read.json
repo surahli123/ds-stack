@@ -1,0 +1,53 @@
+{
+  "pass": false,
+  "skim": "0/2",
+  "full": "1/3",
+  "items": [
+    {
+      "pass": "skim",
+      "item": "answer",
+      "key": "Ship: Successful Search Rate rose 0.81% (+0.41% to +1.21%), which clears the 0.50% bar and every guardrail held.",
+      "reader": "Ship. Successful Search Rate rose from 41.20% to 41.53% (+0.33 pp, +0.81% relative), and the point estimate clears the 0.5% bar. The 95% CI lower bound (+0.41%) is below the bar. Ship only after confirming the bar is relative. The text cuts off at \"If the team meant 0.5 pp absolute,\" and +0.33 pp would fail that reading.",
+      "got": false,
+      "how": "overlap 0%"
+    },
+    {
+      "pass": "skim",
+      "item": "decision",
+      "key": "Approve the launch to all traffic.",
+      "reader": "Ship only after confirming the bar is relative. The text cuts off at \"If the team meant 0.5 pp absolute,\" and +0.33 pp would fail that reading. Ship. Successful Search Rate rose from 41.20% to 41.53% (+0.33 pp, +0.81% relative), and the point estimate clears the 0.5% bar. The 95% CI lower bound (+0.41%) is below the bar.",
+      "got": false,
+      "how": "overlap 0%"
+    },
+    {
+      "pass": "full",
+      "item": "takeaway 1",
+      "key": "Successful Search Rate +0.81% (+0.41% to +1.21%) against at least 0.50% higher.",
+      "reader": "The document recommends shipping, conditional on three checks: the units of the 0.5% bar, a day-1 discrepancy between two views of the data, and the segment definitions. The current state is that the pre-registered point estimate (+0.81% relative) clears the bar, the guardrails hold, and the lift is fading by calendar day. Settle the bar's units first, because that decides whether this is a ship. If the bar is relative, ship. If it is 0.5 pp absolute, the result misses at +0.33 pp. The day-1 and segment checks are data hygiene. They should not block a launch unless they change the headline numbers. Successful Search Rate lift of **+0.81% relative** (41.20% to 41.53%, +0.33 pp), with a 95% CI of +0.41% to +1.21%. Durability. By calendar day the lift fades to +0.50%, and the day-14 CI includes zero. The lower CI bound of the headline result also sits below the 0.5% bar, so the bar is met only on the point estimate.",
+      "got": true,
+      "how": "overlap 70%"
+    },
+    {
+      "pass": "full",
+      "item": "takeaway 2",
+      "key": "Approve the launch to all traffic.",
+      "reader": "The document recommends shipping, conditional on three checks: the units of the 0.5% bar, a day-1 discrepancy between two views of the data, and the segment definitions. The current state is that the pre-registered point estimate (+0.81% relative) clears the bar, the guardrails hold, and the lift is fading by calendar day. Settle the bar's units first, because that decides whether this is a ship. If the bar is relative, ship. If it is 0.5 pp absolute, the result misses at +0.33 pp. The day-1 and segment checks are data hygiene. They should not block a launch unless they change the headline numbers. Successful Search Rate lift of **+0.81% relative** (41.20% to 41.53%, +0.33 pp), with a 95% CI of +0.41% to +1.21%. Durability. By calendar day the lift fades to +0.50%, and the day-14 CI includes zero. The lower CI bound of the headline result also sits below the 0.5% bar, so the bar is met only on the point estimate.",
+      "got": false,
+      "how": "overlap 33%"
+    },
+    {
+      "pass": "full",
+      "item": "takeaway 3",
+      "key": "Could reverse it: pre period could not be checked: no pre-period interval or platform check.",
+      "reader": "The document recommends shipping, conditional on three checks: the units of the 0.5% bar, a day-1 discrepancy between two views of the data, and the segment definitions. The current state is that the pre-registered point estimate (+0.81% relative) clears the bar, the guardrails hold, and the lift is fading by calendar day. Settle the bar's units first, because that decides whether this is a ship. If the bar is relative, ship. If it is 0.5 pp absolute, the result misses at +0.33 pp. The day-1 and segment checks are data hygiene. They should not block a launch unless they change the headline numbers. Successful Search Rate lift of **+0.81% relative** (41.20% to 41.53%, +0.33 pp), with a 95% CI of +0.41% to +1.21%. Durability. By calendar day the lift fades to +0.50%, and the day-14 CI includes zero. The lower CI bound of the headline result also sits below the 0.5% bar, so the bar is met only on the point estimate.",
+      "got": false,
+      "how": "overlap 0%"
+    }
+  ],
+  "lost": "The bar's units. The document says it reads the bar as relative because of how the guardrails and daily files are defined, but the pre-registered wording is not quoted, so I couldn't confirm it. The segment result (negative in Mobile and Desktop, positive overall) was also confusing until the document explained that it implies a segment-definition problem.",
+  "question": "Does the pre-registration define the 0.5% bar as a relative or an absolute lift, and where is that text written down?",
+  "replies": {
+    "skim": "1. **Answer:** Ship. Successful Search Rate rose from 41.20% to 41.53% (+0.33 pp, +0.81% relative), and the point estimate clears the 0.5% bar. The 95% CI lower bound (+0.41%) is below the bar.\n2. **Decision:** Ship only after confirming the bar is relative. The text cuts off at \"If the team meant 0.5 pp absolute,\" and +0.33 pp would fail that reading.\n3. **Number:** +0.81% relative lift in Successful Search Rate (+0.33 pp absolute).\n",
+    "full": "1. **Answer:** The document recommends shipping, conditional on three checks: the units of the 0.5% bar, a day-1 discrepancy between two views of the data, and the segment definitions. The current state is that the pre-registered point estimate (+0.81% relative) clears the bar, the guardrails hold, and the lift is fading by calendar day.\n\n2. **Decision:** Settle the bar's units first, because that decides whether this is a ship. If the bar is relative, ship. If it is 0.5 pp absolute, the result misses at +0.33 pp. The day-1 and segment checks are data hygiene. They should not block a launch unless they change the headline numbers.\n\n3. **Number:** Successful Search Rate lift of **+0.81% relative** (41.20% to 41.53%, +0.33 pp), with a 95% CI of +0.41% to +1.21%.\n\n4. **Caveat:** Durability. By calendar day the lift fades to +0.50%, and the day-14 CI includes zero. The lower CI bound of the headline result also sits below the 0.5% bar, so the bar is met only on the point estimate.\n\n5. **Lost:** The bar's units. The document says it reads the bar as relative because of how the guardrails and daily files are defined, but the pre-registered wording is not quoted, so I couldn't confirm it. The segment result (negative in Mobile and Desktop, positive overall) was also confusing until the document explained that it implies a segment-definition problem.\n\n6. **Question:** Does the pre-registration define the 0.5% bar as a relative or an absolute lift, and where is that text written down?\n"
+  }
+}

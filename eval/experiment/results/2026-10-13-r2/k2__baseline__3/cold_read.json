@@ -1,0 +1,53 @@
+{
+  "pass": false,
+  "skim": "2/2",
+  "full": "1/3",
+  "items": [
+    {
+      "pass": "skim",
+      "item": "answer",
+      "key": "Keep running: Successful Search Rate rose 0.81% (+0.41% to +1.21%) overall, but the effect is fading with each day users have had it.",
+      "reader": "The pooled SSR lift is real (+0.81% relative, 95% CI +0.41% to +1.21%) and no guardrail is hurt, but the daily effect is fading and falls below the pre-registered bar by days 10\u201312, where its CI includes zero. Keep running; don't launch yet.",
+      "got": true,
+      "how": "overlap 47%; grader: same fact"
+    },
+    {
+      "pass": "skim",
+      "item": "decision",
+      "key": "Approve running the test longer.",
+      "reader": "Keep running; don't launch yet. The pooled SSR lift is real (+0.81% relative, 95% CI +0.41% to +1.21%) and no guardrail is hurt, but the daily effect is fading and falls below the pre-registered bar by days 10\u201312, where its CI includes zero.",
+      "got": true,
+      "how": "overlap 25%; grader: same fact"
+    },
+    {
+      "pass": "full",
+      "item": "takeaway 1",
+      "key": "Effect fading: effect by days since exposure: first days +1.33%, last days +0.50% (trend -0.103% per day)",
+      "reader": "The document recommends **Keep running**. The pooled Successful Search Rate (SSR) lift is +0.81% relative (CI +0.41% to +1.21%), and all four guardrails hold. But the daily effect decays steadily, falling to +0.40% by day 12, with a CI that includes zero. The pulse is stale (dated 2026-09-25), and the test is past its planned 14 days and still running as of today. Keep the test running. Don't ship on the pooled number. Confirm whether the 0.005 bar is absolute or relative, pull a fresh pulse, and extend the daily series to see whether the effect plateaus. Agree on the ship criterion beforehand: the plateau or last-7-day effect must reach the bar, and the guardrails must still hold. SSR relative change, +0.81% (pooled). The more decision-relevant figure is the decaying trend, which ends at +0.40% on day 12. The effect looks like a novelty effect, and the pooled number may overstate the lasting benefit by about 2x. The daily series has only 12 points. The bar's unit is ambiguous: as an absolute change the test fails (+0.0033 vs 0.005). Segment results are uncorrected for multiple comparisons, though the tail-query click drop (\u22122.25%, p = 0.004) is flagged as worth watching.",
+      "got": false,
+      "how": "overlap 0%"
+    },
+    {
+      "pass": "full",
+      "item": "takeaway 2",
+      "key": "Approve running the test longer.",
+      "reader": "The document recommends **Keep running**. The pooled Successful Search Rate (SSR) lift is +0.81% relative (CI +0.41% to +1.21%), and all four guardrails hold. But the daily effect decays steadily, falling to +0.40% by day 12, with a CI that includes zero. The pulse is stale (dated 2026-09-25), and the test is past its planned 14 days and still running as of today. Keep the test running. Don't ship on the pooled number. Confirm whether the 0.005 bar is absolute or relative, pull a fresh pulse, and extend the daily series to see whether the effect plateaus. Agree on the ship criterion beforehand: the plateau or last-7-day effect must reach the bar, and the guardrails must still hold. SSR relative change, +0.81% (pooled). The more decision-relevant figure is the decaying trend, which ends at +0.40% on day 12. The effect looks like a novelty effect, and the pooled number may overstate the lasting benefit by about 2x. The daily series has only 12 points. The bar's unit is ambiguous: as an absolute change the test fails (+0.0033 vs 0.005). Segment results are uncorrected for multiple comparisons, though the tail-query click drop (\u22122.25%, p = 0.004) is flagged as worth watching.",
+      "got": true,
+      "how": "overlap 50%"
+    },
+    {
+      "pass": "full",
+      "item": "takeaway 3",
+      "key": "Could reverse it: the remaining data; the call is made at the planned sample.",
+      "reader": "The document recommends **Keep running**. The pooled Successful Search Rate (SSR) lift is +0.81% relative (CI +0.41% to +1.21%), and all four guardrails hold. But the daily effect decays steadily, falling to +0.40% by day 12, with a CI that includes zero. The pulse is stale (dated 2026-09-25), and the test is past its planned 14 days and still running as of today. Keep the test running. Don't ship on the pooled number. Confirm whether the 0.005 bar is absolute or relative, pull a fresh pulse, and extend the daily series to see whether the effect plateaus. Agree on the ship criterion beforehand: the plateau or last-7-day effect must reach the bar, and the guardrails must still hold. SSR relative change, +0.81% (pooled). The more decision-relevant figure is the decaying trend, which ends at +0.40% on day 12. The effect looks like a novelty effect, and the pooled number may overstate the lasting benefit by about 2x. The daily series has only 12 points. The bar's unit is ambiguous: as an absolute change the test fails (+0.0033 vs 0.005). Segment results are uncorrected for multiple comparisons, though the tail-query click drop (\u22122.25%, p = 0.004) is flagged as worth watching.",
+      "got": false,
+      "how": "overlap 14%"
+    }
+  ],
+  "lost": "Mostly nowhere. The one thing I had to stop on was the absolute-versus-relative reading of the 0.005 bar, which the document itself flags as unresolved. The document doesn't say what the team will do if the plateau lands near 0.4%, beyond \"don't ship at this bar, or document a smaller win.\"",
+  "question": "Is the pre-registered 0.005 bar absolute or relative, and what does the refreshed pulse show for the last 7 days?",
+  "replies": {
+    "skim": "1. **Answer:** The pooled SSR lift is real (+0.81% relative, 95% CI +0.41% to +1.21%) and no guardrail is hurt, but the daily effect is fading and falls below the pre-registered bar by days 10\u201312, where its CI includes zero.\n2. **Decision:** Keep running; don't launch yet.\n3. **Number:** Unclear. The days 10\u201312 SSR lift, which the readout says matters most, isn't stated in the text. The only number given is the pooled +0.81% relative lift, and the readout itself says that average overstates the lasting effect.\n",
+    "full": "1. **Answer:** The document recommends **Keep running**. The pooled Successful Search Rate (SSR) lift is +0.81% relative (CI +0.41% to +1.21%), and all four guardrails hold. But the daily effect decays steadily, falling to +0.40% by day 12, with a CI that includes zero. The pulse is stale (dated 2026-09-25), and the test is past its planned 14 days and still running as of today.\n\n2. **Decision:** Keep the test running. Don't ship on the pooled number. Confirm whether the 0.005 bar is absolute or relative, pull a fresh pulse, and extend the daily series to see whether the effect plateaus. Agree on the ship criterion beforehand: the plateau or last-7-day effect must reach the bar, and the guardrails must still hold.\n\n3. **Number:** SSR relative change, +0.81% (pooled). The more decision-relevant figure is the decaying trend, which ends at +0.40% on day 12.\n\n4. **Caveat:** The effect looks like a novelty effect, and the pooled number may overstate the lasting benefit by about 2x. The daily series has only 12 points. The bar's unit is ambiguous: as an absolute change the test fails (+0.0033 vs 0.005). Segment results are uncorrected for multiple comparisons, though the tail-query click drop (\u22122.25%, p = 0.004) is flagged as worth watching.\n\n5. **Lost:** Mostly nowhere. The one thing I had to stop on was the absolute-versus-relative reading of the 0.005 bar, which the document itself flags as unresolved. The document doesn't say what the team will do if the plateau lands near 0.4%, beyond \"don't ship at this bar, or document a smaller win.\"\n\n6. **Question:** Is the pre-registered 0.005 bar absolute or relative, and what does the refreshed pulse show for the last 7 days?\n"
+  }
+}

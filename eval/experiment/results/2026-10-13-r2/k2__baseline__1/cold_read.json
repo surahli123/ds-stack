@@ -1,0 +1,53 @@
+{
+  "pass": false,
+  "skim": "1/2",
+  "full": "1/3",
+  "items": [
+    {
+      "pass": "skim",
+      "item": "answer",
+      "key": "Keep running: Successful Search Rate rose 0.81% (+0.41% to +1.21%) overall, but the effect is fading with each day users have had it.",
+      "reader": "Keep the test running instead of shipping tomorrow. The search-success lift is shrinking from +1.5% on day 1 to +0.4% on day 12, and the CI includes zero from day 10, so the lasting effect is probably smaller than the pooled number. Extend the test and fill in the missing daily data for days 13\u201314 before deciding whether to launch.",
+      "got": false,
+      "how": "overlap 0%"
+    },
+    {
+      "pass": "skim",
+      "item": "decision",
+      "key": "Approve running the test longer.",
+      "reader": "Extend the test and fill in the missing daily data for days 13\u201314 before deciding whether to launch. Keep the test running instead of shipping tomorrow. The search-success lift is shrinking from +1.5% on day 1 to +0.4% on day 12, and the CI includes zero from day 10, so the lasting effect is probably smaller than the pooled number.",
+      "got": true,
+      "how": "overlap 50%"
+    },
+    {
+      "pass": "full",
+      "item": "takeaway 1",
+      "key": "Effect fading: effect by days since exposure: first days +1.33%, last days +0.50% (trend -0.103% per day)",
+      "reader": "The readout recommends extending the test rather than shipping. The pooled primary metric (Successful Search Rate) is +0.33 pp absolute (+0.81% relative, 95% CI +0.17 to +0.50 pp, p = 7e-5), but the daily lift decays from +1.5% on day 1 to +0.4% on day 12, and the CI includes zero from day 10. The author reads this as a novelty effect. Current state: the daily file stops at day 12 of a 14-day test (Sep 12\u201325). Guardrails are within margin. The exposure check and audit log are clean. Extend the test, as the readout proposes, and don't ship on the pooled number. Before the extension rule can be applied, two things need resolving: the bar's unit, and the missing days 13\u201314. Also, the document says \"ship tomorrow,\" but the test dates end Sep 25 and today is Oct 12. Unclear whether this readout is stale or the dates are wrong. Pooled Successful Search Rate lift, +0.33 pp absolute (+0.81% relative). The decision, though, depends on the late-day lift, which the document gives as +0.4% on day 12. Its unit is unclear. The bar is 0.005, and whether that's relative or absolute decides pass or fail: the pooled result passes as relative and fails as absolute. The pooled win is driven by early, larger days, and the lasting effect is probably smaller than the pooled number. The late-day CI includes zero. Secondary: the segment cuts (tail-query clicks \u22122.25%, p = 0.004; desktop search success \u22120.79%, p = 0.07) come from about 60 unplanned, uncorrected comparisons, so they could be noise or a real harm, and the document can't say which.",
+      "got": false,
+      "how": "overlap 0%"
+    },
+    {
+      "pass": "full",
+      "item": "takeaway 2",
+      "key": "Approve running the test longer.",
+      "reader": "The readout recommends extending the test rather than shipping. The pooled primary metric (Successful Search Rate) is +0.33 pp absolute (+0.81% relative, 95% CI +0.17 to +0.50 pp, p = 7e-5), but the daily lift decays from +1.5% on day 1 to +0.4% on day 12, and the CI includes zero from day 10. The author reads this as a novelty effect. Current state: the daily file stops at day 12 of a 14-day test (Sep 12\u201325). Guardrails are within margin. The exposure check and audit log are clean. Extend the test, as the readout proposes, and don't ship on the pooled number. Before the extension rule can be applied, two things need resolving: the bar's unit, and the missing days 13\u201314. Also, the document says \"ship tomorrow,\" but the test dates end Sep 25 and today is Oct 12. Unclear whether this readout is stale or the dates are wrong. Pooled Successful Search Rate lift, +0.33 pp absolute (+0.81% relative). The decision, though, depends on the late-day lift, which the document gives as +0.4% on day 12. Its unit is unclear. The bar is 0.005, and whether that's relative or absolute decides pass or fail: the pooled result passes as relative and fails as absolute. The pooled win is driven by early, larger days, and the lasting effect is probably smaller than the pooled number. The late-day CI includes zero. Secondary: the segment cuts (tail-query clicks \u22122.25%, p = 0.004; desktop search success \u22120.79%, p = 0.07) come from about 60 unplanned, uncorrected comparisons, so they could be noise or a real harm, and the document can't say which.",
+      "got": true,
+      "how": "overlap 25%; grader: same fact"
+    },
+    {
+      "pass": "full",
+      "item": "takeaway 3",
+      "key": "Could reverse it: the remaining data; the call is made at the planned sample.",
+      "reader": "The readout recommends extending the test rather than shipping. The pooled primary metric (Successful Search Rate) is +0.33 pp absolute (+0.81% relative, 95% CI +0.17 to +0.50 pp, p = 7e-5), but the daily lift decays from +1.5% on day 1 to +0.4% on day 12, and the CI includes zero from day 10. The author reads this as a novelty effect. Current state: the daily file stops at day 12 of a 14-day test (Sep 12\u201325). Guardrails are within margin. The exposure check and audit log are clean. Extend the test, as the readout proposes, and don't ship on the pooled number. Before the extension rule can be applied, two things need resolving: the bar's unit, and the missing days 13\u201314. Also, the document says \"ship tomorrow,\" but the test dates end Sep 25 and today is Oct 12. Unclear whether this readout is stale or the dates are wrong. Pooled Successful Search Rate lift, +0.33 pp absolute (+0.81% relative). The decision, though, depends on the late-day lift, which the document gives as +0.4% on day 12. Its unit is unclear. The bar is 0.005, and whether that's relative or absolute decides pass or fail: the pooled result passes as relative and fails as absolute. The pooled win is driven by early, larger days, and the lasting effect is probably smaller than the pooled number. The late-day CI includes zero. Secondary: the segment cuts (tail-query clicks \u22122.25%, p = 0.004; desktop search success \u22120.79%, p = 0.07) come from about 60 unplanned, uncorrected comparisons, so they could be noise or a real harm, and the document can't say which.",
+      "got": false,
+      "how": "overlap 0%"
+    }
+  ],
+  "lost": "I had to reread the bar-unit sentence, since it decides the outcome. The \"ship tomorrow\" line also conflicted with the Sep 25 end date and today's Oct 12 date, which I couldn't reconcile from the text.",
+  "question": "Is the 0.005 bar relative or absolute, and why does the daily file stop at day 12 when the test ran 14 days? (Also: is \"ship tomorrow\" from an older draft, since the test dates are a month back?)",
+  "replies": {
+    "skim": "1. **Answer:** Keep the test running instead of shipping tomorrow. The search-success lift is shrinking from +1.5% on day 1 to +0.4% on day 12, and the CI includes zero from day 10, so the lasting effect is probably smaller than the pooled number.\n2. **Decision:** Extend the test and fill in the missing daily data for days 13\u201314 before deciding whether to launch.\n3. **Number:** Pooled Successful Search Rate lift of +0.33 pp absolute (+0.81% relative; 95% CI +0.17 to +0.50 pp).\n",
+    "full": "1. **Answer:** The readout recommends extending the test rather than shipping. The pooled primary metric (Successful Search Rate) is +0.33 pp absolute (+0.81% relative, 95% CI +0.17 to +0.50 pp, p = 7e-5), but the daily lift decays from +1.5% on day 1 to +0.4% on day 12, and the CI includes zero from day 10. The author reads this as a novelty effect. Current state: the daily file stops at day 12 of a 14-day test (Sep 12\u201325). Guardrails are within margin. The exposure check and audit log are clean.\n\n2. **Decision:** Extend the test, as the readout proposes, and don't ship on the pooled number. Before the extension rule can be applied, two things need resolving: the bar's unit, and the missing days 13\u201314. Also, the document says \"ship tomorrow,\" but the test dates end Sep 25 and today is Oct 12. Unclear whether this readout is stale or the dates are wrong.\n\n3. **Number:** Pooled Successful Search Rate lift, +0.33 pp absolute (+0.81% relative). The decision, though, depends on the late-day lift, which the document gives as +0.4% on day 12. Its unit is unclear. The bar is 0.005, and whether that's relative or absolute decides pass or fail: the pooled result passes as relative and fails as absolute.\n\n4. **Caveat:** The pooled win is driven by early, larger days, and the lasting effect is probably smaller than the pooled number. The late-day CI includes zero. Secondary: the segment cuts (tail-query clicks \u22122.25%, p = 0.004; desktop search success \u22120.79%, p = 0.07) come from about 60 unplanned, uncorrected comparisons, so they could be noise or a real harm, and the document can't say which.\n\n5. **Lost:** I had to reread the bar-unit sentence, since it decides the outcome. The \"ship tomorrow\" line also conflicted with the Sep 25 end date and today's Oct 12 date, which I couldn't reconcile from the text.\n\n6. **Question:** Is the 0.005 bar relative or absolute, and why does the daily file stop at day 12 when the test ran 14 days? (Also: is \"ship tomorrow\" from an older draft, since the test dates are a month back?)\n"
+  }
+}

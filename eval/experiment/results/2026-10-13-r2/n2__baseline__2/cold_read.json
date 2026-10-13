@@ -1,0 +1,53 @@
+{
+  "pass": false,
+  "skim": "1/2",
+  "full": "2/3",
+  "items": [
+    {
+      "pass": "skim",
+      "item": "answer",
+      "key": "No effect found: Successful Search Rate reads +0.06% (-0.24% to +0.36%), which rules out the 0.50% change the test was built to find.",
+      "reader": "The document concludes no effect: Successful Search Rate moved +0.00025 (0.4120 to 0.41225), with a 95% CI of [-0.0010, +0.0015] and p = 0.70. All four guardrails stayed within margin. Don't launch on this result. Even the CI's upper bound (+0.0015) is well below the +0.005 ship bar. The excerpt cuts off before naming a next step, so any follow-up is unclear.",
+      "got": true,
+      "how": "overlap 0%; grader: same fact"
+    },
+    {
+      "pass": "skim",
+      "item": "decision",
+      "key": "Agree to stop the test without launching.",
+      "reader": "Don't launch on this result. Even the CI's upper bound (+0.0015) is well below the +0.005 ship bar. The excerpt cuts off before naming a next step, so any follow-up is unclear. The document concludes no effect: Successful Search Rate moved +0.00025 (0.4120 to 0.41225), with a 95% CI of [-0.0010, +0.0015] and p = 0.70. All four guardrails stayed within margin.",
+      "got": false,
+      "how": "overlap 0%"
+    },
+    {
+      "pass": "full",
+      "item": "takeaway 1",
+      "key": "Successful Search Rate +0.06% (-0.24% to +0.36%) against at least 0.50% higher.",
+      "reader": "The document concludes that v7 shows no effect on the primary metric and should not ship as a general launch. The experiment is still marked `status: active` even though its 14-day window ended around 2026-09-26, so it has not been stopped. Don't ship v7 broadly. Stop the experiment. If the team wants the tail-query gain, pre-register a tail-targeted test after confirming the tail definition and its share of traffic. Successful Search Rate change of +0.00025 (absolute rate, about +0.025 pp), with 95% CI [-0.0010, +0.0015], against a pre-registered ship bar of +0.005. The tail-query win (+1.46 pp) was not pre-registered and comes from one of roughly 35 post-hoc slices. The author flags it as a lead, not a result. The guardrail margins are also assumed to be relative, which the document says the pre-registration doesn't specify.",
+      "got": true,
+      "how": "overlap 0%; grader: same fact"
+    },
+    {
+      "pass": "full",
+      "item": "takeaway 2",
+      "key": "Agree to stop the test without launching.",
+      "reader": "The document concludes that v7 shows no effect on the primary metric and should not ship as a general launch. The experiment is still marked `status: active` even though its 14-day window ended around 2026-09-26, so it has not been stopped. Don't ship v7 broadly. Stop the experiment. If the team wants the tail-query gain, pre-register a tail-targeted test after confirming the tail definition and its share of traffic. Successful Search Rate change of +0.00025 (absolute rate, about +0.025 pp), with 95% CI [-0.0010, +0.0015], against a pre-registered ship bar of +0.005. The tail-query win (+1.46 pp) was not pre-registered and comes from one of roughly 35 post-hoc slices. The author flags it as a lead, not a result. The guardrail margins are also assumed to be relative, which the document says the pre-registration doesn't specify.",
+      "got": true,
+      "how": "overlap 40%; grader: same fact"
+    },
+    {
+      "pass": "full",
+      "item": "takeaway 3",
+      "key": "Could reverse it: pre period could not be checked: no pre-period interval or platform check.",
+      "reader": "The document concludes that v7 shows no effect on the primary metric and should not ship as a general launch. The experiment is still marked `status: active` even though its 14-day window ended around 2026-09-26, so it has not been stopped. Don't ship v7 broadly. Stop the experiment. If the team wants the tail-query gain, pre-register a tail-targeted test after confirming the tail definition and its share of traffic. Successful Search Rate change of +0.00025 (absolute rate, about +0.025 pp), with 95% CI [-0.0010, +0.0015], against a pre-registered ship bar of +0.005. The tail-query win (+1.46 pp) was not pre-registered and comes from one of roughly 35 post-hoc slices. The author flags it as a lead, not a result. The guardrail margins are also assumed to be relative, which the document says the pre-registration doesn't specify.",
+      "got": false,
+      "how": "overlap 0%"
+    }
+  ],
+  "lost": "The tail-query definition is unclear. The document says to confirm it but doesn't give it. The definition of \"successful search\" is also unclear.",
+  "question": "How is \"tail query\" defined, and what share of traffic does it cover?",
+  "replies": {
+    "skim": "1. **Answer:** The document concludes no effect: Successful Search Rate moved +0.00025 (0.4120 to 0.41225), with a 95% CI of [-0.0010, +0.0015] and p = 0.70. All four guardrails stayed within margin.\n2. **Decision:** Don't launch on this result. Even the CI's upper bound (+0.0015) is well below the +0.005 ship bar. The excerpt cuts off before naming a next step, so any follow-up is unclear.\n3. **Number:** +0.00025 absolute change in Successful Search Rate (a proportion, so percentage points on a 0-1 scale).\n",
+    "full": "1. **Answer:** The document concludes that v7 shows no effect on the primary metric and should not ship as a general launch. The experiment is still marked `status: active` even though its 14-day window ended around 2026-09-26, so it has not been stopped.\n2. **Decision:** Don't ship v7 broadly. Stop the experiment. If the team wants the tail-query gain, pre-register a tail-targeted test after confirming the tail definition and its share of traffic.\n3. **Number:** Successful Search Rate change of +0.00025 (absolute rate, about +0.025 pp), with 95% CI [-0.0010, +0.0015], against a pre-registered ship bar of +0.005.\n4. **Caveat:** The tail-query win (+1.46 pp) was not pre-registered and comes from one of roughly 35 post-hoc slices. The author flags it as a lead, not a result. The guardrail margins are also assumed to be relative, which the document says the pre-registration doesn't specify.\n5. **Lost:** The tail-query definition is unclear. The document says to confirm it but doesn't give it. The definition of \"successful search\" is also unclear.\n6. **Question:** How is \"tail query\" defined, and what share of traffic does it cover?\n"
+  }
+}

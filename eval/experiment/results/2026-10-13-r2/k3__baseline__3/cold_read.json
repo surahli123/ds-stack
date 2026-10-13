@@ -1,0 +1,53 @@
+{
+  "pass": false,
+  "skim": "0/2",
+  "full": "0/3",
+  "items": [
+    {
+      "pass": "skim",
+      "item": "answer",
+      "key": "Keep running: Successful Search Rate reads +0.12% (-0.36% to +0.60%); ruling out the 0.50% bar needs about 1.9 times the users so far.",
+      "reader": "",
+      "got": false,
+      "how": "overlap 0%"
+    },
+    {
+      "pass": "skim",
+      "item": "decision",
+      "key": "Approve running the test longer.",
+      "reader": "",
+      "got": false,
+      "how": "overlap 0%"
+    },
+    {
+      "pass": "full",
+      "item": "takeaway 1",
+      "key": "Successful Search Rate +0.12% (-0.36% to +0.60%) against at least 0.50% higher.",
+      "reader": "Ranker v7 did not move Successful Search Rate. The point estimate is +0.12% relative (+0.0005 absolute, p = 0.62), and the pre-registered ship bar was not met under either reading. The guardrails are within margin. The document recommends not launching and treating the result as a null. Don't launch v7. Before any follow-up, the team should decide whether the 0.5 ship bar is absolute or relative and write that into the prereg. Run a follow-up only if a design change could plausibly produce a larger effect. Successful Search Rate change, +0.00049 absolute (+0.12% relative), with a 95% CI of \u22120.0015 to +0.0025 absolute. The document names the ambiguous ship bar (absolute or relative) as unresolved. It also names the roughly 60 unadjusted secondary and segment comparisons, which it reads as chance-level. Five hits at p < 0.05 is a bit above the roughly 3 expected by chance, so I'd treat that reading as generous.",
+      "got": false,
+      "how": "overlap 0%"
+    },
+    {
+      "pass": "full",
+      "item": "takeaway 2",
+      "key": "Approve running the test longer.",
+      "reader": "Ranker v7 did not move Successful Search Rate. The point estimate is +0.12% relative (+0.0005 absolute, p = 0.62), and the pre-registered ship bar was not met under either reading. The guardrails are within margin. The document recommends not launching and treating the result as a null. Don't launch v7. Before any follow-up, the team should decide whether the 0.5 ship bar is absolute or relative and write that into the prereg. Run a follow-up only if a design change could plausibly produce a larger effect. Successful Search Rate change, +0.00049 absolute (+0.12% relative), with a 95% CI of \u22120.0015 to +0.0025 absolute. The document names the ambiguous ship bar (absolute or relative) as unresolved. It also names the roughly 60 unadjusted secondary and segment comparisons, which it reads as chance-level. Five hits at p < 0.05 is a bit above the roughly 3 expected by chance, so I'd treat that reading as generous.",
+      "got": false,
+      "how": "overlap 0%"
+    },
+    {
+      "pass": "full",
+      "item": "takeaway 3",
+      "key": "Could reverse it: the remaining data; the call is made at the planned sample.",
+      "reader": "Ranker v7 did not move Successful Search Rate. The point estimate is +0.12% relative (+0.0005 absolute, p = 0.62), and the pre-registered ship bar was not met under either reading. The guardrails are within margin. The document recommends not launching and treating the result as a null. Don't launch v7. Before any follow-up, the team should decide whether the 0.5 ship bar is absolute or relative and write that into the prereg. Run a follow-up only if a design change could plausibly produce a larger effect. Successful Search Rate change, +0.00049 absolute (+0.12% relative), with a 95% CI of \u22120.0015 to +0.0025 absolute. The document names the ambiguous ship bar (absolute or relative) as unresolved. It also names the roughly 60 unadjusted secondary and segment comparisons, which it reads as chance-level. Five hits at p < 0.05 is a bit above the roughly 3 expected by chance, so I'd treat that reading as generous.",
+      "got": false,
+      "how": "overlap 0%"
+    }
+  ],
+  "lost": "I had to reread the ship-bar section to check both readings. The guardrail margins are stated as relative, with CI bounds given only approximately, so I had to work out what each one meant.",
+  "question": "When you pre-registered the 0.5 bar, did you mean 0.5 percentage points absolute or 0.5% relative?",
+  "replies": {
+    "skim": "Answer: Ranker v7 had no measurable effect on Successful Search Rate (+0.12% relative, CI \u22120.36% to +0.60%, p=0.62), and it fell short of the pre-registered ship bar. Recommendation: don't launch.\n\nDecision: Don't launch v7; close this readout as no-effect.\n\nNumber: +0.00049 absolute change in Successful Search Rate (vs. 0.005 ship bar).\n",
+    "full": "1. **Answer:** Ranker v7 did not move Successful Search Rate. The point estimate is +0.12% relative (+0.0005 absolute, p = 0.62), and the pre-registered ship bar was not met under either reading. The guardrails are within margin. The document recommends not launching and treating the result as a null.\n\n2. **Decision:** Don't launch v7. Before any follow-up, the team should decide whether the 0.5 ship bar is absolute or relative and write that into the prereg. Run a follow-up only if a design change could plausibly produce a larger effect.\n\n3. **Number:** Successful Search Rate change, +0.00049 absolute (+0.12% relative), with a 95% CI of \u22120.0015 to +0.0025 absolute.\n\n4. **Caveat:** The document names the ambiguous ship bar (absolute or relative) as unresolved. It also names the roughly 60 unadjusted secondary and segment comparisons, which it reads as chance-level. Five hits at p < 0.05 is a bit above the roughly 3 expected by chance, so I'd treat that reading as generous.\n\n5. **Lost:** I had to reread the ship-bar section to check both readings. The guardrail margins are stated as relative, with CI bounds given only approximately, so I had to work out what each one meant.\n\n6. **Question:** When you pre-registered the 0.5 bar, did you mean 0.5 percentage points absolute or 0.5% relative?\n"
+  }
+}

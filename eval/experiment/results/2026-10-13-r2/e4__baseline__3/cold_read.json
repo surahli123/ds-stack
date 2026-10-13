@@ -1,0 +1,53 @@
+{
+  "pass": false,
+  "skim": "0/2",
+  "full": "2/3",
+  "items": [
+    {
+      "pass": "skim",
+      "item": "answer",
+      "key": "Escalate: Successful Search Rate rose 0.39% (+0.27% to +0.51%), a real change in the good direction but short of the 0.50% bar.",
+      "reader": "Don't ship v7. Its SSR lift on triggered searches (+0.0078) shrinks to about +0.0008 absolute (+0.39% relative) across all searches, well short of the pre-registered +0.005 bar. Reject the v7 launch and don't ship it in its current form.",
+      "got": false,
+      "how": "overlap 0%"
+    },
+    {
+      "pass": "skim",
+      "item": "decision",
+      "key": "Decide the trade-off at triage.",
+      "reader": "Reject the v7 launch and don't ship it in its current form. Don't ship v7. Its SSR lift on triggered searches (+0.0078) shrinks to about +0.0008 absolute (+0.39% relative) across all searches, well short of the pre-registered +0.005 bar.",
+      "got": false,
+      "how": "overlap 0%"
+    },
+    {
+      "pass": "full",
+      "item": "takeaway 1",
+      "key": "Successful Search Rate +0.39% (+0.27% to +0.51%) against at least 0.50% higher.",
+      "reader": "The readout recommends not shipping v7. It raises SSR on triggered searches (+0.0078 absolute), but scaled to all searches the lift is about +0.0008 absolute, well below the +0.005 bar. The run was clean: planned 14 days, balance check passed, no mid-run changes. Guardrails are within margin. Don't ship. Choose between stopping, or recording an explicit waiver or redefinition of the bar as a deviation. Waiving looks hard to justify, since even the CI upper bound (~+0.0011) is far under +0.005. The only route that could reach the bar is widening the trigger and rerunning, which needs its own pre-registration. Overall SSR lift, +0.0008 absolute (about +0.39% relative), against a bar of +0.005 absolute. I re-derived it from the doc's figures (0.10 \u00d7 0.0078 \u2248 0.00078, CI \u2248 \u00b10.00025) and it checks out. The headline +1.9% applies only to the 10% of searches that trigger, so it overstates the launch-level effect. The doc also flags about 70 uncorrected metric and segment reads, so the Queries per User drop (\u22121.0%, p=0.024) could be chance. It treats that as chance, not harm.",
+      "got": true,
+      "how": "overlap 0%; grader: same fact"
+    },
+    {
+      "pass": "full",
+      "item": "takeaway 2",
+      "key": "Decide the trade-off at triage.",
+      "reader": "The readout recommends not shipping v7. It raises SSR on triggered searches (+0.0078 absolute), but scaled to all searches the lift is about +0.0008 absolute, well below the +0.005 bar. The run was clean: planned 14 days, balance check passed, no mid-run changes. Guardrails are within margin. Don't ship. Choose between stopping, or recording an explicit waiver or redefinition of the bar as a deviation. Waiving looks hard to justify, since even the CI upper bound (~+0.0011) is far under +0.005. The only route that could reach the bar is widening the trigger and rerunning, which needs its own pre-registration. Overall SSR lift, +0.0008 absolute (about +0.39% relative), against a bar of +0.005 absolute. I re-derived it from the doc's figures (0.10 \u00d7 0.0078 \u2248 0.00078, CI \u2248 \u00b10.00025) and it checks out. The headline +1.9% applies only to the 10% of searches that trigger, so it overstates the launch-level effect. The doc also flags about 70 uncorrected metric and segment reads, so the Queries per User drop (\u22121.0%, p=0.024) could be chance. It treats that as chance, not harm.",
+      "got": false,
+      "how": "overlap 0%"
+    },
+    {
+      "pass": "full",
+      "item": "takeaway 3",
+      "key": "Could reverse it: the primary is measured on triggered traffic, so its users aren't compared with the planned total.",
+      "reader": "The readout recommends not shipping v7. It raises SSR on triggered searches (+0.0078 absolute), but scaled to all searches the lift is about +0.0008 absolute, well below the +0.005 bar. The run was clean: planned 14 days, balance check passed, no mid-run changes. Guardrails are within margin. Don't ship. Choose between stopping, or recording an explicit waiver or redefinition of the bar as a deviation. Waiving looks hard to justify, since even the CI upper bound (~+0.0011) is far under +0.005. The only route that could reach the bar is widening the trigger and rerunning, which needs its own pre-registration. Overall SSR lift, +0.0008 absolute (about +0.39% relative), against a bar of +0.005 absolute. I re-derived it from the doc's figures (0.10 \u00d7 0.0078 \u2248 0.00078, CI \u2248 \u00b10.00025) and it checks out. The headline +1.9% applies only to the 10% of searches that trigger, so it overstates the launch-level effect. The doc also flags about 70 uncorrected metric and segment reads, so the Queries per User drop (\u22121.0%, p=0.024) could be chance. It treats that as chance, not harm.",
+      "got": true,
+      "how": "overlap 20%; grader: same fact"
+    }
+  ],
+  "lost": "Nowhere in the text. The only ambiguity is whether the bar is absolute or relative, and the doc flags that itself. \"Pulse\" is not defined, but it doesn't affect the decision.",
+  "question": "Was the +0.005 bar meant as an absolute difference in overall SSR, and was it set before the trigger's 10% coverage was known?",
+  "replies": {
+    "skim": "1. **Answer:** Don't ship v7. Its SSR lift on triggered searches (+0.0078) shrinks to about +0.0008 absolute (+0.39% relative) across all searches, well short of the pre-registered +0.005 bar.\n2. **Decision:** Reject the v7 launch and don't ship it in its current form.\n3. **Number:** Overall SSR lift of +0.0008 (absolute change in success rate, CI about +0.0005 to +0.0011), versus the +0.005 bar.\n",
+    "full": "1. **Answer:** The readout recommends not shipping v7. It raises SSR on triggered searches (+0.0078 absolute), but scaled to all searches the lift is about +0.0008 absolute, well below the +0.005 bar. The run was clean: planned 14 days, balance check passed, no mid-run changes. Guardrails are within margin.\n\n2. **Decision:** Don't ship. Choose between stopping, or recording an explicit waiver or redefinition of the bar as a deviation. Waiving looks hard to justify, since even the CI upper bound (~+0.0011) is far under +0.005. The only route that could reach the bar is widening the trigger and rerunning, which needs its own pre-registration.\n\n3. **Number:** Overall SSR lift, +0.0008 absolute (about +0.39% relative), against a bar of +0.005 absolute. I re-derived it from the doc's figures (0.10 \u00d7 0.0078 \u2248 0.00078, CI \u2248 \u00b10.00025) and it checks out.\n\n4. **Caveat:** The headline +1.9% applies only to the 10% of searches that trigger, so it overstates the launch-level effect. The doc also flags about 70 uncorrected metric and segment reads, so the Queries per User drop (\u22121.0%, p=0.024) could be chance. It treats that as chance, not harm.\n\n5. **Lost:** Nowhere in the text. The only ambiguity is whether the bar is absolute or relative, and the doc flags that itself. \"Pulse\" is not defined, but it doesn't affect the decision.\n\n6. **Question:** Was the +0.005 bar meant as an absolute difference in overall SSR, and was it set before the trigger's 10% coverage was known?\n"
+  }
+}

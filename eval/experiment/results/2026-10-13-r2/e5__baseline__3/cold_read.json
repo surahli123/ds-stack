@@ -1,0 +1,53 @@
+{
+  "pass": false,
+  "skim": "0/2",
+  "full": "0/3",
+  "items": [
+    {
+      "pass": "skim",
+      "item": "answer",
+      "key": "Escalate: Successful Search Rate improved but Long Click Rate is undetermined, +0.12% (-0.48% to +0.72%); the test needs every primary to improve.",
+      "reader": "Don't ship Ranker v7. It fails the pre-registered criteria because Long Click Rate did not reach the +0.005 bar (+0.0003, p=0.70), even though Successful Search Rate improved (+0.0033, p=7e-05). Don't launch v7. Confirm in prereg.json whether the 0.005 bar is absolute or relative; the decision holds under either reading.",
+      "got": false,
+      "how": "overlap 0%"
+    },
+    {
+      "pass": "skim",
+      "item": "decision",
+      "key": "Decide the trade-off at triage.",
+      "reader": "Don't launch v7. Confirm in prereg.json whether the 0.005 bar is absolute or relative; the decision holds under either reading. Don't ship Ranker v7. It fails the pre-registered criteria because Long Click Rate did not reach the +0.005 bar (+0.0003, p=0.70), even though Successful Search Rate improved (+0.0033, p=7e-05).",
+      "got": false,
+      "how": "overlap 0%"
+    },
+    {
+      "pass": "full",
+      "item": "takeaway 1",
+      "key": "Long Click Rate +0.12% (-0.48% to +0.72%) against at least 0.50% higher.",
+      "reader": "The document recommends not shipping Ranker v7. It misses the pre-registered criteria because Long Click Rate (+0.0003, p=0.70) doesn't reach the +0.005 bar, and Successful Search Rate (+0.0033) falls short too. Current state: the experiment is still \"active\" past its planned 14-day window. Don't ship v7 under the pre-registered criteria. Explicitly decide whether to change those criteria to ship on Successful Search Rate alone, since that would be a post-hoc change. Confirm the unit of the 0.005 bar, close out the experiment, and fix experiment.json so it matches the prereg's two primaries. Long Click Rate, +0.0003 absolute (+0.12% relative), against a +0.005 bar. The bar's unit is unclear, but the decision is the same either way. The document names about 90 uncorrected secondary and segment results. The few with p < 0.05 are likely chance, so acting on them would be cherry-picking.",
+      "got": false,
+      "how": "overlap 0%"
+    },
+    {
+      "pass": "full",
+      "item": "takeaway 2",
+      "key": "Successful Search Rate +0.81% (+0.41% to +1.21%) against at least 0.50% higher.",
+      "reader": "The document recommends not shipping Ranker v7. It misses the pre-registered criteria because Long Click Rate (+0.0003, p=0.70) doesn't reach the +0.005 bar, and Successful Search Rate (+0.0033) falls short too. Current state: the experiment is still \"active\" past its planned 14-day window. Don't ship v7 under the pre-registered criteria. Explicitly decide whether to change those criteria to ship on Successful Search Rate alone, since that would be a post-hoc change. Confirm the unit of the 0.005 bar, close out the experiment, and fix experiment.json so it matches the prereg's two primaries. Long Click Rate, +0.0003 absolute (+0.12% relative), against a +0.005 bar. The bar's unit is unclear, but the decision is the same either way. The document names about 90 uncorrected secondary and segment results. The few with p < 0.05 are likely chance, so acting on them would be cherry-picking.",
+      "got": false,
+      "how": "overlap 0%"
+    },
+    {
+      "pass": "full",
+      "item": "takeaway 3",
+      "key": "Could reverse it: pre period could not be checked: no pre-period interval or platform check.",
+      "reader": "The document recommends not shipping Ranker v7. It misses the pre-registered criteria because Long Click Rate (+0.0003, p=0.70) doesn't reach the +0.005 bar, and Successful Search Rate (+0.0033) falls short too. Current state: the experiment is still \"active\" past its planned 14-day window. Don't ship v7 under the pre-registered criteria. Explicitly decide whether to change those criteria to ship on Successful Search Rate alone, since that would be a post-hoc change. Confirm the unit of the 0.005 bar, close out the experiment, and fix experiment.json so it matches the prereg's two primaries. Long Click Rate, +0.0003 absolute (+0.12% relative), against a +0.005 bar. The bar's unit is unclear, but the decision is the same either way. The document names about 90 uncorrected secondary and segment results. The few with p < 0.05 are likely chance, so acting on them would be cherry-picking.",
+      "got": false,
+      "how": "overlap 0%"
+    }
+  ],
+  "lost": "Nowhere. The only gap was the bar's unit, which the document itself flags as unresolved.",
+  "question": "Was the experiment.json listing of Successful Search Rate as the only primary intended, or should the prereg's two-primary requirement stand?",
+  "replies": {
+    "skim": "1. Answer: Don't ship Ranker v7. It fails the pre-registered criteria because Long Click Rate did not reach the +0.005 bar (+0.0003, p=0.70), even though Successful Search Rate improved (+0.0033, p=7e-05).\n2. Decision: Don't launch v7. Confirm in prereg.json whether the 0.005 bar is absolute or relative; the decision holds under either reading.\n3. Number: Long Click Rate change of +0.0003 absolute (+0.12% relative), against a +0.005 bar.\n",
+    "full": "1. **Answer:** The document recommends not shipping Ranker v7. It misses the pre-registered criteria because Long Click Rate (+0.0003, p=0.70) doesn't reach the +0.005 bar, and Successful Search Rate (+0.0033) falls short too. Current state: the experiment is still \"active\" past its planned 14-day window.\n\n2. **Decision:** Don't ship v7 under the pre-registered criteria. Explicitly decide whether to change those criteria to ship on Successful Search Rate alone, since that would be a post-hoc change. Confirm the unit of the 0.005 bar, close out the experiment, and fix experiment.json so it matches the prereg's two primaries.\n\n3. **Number:** Long Click Rate, +0.0003 absolute (+0.12% relative), against a +0.005 bar. The bar's unit is unclear, but the decision is the same either way.\n\n4. **Caveat:** The document names about 90 uncorrected secondary and segment results. The few with p < 0.05 are likely chance, so acting on them would be cherry-picking.\n\n5. **Lost:** Nowhere. The only gap was the bar's unit, which the document itself flags as unresolved.\n\n6. **Question:** Was the experiment.json listing of Successful Search Rate as the only primary intended, or should the prereg's two-primary requirement stand?\n"
+  }
+}

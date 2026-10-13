@@ -1,0 +1,53 @@
+{
+  "pass": false,
+  "skim": "0/2",
+  "full": "0/3",
+  "items": [
+    {
+      "pass": "skim",
+      "item": "answer",
+      "key": "Escalate: Successful Search Rate rose 0.31% (+0.13% to +0.49%), a real change in the good direction but short of the 0.50% bar.",
+      "reader": "Don't ship Ranker v7. Successful Search Rate rose only +0.0013 (0.4120 to 0.4133), well short of the pre-registered +0.005 bar, even though the lift is statistically real. Don't launch v7 as it stands. The text doesn't say what to try next, so the next step is unclear.",
+      "got": false,
+      "how": "overlap 0%"
+    },
+    {
+      "pass": "skim",
+      "item": "decision",
+      "key": "Decide the trade-off at triage.",
+      "reader": "Don't launch v7 as it stands. The text doesn't say what to try next, so the next step is unclear. Don't ship Ranker v7. Successful Search Rate rose only +0.0013 (0.4120 to 0.4133), well short of the pre-registered +0.005 bar, even though the lift is statistically real.",
+      "got": false,
+      "how": "overlap 0%"
+    },
+    {
+      "pass": "full",
+      "item": "takeaway 1",
+      "key": "Successful Search Rate +0.31% (+0.13% to +0.49%) against at least 0.50% higher.",
+      "reader": "Don't ship Ranker v7. The lift in Successful Search Rate is real but small: +0.0013 (0.4120 \u2192 0.4133, 95% CI [+0.0005, +0.0020], p=0.0007). That is about a quarter of the pre-registered +0.005 bar, and even the top of the CI falls short. All four guardrails pass. **Current state:** the test ran its planned 14 days with 1M users per arm. The pulse is dated 2026-09-25 and still shows \"active,\" and the readout did not analyse data after that date. Today is 2026-10-12, so it's unclear whether the test is still running. Don't ship v7 against this bar. If the team still wants the +0.1\u20130.2pp gain, treat it as a new decision with a lower bar, argued openly, not as a reinterpretation of this result. Before anything else, settle the experiment's status: stop it, or decide whether to analyse the data since 2026-09-25. Successful Search Rate change of +0.0013 (absolute, about +0.13 percentage points), against the +0.005 bar. The gain is well short of the bar, and the readout warns against lowering the bar after seeing the data. A second risk is the one nominally significant segment (navigational CTR, p=0.023), which is one of about 60 unplanned cuts and was treated as noise. Revenue per User is also close to its guardrail: its CI floor is about \u22120.8% against a \u22121% margin.",
+      "got": false,
+      "how": "overlap 0%"
+    },
+    {
+      "pass": "full",
+      "item": "takeaway 2",
+      "key": "Decide the trade-off at triage.",
+      "reader": "Don't ship Ranker v7. The lift in Successful Search Rate is real but small: +0.0013 (0.4120 \u2192 0.4133, 95% CI [+0.0005, +0.0020], p=0.0007). That is about a quarter of the pre-registered +0.005 bar, and even the top of the CI falls short. All four guardrails pass. **Current state:** the test ran its planned 14 days with 1M users per arm. The pulse is dated 2026-09-25 and still shows \"active,\" and the readout did not analyse data after that date. Today is 2026-10-12, so it's unclear whether the test is still running. Don't ship v7 against this bar. If the team still wants the +0.1\u20130.2pp gain, treat it as a new decision with a lower bar, argued openly, not as a reinterpretation of this result. Before anything else, settle the experiment's status: stop it, or decide whether to analyse the data since 2026-09-25. Successful Search Rate change of +0.0013 (absolute, about +0.13 percentage points), against the +0.005 bar. The gain is well short of the bar, and the readout warns against lowering the bar after seeing the data. A second risk is the one nominally significant segment (navigational CTR, p=0.023), which is one of about 60 unplanned cuts and was treated as noise. Revenue per User is also close to its guardrail: its CI floor is about \u22120.8% against a \u22121% margin.",
+      "got": false,
+      "how": "overlap 33%"
+    },
+    {
+      "pass": "full",
+      "item": "takeaway 3",
+      "key": "Could reverse it: pre period could not be checked: no pre-period interval or platform check.",
+      "reader": "Don't ship Ranker v7. The lift in Successful Search Rate is real but small: +0.0013 (0.4120 \u2192 0.4133, 95% CI [+0.0005, +0.0020], p=0.0007). That is about a quarter of the pre-registered +0.005 bar, and even the top of the CI falls short. All four guardrails pass. **Current state:** the test ran its planned 14 days with 1M users per arm. The pulse is dated 2026-09-25 and still shows \"active,\" and the readout did not analyse data after that date. Today is 2026-10-12, so it's unclear whether the test is still running. Don't ship v7 against this bar. If the team still wants the +0.1\u20130.2pp gain, treat it as a new decision with a lower bar, argued openly, not as a reinterpretation of this result. Before anything else, settle the experiment's status: stop it, or decide whether to analyse the data since 2026-09-25. Successful Search Rate change of +0.0013 (absolute, about +0.13 percentage points), against the +0.005 bar. The gain is well short of the bar, and the readout warns against lowering the bar after seeing the data. A second risk is the one nominally significant segment (navigational CTR, p=0.023), which is one of about 60 unplanned cuts and was treated as noise. Revenue per User is also close to its guardrail: its CI floor is about \u22120.8% against a \u22121% margin.",
+      "got": false,
+      "how": "overlap 0%"
+    }
+  ],
+  "lost": "Nowhere in the argument. The only unclear point is whether the experiment is still running after 2026-09-25.",
+  "question": "Was the experiment stopped on 2026-09-25, or is it still running, and if so, will you analyse the data collected since then?",
+  "replies": {
+    "skim": "1. **Answer:** Don't ship Ranker v7. Successful Search Rate rose only +0.0013 (0.4120 to 0.4133), well short of the pre-registered +0.005 bar, even though the lift is statistically real.\n2. **Decision:** Don't launch v7 as it stands. The text doesn't say what to try next, so the next step is unclear.\n3. **Number:** +0.0013 absolute change in Successful Search Rate (a proportion, so 0.13 percentage points), about a quarter of the +0.005 bar.\n",
+    "full": "1. **Answer:** Don't ship Ranker v7. The lift in Successful Search Rate is real but small: +0.0013 (0.4120 \u2192 0.4133, 95% CI [+0.0005, +0.0020], p=0.0007). That is about a quarter of the pre-registered +0.005 bar, and even the top of the CI falls short. All four guardrails pass. **Current state:** the test ran its planned 14 days with 1M users per arm. The pulse is dated 2026-09-25 and still shows \"active,\" and the readout did not analyse data after that date. Today is 2026-10-12, so it's unclear whether the test is still running.\n\n2. **Decision:** Don't ship v7 against this bar. If the team still wants the +0.1\u20130.2pp gain, treat it as a new decision with a lower bar, argued openly, not as a reinterpretation of this result. Before anything else, settle the experiment's status: stop it, or decide whether to analyse the data since 2026-09-25.\n\n3. **Number:** Successful Search Rate change of +0.0013 (absolute, about +0.13 percentage points), against the +0.005 bar.\n\n4. **Caveat:** The gain is well short of the bar, and the readout warns against lowering the bar after seeing the data. A second risk is the one nominally significant segment (navigational CTR, p=0.023), which is one of about 60 unplanned cuts and was treated as noise. Revenue per User is also close to its guardrail: its CI floor is about \u22120.8% against a \u22121% margin.\n\n5. **Lost:** Nowhere in the argument. The only unclear point is whether the experiment is still running after 2026-09-25.\n\n6. **Question:** Was the experiment stopped on 2026-09-25, or is it still running, and if so, will you analyse the data collected since then?\n"
+  }
+}
