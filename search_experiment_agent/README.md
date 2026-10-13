@@ -48,6 +48,7 @@ An MCP server is also available for research, but it is not the supported route.
 
 ```
 python3 -m search_agent analyze --scorecard S.csv [--contract C.json] [--config CFG.json]
+python3 -m search_agent contract-template --scorecard S.csv --out contract.json
 python3 -m search_agent why "1P Long Click Rate"
 python3 -m search_agent review wrong --metric "1P Long Click Rate" --note "..." --reviewer NAME
 python3 -m search_agent lessons propose | list | evaluate ID | approve ID --approver NAME
