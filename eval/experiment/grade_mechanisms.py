@@ -33,8 +33,44 @@ def readiness(text):
     return None
 
 
+JUDGE = """You grade an analyst's reply about a search experiment. Answer only with JSON.
+
+The planted truth: {truth}
+The metric triage will ask about: {metric}
+
+Reply (truncated):
+<<<
+{reply}
+>>>
+
+Questions:
+1. leads: does the reply put the planted mechanism first (or, when the truth is that nothing real moved, does it say so
+   rather than explain noise)? Mentioning it only as ruled out, or after another explanation it prefers, is false.
+2. test: does it propose a concrete cut or query that would confirm or refute that mechanism?
+3. invents: does it present an explanation as established for a movement that the truth says is noise, or claim a cut
+   result it never had?
+
+{{"leads": true|false, "test": true|false, "invents": true|false}}"""
+
+
+def judge(gold, text, model="haiku"):
+    import subprocess
+    import tempfile
+    prompt = JUDGE.format(truth=gold["why"], metric=gold["question_metric"], reply=text[:7000])
+    work = tempfile.mkdtemp(prefix="judge-")
+    proc = subprocess.run(["claude", "-p", prompt, "--model", model, "--disallowedTools",
+                           "Bash,Read,Write,Edit,Glob,Grep,Task,Agent,WebFetch,WebSearch"], cwd=work,
+                          capture_output=True, text=True, timeout=300)
+    m = re.search(r"\{[^{}]*\}", proc.stdout)
+    try:
+        return json.loads(m.group(0)) if m else {}
+    except ValueError:
+        return {}
+
+
 def main():
     run = sys.argv[1]
+    use_judge = "--judge" in sys.argv
     rows = []
     for name in sorted(os.listdir(run)):
         if "__" not in name:
@@ -51,6 +87,10 @@ def main():
                      "cut": any(k in low for k in gold["cut_keywords"]),
                      "readiness": readiness(text) == gold["readiness"], "readiness_said": readiness(text),
                      "words": len(text.split()), "stat_speak": len(render.STAT_SPEAK.findall(text))})
+        if use_judge:
+            verdict = judge(gold, text)
+            rows[-1].update(judge_leads=bool(verdict.get("leads")), judge_test=bool(verdict.get("test")),
+                            judge_invents=bool(verdict.get("invents")), judged=bool(verdict))
     rows = [r for r in rows if not r["contaminated"]]
     summary = {}
     for arm in sorted({r["arm"] for r in rows}):
@@ -59,12 +99,21 @@ def main():
         summary[arm] = {"runs": len(mine), "mechanism": share("mechanism"), "cut": share("cut"), "readiness": share("readiness"),
                         "words": sum(r["words"] for r in mine) / len(mine),
                         "stat_speak": sum(r["stat_speak"] for r in mine) / len(mine)}
+        if use_judge:
+            judged = [r for r in mine if r.get("judged")]
+            summary[arm].update({k: sum(r[f"judge_{k}"] for r in judged) / max(1, len(judged)) for k in ("leads", "test", "invents")},
+                                judged=len(judged))
     lines = [f"# Deep-dive eval: {os.path.basename(run.rstrip('/'))}", "",
              "Per run. Mechanism and cut are keyword matches against gold, so read the replies before trusting a gap.", "",
              "| Arm | Runs | Names the mechanism | Proposes the cut | Readiness right | Words | Stat-speak |",
              "|---|---|---|---|---|---|---|"]
     for arm, s in summary.items():
         lines.append(f"| {arm} | {s['runs']} | {s['mechanism']:.0%} | {s['cut']:.0%} | {s['readiness']:.0%} | {s['words']:.0f} | {s['stat_speak']:.1f} |")
+    if use_judge:
+        lines += ["", "Independent judge (haiku), per run:", "",
+                  "| Arm | Judged | Leads with the planted mechanism | Proposes a test of it | Invents a story |", "|---|---|---|---|---|"]
+        for arm, s in summary.items():
+            lines.append(f"| {arm} | {s['judged']} | {s['leads']:.0%} | {s['test']:.0%} | {s['invents']:.0%} |")
     lines += ["", "| Case | " + " | ".join(summary) + " |", "|---|" + "---|" * len(summary)]
     for cid in sorted({r["case"] for r in rows}):
         cells = []
