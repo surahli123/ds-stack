@@ -1,12 +1,11 @@
 ---
 name: ds-experiment
 description: >-
-  Use to read out an A/B experiment for a launch decision, especially search
-  ranking tests on a Statsig-style scorecard: normalizes the scorecard and
-  config, checks validity, makes the launch call from the pre-registration in
-  code, and renders a one-screen readout for the launch review. The model
-  writes only the mechanism and what would change the call. Also runs on
-  /ds-experiment.
+  Use to read out an A/B experiment, especially search ranking tests on a
+  Statsig-style scorecard: checks validity, makes the launch call from the
+  pre-registration in code, explains why metrics moved and which cuts to run
+  next, says whether the result is ready for triage, and renders a one-screen
+  readout plus a triage prep sheet. Also runs on /ds-experiment.
 ---
 
 # ds-experiment
@@ -38,22 +37,30 @@ The launch call comes from code, not from reading 60 metrics. A call compares on
    ```
    The daily series must be by days since first exposure. A calendar-day series mixes day of week with late joiners. Read every line it prints.
    Never edit `scorecard.json`, `config.json` or `decision.json` by hand, and never correct the export's numbers yourself. If a check fails because of how the data was exported, the call is Can't tell. Say in `would_change` how to fix the export. The readout's History line shows every rerun that changed the call.
-5. **Write `notes.json`.** It is the only text you write. The schema is in `tools/render.py`.
-   - `why_it_moved`: at most 3 bullets, each labelled measured, inferred or guess. Use segment cuts in the scorecard when they exist. Otherwise one guess bullet says the mechanism is unknown.
-   - `would_change`: at most 3 bullets. Each names the data or event that would flip the call.
+5. **Explain, and dig before triage:**
+   ```
+   python3 <dir>/tools/explain.py --decision decision.json --scorecard scorecard.json --prereg prereg.json
+   ```
+   This prints the triage readiness, the questions triage will ask, and the cuts to run in order. Each question comes with candidate mechanisms from `references/search_patterns.json` and the overlay's `patterns.json`, plus the cut that would confirm or refute them.
+   - With data access, run the top cuts through the guarded runner as aggregates. Pass the results back as `segments.json` (format in `tools/explain.py`) and rerun, until the readiness verdict stops changing or the cuts run out.
+   - A "Not ready" verdict names what to do first. Do that before anything else.
+   - Two opposite explanations for a registered metric mean the result isn't ready, whatever the call says.
+6. **Write `notes.json`.** It is the only text you write. The schema is in `tools/render.py`.
+   - `why_it_moved`: at most 3 bullets, each labelled measured, inferred or guess. Take them from `explain.json`: a mechanism is measured only when a cut you ran supports it.
+   - `would_change`: at most 3 bullets, each naming the data or event that would flip the call.
    - `analyst_view`: only when evidence the rule can't see would change the call, with the reason. Never use it to argue with a registered bar or margin, a check that couldn't run, or a secondary metric that didn't survive correction. The classic case is a volume primary (queries, sessions or clicks per user) that rose while success fell or reformulation rose: more searching can mean worse results.
-6. **Render:**
+7. **Render:**
    ```
-   python3 <dir>/tools/render.py --decision decision.json --scorecard scorecard.json --notes notes.json
+   python3 <dir>/tools/render.py --decision decision.json --scorecard scorecard.json --notes notes.json --explain explain.json
    ```
-   It refuses notes that use stat-speak or numbers that aren't in the scorecard. It also refuses call words in "why it moved". Fix the notes and rerun. Don't route around it.
-7. **Test the read:**
+   It writes `readout.md` for the launch review and `triage_prep.md` for the engineer: the questions, candidate answers and cuts. It refuses notes that use stat-speak, use numbers not in the scorecard, or put call words in "why it moved". Fix the notes and rerun; don't route around it.
+8. **Test the read:**
    ```
    python3 <dir>/../doc-tighten/tools/doc_lint.py readout.md --spine spine.json
    python3 <dir>/../cold-read/tools/cold_read.py readout.md --spine spine.json
    ```
    `render.py` writes `spine.json` from the decision. Never edit it.
-8. **Reply** with `readout.md` exactly as rendered, starting with its first line, then the lint and cold-read result lines verbatim, and nothing else. Never summarize it or point to the file instead. Add no preamble and no caveats section. A caveat that matters belongs in `would_change` or `why_it_moved`, so rerender. If the cold read fails, say so in one line after the result lines.
+9. **Reply** with `readout.md` exactly as rendered, starting with its first line, then `triage_prep.md` as rendered, then the lint and cold-read result lines verbatim, and nothing else. Never summarize it or point to the file instead. Add no preamble and no caveats section. A caveat that matters belongs in `would_change` or `why_it_moved`, so rerender. If the cold read fails, say so in one line after the result lines.
 
 ## Rules that hold even when they're inconvenient
 

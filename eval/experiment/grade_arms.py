@@ -87,13 +87,13 @@ def stat_speak(text):
     return len(render.STAT_SPEAK.findall(before))
 
 
-def cold_read(run_dir, cid):
+def cold_read(run_dir, cid, doc="result.md"):
     decision = pipeline_cases.run_case(cid)
     spine_path = os.path.join(run_dir, "gold_spine.json")
     with open(spine_path, "w") as handle:
         json.dump(render.spine(decision), handle)
     proc = subprocess.run([sys.executable, os.path.join(ROOT, "skills", "cold-read", "tools", "cold_read.py"),
-                           os.path.join(run_dir, "result.md"), "--spine", spine_path], capture_output=True, text=True)
+                           os.path.join(run_dir, doc), "--spine", spine_path], capture_output=True, text=True)
     match = re.search(r"skim (\d)/2, full (\d)/3", proc.stdout)
     return (int(match.group(1)), int(match.group(2))) if match else (None, None)
 
@@ -115,12 +115,16 @@ def main():
         cid, arm, run = name.split("__")
         with open(os.path.join(HERE, "gold", f"{cid}.json")) as handle:
             gold = json.load(handle)
-        text = open(os.path.join(run_dir, "result.md")).read()
+        full_text = open(os.path.join(run_dir, "result.md")).read()
+        text = re.split(r"^# .*triage prep\s*$", full_text, flags=re.M)[0]  # the launch readout only
+        if text != full_text:
+            with open(os.path.join(run_dir, "readout_part.md"), "w") as handle:
+                handle.write(text)
         call, view = parse_call(text), analyst_call(text)
         effective = view or call
         correct = effective in gold["accept_calls"]
         cost = 0 if correct else (matrix[gold["call"]].get(effective) if effective else max(matrix[gold["call"]].values()))
-        fails, words = lint(os.path.join(run_dir, "result.md"))
+        fails, words = lint(os.path.join(run_dir, "readout_part.md" if text != full_text else "result.md"))
         meta = json.load(open(os.path.join(run_dir, "meta.json")))
         transcript_path = os.path.join(run_dir, "transcript.jsonl")
         transcript = open(transcript_path, encoding="utf-8", errors="replace").read() if os.path.exists(transcript_path) else None
@@ -130,7 +134,7 @@ def main():
                "words": words, "stat_speak": stat_speak(text), "usd": meta.get("cost_usd"), "seconds": meta.get("seconds"),
                "contaminated": contaminated}
         if args.cold_read:
-            row["skim"], row["full"] = cold_read(run_dir, cid)
+            row["skim"], row["full"] = cold_read(run_dir, cid, "readout_part.md" if text != full_text else "result.md")
         rows.append(row)
 
     dropped = [f"{r['case']}__{r['arm']}__{r['run']}" for r in rows if r["contaminated"]]

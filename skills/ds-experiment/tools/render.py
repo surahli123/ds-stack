@@ -332,13 +332,67 @@ def reversal(decision):
     return items[0] if items else "nothing open; every registered check ran and passed"
 
 
-def readout(decision, notes, scorecard):
+def triage_line(explained):
+    r = explained["readiness"]
+    text = f"{r['text']}: {r['reasons'][0]}"
+    if r.get("first"):
+        text += f". Run first: {r['first']['cut']}"
+    return text.rstrip(".") + "."
+
+
+def triage_prep(decision, explained):
+    """The engineer's prep sheet: the questions triage will ask, the candidate answers, and the cuts to run."""
+    exp = decision["experiment"]
+    by_id = {}
+    for inst in explained["patterns"]:
+        by_id.setdefault(inst["id"], inst)
+    cut_number = {d["cut"]: n for n, d in enumerate(explained["deep_dives"], 1)}
+    lines = [f"# {exp.get('name') or exp.get('id')}: triage prep", "",
+             f"Ready for triage: {triage_line(explained)}", "",
+             f"Scripted call: {decision['call_text']}. {decision['reason']}", "",
+             "## Questions triage will ask", ""]
+    if not explained["questions"]:
+        lines += ["- No metric moved clearly enough to be asked about.", ""]
+    explained_at = {}
+    for n, q in enumerate(explained["questions"], 1):
+        change = "" if q["change"].startswith(q["metric"]) else f" It {q['change']}."
+        lines.append(f"{n}. {q['question']}{change}")
+        if not q["candidates"]:
+            lines.append("   - No candidate explanation yet. Say so in the meeting and name the cut you'd run.")
+        for cid in q["candidates"][:2]:
+            inst = by_id[cid]
+            strength = "Likely" if inst["score"] >= 1 or inst["label"] == "measured" else "Possible"
+            if cid in explained_at:
+                lines.append(f"   - {strength} [{inst['label']}]: {inst['name']}, as in question {explained_at[cid]}.")
+                continue
+            explained_at[cid] = n
+            lines.append(f"   - {strength} [{inst['label']}]: {inst['name']}. {inst['mechanism']}")
+            lines.append(f"     Evidence: {'; '.join(inst['evidence'][:3])}.")
+            cuts = [cut_number[d["cut"]] for d in inst["deep_dives"] if d["cut"] in cut_number]
+            if cuts:
+                lines.append(f"     To check: cut {', '.join(str(c) for c in cuts[:2])} below.")
+        lines.append("")
+    ruled = explained.get("ruled_out") or []
+    if ruled:
+        lines += ["## Already ruled out by the scorecard", ""]
+        lines += [f"- {r['name']}: {'; '.join(r['ruled_out_by'])}." for r in ruled[:4]] + [""]
+    lines += ["## Cuts to run before triage, in order", ""]
+    lines += [f"{n}. {d['cut'][:1].upper() + d['cut'][1:]} (tests: {d['tests']}). Supports it: {d['confirms']}. "
+              f"Against it: {d['refutes']}." for n, d in enumerate(explained["deep_dives"], 1)] or ["- Nothing to run."]
+    lines += ["", "Inferred explanations come from how metrics moved together. They become measured when a cut is run "
+              "and its numbers are passed back to explain.py with --segments.", ""]
+    return "\n".join(lines)
+
+
+def readout(decision, notes, scorecard, explained=None):
     exp = decision["experiment"]
     lines = [f"# {exp.get('name') or exp.get('id') or 'Experiment'}: {decision['call_text']}", "",
              f"Decision: {decision['call_text']}. {decision['reason']}", "",
              f"Ask: {decision['ask']}", "",
              f"Status: {status_line(decision['status'])}.", "",
              f"Could reverse it: {reversal(decision)}.", ""]
+    if explained:
+        lines += [f"Triage: {triage_line(explained)}", ""]
     past = history(decision)
     if past:
         lines += [f"History: {past}", ""]
@@ -441,6 +495,7 @@ def main(argv=None):
     parser.add_argument("--decision", required=True)
     parser.add_argument("--scorecard", required=True)
     parser.add_argument("--notes", help="the model's notes.json; omit for a readout with no mechanism")
+    parser.add_argument("--explain", help="explain.json from explain.py; adds the triage line and triage_prep.md")
     parser.add_argument("--out-dir")
     args = parser.parse_args(argv)
     try:
@@ -448,6 +503,10 @@ def main(argv=None):
             decision = json.load(handle)
         with open(args.scorecard, encoding="utf-8") as handle:
             scorecard = json.load(handle)
+        explained = None
+        if args.explain:
+            with open(args.explain, encoding="utf-8") as handle:
+                explained = json.load(handle)
         notes = {}
         if args.notes:
             with open(args.notes, encoding="utf-8") as handle:
@@ -462,12 +521,14 @@ def main(argv=None):
             print(f"  - {p}", file=sys.stderr)
         return 1
     out = args.out_dir or os.path.dirname(os.path.abspath(args.decision))
-    files = {"readout.md": readout(decision, notes, scorecard), "all_metrics.md": all_metrics(decision, scorecard),
+    files = {"readout.md": readout(decision, notes, scorecard, explained), "all_metrics.md": all_metrics(decision, scorecard),
              "spine.json": json.dumps(spine(decision), indent=2)}
+    if explained:
+        files["triage_prep.md"] = triage_prep(decision, explained)
     for name, text in files.items():
         with open(os.path.join(out, name), "w", encoding="utf-8") as handle:
             handle.write(text)
-    print(f"render: wrote readout.md, all_metrics.md and spine.json to {out}")
+    print(f"render: wrote {', '.join(sorted(files))} to {out}")
     return 0
 
 
