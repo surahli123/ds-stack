@@ -39,12 +39,13 @@ The launch call comes from code, not from reading 60 metrics. A call compares on
    Never edit `scorecard.json`, `config.json` or `decision.json` by hand, and never correct the export's numbers yourself. If a check fails because of how the data was exported, the call is Can't tell. Say in `would_change` how to fix the export. The readout's History line shows every rerun that changed the call.
 5. **Explain, and dig before triage:**
    ```
-   python3 <dir>/tools/explain.py --decision decision.json --scorecard scorecard.json --prereg prereg.json
+   python3 <dir>/tools/explain.py --decision decision.json --scorecard scorecard.json --prereg prereg.json --config config.json [--evidence evidence.json]
    ```
-   This prints the triage readiness, the questions triage will ask, and the cuts to run in order. Each question comes with candidate mechanisms from `references/search_patterns.json` and the overlay's `patterns.json`, plus the cut that would confirm or refute them.
-   - With data access, run the top cuts through the guarded runner as aggregates. Pass the results back as `segments.json` (format in `tools/explain.py`) and rerun, until the readiness verdict stops changing or the cuts run out.
+   It prints the triage readiness, the questions triage will ask with candidate mechanisms (from `references/search_patterns.json` and the overlay's `patterns.json`), and the cuts to run in order. Each cut says what result would support or contradict its mechanism.
+   - With data access, run the top cuts through the guarded runner as aggregates. Put the results in `evidence.json` (format in `tools/explain.py`), then rerun: new metrics under `metrics`, splits under `segments` with per-arm units, and outcomes of cuts that aren't either under `cuts`. A cut that supports a candidate confirms it; one that contradicts it removes it. Repeat until the plan is empty or the verdict stops changing.
+   - Record every cut you ran, including the ones that found nothing. The count of cuts run is part of the evidence.
    - A "Not ready" verdict names what to do first. Do that before anything else.
-   - Two opposite explanations for a registered metric mean the result isn't ready, whatever the call says.
+   - Patterns found by scanning, and segments not in the pre-registration's `segments`, are exploratory. They can start a rerun or a new test, never a launch.
 6. **Write `notes.json`.** It is the only text you write. The schema is in `tools/render.py`.
    - `why_it_moved`: at most 3 bullets, each labelled measured, inferred or guess. Take them from `explain.json`: a mechanism is measured only when a cut you ran supports it.
    - `would_change`: at most 3 bullets, each naming the data or event that would flip the call.

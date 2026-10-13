@@ -1,0 +1,12 @@
+{
+ "title": "n14 plus the answer-vs-no-answer abandonment cut passed back",
+ "question_metric": "Abandonment Rate",
+ "mechanism": "concentrated_segment",
+ "readiness": "open_questions",
+ "reviewer_expected": {
+  "mechanism": null,
+  "readiness": "not_ready",
+  "why": "the cut shows the rise sits on queries WITHOUT an answer, which the pattern's own 'refutes' text says rules out good abandonment; the candidate should drop out"
+ },
+ "note": "open questions; good abandonment never matched because success is too noisy, and the fed-back cut is listed"
+}

@@ -1,0 +1,12 @@
+{
+ "title": "success -0.4%, revenue per user +4%, ad clicks +3%, queries per user +2%",
+ "question_metric": "Revenue per User",
+ "mechanism": "worse_organic_ads_look_better",
+ "readiness": "open_questions",
+ "reviewer_expected": {
+  "mechanism": "worse_organic_ads_look_better",
+  "readiness": "open_questions",
+  "why": "worse organic results make ads look relatively better and users search more (Kohavi et al. 2012: +10% queries, +30% revenue from a ranking bug); the library cites this case but has no pattern for it"
+ },
+ "note": "matches the reviewer's expectation"
+}

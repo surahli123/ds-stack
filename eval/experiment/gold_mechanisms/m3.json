@@ -15,5 +15,5 @@
   "network"
  ],
  "readiness": "ready",
- "why": "latency +1.4% inside its margin, abandonment +0.8% inside its margin, CTR down: speed cost"
+ "why": "latency +6% (about 25 ms) inside its margin, abandonment +1.6% inside its margin, CTR down: speed cost"
 }

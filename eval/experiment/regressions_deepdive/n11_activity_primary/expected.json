@@ -1,0 +1,12 @@
+{
+ "title": "clicks per user +2.2% (primary) via queries per user +1.8%; success flat; CTR flat",
+ "question_metric": "Clicks per User",
+ "mechanism": "activity_without_success",
+ "readiness": "not_ready",
+ "reviewer_expected": {
+  "mechanism": "struggling_users",
+  "readiness": "not_ready",
+  "why": "activity up with success flat and more queries is presumptively struggle or confusion (Kohavi 2012, Song 2013, Dirty Dozen 5.12); needs the per-query success and quick re-query cuts before triage"
+ },
+ "note": "activity without success is the reviewer's own proposed pattern; same reading as struggling users"
+}

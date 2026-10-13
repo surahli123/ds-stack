@@ -38,24 +38,24 @@ case("m1", "clicks rise, satisfaction doesn't",
      {"Successful Search Rate": {"rel": 0.0, "half": 0.003}, "CTR": {"rel": 0.024, "half": 0.005},
       "Long Click Rate": {"rel": -0.001, "half": 0.005}, "Clicks per User": {"rel": 0.022, "half": 0.007}})
 case("m2", "users retry because results got worse",
-     gold("Successful Search Rate", "struggling_users", ["retry", "retri", "reformulat", "struggl", "searching more", "search again"],
+     gold("Successful Search Rate", ["struggling_users", "activity_without_success"], ["retry", "retri", "reformulat", "struggl", "searching more", "search again", "without more success"],
           ["per query", "query class", "per session"], "ready",
           "success -0.7%, queries per user +2.3%, reformulation +4.8%: users retry"),
      {"Successful Search Rate": {"rel": -0.0072}, "Queries per User": {"rel": 0.023}, "Reformulation Rate": {"rel": 0.048, "half": 0.008}})
 case("m3", "latency costs engagement",
      gold("Abandonment Rate", "speed_cost", ["latency", "slow", "speed", "load time"],
           ["latency bucket", "by latency", "device", "network"], "ready",
-          "latency +1.4% inside its margin, abandonment +0.8% inside its margin, CTR down: speed cost"),
-     {"Successful Search Rate": {"rel": 0.0, "half": 0.003}, "Latency p95 (ms)": {"rel": 0.014, "half": 0.004},
-      "Abandonment Rate": {"rel": 0.008, "half": 0.003}, "CTR": {"rel": -0.009, "half": 0.004}},
-     pre=mc.prereg(guardrails=[{"metric": "Latency p95 (ms)", "direction": "decrease", "margin": 0.03},
-                               {"metric": "Abandonment Rate", "direction": "decrease", "margin": 0.02}]))
+          "latency +6% (about 25 ms) inside its margin, abandonment +1.6% inside its margin, CTR down: speed cost"),
+     {"Successful Search Rate": {"rel": 0.0, "half": 0.003}, "Latency p95 (ms)": {"rel": 0.06, "half": 0.008},
+      "Abandonment Rate": {"rel": 0.016, "half": 0.004}, "CTR": {"rel": -0.015, "half": 0.004}},
+     pre=mc.prereg(guardrails=[{"metric": "Latency p95 (ms)", "direction": "decrease", "margin": 0.10},
+                               {"metric": "Abandonment Rate", "direction": "decrease", "margin": 0.03}]))
 case("m4", "more results for hard queries, lower precision",
      gold("CTR", "recall_over_precision", ["zero result", "zero-result", "recall", "precision", "no result"],
           ["zero result", "zero-result", "had zero", "no result"], "ready",
           "zero results -12%, CTR -0.9%: weak results for queries that used to get none"),
      {"Successful Search Rate": {"rel": -0.001, "half": 0.003}, "Zero Result Rate": {"rel": -0.12, "half": 0.02},
-      "CTR": {"rel": -0.009, "half": 0.004}},
+      "CTR": {"rel": -0.018, "half": 0.005}},
      pre=mc.prereg(guardrails=[{"metric": "Latency p95 (ms)", "direction": "decrease", "margin": 0.02},
                                {"metric": "Revenue per User", "direction": "increase", "margin": 0.01}]))
 case("m5", "answers on the page reduce clicks",
@@ -77,9 +77,10 @@ case("m7", "the win sits in tail queries",
      gold("Successful Search Rate", "concentrated_segment", ["tail"], ["tail", "triggered", "query class"], "ready",
           "overall flat, tail +3.4%: a tail-only effect diluted overall"),
      {"Successful Search Rate": {"rel": 0.0008, "half": 0.003},
-      "Successful Search Rate - Tail Queries": {"rel": 0.034, "half": 0.009}})
+      "Successful Search Rate - Tail Queries": {"rel": 0.034, "half": 0.009}},
+     pre=mc.prereg(segments=["query class"]))
 case("m8", "volume primary up for the wrong reason",
-     gold("Queries per User", "struggling_users", ["retry", "retri", "reformulat", "struggl", "worse results"],
+     gold("Queries per User", ["struggling_users", "activity_without_success"], ["retry", "retri", "reformulat", "struggl", "worse results", "without more success"],
           ["per query", "query class", "per session"], "not_ready",
           "queries per user is the primary and rose, but reformulation rose and success fell: two opposite readings"),
      {"Queries per User": {"rel": 0.026}, "Reformulation Rate": {"rel": 0.055, "half": 0.008},
@@ -87,6 +88,12 @@ case("m8", "volume primary up for the wrong reason",
      pre=mc.prereg(primaries={"rule": "any", "ship_requires": "point_at_bar", "metrics": [
          {"metric": "Queries per User", "direction": "increase", "bar": 0.01}]},
          guardrails=[{"metric": "Latency p95 (ms)", "direction": "decrease", "margin": 0.02}]))
+
+case("m9", "nothing planted: a flat test at full power",
+     gold("Successful Search Rate", "none", ["no effect", "didn't move", "did not move", "noise", "chance", "unexplained", "no clear"],
+          ["exposure", "rerun", "nothing to run", "no cut", "triggered"], "ready",
+          "the primary rules out the bar and nothing else moves beyond chance: no story to tell"),
+     {"Successful Search Rate": {"rel": 0.0002, "half": 0.003}})
 
 TASK = """You are the data scientist on a search ranking experiment, "Ranker v7". The engineer who ran it presents it at the triage meeting tomorrow. Triage reads the scorecard and asks the engineer why each metric moved.
 

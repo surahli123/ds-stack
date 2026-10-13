@@ -1,0 +1,12 @@
+{
+ "title": "clean win; calendar-day series fades; no exposure-day series",
+ "question_metric": "Successful Search Rate",
+ "mechanism": "relevance_gain",
+ "readiness": "open_questions",
+ "reviewer_expected": {
+  "mechanism": "relevance_gain",
+  "readiness": "open_questions",
+  "why": "a calendar-day fade is day-of-week plus late joiners (the check says so itself); the open item is the exposure-day cut, not 'the effect is fading'"
+ },
+ "note": "matches the reviewer's expectation"
+}

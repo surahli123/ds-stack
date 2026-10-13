@@ -1,0 +1,12 @@
+{
+ "title": "head and tail success both up, overall flat",
+ "question_metric": "Successful Search Rate",
+ "mechanism": "segment_mix",
+ "readiness": "not_ready",
+ "reviewer_expected": {
+  "mechanism": null,
+  "readiness": "not_ready",
+  "why": "both classes rose but the total didn't: the treatment changed which queries fall in each class (segment SRM / Simpson's paradox); check query counts per class by arm before reading the cut"
+ },
+ "note": "segment_mix is the mix-shift mechanism the reviewer described, and it blocks"
+}

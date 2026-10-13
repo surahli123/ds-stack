@@ -32,7 +32,7 @@ def run(overrides, prereg=None, segments=None, seed=7, daily=None):
     pre = prereg or mc.prereg()
     pre.setdefault("hypothesis", "The new ranker raises the share of searches that end in a successful click.")
     decision = decide.decide(scorecard, pre, config, None, daily)
-    return decision, explain.explain(decision, scorecard, pre, LIB, segments)
+    return decision, explain.explain(decision, scorecard, pre, LIB, {"segments": segments} if segments else None, config)
 
 
 def test_volume_primary_with_retries_is_not_ready_and_names_the_separating_cut():
@@ -85,8 +85,9 @@ def test_clean_win_is_ready_only_once_durability_is_known_and_a_broken_test_is_n
     assert unknown["readiness"]["verdict"] == "open_questions" and "durability" in unknown["readiness"]["reasons"][0]
     _, result = run(mc.WIN, daily=mc.daily([0.0081, 0.0079, 0.0083, 0.0080, 0.0082, 0.0080, 0.0081, 0.0079]))
     assert result["readiness"]["verdict"] == "ready"
-    assert [q["question"] for q in result["standard"]][:3] == ["Is the data trustworthy?", "Is the effect real, or chance?",
-                                                               "Will it last?"]
+    assert [q["question"] for q in result["standard"]][:4] == ["What did you change?", "Is the data trustworthy?",
+                                                               "Is the effect real, or chance?", "Will it last?"]
+    assert result["standard"][0]["answer"].startswith("ranker_model: lambdamart_v6 -> lambdamart_v7")
     assert result["chance"]["tested"] >= 50 and result["chance"]["expected_by_chance"] > 2
     decision = pipeline_cases.run_case("c1")
     case = os.path.join(ROOT, "eval", "experiment", "cases", "c1")
@@ -124,3 +125,86 @@ def test_mechanism_case_matches_gold(cid):
     import mechanism_check
     ok, gold, top, result = mechanism_check.compare(cid)
     assert ok, f"{cid}: gold {gold['mechanism']}/{gold['readiness']}, got {top}/{result['readiness']['verdict']}"
+
+
+def _m5(evidence):
+    case = os.path.join(ROOT, "eval", "experiment", "mechanisms", "m5")
+    load = lambda name: json.load(open(os.path.join(case, name)))  # noqa: E731
+    scorecard = adapters.statsig_pulse([load("pulse.json")], load("request.json"))
+    config = adapters.statsig_config(load("experiment.json"), load("audit_logs.json"))
+    decision = decide.decide(scorecard, load("prereg.json"), config, None, load("daily_by_exposure_day.json"))
+    return explain.explain(decision, scorecard, load("prereg.json"), LIB, evidence, config)
+
+
+def _answer_cut(with_answer, without_answer):
+    return {"segments": {"Abandonment Rate": {"by": "answer on the page", "parts": [
+        {"segment": "With answer", "rel_delta": with_answer, "rel_ci": [with_answer - 0.006, with_answer + 0.006], "weight": 0.35},
+        {"segment": "Without answer", "rel_delta": without_answer, "rel_ci": [without_answer - 0.005, without_answer + 0.005], "weight": 0.65}]}}}
+
+
+def test_a_cut_that_refutes_a_candidate_removes_it_and_leaves_the_plan():
+    before = _m5(None)
+    assert before["questions"][0]["candidates"][0] == "good_abandonment"
+    after = _m5(_answer_cut(with_answer=0.002, without_answer=0.031))
+    assert "good_abandonment" in [r["id"] for r in after["ruled_out"]]
+    assert all("good_abandonment" not in q["candidates"] for q in after["questions"])
+    assert not any("answer or rich snippet" in d["cut"] for d in after["deep_dives"] if d["pattern"] == "good_abandonment")
+    assert any(c["outcome"] == "refutes" for c in after["cut_results"])
+
+
+def test_a_cut_that_confirms_a_candidate_marks_it_measured():
+    after = _m5(_answer_cut(with_answer=0.055, without_answer=0.002))
+    q = next(q for q in after["questions"] if q["metric"] == "Abandonment Rate")
+    assert q["candidates"][0] == "good_abandonment" and q["status"] == "confirmed by a cut"
+
+
+def test_a_new_metric_from_evidence_can_answer_a_metric_cut():
+    case = os.path.join(ROOT, "eval", "experiment", "mechanisms", "m1")
+    load = lambda name: json.load(open(os.path.join(case, name)))  # noqa: E731
+    scorecard = adapters.statsig_pulse([load("pulse.json")], load("request.json"))
+    config = adapters.statsig_config(load("experiment.json"), load("audit_logs.json"))
+    decision = decide.decide(scorecard, load("prereg.json"), config, None, load("daily_by_exposure_day.json"))
+    evidence = {"metrics": [{"metric": "SAT Click Rate", "rel_delta": 0.0, "rel_ci": [-0.004, 0.004], "directionality": "increase"}]}
+    result = explain.explain(decision, scorecard, load("prereg.json"), LIB, evidence, config)
+    q = next(q for q in result["questions"] if q["metric"] == "CTR")
+    assert q["candidates"][0] == "attractive_not_relevant" and q["status"] == "confirmed by a cut"
+
+
+def test_dissatisfaction_and_rewrite_metrics_do_not_bind_to_success_or_reformulation():
+    lib = LIB
+    dsat = {"metric": "Dissatisfaction Rate", "directionality": "decrease"}
+    rewrite = {"metric": "Query Rewrite Rate", "directionality": "increase"}
+    sponsored = {"metric": "Sponsored Click-Through Rate", "directionality": "increase"}
+    assert explain.family_candidates(lib, dsat) == ["dissatisfaction"]
+    assert explain.family_candidates(lib, rewrite) == []
+    assert explain.family_candidates(lib, sponsored) == ["ad_ctr"]
+    assert explain.family_candidates(lib, {"metric": "Organic CTR", "directionality": "increase"}) == ["ctr"]
+
+
+def test_a_wide_interval_is_unknown_not_flat():
+    wide = {"metric": "Successful Search Rate", "rel_delta": -0.015, "rel_ci": [-0.035, 0.005]}
+    narrow = {"metric": "Successful Search Rate", "rel_delta": 0.0, "rel_ci": [-0.002, 0.002]}
+    assert explain.state(wide, 0.003) == "unknown" and explain.state(narrow, 0.003) == "flat"
+
+
+DEEPDIVE = os.path.join(ROOT, "eval", "experiment", "regressions_deepdive")
+
+
+@pytest.mark.parametrize("cid", sorted(os.listdir(DEEPDIVE)))
+def test_deep_dive_regression(cid, tmp_path):
+    case = os.path.join(DEEPDIVE, cid)
+    load = lambda name: json.load(open(os.path.join(case, name))) if os.path.exists(os.path.join(case, name)) else None  # noqa: E731
+    expected = load("expected.json")
+    scorecard = adapters.statsig_pulse([load("pulse.json")], load("request.json"))
+    config = adapters.statsig_config(load("experiment.json"), load("audit_logs.json"))
+    raw = load("experiment.json")["data"]
+    if raw.get("exposures"):
+        config["exposures"] = raw["exposures"]
+    decision = decide.decide(scorecard, load("prereg.json"), config, None, load("daily_by_exposure_day.json"))
+    evidence = load("evidence.json") or {}
+    if load("segments.json"):
+        evidence["segments"] = load("segments.json")
+    result = explain.explain(decision, scorecard, load("prereg.json"), LIB, evidence or None, config)
+    q = next((q for q in result["questions"] if q["metric"] == expected["question_metric"]), None)
+    top = q["candidates"][0] if q and q["candidates"] else None
+    assert (top, result["readiness"]["verdict"]) == (expected["mechanism"], expected["readiness"]), expected["note"]

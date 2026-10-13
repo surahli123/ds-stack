@@ -1,0 +1,39 @@
+{
+ "experiment_id": "ranker_v7",
+ "name": "Ranker v7",
+ "design": "ab",
+ "unit": "userID",
+ "confirmed": true,
+ "ci_level": 0.95,
+ "planned": {
+  "days": 14,
+  "units_per_arm": 900000
+ },
+ "primaries": {
+  "rule": "all",
+  "ship_requires": "point_at_bar",
+  "metrics": [
+   {
+    "metric": "Clicks per User",
+    "direction": "increase",
+    "bar": 0.01
+   }
+  ]
+ },
+ "guardrails": [
+  {
+   "metric": "Latency p95 (ms)",
+   "direction": "decrease",
+   "margin": 0.02
+  },
+  {
+   "metric": "Abandonment Rate",
+   "direction": "decrease",
+   "margin": 0.01
+  }
+ ],
+ "intended_params": [
+  "ranker_model"
+ ],
+ "hypothesis": "The new ranker raises the share of searches that end in a successful click."
+}

@@ -1,0 +1,12 @@
+{
+ "title": "Organic CTR up without long clicks; Sponsored CTR down inside its margin",
+ "question_metric": "Organic CTR",
+ "mechanism": "ads_displaced",
+ "readiness": "ready",
+ "reviewer_expected": {
+  "mechanism": "attractive_not_relevant",
+  "readiness": "ready",
+  "why": "organic CTR +2.4% with long clicks and success flat is the attractive-snippets signature; sponsored CTR -2% is ads displaced"
+ },
+ "note": "matches the reviewer's expectation"
+}

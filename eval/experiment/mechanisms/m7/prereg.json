@@ -45,5 +45,8 @@
  "intended_params": [
   "ranker_model"
  ],
+ "segments": [
+  "query class"
+ ],
  "hypothesis": "The new ranker raises the share of searches that end in a successful click."
 }

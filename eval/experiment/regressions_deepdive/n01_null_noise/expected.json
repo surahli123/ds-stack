@@ -1,0 +1,12 @@
+{
+ "title": "null scorecard; CTR crosses zero by noise",
+ "question_metric": "Successful Search Rate",
+ "mechanism": null,
+ "readiness": "ready",
+ "reviewer_expected": {
+  "mechanism": null,
+  "readiness": "ready",
+  "why": "no effect found at full power; nothing to explain, no cuts to run. One of ~57 noise metrics crossing zero is expected"
+ },
+ "note": "matches the reviewer's expectation"
+}

@@ -1,0 +1,12 @@
+{
+ "title": "CTR +3.2%: clicks per user +1.0%, queries per user -2.1%, long clicks flat",
+ "question_metric": "CTR",
+ "mechanism": "denominator_driven",
+ "readiness": "ready",
+ "reviewer_expected": {
+  "mechanism": "denominator_driven",
+  "readiness": "open_questions",
+  "why": "two thirds of the CTR rise is fewer queries per user; the story is volume first, and why queries fell is the question"
+ },
+ "note": "ready: the ratio split is consistent with the scorecard, so the volume story is confirmed by the scorecard"
+}

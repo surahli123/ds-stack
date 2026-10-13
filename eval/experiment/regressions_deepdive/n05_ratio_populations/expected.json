@@ -1,0 +1,12 @@
+{
+ "title": "CTR +2.1% while clicks per user are flat and queries per user fell 0.5%",
+ "question_metric": "CTR",
+ "mechanism": "denominator_driven",
+ "readiness": "open_questions",
+ "reviewer_expected": {
+  "mechanism": null,
+  "readiness": "open_questions",
+  "why": "fewer queries per user explains at most +0.5% of a +2.1% CTR rise; the counts and the ratio are on different populations, so the decomposition doesn't close"
+ },
+ "note": "attractive results is a fair candidate for CTR up with long clicks flat; the population mismatch is listed as an open question"
+}

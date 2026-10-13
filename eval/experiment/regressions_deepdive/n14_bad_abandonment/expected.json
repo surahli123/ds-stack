@@ -1,0 +1,12 @@
+{
+ "title": "abandonment +2.0% breach; success -1.5% with a +/-2% interval; CTR and clicks down",
+ "question_metric": "Abandonment Rate",
+ "mechanism": null,
+ "readiness": "open_questions",
+ "reviewer_expected": {
+  "mechanism": null,
+  "readiness": "not_ready",
+  "why": "for a ranker-only change, abandonment up with clicks down and success trending down is bad abandonment (worse results); the success metric is too noisy to say otherwise, so a rerun with the full success metric is needed"
+ },
+ "note": "open questions: the primary is too noisy to read, which the sheet says"
+}

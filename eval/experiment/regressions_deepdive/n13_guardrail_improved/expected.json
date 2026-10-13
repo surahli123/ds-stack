@@ -1,0 +1,12 @@
+{
+ "title": "win +0.8%; latency p95 fell 2.5%",
+ "question_metric": "Successful Search Rate",
+ "mechanism": "relevance_gain",
+ "readiness": "ready",
+ "reviewer_expected": {
+  "mechanism": "relevance_gain",
+  "readiness": "ready",
+  "why": "the primary's question comes first; a guardrail that improved is good news with one check (page mix, Dirty Dozen 5.1), not 'not as expected'"
+ },
+ "note": "matches the reviewer's expectation"
+}

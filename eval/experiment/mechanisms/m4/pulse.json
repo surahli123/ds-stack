@@ -23,17 +23,17 @@
    {
     "metricID": "CTR::ratio",
     "directionality": "increase",
-    "absoluteChange": -0.002745,
-    "absoluteConfidenceIntervalDelta": 0.00122,
-    "percentChange": -0.9,
-    "percentConfidenceIntervalDelta": 0.4,
-    "testMean": 0.302255,
+    "absoluteChange": -0.00549,
+    "absoluteConfidenceIntervalDelta": 0.001525,
+    "percentChange": -1.8,
+    "percentConfidenceIntervalDelta": 0.5,
+    "testMean": 0.29951,
     "controlMean": 0.305,
-    "testStd": 0.000440146,
-    "controlStd": 0.000440146,
+    "testStd": 0.0005501825,
+    "controlStd": 0.0005501825,
     "testUnits": 1000000,
     "controlUnits": 1000000,
-    "pValue": 1e-05
+    "pValue": 0.0
    },
    {
     "metricID": "Long Click Rate::ratio",

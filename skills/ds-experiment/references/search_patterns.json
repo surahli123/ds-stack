@@ -1,78 +1,230 @@
 {
- "_note": "Search metric co-movement patterns: each maps a signature in the scorecard to a candidate mechanism and the deep dives that would confirm or refute it. States are physical (up, down, flat), not good or bad. Extend or override in the overlay (patterns.json); company metric names belong in the overlay's metric_families.json, never here. 'reading' says whether a mechanism makes the movement good, bad, mixed or neutral news; two candidates with opposite readings on a registered metric mean the result isn't ready for triage until a deep dive separates them.",
+ "_note": "Search metric co-movement patterns. Each maps a signature in the scorecard to a candidate mechanism and the cuts that would confirm or refute it. States are physical (up, down, flat, unknown), judged against each family's practical band: flat means the interval sits inside the band, unknown means it is too wide to tell. A cut with confirms_when/refutes_when is scored by script from evidence.json; others need an explicit outcome. 'reading' says whether a mechanism makes the movement good, bad, mixed or neutral news. Extend or override in the overlay (patterns.json); company metric names belong in the overlay's metric_families.json.",
  "families": {
-  "success": [
-   "successful search",
-   "success rate",
-   "\\bsat\\b",
-   "satisf"
-  ],
-  "ctr": [
-   "^ctr$",
-   "^ctr\\b",
-   "click[- ]?through"
-  ],
-  "long_click": [
-   "long click",
-   "dwell"
-  ],
-  "short_click": [
-   "short click",
-   "quick back",
-   "pogo"
-  ],
-  "abandonment": [
-   "abandon"
-  ],
-  "reformulation": [
-   "reformulat",
-   "requer",
-   "rewrite"
-  ],
-  "queries_per_user": [
-   "queries per user",
-   "searches per user",
-   "query volume"
-  ],
-  "sessions_per_user": [
-   "sessions per user"
-  ],
-  "clicks_per_user": [
-   "clicks per user"
-  ],
-  "time_to_click": [
-   "time to first click",
-   "time to click"
-  ],
-  "zero_result": [
-   "zero result",
-   "null result",
-   "no result"
-  ],
-  "latency": [
-   "latency",
-   "load time",
-   "page time"
-  ],
-  "ad_ctr": [
-   "ad click",
-   "ads? ctr",
-   "sponsored"
-  ],
-  "revenue": [
-   "revenue",
-   "rpm",
-   "monetiz"
-  ],
-  "pagination": [
-   "pagination",
-   "next page",
-   "page 2"
-  ],
-  "autocomplete": [
-   "autocomplete",
-   "suggest"
-  ]
+  "success": {
+   "match": [
+    "successful search",
+    "\\bsearch success",
+    "^success rate",
+    "session success",
+    "\\bsat rate"
+   ],
+   "exclude": [
+    "dissatisf",
+    "\\bunsat",
+    "\\bdsat",
+    "checkout",
+    "login",
+    "\\bsat click"
+   ],
+   "good": "increase",
+   "practical": 0.003
+  },
+  "dissatisfaction": {
+   "match": [
+    "dissatisf",
+    "\\bdsat\\b",
+    "\\bunsat"
+   ],
+   "exclude": [],
+   "good": "decrease",
+   "practical": 0.02
+  },
+  "sat_click": {
+   "match": [
+    "\\bsat click",
+    "satisfied click"
+   ],
+   "exclude": [],
+   "good": "increase",
+   "practical": 0.01
+  },
+  "ctr": {
+   "match": [
+    "\\bctr\\b",
+    "click[- ]?through"
+   ],
+   "exclude": [
+    "sponsored",
+    "\\bads?\\b",
+    "\\bad ctr"
+   ],
+   "good": "increase",
+   "practical": 0.01
+  },
+  "long_click": {
+   "match": [
+    "long click",
+    "\\bdwell"
+   ],
+   "exclude": [
+    "session"
+   ],
+   "good": "increase",
+   "practical": 0.01
+  },
+  "short_click": {
+   "match": [
+    "short click",
+    "quick back",
+    "pogo"
+   ],
+   "exclude": [],
+   "good": "decrease",
+   "practical": 0.02
+  },
+  "abandonment": {
+   "match": [
+    "abandon"
+   ],
+   "exclude": [
+    "good abandon",
+    "cart"
+   ],
+   "good": "decrease",
+   "practical": 0.01
+  },
+  "reformulation": {
+   "match": [
+    "reformulat",
+    "requer"
+   ],
+   "exclude": [
+    "rewrite"
+   ],
+   "good": "decrease",
+   "practical": 0.02
+  },
+  "requery": {
+   "match": [
+    "re-?query within",
+    "quick re-?query",
+    "similar re-?query"
+   ],
+   "exclude": [],
+   "good": "decrease",
+   "practical": 0.02
+  },
+  "queries_per_user": {
+   "match": [
+    "queries per user",
+    "searches per user"
+   ],
+   "exclude": [],
+   "good": null,
+   "practical": 0.01
+  },
+  "success_per_query": {
+   "match": [
+    "success per query",
+    "successful queries per query"
+   ],
+   "exclude": [],
+   "good": "increase",
+   "practical": 0.003
+  },
+  "sessions_per_user": {
+   "match": [
+    "sessions per user"
+   ],
+   "exclude": [],
+   "good": "increase",
+   "practical": 0.005
+  },
+  "clicks_per_user": {
+   "match": [
+    "clicks per user"
+   ],
+   "exclude": [
+    "\\bad",
+    "sponsored",
+    "\\bsat"
+   ],
+   "good": "increase",
+   "practical": 0.01
+  },
+  "time_to_click": {
+   "match": [
+    "time to (first|last) click",
+    "time to click"
+   ],
+   "exclude": [],
+   "good": "decrease",
+   "practical": 0.02
+  },
+  "zero_result": {
+   "match": [
+    "zero result",
+    "null result",
+    "\\bno result"
+   ],
+   "exclude": [
+    "click"
+   ],
+   "good": "decrease",
+   "practical": 0.03
+  },
+  "latency": {
+   "match": [
+    "latency",
+    "load time",
+    "page time"
+   ],
+   "exclude": [
+    "share",
+    "low latency"
+   ],
+   "good": "decrease",
+   "practical": 0.02
+  },
+  "ad_ctr": {
+   "match": [
+    "\\bad click",
+    "\\bads? ctr",
+    "sponsored"
+   ],
+   "exclude": [],
+   "good": "increase",
+   "practical": 0.02
+  },
+  "revenue": {
+   "match": [
+    "revenue",
+    "\\brpm\\b",
+    "monetiz"
+   ],
+   "exclude": [],
+   "good": "increase",
+   "practical": 0.01
+  },
+  "pagination": {
+   "match": [
+    "pagination",
+    "next page",
+    "page 2"
+   ],
+   "exclude": [],
+   "good": "decrease",
+   "practical": 0.03
+  },
+  "navigational_share": {
+   "match": [
+    "navigational share",
+    "share of navigational"
+   ],
+   "exclude": [],
+   "good": null,
+   "practical": 0.02
+  },
+  "autocomplete": {
+   "match": [
+    "autocomplete",
+    "suggest"
+   ],
+   "exclude": [],
+   "good": "increase",
+   "practical": 0.01
+  }
  },
  "ratios": {
   "ctr": {
@@ -97,24 +249,30 @@
    },
    "contradicted_by": {
     "reformulation": "up",
-    "short_click": "up"
+    "short_click": "up",
+    "dissatisfaction": "up"
    },
    "mechanism": "The ranking puts better results where users look, so more searches end in a satisfying click.",
    "deep_dives": [
     {
+     "cut": "success on triggered queries only (where the ranking actually changed) vs untriggered",
+     "confirms": "a larger effect on triggered queries, diluted overall",
+     "refutes": "the same effect on untouched queries, pointing to something other than ranking",
+     "needs": {
+      "segment_of": "success",
+      "by": "triggered"
+     },
+     "confirms_when": {
+      "carries_most": "triggered"
+     },
+     "refutes_when": {
+      "even": true
+     }
+    },
+    {
      "cut": "success by query class and device",
      "confirms": "the gain is largest where the change acts (for example tail queries for a recall change)",
      "refutes": "the gain is uniform, which a ranking change rarely produces"
-    },
-    {
-     "cut": "success on triggered queries only (where the ranking actually changed)",
-     "confirms": "a larger effect on triggered queries, diluted overall",
-     "refutes": "the same effect on untouched queries, pointing to something other than ranking"
-    },
-    {
-     "cut": "the untriggered complement (queries where the ranking didn't change), by arm",
-     "confirms": "no difference there, as an A/A test would show",
-     "refutes": "a difference on untouched queries (logging or leakage)"
     }
    ],
    "reading": "good",
@@ -130,18 +288,54 @@
    "strengthened_by": {
     "success": "flat_or_down",
     "short_click": "up",
-    "clicks_per_user": "up"
+    "clicks_per_user": "up",
+    "dissatisfaction": "up"
    },
    "contradicted_by": {
     "long_click": "up",
-    "success": "up"
+    "success": "up",
+    "sat_click": "up"
    },
    "mechanism": "Results look more clickable (titles, snippets or positions) but satisfy no more often, so CTR rises without long clicks.",
    "deep_dives": [
     {
      "cut": "SAT clicks (dwell of 30 seconds or more) vs all clicks, by arm",
      "confirms": "clicks rise but SAT clicks don't",
-     "refutes": "SAT clicks rise with clicks"
+     "refutes": "SAT clicks rise with clicks",
+     "needs": {
+      "metric": "sat_click"
+     },
+     "confirms_when": {
+      "sat_click": "flat_or_down"
+     },
+     "refutes_when": {
+      "sat_click": "up"
+     }
+    },
+    {
+     "cut": "a similar query issued again within 5 minutes, by arm",
+     "confirms": "quick re-queries rise after clicks",
+     "refutes": "re-queries are flat",
+     "needs": {
+      "metric": "requery"
+     },
+     "confirms_when": {
+      "requery": "up"
+     },
+     "refutes_when": {
+      "requery": "flat_or_down"
+     }
+    },
+    {
+     "cut": "config diff of presentation parameters (titles, snippets, thumbnails)",
+     "confirms": "a presentation parameter differs between arms",
+     "refutes": "only ranking differs (this doesn't rule it out: ranking can surface such results too)",
+     "needs": {
+      "config": "presentation"
+     },
+     "confirms_when": {
+      "presentation_changed": true
+     }
     },
     {
      "cut": "CTR and long-click rate by result position",
@@ -149,23 +343,72 @@
      "refutes": "long clicks rise wherever CTR rises"
     },
     {
-     "cut": "a similar query issued again within 5 minutes, by arm",
-     "confirms": "quick re-queries rise after clicks",
-     "refutes": "re-queries are flat"
-    },
-    {
      "cut": "whole-page CTR vs CTR on the element that changed",
      "confirms": "element CTR rises while whole-page CTR is flat (clicks moved, not added)",
      "refutes": "whole-page CTR rises too"
-    },
-    {
-     "cut": "config diff of presentation parameters (titles, snippets, thumbnails)",
-     "confirms": "a presentation parameter differs between arms",
-     "refutes": "only ranking differs"
     }
    ],
    "reading": "bad",
    "source": "Hassan et al., CIKM 2013 (attractive snippets, SAT clicks at 30 s dwell); Dmitriev et al., A Dirty Dozen: Twelve Common Metric Interpretation Pitfalls, KDD 2017 (clicks shift between page elements)"
+  },
+  {
+   "id": "activity_without_success",
+   "name": "More activity without more success",
+   "reading": "bad",
+   "when": {
+    "success": "flat_or_down"
+   },
+   "any_of": {
+    "queries_per_user": "up",
+    "clicks_per_user": "up",
+    "sessions_per_user": "up"
+   },
+   "strengthened_by": {
+    "reformulation": "up",
+    "requery": "up",
+    "dissatisfaction": "up"
+   },
+   "contradicted_by": {
+    "success": "up",
+    "success_per_query": "up"
+   },
+   "mechanism": "Users click or search more while success doesn't rise. Published cases read this as attractive results, confusion or users struggling, not engagement, until a cut shows otherwise.",
+   "source": "Kohavi et al., KDD 2012; Song, Shi, Fu, WWW 2013; Dmitriev et al., A Dirty Dozen, KDD 2017 (5.12, clicks up from confusion)",
+   "deep_dives": [
+    {
+     "cut": "success per query vs per user",
+     "confirms": "success per query falls or holds while activity grows",
+     "refutes": "success per query rises with activity",
+     "needs": {
+      "metric": "success_per_query"
+     },
+     "confirms_when": {
+      "success_per_query": "flat_or_down"
+     },
+     "refutes_when": {
+      "success_per_query": "up"
+     }
+    },
+    {
+     "cut": "a similar query issued again within 5 minutes, by arm",
+     "confirms": "quick re-queries rise",
+     "refutes": "re-queries are flat",
+     "needs": {
+      "metric": "requery"
+     },
+     "confirms_when": {
+      "requery": "up"
+     },
+     "refutes_when": {
+      "requery": "flat_or_down"
+     }
+    },
+    {
+     "cut": "sessions per user vs queries per session, by arm",
+     "confirms": "more queries inside the same sessions (retrying)",
+     "refutes": "more sessions (coming back)"
+    }
+   ]
   },
   {
    "id": "struggling_users",
@@ -188,22 +431,49 @@
     {
      "cut": "success per query vs per user",
      "confirms": "success per query falls",
-     "refutes": "success per query holds while volume grows"
+     "refutes": "success per query holds while volume grows",
+     "needs": {
+      "metric": "success_per_query"
+     },
+     "confirms_when": {
+      "success_per_query": "down"
+     },
+     "refutes_when": {
+      "success_per_query": "up_or_flat"
+     }
     },
     {
      "cut": "a similar query issued again within 5 minutes, by arm",
      "confirms": "quick similar re-queries rise in treatment",
-     "refutes": "re-queries are flat, so the extra queries are new needs"
+     "refutes": "re-queries are flat, so the extra queries are new needs",
+     "needs": {
+      "metric": "requery"
+     },
+     "confirms_when": {
+      "requery": "up"
+     },
+     "refutes_when": {
+      "requery": "flat_or_down"
+     }
+    },
+    {
+     "cut": "navigational share of queries by arm, week by week",
+     "confirms": "treatment users drift toward easy navigational queries (giving up on hard ones)",
+     "refutes": "the query mix is stable",
+     "needs": {
+      "metric": "navigational_share"
+     },
+     "confirms_when": {
+      "navigational_share": "up"
+     },
+     "refutes_when": {
+      "navigational_share": "flat"
+     }
     },
     {
      "cut": "reformulation rate by query class (head, torso, tail; navigational, informational)",
      "confirms": "reformulation rises on the classes the change touched",
      "refutes": "reformulation rises evenly, pointing to a logging or session change"
-    },
-    {
-     "cut": "navigational share of queries by arm, week by week",
-     "confirms": "treatment users drift toward easy navigational queries (giving up on hard ones)",
-     "refutes": "the query mix is stable"
     },
     {
      "cut": "distribution of queries per session by arm",
@@ -263,7 +533,22 @@
     {
      "cut": "abandonment and CTR by latency bucket, per arm",
      "confirms": "the loss sits in the slow buckets",
-     "refutes": "the loss is flat across latency buckets"
+     "refutes": "the loss is flat across latency buckets",
+     "needs": {
+      "segment_of": "abandonment",
+      "by": "latency"
+     },
+     "confirms_when": {
+      "carries_most": "slow"
+     },
+     "refutes_when": {
+      "even": true
+     }
+    },
+    {
+     "cut": "latency by page type and load type (cached reloads vs fresh loads), by arm",
+     "confirms": "latency rises on the same page types",
+     "refutes": "the page mix changed, so latency moved without pages getting slower"
     },
     {
      "cut": "effect by device and network type",
@@ -274,11 +559,6 @@
      "cut": "relevance metrics on queries where latency didn't change",
      "confirms": "relevance improves once latency is held fixed",
      "refutes": "no gain even at equal latency"
-    },
-    {
-     "cut": "latency by page type and load type (cached reloads vs fresh loads), by arm",
-     "confirms": "latency rises on the same page types",
-     "refutes": "the page mix changed, so latency moved without pages getting slower"
     }
    ],
    "reading": "bad",
@@ -339,21 +619,100 @@
     {
      "cut": "abandonment on queries with an answer or rich snippet vs without",
      "confirms": "the rise sits on answer-bearing queries",
-     "refutes": "the rise is even"
+     "refutes": "the rise sits on queries without an answer",
+     "needs": {
+      "segment_of": "abandonment",
+      "by": "answer"
+     },
+     "confirms_when": {
+      "carries_most": "with answer"
+     },
+     "refutes_when": {
+      "carries_most": "without answer"
+     }
     },
     {
-     "cut": "reformulation and return-within-a-minute after an abandoned query",
+     "cut": "a similar query issued again within 5 minutes after an abandoned query",
      "confirms": "abandoned users don't come back to retry",
-     "refutes": "abandoned users retry"
+     "refutes": "abandoned users retry",
+     "needs": {
+      "metric": "requery"
+     },
+     "confirms_when": {
+      "requery": "flat_or_down"
+     },
+     "refutes_when": {
+      "requery": "up"
+     }
+    },
+    {
+     "cut": "config diff of presentation parameters (answers, rich snippets)",
+     "confirms": "an answer or snippet parameter differs between arms",
+     "refutes": "only ranking differs (this doesn't rule it out: ranking can surface such results too)",
+     "needs": {
+      "config": "presentation"
+     },
+     "confirms_when": {
+      "presentation_changed": true
+     }
     },
     {
      "cut": "abandonment by device",
      "confirms": "the rise is larger on mobile, where good abandonment is common",
-     "refutes": "the rise is the same on desktop"
+     "refutes": "the rise is the same on desktop",
+     "needs": {
+      "segment_of": "abandonment",
+      "by": "device"
+     },
+     "confirms_when": {
+      "carries_most": "mobile"
+     }
     }
    ],
    "reading": "good",
    "source": "Li, Huffman, Tokuda, SIGIR 2009 (good abandonment, higher on mobile); Pew Research 2025 (clicks 8% vs 15% with AI summaries)"
+  },
+  {
+   "id": "bad_abandonment",
+   "name": "Worse results make users give up",
+   "reading": "bad",
+   "when": {
+    "abandonment": "up",
+    "success": "flat_or_down"
+   },
+   "strengthened_by": {
+    "ctr": "down",
+    "clicks_per_user": "down",
+    "reformulation": "up",
+    "dissatisfaction": "up"
+   },
+   "contradicted_by": {
+    "success": "up"
+   },
+   "mechanism": "Users leave without clicking because results got worse, not because the answer was on the page.",
+   "source": "Li, Huffman, Tokuda, SIGIR 2009 (good vs bad abandonment); Song, Shi, Fu, WWW 2013",
+   "deep_dives": [
+    {
+     "cut": "abandonment on queries with an answer or rich snippet vs without",
+     "confirms": "the rise sits on queries without an answer",
+     "refutes": "the rise sits on answer-bearing queries",
+     "needs": {
+      "segment_of": "abandonment",
+      "by": "answer"
+     },
+     "confirms_when": {
+      "carries_most": "without answer"
+     },
+     "refutes_when": {
+      "carries_most": "with answer"
+     }
+    },
+    {
+     "cut": "config diff of presentation parameters (answers, rich snippets)",
+     "confirms": "only ranking differs",
+     "refutes": "an answer or snippet parameter differs"
+    }
+   ]
   },
   {
    "id": "mixed_wins_losses",
@@ -415,6 +774,48 @@
    ],
    "reading": "mixed",
    "source": "Dmitriev et al., A Dirty Dozen: Twelve Common Metric Interpretation Pitfalls, KDD 2017 (ad load by page type); Kohavi et al. 2012 (bad organic results raise revenue)"
+  },
+  {
+   "id": "worse_organic_ads_look_better",
+   "name": "Worse organic results make ads look better",
+   "reading": "bad",
+   "when": {
+    "success": "flat_or_down"
+   },
+   "any_of": {
+    "revenue": "up",
+    "ad_ctr": "up"
+   },
+   "strengthened_by": {
+    "queries_per_user": "up",
+    "reformulation": "up"
+   },
+   "contradicted_by": {
+    "success": "up"
+   },
+   "mechanism": "Revenue or ad clicks rise because organic results got worse: users search more and ads look relatively more relevant. Bing saw a ranking bug raise revenue per user 30%.",
+   "source": "Kohavi et al., Five Puzzling Outcomes, KDD 2012",
+   "deep_dives": [
+    {
+     "cut": "success per query vs per user",
+     "confirms": "success per query falls",
+     "refutes": "success per query holds",
+     "needs": {
+      "metric": "success_per_query"
+     },
+     "confirms_when": {
+      "success_per_query": "down"
+     },
+     "refutes_when": {
+      "success_per_query": "up_or_flat"
+     }
+    },
+    {
+     "cut": "ad clicks per query vs organic clicks per query, by arm",
+     "confirms": "ad clicks rise where organic clicks fall",
+     "refutes": "both rise together"
+    }
+   ]
   },
   {
    "id": "denominator_driven",
@@ -524,7 +925,10 @@
    "mobile",
    "desktop",
    "tablet",
-   "app"
+   "app",
+   "ios",
+   "android",
+   "web"
   ],
   "query class": [
    "head queries",
@@ -538,7 +942,24 @@
    "navigational",
    "informational",
    "transactional"
+  ],
+  "triggered": [
+   "triggered",
+   "untriggered",
+   "not triggered"
+  ],
+  "answer": [
+   "with answer",
+   "without answer",
+   "answer",
+   "no answer"
+  ],
+  "latency": [
+   "slow",
+   "fast",
+   "medium"
   ]
  },
- "_sources": "Research notes: research_notes/Experiment metric deep dives/search_metric_signatures.md (2026-10-13)."
+ "_sources": "Research notes: research_notes/Experiment metric deep dives/search_metric_signatures.md (2026-10-13).",
+ "presentation_params": "snippet|title|thumbnail|layout|\\bui\\b|render|answer|card|module|font|color|image"
 }

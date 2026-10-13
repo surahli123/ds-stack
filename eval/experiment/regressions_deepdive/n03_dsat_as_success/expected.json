@@ -1,0 +1,12 @@
+{
+ "title": "CTR primary up, Dissatisfaction Rate guardrail breached",
+ "question_metric": "Dissatisfaction Rate",
+ "mechanism": "attractive_not_relevant",
+ "readiness": "open_questions",
+ "reviewer_expected": {
+  "mechanism": "attractive_not_relevant",
+  "readiness": "ready",
+  "why": "CTR +2.4% while dissatisfaction rises 3.5% and long clicks are flat: clickable, not relevant. The call is Don't ship"
+ },
+ "note": "open questions, not ready: CTR's two readings don't change a Don't ship call, so triage will ask but the call stands"
+}

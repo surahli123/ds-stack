@@ -341,7 +341,8 @@ def triage_line(explained):
 
 
 def triage_prep(decision, explained):
-    """The engineer's prep sheet: the questions triage will ask, the candidate answers, and the cuts to run."""
+    """The engineer's prep sheet: the standard questions, the questions triage will ask with candidate answers,
+    the cuts already run and their results, and the cuts still to run."""
     exp = decision["experiment"]
     by_id = {}
     for inst in explained["patterns"]:
@@ -352,7 +353,12 @@ def triage_prep(decision, explained):
              f"Scripted call: {decision['call_text']}. {decision['reason']}", "",
              "## Before any single metric", ""]
     for q in explained.get("standard", []):
-        lines.append(f"- {q['question']} {q['answer'].rstrip('.')}.")
+        if not q.get("note"):
+            lines.append(f"- {q['question']} {q['answer'].rstrip('.')}.")
+    families = next((q for q in explained.get("standard", []) if q.get("note")), None)
+    if families:
+        lines += ["", f"Metric families used: {families['answer']}. A wrong pairing here changes every explanation below; "
+                      "fix it in the overlay's metric_families.json."]
     lines += ["", "## Questions triage will ask", ""]
     if not explained["questions"]:
         lines += ["- No metric moved clearly enough to be asked about.", ""]
@@ -360,30 +366,46 @@ def triage_prep(decision, explained):
     for n, q in enumerate(explained["questions"], 1):
         change = "" if q["change"].startswith(q["metric"]) else f" It {q['change']}."
         lines.append(f"{n}. {q['question']}{change} Status: {q.get('status', 'untested')}.")
-        if not q["candidates"]:
-            lines.append("   - No candidate explanation yet. Say so in the meeting and name the cut you'd run.")
+        if not q["candidates"] and q.get("status", "").startswith(("no candidate", "possibly chance")):
+            lines.append("   - No candidate explanation. Say so in the meeting: 'unexplained, possibly chance' is an allowed answer.")
         for cid in q["candidates"][:2]:
-            inst = by_id[cid]
-            strength = "Likely" if inst["score"] >= 1 or inst["label"] == "measured" else "Possible"
+            inst = by_id.get(cid)
+            if not inst:
+                continue
+            confirmed = inst["status"].startswith("confirmed")
+            strength = "Confirmed" if confirmed else ("Likely" if inst["score"] >= 1 else "Possible")
             if cid in explained_at:
-                lines.append(f"   - {strength} [{inst['label']}]: {inst['name']}, as in question {explained_at[cid]}.")
+                lines.append(f"   - {strength}: {inst['name']}, as in question {explained_at[cid]}.")
                 continue
             explained_at[cid] = n
             lines.append(f"   - {strength} [{inst['label']}]: {inst['name']}. {inst['mechanism']}")
-            lines.append(f"     Evidence: {'; '.join(inst['evidence'][:3])}.")
+            evidence = list(dict.fromkeys(inst["evidence"]))
+            lines.append(f"     Evidence: {'; '.join(evidence[:4])}.")
             cuts = [cut_number[d["cut"]] for d in inst["deep_dives"] if d["cut"] in cut_number]
-            if cuts:
+            if cuts and not confirmed:
                 lines.append(f"     To check: cut {', '.join(str(c) for c in cuts[:2])} below.")
         lines.append("")
+    if explained.get("cut_results"):
+        lines += ["## Cuts already run", ""]
+        lines += [f"- {r['cut'][:1].upper() + r['cut'][1:]}: {r['outcome']} '{r['tests']}'. {r['detail']}."
+                  for r in explained["cut_results"]] + [""]
     ruled = explained.get("ruled_out") or []
     if ruled:
-        lines += ["## Already ruled out by the scorecard", ""]
-        lines += [f"- {r['name']}: {'; '.join(r['ruled_out_by'])}." for r in ruled[:4]] + [""]
+        lines += ["## Ruled out", ""]
+        lines += [f"- {r['name']}: {'; '.join(r['ruled_out_by'])}." for r in ruled[:5]] + [""]
+    exploratory = explained.get("exploratory") or []
+    if exploratory:
+        lines += ["## Exploratory, not for the decision", "",
+                  "Found by scanning, not registered in advance: worth a rerun or a new test, not a reason to ship.", ""]
+        lines += [f"- {i['name']}" + (f" ({i['segment']})" if i.get("segment") else "") + f": {'; '.join(i['evidence'][:2])}."
+                  for i in exploratory[:4]] + [""]
     lines += ["## Cuts to run before triage, in order", ""]
     lines += [f"{n}. {d['cut'][:1].upper() + d['cut'][1:]} (tests: {d['tests']}). Supports it: {d['confirms']}. "
-              f"Against it: {d['refutes']}." for n, d in enumerate(explained["deep_dives"], 1)] or ["- Nothing to run."]
-    lines += ["", "Inferred explanations come from how metrics moved together. They become measured when a cut is run "
-              "and its numbers are passed back to explain.py with --segments.", ""]
+              f"Against it: {d['refutes']}." + (" Scored by script once its result is in evidence.json." if d.get("scriptable")
+                                                 else " Record its outcome in evidence.json under cuts.")
+              for n, d in enumerate(explained["deep_dives"], 1)] or ["- Nothing to run."]
+    lines += ["", "Explanations become confirmed only when a cut's result is passed back to explain.py with --evidence; "
+              "a cut that contradicts a candidate removes it.", ""]
     used = [i for i in explained["patterns"] if i.get("source") and i["id"] in explained_at]
     if used:
         lines += ["## Sources", ""] + [f"- {i['name']}: {i['source']}." for i in used] + [""]

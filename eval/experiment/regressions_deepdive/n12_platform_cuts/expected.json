@@ -1,0 +1,12 @@
+{
+ "title": "win +0.8% overall, iOS +3.0%, Android and Web flat",
+ "question_metric": "Successful Search Rate",
+ "mechanism": "relevance_gain",
+ "readiness": "open_questions",
+ "reviewer_expected": {
+  "mechanism": "concentrated_segment:iOS",
+  "readiness": "open_questions",
+  "why": "the effect sits in iOS: ask what is iOS-specific (rendering, logging) and check the iOS split by arm"
+ },
+ "note": "the iOS concentration was found by scanning, so it is exploratory and listed as an open question"
+}

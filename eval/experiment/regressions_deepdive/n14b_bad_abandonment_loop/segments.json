@@ -1,0 +1,25 @@
+{
+ "Abandonment Rate": {
+  "by": "answer on the page",
+  "parts": [
+   {
+    "segment": "With answer",
+    "rel_delta": 0.003,
+    "rel_ci": [
+     -0.005,
+     0.011
+    ],
+    "weight": 0.3
+   },
+   {
+    "segment": "Without answer",
+    "rel_delta": 0.028,
+    "rel_ci": [
+     0.02,
+     0.036
+    ],
+    "weight": 0.7
+   }
+  ]
+ }
+}

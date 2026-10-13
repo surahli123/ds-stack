@@ -23,7 +23,9 @@ def run_case(cid):
     pre = adapters.load_json(os.path.join(d, "prereg.json"))
     daily_path = os.path.join(d, "daily_by_exposure_day.json")
     dec = decide.decide(sc, pre, cfg, None, adapters.load_json(daily_path) if os.path.exists(daily_path) else None)
-    return dec, explain.explain(dec, sc, pre, explain.load_library(None))
+    evidence_path = os.path.join(d, "evidence.json")
+    evidence = adapters.load_json(evidence_path) if os.path.exists(evidence_path) else None
+    return dec, explain.explain(dec, sc, pre, explain.load_library(None), evidence, cfg)
 
 
 def compare(cid):
@@ -32,7 +34,11 @@ def compare(cid):
     dec, result = run_case(cid)
     q = next((q for q in result["questions"] if q["metric"] == gold["question_metric"]), None)
     top = q["candidates"][0] if q and q["candidates"] else None
-    return top == gold["mechanism"] and result["readiness"]["verdict"] == gold["readiness"], gold, top, result
+    wanted = gold["mechanism"] if isinstance(gold["mechanism"], list) else [gold["mechanism"]]
+    if wanted == ["none"]:
+        named = [q for q in result["questions"] if q["candidates"]] + result["patterns"]
+        return not named and result["readiness"]["verdict"] == gold["readiness"], gold, None, result
+    return top in wanted and result["readiness"]["verdict"] == gold["readiness"], gold, top, result
 
 
 def main():

@@ -1,0 +1,23 @@
+{
+ "title": "nothing planted: a flat test at full power",
+ "question_metric": "Successful Search Rate",
+ "mechanism": "none",
+ "mechanism_keywords": [
+  "no effect",
+  "didn't move",
+  "did not move",
+  "noise",
+  "chance",
+  "unexplained",
+  "no clear"
+ ],
+ "cut_keywords": [
+  "exposure",
+  "rerun",
+  "nothing to run",
+  "no cut",
+  "triggered"
+ ],
+ "readiness": "ready",
+ "why": "the primary rules out the bar and nothing else moves beyond chance: no story to tell"
+}

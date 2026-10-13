@@ -1,0 +1,12 @@
+{
+ "title": "abandonment +1.2% inside margin, success +0.8%, CTR down, latency +0.3% (about 1 ms)",
+ "question_metric": "Abandonment Rate",
+ "mechanism": "good_abandonment",
+ "readiness": "open_questions",
+ "reviewer_expected": {
+  "mechanism": "good_abandonment",
+  "readiness": "open_questions",
+  "why": "success up, clicks down, abandonment up with no retry rise is the answers-on-the-page signature; a 1 ms latency change can't move abandonment 1.2% (Brutlag: 100 ms is about 0.2-0.6%)"
+ },
+ "note": "matches the reviewer's expectation"
+}

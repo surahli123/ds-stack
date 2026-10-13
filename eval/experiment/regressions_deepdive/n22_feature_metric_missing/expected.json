@@ -1,0 +1,12 @@
+{
+ "title": "clean win; the registered coverage metric isn't in the export",
+ "question_metric": "Successful Search Rate",
+ "mechanism": "relevance_gain",
+ "readiness": "open_questions",
+ "reviewer_expected": {
+  "mechanism": "relevance_gain",
+  "readiness": "open_questions",
+  "why": "a coverage metric missing from the export is unknown coverage, not evidence that the change didn't reach users"
+ },
+ "note": "matches the reviewer's expectation"
+}

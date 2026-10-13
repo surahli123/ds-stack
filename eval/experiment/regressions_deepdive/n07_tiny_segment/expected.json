@@ -1,0 +1,12 @@
+{
+ "title": "device cut: desktop +0.9% (55% of traffic), mobile flat, tablet +5% (2%)",
+ "question_metric": "Successful Search Rate",
+ "mechanism": "relevance_gain",
+ "readiness": "ready",
+ "reviewer_expected": {
+  "mechanism": "concentrated_segment:Desktop",
+  "readiness": "ready",
+  "why": "desktop contributes 83% of the overall change and mobile is flat; tablet is a 2% slice. The segment to name is Desktop (and ask why mobile is flat)"
+ },
+ "note": "relevance gain is a fair top candidate; the desktop concentration doesn't pass the corrected heterogeneity test"
+}

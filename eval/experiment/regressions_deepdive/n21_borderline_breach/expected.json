@@ -1,0 +1,12 @@
+{
+ "title": "win +0.8%; abandonment +1.3% (+0.05% to +2.55%) past a 1% margin",
+ "question_metric": "Abandonment Rate",
+ "mechanism": "mixed_wins_losses",
+ "readiness": "open_questions",
+ "reviewer_expected": {
+  "mechanism": "relevance_gain",
+  "readiness": "open_questions",
+  "why": "Don't ship is the rule, but a breach at p about 0.04 among four guardrails is what A/A tests produce; triage will ask for a rerun, so say so"
+ },
+ "note": "some wins, some losses is a fair reading of success up with abandonment up; the borderline breach is an open question"
+}

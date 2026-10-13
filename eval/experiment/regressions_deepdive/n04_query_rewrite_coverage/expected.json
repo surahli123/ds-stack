@@ -1,0 +1,12 @@
+{
+ "title": "query rewriter: rewrite coverage +35%, queries per user up, success flat",
+ "question_metric": "Queries per User",
+ "mechanism": null,
+ "readiness": "open_questions",
+ "reviewer_expected": {
+  "mechanism": null,
+  "readiness": "open_questions",
+  "why": "rewrite rate is the feature's coverage metric (what changed), not users retrying; queries per user +1.4% with success flat is an open question"
+ },
+ "note": "activity without success is the reviewer's own proposed pattern for queries up with success flat"
+}

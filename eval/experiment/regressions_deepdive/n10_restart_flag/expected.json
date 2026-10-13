@@ -1,0 +1,12 @@
+{
+ "title": "clean win; the test was restarted on day 2",
+ "question_metric": "Successful Search Rate",
+ "mechanism": "relevance_gain",
+ "readiness": "ready",
+ "reviewer_expected": {
+  "mechanism": "relevance_gain",
+  "readiness": "ready",
+  "why": "a restart before the analysis window is routine; the data is trustworthy and there is no artifact to chase"
+ },
+ "note": "matches the reviewer's expectation"
+}

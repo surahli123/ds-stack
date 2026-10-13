@@ -1,0 +1,10 @@
+{
+ "data": [
+  {
+   "actionType": "experiment_restart",
+   "date": "2026-09-13",
+   "time": "2026-09-13T09:00:00Z",
+   "changeLog": "Restarted after fixing the snippet_length rollout"
+  }
+ ]
+}
