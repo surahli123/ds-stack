@@ -1,0 +1,53 @@
+{
+  "pass": true,
+  "skim": "2/2",
+  "full": "3/3",
+  "items": [
+    {
+      "pass": "skim",
+      "item": "answer",
+      "key": "No effect found: Successful Search Rate reads -0.10% (-0.40% to +0.20%), which rules out the 0.50% change the test was built to find.",
+      "reader": "The document concludes there was no effect: Successful Search Rate moved -0.10% (95% interval -0.40% to +0.20%), ruling out the 0.50% change the test was designed to detect. Recommends stopping the test without launching. Current state: test complete (day 14 of 14, about 1,000,000 users per arm). Agree to stop the test without launching Ranker v7. Before closing, check the \"zero-result queries\" cut the document lists as the one thing that could change the call, since the secondary metric CTR also fell 1.80% after correction.",
+      "got": true,
+      "how": "overlap 69%"
+    },
+    {
+      "pass": "skim",
+      "item": "decision",
+      "key": "Agree to stop the test without launching.",
+      "reader": "Agree to stop the test without launching Ranker v7. Before closing, check the \"zero-result queries\" cut the document lists as the one thing that could change the call, since the secondary metric CTR also fell 1.80% after correction. The document concludes there was no effect: Successful Search Rate moved -0.10% (95% interval -0.40% to +0.20%), ruling out the 0.50% change the test was designed to detect. Recommends stopping the test without launching. Current state: test complete (day 14 of 14, about 1,000,000 users per arm).",
+      "got": true,
+      "how": "overlap 100%"
+    },
+    {
+      "pass": "full",
+      "item": "takeaway 1",
+      "key": "Successful Search Rate -0.10% (-0.40% to +0.20%) against estimate at least 0.50% higher.",
+      "reader": "The test found no effect. Successful Search Rate moved -0.10% (95% interval -0.40% to +0.20%), so the interval rules out the +0.50% the test was built to detect. The recommendation is to stop the test without launching. The test is complete: day 14 of 14, about 1,000,000 users per arm. Agree to stop without launching. Before signing off, I'd want the author to resolve the CTR drop (-1.80%, which survived multiple-comparison correction) and say whether it should block the decision. The pre-period check also never ran, so that gap should be recorded in the handover. -0.10%, the relative change in Successful Search Rate (unit assumed to be percent change; the document doesn't say whether it's relative or absolute). The document's own main risk is the CTR drop, which it lists under \"Could reverse it.\" The pre-period check (the one that could catch a baseline imbalance between arms) was not run. The explanation for the drop (zero-result queries now returning weak results) is an inference from co-movement, not a tested finding.",
+      "got": true,
+      "how": "overlap 64%"
+    },
+    {
+      "pass": "full",
+      "item": "takeaway 2",
+      "key": "Agree to stop the test without launching.",
+      "reader": "The test found no effect. Successful Search Rate moved -0.10% (95% interval -0.40% to +0.20%), so the interval rules out the +0.50% the test was built to detect. The recommendation is to stop the test without launching. The test is complete: day 14 of 14, about 1,000,000 users per arm. Agree to stop without launching. Before signing off, I'd want the author to resolve the CTR drop (-1.80%, which survived multiple-comparison correction) and say whether it should block the decision. The pre-period check also never ran, so that gap should be recorded in the handover. -0.10%, the relative change in Successful Search Rate (unit assumed to be percent change; the document doesn't say whether it's relative or absolute). The document's own main risk is the CTR drop, which it lists under \"Could reverse it.\" The pre-period check (the one that could catch a baseline imbalance between arms) was not run. The explanation for the drop (zero-result queries now returning weak results) is an inference from co-movement, not a tested finding.",
+      "got": true,
+      "how": "overlap 100%"
+    },
+    {
+      "pass": "full",
+      "item": "takeaway 3",
+      "key": "Could reverse it: secondary metric CTR got worse after correction.",
+      "reader": "The test found no effect. Successful Search Rate moved -0.10% (95% interval -0.40% to +0.20%), so the interval rules out the +0.50% the test was built to detect. The recommendation is to stop the test without launching. The test is complete: day 14 of 14, about 1,000,000 users per arm. Agree to stop without launching. Before signing off, I'd want the author to resolve the CTR drop (-1.80%, which survived multiple-comparison correction) and say whether it should block the decision. The pre-period check also never ran, so that gap should be recorded in the handover. -0.10%, the relative change in Successful Search Rate (unit assumed to be percent change; the document doesn't say whether it's relative or absolute). The document's own main risk is the CTR drop, which it lists under \"Could reverse it.\" The pre-period check (the one that could catch a baseline imbalance between arms) was not run. The explanation for the drop (zero-result queries now returning weak results) is an inference from co-movement, not a tested finding.",
+      "got": true,
+      "how": "overlap 38%; grader: same fact"
+    }
+  ],
+  "lost": "I had to reread the \"Could reverse it\" line against the appendix, which says the secondary metrics \"don't change the call.\" Those two statements conflict on whether CTR can block the decision. The \"harm inside a margin goes to escalate\" rule also has no margin defined, so I couldn't tell whether the CTR drop triggers it. The units for the percentages were unclear too.",
+  "question": "Does the -1.80% CTR drop count as harm that could block the stop decision, given that the appendix calls secondary metrics exploratory? And what is the harm margin that the escalation rule refers to?",
+  "replies": {
+    "skim": "1. Answer: The document concludes there was no effect: Successful Search Rate moved -0.10% (95% interval -0.40% to +0.20%), ruling out the 0.50% change the test was designed to detect. Recommends stopping the test without launching. Current state: test complete (day 14 of 14, about 1,000,000 users per arm).\n\n2. Decision: Agree to stop the test without launching Ranker v7. Before closing, check the \"zero-result queries\" cut the document lists as the one thing that could change the call, since the secondary metric CTR also fell 1.80% after correction.\n\n3. Number: Successful Search Rate, -0.10% (relative change, 95% interval -0.40% to +0.20%).\n",
+    "full": "1. **Answer:** The test found no effect. Successful Search Rate moved -0.10% (95% interval -0.40% to +0.20%), so the interval rules out the +0.50% the test was built to detect. The recommendation is to stop the test without launching. The test is complete: day 14 of 14, about 1,000,000 users per arm.\n\n2. **Decision:** Agree to stop without launching. Before signing off, I'd want the author to resolve the CTR drop (-1.80%, which survived multiple-comparison correction) and say whether it should block the decision. The pre-period check also never ran, so that gap should be recorded in the handover.\n\n3. **Number:** -0.10%, the relative change in Successful Search Rate (unit assumed to be percent change; the document doesn't say whether it's relative or absolute).\n\n4. **Caveat:** The document's own main risk is the CTR drop, which it lists under \"Could reverse it.\" The pre-period check (the one that could catch a baseline imbalance between arms) was not run. The explanation for the drop (zero-result queries now returning weak results) is an inference from co-movement, not a tested finding.\n\n5. **Lost:** I had to reread the \"Could reverse it\" line against the appendix, which says the secondary metrics \"don't change the call.\" Those two statements conflict on whether CTR can block the decision. The \"harm inside a margin goes to escalate\" rule also has no margin defined, so I couldn't tell whether the CTR drop triggers it. The units for the percentages were unclear too.\n\n6. **Question:** Does the -1.80% CTR drop count as harm that could block the stop decision, given that the appendix calls secondary metrics exploratory? And what is the harm margin that the escalation rule refers to?\n"
+  }
+}

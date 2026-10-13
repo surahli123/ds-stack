@@ -1,0 +1,53 @@
+{
+  "pass": false,
+  "skim": "2/2",
+  "full": "2/3",
+  "items": [
+    {
+      "pass": "skim",
+      "item": "answer",
+      "key": "No effect found: Successful Search Rate reads +0.00% (-0.30% to +0.30%), which rules out the 0.50% change the test was built to find.",
+      "reader": "The document concludes that Ranker v7 had no detectable effect. The test ran its full 14 days with 1,000,000 users per arm, and the primary metric, Successful Search Rate, moved +0.00% (95% interval \u22120.30% to +0.30%), which rules out the 0.50% change it was built to find. Agree to stop the test without launching. Before closing, run the latency-bucket and answer-versus-snippet cuts to check the p95 latency rise (+6.00%), since they would show whether this is a speed problem worth a rerun.",
+      "got": true,
+      "how": "overlap 87%"
+    },
+    {
+      "pass": "skim",
+      "item": "decision",
+      "key": "Agree to stop the test without launching.",
+      "reader": "Agree to stop the test without launching. Before closing, run the latency-bucket and answer-versus-snippet cuts to check the p95 latency rise (+6.00%), since they would show whether this is a speed problem worth a rerun. The document concludes that Ranker v7 had no detectable effect. The test ran its full 14 days with 1,000,000 users per arm, and the primary metric, Successful Search Rate, moved +0.00% (95% interval \u22120.30% to +0.30%), which rules out the 0.50% change it was built to find.",
+      "got": true,
+      "how": "overlap 100%"
+    },
+    {
+      "pass": "full",
+      "item": "takeaway 1",
+      "key": "Successful Search Rate +0.00% (-0.30% to +0.30%) against estimate at least 0.50% higher.",
+      "reader": "The document concludes \"No effect found\" and recommends stopping the test without launching. The test is finished: day 14 of 14, with 1,000,000 users per arm, above the planned 900,000. Agree to stop Ranker v7 without launching. Optionally, run the latency-bucket and answer-vs-snippet cuts first, since the document says they could turn this into a speed fix and a rerun. Successful Search Rate, +0.00% (95% interval \u22120.30% to +0.30%). The bar was at least +0.50%, and the interval's upper bound (+0.30%) sits below it, so an effect of the designed size is ruled out. Latency p95 rose 6.00% and Abandonment Rate rose 1.60%. Both are inside their guardrail margins, but they moved the wrong way. The document's explanation for them is inferred from co-movement and not yet tested. The pre-period check on the primary metric was not run, so a baseline gap between arms is unexcluded.",
+      "got": true,
+      "how": "overlap 70%"
+    },
+    {
+      "pass": "full",
+      "item": "takeaway 2",
+      "key": "Agree to stop the test without launching.",
+      "reader": "The document concludes \"No effect found\" and recommends stopping the test without launching. The test is finished: day 14 of 14, with 1,000,000 users per arm, above the planned 900,000. Agree to stop Ranker v7 without launching. Optionally, run the latency-bucket and answer-vs-snippet cuts first, since the document says they could turn this into a speed fix and a rerun. Successful Search Rate, +0.00% (95% interval \u22120.30% to +0.30%). The bar was at least +0.50%, and the interval's upper bound (+0.30%) sits below it, so an effect of the designed size is ruled out. Latency p95 rose 6.00% and Abandonment Rate rose 1.60%. Both are inside their guardrail margins, but they moved the wrong way. The document's explanation for them is inferred from co-movement and not yet tested. The pre-period check on the primary metric was not run, so a baseline gap between arms is unexcluded.",
+      "got": true,
+      "how": "overlap 100%"
+    },
+    {
+      "pass": "full",
+      "item": "takeaway 3",
+      "key": "Could reverse it: Latency p95 (ms) rose 6.00% (+5.20% to +6.80%), the wrong way, inside its margin.",
+      "reader": "The document concludes \"No effect found\" and recommends stopping the test without launching. The test is finished: day 14 of 14, with 1,000,000 users per arm, above the planned 900,000. Agree to stop Ranker v7 without launching. Optionally, run the latency-bucket and answer-vs-snippet cuts first, since the document says they could turn this into a speed fix and a rerun. Successful Search Rate, +0.00% (95% interval \u22120.30% to +0.30%). The bar was at least +0.50%, and the interval's upper bound (+0.30%) sits below it, so an effect of the designed size is ruled out. Latency p95 rose 6.00% and Abandonment Rate rose 1.60%. Both are inside their guardrail margins, but they moved the wrong way. The document's explanation for them is inferred from co-movement and not yet tested. The pre-period check on the primary metric was not run, so a baseline gap between arms is unexcluded.",
+      "got": false,
+      "how": "overlap 0%"
+    }
+  ],
+  "lost": "I had to reread the \"Could reverse it\" line, since it is a guardrail movement, not a reason to reverse the decision. The \"Triage: Ready\" line also reads oddly next to \"the explanations are inferred,\" so I was unsure whether triage is actually settled. The \"tighter margins\" bullet took a second pass to follow.",
+  "question": "Given the pre-period check didn't run, can you confirm the randomization and sample split are sound enough to trust the +0.00% result before stopping?",
+  "replies": {
+    "skim": "1. Answer: The document concludes that Ranker v7 had no detectable effect. The test ran its full 14 days with 1,000,000 users per arm, and the primary metric, Successful Search Rate, moved +0.00% (95% interval \u22120.30% to +0.30%), which rules out the 0.50% change it was built to find.\n2. Decision: Agree to stop the test without launching. Before closing, run the latency-bucket and answer-versus-snippet cuts to check the p95 latency rise (+6.00%), since they would show whether this is a speed problem worth a rerun.\n3. Number: Successful Search Rate change, +0.00% (95% interval \u22120.30% to +0.30%).\n",
+    "full": "1. **Answer:** The document concludes \"No effect found\" and recommends stopping the test without launching. The test is finished: day 14 of 14, with 1,000,000 users per arm, above the planned 900,000.\n\n2. **Decision:** Agree to stop Ranker v7 without launching. Optionally, run the latency-bucket and answer-vs-snippet cuts first, since the document says they could turn this into a speed fix and a rerun.\n\n3. **Number:** Successful Search Rate, +0.00% (95% interval \u22120.30% to +0.30%). The bar was at least +0.50%, and the interval's upper bound (+0.30%) sits below it, so an effect of the designed size is ruled out.\n\n4. **Caveat:** Latency p95 rose 6.00% and Abandonment Rate rose 1.60%. Both are inside their guardrail margins, but they moved the wrong way. The document's explanation for them is inferred from co-movement and not yet tested. The pre-period check on the primary metric was not run, so a baseline gap between arms is unexcluded.\n\n5. **Lost:** I had to reread the \"Could reverse it\" line, since it is a guardrail movement, not a reason to reverse the decision. The \"Triage: Ready\" line also reads oddly next to \"the explanations are inferred,\" so I was unsure whether triage is actually settled. The \"tighter margins\" bullet took a second pass to follow.\n\n6. **Question:** Given the pre-period check didn't run, can you confirm the randomization and sample split are sound enough to trust the +0.00% result before stopping?\n"
+  }
+}

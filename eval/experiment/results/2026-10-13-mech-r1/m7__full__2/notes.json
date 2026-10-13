@@ -1,0 +1,6 @@
+{"why_it_moved":[
+{"text":"Overall Successful Search Rate is flat (+0.08%) because a gain on Tail Queries (+3.40%) is cancelled by small losses elsewhere: Head Queries -0.53%, Navigational -1.07%.","label":"inferred"},
+{"text":"Navigational queries look worse: Successful Search Rate -1.07%, with Reformulation Rate up. The new ranker may be pushing the expected top result down for queries with one right answer.","label":"guess"},
+{"text":"Guardrails sit inside their margins, and the effect is steady by days since exposure, so this is not a novelty fade.","label":"measured"}],
+"would_change":["A Tail Queries gain that holds in the triggered-only cut would make a segment-only test worth proposing.","A pre-exposure comparison for the primary; the check could not run."],
+"analyst_view":null}

@@ -1,0 +1,6 @@
+{"why_it_moved":[
+{"text":"CTR rose 2.4% and Clicks per User 2.2%, but Successful Search Rate and Long Click Rate did not move: extra clicks, not extra satisfaction.","label":"inferred"},
+{"text":"Reformulation Rate fell 0.9%, a hint users re-search less, yet Queries per User and Abandonment Rate are flat.","label":"guess"},
+{"text":"Every CTR segment row is negative while overall CTR is up; segment rows do not reconcile with the total.","label":"guess"}],
+"would_change":["A dwell-time cut showing the extra clicks are short ones confirms no gain; mostly long clicks would reopen the result.","A pre-exposure comparison showing the arms differed before the test would make the whole read unreliable."],
+"analyst_view":null}

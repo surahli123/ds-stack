@@ -1,0 +1,9 @@
+{"why_it_moved":[
+{"text":"Successful Search Rate rose 0.81% while Queries per User fell 1.9% and Clicks per User stayed flat, so part of the rise may come from fewer searches in the denominator, not better results.","label":"inferred"},
+{"text":"Every device, head/tail and query-type cut of Successful Search Rate is flat or negative, yet the total is up, which points to a mix shift in which searches get counted.","label":"inferred"},
+{"text":"CTR rose 2.1%, in line with the same smaller query count rather than more clicks.","label":"inferred"}],
+"would_change":[
+"Success on triggered queries (ranking changed) flat or negative, with the Queries per User drop traced to logging or dropped searches, would remove the win.",
+"The same lift on triggered queries with unchanged search logging would confirm the relevance gain.",
+"A pre-exposure comparison that shows the arms already differed would make the test unreliable."],
+"analyst_view":{"call":"escalate","reason":"The rule sees a primary above its bar, but Queries per User fell 1.9% with flat clicks and no cut of Successful Search Rate is positive, so the lift may be a denominator effect. Run the triggered-queries and search-volume cuts before approving."}}

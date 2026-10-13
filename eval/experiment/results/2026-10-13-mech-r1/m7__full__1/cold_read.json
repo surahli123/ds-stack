@@ -1,0 +1,53 @@
+{
+  "pass": true,
+  "skim": "2/2",
+  "full": "3/3",
+  "items": [
+    {
+      "pass": "skim",
+      "item": "answer",
+      "key": "No effect found: Successful Search Rate reads +0.08% (-0.22% to +0.38%), which rules out the 0.50% change the test was built to find.",
+      "reader": "No effect found. The test is at day 14 of 14 and shows Successful Search Rate at +0.08% (95% interval -0.22% to +0.38%), which rules out the 0.50% change it was built to detect. The one check that could not run is a pre-exposure comparison, so the arms' pre-test equivalence is unverified. Agree to stop the test without launching. Before closing it out, have someone run the pre-exposure comparison of Successful Search Rate, since a pre-test imbalance is the only thing that could change this call. The Tail Queries gain and the Mobile cost are unconfirmed guesses, so don't count them as reasons to launch or to pursue further.",
+      "got": true,
+      "how": "overlap 88%"
+    },
+    {
+      "pass": "skim",
+      "item": "decision",
+      "key": "Agree to stop the test without launching.",
+      "reader": "Agree to stop the test without launching. Before closing it out, have someone run the pre-exposure comparison of Successful Search Rate, since a pre-test imbalance is the only thing that could change this call. The Tail Queries gain and the Mobile cost are unconfirmed guesses, so don't count them as reasons to launch or to pursue further. No effect found. The test is at day 14 of 14 and shows Successful Search Rate at +0.08% (95% interval -0.22% to +0.38%), which rules out the 0.50% change it was built to detect. The one check that could not run is a pre-exposure comparison, so the arms' pre-test equivalence is unverified.",
+      "got": true,
+      "how": "overlap 100%"
+    },
+    {
+      "pass": "full",
+      "item": "takeaway 1",
+      "key": "Successful Search Rate +0.08% (-0.22% to +0.38%) against estimate at least 0.50% higher.",
+      "reader": "The document concludes \"No effect found\" and recommends stopping the test without launching. The test is complete (day 14 of 14, 1,000,000 users per arm). The primary metric, Successful Search Rate, moved +0.08% (95% interval -0.22% to +0.38%), which rules out the 0.50% bar. The four other guardrails are within margin. The pre-period check was not run. Agree to stop Ranker v7 without launching. Before closing it out, ask for the pre-exposure comparison of Successful Search Rate, since that is the one check that could change the picture. +0.08% change in Successful Search Rate, relative to control, against a 0.50% bar. There is no pre-period comparison, so a difference between the arms before the test is not ruled out. The \"Why it moved\" explanations are inferred or guesses, and no cuts have been run to confirm them.",
+      "got": true,
+      "how": "overlap 73%"
+    },
+    {
+      "pass": "full",
+      "item": "takeaway 2",
+      "key": "Agree to stop the test without launching.",
+      "reader": "The document concludes \"No effect found\" and recommends stopping the test without launching. The test is complete (day 14 of 14, 1,000,000 users per arm). The primary metric, Successful Search Rate, moved +0.08% (95% interval -0.22% to +0.38%), which rules out the 0.50% bar. The four other guardrails are within margin. The pre-period check was not run. Agree to stop Ranker v7 without launching. Before closing it out, ask for the pre-exposure comparison of Successful Search Rate, since that is the one check that could change the picture. +0.08% change in Successful Search Rate, relative to control, against a 0.50% bar. There is no pre-period comparison, so a difference between the arms before the test is not ruled out. The \"Why it moved\" explanations are inferred or guesses, and no cuts have been run to confirm them.",
+      "got": true,
+      "how": "overlap 100%"
+    },
+    {
+      "pass": "full",
+      "item": "takeaway 3",
+      "key": "Could reverse it: no pre-period comparison, so a difference between the arms before the test isn't ruled out.",
+      "reader": "The document concludes \"No effect found\" and recommends stopping the test without launching. The test is complete (day 14 of 14, 1,000,000 users per arm). The primary metric, Successful Search Rate, moved +0.08% (95% interval -0.22% to +0.38%), which rules out the 0.50% bar. The four other guardrails are within margin. The pre-period check was not run. Agree to stop Ranker v7 without launching. Before closing it out, ask for the pre-exposure comparison of Successful Search Rate, since that is the one check that could change the picture. +0.08% change in Successful Search Rate, relative to control, against a 0.50% bar. There is no pre-period comparison, so a difference between the arms before the test is not ruled out. The \"Why it moved\" explanations are inferred or guesses, and no cuts have been run to confirm them.",
+      "got": true,
+      "how": "overlap 82%"
+    }
+  ],
+  "lost": "I reread the \"Triage: Ready\" line. It says every movement has a candidate explanation, but the explanations are inferred and the cuts that would confirm them haven't been run, so \"Ready\" reads as more settled than the evidence supports. The mobile and Tail Queries explanations were also unclear to me as to whether they affect the call. The document says they don't.",
+  "question": "Can you run the pre-exposure Successful Search Rate comparison before we stop the test, and will the arms come back level?",
+  "replies": {
+    "skim": "1. Answer: No effect found. The test is at day 14 of 14 and shows Successful Search Rate at +0.08% (95% interval -0.22% to +0.38%), which rules out the 0.50% change it was built to detect. The one check that could not run is a pre-exposure comparison, so the arms' pre-test equivalence is unverified.\n\n2. Decision: Agree to stop the test without launching. Before closing it out, have someone run the pre-exposure comparison of Successful Search Rate, since a pre-test imbalance is the only thing that could change this call. The Tail Queries gain and the Mobile cost are unconfirmed guesses, so don't count them as reasons to launch or to pursue further.\n\n3. Number: +0.08% (Successful Search Rate, relative change, 95% interval -0.22% to +0.38%).\n",
+    "full": "1. **Answer:** The document concludes \"No effect found\" and recommends stopping the test without launching. The test is complete (day 14 of 14, 1,000,000 users per arm). The primary metric, Successful Search Rate, moved +0.08% (95% interval -0.22% to +0.38%), which rules out the 0.50% bar. The four other guardrails are within margin. The pre-period check was not run.\n\n2. **Decision:** Agree to stop Ranker v7 without launching. Before closing it out, ask for the pre-exposure comparison of Successful Search Rate, since that is the one check that could change the picture.\n\n3. **Number:** +0.08% change in Successful Search Rate, relative to control, against a 0.50% bar.\n\n4. **Caveat:** There is no pre-period comparison, so a difference between the arms before the test is not ruled out. The \"Why it moved\" explanations are inferred or guesses, and no cuts have been run to confirm them.\n\n5. **Lost:** I reread the \"Triage: Ready\" line. It says every movement has a candidate explanation, but the explanations are inferred and the cuts that would confirm them haven't been run, so \"Ready\" reads as more settled than the evidence supports. The mobile and Tail Queries explanations were also unclear to me as to whether they affect the call. The document says they don't.\n\n6. **Question:** Can you run the pre-exposure Successful Search Rate comparison before we stop the test, and will the arms come back level?\n"
+  }
+}

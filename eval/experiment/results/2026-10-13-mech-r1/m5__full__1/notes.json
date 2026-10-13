@@ -1,0 +1,22 @@
+{
+ "why_it_moved": [
+  {
+   "text": "Abandonment Rate rose 2.10%. Answers shown on the page may satisfy people without a click, which would also explain lower CTR and Clicks per User. Untested.",
+   "label": "inferred"
+  },
+  {
+   "text": "Successful Search Rate rose 0.68% at the same size from the first days to the last, with Long Click Rate and Reformulation Rate flat. That fits a relevance gain.",
+   "label": "inferred"
+  },
+  {
+   "text": "Device and query-class rows are all flat or lower, which the overall rise cannot be built from. The segment rows need a check.",
+   "label": "guess"
+  }
+ ],
+ "would_change": [
+  "Abandonment concentrated on queries with an answer or rich snippet would make the rise benign, and the trade-off would favor the lift.",
+  "More same-query repeats within 5 minutes after an abandoned query would make the rise failed searches, and the trade-off would favor holding back.",
+  "A pre-exposure comparison of Successful Search Rate, not yet run, would clear the one check that could not run."
+ ],
+ "analyst_view": null
+}

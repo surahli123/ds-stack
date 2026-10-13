@@ -1,0 +1,53 @@
+{
+  "pass": false,
+  "skim": "2/2",
+  "full": "2/3",
+  "items": [
+    {
+      "pass": "skim",
+      "item": "answer",
+      "key": "Ship: Successful Search Rate rose 0.81% (+0.41% to +1.21%), which clears the 0.50% bar and every guardrail held.",
+      "reader": "The document concludes Ship. Ranker v7 raised Successful Search Rate by 0.81% (95% interval +0.41% to +1.21%), clearing the 0.50% bar, with all guardrails held. The current state is a day-14 readout of a 1,000,000-users-per-arm test, asking approval to launch to all traffic. The outline's analyst view, though, is Escalate, because Queries per User fell 1.9% and no cut of the primary is positive. Don't approve the full launch yet. Treat this as Escalate: check whether the primary lift is a denominator effect from fewer searches, by confirming that success on triggered queries is flat or positive and tracing the Queries per User drop to logging or dropped searches. Ship only if that holds.",
+      "got": true,
+      "how": "overlap 71%"
+    },
+    {
+      "pass": "skim",
+      "item": "decision",
+      "key": "Approve the launch to all traffic.",
+      "reader": "Don't approve the full launch yet. Treat this as Escalate: check whether the primary lift is a denominator effect from fewer searches, by confirming that success on triggered queries is flat or positive and tracing the Queries per User drop to logging or dropped searches. Ship only if that holds. The document concludes Ship. Ranker v7 raised Successful Search Rate by 0.81% (95% interval +0.41% to +1.21%), clearing the 0.50% bar, with all guardrails held. The current state is a day-14 readout of a 1,000,000-users-per-arm test, asking approval to launch to all traffic. The outline's analyst view, though, is Escalate, because Queries per User fell 1.9% and no cut of the primary is positive.",
+      "got": true,
+      "how": "overlap 100%"
+    },
+    {
+      "pass": "full",
+      "item": "takeaway 1",
+      "key": "Successful Search Rate +0.81% (+0.41% to +1.21%) against estimate at least 0.50% higher.",
+      "reader": "The header recommends Ship: Successful Search Rate rose +0.81% (95% CI +0.41% to +1.21%) against a 0.50% bar, and the test finished day 14 of 14 with 1M users per arm. The analyst's view recommends Escalate, because Queries per User fell 1.9% with flat clicks and no segment cut of the primary is positive. Current state: the test is complete, but the document holds two conflicting calls and the pre-period check was not run. Don't approve the full launch yet. Run the triggered-queries cut and the search-volume cut first, and run the pre-exposure comparison. If the lift holds on triggered queries with unchanged logging and the arms didn't differ beforehand, ship. If not, don't. Successful Search Rate, +0.81% relative change (interval +0.41% to +1.21%). The unit is percent change, and the document doesn't say whether that means relative or percentage points. The lift may be a denominator effect. Queries per User fell 1.9% while Clicks per User stayed flat, and every device, head/tail and query-type cut of the primary is flat or negative even though the total is up. That points to a mix shift in which searches get counted. The pre-period check, which would expose a pre-existing arm difference, was not run.",
+      "got": true,
+      "how": "overlap 73%"
+    },
+    {
+      "pass": "full",
+      "item": "takeaway 2",
+      "key": "Approve the launch to all traffic.",
+      "reader": "The header recommends Ship: Successful Search Rate rose +0.81% (95% CI +0.41% to +1.21%) against a 0.50% bar, and the test finished day 14 of 14 with 1M users per arm. The analyst's view recommends Escalate, because Queries per User fell 1.9% with flat clicks and no segment cut of the primary is positive. Current state: the test is complete, but the document holds two conflicting calls and the pre-period check was not run. Don't approve the full launch yet. Run the triggered-queries cut and the search-volume cut first, and run the pre-exposure comparison. If the lift holds on triggered queries with unchanged logging and the arms didn't differ beforehand, ship. If not, don't. Successful Search Rate, +0.81% relative change (interval +0.41% to +1.21%). The unit is percent change, and the document doesn't say whether that means relative or percentage points. The lift may be a denominator effect. Queries per User fell 1.9% while Clicks per User stayed flat, and every device, head/tail and query-type cut of the primary is flat or negative even though the total is up. That points to a mix shift in which searches get counted. The pre-period check, which would expose a pre-existing arm difference, was not run.",
+      "got": true,
+      "how": "overlap 67%"
+    },
+    {
+      "pass": "full",
+      "item": "takeaway 3",
+      "key": "Could reverse it: secondary metric Queries per User got worse after correction.",
+      "reader": "The header recommends Ship: Successful Search Rate rose +0.81% (95% CI +0.41% to +1.21%) against a 0.50% bar, and the test finished day 14 of 14 with 1M users per arm. The analyst's view recommends Escalate, because Queries per User fell 1.9% with flat clicks and no segment cut of the primary is positive. Current state: the test is complete, but the document holds two conflicting calls and the pre-period check was not run. Don't approve the full launch yet. Run the triggered-queries cut and the search-volume cut first, and run the pre-exposure comparison. If the lift holds on triggered queries with unchanged logging and the arms didn't differ beforehand, ship. If not, don't. Successful Search Rate, +0.81% relative change (interval +0.41% to +1.21%). The unit is percent change, and the document doesn't say whether that means relative or percentage points. The lift may be a denominator effect. Queries per User fell 1.9% while Clicks per User stayed flat, and every device, head/tail and query-type cut of the primary is flat or negative even though the total is up. That points to a mix shift in which searches get counted. The pre-period check, which would expose a pre-existing arm difference, was not run.",
+      "got": false,
+      "how": "overlap 30%"
+    }
+  ],
+  "lost": "Yes, in several places:",
+  "question": "For the author: Does the +0.81% lift hold on triggered queries with search logging unchanged, and does the search-volume count per arm match? Did the arms look the same before exposure?",
+  "replies": {
+    "skim": "1. Answer: The document concludes Ship. Ranker v7 raised Successful Search Rate by 0.81% (95% interval +0.41% to +1.21%), clearing the 0.50% bar, with all guardrails held. The current state is a day-14 readout of a 1,000,000-users-per-arm test, asking approval to launch to all traffic. The outline's analyst view, though, is Escalate, because Queries per User fell 1.9% and no cut of the primary is positive.\n\n2. Decision: Don't approve the full launch yet. Treat this as Escalate: check whether the primary lift is a denominator effect from fewer searches, by confirming that success on triggered queries is flat or positive and tracing the Queries per User drop to logging or dropped searches. Ship only if that holds.\n\n3. Number: +0.81% (relative change in Successful Search Rate, vs. the 0.50% bar).\n",
+    "full": "1. **Answer:** The header recommends Ship: Successful Search Rate rose +0.81% (95% CI +0.41% to +1.21%) against a 0.50% bar, and the test finished day 14 of 14 with 1M users per arm. The analyst's view recommends Escalate, because Queries per User fell 1.9% with flat clicks and no segment cut of the primary is positive. Current state: the test is complete, but the document holds two conflicting calls and the pre-period check was not run.\n\n2. **Decision:** Don't approve the full launch yet. Run the triggered-queries cut and the search-volume cut first, and run the pre-exposure comparison. If the lift holds on triggered queries with unchanged logging and the arms didn't differ beforehand, ship. If not, don't.\n\n3. **Number:** Successful Search Rate, +0.81% relative change (interval +0.41% to +1.21%). The unit is percent change, and the document doesn't say whether that means relative or percentage points.\n\n4. **Caveat:** The lift may be a denominator effect. Queries per User fell 1.9% while Clicks per User stayed flat, and every device, head/tail and query-type cut of the primary is flat or negative even though the total is up. That points to a mix shift in which searches get counted. The pre-period check, which would expose a pre-existing arm difference, was not run.\n\n5. **Lost:** Yes, in several places:\n   - Ship and Escalate are both stated, and \"Ready\" triage sits next to an analyst view that disagrees.\n   - The bar is \"estimate at least 0.50% higher,\" but the interval's lower bound is +0.41%. The bar is cleared only on the point estimate.\n   - The \"Why it moved\" items are labelled [inferred], yet the header calls triage \"Ready.\"\n   - \"Could reverse it\" cites Queries per User after correction, but the appendix says the secondary metrics don't change the call.\n   - I couldn't tell what \"Successful Search Rate\" counts, or whether \"estimate at least 0.50% higher\" means relative or absolute.\n\n6. **Question:** For the author: Does the +0.81% lift hold on triggered queries with search logging unchanged, and does the search-volume count per arm match? Did the arms look the same before exposure?\n"
+  }
+}

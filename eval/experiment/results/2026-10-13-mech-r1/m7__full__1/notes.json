@@ -1,0 +1,8 @@
+{"why_it_moved":[
+{"text":"Overall Successful Search Rate is flat (+0.08%) because gains in Tail Queries (+3.40%) are offset by drops in Head Queries (-0.53%) and Navigational (-1.07%) queries; no cut has been run to confirm this.","label":"inferred"},
+{"text":"Mobile looks worse than desktop (Successful Search Rate -0.73% vs -0.17%), so the Tail gain may come with a Mobile or Navigational cost.","label":"guess"},
+{"text":"Queries per User (-0.66%) and Clicks per User (-0.51%) drifted down with no clear success gain, so users are not obviously finishing faster.","label":"guess"}],
+"would_change":[
+"A pre-exposure comparison of Successful Search Rate showing the arms were level before the test would clear the one check that could not run.",
+"A Tail Queries cut with matching arm counts would make this a targeted follow-up test on that segment."],
+"analyst_view":null}

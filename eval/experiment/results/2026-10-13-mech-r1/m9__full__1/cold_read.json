@@ -1,0 +1,53 @@
+{
+  "pass": true,
+  "skim": "2/2",
+  "full": "3/3",
+  "items": [
+    {
+      "pass": "skim",
+      "item": "answer",
+      "key": "No effect found: Successful Search Rate reads +0.02% (-0.28% to +0.32%), which rules out the 0.50% change the test was built to find.",
+      "reader": "No effect found. Successful Search Rate moved +0.02% (95% interval -0.28% to +0.32%), which rules out the 0.50% change the test was built to detect. The document recommends stopping the test without launching v7. Agree to stop the test without launching. Before closing it, check the pre-exposure comparison of Successful Search Rate, since a gap between arms before exposure would void the result. The document doesn't report that check.",
+      "got": true,
+      "how": "overlap 88%"
+    },
+    {
+      "pass": "skim",
+      "item": "decision",
+      "key": "Agree to stop the test without launching.",
+      "reader": "Agree to stop the test without launching. Before closing it, check the pre-exposure comparison of Successful Search Rate, since a gap between arms before exposure would void the result. The document doesn't report that check. No effect found. Successful Search Rate moved +0.02% (95% interval -0.28% to +0.32%), which rules out the 0.50% change the test was built to detect. The document recommends stopping the test without launching v7.",
+      "got": true,
+      "how": "overlap 100%"
+    },
+    {
+      "pass": "full",
+      "item": "takeaway 1",
+      "key": "Successful Search Rate +0.02% (-0.28% to +0.32%) against estimate at least 0.50% higher.",
+      "reader": "The document concludes \"No effect found\" for Ranker v7 and recommends stopping the test without launching. The test is finished: day 14 of 14, 1,000,000 users per arm, above the planned 900,000. The pre-period check has not been run. Agree to stop the test without launching, but only after someone runs the pre-period comparison of Successful Search Rate. If that shows a gap between arms before exposure, the result is void. The tail-query cut on Successful Search Rate and Abandonment Rate should also be checked before the result is used for triage. Successful Search Rate change of +0.02%, with a 95% interval of -0.28% to +0.32%. The unit is relative percent change, which the document implies but doesn't state. The bar is +0.50%, and the interval's upper bound (0.32%) sits below it, so the test rules out the target effect. The pre-period check was not run, so a difference between the arms before the test is not ruled out. The document says this could reverse the call. A second risk is that no coverage metric is on the scorecard, so it's unknown whether v7 changed enough results to matter.",
+      "got": true,
+      "how": "overlap 64%"
+    },
+    {
+      "pass": "full",
+      "item": "takeaway 2",
+      "key": "Agree to stop the test without launching.",
+      "reader": "The document concludes \"No effect found\" for Ranker v7 and recommends stopping the test without launching. The test is finished: day 14 of 14, 1,000,000 users per arm, above the planned 900,000. The pre-period check has not been run. Agree to stop the test without launching, but only after someone runs the pre-period comparison of Successful Search Rate. If that shows a gap between arms before exposure, the result is void. The tail-query cut on Successful Search Rate and Abandonment Rate should also be checked before the result is used for triage. Successful Search Rate change of +0.02%, with a 95% interval of -0.28% to +0.32%. The unit is relative percent change, which the document implies but doesn't state. The bar is +0.50%, and the interval's upper bound (0.32%) sits below it, so the test rules out the target effect. The pre-period check was not run, so a difference between the arms before the test is not ruled out. The document says this could reverse the call. A second risk is that no coverage metric is on the scorecard, so it's unknown whether v7 changed enough results to matter.",
+      "got": true,
+      "how": "overlap 100%"
+    },
+    {
+      "pass": "full",
+      "item": "takeaway 3",
+      "key": "Could reverse it: no pre-period comparison, so a difference between the arms before the test isn't ruled out.",
+      "reader": "The document concludes \"No effect found\" for Ranker v7 and recommends stopping the test without launching. The test is finished: day 14 of 14, 1,000,000 users per arm, above the planned 900,000. The pre-period check has not been run. Agree to stop the test without launching, but only after someone runs the pre-period comparison of Successful Search Rate. If that shows a gap between arms before exposure, the result is void. The tail-query cut on Successful Search Rate and Abandonment Rate should also be checked before the result is used for triage. Successful Search Rate change of +0.02%, with a 95% interval of -0.28% to +0.32%. The unit is relative percent change, which the document implies but doesn't state. The bar is +0.50%, and the interval's upper bound (0.32%) sits below it, so the test rules out the target effect. The pre-period check was not run, so a difference between the arms before the test is not ruled out. The document says this could reverse the call. A second risk is that no coverage metric is on the scorecard, so it's unknown whether v7 changed enough results to matter.",
+      "got": true,
+      "how": "overlap 91%"
+    }
+  ],
+  "lost": "",
+  "question": "Has the pre-exposure comparison of Successful Search Rate been run, and if so, what gap did it show between the arms before exposure? If it hasn't, can it be run before we agree to stop the test?",
+  "replies": {
+    "skim": "1. Answer: No effect found. Successful Search Rate moved +0.02% (95% interval -0.28% to +0.32%), which rules out the 0.50% change the test was built to detect. The document recommends stopping the test without launching v7.\n2. Decision: Agree to stop the test without launching. Before closing it, check the pre-exposure comparison of Successful Search Rate, since a gap between arms before exposure would void the result. The document doesn't report that check.\n3. Number: +0.02%, the change in Successful Search Rate (95% interval -0.28% to +0.32%).\n",
+    "full": "1. **Answer:** The document concludes \"No effect found\" for Ranker v7 and recommends stopping the test without launching. The test is finished: day 14 of 14, 1,000,000 users per arm, above the planned 900,000. The pre-period check has not been run.\n\n2. **Decision:** Agree to stop the test without launching, but only after someone runs the pre-period comparison of Successful Search Rate. If that shows a gap between arms before exposure, the result is void. The tail-query cut on Successful Search Rate and Abandonment Rate should also be checked before the result is used for triage.\n\n3. **Number:** Successful Search Rate change of +0.02%, with a 95% interval of -0.28% to +0.32%. The unit is relative percent change, which the document implies but doesn't state. The bar is +0.50%, and the interval's upper bound (0.32%) sits below it, so the test rules out the target effect.\n\n4. **Caveat:** The pre-period check was not run, so a difference between the arms before the test is not ruled out. The document says this could reverse the call. A second risk is that no coverage metric is on the scorecard, so it's unknown whether v7 changed enough results to matter.\n\n5. **Lost:**\n   - The \"Could reverse it\" line is hard to parse. It means the pre-period check is missing, which the Checks line states more plainly.\n   - \"Bar\" and \"estimate at least 0.50% higher\" are not clearly the same thing. I read the bar as the minimum effect the test was powered to detect.\n   - Time to First Click is called \"the one clear mover\" but also \"treat it as a lead.\" The appendix says no secondary metric survived the false-discovery correction, so the mover isn't established. Its size is also never given.\n   - \"Guardrails within margin\" never defines the margin.\n   - The \"Triage: Ready\" line is unclear.\n\n6. **Question:** Has the pre-exposure comparison of Successful Search Rate been run, and if so, what gap did it show between the arms before exposure? If it hasn't, can it be run before we agree to stop the test?\n"
+  }
+}

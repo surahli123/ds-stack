@@ -1,0 +1,53 @@
+{
+  "pass": false,
+  "skim": "1/2",
+  "full": "3/3",
+  "items": [
+    {
+      "pass": "skim",
+      "item": "answer",
+      "key": "Escalate: Successful Search Rate rose 0.68% (+0.28% to +1.08%), but Abandonment Rate rose 2.10% (+1.50% to +2.70%), the wrong way, though inside its 4.00% margin.",
+      "reader": "The document concludes Escalate. Current state: day 14 of 14, with 1,000,000 users per arm, so the test has finished its planned run. Decide the trade-off at triage. Abandonment rose 2.10% (inside the 4.00% bar), against a 0.68% gain in Successful Search Rate. The outline says the rise would be benign if abandonment concentrates on queries with an answer or rich snippet, so check that cut before deciding.",
+      "got": false,
+      "how": "overlap 0%"
+    },
+    {
+      "pass": "skim",
+      "item": "decision",
+      "key": "Decide the trade-off at triage.",
+      "reader": "Decide the trade-off at triage. Abandonment rose 2.10% (inside the 4.00% bar), against a 0.68% gain in Successful Search Rate. The outline says the rise would be benign if abandonment concentrates on queries with an answer or rich snippet, so check that cut before deciding. The document concludes Escalate. Current state: day 14 of 14, with 1,000,000 users per arm, so the test has finished its planned run.",
+      "got": true,
+      "how": "overlap 100%"
+    },
+    {
+      "pass": "full",
+      "item": "takeaway 1",
+      "key": "Abandonment Rate +2.10% (+1.50% to +2.70%) against at most 4.00% higher.",
+      "reader": "The document recommends **Escalate**, which means a trade-off for triage, not a launch or a hold. Successful Search Rate rose +0.68% (95% CI +0.28% to +1.08%), clearing its bar of an estimate of at least +0.50%. Abandonment Rate rose +2.10% (CI +1.50% to +2.70%), which is worse but inside its +4.00% margin. The test is finished (day 14 of 14, 1,000,000 users per arm). The pre-period check has not been run. Decide whether to accept the Successful Search lift despite higher abandonment. Before deciding, run the two checks the document names. First, see whether the abandonment rise is concentrated on queries with answers or rich snippets, which would make it benign. Second, see whether same-query repeats within 5 minutes rise after abandoned queries, which would make it failed searches. Also run the pre-exposure comparison of Successful Search Rate. Abandonment Rate +2.10% (relative change, 95% CI +1.50% to +2.70%), against the +4.00% margin. It is the number that drives the trade-off. The biggest risk is that the explanations are inferred from co-movements and untested, and the pre-period check that could rule out a pre-existing difference was not run. The document also says CTR (\u22121.10%) got worse after correction, which could reverse the call. The device and query-class rows are flat or lower, which the document itself says the overall rise cannot be built from.",
+      "got": true,
+      "how": "overlap 100%"
+    },
+    {
+      "pass": "full",
+      "item": "takeaway 2",
+      "key": "Successful Search Rate +0.68% (+0.28% to +1.08%) against estimate at least 0.50% higher.",
+      "reader": "The document recommends **Escalate**, which means a trade-off for triage, not a launch or a hold. Successful Search Rate rose +0.68% (95% CI +0.28% to +1.08%), clearing its bar of an estimate of at least +0.50%. Abandonment Rate rose +2.10% (CI +1.50% to +2.70%), which is worse but inside its +4.00% margin. The test is finished (day 14 of 14, 1,000,000 users per arm). The pre-period check has not been run. Decide whether to accept the Successful Search lift despite higher abandonment. Before deciding, run the two checks the document names. First, see whether the abandonment rise is concentrated on queries with answers or rich snippets, which would make it benign. Second, see whether same-query repeats within 5 minutes rise after abandoned queries, which would make it failed searches. Also run the pre-exposure comparison of Successful Search Rate. Abandonment Rate +2.10% (relative change, 95% CI +1.50% to +2.70%), against the +4.00% margin. It is the number that drives the trade-off. The biggest risk is that the explanations are inferred from co-movements and untested, and the pre-period check that could rule out a pre-existing difference was not run. The document also says CTR (\u22121.10%) got worse after correction, which could reverse the call. The device and query-class rows are flat or lower, which the document itself says the overall rise cannot be built from.",
+      "got": true,
+      "how": "overlap 100%"
+    },
+    {
+      "pass": "full",
+      "item": "takeaway 3",
+      "key": "Could reverse it: secondary metric CTR got worse after correction.",
+      "reader": "The document recommends **Escalate**, which means a trade-off for triage, not a launch or a hold. Successful Search Rate rose +0.68% (95% CI +0.28% to +1.08%), clearing its bar of an estimate of at least +0.50%. Abandonment Rate rose +2.10% (CI +1.50% to +2.70%), which is worse but inside its +4.00% margin. The test is finished (day 14 of 14, 1,000,000 users per arm). The pre-period check has not been run. Decide whether to accept the Successful Search lift despite higher abandonment. Before deciding, run the two checks the document names. First, see whether the abandonment rise is concentrated on queries with answers or rich snippets, which would make it benign. Second, see whether same-query repeats within 5 minutes rise after abandoned queries, which would make it failed searches. Also run the pre-exposure comparison of Successful Search Rate. Abandonment Rate +2.10% (relative change, 95% CI +1.50% to +2.70%), against the +4.00% margin. It is the number that drives the trade-off. The biggest risk is that the explanations are inferred from co-movements and untested, and the pre-period check that could rule out a pre-existing difference was not run. The document also says CTR (\u22121.10%) got worse after correction, which could reverse the call. The device and query-class rows are flat or lower, which the document itself says the overall rise cannot be built from.",
+      "got": true,
+      "how": "overlap 75%"
+    }
+  ],
+  "lost": "I had to reread the \"Ready\" claim. It says none of the explanations conflict, but the segment rows that are flat or lower conflict with the overall rise, and the document only marks that as a guess. The primary bar is also unclear: the estimate clears 0.50%, but the lower interval bound (+0.28%) does not. The document also doesn't define the metrics; it refers to all_metrics.md for that.",
+  "question": "Does the 2.10% abandonment rise concentrate on queries with answers or rich snippets, or on same-query repeats within 5 minutes? That one cut decides whether the trade-off favors the lift.",
+  "replies": {
+    "skim": "1. Answer: The document concludes Escalate. Current state: day 14 of 14, with 1,000,000 users per arm, so the test has finished its planned run.\n\n2. Decision: Decide the trade-off at triage. Abandonment rose 2.10% (inside the 4.00% bar), against a 0.68% gain in Successful Search Rate. The outline says the rise would be benign if abandonment concentrates on queries with an answer or rich snippet, so check that cut before deciding.\n\n3. Number: +2.10% change in Abandonment Rate (guardrail; 95% interval +1.50% to +2.70%; bar at most +4.00%).\n",
+    "full": "1. **Answer:** The document recommends **Escalate**, which means a trade-off for triage, not a launch or a hold. Successful Search Rate rose +0.68% (95% CI +0.28% to +1.08%), clearing its bar of an estimate of at least +0.50%. Abandonment Rate rose +2.10% (CI +1.50% to +2.70%), which is worse but inside its +4.00% margin. The test is finished (day 14 of 14, 1,000,000 users per arm). The pre-period check has not been run.\n\n2. **Decision:** Decide whether to accept the Successful Search lift despite higher abandonment. Before deciding, run the two checks the document names. First, see whether the abandonment rise is concentrated on queries with answers or rich snippets, which would make it benign. Second, see whether same-query repeats within 5 minutes rise after abandoned queries, which would make it failed searches. Also run the pre-exposure comparison of Successful Search Rate.\n\n3. **Number:** Abandonment Rate +2.10% (relative change, 95% CI +1.50% to +2.70%), against the +4.00% margin. It is the number that drives the trade-off.\n\n4. **Caveat:** The biggest risk is that the explanations are inferred from co-movements and untested, and the pre-period check that could rule out a pre-existing difference was not run. The document also says CTR (\u22121.10%) got worse after correction, which could reverse the call. The device and query-class rows are flat or lower, which the document itself says the overall rise cannot be built from.\n\n5. **Lost:** I had to reread the \"Ready\" claim. It says none of the explanations conflict, but the segment rows that are flat or lower conflict with the overall rise, and the document only marks that as a guess. The primary bar is also unclear: the estimate clears 0.50%, but the lower interval bound (+0.28%) does not. The document also doesn't define the metrics; it refers to all_metrics.md for that.\n\n6. **Question:** Does the 2.10% abandonment rise concentrate on queries with answers or rich snippets, or on same-query repeats within 5 minutes? That one cut decides whether the trade-off favors the lift.\n"
+  }
+}

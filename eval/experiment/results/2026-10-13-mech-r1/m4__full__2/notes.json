@@ -1,0 +1,12 @@
+{
+ "why_it_moved": [
+  {"label":"measured","text":"Successful Search Rate did not move (-0.10%, -0.40% to +0.20%), and it was just as flat in the last days as in the first, so this is not a novelty effect."},
+  {"label":"inferred","text":"Zero Result Rate fell 12.00% and CTR fell 1.80%. The likely link is that queries that used to return nothing now return weak results, which pulls the CTR average down without helping success."},
+  {"label":"guess","text":"Nothing else on the scorecard moved beyond what chance would produce, so no other story is needed."}
+ ],
+ "would_change": [
+  "A cut on queries that had zero results in control showing a clear success gain would mean the ranker helps hard queries and the flat total hides it.",
+  "A pre-exposure comparison of Successful Search Rate showing no gap between arms would close the one check that could not run."
+ ],
+ "analyst_view": null
+}

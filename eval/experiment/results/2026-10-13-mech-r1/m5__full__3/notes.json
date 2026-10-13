@@ -1,0 +1,9 @@
+{"why_it_moved":[
+{"text":"Successful Search Rate rose 0.68% while abandonment went up and CTR fell 1.10%: this fits users getting answers on the page and leaving without a click. No cut has tested it.","label":"inferred"},
+{"text":"Clicks per User fell 1.20% while Queries per User didn't move clearly, which fits fewer clicks per search and no extra searching. It does not show whether those searches were satisfied.","label":"inferred"},
+{"text":"The mobile and desktop success rates are both slightly down though overall success is up, so the overall rise is not yet traced to any slice.","label":"guess"}],
+"would_change":[
+"If abandonment sits on queries with no answer or rich snippet, or users re-search soon after leaving, the rise is harm and the abandonment trade-off tips against the change.",
+"If success rises only on queries where the ranking changed, the win is real and larger there; if it is flat there, the overall rise is not from ranking.",
+"A pre-exposure comparison that shows the arms already differed would make the test unreliable."],
+"analyst_view":null}

@@ -1,0 +1,219 @@
+{
+  "call": "escalate",
+  "call_text": "Escalate",
+  "reason": "Successful Search Rate rose 0.68% (+0.28% to +1.08%), but Abandonment Rate rose 2.10% (+1.50% to +2.70%), the wrong way, though inside its 4.00% margin.",
+  "ask": "Decide the trade-off at triage.",
+  "decider": {
+    "metric": "Abandonment Rate",
+    "role": "guardrail",
+    "unit": "relative",
+    "direction": "decrease",
+    "threshold": 0.04,
+    "threshold_kind": "margin",
+    "display_unit": "",
+    "margin_source": "pre-registration",
+    "point": 0.021,
+    "low": 0.015,
+    "high": 0.027000000000000003,
+    "se": 0.0030612807415479255,
+    "level": 0.95,
+    "verdict": "harm_within_margin"
+  },
+  "status": {
+    "days_run": 14,
+    "planned_days": 14,
+    "units_per_arm": 1000000,
+    "planned_units": 900000,
+    "reached": true,
+    "whole_weeks": true,
+    "window_start": "2026-09-12",
+    "as_of": "2026-09-25"
+  },
+  "verdicts": [
+    {
+      "metric": "Successful Search Rate",
+      "role": "primary",
+      "unit": "relative",
+      "direction": "increase",
+      "threshold": 0.005,
+      "threshold_kind": "bar",
+      "listed_as": "primary",
+      "display_unit": "",
+      "point": 0.0068000000000000005,
+      "low": 0.0028000000000000004,
+      "high": 0.0108,
+      "se": 0.0020408538276986163,
+      "level": 0.95,
+      "verdict": "better",
+      "rules_out_bar": false,
+      "achieved_mde": 0.005717625916009713
+    },
+    {
+      "metric": "Latency p95 (ms)",
+      "role": "guardrail",
+      "unit": "relative",
+      "direction": "decrease",
+      "threshold": 0.02,
+      "threshold_kind": "margin",
+      "display_unit": "",
+      "margin_source": "pre-registration",
+      "point": 0.002,
+      "low": -0.002999999999999999,
+      "high": 0.006999999999999999,
+      "se": 0.00255106728462327,
+      "level": 0.95,
+      "verdict": "within"
+    },
+    {
+      "metric": "Abandonment Rate",
+      "role": "guardrail",
+      "unit": "relative",
+      "direction": "decrease",
+      "threshold": 0.04,
+      "threshold_kind": "margin",
+      "display_unit": "",
+      "margin_source": "pre-registration",
+      "point": 0.021,
+      "low": 0.015,
+      "high": 0.027000000000000003,
+      "se": 0.0030612807415479255,
+      "level": 0.95,
+      "verdict": "harm_within_margin"
+    }
+  ],
+  "checks": [
+    {
+      "check": "scorecard",
+      "status": "pass",
+      "summary": "3 of 3 registered metrics cross-checked (relative, absolute and intervals agree)",
+      "details": {}
+    },
+    {
+      "check": "sample_split",
+      "status": "pass",
+      "summary": "split 50.0% / 50.0% matches the planned 50.0% / 50.0%",
+      "details": {
+        "p": 1.0,
+        "counts": [
+          1000000,
+          1000000
+        ],
+        "source": "units in 'Successful Search Rate' (exposures not in the config)"
+      }
+    },
+    {
+      "check": "config_params",
+      "status": "pass",
+      "summary": "only the intended parameters differ (ranker_model)",
+      "details": {}
+    },
+    {
+      "check": "config_edits",
+      "status": "pass",
+      "summary": "no mid-flight edits in the analysis window",
+      "details": {}
+    },
+    {
+      "check": "pre_period",
+      "status": "could_not_run",
+      "summary": "no pre-period interval or platform check",
+      "details": {}
+    },
+    {
+      "check": "novelty",
+      "status": "pass",
+      "summary": "effect by days since exposure: first days +0.67%, last days +0.69% (trend +0.002% per day)",
+      "details": {
+        "late": 0.006900000000000001,
+        "late_se": 0.0015306403707739623,
+        "basis": "days_since_exposure"
+      }
+    }
+  ],
+  "daily": [
+    0.0064,
+    0.0068000000000000005,
+    0.007200000000000001,
+    0.0064,
+    0.0068000000000000005,
+    0.007200000000000001,
+    0.0064,
+    0.0068000000000000005,
+    0.007200000000000001,
+    0.0064,
+    0.0068000000000000005,
+    0.007200000000000001
+  ],
+  "secondaries": {
+    "tested": 54,
+    "untested": 0,
+    "q": 0.1,
+    "survivors": [
+      {
+        "metric": "CTR",
+        "rel_delta": -0.011000000000000001,
+        "rel_ci": [
+          -0.015,
+          -0.007000000000000001
+        ],
+        "abs_delta": -0.003355,
+        "p_value": 0.0,
+        "directionality": "increase"
+      },
+      {
+        "metric": "Clicks per User",
+        "rel_delta": -0.012,
+        "rel_ci": [
+          -0.019,
+          -0.005
+        ],
+        "abs_delta": -0.0432,
+        "p_value": 0.00078,
+        "directionality": "increase"
+      }
+    ]
+  },
+  "open_items": [
+    "Abandonment Rate rose 2.10% (+1.50% to +2.70%), the wrong way, inside its margin",
+    "secondary metric CTR got worse after correction",
+    "secondary metric Clicks per User got worse after correction",
+    "no pre-period comparison, so a difference between the arms before the test isn't ruled out"
+  ],
+  "fallbacks": [],
+  "settings": {
+    "ci_level": 0.95,
+    "scorecard_ci_level": 0.95,
+    "levels": {
+      "primary": 0.95,
+      "guardrail": 0.95,
+      "harm": 0.9833333333333333,
+      "invariant": 0.95,
+      "scorecard": 0.95
+    },
+    "sequential": false,
+    "rule": "all",
+    "ship_requires": "point_at_bar",
+    "cuped": false,
+    "mc_correction": "none",
+    "standards": {
+      "harm_within_margin": "escalate",
+      "below_bar": "escalate",
+      "secondary_harm": "note",
+      "srm_alpha": 0.001,
+      "min_days": 7
+    }
+  },
+  "experiment": {
+    "id": "ranker_v7",
+    "name": "Ranker v7",
+    "test_group": "g_test",
+    "design": "ab"
+  },
+  "inputs": {
+    "scorecard": "6d00605999",
+    "prereg": "c62760dd59",
+    "config": "b84a437530",
+    "standards": "eb5800c555",
+    "daily": "b1d1488b41"
+  }
+}

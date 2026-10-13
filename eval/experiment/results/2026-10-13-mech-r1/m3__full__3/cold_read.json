@@ -1,0 +1,53 @@
+{
+  "pass": false,
+  "skim": "2/2",
+  "full": "2/3",
+  "items": [
+    {
+      "pass": "skim",
+      "item": "answer",
+      "key": "No effect found: Successful Search Rate reads +0.00% (-0.30% to +0.30%), which rules out the 0.50% change the test was built to find.",
+      "reader": "The document concludes no effect was found for Ranker v7. Successful Search Rate is +0.00% (95% interval \u22120.30% to +0.30%), which rules out the 0.50% change the test was designed to detect. Agree to stop the test without launching. Before closing it out, confirm there was no pre-exposure difference between arms, since that would make the flat result unreliable. Also weigh the latency regression (p95 +6.00%), which moved the wrong way.",
+      "got": true,
+      "how": "overlap 80%"
+    },
+    {
+      "pass": "skim",
+      "item": "decision",
+      "key": "Agree to stop the test without launching.",
+      "reader": "Agree to stop the test without launching. Before closing it out, confirm there was no pre-exposure difference between arms, since that would make the flat result unreliable. Also weigh the latency regression (p95 +6.00%), which moved the wrong way. The document concludes no effect was found for Ranker v7. Successful Search Rate is +0.00% (95% interval \u22120.30% to +0.30%), which rules out the 0.50% change the test was designed to detect.",
+      "got": true,
+      "how": "overlap 100%"
+    },
+    {
+      "pass": "full",
+      "item": "takeaway 1",
+      "key": "Successful Search Rate +0.00% (-0.30% to +0.30%) against estimate at least 0.50% higher.",
+      "reader": "Do not launch. The document concludes \"No effect found.\" Successful Search Rate is flat (+0.00%, 95% CI -0.30% to +0.30%), which rules out the 0.50% lift the test was built to detect. Latency p95 (+6.00%) and Abandonment Rate (+1.60%) moved the wrong way but stayed inside their guardrail margins. State: the 14-day test is complete with 1,000,000 users per arm. Agree to stop the test without launching v7. The document asks for exactly that. +0.00% change in Successful Search Rate (95% CI -0.30% to +0.30%). The unit is percent change relative to control. The pre-period comparison was not run. If the arms already differed before exposure, the flat result would be unreliable. The document names this as the main risk.",
+      "got": true,
+      "how": "overlap 60%"
+    },
+    {
+      "pass": "full",
+      "item": "takeaway 2",
+      "key": "Agree to stop the test without launching.",
+      "reader": "Do not launch. The document concludes \"No effect found.\" Successful Search Rate is flat (+0.00%, 95% CI -0.30% to +0.30%), which rules out the 0.50% lift the test was built to detect. Latency p95 (+6.00%) and Abandonment Rate (+1.60%) moved the wrong way but stayed inside their guardrail margins. State: the 14-day test is complete with 1,000,000 users per arm. Agree to stop the test without launching v7. The document asks for exactly that. +0.00% change in Successful Search Rate (95% CI -0.30% to +0.30%). The unit is percent change relative to control. The pre-period comparison was not run. If the arms already differed before exposure, the flat result would be unreliable. The document names this as the main risk.",
+      "got": true,
+      "how": "overlap 100%"
+    },
+    {
+      "pass": "full",
+      "item": "takeaway 3",
+      "key": "Could reverse it: Latency p95 (ms) rose 6.00% (+5.20% to +6.80%), the wrong way, inside its margin.",
+      "reader": "Do not launch. The document concludes \"No effect found.\" Successful Search Rate is flat (+0.00%, 95% CI -0.30% to +0.30%), which rules out the 0.50% lift the test was built to detect. Latency p95 (+6.00%) and Abandonment Rate (+1.60%) moved the wrong way but stayed inside their guardrail margins. State: the 14-day test is complete with 1,000,000 users per arm. Agree to stop the test without launching v7. The document asks for exactly that. +0.00% change in Successful Search Rate (95% CI -0.30% to +0.30%). The unit is percent change relative to control. The pre-period comparison was not run. If the arms already differed before exposure, the flat result would be unreliable. The document names this as the main risk.",
+      "got": false,
+      "how": "overlap 0%"
+    }
+  ],
+  "lost": "Nowhere. The structure and calls were clear on one read. I did have to infer the meaning of \"Could reverse it\" and \"Ready\" in the triage line, but the sentences that explained them made it clear enough.",
+  "question": "Was the pre-period check skipped for a reason, and can you run it before the stop is final? If it isn't possible, would you also cut Abandonment and CTR by latency bucket to tell a speed cost from users giving up?",
+  "replies": {
+    "skim": "1. Answer: The document concludes no effect was found for Ranker v7. Successful Search Rate is +0.00% (95% interval \u22120.30% to +0.30%), which rules out the 0.50% change the test was designed to detect.\n\n2. Decision: Agree to stop the test without launching. Before closing it out, confirm there was no pre-exposure difference between arms, since that would make the flat result unreliable. Also weigh the latency regression (p95 +6.00%), which moved the wrong way.\n\n3. Number: +0.00% for Successful Search Rate (primary metric, 95% interval \u22120.30% to +0.30%).\n",
+    "full": "1. **Answer:** Do not launch. The document concludes \"No effect found.\" Successful Search Rate is flat (+0.00%, 95% CI -0.30% to +0.30%), which rules out the 0.50% lift the test was built to detect. Latency p95 (+6.00%) and Abandonment Rate (+1.60%) moved the wrong way but stayed inside their guardrail margins. State: the 14-day test is complete with 1,000,000 users per arm.\n\n2. **Decision:** Agree to stop the test without launching v7. The document asks for exactly that.\n\n3. **Number:** +0.00% change in Successful Search Rate (95% CI -0.30% to +0.30%). The unit is percent change relative to control.\n\n4. **Caveat:** The pre-period comparison was not run. If the arms already differed before exposure, the flat result would be unreliable. The document names this as the main risk.\n\n5. **Lost:** Nowhere. The structure and calls were clear on one read. I did have to infer the meaning of \"Could reverse it\" and \"Ready\" in the triage line, but the sentences that explained them made it clear enough.\n\n6. **Question:** Was the pre-period check skipped for a reason, and can you run it before the stop is final? If it isn't possible, would you also cut Abandonment and CTR by latency bucket to tell a speed cost from users giving up?\n"
+  }
+}

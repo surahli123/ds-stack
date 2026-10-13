@@ -1,0 +1,22 @@
+{
+ "why_it_moved": [
+  {
+   "text": "Successful Search Rate is flat at +0.00% and stayed flat across all 14 days, so there is no early lift that faded.",
+   "label": "measured"
+  },
+  {
+   "text": "Latency p95 rose +6.00% and Abandonment Rate climbed +1.60%. Engagement suffered too, with CTR at -1.50%. A speed cost fits all three together.",
+   "label": "inferred"
+  },
+  {
+   "text": "Worse results making users give up could also explain the abandonment and CTR moves. No cut has separated the two stories yet.",
+   "label": "guess"
+  }
+ ],
+ "would_change": [
+  "A pre-test comparison of Successful Search Rate showing the arms already differed before exposure would make the flat read unreliable.",
+  "Abandonment and CTR by latency bucket showing the harm sits only in slow queries would point to a fixable speed cost, worth a rerun with a faster v7.",
+  "A rerun with many more users that finds a lift of 0.50% or more would reopen the call."
+ ],
+ "analyst_view": null
+}

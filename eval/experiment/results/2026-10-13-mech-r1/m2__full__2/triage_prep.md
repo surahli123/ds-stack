@@ -1,0 +1,48 @@
+# Ranker v7: triage prep
+
+Ready for triage: Ready: every movement triage will ask about has a candidate explanation and none conflict; the explanations are inferred from co-movements, so the cuts below would confirm them.
+
+Scripted call: Don't ship. Successful Search Rate fell 0.72% (-1.12% to -0.32%), the wrong way.
+
+## Before any single metric
+
+- What did you change? ranker_model: lambdamart_v6 -> lambdamart_v7; nothing else differs between arms.
+- Is the data trustworthy? Yes, as far as the checks reach; not checked: pre period.
+- Is the effect real, or chance? Successful Search Rate -0.72% (-1.12% to -0.32%); its interval excludes zero. Across the scorecard 8 of 57 metrics moved clearly; about 2.9 would by chance alone.
+- Will it last? Probably: effect by days since exposure: first days -0.73%, last days -0.71% (trend +0.002% per day).
+- Did the change do what it was built to do? Not shown. If the scorecard or a cut has a coverage metric (the share of queries whose top results changed), register it as feature_metrics.
+
+Metric families used: abandonment = Abandonment Rate, ad_ctr = Ad Click Rate, autocomplete = Autocomplete Acceptance, clicks_per_user = Clicks per User, ctr = CTR, latency = Latency p95 (ms), long_click = Long Click Rate, pagination = Pagination Rate, queries_per_user = Queries per User, reformulation = Reformulation Rate, revenue = Revenue per User, sessions_per_user = Sessions per User, success = Successful Search Rate, time_to_click = Time to First Click (s), zero_result = Zero Result Rate. A wrong pairing here changes every explanation below; fix it in the overlay's metric_families.json.
+
+## Questions triage will ask
+
+1. Successful Search Rate was expected to rise but fell. Why? It fell 0.72% (-1.12% to -0.32%). Status: untested.
+   - Likely [inferred]: More activity without more success. Users click or search more while success doesn't rise. Published cases read this as attractive results, confusion or users struggling, not engagement, until a cut shows otherwise.
+     Evidence: Successful Search Rate fell 0.72% (-1.12% to -0.32%); Queries per User rose 2.30% (+1.40% to +3.20%); Reformulation Rate rose 4.80% (+4.00% to +5.60%).
+     To check: cut 1, 2 below.
+   - Likely [inferred]: More searching because results got worse. Users search more because they retry: reformulations rise and success doesn't, so higher query volume is a cost, not engagement. A worse ranker can raise queries and even sessions per user for days before engagement falls.
+     Evidence: Queries per User rose 2.30% (+1.40% to +3.20%); Reformulation Rate rose 4.80% (+4.00% to +5.60%); Successful Search Rate fell 0.72% (-1.12% to -0.32%).
+     To check: cut 1, 2 below.
+
+2. Why did Reformulation Rate rise? It rose 4.80% (+4.00% to +5.60%). Status: untested.
+   - Likely: More activity without more success, as in question 1.
+   - Likely: More searching because results got worse, as in question 1.
+
+3. Why did Queries per User rise? It rose 2.30% (+1.40% to +3.20%). Status: untested.
+   - Likely: More activity without more success, as in question 1.
+   - Likely: More searching because results got worse, as in question 1.
+
+## Cuts to run before triage, in order
+
+1. Success per query vs per user (tests: More activity without more success). Supports it: success per query falls or holds while activity grows. Against it: success per query rises with activity. Scored by script once its result is in evidence.json.
+2. A similar query issued again within 5 minutes, by arm (tests: More searching because results got worse). Supports it: quick similar re-queries rise in treatment. Against it: re-queries are flat, so the extra queries are new needs. Scored by script once its result is in evidence.json.
+3. Sessions per user vs queries per session, by arm (tests: More activity without more success). Supports it: more queries inside the same sessions (retrying). Against it: more sessions (coming back). Record its outcome in evidence.json under cuts.
+4. Navigational share of queries by arm, week by week (tests: More searching because results got worse). Supports it: treatment users drift toward easy navigational queries (giving up on hard ones). Against it: the query mix is stable. Scored by script once its result is in evidence.json.
+5. Reformulation rate by query class (head, torso, tail; navigational, informational) (tests: More searching because results got worse). Supports it: reformulation rises on the classes the change touched. Against it: reformulation rises evenly, pointing to a logging or session change. Record its outcome in evidence.json under cuts.
+
+Explanations become confirmed only when a cut's result is passed back to explain.py with --evidence; a cut that contradicts a candidate removes it.
+
+## Sources
+
+- More activity without more success: Kohavi et al., KDD 2012; Song, Shi, Fu, WWW 2013; Dmitriev et al., A Dirty Dozen, KDD 2017 (5.12, clicks up from confusion).
+- More searching because results got worse: Kohavi et al., Five Puzzling Outcomes, KDD 2012 (a ranking bug raised queries per user 10% and revenue 30%); Song, Shi, Fu, WWW 2013 (a worse ranker raised sessions per user for days); Hassan et al., CIKM 2013 (re-query within 5 minutes).

@@ -1,0 +1,365 @@
+{
+  "readiness": {
+    "verdict": "not_ready",
+    "text": "Not ready",
+    "reasons": [
+      "the scripted call is Ship, but the best explanation of Queries per User is bad news: 'More activity without more success'"
+    ],
+    "first": {
+      "cut": "success per query vs per user",
+      "confirms": "success per query falls or holds while activity grows",
+      "refutes": "success per query rises with activity",
+      "needs": {
+        "metric": "success_per_query"
+      },
+      "confirms_when": {
+        "success_per_query": "flat_or_down"
+      },
+      "refutes_when": {
+        "success_per_query": "up"
+      }
+    }
+  },
+  "standard": [
+    {
+      "question": "What did you change?",
+      "answer": "ranker_model: lambdamart_v6 -> lambdamart_v7; nothing else differs between arms",
+      "ok": true
+    },
+    {
+      "question": "Is the data trustworthy?",
+      "answer": "Yes, as far as the checks reach; not checked: pre period",
+      "ok": true
+    },
+    {
+      "question": "Is the effect real, or chance?",
+      "answer": "Queries per User +2.60% (+1.70% to +3.50%); its interval excludes zero. Across the scorecard 8 of 57 metrics moved clearly; about 2.9 would by chance alone",
+      "ok": true,
+      "borderline": false
+    },
+    {
+      "question": "Will it last?",
+      "answer": "Probably: effect by days since exposure: first days -0.46%, last days -0.44% (trend +0.002% per day)",
+      "ok": true
+    },
+    {
+      "question": "Did the change do what it was built to do?",
+      "answer": "Not shown. If the scorecard or a cut has a coverage metric (the share of queries whose top results changed), register it as feature_metrics",
+      "ok": null
+    },
+    {
+      "question": "Metric families used:",
+      "answer": "abandonment = Abandonment Rate, ad_ctr = Ad Click Rate, autocomplete = Autocomplete Acceptance, clicks_per_user = Clicks per User, ctr = CTR, latency = Latency p95 (ms), long_click = Long Click Rate, pagination = Pagination Rate, queries_per_user = Queries per User, reformulation = Reformulation Rate, revenue = Revenue per User, sessions_per_user = Sessions per User, success = Successful Search Rate, time_to_click = Time to First Click (s), zero_result = Zero Result Rate",
+      "ok": true,
+      "note": true
+    }
+  ],
+  "chance": {
+    "tested": 57,
+    "moved": 8,
+    "expected_by_chance": 2.9
+  },
+  "questions": [
+    {
+      "metric": "Queries per User",
+      "question": "Why did Queries per User rise?",
+      "kind": "primary",
+      "change": "rose 2.60% (+1.70% to +3.50%)",
+      "candidates": [
+        "activity_without_success",
+        "struggling_users",
+        "as_hypothesized"
+      ],
+      "status": "untested"
+    },
+    {
+      "metric": "Reformulation Rate",
+      "question": "Why did Reformulation Rate rise?",
+      "kind": "secondary",
+      "change": "rose 5.50% (+4.70% to +6.30%)",
+      "candidates": [
+        "activity_without_success",
+        "struggling_users"
+      ],
+      "status": "untested"
+    },
+    {
+      "metric": "Successful Search Rate - Desktop",
+      "question": "Why did Successful Search Rate - Desktop rise?",
+      "kind": "secondary",
+      "change": "rose 1.52% (+0.60% to +2.44%)",
+      "candidates": [],
+      "status": "no candidate in the library"
+    },
+    {
+      "metric": "Autocomplete Acceptance",
+      "question": "Why did Autocomplete Acceptance rise?",
+      "kind": "secondary",
+      "change": "rose 0.97% (+0.37% to +1.57%)",
+      "candidates": [],
+      "status": "no candidate in the library"
+    }
+  ],
+  "patterns": [
+    {
+      "id": "activity_without_success",
+      "name": "More activity without more success",
+      "label": "inferred",
+      "status": "untested",
+      "mechanism": "Users click or search more while success doesn't rise. Published cases read this as attractive results, confusion or users struggling, not engagement, until a cut shows otherwise.",
+      "reading": "bad",
+      "source": "Kohavi et al., KDD 2012; Song, Shi, Fu, WWW 2013; Dmitriev et al., A Dirty Dozen, KDD 2017 (5.12, clicks up from confusion)",
+      "families": [
+        "success",
+        "queries_per_user",
+        "reformulation"
+      ],
+      "metrics": [
+        "Successful Search Rate",
+        "Queries per User",
+        "Reformulation Rate"
+      ],
+      "evidence": [
+        "Successful Search Rate fell 0.45% (-0.85% to -0.05%)",
+        "Queries per User rose 2.60% (+1.70% to +3.50%)",
+        "Reformulation Rate rose 5.50% (+4.70% to +6.30%)"
+      ],
+      "score": 1,
+      "deep_dives": [
+        {
+          "cut": "success per query vs per user",
+          "confirms": "success per query falls or holds while activity grows",
+          "refutes": "success per query rises with activity",
+          "needs": {
+            "metric": "success_per_query"
+          },
+          "confirms_when": {
+            "success_per_query": "flat_or_down"
+          },
+          "refutes_when": {
+            "success_per_query": "up"
+          }
+        },
+        {
+          "cut": "a similar query issued again within 5 minutes, by arm",
+          "confirms": "quick re-queries rise",
+          "refutes": "re-queries are flat",
+          "needs": {
+            "metric": "requery"
+          },
+          "confirms_when": {
+            "requery": "up"
+          },
+          "refutes_when": {
+            "requery": "flat_or_down"
+          }
+        },
+        {
+          "cut": "sessions per user vs queries per session, by arm",
+          "confirms": "more queries inside the same sessions (retrying)",
+          "refutes": "more sessions (coming back)"
+        }
+      ],
+      "exploratory": false,
+      "cut_results": []
+    },
+    {
+      "id": "struggling_users",
+      "name": "More searching because results got worse",
+      "label": "inferred",
+      "status": "untested",
+      "mechanism": "Users search more because they retry: reformulations rise and success doesn't, so higher query volume is a cost, not engagement. A worse ranker can raise queries and even sessions per user for days before engagement falls.",
+      "reading": "bad",
+      "source": "Kohavi et al., Five Puzzling Outcomes, KDD 2012 (a ranking bug raised queries per user 10% and revenue 30%); Song, Shi, Fu, WWW 2013 (a worse ranker raised sessions per user for days); Hassan et al., CIKM 2013 (re-query within 5 minutes)",
+      "families": [
+        "queries_per_user",
+        "reformulation",
+        "success"
+      ],
+      "metrics": [
+        "Queries per User",
+        "Reformulation Rate",
+        "Successful Search Rate"
+      ],
+      "evidence": [
+        "Queries per User rose 2.60% (+1.70% to +3.50%)",
+        "Reformulation Rate rose 5.50% (+4.70% to +6.30%)",
+        "Successful Search Rate fell 0.45% (-0.85% to -0.05%)"
+      ],
+      "score": 1,
+      "deep_dives": [
+        {
+          "cut": "success per query vs per user",
+          "confirms": "success per query falls",
+          "refutes": "success per query holds while volume grows",
+          "needs": {
+            "metric": "success_per_query"
+          },
+          "confirms_when": {
+            "success_per_query": "down"
+          },
+          "refutes_when": {
+            "success_per_query": "up_or_flat"
+          }
+        },
+        {
+          "cut": "a similar query issued again within 5 minutes, by arm",
+          "confirms": "quick similar re-queries rise in treatment",
+          "refutes": "re-queries are flat, so the extra queries are new needs",
+          "needs": {
+            "metric": "requery"
+          },
+          "confirms_when": {
+            "requery": "up"
+          },
+          "refutes_when": {
+            "requery": "flat_or_down"
+          }
+        },
+        {
+          "cut": "navigational share of queries by arm, week by week",
+          "confirms": "treatment users drift toward easy navigational queries (giving up on hard ones)",
+          "refutes": "the query mix is stable",
+          "needs": {
+            "metric": "navigational_share"
+          },
+          "confirms_when": {
+            "navigational_share": "up"
+          },
+          "refutes_when": {
+            "navigational_share": "flat"
+          }
+        },
+        {
+          "cut": "reformulation rate by query class (head, torso, tail; navigational, informational)",
+          "confirms": "reformulation rises on the classes the change touched",
+          "refutes": "reformulation rises evenly, pointing to a logging or session change"
+        },
+        {
+          "cut": "distribution of queries per session by arm",
+          "confirms": "more long retry chains in treatment",
+          "refutes": "more sessions, not longer ones"
+        }
+      ],
+      "exploratory": false,
+      "cut_results": []
+    },
+    {
+      "id": "as_hypothesized",
+      "name": "The registered hypothesis",
+      "label": "inferred",
+      "status": "untested",
+      "reading": "neutral",
+      "source": null,
+      "exploratory": false,
+      "mechanism": "The new ranker raises the share of searches that end in a successful click. But Successful Search Rate didn't rise, so the hypothesis isn't supported yet.",
+      "families": [],
+      "metrics": [
+        "Queries per User"
+      ],
+      "evidence": [
+        "Queries per User rose 2.60% (+1.70% to +3.50%)",
+        "Successful Search Rate fell 0.45% (-0.85% to -0.05%)"
+      ],
+      "score": 0,
+      "deep_dives": [
+        {
+          "cut": "Queries per User on triggered queries (where the ranking changed) vs untriggered",
+          "confirms": "a larger effect where the ranking changed",
+          "refutes": "the same effect on untouched queries"
+        }
+      ],
+      "cut_results": []
+    }
+  ],
+  "exploratory": [],
+  "ruled_out": [],
+  "cut_results": [],
+  "deep_dives": [
+    {
+      "cut": "success per query vs per user",
+      "confirms": "success per query falls or holds while activity grows",
+      "refutes": "success per query rises with activity",
+      "needs": {
+        "metric": "success_per_query"
+      },
+      "confirms_when": {
+        "success_per_query": "flat_or_down"
+      },
+      "refutes_when": {
+        "success_per_query": "up"
+      },
+      "tests": "More activity without more success",
+      "pattern": "activity_without_success",
+      "scriptable": true
+    },
+    {
+      "cut": "a similar query issued again within 5 minutes, by arm",
+      "confirms": "quick similar re-queries rise in treatment",
+      "refutes": "re-queries are flat, so the extra queries are new needs",
+      "needs": {
+        "metric": "requery"
+      },
+      "confirms_when": {
+        "requery": "up"
+      },
+      "refutes_when": {
+        "requery": "flat_or_down"
+      },
+      "tests": "More searching because results got worse",
+      "pattern": "struggling_users",
+      "scriptable": true
+    },
+    {
+      "cut": "Queries per User on triggered queries (where the ranking changed) vs untriggered",
+      "confirms": "a larger effect where the ranking changed",
+      "refutes": "the same effect on untouched queries",
+      "tests": "The registered hypothesis",
+      "pattern": "as_hypothesized",
+      "scriptable": false
+    },
+    {
+      "cut": "sessions per user vs queries per session, by arm",
+      "confirms": "more queries inside the same sessions (retrying)",
+      "refutes": "more sessions (coming back)",
+      "tests": "More activity without more success",
+      "pattern": "activity_without_success",
+      "scriptable": false
+    },
+    {
+      "cut": "navigational share of queries by arm, week by week",
+      "confirms": "treatment users drift toward easy navigational queries (giving up on hard ones)",
+      "refutes": "the query mix is stable",
+      "needs": {
+        "metric": "navigational_share"
+      },
+      "confirms_when": {
+        "navigational_share": "up"
+      },
+      "refutes_when": {
+        "navigational_share": "flat"
+      },
+      "tests": "More searching because results got worse",
+      "pattern": "struggling_users",
+      "scriptable": true
+    }
+  ],
+  "families": {
+    "success": "Successful Search Rate",
+    "ctr": "CTR",
+    "long_click": "Long Click Rate",
+    "abandonment": "Abandonment Rate",
+    "reformulation": "Reformulation Rate",
+    "queries_per_user": "Queries per User",
+    "sessions_per_user": "Sessions per User",
+    "time_to_click": "Time to First Click (s)",
+    "zero_result": "Zero Result Rate",
+    "latency": "Latency p95 (ms)",
+    "ad_ctr": "Ad Click Rate",
+    "revenue": "Revenue per User",
+    "clicks_per_user": "Clicks per User",
+    "pagination": "Pagination Rate",
+    "autocomplete": "Autocomplete Acceptance"
+  },
+  "notes": []
+}

@@ -1,0 +1,6 @@
+{"why_it_moved":[
+{"text":"Abandonment Rate rose 2.10%, which fits answers on the page satisfying some users without a click.","label":"inferred"},
+{"text":"CTR fell 1.10% and Clicks per User fell 1.20%, the same pattern; Reformulation Rate is flat, so the gain is not extra searching.","label":"inferred"},
+{"text":"Successful Search Rate rose 0.68%, but segment rows do not reconcile: Mobile and Desktop both show about -0.25%.","label":"guess"}],
+"would_change":["Abandonment Rate may rise 4.00% per the pre-registration, but the team standard margin is tighter; its low end of +1.50% would fail that.","A pre-exposure comparison on Successful Search Rate and Abandonment Rate, which the platform did not provide.","Abandoned queries followed by a similar query within 5 minutes: if common, the abandonment is real harm."],
+"analyst_view":null}

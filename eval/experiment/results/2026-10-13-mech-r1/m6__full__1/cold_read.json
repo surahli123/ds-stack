@@ -1,0 +1,53 @@
+{
+  "pass": false,
+  "skim": "2/2",
+  "full": "2/3",
+  "items": [
+    {
+      "pass": "skim",
+      "item": "answer",
+      "key": "Ship: Successful Search Rate rose 0.81% (+0.41% to +1.21%), which clears the 0.50% bar and every guardrail held.",
+      "reader": "The document concludes Ship: Successful Search Rate rose 0.81% (95% interval +0.41% to +1.21%), clearing the 0.50% bar with guardrails holding. But the outline's analyst view is Escalate, because the lift may come from a shrinking denominator (Queries per User \u22121.90%) rather than better ranking. Don't approve the all-traffic launch yet. Check whether success per user (not per query) is flat while queries fall; if it is, the bar is not met. Escalate for a per-user analysis first.",
+      "got": true,
+      "how": "overlap 71%"
+    },
+    {
+      "pass": "skim",
+      "item": "decision",
+      "key": "Approve the launch to all traffic.",
+      "reader": "Don't approve the all-traffic launch yet. Check whether success per user (not per query) is flat while queries fall; if it is, the bar is not met. Escalate for a per-user analysis first. The document concludes Ship: Successful Search Rate rose 0.81% (95% interval +0.41% to +1.21%), clearing the 0.50% bar with guardrails holding. But the outline's analyst view is Escalate, because the lift may come from a shrinking denominator (Queries per User \u22121.90%) rather than better ranking.",
+      "got": true,
+      "how": "overlap 67%"
+    },
+    {
+      "pass": "full",
+      "item": "takeaway 1",
+      "key": "Successful Search Rate +0.81% (+0.41% to +1.21%) against estimate at least 0.50% higher.",
+      "reader": "The document recommends **Ship** to all traffic. The test ran 14 days with 1,000,000 users per arm, and the primary metric, Successful Search Rate, rose +0.81% (95% interval +0.41% to +1.21%) against a 0.50% bar. Guardrails held. The analyst's view is **Escalate**, which conflicts with the Ship call. The document does not say which one governs. Current state: the decision is made, but the analyst's objection is open. Don't approve the all-traffic launch yet. Ask for the success-per-user figure and the pre-exposure comparison. Those are the two checks the document itself says would change the call, and neither is reported. If success per user is flat while queries fall, the lift is probably a denominator effect and the bar isn't met. +0.81% change in Successful Search Rate, a per-query rate. The unit is percent relative change, and the interval's lower bound (+0.41%) sits below the 0.50% bar. The primary is a per-query rate, and Queries per User fell 1.9% while Clicks per User stayed flat (+0.1%). That pattern suggests the lift may come from fewer queries rather than better results. The pre-period check was not run, so pre-existing arm differences are untested.",
+      "got": true,
+      "how": "overlap 73%"
+    },
+    {
+      "pass": "full",
+      "item": "takeaway 2",
+      "key": "Approve the launch to all traffic.",
+      "reader": "The document recommends **Ship** to all traffic. The test ran 14 days with 1,000,000 users per arm, and the primary metric, Successful Search Rate, rose +0.81% (95% interval +0.41% to +1.21%) against a 0.50% bar. Guardrails held. The analyst's view is **Escalate**, which conflicts with the Ship call. The document does not say which one governs. Current state: the decision is made, but the analyst's objection is open. Don't approve the all-traffic launch yet. Ask for the success-per-user figure and the pre-exposure comparison. Those are the two checks the document itself says would change the call, and neither is reported. If success per user is flat while queries fall, the lift is probably a denominator effect and the bar isn't met. +0.81% change in Successful Search Rate, a per-query rate. The unit is percent relative change, and the interval's lower bound (+0.41%) sits below the 0.50% bar. The primary is a per-query rate, and Queries per User fell 1.9% while Clicks per User stayed flat (+0.1%). That pattern suggests the lift may come from fewer queries rather than better results. The pre-period check was not run, so pre-existing arm differences are untested.",
+      "got": true,
+      "how": "overlap 100%"
+    },
+    {
+      "pass": "full",
+      "item": "takeaway 3",
+      "key": "Could reverse it: secondary metric Queries per User got worse after correction.",
+      "reader": "The document recommends **Ship** to all traffic. The test ran 14 days with 1,000,000 users per arm, and the primary metric, Successful Search Rate, rose +0.81% (95% interval +0.41% to +1.21%) against a 0.50% bar. Guardrails held. The analyst's view is **Escalate**, which conflicts with the Ship call. The document does not say which one governs. Current state: the decision is made, but the analyst's objection is open. Don't approve the all-traffic launch yet. Ask for the success-per-user figure and the pre-exposure comparison. Those are the two checks the document itself says would change the call, and neither is reported. If success per user is flat while queries fall, the lift is probably a denominator effect and the bar isn't met. +0.81% change in Successful Search Rate, a per-query rate. The unit is percent relative change, and the interval's lower bound (+0.41%) sits below the 0.50% bar. The primary is a per-query rate, and Queries per User fell 1.9% while Clicks per User stayed flat (+0.1%). That pattern suggests the lift may come from fewer queries rather than better results. The pre-period check was not run, so pre-existing arm differences are untested.",
+      "got": false,
+      "how": "overlap 40%"
+    }
+  ],
+  "lost": "The \"Triage: Ready\" line says every movement has a candidate explanation, but the document also says those explanations are inferred and the cuts would only confirm them. \"Ready\" and \"inferred\" don't fit together. The Ship decision and the Escalate analyst view also conflict with no resolution, and the document never says which governs. I also had to work out that \"Could reverse it\" refers to the secondary metric, not the primary.",
+  "question": "What is Successful Search Rate per user (not per query), and does it still show the +0.81% lift now that Queries per User has fallen 1.9%?",
+  "replies": {
+    "skim": "1. Answer: The document concludes Ship: Successful Search Rate rose 0.81% (95% interval +0.41% to +1.21%), clearing the 0.50% bar with guardrails holding. But the outline's analyst view is Escalate, because the lift may come from a shrinking denominator (Queries per User \u22121.90%) rather than better ranking.\n\n2. Decision: Don't approve the all-traffic launch yet. Check whether success per user (not per query) is flat while queries fall; if it is, the bar is not met. Escalate for a per-user analysis first.\n\n3. Number: +0.81% (Successful Search Rate, per-query rate, relative change at 95% interval +0.41% to +1.21%).\n",
+    "full": "1. **Answer:** The document recommends **Ship** to all traffic. The test ran 14 days with 1,000,000 users per arm, and the primary metric, Successful Search Rate, rose +0.81% (95% interval +0.41% to +1.21%) against a 0.50% bar. Guardrails held. The analyst's view is **Escalate**, which conflicts with the Ship call. The document does not say which one governs. Current state: the decision is made, but the analyst's objection is open.\n\n2. **Decision:** Don't approve the all-traffic launch yet. Ask for the success-per-user figure and the pre-exposure comparison. Those are the two checks the document itself says would change the call, and neither is reported. If success per user is flat while queries fall, the lift is probably a denominator effect and the bar isn't met.\n\n3. **Number:** +0.81% change in Successful Search Rate, a per-query rate. The unit is percent relative change, and the interval's lower bound (+0.41%) sits below the 0.50% bar.\n\n4. **Caveat:** The primary is a per-query rate, and Queries per User fell 1.9% while Clicks per User stayed flat (+0.1%). That pattern suggests the lift may come from fewer queries rather than better results. The pre-period check was not run, so pre-existing arm differences are untested.\n\n5. **Lost:** The \"Triage: Ready\" line says every movement has a candidate explanation, but the document also says those explanations are inferred and the cuts would only confirm them. \"Ready\" and \"inferred\" don't fit together. The Ship decision and the Escalate analyst view also conflict with no resolution, and the document never says which governs. I also had to work out that \"Could reverse it\" refers to the secondary metric, not the primary.\n\n6. **Question:** What is Successful Search Rate per user (not per query), and does it still show the +0.81% lift now that Queries per User has fallen 1.9%?\n"
+  }
+}

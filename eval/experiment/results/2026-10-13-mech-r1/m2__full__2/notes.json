@@ -1,0 +1,21 @@
+{
+ "why_it_moved": [
+  {
+   "text": "Reformulation Rate rose 4.80%, and Queries per User rose 2.30%. Together with the 0.72% drop in the primary, that fits users searching again because first results were worse.",
+   "label": "inferred"
+  },
+  {
+   "text": "The drop is steady from the first days after exposure to the last, so it is not a novelty effect.",
+   "label": "measured"
+  },
+  {
+   "text": "Part of the extra queries may come from a few struggling users or one query class such as tail queries; no cut has been run yet.",
+   "label": "guess"
+  }
+ ],
+ "would_change": [
+  "A pre-exposure comparison showing the arms already differed on Successful Search Rate before exposure would make this a broken test.",
+  "Cuts showing the drop sits in one fixable query class would justify a rerun of a revised ranker."
+ ],
+ "analyst_view": null
+}

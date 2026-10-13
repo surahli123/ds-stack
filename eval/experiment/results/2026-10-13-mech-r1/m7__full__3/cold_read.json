@@ -1,0 +1,53 @@
+{
+  "pass": true,
+  "skim": "2/2",
+  "full": "3/3",
+  "items": [
+    {
+      "pass": "skim",
+      "item": "answer",
+      "key": "No effect found: Successful Search Rate reads +0.08% (-0.22% to +0.38%), which rules out the 0.50% change the test was built to find.",
+      "reader": "The document concludes \"No effect found\" for Ranker v7: the primary metric, Successful Search Rate, moved +0.08% (-0.22% to +0.38%), which rules out the 0.50% change the test was built to detect. The test ran 14 days with about 1,000,000 users per arm. Agree to stop the test without launching. Rerunning aimed at tail queries is only worth considering if a Tail Queries cut on triggered queries confirms the lift and the other classes don't fall. That cut hasn't been run yet.",
+      "got": true,
+      "how": "overlap 88%"
+    },
+    {
+      "pass": "skim",
+      "item": "decision",
+      "key": "Agree to stop the test without launching.",
+      "reader": "Agree to stop the test without launching. Rerunning aimed at tail queries is only worth considering if a Tail Queries cut on triggered queries confirms the lift and the other classes don't fall. That cut hasn't been run yet. The document concludes \"No effect found\" for Ranker v7: the primary metric, Successful Search Rate, moved +0.08% (-0.22% to +0.38%), which rules out the 0.50% change the test was built to detect. The test ran 14 days with about 1,000,000 users per arm.",
+      "got": true,
+      "how": "overlap 100%"
+    },
+    {
+      "pass": "full",
+      "item": "takeaway 1",
+      "key": "Successful Search Rate +0.08% (-0.22% to +0.38%) against estimate at least 0.50% higher.",
+      "reader": "The document concludes \"No effect found\" for Ranker v7. Successful Search Rate moved +0.08% (95% interval -0.22% to +0.38%), which rules out the +0.50% lift the test was built to detect. Current state: the test is complete (day 14 of 14, 1,000,000 users per arm, above the planned 900,000, whole weeks). Agree to stop the test without launching. Before closing it out, I'd run the pre-period comparison of Successful Search Rate across arms, because the document says it wasn't run and a gap there would undermine the result. If that check is clean, stopping is the right call. Successful Search Rate change, +0.08% (relative, 95% interval -0.22% to +0.38%), against a bar of at least +0.50%. The upper bound of the interval is below the bar, so the test can't support a launch. No pre-period comparison was run, so a difference between arms before the test isn't ruled out. The per-segment explanations (tail lift, navigational displacement, mobile CTR) are inferred or guessed from co-movements, and the Tail Queries +3.40% is one of 52 exploratory secondary metrics.",
+      "got": true,
+      "how": "overlap 82%"
+    },
+    {
+      "pass": "full",
+      "item": "takeaway 2",
+      "key": "Agree to stop the test without launching.",
+      "reader": "The document concludes \"No effect found\" for Ranker v7. Successful Search Rate moved +0.08% (95% interval -0.22% to +0.38%), which rules out the +0.50% lift the test was built to detect. Current state: the test is complete (day 14 of 14, 1,000,000 users per arm, above the planned 900,000, whole weeks). Agree to stop the test without launching. Before closing it out, I'd run the pre-period comparison of Successful Search Rate across arms, because the document says it wasn't run and a gap there would undermine the result. If that check is clean, stopping is the right call. Successful Search Rate change, +0.08% (relative, 95% interval -0.22% to +0.38%), against a bar of at least +0.50%. The upper bound of the interval is below the bar, so the test can't support a launch. No pre-period comparison was run, so a difference between arms before the test isn't ruled out. The per-segment explanations (tail lift, navigational displacement, mobile CTR) are inferred or guessed from co-movements, and the Tail Queries +3.40% is one of 52 exploratory secondary metrics.",
+      "got": true,
+      "how": "overlap 100%"
+    },
+    {
+      "pass": "full",
+      "item": "takeaway 3",
+      "key": "Could reverse it: no pre-period comparison, so a difference between the arms before the test isn't ruled out.",
+      "reader": "The document concludes \"No effect found\" for Ranker v7. Successful Search Rate moved +0.08% (95% interval -0.22% to +0.38%), which rules out the +0.50% lift the test was built to detect. Current state: the test is complete (day 14 of 14, 1,000,000 users per arm, above the planned 900,000, whole weeks). Agree to stop the test without launching. Before closing it out, I'd run the pre-period comparison of Successful Search Rate across arms, because the document says it wasn't run and a gap there would undermine the result. If that check is clean, stopping is the right call. Successful Search Rate change, +0.08% (relative, 95% interval -0.22% to +0.38%), against a bar of at least +0.50%. The upper bound of the interval is below the bar, so the test can't support a launch. No pre-period comparison was run, so a difference between arms before the test isn't ruled out. The per-segment explanations (tail lift, navigational displacement, mobile CTR) are inferred or guessed from co-movements, and the Tail Queries +3.40% is one of 52 exploratory secondary metrics.",
+      "got": true,
+      "how": "overlap 91%"
+    }
+  ],
+  "lost": "I reread the \"Triage: Ready\" line and the \"Could reverse it\" line. Triage says the explanations are ready but also that they are inferred and need cuts to confirm, which reads as both done and not done. \"Could reverse it\" doesn't say whether the missing pre-period check should block the stop or only weaken the read. The Tail Queries lift has no interval, so I can't tell how strong it is.",
+  "question": "Was the pre-period Successful Search Rate comparison across arms run, or can it be run before we stop, and does the Tail Queries lift still hold with its own confidence interval rather than only after the false-discovery correction?",
+  "replies": {
+    "skim": "1. Answer: The document concludes \"No effect found\" for Ranker v7: the primary metric, Successful Search Rate, moved +0.08% (-0.22% to +0.38%), which rules out the 0.50% change the test was built to detect. The test ran 14 days with about 1,000,000 users per arm.\n2. Decision: Agree to stop the test without launching. Rerunning aimed at tail queries is only worth considering if a Tail Queries cut on triggered queries confirms the lift and the other classes don't fall. That cut hasn't been run yet.\n3. Number: +0.08% (Successful Search Rate, relative change, 95% interval -0.22% to +0.38%).\n",
+    "full": "1. **Answer:** The document concludes \"No effect found\" for Ranker v7. Successful Search Rate moved +0.08% (95% interval -0.22% to +0.38%), which rules out the +0.50% lift the test was built to detect. Current state: the test is complete (day 14 of 14, 1,000,000 users per arm, above the planned 900,000, whole weeks).\n\n2. **Decision:** Agree to stop the test without launching. Before closing it out, I'd run the pre-period comparison of Successful Search Rate across arms, because the document says it wasn't run and a gap there would undermine the result. If that check is clean, stopping is the right call.\n\n3. **Number:** Successful Search Rate change, +0.08% (relative, 95% interval -0.22% to +0.38%), against a bar of at least +0.50%. The upper bound of the interval is below the bar, so the test can't support a launch.\n\n4. **Caveat:** No pre-period comparison was run, so a difference between arms before the test isn't ruled out. The per-segment explanations (tail lift, navigational displacement, mobile CTR) are inferred or guessed from co-movements, and the Tail Queries +3.40% is one of 52 exploratory secondary metrics.\n\n5. **Lost:** I reread the \"Triage: Ready\" line and the \"Could reverse it\" line. Triage says the explanations are ready but also that they are inferred and need cuts to confirm, which reads as both done and not done. \"Could reverse it\" doesn't say whether the missing pre-period check should block the stop or only weaken the read. The Tail Queries lift has no interval, so I can't tell how strong it is.\n\n6. **Question:** Was the pre-period Successful Search Rate comparison across arms run, or can it be run before we stop, and does the Tail Queries lift still hold with its own confidence interval rather than only after the false-discovery correction?\n"
+  }
+}

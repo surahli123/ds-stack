@@ -1,0 +1,158 @@
+{
+  "readiness": {
+    "verdict": "ready",
+    "text": "Ready",
+    "first": null,
+    "reasons": [
+      "every movement triage will ask about has a candidate explanation and none conflict; the explanations are inferred from co-movements, so the cuts below would confirm them"
+    ]
+  },
+  "standard": [
+    {
+      "question": "What did you change?",
+      "answer": "ranker_model: lambdamart_v6 -> lambdamart_v7; nothing else differs between arms",
+      "ok": true
+    },
+    {
+      "question": "Is the data trustworthy?",
+      "answer": "Yes, as far as the checks reach; not checked: pre period",
+      "ok": true
+    },
+    {
+      "question": "Is the effect real, or chance?",
+      "answer": "Successful Search Rate +0.08% (-0.22% to +0.38%); its interval includes zero. Across the scorecard 4 of 57 metrics moved clearly; about 2.9 would by chance alone",
+      "ok": true,
+      "borderline": false
+    },
+    {
+      "question": "Will it last?",
+      "answer": "Probably: effect by days since exposure: first days +0.07%, last days +0.09% (trend +0.002% per day)",
+      "ok": true
+    },
+    {
+      "question": "Did the change do what it was built to do?",
+      "answer": "Not shown. If the scorecard or a cut has a coverage metric (the share of queries whose top results changed), register it as feature_metrics",
+      "ok": null
+    },
+    {
+      "question": "Metric families used:",
+      "answer": "abandonment = Abandonment Rate, ad_ctr = Ad Click Rate, autocomplete = Autocomplete Acceptance, clicks_per_user = Clicks per User, ctr = CTR, latency = Latency p95 (ms), long_click = Long Click Rate, pagination = Pagination Rate, queries_per_user = Queries per User, reformulation = Reformulation Rate, revenue = Revenue per User, sessions_per_user = Sessions per User, success = Successful Search Rate, time_to_click = Time to First Click (s), zero_result = Zero Result Rate",
+      "ok": true,
+      "note": true
+    }
+  ],
+  "chance": {
+    "tested": 57,
+    "moved": 4,
+    "expected_by_chance": 2.9
+  },
+  "questions": [
+    {
+      "metric": "Successful Search Rate",
+      "question": "Successful Search Rate was expected to rise but didn't move. Why?",
+      "kind": "primary",
+      "change": "didn't move clearly (+0.08% (-0.22% to +0.38%))",
+      "candidates": [
+        "concentrated_segment"
+      ],
+      "status": "untested"
+    },
+    {
+      "metric": "Successful Search Rate",
+      "question": "Why is Successful Search Rate's change concentrated in Tail Queries?",
+      "kind": "segment",
+      "change": "Successful Search Rate by query class: Head Queries -0.53%; Tail Queries +3.40%",
+      "candidates": [
+        "concentrated_segment"
+      ],
+      "status": "untested"
+    }
+  ],
+  "patterns": [
+    {
+      "id": "concentrated_segment",
+      "name": "The effect sits in one segment",
+      "label": "inferred",
+      "status": "untested",
+      "reading": "neutral",
+      "source": "Dmitriev et al., A Dirty Dozen: Twelve Common Metric Interpretation Pitfalls, KDD 2017 (effects confined to a country, browser or version); tail-query lifts reported for semantic retrieval (snippet-level)",
+      "mechanism": "Successful Search Rate's change comes mostly from Tail Queries (while the overall change is about zero of the overall change), and segments differ more than noise allows.",
+      "families": [],
+      "metrics": [
+        "Successful Search Rate"
+      ],
+      "segment": "Tail Queries",
+      "dimension": "query class",
+      "exploratory": false,
+      "evidence": [
+        "Successful Search Rate by query class: Head Queries -0.53%; Tail Queries +3.40%"
+      ],
+      "score": 2,
+      "deep_dives": [
+        {
+          "cut": "Successful Search Rate for Tail Queries vs the rest, with triggered queries only",
+          "confirms": "the change is real and confined to Tail Queries",
+          "refutes": "the other segments move too once diluted traffic is removed"
+        },
+        {
+          "cut": "what the treatment changes for Tail Queries (ranking features, coverage, rendering)",
+          "confirms": "a mechanism specific to Tail Queries",
+          "refutes": "nothing in the change targets Tail Queries"
+        },
+        {
+          "cut": "sample split and event logging within Tail Queries, by arm",
+          "confirms": "the segment is balanced and logs the same way",
+          "refutes": "the segment itself is imbalanced or logs differently (an artifact)"
+        }
+      ],
+      "cut_results": []
+    }
+  ],
+  "exploratory": [],
+  "ruled_out": [],
+  "cut_results": [],
+  "deep_dives": [
+    {
+      "cut": "Successful Search Rate for Tail Queries vs the rest, with triggered queries only",
+      "confirms": "the change is real and confined to Tail Queries",
+      "refutes": "the other segments move too once diluted traffic is removed",
+      "tests": "The effect sits in one segment",
+      "pattern": "concentrated_segment",
+      "scriptable": false
+    },
+    {
+      "cut": "what the treatment changes for Tail Queries (ranking features, coverage, rendering)",
+      "confirms": "a mechanism specific to Tail Queries",
+      "refutes": "nothing in the change targets Tail Queries",
+      "tests": "The effect sits in one segment",
+      "pattern": "concentrated_segment",
+      "scriptable": false
+    },
+    {
+      "cut": "sample split and event logging within Tail Queries, by arm",
+      "confirms": "the segment is balanced and logs the same way",
+      "refutes": "the segment itself is imbalanced or logs differently (an artifact)",
+      "tests": "The effect sits in one segment",
+      "pattern": "concentrated_segment",
+      "scriptable": false
+    }
+  ],
+  "families": {
+    "success": "Successful Search Rate",
+    "ctr": "CTR",
+    "long_click": "Long Click Rate",
+    "abandonment": "Abandonment Rate",
+    "reformulation": "Reformulation Rate",
+    "queries_per_user": "Queries per User",
+    "sessions_per_user": "Sessions per User",
+    "time_to_click": "Time to First Click (s)",
+    "zero_result": "Zero Result Rate",
+    "latency": "Latency p95 (ms)",
+    "ad_ctr": "Ad Click Rate",
+    "revenue": "Revenue per User",
+    "clicks_per_user": "Clicks per User",
+    "pagination": "Pagination Rate",
+    "autocomplete": "Autocomplete Acceptance"
+  },
+  "notes": []
+}

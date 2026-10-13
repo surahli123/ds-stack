@@ -1,0 +1,82 @@
+{
+  "readiness": {
+    "verdict": "ready",
+    "text": "Ready",
+    "first": null,
+    "reasons": [
+      "every movement triage will ask about has a candidate explanation and none conflict; the explanations are inferred from co-movements, so the cuts below would confirm them"
+    ]
+  },
+  "standard": [
+    {
+      "question": "What did you change?",
+      "answer": "ranker_model: lambdamart_v6 -> lambdamart_v7; nothing else differs between arms",
+      "ok": true
+    },
+    {
+      "question": "Is the data trustworthy?",
+      "answer": "Yes, as far as the checks reach; not checked: pre period",
+      "ok": true
+    },
+    {
+      "question": "Is the effect real, or chance?",
+      "answer": "Successful Search Rate +0.02% (-0.28% to +0.32%); its interval includes zero. Across the scorecard 1 of 57 metrics moved clearly; about 2.9 would by chance alone",
+      "ok": true,
+      "borderline": false
+    },
+    {
+      "question": "Will it last?",
+      "answer": "Probably: effect by days since exposure: first days +0.01%, last days +0.03% (trend +0.002% per day)",
+      "ok": true
+    },
+    {
+      "question": "Did the change do what it was built to do?",
+      "answer": "Not shown. If the scorecard or a cut has a coverage metric (the share of queries whose top results changed), register it as feature_metrics",
+      "ok": null
+    },
+    {
+      "question": "Metric families used:",
+      "answer": "abandonment = Abandonment Rate, ad_ctr = Ad Click Rate, autocomplete = Autocomplete Acceptance, clicks_per_user = Clicks per User, ctr = CTR, latency = Latency p95 (ms), long_click = Long Click Rate, pagination = Pagination Rate, queries_per_user = Queries per User, reformulation = Reformulation Rate, revenue = Revenue per User, sessions_per_user = Sessions per User, success = Successful Search Rate, time_to_click = Time to First Click (s), zero_result = Zero Result Rate",
+      "ok": true,
+      "note": true
+    }
+  ],
+  "chance": {
+    "tested": 57,
+    "moved": 1,
+    "expected_by_chance": 2.9
+  },
+  "questions": [
+    {
+      "metric": "Successful Search Rate",
+      "question": "Successful Search Rate was expected to rise but didn't move. Why?",
+      "kind": "primary",
+      "change": "didn't move clearly (+0.02% (-0.28% to +0.32%))",
+      "candidates": [],
+      "status": "answered by the call: the interval rules out the bar"
+    }
+  ],
+  "patterns": [],
+  "exploratory": [],
+  "ruled_out": [],
+  "cut_results": [],
+  "deep_dives": [],
+  "families": {
+    "success": "Successful Search Rate",
+    "ctr": "CTR",
+    "long_click": "Long Click Rate",
+    "abandonment": "Abandonment Rate",
+    "reformulation": "Reformulation Rate",
+    "queries_per_user": "Queries per User",
+    "sessions_per_user": "Sessions per User",
+    "time_to_click": "Time to First Click (s)",
+    "zero_result": "Zero Result Rate",
+    "latency": "Latency p95 (ms)",
+    "ad_ctr": "Ad Click Rate",
+    "revenue": "Revenue per User",
+    "clicks_per_user": "Clicks per User",
+    "pagination": "Pagination Rate",
+    "autocomplete": "Autocomplete Acceptance"
+  },
+  "notes": []
+}

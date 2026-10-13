@@ -1,0 +1,329 @@
+{
+  "readiness": {
+    "verdict": "ready",
+    "text": "Ready",
+    "first": null,
+    "reasons": [
+      "every movement triage will ask about has a candidate explanation and none conflict; the explanations are inferred from co-movements, so the cuts below would confirm them"
+    ]
+  },
+  "standard": [
+    {
+      "question": "What did you change?",
+      "answer": "ranker_model: lambdamart_v6 -> lambdamart_v7; nothing else differs between arms",
+      "ok": true
+    },
+    {
+      "question": "Is the data trustworthy?",
+      "answer": "Yes, as far as the checks reach; not checked: pre period",
+      "ok": true
+    },
+    {
+      "question": "Is the effect real, or chance?",
+      "answer": "Successful Search Rate +0.00% (-0.30% to +0.30%); its interval includes zero. Across the scorecard 6 of 57 metrics moved clearly; about 2.9 would by chance alone",
+      "ok": true,
+      "borderline": false
+    },
+    {
+      "question": "Will it last?",
+      "answer": "Probably: effect by days since exposure: first days -0.01%, last days +0.01% (trend +0.002% per day)",
+      "ok": true
+    },
+    {
+      "question": "Did the change do what it was built to do?",
+      "answer": "Not shown. If the scorecard or a cut has a coverage metric (the share of queries whose top results changed), register it as feature_metrics",
+      "ok": null
+    },
+    {
+      "question": "Metric families used:",
+      "answer": "abandonment = Abandonment Rate, ad_ctr = Ad Click Rate, autocomplete = Autocomplete Acceptance, clicks_per_user = Clicks per User, ctr = CTR, latency = Latency p95 (ms), long_click = Long Click Rate, pagination = Pagination Rate, queries_per_user = Queries per User, reformulation = Reformulation Rate, revenue = Revenue per User, sessions_per_user = Sessions per User, success = Successful Search Rate, time_to_click = Time to First Click (s), zero_result = Zero Result Rate",
+      "ok": true,
+      "note": true
+    }
+  ],
+  "chance": {
+    "tested": 57,
+    "moved": 6,
+    "expected_by_chance": 2.9
+  },
+  "questions": [
+    {
+      "metric": "Successful Search Rate",
+      "question": "Successful Search Rate was expected to rise but didn't move. Why?",
+      "kind": "primary",
+      "change": "didn't move clearly (+0.00% (-0.30% to +0.30%))",
+      "candidates": [
+        "attractive_not_relevant",
+        "activity_without_success"
+      ],
+      "status": "untested"
+    },
+    {
+      "metric": "CTR",
+      "question": "Why did CTR rise?",
+      "kind": "secondary",
+      "change": "rose 2.40% (+1.90% to +2.90%)",
+      "candidates": [
+        "attractive_not_relevant"
+      ],
+      "status": "untested"
+    },
+    {
+      "metric": "Clicks per User",
+      "question": "Why did Clicks per User rise?",
+      "kind": "secondary",
+      "change": "rose 2.20% (+1.50% to +2.90%)",
+      "candidates": [
+        "attractive_not_relevant",
+        "activity_without_success"
+      ],
+      "status": "untested"
+    }
+  ],
+  "patterns": [
+    {
+      "id": "attractive_not_relevant",
+      "name": "More clicks, not more satisfaction",
+      "label": "inferred",
+      "status": "untested",
+      "mechanism": "Results look more clickable (titles, snippets or positions) but satisfy no more often, so CTR rises without long clicks.",
+      "reading": "bad",
+      "source": "Hassan et al., CIKM 2013 (attractive snippets, SAT clicks at 30 s dwell); Dmitriev et al., A Dirty Dozen: Twelve Common Metric Interpretation Pitfalls, KDD 2017 (clicks shift between page elements)",
+      "families": [
+        "ctr",
+        "long_click",
+        "success",
+        "clicks_per_user"
+      ],
+      "metrics": [
+        "CTR",
+        "Long Click Rate",
+        "Successful Search Rate",
+        "Clicks per User"
+      ],
+      "evidence": [
+        "CTR rose 2.40% (+1.90% to +2.90%)",
+        "Long Click Rate didn't move clearly (-0.10% (-0.60% to +0.40%))",
+        "Successful Search Rate didn't move clearly (+0.00% (-0.30% to +0.30%))",
+        "Clicks per User rose 2.20% (+1.50% to +2.90%)"
+      ],
+      "score": 2,
+      "deep_dives": [
+        {
+          "cut": "SAT clicks (dwell of 30 seconds or more) vs all clicks, by arm",
+          "confirms": "clicks rise but SAT clicks don't",
+          "refutes": "SAT clicks rise with clicks",
+          "needs": {
+            "metric": "sat_click"
+          },
+          "confirms_when": {
+            "sat_click": "flat_or_down"
+          },
+          "refutes_when": {
+            "sat_click": "up"
+          }
+        },
+        {
+          "cut": "a similar query issued again within 5 minutes, by arm",
+          "confirms": "quick re-queries rise after clicks",
+          "refutes": "re-queries are flat",
+          "needs": {
+            "metric": "requery"
+          },
+          "confirms_when": {
+            "requery": "up"
+          },
+          "refutes_when": {
+            "requery": "flat_or_down"
+          }
+        },
+        {
+          "cut": "config diff of presentation parameters (titles, snippets, thumbnails)",
+          "confirms": "a presentation parameter differs between arms",
+          "refutes": "only ranking differs (this doesn't rule it out: ranking can surface such results too)",
+          "needs": {
+            "config": "presentation"
+          },
+          "confirms_when": {
+            "presentation_changed": true
+          }
+        },
+        {
+          "cut": "CTR and long-click rate by result position",
+          "confirms": "the CTR gain sits in top positions and comes with short clicks",
+          "refutes": "long clicks rise wherever CTR rises"
+        },
+        {
+          "cut": "whole-page CTR vs CTR on the element that changed",
+          "confirms": "element CTR rises while whole-page CTR is flat (clicks moved, not added)",
+          "refutes": "whole-page CTR rises too"
+        }
+      ],
+      "exploratory": false,
+      "cut_results": [
+        {
+          "cut": "config diff of presentation parameters (titles, snippets, thumbnails)",
+          "outcome": "inconclusive",
+          "detail": "config differs in ranker_model (lambdamart_v6 -> lambdamart_v7)"
+        }
+      ]
+    },
+    {
+      "id": "activity_without_success",
+      "name": "More activity without more success",
+      "label": "inferred",
+      "status": "untested",
+      "mechanism": "Users click or search more while success doesn't rise. Published cases read this as attractive results, confusion or users struggling, not engagement, until a cut shows otherwise.",
+      "reading": "bad",
+      "source": "Kohavi et al., KDD 2012; Song, Shi, Fu, WWW 2013; Dmitriev et al., A Dirty Dozen, KDD 2017 (5.12, clicks up from confusion)",
+      "families": [
+        "success",
+        "clicks_per_user"
+      ],
+      "metrics": [
+        "Successful Search Rate",
+        "Clicks per User"
+      ],
+      "evidence": [
+        "Successful Search Rate didn't move clearly (+0.00% (-0.30% to +0.30%))",
+        "Clicks per User rose 2.20% (+1.50% to +2.90%)"
+      ],
+      "score": 0,
+      "deep_dives": [
+        {
+          "cut": "success per query vs per user",
+          "confirms": "success per query falls or holds while activity grows",
+          "refutes": "success per query rises with activity",
+          "needs": {
+            "metric": "success_per_query"
+          },
+          "confirms_when": {
+            "success_per_query": "flat_or_down"
+          },
+          "refutes_when": {
+            "success_per_query": "up"
+          }
+        },
+        {
+          "cut": "a similar query issued again within 5 minutes, by arm",
+          "confirms": "quick re-queries rise",
+          "refutes": "re-queries are flat",
+          "needs": {
+            "metric": "requery"
+          },
+          "confirms_when": {
+            "requery": "up"
+          },
+          "refutes_when": {
+            "requery": "flat_or_down"
+          }
+        },
+        {
+          "cut": "sessions per user vs queries per session, by arm",
+          "confirms": "more queries inside the same sessions (retrying)",
+          "refutes": "more sessions (coming back)"
+        }
+      ],
+      "exploratory": false,
+      "cut_results": []
+    }
+  ],
+  "exploratory": [],
+  "ruled_out": [],
+  "cut_results": [
+    {
+      "cut": "config diff of presentation parameters (titles, snippets, thumbnails)",
+      "outcome": "inconclusive",
+      "detail": "config differs in ranker_model (lambdamart_v6 -> lambdamart_v7)",
+      "pattern": "attractive_not_relevant",
+      "tests": "More clicks, not more satisfaction"
+    }
+  ],
+  "deep_dives": [
+    {
+      "cut": "SAT clicks (dwell of 30 seconds or more) vs all clicks, by arm",
+      "confirms": "clicks rise but SAT clicks don't",
+      "refutes": "SAT clicks rise with clicks",
+      "needs": {
+        "metric": "sat_click"
+      },
+      "confirms_when": {
+        "sat_click": "flat_or_down"
+      },
+      "refutes_when": {
+        "sat_click": "up"
+      },
+      "tests": "More clicks, not more satisfaction",
+      "pattern": "attractive_not_relevant",
+      "scriptable": true
+    },
+    {
+      "cut": "success per query vs per user",
+      "confirms": "success per query falls or holds while activity grows",
+      "refutes": "success per query rises with activity",
+      "needs": {
+        "metric": "success_per_query"
+      },
+      "confirms_when": {
+        "success_per_query": "flat_or_down"
+      },
+      "refutes_when": {
+        "success_per_query": "up"
+      },
+      "tests": "More activity without more success",
+      "pattern": "activity_without_success",
+      "scriptable": true
+    },
+    {
+      "cut": "a similar query issued again within 5 minutes, by arm",
+      "confirms": "quick re-queries rise after clicks",
+      "refutes": "re-queries are flat",
+      "needs": {
+        "metric": "requery"
+      },
+      "confirms_when": {
+        "requery": "up"
+      },
+      "refutes_when": {
+        "requery": "flat_or_down"
+      },
+      "tests": "More clicks, not more satisfaction",
+      "pattern": "attractive_not_relevant",
+      "scriptable": true
+    },
+    {
+      "cut": "sessions per user vs queries per session, by arm",
+      "confirms": "more queries inside the same sessions (retrying)",
+      "refutes": "more sessions (coming back)",
+      "tests": "More activity without more success",
+      "pattern": "activity_without_success",
+      "scriptable": false
+    },
+    {
+      "cut": "CTR and long-click rate by result position",
+      "confirms": "the CTR gain sits in top positions and comes with short clicks",
+      "refutes": "long clicks rise wherever CTR rises",
+      "tests": "More clicks, not more satisfaction",
+      "pattern": "attractive_not_relevant",
+      "scriptable": false
+    }
+  ],
+  "families": {
+    "success": "Successful Search Rate",
+    "ctr": "CTR",
+    "long_click": "Long Click Rate",
+    "abandonment": "Abandonment Rate",
+    "reformulation": "Reformulation Rate",
+    "queries_per_user": "Queries per User",
+    "sessions_per_user": "Sessions per User",
+    "time_to_click": "Time to First Click (s)",
+    "zero_result": "Zero Result Rate",
+    "latency": "Latency p95 (ms)",
+    "ad_ctr": "Ad Click Rate",
+    "revenue": "Revenue per User",
+    "clicks_per_user": "Clicks per User",
+    "pagination": "Pagination Rate",
+    "autocomplete": "Autocomplete Acceptance"
+  },
+  "notes": []
+}

@@ -1,0 +1,21 @@
+{
+ "why_it_moved": [
+  {
+   "text": "Reformulation Rate rose 4.8% and Queries per User rose 2.3%, while success per search slipped 0.72%. Users searched more because first results missed, not because they wanted more.",
+   "label": "inferred"
+  },
+  {
+   "text": "The drop held steady from the first days after exposure to the last, so it is not a novelty effect.",
+   "label": "measured"
+  },
+  {
+   "text": "Reformulation rose most on tail queries, which points to v7 ranking rare queries worse. No cut has tested this yet.",
+   "label": "guess"
+  }
+ ],
+ "would_change": [
+  "A per-query success cut showing success per query is flat and the drop comes only from extra low-success queries from a few heavy users.",
+  "A pre-exposure comparison of the two arms showing a baseline gap large enough to explain the 0.72% drop."
+ ],
+ "analyst_view": null
+}

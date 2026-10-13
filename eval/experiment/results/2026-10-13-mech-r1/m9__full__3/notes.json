@@ -1,0 +1,17 @@
+{
+ "why_it_moved": [
+  {
+   "text": "Successful Search Rate did not move: +0.02% against the 0.50% the test was built to find, and the daily series stays flat from the first days to the last.",
+   "label": "measured"
+  },
+  {
+   "text": "Every guardrail stayed within its margin, so v7 changed rankings without hurting latency, abandonment, zero results or revenue.",
+   "label": "measured"
+  }
+ ],
+ "would_change": [
+  "A pre-exposure comparison of Successful Search Rate showing the arms already differed before the test started would make this test unreadable.",
+  "A rerun on a larger sample that reads at or above 0.50% would reopen the case for v7."
+ ],
+ "analyst_view": null
+}

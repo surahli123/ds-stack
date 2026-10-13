@@ -1,0 +1,53 @@
+{
+  "pass": true,
+  "skim": "2/2",
+  "full": "3/3",
+  "items": [
+    {
+      "pass": "skim",
+      "item": "answer",
+      "key": "No effect found: Successful Search Rate reads +0.00% (-0.30% to +0.30%), which rules out the 0.50% change the test was built to find.",
+      "reader": "The document concludes no effect was found. Successful Search Rate is +0.00% (-0.30% to +0.30%), which rules out the 0.50% change the test was built to detect. The test ran 14 days at 1,000,000 users per arm and is complete. Agree to stop the test without launching Ranker v7. The one open risk is that no pre-period comparison was made, so a pre-test difference between arms isn't ruled out.",
+      "got": true,
+      "how": "overlap 87%"
+    },
+    {
+      "pass": "skim",
+      "item": "decision",
+      "key": "Agree to stop the test without launching.",
+      "reader": "Agree to stop the test without launching Ranker v7. The one open risk is that no pre-period comparison was made, so a pre-test difference between arms isn't ruled out. The document concludes no effect was found. Successful Search Rate is +0.00% (-0.30% to +0.30%), which rules out the 0.50% change the test was built to detect. The test ran 14 days at 1,000,000 users per arm and is complete.",
+      "got": true,
+      "how": "overlap 100%"
+    },
+    {
+      "pass": "full",
+      "item": "takeaway 1",
+      "key": "Successful Search Rate +0.00% (-0.30% to +0.30%) against estimate at least 0.50% higher.",
+      "reader": "Stop the test without launching. The ranker v7 test found no effect: Successful Search Rate moved +0.00% (95% interval -0.30% to +0.30%), which rules out the 0.50% lift the test was sized to detect. The test is at day 14 of 14 with about 1M users per arm, and the pre-period check did not run. Agree to stop the test and not launch v7. Before closing, get the pre-period comparison run, since it is the one check that could reverse the call. Successful Search Rate, +0.00% (95% interval -0.30% to +0.30%). The unit is percent change relative to control; the bar is at least +0.50%. The doc says there is no pre-period comparison, so a difference between arms before the test is not ruled out. The CTR and Clicks per User gains are inferred to be \"attractive, not relevant\" results, which is a guess the cuts have not confirmed.",
+      "got": true,
+      "how": "overlap 70%"
+    },
+    {
+      "pass": "full",
+      "item": "takeaway 2",
+      "key": "Agree to stop the test without launching.",
+      "reader": "Stop the test without launching. The ranker v7 test found no effect: Successful Search Rate moved +0.00% (95% interval -0.30% to +0.30%), which rules out the 0.50% lift the test was sized to detect. The test is at day 14 of 14 with about 1M users per arm, and the pre-period check did not run. Agree to stop the test and not launch v7. Before closing, get the pre-period comparison run, since it is the one check that could reverse the call. Successful Search Rate, +0.00% (95% interval -0.30% to +0.30%). The unit is percent change relative to control; the bar is at least +0.50%. The doc says there is no pre-period comparison, so a difference between arms before the test is not ruled out. The CTR and Clicks per User gains are inferred to be \"attractive, not relevant\" results, which is a guess the cuts have not confirmed.",
+      "got": true,
+      "how": "overlap 100%"
+    },
+    {
+      "pass": "full",
+      "item": "takeaway 3",
+      "key": "Could reverse it: no pre-period comparison, so a difference between the arms before the test isn't ruled out.",
+      "reader": "Stop the test without launching. The ranker v7 test found no effect: Successful Search Rate moved +0.00% (95% interval -0.30% to +0.30%), which rules out the 0.50% lift the test was sized to detect. The test is at day 14 of 14 with about 1M users per arm, and the pre-period check did not run. Agree to stop the test and not launch v7. Before closing, get the pre-period comparison run, since it is the one check that could reverse the call. Successful Search Rate, +0.00% (95% interval -0.30% to +0.30%). The unit is percent change relative to control; the bar is at least +0.50%. The doc says there is no pre-period comparison, so a difference between arms before the test is not ruled out. The CTR and Clicks per User gains are inferred to be \"attractive, not relevant\" results, which is a guess the cuts have not confirmed.",
+      "got": true,
+      "how": "overlap 91%"
+    }
+  ],
+  "lost": "Nowhere significant. The \"Could reverse it\" line and the \"What would change the call\" section took a second read to see that the pre-period gap is the only open item. The \"Ready\" triage line was slightly unclear: it says the explanations are inferred and would be confirmed by cuts, but the cuts are not reported as run.",
+  "question": "Can you run the pre-period comparison (or a pre-exposure A/A-style check) on Successful Search Rate and confirm the arms were balanced before launch, and if so, what does the result show?",
+  "replies": {
+    "skim": "1. Answer: The document concludes no effect was found. Successful Search Rate is +0.00% (-0.30% to +0.30%), which rules out the 0.50% change the test was built to detect. The test ran 14 days at 1,000,000 users per arm and is complete.\n\n2. Decision: Agree to stop the test without launching Ranker v7. The one open risk is that no pre-period comparison was made, so a pre-test difference between arms isn't ruled out.\n\n3. Number: +0.00% Successful Search Rate (95% interval -0.30% to +0.30%), where the bar for launch is +0.50%.\n",
+    "full": "1. **Answer:** Stop the test without launching. The ranker v7 test found no effect: Successful Search Rate moved +0.00% (95% interval -0.30% to +0.30%), which rules out the 0.50% lift the test was sized to detect. The test is at day 14 of 14 with about 1M users per arm, and the pre-period check did not run.\n\n2. **Decision:** Agree to stop the test and not launch v7. Before closing, get the pre-period comparison run, since it is the one check that could reverse the call.\n\n3. **Number:** Successful Search Rate, +0.00% (95% interval -0.30% to +0.30%). The unit is percent change relative to control; the bar is at least +0.50%.\n\n4. **Caveat:** The doc says there is no pre-period comparison, so a difference between arms before the test is not ruled out. The CTR and Clicks per User gains are inferred to be \"attractive, not relevant\" results, which is a guess the cuts have not confirmed.\n\n5. **Lost:** Nowhere significant. The \"Could reverse it\" line and the \"What would change the call\" section took a second read to see that the pre-period gap is the only open item. The \"Ready\" triage line was slightly unclear: it says the explanations are inferred and would be confirmed by cuts, but the cuts are not reported as run.\n\n6. **Question:** Can you run the pre-period comparison (or a pre-exposure A/A-style check) on Successful Search Rate and confirm the arms were balanced before launch, and if so, what does the result show?\n"
+  }
+}

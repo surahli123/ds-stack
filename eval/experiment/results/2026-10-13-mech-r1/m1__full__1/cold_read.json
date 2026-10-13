@@ -1,0 +1,53 @@
+{
+  "pass": true,
+  "skim": "2/2",
+  "full": "3/3",
+  "items": [
+    {
+      "pass": "skim",
+      "item": "answer",
+      "key": "No effect found: Successful Search Rate reads +0.00% (-0.30% to +0.30%), which rules out the 0.50% change the test was built to find.",
+      "reader": "The document concludes no effect was found. Successful Search Rate moved +0.00% (95% interval -0.30% to +0.30%), ruling out the 0.50% change the test was built to find, so the recommendation is to stop the test without launching. Agree to stop the Ranker v7 test without launching. Before closing it out, the dwell-time cut is the check that could reopen the result. If the extra clicks are mostly long clicks, the call should be revisited.",
+      "got": true,
+      "how": "overlap 87%"
+    },
+    {
+      "pass": "skim",
+      "item": "decision",
+      "key": "Agree to stop the test without launching.",
+      "reader": "Agree to stop the Ranker v7 test without launching. Before closing it out, the dwell-time cut is the check that could reopen the result. If the extra clicks are mostly long clicks, the call should be revisited. The document concludes no effect was found. Successful Search Rate moved +0.00% (95% interval -0.30% to +0.30%), ruling out the 0.50% change the test was built to find, so the recommendation is to stop the test without launching.",
+      "got": true,
+      "how": "overlap 100%"
+    },
+    {
+      "pass": "full",
+      "item": "takeaway 1",
+      "key": "Successful Search Rate +0.00% (-0.30% to +0.30%) against estimate at least 0.50% higher.",
+      "reader": "The document concludes \"No effect found\" and recommends stopping the test without launching. Successful Search Rate moved +0.00% (95% interval -0.30% to +0.30%), which rules out the 0.50% bar. The test is finished: day 14 of 14, 1,000,000 users per arm, above the planned 900,000. Agree to stop the test without launching. The document also says a pre-period comparison was not run, so confirm that check does not change the read before the stop is final. Successful Search Rate change, +0.00% (relative percent, 95% interval -0.30% to +0.30%), against a bar of at least +0.50%. The pre-period comparison was not run, so a difference between the arms before the test is not ruled out, and the document says this could make the whole read unreliable. The \"Why it moved\" explanations are marked inferred or guess, and the segment CTR rows do not reconcile with the overall CTR.",
+      "got": true,
+      "how": "overlap 80%"
+    },
+    {
+      "pass": "full",
+      "item": "takeaway 2",
+      "key": "Agree to stop the test without launching.",
+      "reader": "The document concludes \"No effect found\" and recommends stopping the test without launching. Successful Search Rate moved +0.00% (95% interval -0.30% to +0.30%), which rules out the 0.50% bar. The test is finished: day 14 of 14, 1,000,000 users per arm, above the planned 900,000. Agree to stop the test without launching. The document also says a pre-period comparison was not run, so confirm that check does not change the read before the stop is final. Successful Search Rate change, +0.00% (relative percent, 95% interval -0.30% to +0.30%), against a bar of at least +0.50%. The pre-period comparison was not run, so a difference between the arms before the test is not ruled out, and the document says this could make the whole read unreliable. The \"Why it moved\" explanations are marked inferred or guess, and the segment CTR rows do not reconcile with the overall CTR.",
+      "got": true,
+      "how": "overlap 100%"
+    },
+    {
+      "pass": "full",
+      "item": "takeaway 3",
+      "key": "Could reverse it: no pre-period comparison, so a difference between the arms before the test isn't ruled out.",
+      "reader": "The document concludes \"No effect found\" and recommends stopping the test without launching. Successful Search Rate moved +0.00% (95% interval -0.30% to +0.30%), which rules out the 0.50% bar. The test is finished: day 14 of 14, 1,000,000 users per arm, above the planned 900,000. Agree to stop the test without launching. The document also says a pre-period comparison was not run, so confirm that check does not change the read before the stop is final. Successful Search Rate change, +0.00% (relative percent, 95% interval -0.30% to +0.30%), against a bar of at least +0.50%. The pre-period comparison was not run, so a difference between the arms before the test is not ruled out, and the document says this could make the whole read unreliable. The \"Why it moved\" explanations are marked inferred or guess, and the segment CTR rows do not reconcile with the overall CTR.",
+      "got": true,
+      "how": "overlap 82%"
+    }
+  ],
+  "lost": "I reread the verdict logic. The table labels the primary metric's verdict \"unclear\", but the headline call is \"No effect found\". The document does not say whether \"unclear\" is the table's status for an interval that excludes the bar or a separate state. The \"Ready\" triage line was also hard to parse.",
+  "question": "Can you run the pre-period comparison (or a pre-exposure check) on the same 1M-per-arm population before we stop, and if the arms did differ beforehand, what is the revised read?",
+  "replies": {
+    "skim": "1. Answer: The document concludes no effect was found. Successful Search Rate moved +0.00% (95% interval -0.30% to +0.30%), ruling out the 0.50% change the test was built to find, so the recommendation is to stop the test without launching.\n\n2. Decision: Agree to stop the Ranker v7 test without launching. Before closing it out, the dwell-time cut is the check that could reopen the result. If the extra clicks are mostly long clicks, the call should be revisited.\n\n3. Number: +0.00% change in Successful Search Rate (95% interval -0.30% to +0.30%).\n",
+    "full": "1. **Answer:** The document concludes \"No effect found\" and recommends stopping the test without launching. Successful Search Rate moved +0.00% (95% interval -0.30% to +0.30%), which rules out the 0.50% bar. The test is finished: day 14 of 14, 1,000,000 users per arm, above the planned 900,000.\n\n2. **Decision:** Agree to stop the test without launching. The document also says a pre-period comparison was not run, so confirm that check does not change the read before the stop is final.\n\n3. **Number:** Successful Search Rate change, +0.00% (relative percent, 95% interval -0.30% to +0.30%), against a bar of at least +0.50%.\n\n4. **Caveat:** The pre-period comparison was not run, so a difference between the arms before the test is not ruled out, and the document says this could make the whole read unreliable. The \"Why it moved\" explanations are marked inferred or guess, and the segment CTR rows do not reconcile with the overall CTR.\n\n5. **Lost:** I reread the verdict logic. The table labels the primary metric's verdict \"unclear\", but the headline call is \"No effect found\". The document does not say whether \"unclear\" is the table's status for an interval that excludes the bar or a separate state. The \"Ready\" triage line was also hard to parse.\n\n6. **Question:** Can you run the pre-period comparison (or a pre-exposure check) on the same 1M-per-arm population before we stop, and if the arms did differ beforehand, what is the revised read?\n"
+  }
+}

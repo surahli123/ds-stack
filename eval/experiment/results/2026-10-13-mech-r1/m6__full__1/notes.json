@@ -1,0 +1,6 @@
+{"why_it_moved":[
+{"text":"Queries per User fell 1.9% while Clicks per User (+0.1%) and Sessions per User (-0.1%) stayed flat, so per-query rates like CTR (+2.1%) can rise with no better results.","label":"inferred"},
+{"text":"Successful Search Rate rose 0.81%, but Long Click Rate, Abandonment Rate and Reformulation Rate did not move, and no query class or device shows a clear gain.","label":"measured"},
+{"text":"Ranker v7 may have cut repeat or accidental queries, which would be a real gain, but nothing on the scorecard shows it yet.","label":"guess"}],
+"would_change":["Success per user (not per query) flat while queries fall: the lift is the denominator, so the bar is not met.","Success on queries where ranking changed up clearly, with untriggered queries flat: a real relevance gain.","A pre-exposure comparison showing the arms already differed before the test started."],
+"analyst_view":{"call":"escalate","reason":"The primary is a per-query rate and queries per user fell while clicks stayed flat; this may be the denominator, not better ranking."}}

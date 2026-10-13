@@ -1,0 +1,156 @@
+{
+  "readiness": {
+    "verdict": "ready",
+    "text": "Ready",
+    "first": null,
+    "reasons": [
+      "every movement triage will ask about has a candidate explanation and none conflict; the explanations are inferred from co-movements, so the cuts below would confirm them"
+    ]
+  },
+  "standard": [
+    {
+      "question": "What did you change?",
+      "answer": "ranker_model: lambdamart_v6 -> lambdamart_v7; nothing else differs between arms",
+      "ok": true
+    },
+    {
+      "question": "Is the data trustworthy?",
+      "answer": "Yes, as far as the checks reach; not checked: pre period",
+      "ok": true
+    },
+    {
+      "question": "Is the effect real, or chance?",
+      "answer": "Successful Search Rate -0.10% (-0.40% to +0.20%); its interval includes zero. Across the scorecard 5 of 57 metrics moved clearly; about 2.9 would by chance alone",
+      "ok": true,
+      "borderline": false
+    },
+    {
+      "question": "Will it last?",
+      "answer": "Probably: effect by days since exposure: first days -0.11%, last days -0.09% (trend +0.002% per day)",
+      "ok": true
+    },
+    {
+      "question": "Did the change do what it was built to do?",
+      "answer": "Not shown. If the scorecard or a cut has a coverage metric (the share of queries whose top results changed), register it as feature_metrics",
+      "ok": null
+    },
+    {
+      "question": "Metric families used:",
+      "answer": "abandonment = Abandonment Rate, ad_ctr = Ad Click Rate, autocomplete = Autocomplete Acceptance, clicks_per_user = Clicks per User, ctr = CTR, latency = Latency p95 (ms), long_click = Long Click Rate, pagination = Pagination Rate, queries_per_user = Queries per User, reformulation = Reformulation Rate, revenue = Revenue per User, sessions_per_user = Sessions per User, success = Successful Search Rate, time_to_click = Time to First Click (s), zero_result = Zero Result Rate",
+      "ok": true,
+      "note": true
+    }
+  ],
+  "chance": {
+    "tested": 57,
+    "moved": 5,
+    "expected_by_chance": 2.9
+  },
+  "questions": [
+    {
+      "metric": "Successful Search Rate",
+      "question": "Successful Search Rate was expected to rise but didn't move. Why?",
+      "kind": "primary",
+      "change": "didn't move clearly (-0.10% (-0.40% to +0.20%))",
+      "candidates": [],
+      "status": "answered by the call: the interval rules out the bar"
+    },
+    {
+      "metric": "CTR",
+      "question": "Why did CTR fall?",
+      "kind": "secondary",
+      "change": "fell 1.80% (-2.30% to -1.30%)",
+      "candidates": [
+        "recall_over_precision"
+      ],
+      "status": "untested"
+    },
+    {
+      "metric": "Zero Result Rate",
+      "question": "Why did Zero Result Rate fall?",
+      "kind": "secondary",
+      "change": "fell 12.00% (-14.00% to -10.00%)",
+      "candidates": [
+        "recall_over_precision"
+      ],
+      "status": "untested"
+    }
+  ],
+  "patterns": [
+    {
+      "id": "recall_over_precision",
+      "name": "More results for hard queries, lower precision",
+      "label": "inferred",
+      "status": "untested",
+      "mechanism": "The change returns results for queries that used to get none, but those results are weak, so averages over all queries fall.",
+      "reading": "bad",
+      "source": "Dmitriev et al., A Dirty Dozen: Twelve Common Metric Interpretation Pitfalls, KDD 2017 (ratio metrics move with their denominator); reasoned, no published case of this exact signature",
+      "families": [
+        "zero_result",
+        "ctr"
+      ],
+      "metrics": [
+        "Zero Result Rate",
+        "CTR"
+      ],
+      "evidence": [
+        "Zero Result Rate fell 12.00% (-14.00% to -10.00%)",
+        "CTR fell 1.80% (-2.30% to -1.30%)"
+      ],
+      "score": 1,
+      "deep_dives": [
+        {
+          "cut": "success and CTR on queries that had zero results in control",
+          "confirms": "these queries now get results but low success",
+          "refutes": "they succeed at the normal rate"
+        },
+        {
+          "cut": "the same metrics excluding those queries",
+          "confirms": "the rest of the traffic is flat",
+          "refutes": "the drop is broad"
+        }
+      ],
+      "exploratory": false,
+      "cut_results": []
+    }
+  ],
+  "exploratory": [],
+  "ruled_out": [],
+  "cut_results": [],
+  "deep_dives": [
+    {
+      "cut": "success and CTR on queries that had zero results in control",
+      "confirms": "these queries now get results but low success",
+      "refutes": "they succeed at the normal rate",
+      "tests": "More results for hard queries, lower precision",
+      "pattern": "recall_over_precision",
+      "scriptable": false
+    },
+    {
+      "cut": "the same metrics excluding those queries",
+      "confirms": "the rest of the traffic is flat",
+      "refutes": "the drop is broad",
+      "tests": "More results for hard queries, lower precision",
+      "pattern": "recall_over_precision",
+      "scriptable": false
+    }
+  ],
+  "families": {
+    "success": "Successful Search Rate",
+    "ctr": "CTR",
+    "long_click": "Long Click Rate",
+    "abandonment": "Abandonment Rate",
+    "reformulation": "Reformulation Rate",
+    "queries_per_user": "Queries per User",
+    "sessions_per_user": "Sessions per User",
+    "time_to_click": "Time to First Click (s)",
+    "zero_result": "Zero Result Rate",
+    "latency": "Latency p95 (ms)",
+    "ad_ctr": "Ad Click Rate",
+    "revenue": "Revenue per User",
+    "clicks_per_user": "Clicks per User",
+    "pagination": "Pagination Rate",
+    "autocomplete": "Autocomplete Acceptance"
+  },
+  "notes": []
+}

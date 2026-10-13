@@ -1,0 +1,53 @@
+{
+  "pass": true,
+  "skim": "2/2",
+  "full": "3/3",
+  "items": [
+    {
+      "pass": "skim",
+      "item": "answer",
+      "key": "No effect found: Successful Search Rate reads +0.00% (-0.30% to +0.30%), which rules out the 0.50% change the test was built to find.",
+      "reader": "The document concludes that Ranker v7 had no detectable effect on Successful Search Rate (+0.00%, 95% interval \u22120.30% to +0.30%) and recommends stopping the test without launching. The test has finished (day 14 of 14, 1,000,000 users per arm). Agree to stop the test without launching Ranker v7.",
+      "got": true,
+      "how": "overlap 0%; grader: same fact"
+    },
+    {
+      "pass": "skim",
+      "item": "decision",
+      "key": "Agree to stop the test without launching.",
+      "reader": "Agree to stop the test without launching Ranker v7. The document concludes that Ranker v7 had no detectable effect on Successful Search Rate (+0.00%, 95% interval \u22120.30% to +0.30%) and recommends stopping the test without launching. The test has finished (day 14 of 14, 1,000,000 users per arm).",
+      "got": true,
+      "how": "overlap 100%"
+    },
+    {
+      "pass": "full",
+      "item": "takeaway 1",
+      "key": "Successful Search Rate +0.00% (-0.30% to +0.30%) against estimate at least 0.50% higher.",
+      "reader": "Stop the test without launching. Ranker v7 showed no effect on Successful Search Rate (+0.00%, 95% interval -0.30% to +0.30%), which rules out the 0.50% lift the test was sized to detect. Current state: day 14 of 14 complete, all planned users run, guardrails within margin. Agree to stop the test and not launch v7. One gap to close first: the pre-period comparison was not run, so the arms' pre-test equivalence is unverified. Successful Search Rate change, +0.00% (interval -0.30% to +0.30%). The pre-period check was not run, so a pre-existing difference between arms can't be ruled out. The document says this could reverse the \"no effect\" call.",
+      "got": true,
+      "how": "overlap 60%"
+    },
+    {
+      "pass": "full",
+      "item": "takeaway 2",
+      "key": "Agree to stop the test without launching.",
+      "reader": "Stop the test without launching. Ranker v7 showed no effect on Successful Search Rate (+0.00%, 95% interval -0.30% to +0.30%), which rules out the 0.50% lift the test was sized to detect. Current state: day 14 of 14 complete, all planned users run, guardrails within margin. Agree to stop the test and not launch v7. One gap to close first: the pre-period comparison was not run, so the arms' pre-test equivalence is unverified. Successful Search Rate change, +0.00% (interval -0.30% to +0.30%). The pre-period check was not run, so a pre-existing difference between arms can't be ruled out. The document says this could reverse the \"no effect\" call.",
+      "got": true,
+      "how": "overlap 100%"
+    },
+    {
+      "pass": "full",
+      "item": "takeaway 3",
+      "key": "Could reverse it: no pre-period comparison, so a difference between the arms before the test isn't ruled out.",
+      "reader": "Stop the test without launching. Ranker v7 showed no effect on Successful Search Rate (+0.00%, 95% interval -0.30% to +0.30%), which rules out the 0.50% lift the test was sized to detect. Current state: day 14 of 14 complete, all planned users run, guardrails within margin. Agree to stop the test and not launch v7. One gap to close first: the pre-period comparison was not run, so the arms' pre-test equivalence is unverified. Successful Search Rate change, +0.00% (interval -0.30% to +0.30%). The pre-period check was not run, so a pre-existing difference between arms can't be ruled out. The document says this could reverse the \"no effect\" call.",
+      "got": true,
+      "how": "overlap 82%"
+    }
+  ],
+  "lost": "Nowhere. The \"Ready\" triage label and the \"[inferred]\" tags on the CTR explanation were clear enough. I did note that \"Ready\" is ambiguous, since the explanations are unconfirmed.",
+  "question": "Can you run the pre-exposure comparison (and the long-dwell satisfied-click cut) before we stop, so we know the flat result isn't an artifact of pre-existing differences between the arms?",
+  "replies": {
+    "skim": "1. Answer: The document concludes that Ranker v7 had no detectable effect on Successful Search Rate (+0.00%, 95% interval \u22120.30% to +0.30%) and recommends stopping the test without launching. The test has finished (day 14 of 14, 1,000,000 users per arm).\n2. Decision: Agree to stop the test without launching Ranker v7.\n3. Number: +0.00% change in Successful Search Rate (percent, 95% interval \u22120.30% to +0.30%).\n",
+    "full": "1. **Answer:** Stop the test without launching. Ranker v7 showed no effect on Successful Search Rate (+0.00%, 95% interval -0.30% to +0.30%), which rules out the 0.50% lift the test was sized to detect. Current state: day 14 of 14 complete, all planned users run, guardrails within margin.\n\n2. **Decision:** Agree to stop the test and not launch v7. One gap to close first: the pre-period comparison was not run, so the arms' pre-test equivalence is unverified.\n\n3. **Number:** Successful Search Rate change, +0.00% (interval -0.30% to +0.30%).\n\n4. **Caveat:** The pre-period check was not run, so a pre-existing difference between arms can't be ruled out. The document says this could reverse the \"no effect\" call.\n\n5. **Lost:** Nowhere. The \"Ready\" triage label and the \"[inferred]\" tags on the CTR explanation were clear enough. I did note that \"Ready\" is ambiguous, since the explanations are unconfirmed.\n\n6. **Question:** Can you run the pre-exposure comparison (and the long-dwell satisfied-click cut) before we stop, so we know the flat result isn't an artifact of pre-existing differences between the arms?\n"
+  }
+}

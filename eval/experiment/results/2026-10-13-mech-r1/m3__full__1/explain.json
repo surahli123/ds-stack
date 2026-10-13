@@ -1,0 +1,412 @@
+{
+  "readiness": {
+    "verdict": "ready",
+    "text": "Ready",
+    "first": null,
+    "reasons": [
+      "every movement triage will ask about has a candidate explanation and none conflict; the explanations are inferred from co-movements, so the cuts below would confirm them"
+    ]
+  },
+  "standard": [
+    {
+      "question": "What did you change?",
+      "answer": "ranker_model: lambdamart_v6 -> lambdamart_v7; nothing else differs between arms",
+      "ok": true
+    },
+    {
+      "question": "Is the data trustworthy?",
+      "answer": "Yes, as far as the checks reach; not checked: pre period",
+      "ok": true
+    },
+    {
+      "question": "Is the effect real, or chance?",
+      "answer": "Successful Search Rate +0.00% (-0.30% to +0.30%); its interval includes zero. Across the scorecard 4 of 57 metrics moved clearly; about 2.9 would by chance alone",
+      "ok": true,
+      "borderline": false
+    },
+    {
+      "question": "Will it last?",
+      "answer": "Probably: effect by days since exposure: first days -0.01%, last days +0.01% (trend +0.002% per day)",
+      "ok": true
+    },
+    {
+      "question": "Did the change do what it was built to do?",
+      "answer": "Not shown. If the scorecard or a cut has a coverage metric (the share of queries whose top results changed), register it as feature_metrics",
+      "ok": null
+    },
+    {
+      "question": "Metric families used:",
+      "answer": "abandonment = Abandonment Rate, ad_ctr = Ad Click Rate, autocomplete = Autocomplete Acceptance, clicks_per_user = Clicks per User, ctr = CTR, latency = Latency p95 (ms), long_click = Long Click Rate, pagination = Pagination Rate, queries_per_user = Queries per User, reformulation = Reformulation Rate, revenue = Revenue per User, sessions_per_user = Sessions per User, success = Successful Search Rate, time_to_click = Time to First Click (s), zero_result = Zero Result Rate",
+      "ok": true,
+      "note": true
+    }
+  ],
+  "chance": {
+    "tested": 57,
+    "moved": 4,
+    "expected_by_chance": 2.9
+  },
+  "questions": [
+    {
+      "metric": "Successful Search Rate",
+      "question": "Successful Search Rate was expected to rise but didn't move. Why?",
+      "kind": "primary",
+      "change": "didn't move clearly (+0.00% (-0.30% to +0.30%))",
+      "candidates": [
+        "speed_cost",
+        "bad_abandonment"
+      ],
+      "status": "untested"
+    },
+    {
+      "metric": "Latency p95 (ms)",
+      "question": "Why did Latency p95 (ms) rise?",
+      "kind": "guardrail",
+      "change": "rose 6.00% (+5.20% to +6.80%)",
+      "candidates": [
+        "speed_cost"
+      ],
+      "status": "untested"
+    },
+    {
+      "metric": "Abandonment Rate",
+      "question": "Why did Abandonment Rate rise?",
+      "kind": "guardrail",
+      "change": "rose 1.60% (+1.20% to +2.00%)",
+      "candidates": [
+        "speed_cost",
+        "bad_abandonment"
+      ],
+      "status": "untested"
+    },
+    {
+      "metric": "CTR",
+      "question": "Why did CTR fall?",
+      "kind": "secondary",
+      "change": "fell 1.50% (-1.90% to -1.10%)",
+      "candidates": [
+        "speed_cost",
+        "bad_abandonment"
+      ],
+      "status": "untested"
+    }
+  ],
+  "patterns": [
+    {
+      "id": "speed_cost",
+      "name": "Slower results cost engagement",
+      "label": "inferred",
+      "status": "untested",
+      "mechanism": "The treatment serves results more slowly, and slower pages lose clicks and raise abandonment, which can hide a relevance gain. Speed effects tend to grow over weeks rather than fade.",
+      "reading": "bad",
+      "source": "Brutlag, Google, 2009 (400 ms delay: -0.44% searches in weeks 1-3, -0.76% in weeks 4-6, still -0.21% after removal); Dmitriev et al., A Dirty Dozen: Twelve Common Metric Interpretation Pitfalls, KDD 2017 (latency moved by page mix)",
+      "families": [
+        "latency",
+        "abandonment",
+        "ctr",
+        "success"
+      ],
+      "metrics": [
+        "Latency p95 (ms)",
+        "Abandonment Rate",
+        "CTR",
+        "Successful Search Rate"
+      ],
+      "evidence": [
+        "Latency p95 (ms) rose 6.00% (+5.20% to +6.80%)",
+        "Abandonment Rate rose 1.60% (+1.20% to +2.00%)",
+        "CTR fell 1.50% (-1.90% to -1.10%)",
+        "Successful Search Rate didn't move clearly (+0.00% (-0.30% to +0.30%))"
+      ],
+      "score": 3,
+      "deep_dives": [
+        {
+          "cut": "abandonment and CTR by latency bucket, per arm",
+          "confirms": "the loss sits in the slow buckets",
+          "refutes": "the loss is flat across latency buckets",
+          "needs": {
+            "segment_of": "abandonment",
+            "by": "latency"
+          },
+          "confirms_when": {
+            "carries_most": "slow"
+          },
+          "refutes_when": {
+            "even": true
+          }
+        },
+        {
+          "cut": "latency by page type and load type (cached reloads vs fresh loads), by arm",
+          "confirms": "latency rises on the same page types",
+          "refutes": "the page mix changed, so latency moved without pages getting slower"
+        },
+        {
+          "cut": "effect by device and network type",
+          "confirms": "mobile or slow networks carry the loss",
+          "refutes": "the loss is the same everywhere"
+        },
+        {
+          "cut": "relevance metrics on queries where latency didn't change",
+          "confirms": "relevance improves once latency is held fixed",
+          "refutes": "no gain even at equal latency"
+        }
+      ],
+      "exploratory": false,
+      "cut_results": []
+    },
+    {
+      "id": "bad_abandonment",
+      "name": "Worse results make users give up",
+      "label": "inferred",
+      "status": "untested",
+      "mechanism": "Users leave without clicking because results got worse, not because the answer was on the page.",
+      "reading": "bad",
+      "source": "Li, Huffman, Tokuda, SIGIR 2009 (good vs bad abandonment); Song, Shi, Fu, WWW 2013",
+      "families": [
+        "abandonment",
+        "success",
+        "ctr"
+      ],
+      "metrics": [
+        "Abandonment Rate",
+        "Successful Search Rate",
+        "CTR"
+      ],
+      "evidence": [
+        "Abandonment Rate rose 1.60% (+1.20% to +2.00%)",
+        "Successful Search Rate didn't move clearly (+0.00% (-0.30% to +0.30%))",
+        "CTR fell 1.50% (-1.90% to -1.10%)"
+      ],
+      "score": 1,
+      "deep_dives": [
+        {
+          "cut": "abandonment on queries with an answer or rich snippet vs without",
+          "confirms": "the rise sits on queries without an answer",
+          "refutes": "the rise sits on answer-bearing queries",
+          "needs": {
+            "segment_of": "abandonment",
+            "by": "answer"
+          },
+          "confirms_when": {
+            "carries_most": "without answer"
+          },
+          "refutes_when": {
+            "carries_most": "with answer"
+          }
+        },
+        {
+          "cut": "config diff of presentation parameters (answers, rich snippets)",
+          "confirms": "only ranking differs",
+          "refutes": "an answer or snippet parameter differs"
+        }
+      ],
+      "exploratory": false,
+      "cut_results": []
+    }
+  ],
+  "exploratory": [],
+  "ruled_out": [
+    {
+      "id": "good_abandonment",
+      "name": "Answers on the page reduce clicks",
+      "label": "inferred",
+      "status": "untested",
+      "mechanism": "More users get their answer from the results page itself (answers, richer snippets), so they leave without clicking and don't retry.",
+      "reading": "good",
+      "source": "Li, Huffman, Tokuda, SIGIR 2009 (good abandonment, higher on mobile); Pew Research 2025 (clicks 8% vs 15% with AI summaries)",
+      "families": [
+        "abandonment",
+        "success",
+        "ctr"
+      ],
+      "metrics": [
+        "Abandonment Rate",
+        "Successful Search Rate",
+        "CTR"
+      ],
+      "evidence": [
+        "Abandonment Rate rose 1.60% (+1.20% to +2.00%)",
+        "Successful Search Rate didn't move clearly (+0.00% (-0.30% to +0.30%))",
+        "CTR fell 1.50% (-1.90% to -1.10%)"
+      ],
+      "score": 1,
+      "deep_dives": [
+        {
+          "cut": "abandonment on queries with an answer or rich snippet vs without",
+          "confirms": "the rise sits on answer-bearing queries",
+          "refutes": "the rise sits on queries without an answer",
+          "needs": {
+            "segment_of": "abandonment",
+            "by": "answer"
+          },
+          "confirms_when": {
+            "carries_most": "with answer"
+          },
+          "refutes_when": {
+            "carries_most": "without answer"
+          }
+        },
+        {
+          "cut": "a similar query issued again within 5 minutes after an abandoned query",
+          "confirms": "abandoned users don't come back to retry",
+          "refutes": "abandoned users retry",
+          "needs": {
+            "metric": "requery"
+          },
+          "confirms_when": {
+            "requery": "flat_or_down"
+          },
+          "refutes_when": {
+            "requery": "up"
+          }
+        },
+        {
+          "cut": "config diff of presentation parameters (answers, rich snippets)",
+          "confirms": "an answer or snippet parameter differs between arms",
+          "refutes": "only ranking differs (this doesn't rule it out: ranking can surface such results too)",
+          "needs": {
+            "config": "presentation"
+          },
+          "confirms_when": {
+            "presentation_changed": true
+          }
+        },
+        {
+          "cut": "abandonment by device",
+          "confirms": "the rise is larger on mobile, where good abandonment is common",
+          "refutes": "the rise is the same on desktop",
+          "needs": {
+            "segment_of": "abandonment",
+            "by": "device"
+          },
+          "confirms_when": {
+            "carries_most": "mobile"
+          }
+        }
+      ],
+      "exploratory": false,
+      "ruled_out_by": [
+        "Latency p95 (ms) rose 6.00% (+5.20% to +6.80%)"
+      ]
+    },
+    {
+      "id": "mixed_wins_losses",
+      "name": "Some queries win, others lose",
+      "label": "inferred",
+      "status": "untested",
+      "mechanism": "The change helps many queries and hurts others, so averages hide both: more clicks overall while a slice of queries is abandoned more.",
+      "reading": "mixed",
+      "source": "Dmitriev et al., A Dirty Dozen: Twelve Common Metric Interpretation Pitfalls, KDD 2017 (heterogeneous effects); reasoned from averages hiding opposite effects",
+      "families": [
+        "abandonment",
+        "success"
+      ],
+      "metrics": [
+        "Abandonment Rate",
+        "Successful Search Rate"
+      ],
+      "evidence": [
+        "Abandonment Rate rose 1.60% (+1.20% to +2.00%)",
+        "Successful Search Rate didn't move clearly (+0.00% (-0.30% to +0.30%))"
+      ],
+      "score": 0,
+      "deep_dives": [
+        {
+          "cut": "per-query win/loss: share of queries whose success rose vs fell",
+          "confirms": "a sizeable group of losing queries",
+          "refutes": "losses are spread thinly, not concentrated"
+        },
+        {
+          "cut": "abandonment by query class and query length",
+          "confirms": "the abandonment rise sits in one class",
+          "refutes": "abandonment rises evenly"
+        }
+      ],
+      "exploratory": false,
+      "ruled_out_by": [
+        "CTR fell 1.50% (-1.90% to -1.10%)"
+      ]
+    }
+  ],
+  "cut_results": [],
+  "deep_dives": [
+    {
+      "cut": "abandonment and CTR by latency bucket, per arm",
+      "confirms": "the loss sits in the slow buckets",
+      "refutes": "the loss is flat across latency buckets",
+      "needs": {
+        "segment_of": "abandonment",
+        "by": "latency"
+      },
+      "confirms_when": {
+        "carries_most": "slow"
+      },
+      "refutes_when": {
+        "even": true
+      },
+      "tests": "Slower results cost engagement",
+      "pattern": "speed_cost",
+      "scriptable": true
+    },
+    {
+      "cut": "abandonment on queries with an answer or rich snippet vs without",
+      "confirms": "the rise sits on queries without an answer",
+      "refutes": "the rise sits on answer-bearing queries",
+      "needs": {
+        "segment_of": "abandonment",
+        "by": "answer"
+      },
+      "confirms_when": {
+        "carries_most": "without answer"
+      },
+      "refutes_when": {
+        "carries_most": "with answer"
+      },
+      "tests": "Worse results make users give up",
+      "pattern": "bad_abandonment",
+      "scriptable": true
+    },
+    {
+      "cut": "latency by page type and load type (cached reloads vs fresh loads), by arm",
+      "confirms": "latency rises on the same page types",
+      "refutes": "the page mix changed, so latency moved without pages getting slower",
+      "tests": "Slower results cost engagement",
+      "pattern": "speed_cost",
+      "scriptable": false
+    },
+    {
+      "cut": "config diff of presentation parameters (answers, rich snippets)",
+      "confirms": "only ranking differs",
+      "refutes": "an answer or snippet parameter differs",
+      "tests": "Worse results make users give up",
+      "pattern": "bad_abandonment",
+      "scriptable": false
+    },
+    {
+      "cut": "effect by device and network type",
+      "confirms": "mobile or slow networks carry the loss",
+      "refutes": "the loss is the same everywhere",
+      "tests": "Slower results cost engagement",
+      "pattern": "speed_cost",
+      "scriptable": false
+    }
+  ],
+  "families": {
+    "success": "Successful Search Rate",
+    "ctr": "CTR",
+    "long_click": "Long Click Rate",
+    "abandonment": "Abandonment Rate",
+    "reformulation": "Reformulation Rate",
+    "queries_per_user": "Queries per User",
+    "sessions_per_user": "Sessions per User",
+    "time_to_click": "Time to First Click (s)",
+    "zero_result": "Zero Result Rate",
+    "latency": "Latency p95 (ms)",
+    "ad_ctr": "Ad Click Rate",
+    "revenue": "Revenue per User",
+    "clicks_per_user": "Clicks per User",
+    "pagination": "Pagination Rate",
+    "autocomplete": "Autocomplete Acceptance"
+  },
+  "notes": []
+}

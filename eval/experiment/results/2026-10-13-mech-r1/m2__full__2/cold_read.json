@@ -1,0 +1,53 @@
+{
+  "pass": true,
+  "skim": "2/2",
+  "full": "3/3",
+  "items": [
+    {
+      "pass": "skim",
+      "item": "answer",
+      "key": "Don't ship: Successful Search Rate fell 0.72% (-1.12% to -0.32%), the wrong way.",
+      "reader": "Don't ship. Ranker v7 made Successful Search Rate worse: -0.72% (95% interval -1.12% to -0.32%), and the 14-day test is complete. Agree not to launch, and leave it to the owner whether to iterate on the ranker.",
+      "got": true,
+      "how": "overlap 73%"
+    },
+    {
+      "pass": "skim",
+      "item": "decision",
+      "key": "Agree not to launch; the owner decides whether to iterate.",
+      "reader": "Agree not to launch, and leave it to the owner whether to iterate on the ranker. Don't ship. Ranker v7 made Successful Search Rate worse: -0.72% (95% interval -1.12% to -0.32%), and the 14-day test is complete.",
+      "got": true,
+      "how": "overlap 83%"
+    },
+    {
+      "pass": "full",
+      "item": "takeaway 1",
+      "key": "Successful Search Rate -0.72% (-1.12% to -0.32%) against estimate at least 0.50% higher.",
+      "reader": "The document recommends not launching Ranker v7. Successful Search Rate, the primary metric, fell 0.72% (95% interval -1.12% to -0.32%), against a bar of at least +0.50%. The test is finished: day 14 of 14, 1,000,000 users per arm, above the planned 900,000. The four other guardrails are within margin. The owner decides whether to iterate. Agree not to launch. Before the owner decides whether to iterate, run the pre-exposure comparison. The document says that if the arms already differed on Successful Search Rate before exposure, the test is broken, and that check was not run. Query-class cuts are also worth running, since they would show whether a revised ranker is worth trying. The -0.72% change in Successful Search Rate (primary), with its interval of -1.12% to -0.32%. The validity of the test is unverified. The pre-period check was not run, so nothing shows the arms were comparable before exposure. The explanation for the drop is also inferred, not measured: users reformulate and search more because results are worse. The document's own \"why\" section marks the query-class explanation as a guess, and no cuts have been run. The \"Ready\" triage label overstates this, since the explanations are inferred and the cuts would only confirm them.",
+      "got": true,
+      "how": "overlap 82%"
+    },
+    {
+      "pass": "full",
+      "item": "takeaway 2",
+      "key": "Agree not to launch; the owner decides whether to iterate.",
+      "reader": "The document recommends not launching Ranker v7. Successful Search Rate, the primary metric, fell 0.72% (95% interval -1.12% to -0.32%), against a bar of at least +0.50%. The test is finished: day 14 of 14, 1,000,000 users per arm, above the planned 900,000. The four other guardrails are within margin. The owner decides whether to iterate. Agree not to launch. Before the owner decides whether to iterate, run the pre-exposure comparison. The document says that if the arms already differed on Successful Search Rate before exposure, the test is broken, and that check was not run. Query-class cuts are also worth running, since they would show whether a revised ranker is worth trying. The -0.72% change in Successful Search Rate (primary), with its interval of -1.12% to -0.32%. The validity of the test is unverified. The pre-period check was not run, so nothing shows the arms were comparable before exposure. The explanation for the drop is also inferred, not measured: users reformulate and search more because results are worse. The document's own \"why\" section marks the query-class explanation as a guess, and no cuts have been run. The \"Ready\" triage label overstates this, since the explanations are inferred and the cuts would only confirm them.",
+      "got": true,
+      "how": "overlap 100%"
+    },
+    {
+      "pass": "full",
+      "item": "takeaway 3",
+      "key": "Could reverse it: only a version where Successful Search Rate improves.",
+      "reader": "The document recommends not launching Ranker v7. Successful Search Rate, the primary metric, fell 0.72% (95% interval -1.12% to -0.32%), against a bar of at least +0.50%. The test is finished: day 14 of 14, 1,000,000 users per arm, above the planned 900,000. The four other guardrails are within margin. The owner decides whether to iterate. Agree not to launch. Before the owner decides whether to iterate, run the pre-exposure comparison. The document says that if the arms already differed on Successful Search Rate before exposure, the test is broken, and that check was not run. Query-class cuts are also worth running, since they would show whether a revised ranker is worth trying. The -0.72% change in Successful Search Rate (primary), with its interval of -1.12% to -0.32%. The validity of the test is unverified. The pre-period check was not run, so nothing shows the arms were comparable before exposure. The explanation for the drop is also inferred, not measured: users reformulate and search more because results are worse. The document's own \"why\" section marks the query-class explanation as a guess, and no cuts have been run. The \"Ready\" triage label overstates this, since the explanations are inferred and the cuts would only confirm them.",
+      "got": true,
+      "how": "overlap 57%"
+    }
+  ],
+  "lost": "I had to reread in a few places:",
+  "question": "Was the pre-period check run, or can it be run before the owner decides whether to iterate? It is the one check that could make this result invalid, and the document says it was not run.",
+  "replies": {
+    "skim": "1. Answer: Don't ship. Ranker v7 made Successful Search Rate worse: -0.72% (95% interval -1.12% to -0.32%), and the 14-day test is complete.\n2. Decision: Agree not to launch, and leave it to the owner whether to iterate on the ranker.\n3. Number: -0.72% change in Successful Search Rate (primary metric, versus a bar of at least +0.50%).\n",
+    "full": "1. **Answer:** The document recommends not launching Ranker v7. Successful Search Rate, the primary metric, fell 0.72% (95% interval -1.12% to -0.32%), against a bar of at least +0.50%. The test is finished: day 14 of 14, 1,000,000 users per arm, above the planned 900,000. The four other guardrails are within margin. The owner decides whether to iterate.\n\n2. **Decision:** Agree not to launch. Before the owner decides whether to iterate, run the pre-exposure comparison. The document says that if the arms already differed on Successful Search Rate before exposure, the test is broken, and that check was not run. Query-class cuts are also worth running, since they would show whether a revised ranker is worth trying.\n\n3. **Number:** The -0.72% change in Successful Search Rate (primary), with its interval of -1.12% to -0.32%.\n\n4. **Caveat:** The validity of the test is unverified. The pre-period check was not run, so nothing shows the arms were comparable before exposure. The explanation for the drop is also inferred, not measured: users reformulate and search more because results are worse. The document's own \"why\" section marks the query-class explanation as a guess, and no cuts have been run. The \"Ready\" triage label overstates this, since the explanations are inferred and the cuts would only confirm them.\n\n5. **Lost:** I had to reread in a few places:\n   - The \"Triage: Ready\" line, because it conflicts with the \"inferred\" and \"guess\" labels further down.\n   - The verdict column says only \"worse\", so I had to work out from the appendix's call definitions that this is a \"Don't ship\" result rather than \"Escalate\". The document never states the mapping directly.\n   - \"Could reverse it\" and \"whole weeks\" in the status line were unexplained.\n   - The FDR correction method for the 52 secondary metrics is unclear.\n\n6. **Question:** Was the pre-period check run, or can it be run before the owner decides whether to iterate? It is the one check that could make this result invalid, and the document says it was not run.\n"
+  }
+}

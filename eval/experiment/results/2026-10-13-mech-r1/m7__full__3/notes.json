@@ -1,0 +1,6 @@
+{"why_it_moved":[
+{"text":"The overall rate is flat because gains and losses cancel by query class: Successful Search Rate is +3.40% on Tail Queries, -0.53% on Head Queries and -1.07% on Navigational.","label":"measured"},
+{"text":"The new ranker probably surfaces better results for rare, long-tail queries and slightly displaces the right top result on navigational ones; Reformulation Rate on Navigational rose 1.71%.","label":"inferred"},
+{"text":"CTR - Mobile fell 1.43% while Successful Search Rate - Mobile did not clearly move; no cut has been run on it.","label":"guess"}],
+"would_change":["A Tail Queries cut on triggered queries showing the lift holds and the other classes do not fall would justify a rerun aimed at tail traffic.","A sample split or logging imbalance within Tail Queries by arm would mean the tail lift is an artifact.","A pre-exposure comparison of Successful Search Rate showing a gap between arms would undermine this read."],
+"analyst_view":null}

@@ -1,0 +1,8 @@
+{"why_it_moved":[
+{"text":"Queries per User rose 2.60% and Reformulation Rate rose 5.50%. Searchers retry because first results miss. Successful Search Rate fell 0.45%.","label":"inferred"},
+{"text":"Successful Search Rate - Desktop rose 1.52%. Mobile and informational queries did not follow. No cut has been run on this yet.","label":"guess"},
+{"text":"Latency p95 (ms) is flat at +0.20%, so speed does not explain the moves.","label":"measured"}],
+"would_change":[
+"Registering Successful Search Rate, as the hypothesis states, as the primary: the pre-registration lists Queries per User instead.",
+"Success per query flat or up with no rise in repeat queries would show the extra queries are healthy."],
+"analyst_view":{"call":"escalate","reason":"The hypothesis and config name Successful Search Rate as primary, and it fell 0.45% while Reformulation Rate rose 5.50%. More searching with less success can mean worse results."}}

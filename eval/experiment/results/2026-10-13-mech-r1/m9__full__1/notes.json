@@ -1,0 +1,6 @@
+{"why_it_moved":[
+{"text":"Successful Search Rate is flat at +0.02% and the daily series is flat too, so v7 ranks differently but does not change how often searches succeed.","label":"measured"},
+{"text":"Time to First Click on tail queries is the one clear mover, and it got slower; one mover among this many metrics is what luck alone gives, so treat it as a lead.","label":"inferred"},
+{"text":"No coverage metric (share of queries whose top results changed) is on the scorecard, so we can't say whether v7 changed enough results to matter.","label":"guess"}],
+"would_change":["A pre-exposure comparison of Successful Search Rate showing a gap between arms before exposure would void this result.","A tail-query cut showing Successful Search Rate or Abandonment Rate worse there would make the tail slowdown a real harm for triage."],
+"analyst_view":null}

@@ -1,0 +1,6 @@
+{"why_it_moved":[
+{"text":"CTR rose 2.10% mostly through its denominator. Queries per User fell 1.90% while Clicks per User stayed flat (+0.10%): same clicks over fewer searches.","label":"measured"},
+{"text":"Successful Search Rate rose 0.81%, but Long Click Rate (-0.03%), Reformulation Rate and Abandonment Rate did not improve, so a pure relevance gain is not yet shown.","label":"inferred"},
+{"text":"Segment cuts of Successful Search Rate are all flat or negative (Informational -0.89%) though the total rose; search mix may differ between arms.","label":"guess"}],
+"would_change":["Success on triggered queries flat while untriggered carries the lift, or the lift tied to the Queries per User drop, would make the win a counting effect.","A pre-exposure comparison showing the arms already differed on Successful Search Rate would void the result.","Segment mix shifting between arms in a per-user cut would explain the segment-versus-total gap."],
+"analyst_view":null}

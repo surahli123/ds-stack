@@ -1,0 +1,362 @@
+{
+  "readiness": {
+    "verdict": "ready",
+    "text": "Ready",
+    "first": null,
+    "reasons": [
+      "every movement triage will ask about has a candidate explanation and none conflict; the explanations are inferred from co-movements, so the cuts below would confirm them"
+    ]
+  },
+  "standard": [
+    {
+      "question": "What did you change?",
+      "answer": "ranker_model: lambdamart_v6 -> lambdamart_v7; nothing else differs between arms",
+      "ok": true
+    },
+    {
+      "question": "Is the data trustworthy?",
+      "answer": "Yes, as far as the checks reach; not checked: pre period",
+      "ok": true
+    },
+    {
+      "question": "Is the effect real, or chance?",
+      "answer": "Successful Search Rate +0.81% (+0.41% to +1.21%); its interval excludes zero. Across the scorecard 6 of 57 metrics moved clearly; about 2.9 would by chance alone",
+      "ok": true,
+      "borderline": false
+    },
+    {
+      "question": "Will it last?",
+      "answer": "Probably: effect by days since exposure: first days +0.80%, last days +0.82% (trend +0.002% per day)",
+      "ok": true
+    },
+    {
+      "question": "Did the change do what it was built to do?",
+      "answer": "Not shown. If the scorecard or a cut has a coverage metric (the share of queries whose top results changed), register it as feature_metrics",
+      "ok": null
+    },
+    {
+      "question": "Metric families used:",
+      "answer": "abandonment = Abandonment Rate, ad_ctr = Ad Click Rate, autocomplete = Autocomplete Acceptance, clicks_per_user = Clicks per User, ctr = CTR, latency = Latency p95 (ms), long_click = Long Click Rate, pagination = Pagination Rate, queries_per_user = Queries per User, reformulation = Reformulation Rate, revenue = Revenue per User, sessions_per_user = Sessions per User, success = Successful Search Rate, time_to_click = Time to First Click (s), zero_result = Zero Result Rate",
+      "ok": true,
+      "note": true
+    }
+  ],
+  "chance": {
+    "tested": 57,
+    "moved": 6,
+    "expected_by_chance": 2.9
+  },
+  "questions": [
+    {
+      "metric": "Successful Search Rate",
+      "question": "Why did Successful Search Rate rise?",
+      "kind": "primary",
+      "change": "rose 0.81% (+0.41% to +1.21%)",
+      "candidates": [
+        "relevance_gain",
+        "as_hypothesized"
+      ],
+      "status": "untested"
+    },
+    {
+      "metric": "CTR",
+      "question": "Why did CTR rise?",
+      "kind": "secondary",
+      "change": "rose 2.10% (+1.60% to +2.60%)",
+      "candidates": [
+        "denominator_driven",
+        "relevance_gain"
+      ],
+      "status": "confirmed by the scorecard"
+    },
+    {
+      "metric": "Queries per User",
+      "question": "Why did Queries per User fall?",
+      "kind": "secondary",
+      "change": "fell 1.90% (-2.60% to -1.20%)",
+      "candidates": [
+        "denominator_driven"
+      ],
+      "status": "confirmed by the scorecard"
+    }
+  ],
+  "patterns": [
+    {
+      "id": "relevance_gain",
+      "name": "Better results, more satisfied clicks",
+      "label": "inferred",
+      "status": "untested",
+      "mechanism": "The ranking puts better results where users look, so more searches end in a satisfying click.",
+      "reading": "good",
+      "source": "Kohavi, Tang, Xu 2020, ch. 20 (triggered analysis needs counterfactual logging, and the untriggered complement must look like an A/A)",
+      "families": [
+        "success",
+        "ctr",
+        "reformulation",
+        "abandonment",
+        "time_to_click"
+      ],
+      "metrics": [
+        "Successful Search Rate",
+        "CTR",
+        "Reformulation Rate",
+        "Abandonment Rate",
+        "Time to First Click (s)"
+      ],
+      "evidence": [
+        "Successful Search Rate rose 0.81% (+0.41% to +1.21%)",
+        "CTR rose 2.10% (+1.60% to +2.60%)",
+        "Reformulation Rate didn't move clearly (+0.17% (-0.63% to +0.97%))",
+        "Abandonment Rate didn't move clearly (+0.10% (-0.50% to +0.70%))",
+        "Time to First Click (s) didn't move clearly (-0.02% (-1.02% to +0.98%))"
+      ],
+      "score": 4,
+      "deep_dives": [
+        {
+          "cut": "success on triggered queries only (where the ranking actually changed) vs untriggered",
+          "confirms": "a larger effect on triggered queries, diluted overall",
+          "refutes": "the same effect on untouched queries, pointing to something other than ranking",
+          "needs": {
+            "segment_of": "success",
+            "by": "triggered"
+          },
+          "confirms_when": {
+            "carries_most": "triggered"
+          },
+          "refutes_when": {
+            "even": true
+          }
+        },
+        {
+          "cut": "success by query class and device",
+          "confirms": "the gain is largest where the change acts (for example tail queries for a recall change)",
+          "refutes": "the gain is uniform, which a ranking change rarely produces"
+        }
+      ],
+      "exploratory": false,
+      "cut_results": []
+    },
+    {
+      "id": "denominator_driven",
+      "name": "A ratio moved because its denominator moved",
+      "label": "measured",
+      "status": "confirmed by the scorecard",
+      "mechanism": "CTR moved because Queries per User moved (fell 1.90% (-2.60% to -1.20%)), not because Clicks per User changed; the ratio's story is about volume, not quality.",
+      "reading": "neutral",
+      "source": "Dmitriev et al., A Dirty Dozen: Twelve Common Metric Interpretation Pitfalls, KDD 2017 (module CTR -40% while clicks +74% and impressions +200%)",
+      "families": [
+        "ctr",
+        "clicks_per_user",
+        "queries_per_user"
+      ],
+      "metrics": [
+        "CTR",
+        "Clicks per User",
+        "Queries per User"
+      ],
+      "evidence": [
+        "CTR rose 2.10% (+1.60% to +2.60%)",
+        "Clicks per User didn't move clearly (+0.10% (-0.70% to +0.90%))",
+        "Queries per User fell 1.90% (-2.60% to -1.20%)",
+        "95% of the split comes from Queries per User"
+      ],
+      "score": 3,
+      "deep_dives": [
+        {
+          "cut": "Clicks per User and Queries per User per user, side by side",
+          "confirms": "the denominator carries the change",
+          "refutes": "the numerator moves too"
+        },
+        {
+          "cut": "what changed the Queries per User (query volume, sessions, logging of searches)",
+          "confirms": "a volume or logging change explains it",
+          "refutes": "volume is steady"
+        },
+        {
+          "cut": "the same clicks over the finest denominator that doesn't move itself (for example clicks per session)",
+          "confirms": "the effect disappears on a stable denominator",
+          "refutes": "the effect holds on a stable denominator"
+        }
+      ],
+      "exploratory": false,
+      "cut_results": []
+    },
+    {
+      "id": "as_hypothesized",
+      "name": "The registered hypothesis",
+      "label": "inferred",
+      "status": "untested",
+      "reading": "good",
+      "source": null,
+      "exploratory": false,
+      "mechanism": "The new ranker raises the share of searches that end in a successful click.",
+      "families": [],
+      "metrics": [
+        "Successful Search Rate"
+      ],
+      "evidence": [
+        "Successful Search Rate rose 0.81% (+0.41% to +1.21%)"
+      ],
+      "score": 1,
+      "deep_dives": [
+        {
+          "cut": "Successful Search Rate on triggered queries (where the ranking changed) vs untriggered",
+          "confirms": "a larger effect where the ranking changed",
+          "refutes": "the same effect on untouched queries"
+        }
+      ],
+      "cut_results": []
+    }
+  ],
+  "exploratory": [],
+  "ruled_out": [
+    {
+      "id": "attractive_not_relevant",
+      "name": "More clicks, not more satisfaction",
+      "label": "inferred",
+      "status": "untested",
+      "mechanism": "Results look more clickable (titles, snippets or positions) but satisfy no more often, so CTR rises without long clicks.",
+      "reading": "bad",
+      "source": "Hassan et al., CIKM 2013 (attractive snippets, SAT clicks at 30 s dwell); Dmitriev et al., A Dirty Dozen: Twelve Common Metric Interpretation Pitfalls, KDD 2017 (clicks shift between page elements)",
+      "families": [
+        "ctr",
+        "long_click"
+      ],
+      "metrics": [
+        "CTR",
+        "Long Click Rate"
+      ],
+      "evidence": [
+        "CTR rose 2.10% (+1.60% to +2.60%)",
+        "Long Click Rate didn't move clearly (-0.03% (-0.63% to +0.57%))"
+      ],
+      "score": 0,
+      "deep_dives": [
+        {
+          "cut": "SAT clicks (dwell of 30 seconds or more) vs all clicks, by arm",
+          "confirms": "clicks rise but SAT clicks don't",
+          "refutes": "SAT clicks rise with clicks",
+          "needs": {
+            "metric": "sat_click"
+          },
+          "confirms_when": {
+            "sat_click": "flat_or_down"
+          },
+          "refutes_when": {
+            "sat_click": "up"
+          }
+        },
+        {
+          "cut": "a similar query issued again within 5 minutes, by arm",
+          "confirms": "quick re-queries rise after clicks",
+          "refutes": "re-queries are flat",
+          "needs": {
+            "metric": "requery"
+          },
+          "confirms_when": {
+            "requery": "up"
+          },
+          "refutes_when": {
+            "requery": "flat_or_down"
+          }
+        },
+        {
+          "cut": "config diff of presentation parameters (titles, snippets, thumbnails)",
+          "confirms": "a presentation parameter differs between arms",
+          "refutes": "only ranking differs (this doesn't rule it out: ranking can surface such results too)",
+          "needs": {
+            "config": "presentation"
+          },
+          "confirms_when": {
+            "presentation_changed": true
+          }
+        },
+        {
+          "cut": "CTR and long-click rate by result position",
+          "confirms": "the CTR gain sits in top positions and comes with short clicks",
+          "refutes": "long clicks rise wherever CTR rises"
+        },
+        {
+          "cut": "whole-page CTR vs CTR on the element that changed",
+          "confirms": "element CTR rises while whole-page CTR is flat (clicks moved, not added)",
+          "refutes": "whole-page CTR rises too"
+        }
+      ],
+      "exploratory": false,
+      "ruled_out_by": [
+        "Successful Search Rate rose 0.81% (+0.41% to +1.21%)"
+      ]
+    }
+  ],
+  "cut_results": [],
+  "deep_dives": [
+    {
+      "cut": "success on triggered queries only (where the ranking actually changed) vs untriggered",
+      "confirms": "a larger effect on triggered queries, diluted overall",
+      "refutes": "the same effect on untouched queries, pointing to something other than ranking",
+      "needs": {
+        "segment_of": "success",
+        "by": "triggered"
+      },
+      "confirms_when": {
+        "carries_most": "triggered"
+      },
+      "refutes_when": {
+        "even": true
+      },
+      "tests": "Better results, more satisfied clicks",
+      "pattern": "relevance_gain",
+      "scriptable": true
+    },
+    {
+      "cut": "Successful Search Rate on triggered queries (where the ranking changed) vs untriggered",
+      "confirms": "a larger effect where the ranking changed",
+      "refutes": "the same effect on untouched queries",
+      "tests": "The registered hypothesis",
+      "pattern": "as_hypothesized",
+      "scriptable": false
+    },
+    {
+      "cut": "Clicks per User and Queries per User per user, side by side",
+      "confirms": "the denominator carries the change",
+      "refutes": "the numerator moves too",
+      "tests": "A ratio moved because its denominator moved",
+      "pattern": "denominator_driven",
+      "scriptable": false
+    },
+    {
+      "cut": "success by query class and device",
+      "confirms": "the gain is largest where the change acts (for example tail queries for a recall change)",
+      "refutes": "the gain is uniform, which a ranking change rarely produces",
+      "tests": "Better results, more satisfied clicks",
+      "pattern": "relevance_gain",
+      "scriptable": false
+    },
+    {
+      "cut": "what changed the Queries per User (query volume, sessions, logging of searches)",
+      "confirms": "a volume or logging change explains it",
+      "refutes": "volume is steady",
+      "tests": "A ratio moved because its denominator moved",
+      "pattern": "denominator_driven",
+      "scriptable": false
+    }
+  ],
+  "families": {
+    "success": "Successful Search Rate",
+    "ctr": "CTR",
+    "long_click": "Long Click Rate",
+    "abandonment": "Abandonment Rate",
+    "reformulation": "Reformulation Rate",
+    "queries_per_user": "Queries per User",
+    "sessions_per_user": "Sessions per User",
+    "time_to_click": "Time to First Click (s)",
+    "zero_result": "Zero Result Rate",
+    "latency": "Latency p95 (ms)",
+    "ad_ctr": "Ad Click Rate",
+    "revenue": "Revenue per User",
+    "clicks_per_user": "Clicks per User",
+    "pagination": "Pagination Rate",
+    "autocomplete": "Autocomplete Acceptance"
+  },
+  "notes": []
+}

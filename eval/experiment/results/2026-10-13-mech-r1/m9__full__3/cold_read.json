@@ -1,0 +1,53 @@
+{
+  "pass": true,
+  "skim": "2/2",
+  "full": "3/3",
+  "items": [
+    {
+      "pass": "skim",
+      "item": "answer",
+      "key": "No effect found: Successful Search Rate reads +0.02% (-0.28% to +0.32%), which rules out the 0.50% change the test was built to find.",
+      "reader": "The test found no effect. Successful Search Rate moved +0.02% (95% interval \u22120.28% to +0.32%), which rules out the 0.50% change it was built to detect. Every guardrail stayed within its margin. The test is complete (day 14 of 14). Agree to stop the test without launching v7. The document doesn't include a pre-exposure check of Successful Search Rate, so confirm the arms didn't already differ before the test started.",
+      "got": true,
+      "how": "overlap 88%"
+    },
+    {
+      "pass": "skim",
+      "item": "decision",
+      "key": "Agree to stop the test without launching.",
+      "reader": "Agree to stop the test without launching v7. The document doesn't include a pre-exposure check of Successful Search Rate, so confirm the arms didn't already differ before the test started. The test found no effect. Successful Search Rate moved +0.02% (95% interval \u22120.28% to +0.32%), which rules out the 0.50% change it was built to detect. Every guardrail stayed within its margin. The test is complete (day 14 of 14).",
+      "got": true,
+      "how": "overlap 100%"
+    },
+    {
+      "pass": "full",
+      "item": "takeaway 1",
+      "key": "Successful Search Rate +0.02% (-0.28% to +0.32%) against estimate at least 0.50% higher.",
+      "reader": "The document concludes \"No effect found\" and recommends stopping Ranker v7 without launching. The test is complete: day 14 of 14, 1,000,000 users per arm, and the four guardrails stayed within margin. Agree to stop the test without launching. The pre-period check was not run, and the document says a pre-exposure imbalance would make the test unreadable, so I would run that check before signing off. If it's clean, stop. Successful Search Rate change of +0.02% (95% interval -0.28% to +0.32%), against a 0.50% bar. The whole interval sits below 0.50%, so the bar is ruled out. No pre-period comparison was run, so a difference between the arms before the test started is not ruled out.",
+      "got": true,
+      "how": "overlap 73%"
+    },
+    {
+      "pass": "full",
+      "item": "takeaway 2",
+      "key": "Agree to stop the test without launching.",
+      "reader": "The document concludes \"No effect found\" and recommends stopping Ranker v7 without launching. The test is complete: day 14 of 14, 1,000,000 users per arm, and the four guardrails stayed within margin. Agree to stop the test without launching. The pre-period check was not run, and the document says a pre-exposure imbalance would make the test unreadable, so I would run that check before signing off. If it's clean, stop. Successful Search Rate change of +0.02% (95% interval -0.28% to +0.32%), against a 0.50% bar. The whole interval sits below 0.50%, so the bar is ruled out. No pre-period comparison was run, so a difference between the arms before the test started is not ruled out.",
+      "got": true,
+      "how": "overlap 100%"
+    },
+    {
+      "pass": "full",
+      "item": "takeaway 3",
+      "key": "Could reverse it: no pre-period comparison, so a difference between the arms before the test isn't ruled out.",
+      "reader": "The document concludes \"No effect found\" and recommends stopping Ranker v7 without launching. The test is complete: day 14 of 14, 1,000,000 users per arm, and the four guardrails stayed within margin. Agree to stop the test without launching. The pre-period check was not run, and the document says a pre-exposure imbalance would make the test unreadable, so I would run that check before signing off. If it's clean, stop. Successful Search Rate change of +0.02% (95% interval -0.28% to +0.32%), against a 0.50% bar. The whole interval sits below 0.50%, so the bar is ruled out. No pre-period comparison was run, so a difference between the arms before the test started is not ruled out.",
+      "got": true,
+      "how": "overlap 82%"
+    }
+  ],
+  "lost": "Mostly nowhere. \"Could reverse it\" is a little unclear, since it reads as the reason the decision could be overturned rather than a note on the caveat. The \"Triage: Ready\" line refers to movements, but nothing moved, so it doesn't apply and I skipped it. \"Harm inside a margin goes to escalate\" is not explained.",
+  "question": "Has the pre-exposure comparison of Successful Search Rate been run, or can it be run before we stop the test?",
+  "replies": {
+    "skim": "1. **Answer:** The test found no effect. Successful Search Rate moved +0.02% (95% interval \u22120.28% to +0.32%), which rules out the 0.50% change it was built to detect. Every guardrail stayed within its margin. The test is complete (day 14 of 14).\n2. **Decision:** Agree to stop the test without launching v7. The document doesn't include a pre-exposure check of Successful Search Rate, so confirm the arms didn't already differ before the test started.\n3. **Number:** +0.02% (percentage-point change in Successful Search Rate, 95% interval \u22120.28% to +0.32%).\n",
+    "full": "1. **Answer:** The document concludes \"No effect found\" and recommends stopping Ranker v7 without launching. The test is complete: day 14 of 14, 1,000,000 users per arm, and the four guardrails stayed within margin.\n\n2. **Decision:** Agree to stop the test without launching. The pre-period check was not run, and the document says a pre-exposure imbalance would make the test unreadable, so I would run that check before signing off. If it's clean, stop.\n\n3. **Number:** Successful Search Rate change of +0.02% (95% interval -0.28% to +0.32%), against a 0.50% bar. The whole interval sits below 0.50%, so the bar is ruled out.\n\n4. **Caveat:** No pre-period comparison was run, so a difference between the arms before the test started is not ruled out.\n\n5. **Lost:** Mostly nowhere. \"Could reverse it\" is a little unclear, since it reads as the reason the decision could be overturned rather than a note on the caveat. The \"Triage: Ready\" line refers to movements, but nothing moved, so it doesn't apply and I skipped it. \"Harm inside a margin goes to escalate\" is not explained.\n\n6. **Question:** Has the pre-exposure comparison of Successful Search Rate been run, or can it be run before we stop the test?\n"
+  }
+}

@@ -1,0 +1,53 @@
+{
+  "pass": true,
+  "skim": "2/2",
+  "full": "3/3",
+  "items": [
+    {
+      "pass": "skim",
+      "item": "answer",
+      "key": "Escalate: Successful Search Rate rose 0.68% (+0.28% to +1.08%), but Abandonment Rate rose 2.10% (+1.50% to +2.70%), the wrong way, though inside its 4.00% margin.",
+      "reader": "Escalate. Successful Search Rate rose 0.68%, but Abandonment Rate rose 2.10% (inside its 4.00% margin), and CTR and Clicks per User fell after correction, so the document doesn't recommend launch and the current state is an open trade-off decision at day 14 of 14. Decide the trade-off at triage: accept the 2.10% abandonment rise as within the 4.00% bar, or reject v7. Before deciding, check whether abandonment is concentrated on queries with no answer or rich snippet, or whether users re-search soon after leaving; if so, the trade-off tips against the change.",
+      "got": true,
+      "how": "overlap 0%; grader: same fact"
+    },
+    {
+      "pass": "skim",
+      "item": "decision",
+      "key": "Decide the trade-off at triage.",
+      "reader": "Decide the trade-off at triage: accept the 2.10% abandonment rise as within the 4.00% bar, or reject v7. Before deciding, check whether abandonment is concentrated on queries with no answer or rich snippet, or whether users re-search soon after leaving; if so, the trade-off tips against the change. Escalate. Successful Search Rate rose 0.68%, but Abandonment Rate rose 2.10% (inside its 4.00% margin), and CTR and Clicks per User fell after correction, so the document doesn't recommend launch and the current state is an open trade-off decision at day 14 of 14.",
+      "got": true,
+      "how": "overlap 100%"
+    },
+    {
+      "pass": "full",
+      "item": "takeaway 1",
+      "key": "Abandonment Rate +2.10% (+1.50% to +2.70%) against at most 4.00% higher.",
+      "reader": "The document recommends **Escalate**, not launch or kill. Successful Search Rate rose +0.68% (CI +0.28% to +1.08%), which meets its bar on the point estimate. Abandonment Rate rose +2.10% (CI +1.50% to +2.70%), which is worse but inside its 4.00% margin. The test finished on day 14 with 1,000,000 users per arm. No decision has been made; the trade-off is with triage. Triage has to decide whether a 2.10% relative rise in abandonment is acceptable for a 0.68% rise in success. I would not decide on this yet. The \"pre period\" check was not run, and the document says an imbalance there would make the test unreliable. The no-answer, re-search, and changed-ranking cuts that would confirm or reject the explanations also haven't been run. I'd run those first, then decide. Abandonment Rate, +2.10% relative (against a 4.00% margin). It is the number that decides whether the trade-off is acceptable. The explanations are inferred from co-movements, and the document says no cut has tested them. Mobile and desktop success are both slightly down while overall success is up, which the document labels a guess and does not trace. The pre-period check is missing. CTR also fell after correction, and the document lists it as a possible reason to reverse.",
+      "got": true,
+      "how": "overlap 88%"
+    },
+    {
+      "pass": "full",
+      "item": "takeaway 2",
+      "key": "Successful Search Rate +0.68% (+0.28% to +1.08%) against estimate at least 0.50% higher.",
+      "reader": "The document recommends **Escalate**, not launch or kill. Successful Search Rate rose +0.68% (CI +0.28% to +1.08%), which meets its bar on the point estimate. Abandonment Rate rose +2.10% (CI +1.50% to +2.70%), which is worse but inside its 4.00% margin. The test finished on day 14 with 1,000,000 users per arm. No decision has been made; the trade-off is with triage. Triage has to decide whether a 2.10% relative rise in abandonment is acceptable for a 0.68% rise in success. I would not decide on this yet. The \"pre period\" check was not run, and the document says an imbalance there would make the test unreliable. The no-answer, re-search, and changed-ranking cuts that would confirm or reject the explanations also haven't been run. I'd run those first, then decide. Abandonment Rate, +2.10% relative (against a 4.00% margin). It is the number that decides whether the trade-off is acceptable. The explanations are inferred from co-movements, and the document says no cut has tested them. Mobile and desktop success are both slightly down while overall success is up, which the document labels a guess and does not trace. The pre-period check is missing. CTR also fell after correction, and the document lists it as a possible reason to reverse.",
+      "got": true,
+      "how": "overlap 0%; grader: same fact"
+    },
+    {
+      "pass": "full",
+      "item": "takeaway 3",
+      "key": "Could reverse it: secondary metric CTR got worse after correction.",
+      "reader": "The document recommends **Escalate**, not launch or kill. Successful Search Rate rose +0.68% (CI +0.28% to +1.08%), which meets its bar on the point estimate. Abandonment Rate rose +2.10% (CI +1.50% to +2.70%), which is worse but inside its 4.00% margin. The test finished on day 14 with 1,000,000 users per arm. No decision has been made; the trade-off is with triage. Triage has to decide whether a 2.10% relative rise in abandonment is acceptable for a 0.68% rise in success. I would not decide on this yet. The \"pre period\" check was not run, and the document says an imbalance there would make the test unreliable. The no-answer, re-search, and changed-ranking cuts that would confirm or reject the explanations also haven't been run. I'd run those first, then decide. Abandonment Rate, +2.10% relative (against a 4.00% margin). It is the number that decides whether the trade-off is acceptable. The explanations are inferred from co-movements, and the document says no cut has tested them. Mobile and desktop success are both slightly down while overall success is up, which the document labels a guess and does not trace. The pre-period check is missing. CTR also fell after correction, and the document lists it as a possible reason to reverse.",
+      "got": true,
+      "how": "overlap 62%"
+    }
+  ],
+  "lost": "I reread the bar wording. It says \"estimate at least 0.50% higher,\" but the interval's lower bound (0.28%) is below 0.50%, so the bar is met only on the point estimate. The \"Ready\" line says \"none conflict,\" yet the flat-to-down mobile and desktop success rates sit awkwardly against the overall rise. The document doesn't resolve that.",
+  "question": "Has the pre-period comparison been run, and can you show the arms were balanced before exposure? If it has not, can it run before triage so the abandonment trade-off is decided on a test that's known to be valid?",
+  "replies": {
+    "skim": "1. Answer: Escalate. Successful Search Rate rose 0.68%, but Abandonment Rate rose 2.10% (inside its 4.00% margin), and CTR and Clicks per User fell after correction, so the document doesn't recommend launch and the current state is an open trade-off decision at day 14 of 14.\n\n2. Decision: Decide the trade-off at triage: accept the 2.10% abandonment rise as within the 4.00% bar, or reject v7. Before deciding, check whether abandonment is concentrated on queries with no answer or rich snippet, or whether users re-search soon after leaving; if so, the trade-off tips against the change.\n\n3. Number: +2.10% (relative change in Abandonment Rate, 95% interval +1.50% to +2.70%, against a 4.00% guardrail bar).\n",
+    "full": "1. **Answer:** The document recommends **Escalate**, not launch or kill. Successful Search Rate rose +0.68% (CI +0.28% to +1.08%), which meets its bar on the point estimate. Abandonment Rate rose +2.10% (CI +1.50% to +2.70%), which is worse but inside its 4.00% margin. The test finished on day 14 with 1,000,000 users per arm. No decision has been made; the trade-off is with triage.\n\n2. **Decision:** Triage has to decide whether a 2.10% relative rise in abandonment is acceptable for a 0.68% rise in success. I would not decide on this yet. The \"pre period\" check was not run, and the document says an imbalance there would make the test unreliable. The no-answer, re-search, and changed-ranking cuts that would confirm or reject the explanations also haven't been run. I'd run those first, then decide.\n\n3. **Number:** Abandonment Rate, +2.10% relative (against a 4.00% margin). It is the number that decides whether the trade-off is acceptable.\n\n4. **Caveat:** The explanations are inferred from co-movements, and the document says no cut has tested them. Mobile and desktop success are both slightly down while overall success is up, which the document labels a guess and does not trace. The pre-period check is missing. CTR also fell after correction, and the document lists it as a possible reason to reverse.\n\n5. **Lost:** I reread the bar wording. It says \"estimate at least 0.50% higher,\" but the interval's lower bound (0.28%) is below 0.50%, so the bar is met only on the point estimate. The \"Ready\" line says \"none conflict,\" yet the flat-to-down mobile and desktop success rates sit awkwardly against the overall rise. The document doesn't resolve that.\n\n6. **Question:** Has the pre-period comparison been run, and can you show the arms were balanced before exposure? If it has not, can it run before triage so the abandonment trade-off is decided on a test that's known to be valid?\n"
+  }
+}

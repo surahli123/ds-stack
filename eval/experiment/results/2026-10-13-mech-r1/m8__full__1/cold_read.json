@@ -1,0 +1,53 @@
+{
+  "pass": false,
+  "skim": "1/2",
+  "full": "3/3",
+  "items": [
+    {
+      "pass": "skim",
+      "item": "answer",
+      "key": "Ship: Queries per User rose 2.60% (+1.70% to +3.50%), which clears the 1.00% bar and every guardrail held.",
+      "reader": "The document recommends Ship (launch to all traffic), but its own triage marks it \"Not ready\" and the analyst would call it Escalate. The state is day 14 of 14 with 1,000,000 users per arm, and the primary metric is up. Don't approve the full launch yet. First check success per query and per user, since Successful Search Rate is down 0.45% and Reformulation Rate is up 5.50%. Escalate for review unless success holds flat or rises.",
+      "got": false,
+      "how": "overlap 0%"
+    },
+    {
+      "pass": "skim",
+      "item": "decision",
+      "key": "Approve the launch to all traffic.",
+      "reader": "Don't approve the full launch yet. First check success per query and per user, since Successful Search Rate is down 0.45% and Reformulation Rate is up 5.50%. Escalate for review unless success holds flat or rises. The document recommends Ship (launch to all traffic), but its own triage marks it \"Not ready\" and the analyst would call it Escalate. The state is day 14 of 14 with 1,000,000 users per arm, and the primary metric is up.",
+      "got": true,
+      "how": "overlap 100%"
+    },
+    {
+      "pass": "full",
+      "item": "takeaway 1",
+      "key": "Queries per User +2.60% (+1.70% to +3.50%) against estimate at least 1.00% higher.",
+      "reader": "The scripted call is Ship: Queries per User rose +2.60% (95% interval +1.70% to +3.50%) against a 1.00% bar, and the guardrails held. The document's own triage and analyst view both say not to ship yet. Current state: the test finished (day 14 of 14, 1,000,000 users per arm, above the planned 900,000). The success metric is unresolved. Don't approve the launch to all traffic yet. Escalate. First, check success per query against success per user. Then run the Successful Search Rate cuts by query type and platform, and check whether similar queries repeat within 5 minutes in Test. Successful Search Rate, \u22120.45% (percent change). It is the registered hypothesis metric, and the document's own reasoning turns on it, not on the +2.60% Queries per User headline. The extra activity may be repeat searching after weak results, not real demand. Successful Search Rate is down while Reformulation Rate is up (+5.50%). The document says Reformulation Rate got worse after correction, which it names as a reason to reverse. The pre-period check was not run, and the 55 secondary metrics are exploratory.",
+      "got": true,
+      "how": "overlap 73%"
+    },
+    {
+      "pass": "full",
+      "item": "takeaway 2",
+      "key": "Approve the launch to all traffic.",
+      "reader": "The scripted call is Ship: Queries per User rose +2.60% (95% interval +1.70% to +3.50%) against a 1.00% bar, and the guardrails held. The document's own triage and analyst view both say not to ship yet. Current state: the test finished (day 14 of 14, 1,000,000 users per arm, above the planned 900,000). The success metric is unresolved. Don't approve the launch to all traffic yet. Escalate. First, check success per query against success per user. Then run the Successful Search Rate cuts by query type and platform, and check whether similar queries repeat within 5 minutes in Test. Successful Search Rate, \u22120.45% (percent change). It is the registered hypothesis metric, and the document's own reasoning turns on it, not on the +2.60% Queries per User headline. The extra activity may be repeat searching after weak results, not real demand. Successful Search Rate is down while Reformulation Rate is up (+5.50%). The document says Reformulation Rate got worse after correction, which it names as a reason to reverse. The pre-period check was not run, and the 55 secondary metrics are exploratory.",
+      "got": true,
+      "how": "overlap 100%"
+    },
+    {
+      "pass": "full",
+      "item": "takeaway 3",
+      "key": "Could reverse it: secondary metric Reformulation Rate got worse after correction.",
+      "reader": "The scripted call is Ship: Queries per User rose +2.60% (95% interval +1.70% to +3.50%) against a 1.00% bar, and the guardrails held. The document's own triage and analyst view both say not to ship yet. Current state: the test finished (day 14 of 14, 1,000,000 users per arm, above the planned 900,000). The success metric is unresolved. Don't approve the launch to all traffic yet. Escalate. First, check success per query against success per user. Then run the Successful Search Rate cuts by query type and platform, and check whether similar queries repeat within 5 minutes in Test. Successful Search Rate, \u22120.45% (percent change). It is the registered hypothesis metric, and the document's own reasoning turns on it, not on the +2.60% Queries per User headline. The extra activity may be repeat searching after weak results, not real demand. Successful Search Rate is down while Reformulation Rate is up (+5.50%). The document says Reformulation Rate got worse after correction, which it names as a reason to reverse. The pre-period check was not run, and the 55 secondary metrics are exploratory.",
+      "got": true,
+      "how": "overlap 100%"
+    }
+  ],
+  "lost": "I had to reread the header against the triage and analyst view, since they disagree (Ship, Not ready, Escalate). Other gaps:",
+  "question": "What is the 95% interval and p-value for the Successful Search Rate change (\u22120.45%), and is it statistically below zero?",
+  "replies": {
+    "skim": "1. Answer: The document recommends Ship (launch to all traffic), but its own triage marks it \"Not ready\" and the analyst would call it Escalate. The state is day 14 of 14 with 1,000,000 users per arm, and the primary metric is up.\n2. Decision: Don't approve the full launch yet. First check success per query and per user, since Successful Search Rate is down 0.45% and Reformulation Rate is up 5.50%. Escalate for review unless success holds flat or rises.\n3. Number: Queries per User, +2.60% (95% interval +1.70% to +3.50%). Its unit is percent change per user, and it is the primary metric that is ambiguous, since the success metric it should be read against moved the wrong way.\n",
+    "full": "1. **Answer:** The scripted call is Ship: Queries per User rose +2.60% (95% interval +1.70% to +3.50%) against a 1.00% bar, and the guardrails held. The document's own triage and analyst view both say not to ship yet. Current state: the test finished (day 14 of 14, 1,000,000 users per arm, above the planned 900,000). The success metric is unresolved.\n\n2. **Decision:** Don't approve the launch to all traffic yet. Escalate. First, check success per query against success per user. Then run the Successful Search Rate cuts by query type and platform, and check whether similar queries repeat within 5 minutes in Test.\n\n3. **Number:** Successful Search Rate, \u22120.45% (percent change). It is the registered hypothesis metric, and the document's own reasoning turns on it, not on the +2.60% Queries per User headline.\n\n4. **Caveat:** The extra activity may be repeat searching after weak results, not real demand. Successful Search Rate is down while Reformulation Rate is up (+5.50%). The document says Reformulation Rate got worse after correction, which it names as a reason to reverse. The pre-period check was not run, and the 55 secondary metrics are exploratory.\n\n5. **Lost:** I had to reread the header against the triage and analyst view, since they disagree (Ship, Not ready, Escalate). Other gaps:\n   - Successful Search Rate's \u22120.45% has no interval or p-value, yet the analyst says it is \"clearly below zero.\" Unclear.\n   - It is called the hypothesis metric but is missing from the primary table.\n   - The correction method for the secondary metrics is not named.\n   - The \"1 other guardrail\" row is not named.\n   - I could not tell whether \"Could reverse it\" is a real reversal trigger or only a note.\n\n6. **Question:** What is the 95% interval and p-value for the Successful Search Rate change (\u22120.45%), and is it statistically below zero?\n"
+  }
+}

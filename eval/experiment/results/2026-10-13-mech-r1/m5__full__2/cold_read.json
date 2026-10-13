@@ -1,0 +1,53 @@
+{
+  "pass": false,
+  "skim": "1/2",
+  "full": "3/3",
+  "items": [
+    {
+      "pass": "skim",
+      "item": "answer",
+      "key": "Escalate: Successful Search Rate rose 0.68% (+0.28% to +1.08%), but Abandonment Rate rose 2.10% (+1.50% to +2.70%), the wrong way, though inside its 4.00% margin.",
+      "reader": "The document recommends escalating rather than launching. The test ran its full 14 days with 1,000,000 users per arm. Successful Search Rate rose 0.68%, but Abandonment Rate rose 2.10%, the wrong direction, though inside its 4.00% bar. CTR fell after correction, which could reverse the call. Decide whether to accept the Abandonment Rate rise at triage. The team's tighter standard margin would fail the low end of the interval (+1.50%). The stated causes are inferred from co-movements, so the planned cuts need to run before the trade-off is settled.",
+      "got": false,
+      "how": "overlap 0%"
+    },
+    {
+      "pass": "skim",
+      "item": "decision",
+      "key": "Decide the trade-off at triage.",
+      "reader": "Decide whether to accept the Abandonment Rate rise at triage. The team's tighter standard margin would fail the low end of the interval (+1.50%). The stated causes are inferred from co-movements, so the planned cuts need to run before the trade-off is settled. The document recommends escalating rather than launching. The test ran its full 14 days with 1,000,000 users per arm. Successful Search Rate rose 0.68%, but Abandonment Rate rose 2.10%, the wrong direction, though inside its 4.00% bar. CTR fell after correction, which could reverse the call.",
+      "got": true,
+      "how": "overlap 100%"
+    },
+    {
+      "pass": "full",
+      "item": "takeaway 1",
+      "key": "Abandonment Rate +2.10% (+1.50% to +2.70%) against at most 4.00% higher.",
+      "reader": "The document concludes **Escalate**: a trade-off for triage, not a launch or a rollback. Ranker v7 raised Successful Search Rate (primary) by +0.68%, but also raised Abandonment Rate (guardrail) by +2.10%, which is inside the pre-registered 4.00% margin. The test is complete: day 14 of 14, with 1,000,000 users per arm. Triage has to decide whether a +0.68% primary gain is worth a +2.10% abandonment rise. Before deciding, I'd want the tighter team margin defined and the pre-period and segment checks run, since both could change the call. I wouldn't launch on this document alone. Abandonment Rate, +2.10% (95% interval +1.50% to +2.70%). Its low end already exceeds the team's tighter margin, which the document doesn't state. The primary metric is +0.68% (+0.28% to +1.08%), and its interval low end is below the 0.50% bar. The document's own biggest risk is that the causal stories are inferred from co-movements, not confirmed. The segment rows don't reconcile: Mobile and Desktop both show about -0.25%, yet the overall is +0.68%. The pre-period check was not run, and the pre-exposure comparison on both metrics was not provided. Secondary CTR also fell 1.10% after correction, which the document says could reverse the call.",
+      "got": true,
+      "how": "overlap 75%"
+    },
+    {
+      "pass": "full",
+      "item": "takeaway 2",
+      "key": "Successful Search Rate +0.68% (+0.28% to +1.08%) against estimate at least 0.50% higher.",
+      "reader": "The document concludes **Escalate**: a trade-off for triage, not a launch or a rollback. Ranker v7 raised Successful Search Rate (primary) by +0.68%, but also raised Abandonment Rate (guardrail) by +2.10%, which is inside the pre-registered 4.00% margin. The test is complete: day 14 of 14, with 1,000,000 users per arm. Triage has to decide whether a +0.68% primary gain is worth a +2.10% abandonment rise. Before deciding, I'd want the tighter team margin defined and the pre-period and segment checks run, since both could change the call. I wouldn't launch on this document alone. Abandonment Rate, +2.10% (95% interval +1.50% to +2.70%). Its low end already exceeds the team's tighter margin, which the document doesn't state. The primary metric is +0.68% (+0.28% to +1.08%), and its interval low end is below the 0.50% bar. The document's own biggest risk is that the causal stories are inferred from co-movements, not confirmed. The segment rows don't reconcile: Mobile and Desktop both show about -0.25%, yet the overall is +0.68%. The pre-period check was not run, and the pre-exposure comparison on both metrics was not provided. Secondary CTR also fell 1.10% after correction, which the document says could reverse the call.",
+      "got": true,
+      "how": "overlap 64%"
+    },
+    {
+      "pass": "full",
+      "item": "takeaway 3",
+      "key": "Could reverse it: secondary metric CTR got worse after correction.",
+      "reader": "The document concludes **Escalate**: a trade-off for triage, not a launch or a rollback. Ranker v7 raised Successful Search Rate (primary) by +0.68%, but also raised Abandonment Rate (guardrail) by +2.10%, which is inside the pre-registered 4.00% margin. The test is complete: day 14 of 14, with 1,000,000 users per arm. Triage has to decide whether a +0.68% primary gain is worth a +2.10% abandonment rise. Before deciding, I'd want the tighter team margin defined and the pre-period and segment checks run, since both could change the call. I wouldn't launch on this document alone. Abandonment Rate, +2.10% (95% interval +1.50% to +2.70%). Its low end already exceeds the team's tighter margin, which the document doesn't state. The primary metric is +0.68% (+0.28% to +1.08%), and its interval low end is below the 0.50% bar. The document's own biggest risk is that the causal stories are inferred from co-movements, not confirmed. The segment rows don't reconcile: Mobile and Desktop both show about -0.25%, yet the overall is +0.68%. The pre-period check was not run, and the pre-exposure comparison on both metrics was not provided. Secondary CTR also fell 1.10% after correction, which the document says could reverse the call.",
+      "got": true,
+      "how": "overlap 75%"
+    }
+  ],
+  "lost": "",
+  "question": "What is the team's standard Abandonment margin, and why do Mobile and Desktop both show about -0.25% when the overall Successful Search Rate is +0.68%?",
+  "replies": {
+    "skim": "1. **Answer:** The document recommends escalating rather than launching. The test ran its full 14 days with 1,000,000 users per arm. Successful Search Rate rose 0.68%, but Abandonment Rate rose 2.10%, the wrong direction, though inside its 4.00% bar. CTR fell after correction, which could reverse the call.\n2. **Decision:** Decide whether to accept the Abandonment Rate rise at triage. The team's tighter standard margin would fail the low end of the interval (+1.50%). The stated causes are inferred from co-movements, so the planned cuts need to run before the trade-off is settled.\n3. **Number:** Abandonment Rate +2.10% (percent change; 95% interval +1.50% to +2.70%, against a 4.00% bar).\n",
+    "full": "1. **Answer:** The document concludes **Escalate**: a trade-off for triage, not a launch or a rollback. Ranker v7 raised Successful Search Rate (primary) by +0.68%, but also raised Abandonment Rate (guardrail) by +2.10%, which is inside the pre-registered 4.00% margin. The test is complete: day 14 of 14, with 1,000,000 users per arm.\n\n2. **Decision:** Triage has to decide whether a +0.68% primary gain is worth a +2.10% abandonment rise. Before deciding, I'd want the tighter team margin defined and the pre-period and segment checks run, since both could change the call. I wouldn't launch on this document alone.\n\n3. **Number:** Abandonment Rate, +2.10% (95% interval +1.50% to +2.70%). Its low end already exceeds the team's tighter margin, which the document doesn't state. The primary metric is +0.68% (+0.28% to +1.08%), and its interval low end is below the 0.50% bar.\n\n4. **Caveat:** The document's own biggest risk is that the causal stories are inferred from co-movements, not confirmed. The segment rows don't reconcile: Mobile and Desktop both show about -0.25%, yet the overall is +0.68%. The pre-period check was not run, and the pre-exposure comparison on both metrics was not provided. Secondary CTR also fell 1.10% after correction, which the document says could reverse the call.\n\n5. **Lost:**\n   - The \"team standard margin\" that Abandonment would fail is never given a number, so I couldn't tell how far the +1.50% low end exceeds it.\n   - The Mobile/Desktop reconciliation problem reads as a contradiction, and I had to reread the segment note to be sure of it.\n   - The \"Ready\" label in Triage sits oddly with the \"[guess]\" and \"[inferred]\" tags beneath it.\n\n6. **Question:** What is the team's standard Abandonment margin, and why do Mobile and Desktop both show about -0.25% when the overall Successful Search Rate is +0.68%?\n"
+  }
+}

@@ -1,0 +1,214 @@
+{
+  "call": "ship",
+  "call_text": "Ship",
+  "reason": "Queries per User rose 2.60% (+1.70% to +3.50%), which clears the 1.00% bar and every guardrail held.",
+  "ask": "Approve the launch to all traffic.",
+  "decider": {
+    "metric": "Queries per User",
+    "role": "primary",
+    "unit": "relative",
+    "direction": "increase",
+    "threshold": 0.01,
+    "threshold_kind": "bar",
+    "listed_as": "secondary",
+    "display_unit": "",
+    "point": 0.026000000000000002,
+    "low": 0.017,
+    "high": 0.035,
+    "se": 0.004591921112321888,
+    "level": 0.95,
+    "verdict": "better",
+    "rules_out_bar": false,
+    "achieved_mde": 0.012864658311021857
+  },
+  "status": {
+    "days_run": 14,
+    "planned_days": 14,
+    "units_per_arm": 1000000,
+    "planned_units": 900000,
+    "reached": true,
+    "whole_weeks": true,
+    "window_start": "2026-09-12",
+    "as_of": "2026-09-25"
+  },
+  "verdicts": [
+    {
+      "metric": "Queries per User",
+      "role": "primary",
+      "unit": "relative",
+      "direction": "increase",
+      "threshold": 0.01,
+      "threshold_kind": "bar",
+      "listed_as": "secondary",
+      "display_unit": "",
+      "point": 0.026000000000000002,
+      "low": 0.017,
+      "high": 0.035,
+      "se": 0.004591921112321888,
+      "level": 0.95,
+      "verdict": "better",
+      "rules_out_bar": false,
+      "achieved_mde": 0.012864658311021857
+    },
+    {
+      "metric": "Latency p95 (ms)",
+      "role": "guardrail",
+      "unit": "relative",
+      "direction": "decrease",
+      "threshold": 0.02,
+      "threshold_kind": "margin",
+      "display_unit": "",
+      "margin_source": "pre-registration",
+      "point": 0.002,
+      "low": -0.002999999999999999,
+      "high": 0.006999999999999999,
+      "se": 0.00255106728462327,
+      "level": 0.95,
+      "verdict": "within"
+    }
+  ],
+  "checks": [
+    {
+      "check": "scorecard",
+      "status": "pass",
+      "summary": "2 of 2 registered metrics cross-checked (relative, absolute and intervals agree)",
+      "details": {}
+    },
+    {
+      "check": "sample_split",
+      "status": "pass",
+      "summary": "split 50.0% / 50.0% matches the planned 50.0% / 50.0%",
+      "details": {
+        "p": 1.0,
+        "counts": [
+          1000000,
+          1000000
+        ],
+        "source": "units in 'Queries per User' (exposures not in the config)"
+      }
+    },
+    {
+      "check": "config_params",
+      "status": "pass",
+      "summary": "only the intended parameters differ (ranker_model)",
+      "details": {}
+    },
+    {
+      "check": "config_edits",
+      "status": "pass",
+      "summary": "no mid-flight edits in the analysis window",
+      "details": {}
+    },
+    {
+      "check": "pre_period",
+      "status": "could_not_run",
+      "summary": "no pre-period interval or platform check",
+      "details": {}
+    },
+    {
+      "check": "novelty",
+      "status": "pass",
+      "summary": "effect by days since exposure: first days -0.46%, last days -0.44% (trend +0.002% per day)",
+      "details": {
+        "late": -0.0044,
+        "late_se": 0.0015306403707739623,
+        "basis": "days_since_exposure"
+      }
+    }
+  ],
+  "daily": [
+    -0.004900000000000001,
+    -0.0045000000000000005,
+    -0.0041,
+    -0.004900000000000001,
+    -0.0045000000000000005,
+    -0.0041,
+    -0.004900000000000001,
+    -0.0045000000000000005,
+    -0.0041,
+    -0.004900000000000001,
+    -0.0045000000000000005,
+    -0.0041
+  ],
+  "secondaries": {
+    "tested": 55,
+    "untested": 0,
+    "q": 0.1,
+    "survivors": [
+      {
+        "metric": "Reformulation Rate",
+        "rel_delta": 0.055,
+        "rel_ci": [
+          0.047,
+          0.063
+        ],
+        "abs_delta": 0.007865,
+        "p_value": 0.0,
+        "directionality": "decrease"
+      },
+      {
+        "metric": "Successful Search Rate - Desktop",
+        "rel_delta": 0.01520935,
+        "rel_ci": [
+          0.005982919999999999,
+          0.02443578
+        ],
+        "abs_delta": 0.00731986,
+        "p_value": 0.001234,
+        "directionality": "increase"
+      },
+      {
+        "metric": "Autocomplete Acceptance",
+        "rel_delta": 0.009739290000000001,
+        "rel_ci": [
+          0.0037392900000000006,
+          0.015739290000000003
+        ],
+        "abs_delta": 0.00329188,
+        "p_value": 0.001465,
+        "directionality": "increase"
+      }
+    ]
+  },
+  "open_items": [
+    "secondary metric Reformulation Rate got worse after correction",
+    "no pre-period comparison, so a difference between the arms before the test isn't ruled out"
+  ],
+  "fallbacks": [],
+  "settings": {
+    "ci_level": 0.95,
+    "scorecard_ci_level": 0.95,
+    "levels": {
+      "primary": 0.95,
+      "guardrail": 0.95,
+      "harm": 0.975,
+      "invariant": 0.95,
+      "scorecard": 0.95
+    },
+    "sequential": false,
+    "rule": "any",
+    "ship_requires": "point_at_bar",
+    "cuped": false,
+    "mc_correction": "none",
+    "standards": {
+      "harm_within_margin": "escalate",
+      "below_bar": "escalate",
+      "secondary_harm": "note",
+      "srm_alpha": 0.001,
+      "min_days": 7
+    }
+  },
+  "experiment": {
+    "id": "ranker_v7",
+    "name": "Ranker v7",
+    "test_group": "g_test",
+    "design": "ab"
+  },
+  "inputs": {
+    "scorecard": "04543080e6",
+    "prereg": "34af940587",
+    "config": "b84a437530",
+    "standards": "eb5800c555",
+    "daily": "3e5439d05e"
+  }
+}

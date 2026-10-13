@@ -1,0 +1,5 @@
+{"why_it_moved":[
+{"text":"CTR rose 2.4% and Clicks per User rose 2.2%, but Successful Search Rate and Long Click Rate did not move, so the extra clicks are probably not extra satisfaction.","label":"inferred"},
+{"text":"Only ranker_model differs between arms, so snippet or title changes do not explain the CTR rise; position or result mix might.","label":"inferred"}],
+"would_change":["A long-dwell satisfied-click cut showing more satisfied clicks per user in Test would reopen the question of a small real win.","A pre-exposure comparison showing the arms were already different would make the flat read untrustworthy."],
+"analyst_view":null}

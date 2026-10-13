@@ -1,0 +1,20 @@
+{
+ "why_it_moved": [
+  {
+   "text": "Users ran more queries (+2.60%) and reformulated more (+5.50%), yet Successful Search Rate is down (-0.45%). That fits repeat searching after weak first results.",
+   "label": "inferred"
+  },
+  {
+   "text": "Successful Search Rate is the registered hypothesis metric, and its drop is concentrated in Informational queries (down 0.85%) while Desktop rose 1.52%. No cut has been run to explain this yet.",
+   "label": "guess"
+  }
+ ],
+ "would_change": [
+  "Success per query flat or down while Queries per User rises would confirm activity without success.",
+  "A similar query repeated within 5 minutes rising in Test would confirm worse results; flat would point to real extra demand."
+ ],
+ "analyst_view": {
+  "call": "escalate",
+  "reason": "The pre-registered primary is Queries per User, but the hypothesis is Successful Search Rate, which is down 0.45% and clearly below zero. Reformulation Rate is up 5.50%. More searching with less success can mean worse results, so settle the success cuts first."
+ }
+}
