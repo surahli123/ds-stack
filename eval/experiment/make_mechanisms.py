@@ -111,8 +111,11 @@ def build():
         request = {"control": "g_control", "test": "g_test", "cuped": "false", "confidence": "95"}
         prereg = pre or mc.prereg()
         prereg["hypothesis"] = HYPOTHESIS
+        primary = next(m for m in pulse["data"]["primaryMetrics"])
+        effect = primary["percentChange"] / 100
         files = {"pulse.json": pulse, "experiment.json": mc.experiment("Ranker v7"), "audit_logs.json": {"data": []},
-                 "request.json": request, "prereg.json": prereg}
+                 "request.json": request, "prereg.json": prereg,
+                 "daily_by_exposure_day.json": mc.daily([effect + 0.0004 * ((d % 3) - 1) for d in range(12)])}
         for name, content in files.items():
             with open(os.path.join(directory, name), "w") as handle:
                 json.dump(content, handle, indent=1)

@@ -350,13 +350,16 @@ def triage_prep(decision, explained):
     lines = [f"# {exp.get('name') or exp.get('id')}: triage prep", "",
              f"Ready for triage: {triage_line(explained)}", "",
              f"Scripted call: {decision['call_text']}. {decision['reason']}", "",
-             "## Questions triage will ask", ""]
+             "## Before any single metric", ""]
+    for q in explained.get("standard", []):
+        lines.append(f"- {q['question']} {q['answer'].rstrip('.')}.")
+    lines += ["", "## Questions triage will ask", ""]
     if not explained["questions"]:
         lines += ["- No metric moved clearly enough to be asked about.", ""]
     explained_at = {}
     for n, q in enumerate(explained["questions"], 1):
         change = "" if q["change"].startswith(q["metric"]) else f" It {q['change']}."
-        lines.append(f"{n}. {q['question']}{change}")
+        lines.append(f"{n}. {q['question']}{change} Status: {q.get('status', 'untested')}.")
         if not q["candidates"]:
             lines.append("   - No candidate explanation yet. Say so in the meeting and name the cut you'd run.")
         for cid in q["candidates"][:2]:

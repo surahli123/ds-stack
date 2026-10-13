@@ -25,13 +25,13 @@ def quiet_log(monkeypatch, tmp_path):
     monkeypatch.setenv("DS_CHECKS_LOG", str(tmp_path / "log"))
 
 
-def run(overrides, prereg=None, segments=None, seed=7):
+def run(overrides, prereg=None, segments=None, seed=7, daily=None):
     pulse = mc.scorecard(random.Random(seed), {**mc.GUARDS, **overrides})
     scorecard = adapters.statsig_pulse([pulse], {"control": "g_control", "test": "g_test", "cuped": "false", "confidence": "95"})
     config = adapters.statsig_config(mc.experiment("Ranker v7"))
     pre = prereg or mc.prereg()
     pre.setdefault("hypothesis", "The new ranker raises the share of searches that end in a successful click.")
-    decision = decide.decide(scorecard, pre, config)
+    decision = decide.decide(scorecard, pre, config, None, daily)
     return decision, explain.explain(decision, scorecard, pre, LIB, segments)
 
 
@@ -80,9 +80,14 @@ def test_measured_segment_cut_from_a_deep_dive_names_the_segment():
     assert seg and seg[0]["segment"] == "Tail" and seg[0]["label"] == "measured"
 
 
-def test_clean_win_is_ready_and_a_broken_test_is_not():
-    _, result = run(mc.WIN)
+def test_clean_win_is_ready_only_once_durability_is_known_and_a_broken_test_is_not():
+    _, unknown = run(mc.WIN)
+    assert unknown["readiness"]["verdict"] == "open_questions" and "durability" in unknown["readiness"]["reasons"][0]
+    _, result = run(mc.WIN, daily=mc.daily([0.0081, 0.0079, 0.0083, 0.0080, 0.0082, 0.0080, 0.0081, 0.0079]))
     assert result["readiness"]["verdict"] == "ready"
+    assert [q["question"] for q in result["standard"]][:3] == ["Is the data trustworthy?", "Is the effect real, or chance?",
+                                                               "Will it last?"]
+    assert result["chance"]["tested"] >= 50 and result["chance"]["expected_by_chance"] > 2
     decision = pipeline_cases.run_case("c1")
     case = os.path.join(ROOT, "eval", "experiment", "cases", "c1")
     scorecard = adapters.statsig_pulse([json.load(open(os.path.join(case, "pulse.json")))],

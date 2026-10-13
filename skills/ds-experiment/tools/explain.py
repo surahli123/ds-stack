@@ -303,7 +303,53 @@ def hypothesis_candidate(decision, prereg, comparison, instances):
     return out
 
 
-def readiness(decision, instances, questions):
+def chance_count(comparison, level):
+    """How many metrics moved clearly, against how many would by chance alone."""
+    tested = [m for m in comparison["metrics"] if m.get("rel_ci") or m.get("abs_ci")]
+    moved = [m for m in tested if state(m) in ("up", "down")]
+    return {"tested": len(tested), "moved": len(moved), "expected_by_chance": round(len(tested) * (1 - level), 1)}
+
+
+def standard_questions(decision, prereg, comparison, chance):
+    """The four questions triage asks of every experiment before any single metric."""
+    checks = {c["check"]: c for c in decision["checks"]}
+    problems = [c for c in decision["checks"] if c["status"] in ("fail", "flag") and c["check"] != "novelty"]
+    unrun = [c["check"].replace("_", " ") for c in decision["checks"] if c["status"] == "could_not_run" and c["check"] != "novelty"]
+    trust = ("No: " + "; ".join(c["summary"] for c in problems[:2])) if problems else (
+        "Yes, as far as the checks reach" + (f"; not checked: {', '.join(unrun)}" if unrun else ""))
+    lead = next((v for v in decision["verdicts"] if v["role"] == "primary" and v.get("se")), None)
+    if lead:
+        p = expstats.two_sided_p(lead["point"], lead["se"])
+        real = (f"{lead['metric']} {describe(lead)}; " + ("its interval excludes zero" if lead["low"] > 0 or lead["high"] < 0
+                                                        else "its interval includes zero")
+                + (f", but p is about {p:.2f}, and wins that borderline often fail a rerun" if 0.01 < p < 0.05 else "")
+                + f". Across the scorecard {chance['moved']} of {chance['tested']} metrics moved clearly; about "
+                  f"{chance['expected_by_chance']:g} would by chance alone.")
+    else:
+        real = "No primary interval to judge."
+    novelty = checks.get("novelty")
+    if novelty and novelty["status"] == "pass":
+        last = "Probably: " + novelty["summary"] + "."
+    elif novelty and novelty["status"] == "flag":
+        last = "Maybe not: " + novelty["summary"] + "."
+    else:
+        last = "Unknown: there is no effect series by days since first exposure. Cut the primary by exposure day before triage."
+    features = prereg.get("feature_metrics") or []
+    by_name = {m["metric"].lower(): m for m in comparison["metrics"]}
+    shown = [(f, by_name.get(str(f).lower())) for f in features]
+    if not features:
+        did = ("Not shown. Add a coverage metric, such as the share of queries whose top results changed, so triage can "
+               "see the change actually reached users.")
+    else:
+        did = "; ".join(f"{f} {change_text(m)}" if m else f"{f} is not in the scorecard" for f, m in shown) + "."
+    return [{"question": "Is the data trustworthy?", "answer": trust, "ok": not problems},
+            {"question": "Is the effect real, or chance?", "answer": real, "ok": bool(lead) and not (lead and 0.01 < expstats.two_sided_p(lead["point"], lead["se"]) < 0.05)},
+            {"question": "Will it last?", "answer": last, "ok": bool(novelty and novelty["status"] == "pass")},
+            {"question": "Did the change do what it was built to do?", "answer": did,
+             "ok": bool(features) and all(m and state(m) in ("up", "down") for f, m in shown)}]
+
+
+def readiness(decision, instances, questions, standard=None):
     """Ready, ready with open questions, or not ready, with the reason and the first thing to do."""
     by_id = {}
     for inst in instances:
@@ -329,6 +375,10 @@ def readiness(decision, instances, questions):
                            "and they lead to different decisions")
             first = first or (bad["deep_dives"][0] if bad["deep_dives"] else None)
             break
+    features_failed = [q for q in (standard or []) if q["question"].startswith("Did the change") and q["answer"] and not q["ok"]
+                       and not q["answer"].startswith("Not shown")]
+    if features_failed:
+        reasons.append("the change may not have reached users: " + features_failed[0]["answer"])
     if reasons:
         return {"verdict": "not_ready", "text": "Not ready", "reasons": reasons, "first": first}
     borderline = []
@@ -340,8 +390,9 @@ def readiness(decision, instances, questions):
                                   "so expect triage to ask for one")
     open_q = [q for q in questions if not q["candidates"]]
     weak = [q for q in registered if q["candidates"] and all(by_id[c]["score"] == 0 for c in q["candidates"] if c in by_id)]
-    if open_q or weak or borderline:
-        parts = list(borderline)
+    durability = [q for q in (standard or []) if q["question"] == "Will it last?" and not q["ok"]]
+    if open_q or weak or borderline or durability:
+        parts = list(borderline) + (["durability is unknown: no effect series by days since first exposure"] if durability else [])
         if open_q:
             parts.append(f"{len(open_q)} of {len(questions)} movements have no candidate explanation yet")
         if weak:
@@ -392,8 +443,15 @@ def explain(decision, scorecard, prereg, library, extra_segments=None):
     found += hypothesis_candidate(decision, prereg, comparison, found)
     expected = expectations(prereg, decision)
     questions = build_questions(decision, comparison, expected, found, seg_found)
-    ready = readiness(decision, found, questions)
-    return {"readiness": ready, "questions": questions, "patterns": sorted(found, key=lambda i: -i["score"]),
+    by_id = {i["id"]: i for i in found}
+    for q in questions:
+        labels = [by_id[c]["label"] for c in q["candidates"] if c in by_id]
+        q["status"] = "confirmed by a cut" if "measured" in labels else "untested" if labels else "unexplained (possibly chance)"
+    chance = chance_count(comparison, level)
+    standard = standard_questions(decision, prereg, comparison, chance)
+    ready = readiness(decision, found, questions, standard)
+    return {"readiness": ready, "standard": standard, "chance": chance, "questions": questions,
+            "patterns": sorted(found, key=lambda i: -i["score"]),
             "ruled_out": ruled_out, "deep_dives": plan(found, questions), "families": {f: m["metric"] for f, m in fam.items()},
             "expectations": expected}
 

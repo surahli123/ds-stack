@@ -21,7 +21,8 @@ def run_case(cid):
     sc = adapters.statsig_pulse([adapters.load_json(os.path.join(d, "pulse.json"))], adapters.load_json(os.path.join(d, "request.json")))
     cfg = adapters.statsig_config(adapters.load_json(os.path.join(d, "experiment.json")), adapters.load_json(os.path.join(d, "audit_logs.json")))
     pre = adapters.load_json(os.path.join(d, "prereg.json"))
-    dec = decide.decide(sc, pre, cfg)
+    daily_path = os.path.join(d, "daily_by_exposure_day.json")
+    dec = decide.decide(sc, pre, cfg, None, adapters.load_json(daily_path) if os.path.exists(daily_path) else None)
     return dec, explain.explain(dec, sc, pre, explain.load_library(None))
 
 
