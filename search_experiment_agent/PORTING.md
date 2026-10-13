@@ -29,7 +29,7 @@ Copy `search_agent/vendor/ds_experiment_tools/` without changes, with `srm.py` a
 
 ## 3. Translate the aliases
 
-The code uses T1 to T4 and canonical column names. Translate them through the local alias map into `overlay/warehouse.json`. Start from `overlay.example/`.
+The code uses T1 to T4 and canonical column names. Translate them through the local alias map into the workspace overlay, `~/.kangaroo/overlay/warehouse.json`. `python3 bin/kangaroo init` makes it from `overlay.example/`.
 
 | Key | Value |
 |---|---|
