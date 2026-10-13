@@ -31,11 +31,11 @@ SKIP = shutil.ignore_patterns("__pycache__", ".ds-checks.log", "registry.json")
 FULL_NOTE = "For any experiment readout or launch decision, read and follow .claude/skills/ds-experiment/SKILL.md.\n"
 
 
-def run_job(job, model, out_dir, timeout):
+def run_job(job, model, out_dir, timeout, cases_dir=CASES):
     cid, arm, run = job
     root = os.path.join(os.environ.get("DS_RUN_ROOT", "/tmp/ds-runs"), uuid.uuid4().hex[:10])
     work = os.path.join(root, "work")
-    shutil.copytree(os.path.join(CASES, cid), work)
+    shutil.copytree(os.path.join(cases_dir, cid), work)
     if arm == "full":
         for skill in SKILLS:
             shutil.copytree(os.path.join(ROOT, "skills", skill), os.path.join(work, ".claude", "skills", skill), ignore=SKIP)
@@ -74,7 +74,8 @@ def run_job(job, model, out_dir, timeout):
         handle.write(stdout)
     with open(os.path.join(dest, "result.md"), "w") as handle:
         handle.write(final or "")
-    for name in (".ds-checks.log", "readout.md", "notes.json", "prereg.json", "decision.json", "cold_read.json"):
+    for name in (".ds-checks.log", "readout.md", "notes.json", "prereg.json", "decision.json", "cold_read.json",
+                 "explain.json", "triage_prep.md", "segments.json"):
         if os.path.exists(os.path.join(work, name)):
             shutil.copy(os.path.join(work, name), os.path.join(dest, name.lstrip(".")))
     meta = {"case": cid, "arm": arm, "run": run, "model": model, "exit": code,
@@ -92,14 +93,15 @@ def main():
     parser.add_argument("--parallel", type=int, default=6)
     parser.add_argument("--timeout", type=int, default=1500)
     parser.add_argument("--cases")
+    parser.add_argument("--cases-dir", default=CASES, help="eval/experiment/cases (default) or eval/experiment/mechanisms")
     parser.add_argument("--arms", default="baseline,full")
     parser.add_argument("--out", default=os.path.join(HERE, "results", time.strftime("%Y-%m-%d-%H%M")))
     args = parser.parse_args()
-    cases = args.cases.split(",") if args.cases else sorted(os.listdir(CASES))
+    cases = args.cases.split(",") if args.cases else sorted(os.listdir(args.cases_dir))
     jobs = [(c, a, r) for c in cases for a in args.arms.split(",") for r in range(1, args.runs + 1)]
     os.makedirs(args.out, exist_ok=True)
     with futures.ThreadPoolExecutor(max_workers=args.parallel) as pool:
-        for done in futures.as_completed([pool.submit(run_job, j, args.model, args.out, args.timeout) for j in jobs]):
+        for done in futures.as_completed([pool.submit(run_job, j, args.model, args.out, args.timeout, args.cases_dir) for j in jobs]):
             m = done.result()
             print(f"{m['case']:3} {m['arm']:8} run {m['run']}: exit {m['exit']}, {m['seconds']}s, turns {m['turns']}, ${m['cost_usd']}",
                   flush=True)
