@@ -60,4 +60,4 @@ The deep-dive layer passes its 9 planted-mechanism cases and 45 adversarial regr
 
 ## On the work laptop
 
-See `port/README.md`: write the overlay's `standards.json` and `metric_families.json`, self-test the adapter, measure the current agent's readouts with `port/audit_readouts.py`, and backtest `decide.py` against past triage calls with `port/backtest.py`. Both scripts print counts only.
+See `port/README.md`: write the overlay's `standards.json` and `metric_families.json`, self-test the adapter, measure the current agent's readouts with `port/audit_readouts.py`, and backtest `decide.py` against past triage calls with `port/backtest.py`. Both scripts print counts only. To send real material home, sanitize it with `port/sanitize.py` and read it first.
