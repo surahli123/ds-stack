@@ -1,53 +1,52 @@
-# Porting the seed to the work laptop
+# Setting up the seed on the work laptop
 
-Run part 1 on synthetic data before anything touches company data. Only after it passes do you build part 2. Nothing in this file needs company data to come home: changes flow from this repo to work, never back.
+You need one folder and one line of config. Data comes through the tools you already have, such as the Search Metric Analyzer (SMA), so no warehouse adapter is needed for testing.
 
-## 1. Smoke test in Codex and Cursor (synthetic data)
+## Set up (about 10 minutes)
 
-Import the `v0.3-seed` tree wherever company code lives, with no remote pointing back to this repo.
-
-1. Safety and unit tests, from the repo root:
-   ```bash
-   python3 safety/selftest.py        # every line "ok", including the three log assertions
-   python3 -m pytest -q              # needs pytest
+1. Copy `skills/ds-mode/` to a place outside every repo, for example `~/ds-skills/ds-mode/`. It runs on Python's standard library, so there is nothing to install. For test 1, also copy the two files in `eval/fixtures/f1/`.
+2. In the root of the project you work in (the SMA project, for example), create `AGENTS.md` with one line. Codex and Cursor both read it. Use the absolute path:
    ```
-2. Load the skill.
-   - Cursor reads `.cursor-plugin/plugin.json`, or you can copy `skills/ds-mode/` into its skills directory.
-   - Codex can install the plugin, or read `skills/ds-mode/SKILL.md` through an `AGENTS.md` line such as: "For any data analysis request, read and follow skills/ds-mode/SKILL.md".
-3. Make a scratch directory, copy `eval/fixtures/f1/warehouse.db` into it, open the agent there, and paste the task in `eval/fixtures/f1/task.md`.
-4. Confirm each of these in the agent's run:
-
-| Check | What passing looks like |
-|---|---|
-| The skill loads | The agent follows the ds-mode method without being told the steps |
-| Script paths resolve | It runs `<skill dir>/tools/query.py`; a wrong path shows up as "No such file" |
-| Queries are logged | `.ds-queries.log` has one line per statement, with ids q1, q2, … |
-| Checks name their source | `.ds-checks.log` lines carry `"from": ["q<n>"]` |
-| The readout traces | `python3 <skill dir>/tools/verify_readout.py readout.md` prints `pass` when you run it yourself |
-| The answer is right | about 0 pp attributable to the ranker, with mix shift ruled in |
-| No filesystem search | The agent doesn't look for `metrics.json` outside `$DS_OVERLAY_DIR` |
-
-5. Optional: run the eval through the agent's headless mode. Check its `--help` for the exact flags.
-   ```bash
-   DS_AGENT_CMD='codex exec {prompt_file}' python3 eval/run_arms.py --runs 1 --arms full
-   python3 eval/grade.py eval/results/<dir> --allow-no-transcript
+   For any data analysis request, read and follow /Users/<you>/ds-skills/ds-mode/SKILL.md
    ```
-   The arm's pointer to the skill goes in both `CLAUDE.md` and `AGENTS.md`. With a custom agent, isolation is reported as unverified, because there is no transcript.
+   To keep the file out of that project's git, add `AGENTS.md` to `.git/info/exclude`.
+3. Optional: write the definitions of 2-3 metrics you use often into `~/ds-overlay/metrics.json`, giving numerator, denominator, filters, grain and source for each, then `export DS_OVERLAY_DIR=~/ds-overlay`. Without it, ds-mode still runs and labels the definition `[guess]`.
 
-If a check fails because the agent can't call the scripts, strip the skill down to its scripts plus one prompt file and retry once (iteration plan, Step 1).
+## Test 1: synthetic data (about 5 minutes, no company data)
 
-## 2. Before the first run on company data
+```bash
+mkdir /tmp/ds-test && cp <ds-stack>/eval/fixtures/f1/* /tmp/ds-test/ && cd /tmp/ds-test
+echo "For any data analysis request, read and follow /Users/<you>/ds-skills/ds-mode/SKILL.md" > AGENTS.md
+```
 
-Each item is structure, not an instruction to the agent.
+Open Codex or Cursor in that directory and paste in the text of `task.md`. It passes when:
 
-| Item | In place when |
-|---|---|
-| Warehouse adapter | a copy of `skills/ds-mode/tools/query.py` whose `connect()` opens the warehouse. Keep the rest of the runner, the log included. |
-| Self-test | the adapter passes its copy of `safety/selftest.py`, log assertions included. |
-| Credentials | only the runner process holds the warehouse credential, and it can read and write only to scratch. |
-| Data | the agent's role sees a view without free-text columns. Without one, run each query yourself and paste back aggregates with `query.py --pasted`. |
-| Tools | web and MCP tools are off in the agent session. |
-| No route home | run `make hooks` with a denylist seeded from internal metric and table names, and confirm that a planted term is blocked. |
-| Metric adapter | ds-mode's pin-the-metric step reads definitions from the internal metric layer, or from an overlay `metrics.json` generated from it, through `$DS_OVERLAY_DIR`. |
+- the answer is about 0 pp, with mix shift (mobile's share rising) as the cause;
+- `.ds-queries.log`, `.ds-checks.log` and `readout.md` appear in the directory;
+- `python3 ~/ds-skills/ds-mode/tools/verify_readout.py readout.md`, run by you, prints `pass`.
 
-The first real question should be one you answered last month, where the obvious definition gives a different number from the dashboard's. A good result is a readout whose metric comes from the internal layer, with `verify_readout.py` passing and a `Reconciled:` line. Review time is the measure, with a target of under 10 minutes.
+When it fails, the usual cause is a script path the agent can't resolve. Check that `AGENTS.md` uses an absolute path.
+
+## Test 2: a real question, with data from SMA
+
+In the SMA project, ask a question you answered last month. Pick one where the obvious metric definition gives a different number from the dashboard's. Add this line to the prompt:
+
+> Get the data through SMA as usual, and log each result with ds-mode's `query.py --pasted`.
+
+Each SMA result then gets an id (q1, q2, ...), and the checks and `verify_readout.py` work as usual. It passes when:
+
+- `verify_readout.py` prints `pass`;
+- you can check the readout in under 10 minutes;
+- the number matches your answer from last month, or the readout explains the difference.
+
+To gather evidence for the SMA rethink, run the same question with SMA alone and then with SMA plus ds-mode. Compare the review time, and whether either run caught something you missed.
+
+## Later, before any unattended run on company data
+
+Only then add the structural pieces:
+
+- a warehouse adapter (a copy of `tools/query.py` whose `connect()` opens the warehouse), passing its copy of `safety/selftest.py`;
+- a warehouse credential held only by that runner, with writes limited to scratch;
+- a view without free-text columns;
+- web and MCP tools off;
+- the denylist hook (`make hooks`) in any repo that holds the work copy.
