@@ -73,7 +73,7 @@ make eval && make grade RUN=eval/results/<dir>                       # analysis 
 make writing-eval && make writing-grade RUN=eval/writing/results/<dir>   # writing eval
 ```
 
-Transcripts stay local because they are bulky. A regrade without them fails closed as unverifiable, unless the runs came from a custom agent and `--allow-no-transcript` is passed.
+Transcripts are committed with each results directory (about 3 MB for a 45-run eval), so a regrade can verify isolation. A regrade without them fails closed as unverifiable, unless the runs came from a custom agent and `--allow-no-transcript` is passed.
 
 ## Other caveats
 
