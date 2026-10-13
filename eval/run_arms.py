@@ -25,7 +25,7 @@ so grade such runs with `grade.py --allow-no-transcript`.
 Arms:
   baseline  plain prompting
   checks    checks/ plus a one-line instruction to run them
-  full      the ds-mode skill (method + checks + readout), pointed to by CLAUDE.md
+  full      the ds-mode skill (method + checks + readout), pointed to by CLAUDE.md and AGENTS.md
 
 Every arm gets the identical prompt: the fixture's task plus the readout format.
 """
@@ -86,18 +86,23 @@ def build_prompt(fixture):
             f"```\n{readout_format()}```\n")
 
 
+def write_note(work, note):
+    """The arm's one-line instruction, for Claude Code (CLAUDE.md) and for Codex and Cursor (AGENTS.md)."""
+    for name in ("CLAUDE.md", "AGENTS.md"):
+        with open(os.path.join(work, name), "w") as handle:
+            handle.write(note)
+
+
 def prepare_workdir(job_root, fixture, arm):
     work = os.path.join(job_root, "analysis")
     os.makedirs(work)
     shutil.copy(os.path.join(FIXTURES, fixture, "warehouse.db"), work)
     if arm == "checks":
         shutil.copytree(os.path.join(SKILL_DIR, "checks"), os.path.join(work, "checks"), ignore=SKIP_IN_COPY)
-        with open(os.path.join(work, "CLAUDE.md"), "w") as handle:
-            handle.write(CHECKS_ONLY_NOTE)
+        write_note(work, CHECKS_ONLY_NOTE)
     elif arm == "full":
         shutil.copytree(SKILL_DIR, os.path.join(work, ".claude", "skills", "ds-mode"), ignore=SKIP_IN_COPY)
-        with open(os.path.join(work, "CLAUDE.md"), "w") as handle:
-            handle.write(FULL_NOTE)
+        write_note(work, FULL_NOTE)
     return work
 
 

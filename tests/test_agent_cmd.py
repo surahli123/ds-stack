@@ -322,3 +322,15 @@ def test_grade_cli_flag_end_to_end_from_a_run_arms_job(tmp_path, monkeypatch, ca
     assert "unverified (custom agent)" in (results / "summary.md").read_text()
     assert grade.main([]) == 3
     capsys.readouterr()
+
+
+@pytest.mark.parametrize("arm, note", [("checks", run_arms.CHECKS_ONLY_NOTE), ("full", run_arms.FULL_NOTE)])
+def test_the_arm_note_is_written_for_claude_codex_and_cursor(tmp_path, arm, note):
+    work = run_arms.prepare_workdir(str(tmp_path), "f1", arm)
+    for name in ("CLAUDE.md", "AGENTS.md"):
+        assert open(os.path.join(work, name)).read() == note
+
+
+def test_the_baseline_arm_gets_no_note(tmp_path):
+    work = run_arms.prepare_workdir(str(tmp_path), "f1", "baseline")
+    assert not any(os.path.exists(os.path.join(work, name)) for name in ("CLAUDE.md", "AGENTS.md"))
