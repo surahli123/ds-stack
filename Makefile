@@ -1,4 +1,4 @@
-.PHONY: test fixtures hooks selftest eval grade lint-doc writing-eval writing-grade
+.PHONY: test fixtures hooks selftest verify eval grade lint-doc writing-eval writing-grade
 
 test:            ## unit tests (checks, parser, grader, guard, hook)
 	python3 -m pytest -q
@@ -11,6 +11,9 @@ hooks:           ## enable the denylist hook in this repo
 
 selftest:        ## safety-envelope self-test for the reference runner
 	python3 safety/selftest.py
+
+verify:          ## make verify READOUT=readout.md: every number traces to a logged query or check
+	python3 skills/ds-mode/tools/verify_readout.py $(READOUT)
 
 eval:            ## three arms x all fixtures x 3 runs (costs model usage)
 	python3 eval/run_arms.py --runs 3 --model sonnet --parallel 6

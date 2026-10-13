@@ -27,6 +27,7 @@ HEADLINE = re.compile(r"^\s*[-*]?\s*headline\s*:\s*(.+?)\s*$", re.I | re.M)
 VERDICT = re.compile(r"\b(not\s+)?ruled[\s-]*(in|out)\b", re.I)
 NAME_SPLIT = re.compile(r"\s*(?::|—|–|\s-\s)\s*")
 CHECK = re.compile(r"^\s*[-*]\s*([a-z_]+)\s*:\s*(pass|flag|fail|could[ _]not[ _]run|skipped)\b", re.I)
+TRACE_TAGS = re.compile(r"\[\s*(?:q\d+|check:[a-z_]+#\d+|given)(?:\s*[,;|]\s*(?:q\d+|check:[a-z_]+#\d+|given))*\s*\]", re.I)
 LABEL = re.compile(r"\[(measured|inferred|guess)\]", re.I)
 INTERVAL = re.compile(r"([-+−]?\d+(?:\.\d+)?)\s*%?\s*(?:to|,|–|—|\.\.\.?)\s*([-+−]?\d+(?:\.\d+)?)", re.I)
 UNIT_NAMES = {"pp": "pp", "%": "percent", "percent": "percent"}
@@ -62,6 +63,7 @@ class Readout:
 
 def _clean(text):
     text = re.sub(r"^```[a-z]*\s*$", "", text, flags=re.M)
+    text = TRACE_TAGS.sub(" ", text)
     return text.replace("**", "").replace("__", "").replace("`", "").replace("−", "-")
 
 

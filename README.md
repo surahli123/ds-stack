@@ -6,18 +6,43 @@ A pstack-style plugin for data-science work. It makes an agent's number trustwor
 
 This repo holds only the generic core. Company facts live in a private overlay outside any repo (see [`overlay.example/`](overlay.example/README.md)).
 
+**This is the prototype seed (`v0.3-seed`).** The work side imports it and builds on its internal metric layer; [`docs/porting.md`](docs/porting.md) is the checklist. Changes flow one way, from here to work, so fixes made at work do not come back to this repo. Treat it as a snapshot.
+
+The trust bar is review, not autonomy: a data scientist who didn't run the analysis can check a readout in under 10 minutes. Every number in a readout carries a tag (`[q3]`, `[check:mix_shift#1]`, `[given]`) that `verify_readout.py` resolves against the query and check logs.
+
 ## Skills
 
 | Skill | Fixes | Enforced by |
 |---|---|---|
-| `ds-mode` | Analyses: pins the metric definition, checks the data, decomposes a movement, rules alternatives in or out, writes the readout with an interval and provenance | Four check scripts that log every run; a readout format the eval parser reads |
+| `ds-mode` | Analyses: pins the metric, checks the data, decomposes a movement, rules alternatives in or out, writes a traceable readout | A logged query runner, four logged check scripts, and `verify_readout.py`, which fails any untraced number |
 | `ds-doc` | Doc structure and narrative: doc type, the spine (reader, decision, one-sentence answer, takeaways), answer-first drafting, DS claim rules | A step checklist; skipped steps stay visible |
 | `doc-tighten` | Format and concision: answer placement, bold, log drift, tables, clutter, length budget | `doc_lint.py`, 14 rules |
-| `cold-read` | Whether the doc works: a fresh reader must recover the answer and decision from a skim, and every takeaway from a full read | `cold_read.py`: a fresh `claude -p` reader, graded by script against `spine.json` |
+| `cold-read` | Whether the doc works: a fresh reader must recover the answer and decision from a skim, and every takeaway from a full read | `cold_read.py`: a fresh reader (`claude -p` by default, any agent CLI through `DS_AGENT_CMD`), graded by script against `spine.json` |
 
 Each lint rule is tied to a count from 119 agent-written docs, or to the DS editing guide in ai-writing-suite (`tools/rules.json`). On that corpus, 76 docs open with method or status before any answer, 64 lean on bold, 27 restate points in new words, and 13 turn into logs. The lint's answer-first rule flags 77 of the 119.
 
 Word-level polish is not duplicated here. If ai-writing-suite is installed, `ds-doc` hands off to its `comms-polish` skill.
+
+## Reviewing a readout
+
+1. Run `python3 skills/ds-mode/tools/verify_readout.py readout.md` in the analysis directory. It resolves every tag against `.ds-queries.log` and `.ds-checks.log` and lists the `[given]` numbers to confirm against the request.
+2. Read each cited query's SQL and stored result in `.ds-queries.log`, which holds the as-of period and the capped result rows, so nothing needs re-running.
+3. Work through `skills/ds-mode/references/review-checklist.md`. A failed item goes back to the analyst with its number.
+
+## What came from the retired tools
+
+Three earlier tools (ds-brainstorm-agent, and ds-review and ds-trace in ds-productivity-agents) were folded in and retired. Only what serves review or fills a gap was kept:
+
+| Kept | From | Now |
+|---|---|---|
+| The analysis reviewer's questions, without scores | ds-review | `skills/ds-mode/references/review-checklist.md` |
+| Recording what the agent did | ds-trace | the query log and readout tags, written by script rather than by the agent |
+| Verifying one result against a second source | ds-trace | the readout's `Reconciled:` line |
+| Mistake classes with detection rules | ds-brainstorm anti-patterns | `skills/ds-mode/references/mistake-classes.md`, to seed the wrong-number archive |
+| Methodology, decision and feasibility lenses | ds-brainstorm personas | `skills/ds-mode/references/plan-critique.md`, optional and not wired into the method |
+| Lessons on judge noise and regression to the mean | autoresearch | `eval/README.md` |
+
+Dropped: scoring frameworks (uncalibrated), domain digests (stale, with invented entries tagged authoritative), the writer-judge loop (no gain beyond noise), report generation and stakeholder profiles.
 
 ## Install
 
@@ -30,80 +55,25 @@ codex plugin marketplace add surahli123/ds-stack && codex plugin add ds-stack
 
 For Cursor, the `.cursor-plugin/plugin.json` manifest points at `skills/`. To install a single skill instead, copy its folder from `skills/` into your tool's skills directory. The skills are plain SKILL.md files with standard-library Python tools.
 
-Status by tool: in Claude Code the plugin validates, installs, and exposes all four skills (`ds-stack:ds-mode`, `ds-doc`, `doc-tighten`, `cold-read`), and both evals ran there. Codex and Cursor have not been smoke-tested yet.
+Status by tool: in Claude Code the plugin validates, installs, and exposes all four skills (`ds-stack:ds-mode`, `ds-doc`, `doc-tighten`, `cold-read`), and both evals ran there. Codex and Cursor have not been smoke-tested yet. The eval runner and `cold_read.py` take any agent CLI through `--agent-cmd` or `DS_AGENT_CMD`; runs without a transcript are graded with `grade.py --allow-no-transcript` and reported as unverified isolation. In the eval's full arm, the skill is pointed to from a `CLAUDE.md` note, which another agent may not read; check that first when porting.
 
 ## Results so far
 
-Both evals use synthetic tasks, 3 runs per setup, Sonnet as the agent, and clean profiles. Both report `INSUFFICIENT_N`, because the pre-registered rules need more tasks before they give a verdict.
-
-**Analysis eval** (5 cases; `eval/results/`). Plain prompting got all 5 cases right, and so did the checks-only and full setups after a fix. Round 1 found a real bug: the skill told the agent to abstain whenever a check couldn't run, so it withheld a correct answer on a case with only one week of data. The rule now separates a failed check, a check called wrongly, and data that can't support a check.
-
-**Writing eval** (3 tasks: a readout, a memo, a handover; `eval/writing/results/`).
-
-| Metric | Plain prompting | ds-doc |
-|---|---|---|
-| Fresh reader, skim (answer, decision, number) | 0.96 | 0.89 |
-| Fresh reader, full read (all takeaways) | 0.89 | 0.94 |
-| Docs with no lint fail | 2 of 9 | 9 of 9 |
-| Mean words | 423 | 356 |
-| Cost per run | $0.055 | $0.080 |
-
-- The skills fix format and length. Plain prompting failed the lint on 7 of 9 docs, mostly on bold and bold-label bullets. The ds-doc docs are 16% shorter.
-- No comprehension gain is shown. Readers already understood the plain docs. The one skim gap is a grading artifact: the reader prompt asked a handover for its conclusion rather than its current state. That prompt is now fixed.
-
-What the evals show: short tasks written from clean notes are too easy, both for analysis and for writing. The corpus failures came from long, multi-session docs written mid-work.
-
-## Real-case review (2026-10-10)
-
-An independent reviewer ran the skills on 10 real notes docs and on two public Simpson's-paradox datasets (Berkeley admissions, kidney stones), disguised so the agent couldn't recall the answer.
-
-| Finding | Change made |
-|---|---|
-| ds-mode got 6 of 6 answers right but reported an interval in 0 of 3 runs; plain prompting did in 2 of 3 | The readout requires an interval, or `(no interval: <reason>)`; `mix_shift` reports a 95% CI for the overall and within-segment change |
-| `mix_shift` fired on 12-27% of cases with no real change | A noise floor of 2 standard errors; 0 of the null cases fire now |
-| `mix_shift` called a real Simpson's paradox a `fail`, so agents had to explain it wasn't a data defect | New status `flag`: a finding the answer must report |
-| Per-segment mix effects were uninterpretable (+47 and -37 pp on a +4.6 pp total) | Deviation form: each segment's mix term now reads on its own |
-| `completeness` failed a normal Saturday and passed an 85% load | Same-weekday baseline; default threshold 90% |
-| `fanout` missed duplicate keys cancelled by dropped rows | Optional `matched_left_rows` catches it |
-| ds-doc rewrites: 36% shorter, lint-clean on 7 of 10 (plain prompting 0 of 10); spine written and cold read run in 0 of 5 | `spine.json` comes before the draft; `cold_read.py` grades the reader by script |
-| Lint precision on 24 hand-checked findings was 0.67 | Nine false-positive patterns and five misses fixed; about 0.88 on the same set, which is optimistic because the fixes were tuned on it |
-
-A re-run of the three ds-mode cases after the fixes: all 3 correct, all 3 with a 95% interval and `mix_shift` as `flag`, and each ended with provenance labelling the metric `[guess]`, as no `metrics.json` was given.
-
-Fresh readers understood originals and rewrites alike: ds-doc made docs shorter and cleaner without losing the answer, with no comprehension gain. Rewrites did drop facts the next reader needs: a status line saying the plan was already executed, and a handover's list of attacks already tried. The doc types now keep both.
-
-## What the research changed
-
-A review of data-agent benchmarks, vendor guidance and practitioner write-ups (October 2026) found three levers, in order of measured effect:
-
-1. Curated, data-verified metric definitions (+26 to +36 points on hard DABStep tasks).
-2. Execute-and-verify loops with independent review (+2 to +6 points on SQL benchmarks).
-3. An explicit right to abstain, which no mainstream benchmark scores.
-
-The skills now act on all three:
-
-- ds-mode pins the metric from the overlay's `metrics.json` before querying, and labels any definition it had to state itself `[guess]`. It asks when a question has two readings that give different numbers.
-- The readout carries a provenance section, and allows "caused" only for a randomized test or another design that identifies the cause.
-- `metrics.json` entries now carry `grain`, `source`, `verified` and `pitfalls`, and are written by a person, never drafted by an agent.
-
-Still open:
-
-- an independent reviewer before the readout is sent
-- answerability cases in the eval, scored +1 right, 0 abstain, minus a penalty wrong
-- an eval with real past errors that crosses definitions in context with checks on and off
+Both evals use synthetic tasks and report `INSUFFICIENT_N`: plain prompting already gets the current cases right, so they can't show a gain yet. A review on real notes docs and public Simpson's-paradox data fixed several check and lint bugs. The research found curated metric definitions to be the largest lever, then execute-and-verify loops, then an explicit right to abstain. Details, numbers and what is still open: [`docs/results.md`](docs/results.md).
 
 ## Develop
 
 ```bash
 make test                               # unit tests
 make lint-doc DOC=doc.md TYPE=readout   # lint one document
-make selftest                           # safety envelope
+make selftest                           # safety envelope, including the query log
+make verify READOUT=readout.md          # every number traces to a logged query or check
 make hooks                              # denylist hook (needs DS_OVERLAY_DIR or DS_DENYLIST)
 make eval && make grade RUN=eval/results/<dir>                       # analysis eval
 make writing-eval && make writing-grade RUN=eval/writing/results/<dir>   # writing eval
 ```
 
-Transcripts stay local because they are bulky. A regrade without them fails closed as unverifiable.
+Transcripts are committed with each results directory (about 3 MB for a 45-run eval), so a regrade can verify isolation. A regrade without them fails closed as unverifiable, unless the runs came from a custom agent and `--allow-no-transcript` is passed.
 
 ## Other caveats
 

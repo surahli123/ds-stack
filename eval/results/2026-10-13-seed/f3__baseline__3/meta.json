@@ -1,0 +1,10 @@
+{
+  "fixture": "f3",
+  "arm": "baseline",
+  "run": 3,
+  "model": "sonnet",
+  "exit": 0,
+  "seconds": 24.1,
+  "cost_usd": 0.06500679999999999,
+  "turns": 5
+}

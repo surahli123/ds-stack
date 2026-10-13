@@ -11,6 +11,7 @@ eval/gold/, which is never copied into an agent's working directory.
 
 import json
 import os
+import random
 import sqlite3
 from datetime import date, timedelta
 
@@ -58,13 +59,16 @@ def ranker_fixture(fixture_id, start, ranker_old, ranker_new, weeks):
     dates = days(start, 14)
     countries = {"US": (0.55, 1.03), "other": (0.45, 0.965)}
     totals = {0: [0, 0], 1: [0, 0]}
+    # Seeded day-level noise, so no week is an exact copy of another. A clean control
+    # with byte-identical weeks reads as a stale-copy defect to a careful analyst.
+    rng = random.Random(f"{fixture_id}-noise")
     for i, day in enumerate(dates):
         week = i // 7
         ranker = ranker_old if week == 0 else ranker_new
         for platform, (volume, ctr) in weeks[week].items():
             for country, (share, lift) in countries.items():
-                searches = round(volume * DAY_VOLUME[i % 7] * share)
-                clicks = round(searches * ctr * lift * DAY_CTR[i % 7])
+                searches = round(volume * DAY_VOLUME[i % 7] * share * rng.uniform(0.985, 1.015))
+                clicks = round(searches * ctr * lift * DAY_CTR[i % 7] * rng.uniform(0.995, 1.005))
                 conn.execute("INSERT INTO search_daily VALUES (?, ?, ?, ?, ?, ?)",
                              (day, platform, country, ranker, searches, clicks))
                 totals[week][0] += searches

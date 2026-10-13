@@ -22,14 +22,14 @@ The key is `spine.json` from `ds-doc`: the reader's role, the answer in one sent
 python3 <dir of this SKILL.md>/tools/cold_read.py doc.md --spine spine.json
 ```
 
-The script builds the skim view (the first 120 words, then each heading with its section's first sentence). It sends the skim and the full doc to a fresh reader, using `claude -p` with no tools and none of your context, with the prompts in `references/reader-prompts.md`. Then it grades the answers against the spine. The script does the grading, not you. Items that share too few words with the key go to a separate grader call. It prints one line per item and a verdict, for example "cold-read: skim 2/2, full 3/3 - pass", and writes `cold_read.json` next to the doc.
+The script builds the skim view (the first 120 words, then each heading with its section's first sentence). It sends the skim and the full doc to a fresh reader, using `claude -p` with no tools and none of your context (or the headless agent named in `DS_AGENT_CMD`, below), with the prompts in `references/reader-prompts.md`. Then it grades the answers against the spine. The script does the grading, not you. Items that share too few words with the key go to a separate grader call. It prints one line per item and a verdict, for example "cold-read: skim 2/2, full 3/3 - pass", and writes `cold_read.json` next to the doc.
 
 | Pass | Passes when |
 |---|---|
 | Skim | The reader states the answer and the decision |
 | Full | The reader recovers all three takeaways |
 
-Without the `claude` CLI (for example in Cursor or Codex), run with `--prompts-only`. Send each prompt to a fresh subagent with nothing else, save the replies as `{"skim": "...", "full": "..."}`, and grade with `--replies replies.json`. A reader from a different model family than the author is better, because it doesn't share the author's blind spots.
+To use another agent instead of Claude, set `DS_AGENT_CMD` (or pass `--agent-cmd`) to a command template such as `my-agent --model {model}` (`--reader-model` fills `{model}`): the prompt goes to its stdin, or into a file if the template contains `{prompt_file}`, and its stdout is the reply. With no headless agent at all (for example in Cursor's editor), run with `--prompts-only`. Send each prompt to a fresh subagent with nothing else, save the replies as `{"skim": "...", "full": "..."}`, and grade with `--replies replies.json`. A reader from a different model family than the author is better, because it doesn't share the author's blind spots.
 
 ## 3. Fix the doc, not the reader
 

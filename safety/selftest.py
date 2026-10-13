@@ -2,14 +2,15 @@
 """Startup self-test for a guarded runner. Run it before any unsupervised session.
 
 Exits 0 only if the runner blocks a write outside scratch, a second smuggled
-statement, and an oversized result, and still allows an aggregate read and a
-scratch write. The default target is the reference SQLite runner. A warehouse
+statement, and an oversized result, still allows an aggregate read and a
+scratch write, and logs every statement it is given with a unique id. The default target is the reference SQLite runner. A warehouse
 adapter in the private overlay should ship its own copy of these assertions.
 """
 
 import os
 import sqlite3
 import sys
+import tempfile
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
@@ -48,9 +49,25 @@ def selftest(conn, scratch_prefix, run=gq.run):
     return results
 
 
+def log_selftest(conn, scratch_prefix, run_logged=gq.run_logged, read_log=gq.read_log):
+    """One log line per statement, with a unique id, whether it ran or was blocked."""
+    with tempfile.TemporaryDirectory() as tmp:
+        log = os.path.join(tmp, "queries.log")
+        for sql in ("SELECT COUNT(*) FROM sqlite_master", "DROP TABLE sqlite_master", "SELECT 1; SELECT 2"):
+            try:
+                run_logged(conn, sql, scratch_prefix=scratch_prefix, max_rows=10, log=log)
+            except Exception:
+                pass
+        entries = read_log(log)
+    ids = [e.get("id") for e in entries]
+    return [("every statement is logged", len(entries) == 3),
+            ("log ids are unique", len(set(ids)) == len(ids) and None not in ids),
+            ("blocked statements are logged as blocked", [e.get("status") for e in entries] == ["ok", "blocked", "blocked"])]
+
+
 def main():
     conn = sqlite3.connect(":memory:")
-    results = selftest(conn, scratch_prefix="scratch_selftest_")
+    results = selftest(conn, scratch_prefix="scratch_selftest_") + log_selftest(conn, "scratch_selftest_")
     for label, ok in results:
         print(f"{'ok  ' if ok else 'FAIL'} {label}")
     return 0 if all(ok for _, ok in results) else 1

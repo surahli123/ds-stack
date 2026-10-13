@@ -6,6 +6,9 @@
     python3 checks/run.py --list
 
 Prints one JSON line and appends it to .ds-checks.log in the working directory.
+Add "from": "q3" (or a list of query ids) to the spec to record which logged
+queries the aggregates came from; the readout cites the printed id, such as
+[check:mix_shift#1].
 Statuses: pass; flag (a finding the answer must report, not a data defect);
 fail (a data or query defect); could_not_run.
 Exit code: 0 pass, 1 flag or fail, 2 could not run, 3 usage error.
@@ -15,11 +18,14 @@ import argparse
 import importlib
 import json
 import os
+import re
 import sys
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
 from _common import COULD_NOT_RUN, Result, emit  # noqa: E402
+
+QUERY_ID = re.compile(r"^q\d+$")
 
 CHECKS = ("completeness", "fanout", "mix_shift", "srm")
 
@@ -66,8 +72,14 @@ def main(argv=None):
     except (OSError, ValueError) as err:
         return emit(Result(args.check, COULD_NOT_RUN, f"could not run: unreadable spec ({err})"))
 
+    sources = spec.pop("from", [])
+    if isinstance(sources, str):
+        sources = [sources]
+    if not isinstance(sources, list) or not all(isinstance(s, str) and QUERY_ID.match(s) for s in sources):
+        return emit(Result(args.check, COULD_NOT_RUN, "could not run: 'from' must be a query id like \"q3\" or a list of them"))
+
     module = importlib.import_module(args.check)
-    return emit(module.run(spec))
+    return emit(module.run(spec), sources=sources)
 
 
 if __name__ == "__main__":
