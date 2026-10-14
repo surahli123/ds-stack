@@ -37,7 +37,7 @@ ls ~/ds-codex-hidden
 
 If the first line reports a leftover, stop: an earlier run didn't finish cleanly, and the owner decides what to restore.
 
-`--ignore-user-config` skips only `config.toml`. Global instructions in `~/.codex` would reach every arm, plain prompting included. Leave `auth.json` where it is. `eval/agents/codex.sh` also gives Codex an empty `HOME`, so skills in `~/.agents/skills` and plugins stay out.
+`--ignore-user-config` skips only `config.toml`. Global instructions in `~/.codex` would reach every arm, plain prompting included. Leave `auth.json` and `plugins/` where they are. `eval/agents/codex.sh` also gives Codex an empty `HOME`, so skills in `~/.agents/skills` stay out, and switches off plugins, remote plugins, apps and memories for each run.
 
 Then confirm the isolation with one paid call:
 
@@ -45,7 +45,7 @@ Then confirm the isolation with one paid call:
 cd ~/ds-stack && sh eval/agents/codex-isolation-probe.sh
 ```
 
-It passes when Codex lists no skills and no instruction files (NONE for both), or only its built-in behaviour. If it names any skill, quotes any AGENTS.md or mentions a personal path, run step 5's first block to put everything back, then stop and report the probe's reply.
+The script prints Codex's two-line reply, then `PASS` or `FAIL`. It passes only when every listed skill is one of Codex's five rebuilt system skills (imagegen, openai-docs, plugin-creator, skill-creator, skill-installer) and no instruction file is listed. On `FAIL`, run step 5's first block to put everything back, then stop and report the reply.
 
 ### 3. Run the Codex column, in English and in Chinese
 
@@ -65,12 +65,17 @@ The Cursor column isn't run this round.
 
 ### 5. Restore everything, then grade
 
-Restore first, also when you stop early:
+Restore first, also when you stop early. Codex rebuilds `~/.codex/skills` (its system skills) on every run, so the rebuilt copy moves to `~/ds-codex-recreated-<run id>`, kept, before the original goes back:
 
 ```bash
+D=$(cat ~/ds-run-id 2>/dev/null || date +%Y-%m-%d-%H%M)
 [ -e ~/ds-stack/eval/gold ] || mv ~/ds-gold-hidden ~/ds-stack/eval/gold
-for f in ~/ds-codex-hidden/* ~/ds-codex-hidden/.[!.]*; do [ -e "$f" ] && mv "$f" ~/.codex/; done; rmdir ~/ds-codex-hidden
-ls ~/ds-stack/eval/gold ~/.codex
+for f in ~/ds-codex-hidden/* ~/ds-codex-hidden/.[!.]*; do
+  [ -e "$f" ] || continue; n=$(basename "$f")
+  if [ -e ~/.codex/"$n" ]; then mkdir -p ~/ds-codex-recreated-$D && mv ~/.codex/"$n" ~/ds-codex-recreated-$D/; fi
+  mv "$f" ~/.codex/
+done; rmdir ~/ds-codex-hidden
+ls ~/ds-stack/eval/gold ~/.codex ~/ds-codex-recreated-$D 2>/dev/null
 ```
 
 Then grade:
