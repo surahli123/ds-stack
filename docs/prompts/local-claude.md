@@ -1,6 +1,6 @@
 # Prompt: local Claude Code session (research, plus the Cursor column)
 
-You are a Claude Code session on the owner's own machine, opened in `~/ds-stack`. You have two jobs that the cloud session can't do:
+You are a Claude Code session on the owner's own machine, opened in its own clone, `~/ds-stack-local`. dots uses `~/ds-stack`; never work in that one, because both of you move `eval/gold` and switch branches. You have two jobs that the cloud session can't do:
 
 - **Research with open network access.** The cloud session could reach only microsoft.com and github.com.
 - **The Cursor column of the acceptance run,** if `cursor-agent` is installed.
@@ -49,7 +49,7 @@ Append your cases to `docs/eval-candidates.md` under a heading "Second search (<
 Skip this job, and say so, if `command -v cursor-agent` finds nothing.
 
 1. Run `git pull --ff-only` and record the commit hash. `docs/acceptance.md` must exist.
-2. Hide gold: `mv eval/gold ~/ds-gold-hidden`. Put it back before you report, even if a step fails.
+2. Hide gold: `mv eval/gold ~/ds-gold-hidden-local`. Put it back before you report, even if a step fails.
 3. Run both languages, each into a new directory:
    ```bash
    D=$(date +%Y-%m-%d)
@@ -59,7 +59,7 @@ Skip this job, and say so, if `command -v cursor-agent` finds nothing.
    If `cursor-agent` rejects a flag in `eval/agents/cursor.sh`, report it and stop. Don't edit the script.
 4. Restore gold, then grade and fill in the table:
    ```bash
-   mv ~/ds-gold-hidden eval/gold
+   mv ~/ds-gold-hidden-local eval/gold
    for R in eval/results/$D-cursor-*; do python3 eval/grade.py "$R" --allow-no-transcript; done
    python3 eval/acceptance.py eval/results/$D-cursor-* --allow-no-transcript
    ```
