@@ -1,0 +1,257 @@
+{
+  "verdict": {
+    "n_fixtures": 3,
+    "min_required": 15,
+    "verdict": "INSUFFICIENT_N (smoke test, not a decision)"
+  },
+  "per_arm": {
+    "full": {
+      "fixtures_correct": 3,
+      "fixtures_false_alarm": 0,
+      "fixtures_abstain_answered": 0,
+      "fixtures_incomplete": 0,
+      "runs_correct": 8,
+      "runs": 9,
+      "runs_unparseable": 0,
+      "runs_contaminated": 0,
+      "runs_unverified_isolation": 0,
+      "dropped_alternative_lines": 3,
+      "runs_with_any_check": 9,
+      "runs_reading_skill": 9,
+      "cost_usd": 1.3
+    }
+  },
+  "runs": [
+    {
+      "fixture": "f1",
+      "arm": "full",
+      "run": 1,
+      "model": "sonnet",
+      "exit": 0,
+      "seconds": 41.0,
+      "cost_usd": 0.14309580000000002,
+      "turns": 10,
+      "correct": true,
+      "reason": "number within tolerance; causes consistent with gold",
+      "miss": null,
+      "headline": "-0.00 pp (-0.15 to +0.15) within-segment change, the part of the CTR move that v2 could account for",
+      "dropped_alternative_lines": 0,
+      "checks_ran": {
+        "completeness": [
+          "could_not_run"
+        ],
+        "mix_shift": [
+          "flag",
+          "flag"
+        ]
+      },
+      "skill_read": true,
+      "isolation": "ok",
+      "kind": "error"
+    },
+    {
+      "fixture": "f1",
+      "arm": "full",
+      "run": 2,
+      "model": "sonnet",
+      "exit": 0,
+      "seconds": 41.7,
+      "cost_usd": 0.15539730000000002,
+      "turns": 10,
+      "correct": true,
+      "reason": "number within tolerance; causes consistent with gold",
+      "miss": null,
+      "headline": "-0.00 pp (-0.15 to +0.15) attributable to v2 after holding platform mix fixed",
+      "dropped_alternative_lines": 0,
+      "checks_ran": {
+        "completeness": [
+          "pass"
+        ],
+        "mix_shift": [
+          "flag",
+          "flag"
+        ]
+      },
+      "skill_read": true,
+      "isolation": "ok",
+      "kind": "error"
+    },
+    {
+      "fixture": "f1",
+      "arm": "full",
+      "run": 3,
+      "model": "sonnet",
+      "exit": 0,
+      "seconds": 54.8,
+      "cost_usd": 0.1514566,
+      "turns": 10,
+      "correct": true,
+      "reason": "number within tolerance; causes consistent with gold",
+      "miss": null,
+      "headline": "-0.00 pp (-0.15 to +0.15) attributable to v2, as the within-platform CTR change",
+      "dropped_alternative_lines": 1,
+      "checks_ran": {
+        "mix_shift": [
+          "flag",
+          "flag"
+        ],
+        "completeness": [
+          "pass"
+        ]
+      },
+      "skill_read": true,
+      "isolation": "ok",
+      "kind": "error"
+    },
+    {
+      "fixture": "f3",
+      "arm": "full",
+      "run": 1,
+      "model": "sonnet",
+      "exit": 0,
+      "seconds": 44.9,
+      "cost_usd": 0.1561667,
+      "turns": 11,
+      "correct": true,
+      "reason": "number within tolerance; causes consistent with gold",
+      "miss": null,
+      "headline": "-1.83 pp (95% CI -1.98 to -1.68) overall CTR change, week over week; this is the total change that coincided with v3, not a v3 effect isolated by a control",
+      "dropped_alternative_lines": 0,
+      "checks_ran": {
+        "mix_shift": [
+          "pass"
+        ],
+        "completeness": [
+          "pass"
+        ]
+      },
+      "skill_read": true,
+      "isolation": "ok",
+      "kind": "clean"
+    },
+    {
+      "fixture": "f3",
+      "arm": "full",
+      "run": 2,
+      "model": "sonnet",
+      "exit": 0,
+      "seconds": 41.5,
+      "cost_usd": 0.1484576,
+      "turns": 9,
+      "correct": true,
+      "reason": "number within tolerance; causes consistent with gold",
+      "miss": null,
+      "headline": "-1.83 pp (95% CI -1.98 to -1.68)",
+      "dropped_alternative_lines": 0,
+      "checks_ran": {
+        "completeness": [
+          "pass"
+        ],
+        "mix_shift": [
+          "pass",
+          "pass"
+        ]
+      },
+      "skill_read": true,
+      "isolation": "ok",
+      "kind": "clean"
+    },
+    {
+      "fixture": "f3",
+      "arm": "full",
+      "run": 3,
+      "model": "sonnet",
+      "exit": 0,
+      "seconds": 45.6,
+      "cost_usd": 0.1432906,
+      "turns": 9,
+      "correct": false,
+      "reason": "abstained on a case with a valid answer",
+      "miss": "false_alarm",
+      "headline": "can't tell",
+      "dropped_alternative_lines": 0,
+      "checks_ran": {
+        "completeness": [
+          "could_not_run"
+        ],
+        "mix_shift": [
+          "pass",
+          "pass"
+        ]
+      },
+      "skill_read": true,
+      "isolation": "ok",
+      "kind": "clean"
+    },
+    {
+      "fixture": "f6",
+      "arm": "full",
+      "run": 1,
+      "model": "sonnet",
+      "exit": 0,
+      "seconds": 50.2,
+      "cost_usd": 0.15391069999999998,
+      "turns": 13,
+      "correct": true,
+      "reason": "number within tolerance; causes consistent with gold",
+      "miss": null,
+      "headline": "50.05 % (49.93 to 50.18)",
+      "dropped_alternative_lines": 1,
+      "checks_ran": {
+        "completeness": [
+          "fail",
+          "pass"
+        ]
+      },
+      "skill_read": true,
+      "isolation": "ok",
+      "kind": "error"
+    },
+    {
+      "fixture": "f6",
+      "arm": "full",
+      "run": 2,
+      "model": "sonnet",
+      "exit": 0,
+      "seconds": 40.7,
+      "cost_usd": 0.12342080000000001,
+      "turns": 9,
+      "correct": true,
+      "reason": "number within tolerance; causes consistent with gold",
+      "miss": null,
+      "headline": "50.05 % CTR (95% CI 49.93 to 50.17 %, binomial on the q5 counts)",
+      "dropped_alternative_lines": 1,
+      "checks_ran": {
+        "completeness": [
+          "pass"
+        ]
+      },
+      "skill_read": true,
+      "isolation": "ok",
+      "kind": "error"
+    },
+    {
+      "fixture": "f6",
+      "arm": "full",
+      "run": 3,
+      "model": "sonnet",
+      "exit": 0,
+      "seconds": 37.8,
+      "cost_usd": 0.124549,
+      "turns": 10,
+      "correct": true,
+      "reason": "number within tolerance; causes consistent with gold",
+      "miss": null,
+      "headline": "50.05 % search CTR (95% CI 49.93 to 50.17)",
+      "dropped_alternative_lines": 0,
+      "checks_ran": {
+        "completeness": [
+          "pass"
+        ]
+      },
+      "skill_read": true,
+      "isolation": "ok",
+      "kind": "error"
+    }
+  ]
+}

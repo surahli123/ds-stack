@@ -1,0 +1,1 @@
+{"check": "completeness", "details": {}, "from": ["q4"], "id": "completeness#1", "status": "could_not_run", "summary": "could not run: need at least 3 earlier periods (trailing days (under 3 weeks of same-weekday history)) before 2026-10-05, got 0", "ts": 1791955199.918}

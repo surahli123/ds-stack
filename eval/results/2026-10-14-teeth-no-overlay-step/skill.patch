@@ -1,0 +1,13 @@
+diff --git a/skills/ds-mode/SKILL.md b/skills/ds-mode/SKILL.md
+index 9a2aa71..7fd878b 100644
+--- a/skills/ds-mode/SKILL.md
++++ b/skills/ds-mode/SKILL.md
+@@ -20,7 +20,7 @@ A data scientist will review your readout, and should be able to check it in und
+ This is a draft, to be replaced with the analyst's own first moves.
+ 
+ 1. Restate the question in one sentence and name the decision it feeds. Treat the requester's guess about the cause as one alternative, not the premise.
+-2. Pin the metric before you query: numerator, denominator, filters, grain and source table. Take it from `metrics.json` in the overlay directory named by `$DS_OVERLAY_DIR` when the metric is there, and say so. If `$DS_OVERLAY_DIR` is unset or holds no `metrics.json`, there is none: never search the filesystem for one. When it isn't, write your definition into the readout and label it `[guess]`. Never invent a definition silently; a plausible number on the wrong definition is the most common wrong answer, and no check below catches it.
++2. Pin the metric before you query: numerator, denominator, filters, grain and source table. When it isn't, write your definition into the readout and label it `[guess]`. Never invent a definition silently; a plausible number on the wrong definition is the most common wrong answer, and no check below catches it.
+ 3. Decide whether the question can be answered.
+    - If two readings of it give materially different numbers and nothing settles which one is meant, ask before computing. When no one can answer, pick the reading the decision most likely needs, state it in the Answer, and put the other in the caveats.
+    - If the data can't answer it (the metric isn't logged, the period hasn't landed), say so up front instead of computing a substitute.
