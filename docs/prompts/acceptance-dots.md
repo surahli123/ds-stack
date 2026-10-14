@@ -7,7 +7,8 @@ You run the Codex column of the ds-stack acceptance matrix on the machine of the
 - Synthetic data only. Don't open, query or copy company data, and don't run SMA.
 - Don't edit `docs/acceptance.md`, any skill, the grader or the fixtures. If something looks wrong, report it.
 - Gold stays hidden while agents run, as step 2 describes.
-- Never overwrite a results or report directory. Each run gets a new one.
+- Never overwrite a results or report directory. Each run gets a new one; `run_arms.py` refuses an existing run.
+- Codex results made before commit `1093ca9` (a `codex.sh` without an empty `HOME`) are contaminated by the owner's global instructions and skills. Keep them, list them as contaminated in the report, and never grade them into the acceptance table.
 - Push only your results, to a new branch named `results/<date>-<harness>`. Don't merge anything, and don't open a PR unless the owner asks.
 
 ## Steps
@@ -45,7 +46,7 @@ Move everything back only in step 5, after every agent has finished. If anything
 ### 3. Run the Codex column, in English and in Chinese
 
 ```bash
-cd ~/ds-stack && D=$(date +%Y-%m-%d)
+cd ~/ds-stack && D=$(date +%Y-%m-%d-%H%M)
 python3 eval/run_arms.py --runs 3 --agent-cmd "sh $PWD/eval/agents/codex.sh {prompt_file}" --out eval/results/$D-codex-en
 python3 eval/run_arms.py --runs 3 --agent-cmd "sh $PWD/eval/agents/codex.sh {prompt_file}" --prompt-suffix "请用中文写结论。" --out eval/results/$D-codex-zh
 ```
@@ -83,6 +84,7 @@ Codex: <version>
 <for each results directory: its Fixtures-by-majority table from summary.md>
 Failing runs: <directory/run: the Reason column from summary.md>
 Pushed: <branch name>
+Contaminated earlier directories: <list, or "none">
 Hidden from ~/.codex: <what step 2 moved, or "nothing">; isolation probe: <its reply, shortened>; runs flagged "not isolated": <count>
 Problems: <none, or the step, the command and its error>
 ```
