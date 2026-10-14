@@ -8,7 +8,7 @@ This repo holds only the generic core. Company facts live in a private overlay o
 
 **This is the prototype seed (`v0.3-seed`).** The work side imports it and builds on its internal metric layer; [`docs/porting.md`](docs/porting.md) is the checklist. Changes flow one way, from here to work, so fixes made at work do not come back to this repo. Treat it as a snapshot.
 
-The trust bar is review, not autonomy: a data scientist who didn't run the analysis can check a readout in under 10 minutes. Every number in a readout carries a tag (`[q3]`, `[check:mix_shift#1]`, `[given]`) that `verify_readout.py` resolves against the query and check logs.
+[`docs/acceptance.md`](docs/acceptance.md) fixes when ds-mode counts as working, per harness and language. The trust bar is review, not autonomy: a data scientist who didn't run the analysis can check a readout in under 10 minutes. Every number in a readout carries a tag (`[q3]`, `[check:mix_shift#1]`, `[given]`) that `verify_readout.py` resolves against the query and check logs.
 
 ## Skills
 

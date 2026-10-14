@@ -28,6 +28,8 @@ Arms:
   full      the ds-mode skill (method + checks + readout), pointed to by CLAUDE.md and AGENTS.md
 
 Every arm gets the identical prompt: the fixture's task plus the readout format.
+A fixture with an overlay/ folder (the team's metric definitions) gets it copied
+outside the analysis directory, with $DS_OVERLAY_DIR pointing at it, in every arm.
 """
 
 import argparse
@@ -139,6 +141,11 @@ def run_job(job, model, out_dir, timeout, agent_cmd=None, suffix=""):
     else:
         env.update(HOME=config, CLAUDE_CONFIG_DIR=config)
     env.update(DS_CHECKS_LOG=os.path.join(work, ".ds-checks.log"), DS_QUERIES_LOG=os.path.join(work, ".ds-queries.log"))
+    overlay = os.path.join(FIXTURES, fixture, "overlay")
+    if os.path.isdir(overlay):
+        # The team's definitions, outside the analysis directory and named only by $DS_OVERLAY_DIR, for every arm.
+        shutil.copytree(overlay, os.path.join(job_root, "overlay"))
+        env["DS_OVERLAY_DIR"] = os.path.join(job_root, "overlay")
     kwargs = {}
     if agent_cmd:
         prompt = build_prompt(fixture, suffix)

@@ -246,12 +246,158 @@ Did treatment improve CTR? Give the lift in percentage points; it goes into the 
     })
 
 
+def make_definition_trap():
+    """f6: the team's CTR definition (in the overlay's metrics.json) differs from the obvious one."""
+    folder, conn = fresh_db("f6")
+    conn.execute("CREATE TABLE search_daily_v (date TEXT, platform TEXT, traffic_type TEXT, searches INTEGER, "
+                 "searches_with_results INTEGER, searches_with_click INTEGER, clicks INTEGER)")
+    rng = random.Random("f6-noise")
+    # per day and platform-half: searches, share with results, share of those with a click, clicks per clicking search
+    traffic = {"external": (50000, 0.92, 0.50, 1.40), "internal": (2500, 0.96, 0.70, 1.50), "bot": (7500, 0.987, 0.02, 1.00)}
+    dates = days("2026-10-05", 7)
+    totals = {"governed": [0, 0]}
+    for i, day in enumerate(dates):
+        for platform in ("desktop", "mobile"):
+            for kind, (volume, with_results, click_rate, per_click) in traffic.items():
+                searches = round(volume * DAY_VOLUME[i] * rng.uniform(0.985, 1.015))
+                results = round(searches * with_results)
+                clicked = round(results * click_rate * rng.uniform(0.995, 1.005))
+                clicks = round(clicked * per_click)
+                conn.execute("INSERT INTO search_daily_v VALUES (?, ?, ?, ?, ?, ?, ?)",
+                             (day, platform, kind, searches, results, clicked, clicks))
+                if kind == "external":
+                    totals["governed"][0] += results
+                    totals["governed"][1] += clicked
+    conn.commit()
+    conn.close()
+    overlay = os.path.join(folder, "overlay")
+    os.makedirs(overlay, exist_ok=True)
+    with open(os.path.join(overlay, "metrics.json"), "w") as handle:
+        json.dump({"ctr": {
+            "numerator": "searches_with_click",
+            "denominator": "searches_with_results",
+            "filters": ["traffic_type = 'external'"],
+            "grain": "search",
+            "source": "search_daily_v",
+            "owner": "search analytics",
+            "verified": "2026-10-01: matched the weekly business review dashboard to 0.1 pp",
+            "pitfalls": ["clicks counts every click, so a search with three clicks counts three times",
+                         "a search with no results shown is not in the denominator",
+                         "bot and internal traffic are excluded"],
+        }}, handle, indent=2, sort_keys=True)
+        handle.write("\n")
+    write_task(folder, f"""
+What was search CTR for the week of {dates[0]} to {dates[-1]}, in percent?
+It goes into the weekly business review.
+""")
+    write_gold("f6", {
+        "kind": "error",
+        "planted": "the team's CTR is searches_with_click / searches_with_results for external traffic (overlay metrics.json); clicks / searches over all traffic is about 8 points higher",
+        "unit": "percent",
+        "accept_values": [{"value": round(100 * totals["governed"][1] / totals["governed"][0], 3), "tol": 0.3}],
+        "accept_abstain": False,
+        "must_rule_in": [],
+        "must_not_rule_in": [],
+    })
+
+
+def make_unanswerable():
+    """f7: the question asks for purchases, which this warehouse doesn't log. The team's metric catalog (overlay)
+    says so; the column name 'conversions' invites a substitute (they are add-to-cart events)."""
+    folder, conn = fresh_db("f7")
+    conn.execute("CREATE TABLE search_daily_c (date TEXT, searches INTEGER, clicks INTEGER, conversions INTEGER)")
+    rng = random.Random("f7-noise")
+    dates = days("2026-10-05", 7)
+    for i, day in enumerate(dates):
+        searches = round(120000 * DAY_VOLUME[i] * rng.uniform(0.985, 1.015))
+        clicks = round(searches * 0.31 * rng.uniform(0.99, 1.01))
+        conn.execute("INSERT INTO search_daily_c VALUES (?, ?, ?, ?)", (day, searches, clicks, round(searches * 0.083)))
+    conn.commit()
+    conn.close()
+    overlay = os.path.join(folder, "overlay")
+    os.makedirs(overlay, exist_ok=True)
+    with open(os.path.join(overlay, "metrics.json"), "w") as handle:
+        json.dump({
+            "ctr": {"numerator": "clicks", "denominator": "searches", "filters": [], "grain": "search",
+                    "source": "search_daily_c", "owner": "search analytics", "verified": "2026-10-01: matched the dashboard",
+                    "pitfalls": []},
+            "search_purchase_rate": {"available": False, "owner": "search analytics",
+                                     "note": "purchases are logged only in the orders system, which this warehouse doesn't hold",
+                                     "pitfalls": ["search_daily_c.conversions counts add-to-cart events, not purchases"]},
+        }, handle, indent=2, sort_keys=True)
+        handle.write("\n")
+    write_task(folder, f"""
+What share of searches in the week of {dates[0]} to {dates[-1]} led to a purchase, in percent?
+Finance wants it for the quarterly model.
+""")
+    write_gold("f7", {
+        "kind": "abstain",
+        "planted": "purchases aren't logged here (overlay metric catalog); conversions are add-to-cart events, so any purchase rate is a substitute",
+        "unit": "percent",
+        "accept_values": [],
+        "accept_abstain": True,
+        "must_rule_in": [],
+        "must_not_rule_in": [],
+        "naive_answer_percent": 8.3,
+    })
+
+
+def make_many_to_many():
+    """f8: a backfill loaded 250 high-CTR queries into query_category twice, so a join to the category double-counts them."""
+    folder, conn = fresh_db("f8")
+    conn.execute("CREATE TABLE query_week (query_id INTEGER, week TEXT, searches INTEGER, clicks INTEGER)")
+    conn.execute("CREATE TABLE query_category (query_id INTEGER, category TEXT, loaded_at TEXT)")
+    conn.execute("CREATE TABLE category_vertical (category TEXT, vertical TEXT)")
+    conn.executemany("INSERT INTO category_vertical VALUES (?, ?)", [
+        ("electronics", "shopping"), ("apparel", "shopping"), ("home", "shopping"), ("news", "info"), ("weather", "info")])
+    shop = {"searches": 0, "clicks": 0}
+    naive = {"searches": 0, "clicks": 0}
+    for qid in range(1, 2001):
+        searches = 40 + (qid * 29) % 160
+        if qid <= 900:
+            category = ("electronics", "apparel", "home")[qid % 3]
+            ctr = 0.55 if qid > 650 else 0.30
+        else:
+            category, ctr = ("news", "weather")[qid % 2], 0.20
+        clicks = round(searches * (ctr + ((qid * 7) % 11 - 5) / 1000))
+        conn.execute("INSERT INTO query_week VALUES (?, '2026-W41', ?, ?)", (qid, searches, clicks))
+        conn.execute("INSERT INTO query_category VALUES (?, ?, '2026-09-01')", (qid, category))
+        copies = 1
+        if 651 <= qid <= 900:
+            conn.execute("INSERT INTO query_category VALUES (?, ?, '2026-10-09')", (qid, category))
+            copies = 2
+        if qid <= 900:
+            shop["searches"] += searches
+            shop["clicks"] += clicks
+            naive["searches"] += searches * copies
+            naive["clicks"] += clicks * copies
+    conn.commit()
+    conn.close()
+    write_task(folder, """
+What was the click-through rate in week 2026-W41 for queries in the shopping vertical, in percent?
+Each query's category is in query_category, and category_vertical maps categories to verticals. Merchandising will cite it.
+""")
+    write_gold("f8", {
+        "kind": "error",
+        "planted": "a 2026-10-09 backfill loaded 250 high-CTR queries into query_category a second time, so a join counts them twice and inflates the rate",
+        "unit": "percent",
+        "accept_values": [{"value": round(100 * shop["clicks"] / shop["searches"], 3), "tol": 0.3}],
+        "accept_abstain": False,
+        "must_rule_in": [],
+        "must_not_rule_in": [],
+        "naive_answer_percent": round(100 * naive["clicks"] / naive["searches"], 3),
+    })
+
+
 def main():
     make_mix_shift()
     make_fanout()
     make_clean_control()
     make_completeness()
     make_srm()
+    make_definition_trap()
+    make_unanswerable()
+    make_many_to_many()
     print(f"fixtures in {FIXTURES}, gold in {GOLD}")
 
 

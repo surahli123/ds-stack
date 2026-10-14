@@ -342,3 +342,15 @@ def test_a_prompt_suffix_goes_last_and_is_the_same_for_every_arm():
     suffixed = run_arms.build_prompt("f1", "Write the prose in Chinese.")
     assert suffixed == plain + "\nWrite the prose in Chinese.\n"
     assert run_arms.build_prompt("f1", "   ") == plain
+
+
+PRINT_OVERLAY = ('python3 -c "import os; d = os.environ.get(\'DS_OVERLAY_DIR\', \'\'); '
+                 'print(d.endswith(\'/overlay\'), os.path.exists(os.path.join(d, \'metrics.json\')), '
+                 'os.path.exists(\'metrics.json\'))"')
+
+
+@pytest.mark.parametrize("fixture, expected", [("f6", "True True False"), ("f1", "False False False")])
+def test_a_fixture_overlay_is_named_by_env_and_kept_out_of_the_analysis_dir(tmp_path, monkeypatch, fixture, expected):
+    monkeypatch.setenv("DS_RUN_ROOT", str(tmp_path / "runs"))
+    run_arms.run_job((fixture, "baseline", 1), "auto", str(tmp_path / "out"), 60, agent_cmd=PRINT_OVERLAY)
+    assert (tmp_path / "out" / f"{fixture}__baseline__1" / "result.md").read_text().strip() == expected

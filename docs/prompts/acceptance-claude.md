@@ -30,7 +30,7 @@ Goal: show that the ds-mode plugin works in Claude Code, Codex and Cursor, with 
 ## Phase B: the Claude column
 
 4. Run `eval/run_arms.py --runs 3` with all three arms, once in English and once with the Chinese suffix. Each run gets a new results directory under `eval/results/`.
-5. Grade with `eval/grade.py`. Diagnose every failing run from raw evidence: its `transcript.jsonl`, `queries.log`, `checks.log`, and the SKILL.md copy the agent saw. Don't diagnose from one-line summaries.
+5. Grade with `eval/grade.py`, and fill in the levels with `eval/acceptance.py <dirs>`. Diagnose every failing run from raw evidence: its `transcript.jsonl`, `queries.log`, `checks.log`, and the SKILL.md copy the agent saw. Don't diagnose from one-line summaries.
 6. For each failure, find the first point where the agent left the skill. Classify it as harness or plumbing, skill-text ambiguity, grader parsing, fixture flaw, or model error. Fix only that layer, and add a regression test built from the failing artifact. A fix to the skill, grader or fixtures restarts the matrix in new directories, so tell the owner that dots must rerun too.
 7. Prove the eval has teeth. On a scratch branch, remove the three-estimate-lines rule from SKILL.md and run the full arm on f1, f3 and f6. Confirm that grading catches it, then delete the branch. Record the result.
 8. When dots pushes its `results/<date>-<harness>` branches, merge them and fill in the acceptance table.
