@@ -30,7 +30,15 @@ for f in AGENTS.md skills prompts; do [ -e ~/.codex/$f ] && mv ~/.codex/$f ~/ds-
 ls ~/ds-codex-hidden
 ```
 
-`--ignore-user-config` skips only `config.toml`. Global instructions in `~/.codex` would reach every arm, plain prompting included. Leave `auth.json` where it is.
+`--ignore-user-config` skips only `config.toml`. Global instructions in `~/.codex` would reach every arm, plain prompting included. Leave `auth.json` where it is. `eval/agents/codex.sh` also gives Codex an empty `HOME`, so skills in `~/.agents/skills` and plugins stay out.
+
+Then confirm the isolation with one paid call:
+
+```bash
+cd ~/ds-stack && sh eval/agents/codex-isolation-probe.sh
+```
+
+It passes when Codex lists no skills and no instruction files (NONE for both), or only its built-in behaviour. If it names any skill, quotes any AGENTS.md or mentions a personal path, put everything back, then stop and report its reply.
 
 Move everything back only in step 5, after every agent has finished. If anything stops you early, move it back before you report.
 
@@ -75,6 +83,6 @@ Codex: <version>
 <for each results directory: its Fixtures-by-majority table from summary.md>
 Failing runs: <directory/run: the Reason column from summary.md>
 Pushed: <branch name>
-Hidden from ~/.codex: <what step 2 moved, or "nothing">; runs flagged "not isolated": <count>
+Hidden from ~/.codex: <what step 2 moved, or "nothing">; isolation probe: <its reply, shortened>; runs flagged "not isolated": <count>
 Problems: <none, or the step, the command and its error>
 ```
