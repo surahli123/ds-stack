@@ -5,8 +5,10 @@
 # step 2). It is the first Codex start after that, so Codex rebuilds skills/.system during it; codex.sh allows
 # only that folder in skills/ from then on, and this probe checks that it holds just the system skills.
 # Prints Codex's reply, then PASS or FAIL. Exit code: 0 pass, 1 fail.
-# Pass: every listed skill is one of Codex's five rebuilt system skills, and no instruction file is listed.
-ALLOWED="imagegen openai-docs plugin-creator skill-creator skill-installer"
+# Pass: every listed skill is one of Codex's system skills, and no instruction file is listed. The model may
+# leave some out (in 2026-10-13-2343 it didn't list review-agent), so codex.sh also checks the folder itself.
+# Same list as SYSTEM_SKILLS in codex.sh.
+ALLOWED="imagegen openai-docs plugin-creator review-agent skill-creator skill-installer"
 HERE=$(cd "$(dirname "$0")" && pwd)
 WORK=$(mktemp -d "${TMPDIR:-/tmp}/ds-codex-probe.XXXXXX")
 cat > "$WORK/prompt.md" <<'PROMPT'
@@ -30,6 +32,6 @@ if [ "$(echo "$SKILLS" | tr 'a-z' 'A-Z' | tr -d ' .')" != "NONE" ]; then
     case " $ALLOWED " in *" $name "*) ;; *) EXTRA="$EXTRA $name" ;; esac
   done
 fi
-if [ -n "$EXTRA" ]; then echo "FAIL: skills beyond the five system skills:$EXTRA"; exit 1; fi
+if [ -n "$EXTRA" ]; then echo "FAIL: skills beyond Codex's system skills:$EXTRA"; exit 1; fi
 if [ "$(echo "$INSTR" | tr 'a-z' 'A-Z' | tr -d ' .')" != "NONE" ]; then echo "FAIL: instruction files: $INSTR"; exit 1; fi
 echo "PASS"

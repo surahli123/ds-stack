@@ -47,7 +47,7 @@ Then confirm the isolation with one paid call:
 cd ~/ds-stack && sh eval/agents/codex-isolation-probe.sh
 ```
 
-The script prints Codex's two-line reply, then `PASS` or `FAIL`. It passes only when every listed skill is one of Codex's five rebuilt system skills (imagegen, openai-docs, plugin-creator, skill-creator, skill-installer) and no instruction file is listed. On `FAIL`, run step 5's first block to put everything back, then stop and report the reply.
+The script prints Codex's two-line reply, then `PASS` or `FAIL`. It passes only when every listed skill is one of Codex's six system skills (imagegen, openai-docs, plugin-creator, review-agent, skill-creator, skill-installer) and no instruction file is listed. The model may list fewer; `codex.sh` checks the folder itself on every run. On `FAIL`, run step 5's first block to put everything back, then stop and report the reply.
 
 ### 3. Run the Codex column, in English and in Chinese
 

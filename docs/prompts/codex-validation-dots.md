@@ -21,7 +21,7 @@ The second command replays the published attempt from its branch, since checking
 ls -A ~/ds-codex-recreated-2026-10-13-2343/skills ~/ds-codex-recreated-2026-10-13-2343/skills/.system
 ```
 
-Expected: `skills` holds only `.system`. `.system` holds the five system skills and `.codex-system-skills.marker`. Anything else: stop and report it.
+Expected: `skills` holds only `.system`. `.system` holds `.codex-system-skills.marker` and Codex 0.153.4's six system skills: imagegen, openai-docs, plugin-creator, review-agent, skill-creator, skill-installer. Anything else: stop and report it.
 
 ### V3. Hide, then probe (1 paid call)
 

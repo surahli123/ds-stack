@@ -390,3 +390,40 @@ def test_finders_ds_store_is_not_a_leftover(fake_codex):
     (home / "skills" / ".DS_Store").unlink()
     (home / "skills" / ".DS_Store").mkdir()
     assert run().returncode == 4
+
+
+# --- Codex's own system skills, checked by folder and not by the model's listing ---------------------------
+
+SYSTEM_SKILLS = ["imagegen", "openai-docs", "plugin-creator", "review-agent", "skill-creator", "skill-installer"]
+
+
+def test_codexs_six_system_skills_and_marker_are_allowed(fake_codex):
+    # As dots found in ~/ds-codex-recreated-2026-10-13-2343: the probe's model reply had left out review-agent.
+    home, run = fake_codex
+    system = home / "skills" / ".system"
+    for name in SYSTEM_SKILLS:
+        (system / name).mkdir(parents=True)
+        (system / name / "SKILL.md").write_text(f"---\nname: {name}\n---\n")
+    (system / ".codex-system-skills.marker").write_text("abc\n")
+    proc = run()
+    assert proc.returncode == 0, proc.stderr
+
+
+@pytest.mark.parametrize("extra", ["ds-mode", ".hidden", "notes.md"])
+def test_anything_else_in_the_system_folder_stops_the_run(fake_codex, extra):
+    home, run = fake_codex
+    system = home / "skills" / ".system"
+    (system / "imagegen").mkdir(parents=True)
+    (system / extra).write_text("x")
+    proc = run()
+    assert proc.returncode == 4 and f".system/{extra}" in proc.stderr
+
+
+def test_the_probe_and_the_wrapper_allow_the_same_skills():
+    def listed(path, var):
+        with open(path) as handle:
+            line = next(l for l in handle if l.startswith(f"{var}="))
+        return line.split("=", 1)[1].strip().strip('"').split()
+    agents = os.path.join(ROOT, "eval", "agents")
+    assert listed(os.path.join(agents, "codex.sh"), "SYSTEM_SKILLS") == SYSTEM_SKILLS
+    assert listed(os.path.join(agents, "codex-isolation-probe.sh"), "ALLOWED") == SYSTEM_SKILLS

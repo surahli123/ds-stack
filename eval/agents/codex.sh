@@ -11,7 +11,9 @@
 #   without starting Codex, so a leaky run is never made.
 # - Codex writes its embedded system skills to $CODEX_HOME/skills/.system on every start (codex-rs/skills,
 #   install_system_skills), so skills/ exists again after the first run. Only .system is allowed in it (and
-#   Finder's .DS_Store); the isolation probe checks that it holds the five system skills.
+#   Finder's .DS_Store), and .system may hold only the skills below and Codex's marker file. They are the
+#   six in codex-rs/skills/src/assets/samples at tag rust-v0.153.4. A Codex release that adds one stops
+#   every run here until the list is updated; the probe uses the same list.
 # - HOME points at an empty temporary directory, so nothing under the real home reaches the agent.
 # - Plugins, remote plugins, apps and memories are disabled per run (Codex 0.153 feature flags).
 # - DS_CODEX_MODEL and DS_CODEX_EFFORT, when set, pin the model and the reasoning effort. Otherwise
@@ -19,6 +21,7 @@
 # Check the result once with eval/agents/codex-isolation-probe.sh before a matrix.
 CODEX_HOME=${CODEX_HOME:-$HOME/.codex}
 export CODEX_HOME
+SYSTEM_SKILLS="imagegen openai-docs plugin-creator review-agent skill-creator skill-installer"
 LEAKED=0
 leak() { echo "ds-stack: $1 is present, so this run is not isolated; Codex was not started" >&2; LEAKED=1; }
 for leftover in AGENTS.md AGENTS.override.md prompts; do
@@ -28,6 +31,11 @@ for entry in "$CODEX_HOME"/skills/* "$CODEX_HOME"/skills/.[!.]* "$CODEX_HOME"/sk
   if [ ! -e "$entry" ] && [ ! -L "$entry" ]; then continue; fi
   if [ "$entry" = "$CODEX_HOME/skills/.system" ] && [ ! -L "$entry" ]; then continue; fi
   if [ "$entry" = "$CODEX_HOME/skills/.DS_Store" ] && [ -f "$entry" ] && [ ! -L "$entry" ]; then continue; fi
+  leak "$entry"
+done
+for entry in "$CODEX_HOME"/skills/.system/* "$CODEX_HOME"/skills/.system/.[!.]* "$CODEX_HOME"/skills/.system/..?*; do
+  if [ ! -e "$entry" ] && [ ! -L "$entry" ]; then continue; fi
+  case " $SYSTEM_SKILLS .codex-system-skills.marker .DS_Store " in *" ${entry##*/} "*) continue ;; esac
   leak "$entry"
 done
 if [ "$LEAKED" = 1 ]; then exit 4; fi
