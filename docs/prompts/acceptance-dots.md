@@ -21,13 +21,18 @@ cd ~/ds-stack && test -f docs/acceptance.md && git log -1 --format=%H
 
 Stop and tell the owner if `docs/acceptance.md` doesn't exist yet. Record the commit hash. Also check that `codex --version` works and that `codex login status` shows a sign-in.
 
-### 2. Hide gold while the agents run
+### 2. Hide gold and Codex's global instructions while the agents run
 
 ```bash
 mv ~/ds-stack/eval/gold ~/ds-gold-hidden
+mkdir -p ~/ds-codex-hidden
+for f in AGENTS.md skills prompts; do [ -e ~/.codex/$f ] && mv ~/.codex/$f ~/ds-codex-hidden/; done
+ls ~/ds-codex-hidden
 ```
 
-Move it back only in step 5, after every agent has finished. If anything stops you early, move it back before you report.
+`--ignore-user-config` skips only `config.toml`. Global instructions in `~/.codex` would reach every arm, plain prompting included. Leave `auth.json` where it is.
+
+Move everything back only in step 5, after every agent has finished. If anything stops you early, move it back before you report.
 
 ### 3. Run the Codex column, in English and in Chinese
 
@@ -47,6 +52,8 @@ A local Claude Code session runs it (`docs/prompts/local-claude.md`). Run Cursor
 
 ```bash
 mv ~/ds-gold-hidden ~/ds-stack/eval/gold
+for f in ~/ds-codex-hidden/*; do [ -e "$f" ] && mv "$f" ~/.codex/; done; rmdir ~/ds-codex-hidden
+grep -l "is not isolated" eval/results/$D-codex-*/*/agent.log
 for R in eval/results/$D-codex-* eval/results/$D-cursor-*; do [ -d "$R" ] && python3 eval/grade.py "$R" --allow-no-transcript; done
 python3 eval/acceptance.py eval/results/$D-codex-* eval/results/$D-cursor-* --allow-no-transcript
 ```
@@ -68,5 +75,6 @@ Codex: <version>
 <for each results directory: its Fixtures-by-majority table from summary.md>
 Failing runs: <directory/run: the Reason column from summary.md>
 Pushed: <branch name>
+Hidden from ~/.codex: <what step 2 moved, or "nothing">; runs flagged "not isolated": <count>
 Problems: <none, or the step, the command and its error>
 ```

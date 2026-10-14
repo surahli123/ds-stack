@@ -50,7 +50,7 @@ FIXTURES = os.path.join(HERE, "fixtures")
 ARMS = ("baseline", "checks", "full")
 PASSTHROUGH_ENV = ("PATH", "ANTHROPIC_BASE_URL", "HTTPS_PROXY", "HTTP_PROXY", "NO_PROXY",
                    "https_proxy", "http_proxy", "no_proxy", "NODE_EXTRA_CA_CERTS", "SSL_CERT_FILE",
-                   "REQUESTS_CA_BUNDLE", "ANTHROPIC_API_KEY")
+                   "REQUESTS_CA_BUNDLE", "ANTHROPIC_API_KEY", "CLAUDE_CODE_OAUTH_TOKEN")
 # A custom agent keeps its real login, so it also gets these (the default arm runs with HOME set to an empty dir).
 CUSTOM_AGENT_ENV = ("HOME", "USER", "LOGNAME", "XDG_CONFIG_HOME", "XDG_DATA_HOME", "XDG_CACHE_HOME", "CURSOR_API_KEY")
 SKIP_IN_COPY = shutil.ignore_patterns("__pycache__", "registry.json", ".ds-checks.log", ".ds-queries.log")
