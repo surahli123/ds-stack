@@ -10,8 +10,8 @@
 #   it for the run (docs/prompts/acceptance-dots.md). If any is still there, this script says so and exits 4
 #   without starting Codex, so a leaky run is never made.
 # - Codex writes its embedded system skills to $CODEX_HOME/skills/.system on every start (codex-rs/skills,
-#   install_system_skills), so skills/ exists again after the first run. Only .system is allowed in it; the
-#   isolation probe checks that it holds the five system skills.
+#   install_system_skills), so skills/ exists again after the first run. Only .system is allowed in it (and
+#   Finder's .DS_Store); the isolation probe checks that it holds the five system skills.
 # - HOME points at an empty temporary directory, so nothing under the real home reaches the agent.
 # - Plugins, remote plugins, apps and memories are disabled per run (Codex 0.153 feature flags).
 # - DS_CODEX_MODEL and DS_CODEX_EFFORT, when set, pin the model and the reasoning effort. Otherwise
@@ -27,6 +27,7 @@ done
 for entry in "$CODEX_HOME"/skills/* "$CODEX_HOME"/skills/.[!.]* "$CODEX_HOME"/skills/..?*; do
   if [ ! -e "$entry" ] && [ ! -L "$entry" ]; then continue; fi
   if [ "$entry" = "$CODEX_HOME/skills/.system" ] && [ ! -L "$entry" ]; then continue; fi
+  if [ "$entry" = "$CODEX_HOME/skills/.DS_Store" ] && [ -f "$entry" ] && [ ! -L "$entry" ]; then continue; fi
   leak "$entry"
 done
 if [ "$LEAKED" = 1 ]; then exit 4; fi

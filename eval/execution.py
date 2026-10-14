@@ -17,8 +17,13 @@ OK = "ok"
 AGENT_LIMITS = ("timeout", "max_turns", "empty_reply")
 # Failures worth retrying after a pause: the provider refused the request, not the agent's work.
 RETRYABLE = ("rate_limited", "capacity")
-# Printed by eval/agents/codex.sh, which then exits without starting the agent.
-ISOLATION = re.compile(r"\bnot isolated\b")
+# The line eval/agents/codex.sh prints before it exits without starting the agent (older versions printed it
+# and went on). Anchored to that line: Codex echoes the model's prose into its log, and an analysis may well
+# say "the effect is not isolated".
+ISOLATION = re.compile(r"^ds-stack: .+ is present, so this run is not isolated", re.M)
+# Provider refusals are read only from error lines (Codex prints "ERROR: ...") and from an error result the
+# agent reported, never from tool output or prose, where "429 rows" or "overloaded servers" can appear.
+ERROR_LINE = re.compile(r"^\s*(?:ERROR|Error|error)\b.*$", re.M)
 RATE_LIMITED = re.compile(r"\b429\b|too many requests|rate[ _-]?limit|usage limit", re.I)
 CAPACITY = re.compile(r"at capacity|overloaded|\b529\b", re.I)
 AGENT_MODEL = re.compile(r"^model: *(\S+)", re.M)
@@ -43,19 +48,22 @@ def classify(code, reply, log, error_text=None):
 def _outcome(code, reply, log, error_text):
     if code == 0 and error_text is None and (reply or "").strip():
         return OK
+    # claude -p exits 1 on any error result, its turn cap included; the cap is the agent's own limit.
+    if error_text is not None and "max_turns" in error_text:
+        return "max_turns"
     # Codex retries a 429 itself and may still finish, so these patterns only explain a run that failed.
-    text = "\n".join((log or "", error_text or "", reply or ""))
-    if RATE_LIMITED.search(text):
+    errors = "\n".join(ERROR_LINE.findall(log or "") + [error_text or ""])
+    if RATE_LIMITED.search(errors):
         return "rate_limited"
-    if CAPACITY.search(text):
+    if CAPACITY.search(errors):
         return "capacity"
     if code == "timeout":
         return "timeout"
     if code != 0:
+        # A custom agent has no error channel, so a crash for its own reasons can't be told from a provider
+        # failure: it counts as a failure, and every rerun it causes is reported.
         return f"exit_{code}"
-    if error_text is not None:
-        return "max_turns" if "max_turns" in error_text else "agent_error"
-    return "empty_reply"
+    return "agent_error" if error_text is not None else "empty_reply"
 
 
 def executed(kind):

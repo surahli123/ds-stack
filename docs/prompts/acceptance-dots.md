@@ -85,7 +85,7 @@ ls ~/ds-stack/eval/gold ~/.codex ~/ds-codex-recreated-$D 2>/dev/null
 Then grade:
 
 ```bash
-cd ~/ds-stack && D=$(cat ~/ds-run-id) && cat eval/results/$D-codex-*/run-status.json; for R in eval/results/$D-codex-*; do python3 eval/grade.py "$R" --allow-no-transcript; done; python3 eval/acceptance.py eval/results/$D-codex-* --allow-no-transcript; echo "acceptance exit $?"
+cd ~/ds-stack && D=$(cat ~/ds-run-id) && cat eval/results/$D-codex-en/run-status.json eval/results/$D-codex-zh/run-status.json; for R in eval/results/$D-codex-en eval/results/$D-codex-zh; do python3 eval/grade.py "$R" --allow-no-transcript; done; python3 eval/acceptance.py eval/results/$D-codex-en eval/results/$D-codex-zh --allow-no-transcript; echo "acceptance exit $?"
 ```
 
 ### 6. Push the results

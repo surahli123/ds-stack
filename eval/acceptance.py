@@ -12,8 +12,9 @@ A directory where any run didn't execute (rate-limited, at capacity, not isolate
 crashed, or an API error), or where run_arms.py left jobs unstarted, is
 INVALID: its levels aren't computed, because they would measure the failures,
 not the agent. --diagnostic prints them anyway, marked as diagnostic only. A
-directory named in eval/never_grade.txt is refused. Exit code: 0 when every
-directory was assessed, 2 when any was INVALID or refused, 3 when none exists.
+directory named in eval/never_grade.txt is refused, and one with no runs is
+skipped. Exit code: 0 when every directory was assessed, 2 when any was INVALID
+or refused, 3 when none exists.
 """
 
 import argparse
@@ -156,6 +157,9 @@ def main(argv=None):
         if refused:
             print(f"### {os.path.basename(os.path.normpath(results_dir))}\n\nREFUSED: {refused}\n")
             status = 2
+            continue
+        if not grade.grade_dir(results_dir, args.allow_no_transcript):
+            print(f"acceptance: skipping {results_dir}: it holds no runs (a report directory?)", file=sys.stderr)
             continue
         row = assess(results_dir, args.allow_no_transcript)
         print(render(row, args.diagnostic))

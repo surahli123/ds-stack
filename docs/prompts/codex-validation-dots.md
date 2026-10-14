@@ -10,7 +10,7 @@ Why: the Codex attempt 2026-10-13-2343 measured nothing. 137 of its 144 runs die
 
 ```bash
 cd ~/ds-stack && git fetch origin && git checkout <commit the owner names> && python3 -m pytest tests -q | tail -1
-cd ~/ds-stack && rm -rf /tmp/ds-replay && mkdir /tmp/ds-replay && git archive origin/results/2026-10-13-2343-codex eval/results | tar -x -C /tmp/ds-replay && python3 eval/acceptance.py /tmp/ds-replay/eval/results/2026-10-13-2343-codex-* --allow-no-transcript; echo "acceptance exit $?"
+cd ~/ds-stack && rm -rf /tmp/ds-replay && mkdir /tmp/ds-replay && git archive origin/results/2026-10-13-2343-codex eval/results | tar -x -C /tmp/ds-replay && python3 eval/acceptance.py /tmp/ds-replay/eval/results/2026-10-13-2343-codex-en /tmp/ds-replay/eval/results/2026-10-13-2343-codex-zh --allow-no-transcript; echo "acceptance exit $?"
 ```
 
 The second command replays the published attempt from its branch, since checking out the commit removes it from the working tree. Expected: every test passes. Both directories print `INVALID`, the English one with `not_isolated+rate_limited 69, not_isolated 2, not_isolated+capacity 1`, and the exit code is 2.
@@ -47,7 +47,7 @@ If runs end `rate_limited` or `capacity` after their retries, the exit is 2: tha
 
 ### V6. Restore, grade, push
 
-Run step 5 of `acceptance-dots.md` (restore, then grade) with `eval/results/$D-validate-*` in place of `eval/results/$D-codex-*`. Levels on these directories are not acceptance results: only execution and Plumbing matter here. Push with step 6, using the branch `results/$D-codex-validate` and `git add eval/results/$D-validate-*`.
+Run step 5 of `acceptance-dots.md` (restore, then grade), naming `eval/results/$D-validate-canary` and `eval/results/$D-validate-codex` in place of the two Codex directories. The canary directory grades INVALID, as it should. Levels on these directories are not acceptance results: only execution and Plumbing matter here. Push with step 6, using the branch `results/$D-codex-validate` and `git add eval/results/$D-validate-*`.
 
 ## Report back
 

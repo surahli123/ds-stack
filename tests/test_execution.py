@@ -324,3 +324,69 @@ def test_listed_directories_are_never_graded(tmp_path, capsys):
     assert not (results / "summary.md").exists()
     assert acceptance.main([str(results), "--allow-no-transcript"]) == 2
     assert "REFUSED" in capsys.readouterr().out
+
+
+# --- regressions from the adversarial review of the fix -----------------------------------------------------
+
+def test_codex_echoing_prose_that_says_not_isolated_is_still_ok():
+    # Codex's log repeats the model's messages, and f1's analysis may well use the phrase.
+    log = "codex\nThe v2 effect is not isolated from the mix shift.\n"
+    assert execution.classify(0, READOUT, log) == "ok"
+    assert execution.classify(1, "", log + "ERROR: exceeded retry limit, last status: 429\n") == "rate_limited"
+
+
+def test_claude_max_turns_exits_1_and_is_still_the_agents_own_limit():
+    assert execution.classify(1, "", "", "error_max_turns") == "max_turns"
+    assert execution.classify(1, "", "", "API Error: 429 rate_limit_error") == "rate_limited"
+    assert execution.classify(1, "", "", "API Error: 500 internal") == "exit_1"
+
+
+@pytest.mark.parametrize("code, reply, log, expected", [
+    ("timeout", "", "| 429 rows |\n", "timeout"),
+    ("timeout", "the servers were overloaded on 09-28", "", "timeout"),
+    (1, "", "Traceback (most recent call last):\n  import rate_limiter\nKeyError: 'x'\n", "exit_1"),
+])
+def test_rate_and_capacity_words_outside_error_lines_are_ignored(code, reply, log, expected):
+    assert execution.classify(code, reply, log) == expected
+
+
+def test_no_retry_starts_after_a_stop_during_the_pause(tmp_path, monkeypatch):
+    monkeypatch.setenv("DS_RUN_ROOT", str(tmp_path / "runs"))
+    template, counter = counting_agent(tmp_path, failures=99)
+    pacer = run_arms.Pacer(backoff=0)
+    waits = []
+    original = pacer.wait
+
+    def wait():
+        waits.append(1)
+        if len(waits) == 2:  # another worker's run is not isolated while this one pauses
+            pacer.finished("not_isolated")
+        original()
+    pacer.wait = wait
+    out = tmp_path / "out"
+    meta = run_arms.run_job(("f5", "baseline", 1), "auto", str(out), 60, agent_cmd=template, pacer=pacer, retries=2)
+    assert meta["execution"] == "rate_limited" and meta["attempts"] == 1 and counter.read_text() == "1"
+    assert not (out / "f5__baseline__1" / "attempt1.log").exists() and "earlier_attempts" not in meta
+
+
+def test_a_report_directory_is_skipped_not_graded(tmp_path, capsys):
+    report = tmp_path / "2026-10-13-2343-codex-report"
+    report.mkdir()
+    (report / "README.md").write_text("notes")
+    assert grade.main([str(report), "--allow-no-transcript"]) == 3
+    assert not (report / "summary.md").exists()
+    runs = tmp_path / "2026-10-13-2343-codex-en"
+    make_run(runs, "f5", "full", 1)
+    assert acceptance.main([str(runs), str(report), "--allow-no-transcript"]) == 0
+    captured = capsys.readouterr()
+    assert "holds no runs" in captured.err and "codex-report" not in captured.out
+
+
+def test_finders_ds_store_is_not_a_leftover(fake_codex):
+    home, run = fake_codex
+    (home / "skills" / ".system").mkdir(parents=True)
+    (home / "skills" / ".DS_Store").write_bytes(b"\x00\x00\x00\x01Bud1")
+    assert run().returncode == 0
+    (home / "skills" / ".DS_Store").unlink()
+    (home / "skills" / ".DS_Store").mkdir()
+    assert run().returncode == 4

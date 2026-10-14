@@ -228,26 +228,26 @@ def attempt_job(fixture, arm, model, timeout, agent_cmd=None, suffix=""):
 
 def run_job(job, model, out_dir, timeout, agent_cmd=None, suffix="", pacer=None, retries=0):
     fixture, arm, run = job
-    if pacer and pacer.stopped:
-        return {"fixture": fixture, "arm": arm, "run": run, "execution": "not_started"}
     dest = os.path.join(out_dir, f"{fixture}__{arm}__{run}")
-    earlier = []
-    attempt = 0
+    earlier, attempt, outcome = [], 0, None
     while True:
-        attempt += 1
         if pacer:
             pacer.wait()
-            if pacer.stopped and attempt == 1:
-                return {"fixture": fixture, "arm": arm, "run": run, "execution": "not_started"}
+            if pacer.stopped:
+                if outcome is None:
+                    return {"fixture": fixture, "arm": arm, "run": run, "execution": "not_started"}
+                break  # keep the refused attempt as the run's outcome
+        if outcome is not None:
+            # A refused request says nothing about the agent: keep its log, then try again in a fresh directory.
+            os.makedirs(dest, exist_ok=True)
+            with open(os.path.join(dest, f"attempt{attempt}.log"), "w") as handle:
+                handle.write(outcome["stderr"] if agent_cmd else outcome["stdout"])
+            earlier.append(outcome["execution"])
+            shutil.rmtree(outcome["job_root"], ignore_errors=True)
+        attempt += 1
         outcome = attempt_job(fixture, arm, model, timeout, agent_cmd, suffix)
-        if outcome["execution"] not in RETRYABLE or attempt > retries or (pacer and pacer.stopped):
+        if outcome["execution"] not in RETRYABLE or attempt > retries:
             break
-        # A refused request says nothing about the agent: keep its log, then try again in a fresh directory.
-        os.makedirs(dest, exist_ok=True)
-        with open(os.path.join(dest, f"attempt{attempt}.log"), "w") as handle:
-            handle.write(outcome["stderr"] if agent_cmd else outcome["stdout"])
-        earlier.append(outcome["execution"])
-        shutil.rmtree(outcome["job_root"], ignore_errors=True)
         if pacer:
             pacer.pause(attempt)
 

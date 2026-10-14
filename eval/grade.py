@@ -291,6 +291,9 @@ def main(argv=None):
     with open(os.path.join(HERE, "pass_rule.json")) as handle:
         rule = json.load(handle)
     runs = grade_dir(results_dir, allow_no_transcript=allow)
+    if not runs:
+        print(f"grade: {results_dir} holds no runs (a report directory?), so nothing was written", file=sys.stderr)
+        return 3
     fixtures, arms, cells, per_arm, verdict = summarize(runs, rule)
     report = render(results_dir, runs, fixtures, arms, cells, per_arm, verdict)
     with open(os.path.join(results_dir, "summary.md"), "w") as handle:
