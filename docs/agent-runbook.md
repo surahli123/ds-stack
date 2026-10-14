@@ -26,10 +26,10 @@ The repo is private, so cloning needs their GitHub access.
 ### 3. Install the skill and run the self-test
 
 ```bash
-mkdir -p ~/ds-skills && rm -rf ~/ds-skills/ds-mode && cp -R ~/ds-stack/skills/ds-mode ~/ds-skills/
+mkdir -p ~/ds-skills && if [ -e ~/ds-skills/ds-mode ]; then mv ~/ds-skills/ds-mode ~/ds-skills/ds-mode.bak-$(date +%Y%m%d-%H%M%S); fi && cp -R ~/ds-stack/skills/ds-mode ~/ds-skills/
 python3 ~/ds-stack/safety/selftest.py
 ```
-Every line of the self-test must start with `ok`.
+Every line of the self-test must start with `ok`. An existing `ds-mode` is moved aside, never deleted. ds-mode doesn't need the other ds-stack skills for this test; it uses ds-doc only when that is installed.
 
 ### 4. Run the analysis in Codex
 
@@ -37,9 +37,9 @@ Every line of the self-test must start with `ok`.
 T=~/ds-test-$(date +%Y%m%d-%H%M%S) && mkdir -p "$T" && cp ~/ds-stack/eval/fixtures/f1/* "$T"/ && cd "$T"
 echo "For any data analysis request, read and follow $HOME/ds-skills/ds-mode/SKILL.md" > AGENTS.md
 git init -q
-codex exec --full-auto --skip-git-repo-check "$(cat task.md)"
+codex exec --approve-for-me --skip-git-repo-check "$(cat task.md)"
 ```
-If Codex rejects a flag, run `codex exec --help` and use its equivalent: the run must let Codex execute commands and write files in `$T`. This step usually takes 1–3 minutes.
+`--approve-for-me` is the Codex 0.153 name; older versions call it `--full-auto`. If Codex rejects a flag, run `codex exec --help` and use its equivalent: the run must let Codex execute commands and write files in `$T`. Codex also needs a writable home directory, so it can't start on a read-only machine image. This step usually takes 1–3 minutes.
 
 ### 5. Check the result
 
@@ -60,6 +60,7 @@ If the `cursor-agent` command exists, repeat steps 4 and 5 in a new directory wi
 | `no logged queries` | Codex queried the database directly | Rerun step 4, adding "Use the skill's tools/query.py for every query." to the end of the prompt |
 | `verify_readout: fail` | A number without a tag, or a tag that doesn't resolve | Report it. It is a finding about the skill, not about this machine |
 | `answer vs gold` | The analysis reached the wrong answer | Report it, with the Headline line from `readout.md` |
+| `none of the ... alternative lines says 'ruled in' or 'ruled out'` | The readout translated the fixed English words | Report it. The skill asks for those words in English |
 
 ## Report back
 

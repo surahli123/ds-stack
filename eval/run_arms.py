@@ -77,13 +77,16 @@ def readout_format():
     return strip_tag_placeholders(re.search(r"```\n(.*?)```", section, re.S).group(1))
 
 
-def build_prompt(fixture):
+def build_prompt(fixture, suffix=""):
+    """The fixture's task plus the readout format. `suffix` (for example "Write the prose in Chinese.")
+    goes last, identically for every arm."""
     with open(os.path.join(FIXTURES, fixture, "task.md")) as handle:
         task = handle.read().strip()
-    return (f"{task}\n\nThe data is in warehouse.db (SQLite) in the current directory.\n\n"
-            "End with exactly this readout as your final reply. Label each claim "
-            "measured (computed from data here), inferred, or guess:\n\n"
-            f"```\n{readout_format()}```\n")
+    prompt = (f"{task}\n\nThe data is in warehouse.db (SQLite) in the current directory.\n\n"
+              "End with exactly this readout as your final reply. Label each claim "
+              "measured (computed from data here), inferred, or guess:\n\n"
+              f"```\n{readout_format()}```\n")
+    return prompt + (f"\n{suffix.strip()}\n" if suffix.strip() else "")
 
 
 def write_note(work, note):
@@ -123,7 +126,7 @@ def agent_argv(template, prompt_file, model):
     return argv, "{prompt_file}" not in template
 
 
-def run_job(job, model, out_dir, timeout, agent_cmd=None):
+def run_job(job, model, out_dir, timeout, agent_cmd=None, suffix=""):
     fixture, arm, run = job
     job_root = os.path.join(os.environ.get("DS_RUN_ROOT", "/tmp/ds-runs"), uuid.uuid4().hex[:10])
     work = prepare_workdir(job_root, fixture, arm)
@@ -138,7 +141,7 @@ def run_job(job, model, out_dir, timeout, agent_cmd=None):
     env.update(DS_CHECKS_LOG=os.path.join(work, ".ds-checks.log"), DS_QUERIES_LOG=os.path.join(work, ".ds-queries.log"))
     kwargs = {}
     if agent_cmd:
-        prompt = build_prompt(fixture)
+        prompt = build_prompt(fixture, suffix)
         prompt_file = os.path.join(job_root, "prompt.md")
         with open(prompt_file, "w", encoding="utf-8") as handle:
             handle.write(prompt)
@@ -146,23 +149,26 @@ def run_job(job, model, out_dir, timeout, agent_cmd=None):
         kwargs = {"input": prompt} if on_stdin else {"stdin": subprocess.DEVNULL}
         kwargs.update(encoding="utf-8", errors="replace")
     else:
-        cmd = claude_argv(build_prompt(fixture), model)
+        cmd = claude_argv(build_prompt(fixture, suffix), model)
     started = time.time()
     try:
         proc = subprocess.run(cmd, cwd=work, env=env, capture_output=True, text=True, timeout=timeout, **kwargs)
-        stdout, code = proc.stdout, proc.returncode
+        stdout, stderr, code = proc.stdout, proc.stderr or "", proc.returncode
     except subprocess.TimeoutExpired as err:
         stdout, code = (err.stdout or b"").decode() if isinstance(err.stdout, bytes) else (err.stdout or ""), "timeout"
+        stderr = (err.stderr or b"").decode() if isinstance(err.stderr, bytes) else (err.stderr or "")
     except OSError as err:
         if not agent_cmd:
             raise
-        stdout, code = "", f"error: {err}"
+        stdout, stderr, code = "", str(err), f"error: {err}"
 
     dest = os.path.join(out_dir, f"{fixture}__{arm}__{run}")
     os.makedirs(dest, exist_ok=True)
     result_text, cost, turns = "", None, None
     if agent_cmd:
         result_text = stdout
+        with open(os.path.join(dest, "agent.log"), "w") as handle:
+            handle.write(stderr)
     else:
         with open(os.path.join(dest, "transcript.jsonl"), "w") as handle:
             handle.write(stdout)
@@ -185,6 +191,8 @@ def run_job(job, model, out_dir, timeout, agent_cmd=None):
             "seconds": round(time.time() - started, 1), "cost_usd": cost, "turns": turns}
     if agent_cmd:
         meta.update(agent_cmd=agent_cmd, transcript=False)
+    if suffix.strip():
+        meta.update(prompt_suffix=suffix.strip())
     with open(os.path.join(dest, "meta.json"), "w") as handle:
         json.dump(meta, handle, indent=2)
     shutil.rmtree(job_root, ignore_errors=True)
@@ -201,6 +209,8 @@ def main():
                         help="command template for a non-Claude agent, e.g. 'my-agent --model {model}'. {prompt_file} is "
                              "the prompt's path; without it the prompt goes on stdin. Its stdout is the final reply. "
                              "No transcript is recorded. Default: $DS_AGENT_CMD, else `claude -p`")
+    parser.add_argument("--prompt-suffix", default="",
+                        help='text appended to every arm\'s prompt, e.g. "Write the prose in Chinese." (recorded in meta.json)')
     parser.add_argument("--parallel", type=int, default=6)
     parser.add_argument("--timeout", type=int, default=900)
     parser.add_argument("--out", default=os.path.join(HERE, "results", time.strftime("%Y%m%d-%H%M%S")))
@@ -218,7 +228,7 @@ def main():
     os.makedirs(args.out, exist_ok=True)
     print(f"{len(jobs)} jobs -> {args.out}", flush=True)
     with futures.ThreadPoolExecutor(max_workers=args.parallel) as pool:
-        pending = {pool.submit(run_job, job, args.model, args.out, args.timeout, agent_cmd): job for job in jobs}
+        pending = {pool.submit(run_job, job, args.model, args.out, args.timeout, agent_cmd, args.prompt_suffix): job for job in jobs}
         for done in futures.as_completed(pending):
             meta = done.result()
             spend = "no transcript or cost data" if meta.get("transcript") is False else f"turns {meta['turns']}, ${meta['cost_usd']}"

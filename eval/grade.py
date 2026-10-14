@@ -51,13 +51,20 @@ def grade_readout(readout, gold):
         if gold["accept_abstain"]:
             return True, "abstained (accepted)", None
         return False, "abstained on a case with a valid answer", "false_alarm" if gold["kind"] == "clean" else "miss"
-    value = readout.value_in(gold["unit"])
+    estimand = gold.get("estimand", "headline")
+    value, source = readout.value_in(gold["unit"]), "headline"
+    if estimand != "headline" and readout.estimate_in(estimand, gold["unit"]) is not None:
+        value, source = readout.estimate_in(estimand, gold["unit"]), estimand
+    if value is None:
+        return False, f"headline has no number in {gold['unit']}", "unparseable"
+    if gold.get("causal_identified") is False and (readout.estimates.get("causal effect") or {}).get("status") == "number":
+        return False, "gives a number for a causal effect the design can't identify", "false_alarm" if gold["kind"] == "clean" else "miss"
     if gold["kind"] == "abstain" and not gold["accept_values"]:
         return False, f"answered {value:g} where the right answer is can't tell", "answered_abstain_case"
     if not any(abs(value - v["value"]) <= v["tol"] for v in gold["accept_values"]):
         targets = ", ".join(f"{v['value']:g}±{v['tol']:g}" for v in gold["accept_values"])
         miss = "answered_abstain_case" if gold["kind"] == "abstain" else "miss"
-        return False, f"headline {value:g} outside {targets}", miss
+        return False, f"{source} {value:g} outside {targets}", miss
     true_words = gold.get("true_cause_words", [])
     for words in gold["must_rule_in"]:
         if not _ruled_in(readout, words):

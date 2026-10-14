@@ -6,6 +6,8 @@
       "value": -1.827
     }
   ],
+  "causal_identified": false,
+  "estimand": "adjusted",
   "id": "f3",
   "kind": "clean",
   "must_not_rule_in": [

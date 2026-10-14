@@ -1,0 +1,1131 @@
+{
+  "verdict": {
+    "n_fixtures": 5,
+    "min_required": 15,
+    "rule_outcome_if_n_were_enough": "FAIL",
+    "verdict": "INSUFFICIENT_N (smoke test, not a decision)"
+  },
+  "per_arm": {
+    "baseline": {
+      "fixtures_correct": 4,
+      "fixtures_false_alarm": 1,
+      "fixtures_abstain_answered": 0,
+      "fixtures_incomplete": 0,
+      "runs_correct": 12,
+      "runs": 15,
+      "runs_unparseable": 0,
+      "runs_contaminated": 0,
+      "runs_unverified_isolation": 0,
+      "dropped_alternative_lines": 14,
+      "runs_with_any_check": 0,
+      "runs_reading_skill": 0,
+      "cost_usd": 1.02
+    },
+    "checks": {
+      "fixtures_correct": 3,
+      "fixtures_false_alarm": 1,
+      "fixtures_abstain_answered": 0,
+      "fixtures_incomplete": 0,
+      "runs_correct": 9,
+      "runs": 15,
+      "runs_unparseable": 0,
+      "runs_contaminated": 0,
+      "runs_unverified_isolation": 0,
+      "dropped_alternative_lines": 13,
+      "runs_with_any_check": 15,
+      "runs_reading_skill": 0,
+      "cost_usd": 1.18
+    },
+    "full": {
+      "fixtures_correct": 5,
+      "fixtures_false_alarm": 0,
+      "fixtures_abstain_answered": 0,
+      "fixtures_incomplete": 0,
+      "runs_correct": 15,
+      "runs": 15,
+      "runs_unparseable": 0,
+      "runs_contaminated": 0,
+      "runs_unverified_isolation": 0,
+      "dropped_alternative_lines": 23,
+      "runs_with_any_check": 15,
+      "runs_reading_skill": 14,
+      "cost_usd": 2.24
+    }
+  },
+  "runs": [
+    {
+      "fixture": "f1",
+      "arm": "baseline",
+      "run": 1,
+      "model": "sonnet",
+      "exit": 0,
+      "seconds": 32.1,
+      "cost_usd": 0.08814630000000001,
+      "turns": 6,
+      "correct": true,
+      "reason": "number within tolerance; causes consistent with gold",
+      "miss": null,
+      "headline": "-0.01 pp (\u00b10.16 pp) is the mix-adjusted change in CTR. This is not a causal estimate of v2.",
+      "dropped_alternative_lines": 1,
+      "checks_ran": {},
+      "skill_read": false,
+      "isolation": "ok",
+      "kind": "error"
+    },
+    {
+      "fixture": "f1",
+      "arm": "baseline",
+      "run": 2,
+      "model": "sonnet",
+      "exit": 0,
+      "seconds": 25.7,
+      "cost_usd": 0.0704277,
+      "turns": 5,
+      "correct": true,
+      "reason": "number within tolerance; causes consistent with gold",
+      "miss": null,
+      "headline": "about 0.0 pp (-0.15 to +0.15 pp) attributable to v2, on a mix-adjusted basis, not a randomized effect.",
+      "dropped_alternative_lines": 2,
+      "checks_ran": {},
+      "skill_read": false,
+      "isolation": "ok",
+      "kind": "error"
+    },
+    {
+      "fixture": "f1",
+      "arm": "baseline",
+      "run": 3,
+      "model": "sonnet",
+      "exit": 0,
+      "seconds": 24.7,
+      "cost_usd": 0.0712092,
+      "turns": 5,
+      "correct": false,
+      "reason": "abstained on a case with a valid answer",
+      "miss": "miss",
+      "headline": "can't tell",
+      "dropped_alternative_lines": 0,
+      "checks_ran": {},
+      "skill_read": false,
+      "isolation": "ok",
+      "kind": "error"
+    },
+    {
+      "fixture": "f1",
+      "arm": "checks",
+      "run": 1,
+      "model": "sonnet",
+      "exit": 0,
+      "seconds": 27.4,
+      "cost_usd": 0.08620320000000001,
+      "turns": 7,
+      "correct": false,
+      "reason": "abstained on a case with a valid answer",
+      "miss": "miss",
+      "headline": "can't tell (a causal effect isn't identified, but the within-segment change is -0.01 pp, 95% interval -0.16 to +0.14)",
+      "dropped_alternative_lines": 1,
+      "checks_ran": {
+        "mix_shift": [
+          "flag"
+        ],
+        "completeness": [
+          "pass"
+        ]
+      },
+      "skill_read": false,
+      "isolation": "ok",
+      "kind": "error"
+    },
+    {
+      "fixture": "f1",
+      "arm": "checks",
+      "run": 2,
+      "model": "sonnet",
+      "exit": 0,
+      "seconds": 27.7,
+      "cost_usd": 0.08640949999999999,
+      "turns": 6,
+      "correct": false,
+      "reason": "abstained on a case with a valid answer",
+      "miss": "miss",
+      "headline": "can't tell. The overall drop is -2.10 pp (-2.25 to -1.95), but almost none of it shows up inside platform and country segments.",
+      "dropped_alternative_lines": 0,
+      "checks_ran": {
+        "mix_shift": [
+          "flag"
+        ],
+        "completeness": [
+          "pass"
+        ]
+      },
+      "skill_read": false,
+      "isolation": "ok",
+      "kind": "error"
+    },
+    {
+      "fixture": "f1",
+      "arm": "checks",
+      "run": 3,
+      "model": "sonnet",
+      "exit": 0,
+      "seconds": 23.2,
+      "cost_usd": 0.0764907,
+      "turns": 5,
+      "correct": false,
+      "reason": "abstained on a case with a valid answer",
+      "miss": "miss",
+      "headline": "can't tell",
+      "dropped_alternative_lines": 0,
+      "checks_ran": {
+        "mix_shift": [
+          "flag"
+        ],
+        "completeness": [
+          "pass"
+        ]
+      },
+      "skill_read": false,
+      "isolation": "ok",
+      "kind": "error"
+    },
+    {
+      "fixture": "f1",
+      "arm": "full",
+      "run": 1,
+      "model": "sonnet",
+      "exit": 0,
+      "seconds": 45.5,
+      "cost_usd": 0.15656480000000003,
+      "turns": 10,
+      "correct": true,
+      "reason": "number within tolerance; causes consistent with gold",
+      "miss": null,
+      "headline": "-0.00 pp (-0.15 to +0.15)",
+      "dropped_alternative_lines": 2,
+      "checks_ran": {
+        "completeness": [
+          "pass"
+        ],
+        "mix_shift": [
+          "flag",
+          "flag"
+        ]
+      },
+      "skill_read": true,
+      "isolation": "ok",
+      "kind": "error"
+    },
+    {
+      "fixture": "f1",
+      "arm": "full",
+      "run": 2,
+      "model": "sonnet",
+      "exit": 0,
+      "seconds": 43.2,
+      "cost_usd": 0.16441240000000004,
+      "turns": 10,
+      "correct": true,
+      "reason": "number within tolerance; causes consistent with gold",
+      "miss": null,
+      "headline": "-0.00 pp (-0.15 to +0.15)",
+      "dropped_alternative_lines": 3,
+      "checks_ran": {
+        "completeness": [
+          "fail",
+          "pass"
+        ],
+        "mix_shift": [
+          "flag",
+          "flag"
+        ]
+      },
+      "skill_read": true,
+      "isolation": "ok",
+      "kind": "error"
+    },
+    {
+      "fixture": "f1",
+      "arm": "full",
+      "run": 3,
+      "model": "sonnet",
+      "exit": 0,
+      "seconds": 44.1,
+      "cost_usd": 0.1602619,
+      "turns": 10,
+      "correct": true,
+      "reason": "number within tolerance; causes consistent with gold",
+      "miss": null,
+      "headline": "-0.00 pp (-0.15 to +0.15)",
+      "dropped_alternative_lines": 4,
+      "checks_ran": {
+        "mix_shift": [
+          "flag",
+          "flag"
+        ],
+        "completeness": [
+          "fail",
+          "pass"
+        ]
+      },
+      "skill_read": true,
+      "isolation": "ok",
+      "kind": "error"
+    },
+    {
+      "fixture": "f2",
+      "arm": "baseline",
+      "run": 1,
+      "model": "sonnet",
+      "exit": 0,
+      "seconds": 23.1,
+      "cost_usd": 0.06834409999999999,
+      "turns": 5,
+      "correct": true,
+      "reason": "number within tolerance; causes consistent with gold",
+      "miss": null,
+      "headline": "54.98 % (95% CI 54.6 to 55.4)",
+      "dropped_alternative_lines": 1,
+      "checks_ran": {},
+      "skill_read": false,
+      "isolation": "ok",
+      "kind": "error"
+    },
+    {
+      "fixture": "f2",
+      "arm": "baseline",
+      "run": 2,
+      "model": "sonnet",
+      "exit": 0,
+      "seconds": 18.4,
+      "cost_usd": 0.060268499999999996,
+      "turns": 4,
+      "correct": true,
+      "reason": "number within tolerance; causes consistent with gold",
+      "miss": null,
+      "headline": "55.0 % (95% CI 54.6 to 55.4)",
+      "dropped_alternative_lines": 0,
+      "checks_ran": {},
+      "skill_read": false,
+      "isolation": "ok",
+      "kind": "error"
+    },
+    {
+      "fixture": "f2",
+      "arm": "baseline",
+      "run": 3,
+      "model": "sonnet",
+      "exit": 0,
+      "seconds": 20.7,
+      "cost_usd": 0.0647202,
+      "turns": 5,
+      "correct": true,
+      "reason": "number within tolerance; causes consistent with gold",
+      "miss": null,
+      "headline": "55.0 % (95% CI 54.9 to 55.0)",
+      "dropped_alternative_lines": 0,
+      "checks_ran": {},
+      "skill_read": false,
+      "isolation": "ok",
+      "kind": "error"
+    },
+    {
+      "fixture": "f2",
+      "arm": "checks",
+      "run": 1,
+      "model": "sonnet",
+      "exit": 0,
+      "seconds": 27.5,
+      "cost_usd": 0.0696312,
+      "turns": 6,
+      "correct": true,
+      "reason": "number within tolerance; causes consistent with gold",
+      "miss": null,
+      "headline": "54.98 % (no interval computed; this is a full-week count, not a sample)",
+      "dropped_alternative_lines": 1,
+      "checks_ran": {
+        "fanout": [
+          "pass"
+        ],
+        "completeness": [
+          "could_not_run"
+        ]
+      },
+      "skill_read": false,
+      "isolation": "ok",
+      "kind": "error"
+    },
+    {
+      "fixture": "f2",
+      "arm": "checks",
+      "run": 2,
+      "model": "sonnet",
+      "exit": 0,
+      "seconds": 25.1,
+      "cost_usd": 0.07267159999999999,
+      "turns": 5,
+      "correct": true,
+      "reason": "number within tolerance; causes consistent with gold",
+      "miss": null,
+      "headline": "55.0 % (54.6 to 55.4 %, binomial interval that ignores query-level clustering)",
+      "dropped_alternative_lines": 1,
+      "checks_ran": {
+        "fanout": [
+          "pass"
+        ],
+        "completeness": [
+          "could_not_run"
+        ]
+      },
+      "skill_read": false,
+      "isolation": "ok",
+      "kind": "error"
+    },
+    {
+      "fixture": "f2",
+      "arm": "checks",
+      "run": 3,
+      "model": "sonnet",
+      "exit": 0,
+      "seconds": 26.2,
+      "cost_usd": 0.07499159999999999,
+      "turns": 6,
+      "correct": true,
+      "reason": "number within tolerance; causes consistent with gold",
+      "miss": null,
+      "headline": "54.98 percent (interval not computed: the data is weekly aggregates with no per-query variance)",
+      "dropped_alternative_lines": 0,
+      "checks_ran": {
+        "fanout": [
+          "pass"
+        ],
+        "completeness": [
+          "could_not_run"
+        ]
+      },
+      "skill_read": false,
+      "isolation": "ok",
+      "kind": "error"
+    },
+    {
+      "fixture": "f2",
+      "arm": "full",
+      "run": 1,
+      "model": "sonnet",
+      "exit": 0,
+      "seconds": 35.9,
+      "cost_usd": 0.12168780000000001,
+      "turns": 10,
+      "correct": true,
+      "reason": "number within tolerance; causes consistent with gold",
+      "miss": null,
+      "headline": "55.0 % (54.6 to 55.4)",
+      "dropped_alternative_lines": 0,
+      "checks_ran": {
+        "fanout": [
+          "could_not_run",
+          "pass"
+        ],
+        "completeness": [
+          "could_not_run",
+          "could_not_run"
+        ]
+      },
+      "skill_read": false,
+      "isolation": "ok",
+      "kind": "error"
+    },
+    {
+      "fixture": "f2",
+      "arm": "full",
+      "run": 2,
+      "model": "sonnet",
+      "exit": 0,
+      "seconds": 41.1,
+      "cost_usd": 0.14322759999999998,
+      "turns": 11,
+      "correct": true,
+      "reason": "number within tolerance; causes consistent with gold",
+      "miss": null,
+      "headline": "54.98 % (54.58 to 55.38)",
+      "dropped_alternative_lines": 1,
+      "checks_ran": {
+        "fanout": [
+          "pass"
+        ],
+        "completeness": [
+          "could_not_run"
+        ]
+      },
+      "skill_read": true,
+      "isolation": "ok",
+      "kind": "error"
+    },
+    {
+      "fixture": "f2",
+      "arm": "full",
+      "run": 3,
+      "model": "sonnet",
+      "exit": 0,
+      "seconds": 35.7,
+      "cost_usd": 0.1326867,
+      "turns": 9,
+      "correct": true,
+      "reason": "number within tolerance; causes consistent with gold",
+      "miss": null,
+      "headline": "54.98 % (54.95 to 55.01)",
+      "dropped_alternative_lines": 3,
+      "checks_ran": {
+        "fanout": [
+          "pass"
+        ],
+        "completeness": [
+          "could_not_run"
+        ]
+      },
+      "skill_read": true,
+      "isolation": "ok",
+      "kind": "error"
+    },
+    {
+      "fixture": "f3",
+      "arm": "baseline",
+      "run": 1,
+      "model": "sonnet",
+      "exit": 0,
+      "seconds": 22.7,
+      "cost_usd": 0.061438900000000005,
+      "turns": 4,
+      "correct": true,
+      "reason": "number within tolerance; causes consistent with gold",
+      "miss": null,
+      "headline": "-1.80 pp (95% CI -1.95 to -1.65)",
+      "dropped_alternative_lines": 2,
+      "checks_ran": {},
+      "skill_read": false,
+      "isolation": "ok",
+      "kind": "clean"
+    },
+    {
+      "fixture": "f3",
+      "arm": "baseline",
+      "run": 2,
+      "model": "sonnet",
+      "exit": 0,
+      "seconds": 26.2,
+      "cost_usd": 0.0716596,
+      "turns": 5,
+      "correct": false,
+      "reason": "abstained on a case with a valid answer",
+      "miss": "false_alarm",
+      "headline": "can't tell. Overall CTR fell 1.83 pp (95% CI -2.06 to -1.59), but this data can't show how much of that v3 caused.",
+      "dropped_alternative_lines": 3,
+      "checks_ran": {},
+      "skill_read": false,
+      "isolation": "ok",
+      "kind": "clean"
+    },
+    {
+      "fixture": "f3",
+      "arm": "baseline",
+      "run": 3,
+      "model": "sonnet",
+      "exit": 0,
+      "seconds": 23.1,
+      "cost_usd": 0.0690192,
+      "turns": 5,
+      "correct": false,
+      "reason": "abstained on a case with a valid answer",
+      "miss": "false_alarm",
+      "headline": "can't tell. The observed change is -1.83 pp (\u00b10.15), and the data can't separate v3's share of it from anything else that changed on 2026-09-07.",
+      "dropped_alternative_lines": 2,
+      "checks_ran": {},
+      "skill_read": false,
+      "isolation": "ok",
+      "kind": "clean"
+    },
+    {
+      "fixture": "f3",
+      "arm": "checks",
+      "run": 1,
+      "model": "sonnet",
+      "exit": 0,
+      "seconds": 25.8,
+      "cost_usd": 0.0834268,
+      "turns": 5,
+      "correct": false,
+      "reason": "abstained on a case with a valid answer",
+      "miss": "false_alarm",
+      "headline": "can't tell",
+      "dropped_alternative_lines": 1,
+      "checks_ran": {
+        "mix_shift": [
+          "pass"
+        ],
+        "completeness": [
+          "pass"
+        ]
+      },
+      "skill_read": false,
+      "isolation": "ok",
+      "kind": "clean"
+    },
+    {
+      "fixture": "f3",
+      "arm": "checks",
+      "run": 2,
+      "model": "sonnet",
+      "exit": 0,
+      "seconds": 32.1,
+      "cost_usd": 0.0894085,
+      "turns": 6,
+      "correct": false,
+      "reason": "abstained on a case with a valid answer",
+      "miss": "false_alarm",
+      "headline": "can't tell",
+      "dropped_alternative_lines": 1,
+      "checks_ran": {
+        "mix_shift": [
+          "pass"
+        ],
+        "completeness": [
+          "pass"
+        ]
+      },
+      "skill_read": false,
+      "isolation": "ok",
+      "kind": "clean"
+    },
+    {
+      "fixture": "f3",
+      "arm": "checks",
+      "run": 3,
+      "model": "sonnet",
+      "exit": 0,
+      "seconds": 26.2,
+      "cost_usd": 0.08504489999999999,
+      "turns": 5,
+      "correct": false,
+      "reason": "abstained on a case with a valid answer",
+      "miss": "false_alarm",
+      "headline": "can't tell",
+      "dropped_alternative_lines": 0,
+      "checks_ran": {
+        "mix_shift": [
+          "pass"
+        ],
+        "completeness": [
+          "pass"
+        ]
+      },
+      "skill_read": false,
+      "isolation": "ok",
+      "kind": "clean"
+    },
+    {
+      "fixture": "f3",
+      "arm": "full",
+      "run": 1,
+      "model": "sonnet",
+      "exit": 0,
+      "seconds": 41.6,
+      "cost_usd": 0.1493963,
+      "turns": 10,
+      "correct": true,
+      "reason": "number within tolerance; causes consistent with gold",
+      "miss": null,
+      "headline": "-1.82 pp (-1.97 to -1.67)",
+      "dropped_alternative_lines": 1,
+      "checks_ran": {
+        "completeness": [
+          "could_not_run"
+        ],
+        "mix_shift": [
+          "pass",
+          "pass"
+        ]
+      },
+      "skill_read": true,
+      "isolation": "ok",
+      "kind": "clean"
+    },
+    {
+      "fixture": "f3",
+      "arm": "full",
+      "run": 2,
+      "model": "sonnet",
+      "exit": 0,
+      "seconds": 51.3,
+      "cost_usd": 0.16067210000000004,
+      "turns": 10,
+      "correct": true,
+      "reason": "number within tolerance; causes consistent with gold",
+      "miss": null,
+      "headline": "-1.82 pp (-1.97 to -1.67)",
+      "dropped_alternative_lines": 3,
+      "checks_ran": {
+        "mix_shift": [
+          "pass",
+          "pass"
+        ],
+        "completeness": [
+          "pass"
+        ]
+      },
+      "skill_read": true,
+      "isolation": "ok",
+      "kind": "clean"
+    },
+    {
+      "fixture": "f3",
+      "arm": "full",
+      "run": 3,
+      "model": "sonnet",
+      "exit": 0,
+      "seconds": 39.6,
+      "cost_usd": 0.1461338,
+      "turns": 10,
+      "correct": true,
+      "reason": "number within tolerance; causes consistent with gold",
+      "miss": null,
+      "headline": "-1.82 pp (-1.97 to -1.67)",
+      "dropped_alternative_lines": 0,
+      "checks_ran": {
+        "mix_shift": [
+          "pass",
+          "pass"
+        ],
+        "completeness": [
+          "pass"
+        ]
+      },
+      "skill_read": true,
+      "isolation": "ok",
+      "kind": "clean"
+    },
+    {
+      "fixture": "f4",
+      "arm": "baseline",
+      "run": 1,
+      "model": "sonnet",
+      "exit": 0,
+      "seconds": 24.6,
+      "cost_usd": 0.06737969999999999,
+      "turns": 5,
+      "correct": true,
+      "reason": "abstained (accepted)",
+      "miss": null,
+      "headline": "can't tell. The -2.8 pp drop is an artifact of comparing a partial day with full days, so there is no evidence of a real drop yet.",
+      "dropped_alternative_lines": 1,
+      "checks_ran": {},
+      "skill_read": false,
+      "isolation": "ok",
+      "kind": "abstain"
+    },
+    {
+      "fixture": "f4",
+      "arm": "baseline",
+      "run": 2,
+      "model": "sonnet",
+      "exit": 0,
+      "seconds": 24.4,
+      "cost_usd": 0.0661702,
+      "turns": 5,
+      "correct": true,
+      "reason": "abstained (accepted)",
+      "miss": null,
+      "headline": "can't tell. Yesterday's data stops at hour 09, so the full-day figure doesn't exist yet.",
+      "dropped_alternative_lines": 0,
+      "checks_ran": {},
+      "skill_read": false,
+      "isolation": "ok",
+      "kind": "abstain"
+    },
+    {
+      "fixture": "f4",
+      "arm": "baseline",
+      "run": 3,
+      "model": "sonnet",
+      "exit": 0,
+      "seconds": 20.6,
+      "cost_usd": 0.0611756,
+      "turns": 5,
+      "correct": true,
+      "reason": "abstained (accepted)",
+      "miss": null,
+      "headline": "can't tell. Yesterday's data is incomplete, so there is no valid full-day comparison yet. The like-for-like comparison shows no drop.",
+      "dropped_alternative_lines": 0,
+      "checks_ran": {},
+      "skill_read": false,
+      "isolation": "ok",
+      "kind": "abstain"
+    },
+    {
+      "fixture": "f4",
+      "arm": "checks",
+      "run": 1,
+      "model": "sonnet",
+      "exit": 0,
+      "seconds": 31.5,
+      "cost_usd": 0.0838241,
+      "turns": 6,
+      "correct": true,
+      "reason": "abstained (accepted)",
+      "miss": null,
+      "headline": "can't tell (2026-10-07 is only partly loaded, so there's no valid full-day number yet)",
+      "dropped_alternative_lines": 1,
+      "checks_ran": {
+        "completeness": [
+          "fail"
+        ],
+        "mix_shift": [
+          "could_not_run",
+          "flag"
+        ]
+      },
+      "skill_read": false,
+      "isolation": "ok",
+      "kind": "abstain"
+    },
+    {
+      "fixture": "f4",
+      "arm": "checks",
+      "run": 2,
+      "model": "sonnet",
+      "exit": 0,
+      "seconds": 21.0,
+      "cost_usd": 0.07075609999999999,
+      "turns": 5,
+      "correct": true,
+      "reason": "abstained (accepted)",
+      "miss": null,
+      "headline": "can't tell. The \"drop\" is a partial-day artifact, and the like-for-like change is 0.0 pp.",
+      "dropped_alternative_lines": 0,
+      "checks_ran": {
+        "completeness": [
+          "fail"
+        ]
+      },
+      "skill_read": false,
+      "isolation": "ok",
+      "kind": "abstain"
+    },
+    {
+      "fixture": "f4",
+      "arm": "checks",
+      "run": 3,
+      "model": "sonnet",
+      "exit": 0,
+      "seconds": 27.1,
+      "cost_usd": 0.0851373,
+      "turns": 6,
+      "correct": true,
+      "reason": "number within tolerance; causes consistent with gold",
+      "miss": null,
+      "headline": "0.0 pp (95% interval -0.7 to +0.7), measured on hours 00\u201309 only. Hours 10\u201323 of 2026-10-07 are not in the data.",
+      "dropped_alternative_lines": 3,
+      "checks_ran": {
+        "completeness": [
+          "fail"
+        ],
+        "mix_shift": [
+          "pass"
+        ]
+      },
+      "skill_read": false,
+      "isolation": "ok",
+      "kind": "abstain"
+    },
+    {
+      "fixture": "f4",
+      "arm": "full",
+      "run": 1,
+      "model": "sonnet",
+      "exit": 0,
+      "seconds": 52.0,
+      "cost_usd": 0.164781,
+      "turns": 11,
+      "correct": true,
+      "reason": "number within tolerance; causes consistent with gold",
+      "miss": null,
+      "headline": "+0.0 pp (-0.66 to +0.66) on hours 0-9, the only hours logged for 2026-10-07",
+      "dropped_alternative_lines": 1,
+      "checks_ran": {
+        "completeness": [
+          "fail"
+        ],
+        "mix_shift": [
+          "pass",
+          "could_not_run"
+        ]
+      },
+      "skill_read": true,
+      "isolation": "ok",
+      "kind": "abstain"
+    },
+    {
+      "fixture": "f4",
+      "arm": "full",
+      "run": 2,
+      "model": "sonnet",
+      "exit": 0,
+      "seconds": 42.3,
+      "cost_usd": 0.15216420000000003,
+      "turns": 10,
+      "correct": true,
+      "reason": "number within tolerance; causes consistent with gold",
+      "miss": null,
+      "headline": "0.00 pp (-0.66 to +0.66)",
+      "dropped_alternative_lines": 1,
+      "checks_ran": {
+        "completeness": [
+          "fail"
+        ],
+        "mix_shift": [
+          "pass"
+        ]
+      },
+      "skill_read": true,
+      "isolation": "ok",
+      "kind": "abstain"
+    },
+    {
+      "fixture": "f4",
+      "arm": "full",
+      "run": 3,
+      "model": "sonnet",
+      "exit": 0,
+      "seconds": 48.6,
+      "cost_usd": 0.1576715,
+      "turns": 10,
+      "correct": true,
+      "reason": "number within tolerance; causes consistent with gold",
+      "miss": null,
+      "headline": "+0.0 pp (-0.66 to +0.66)",
+      "dropped_alternative_lines": 1,
+      "checks_ran": {
+        "completeness": [
+          "fail"
+        ],
+        "mix_shift": [
+          "pass"
+        ]
+      },
+      "skill_read": true,
+      "isolation": "ok",
+      "kind": "abstain"
+    },
+    {
+      "fixture": "f5",
+      "arm": "baseline",
+      "run": 1,
+      "model": "sonnet",
+      "exit": 0,
+      "seconds": 22.7,
+      "cost_usd": 0.0650408,
+      "turns": 4,
+      "correct": true,
+      "reason": "abstained (accepted)",
+      "miss": null,
+      "headline": "can't tell",
+      "dropped_alternative_lines": 1,
+      "checks_ran": {},
+      "skill_read": false,
+      "isolation": "ok",
+      "kind": "abstain"
+    },
+    {
+      "fixture": "f5",
+      "arm": "baseline",
+      "run": 2,
+      "model": "sonnet",
+      "exit": 0,
+      "seconds": 30.0,
+      "cost_usd": 0.072444,
+      "turns": 5,
+      "correct": true,
+      "reason": "abstained (accepted)",
+      "miss": null,
+      "headline": "can't tell. The observed CTR difference is +1.20 pp, but the arm sizes show the split was not a clean 50/50, so I can't call it a treatment effect.",
+      "dropped_alternative_lines": 0,
+      "checks_ran": {},
+      "skill_read": false,
+      "isolation": "ok",
+      "kind": "abstain"
+    },
+    {
+      "fixture": "f5",
+      "arm": "baseline",
+      "run": 3,
+      "model": "sonnet",
+      "exit": 0,
+      "seconds": 20.2,
+      "cost_usd": 0.0588095,
+      "turns": 4,
+      "correct": true,
+      "reason": "abstained (accepted)",
+      "miss": null,
+      "headline": "can't tell",
+      "dropped_alternative_lines": 1,
+      "checks_ran": {},
+      "skill_read": false,
+      "isolation": "ok",
+      "kind": "abstain"
+    },
+    {
+      "fixture": "f5",
+      "arm": "checks",
+      "run": 1,
+      "model": "sonnet",
+      "exit": 0,
+      "seconds": 25.6,
+      "cost_usd": 0.07338460000000001,
+      "turns": 5,
+      "correct": true,
+      "reason": "abstained (accepted)",
+      "miss": null,
+      "headline": "can't tell",
+      "dropped_alternative_lines": 2,
+      "checks_ran": {
+        "srm": [
+          "fail"
+        ],
+        "completeness": [
+          "could_not_run"
+        ]
+      },
+      "skill_read": false,
+      "isolation": "ok",
+      "kind": "abstain"
+    },
+    {
+      "fixture": "f5",
+      "arm": "checks",
+      "run": 2,
+      "model": "sonnet",
+      "exit": 0,
+      "seconds": 24.7,
+      "cost_usd": 0.0715913,
+      "turns": 5,
+      "correct": true,
+      "reason": "abstained (accepted)",
+      "miss": null,
+      "headline": "can't tell",
+      "dropped_alternative_lines": 0,
+      "checks_ran": {
+        "srm": [
+          "fail"
+        ],
+        "completeness": [
+          "pass"
+        ]
+      },
+      "skill_read": false,
+      "isolation": "ok",
+      "kind": "abstain"
+    },
+    {
+      "fixture": "f5",
+      "arm": "checks",
+      "run": 3,
+      "model": "sonnet",
+      "exit": 0,
+      "seconds": 25.8,
+      "cost_usd": 0.0719766,
+      "turns": 5,
+      "correct": true,
+      "reason": "abstained (accepted)",
+      "miss": null,
+      "headline": "can't tell",
+      "dropped_alternative_lines": 2,
+      "checks_ran": {
+        "srm": [
+          "fail"
+        ],
+        "completeness": [
+          "could_not_run"
+        ]
+      },
+      "skill_read": false,
+      "isolation": "ok",
+      "kind": "abstain"
+    },
+    {
+      "fixture": "f5",
+      "arm": "full",
+      "run": 1,
+      "model": "sonnet",
+      "exit": 0,
+      "seconds": 43.3,
+      "cost_usd": 0.14578200000000002,
+      "turns": 10,
+      "correct": true,
+      "reason": "abstained (accepted)",
+      "miss": null,
+      "headline": "can't tell",
+      "dropped_alternative_lines": 1,
+      "checks_ran": {
+        "srm": [
+          "fail"
+        ],
+        "completeness": [
+          "pass"
+        ]
+      },
+      "skill_read": true,
+      "isolation": "ok",
+      "kind": "abstain"
+    },
+    {
+      "fixture": "f5",
+      "arm": "full",
+      "run": 2,
+      "model": "sonnet",
+      "exit": 0,
+      "seconds": 37.4,
+      "cost_usd": 0.1496913,
+      "turns": 12,
+      "correct": true,
+      "reason": "abstained (accepted)",
+      "miss": null,
+      "headline": "can't tell",
+      "dropped_alternative_lines": 1,
+      "checks_ran": {
+        "srm": [
+          "fail"
+        ],
+        "completeness": [
+          "pass"
+        ]
+      },
+      "skill_read": true,
+      "isolation": "ok",
+      "kind": "abstain"
+    },
+    {
+      "fixture": "f5",
+      "arm": "full",
+      "run": 3,
+      "model": "sonnet",
+      "exit": 0,
+      "seconds": 41.0,
+      "cost_usd": 0.1360789,
+      "turns": 11,
+      "correct": true,
+      "reason": "abstained (accepted)",
+      "miss": null,
+      "headline": "can't tell",
+      "dropped_alternative_lines": 1,
+      "checks_ran": {
+        "srm": [
+          "fail"
+        ],
+        "completeness": [
+          "pass"
+        ]
+      },
+      "skill_read": true,
+      "isolation": "ok",
+      "kind": "abstain"
+    }
+  ]
+}

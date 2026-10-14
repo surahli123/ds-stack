@@ -222,6 +222,7 @@ def test_run_job_with_a_custom_agent_writes_result_logs_and_meta(tmp_path, monke
     dest = out / "f5__baseline__1"
     assert (dest / "result.md").read_text() == READOUT
     assert not (dest / "transcript.jsonl").exists()
+    assert (dest / "agent.log").exists()
     saved = json.loads((dest / "meta.json").read_text())
     assert saved == meta
     assert saved["agent_cmd"] == template and saved["transcript"] is False and saved["exit"] == 0
@@ -334,3 +335,10 @@ def test_the_arm_note_is_written_for_claude_codex_and_cursor(tmp_path, arm, note
 def test_the_baseline_arm_gets_no_note(tmp_path):
     work = run_arms.prepare_workdir(str(tmp_path), "f1", "baseline")
     assert not any(os.path.exists(os.path.join(work, name)) for name in ("CLAUDE.md", "AGENTS.md"))
+
+
+def test_a_prompt_suffix_goes_last_and_is_the_same_for_every_arm():
+    plain = run_arms.build_prompt("f1")
+    suffixed = run_arms.build_prompt("f1", "Write the prose in Chinese.")
+    assert suffixed == plain + "\nWrite the prose in Chinese.\n"
+    assert run_arms.build_prompt("f1", "   ") == plain
