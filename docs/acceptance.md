@@ -9,10 +9,12 @@ Each harness runs `eval/run_arms.py --runs 3` over fixtures f1–f8 and all thre
 | Harness | Command | Run by |
 |---|---|---|
 | Claude Code | `claude -p` (default), Sonnet | Claude, in a cloud session |
-| Codex | `--agent-cmd "sh $PWD/eval/agents/codex.sh {prompt_file}"` | dots, on the owner's machine |
+| Codex | `--parallel 2 --agent-cmd "sh $PWD/eval/agents/codex.sh {prompt_file}"` | dots, on the owner's machine |
 | Cursor | `--agent-cmd "sh $PWD/eval/agents/cursor.sh {prompt_file}"`, if installed | dots |
 
 Gold answers stay out of every analysis agent's reach. On the owner's machine, `eval/gold` is moved away while the agents run.
+
+A results directory in which any run didn't execute is INVALID: rate-limited, at capacity, not isolated, crashed, or an API error, as `eval/execution.py` decides. A run that hits the agent's own time or turn cap still counts, as a miss. `eval/acceptance.py` computes no levels for it, and the harness reruns into a new directory. This rule guards the bar; it doesn't change it.
 
 ## Fixtures
 

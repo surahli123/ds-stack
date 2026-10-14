@@ -14,6 +14,11 @@ say so in meta.json ("transcript": false). With --allow-no-transcript those runs
 are graded on their readout and reported as "unverified (custom agent)" for
 isolation and skill-read instead of failing, and counted per arm in
 runs_unverified_isolation. Without the flag nothing changes.
+
+A run that didn't execute (eval/execution.py: rate-limited, at capacity, not isolated, crashed, or an API
+error) is not a wrong answer: it is graded "execution failed: <why>", its fixture-by-arm cell is
+not_executed, and the verdict is INVALID, so the directory says nothing about the model or the skill. The exit
+code is then 2. A directory named in eval/never_grade.txt is refused outright.
 """
 
 import json
@@ -25,11 +30,26 @@ HERE = os.path.dirname(os.path.abspath(__file__))
 ROOT = os.path.dirname(HERE)
 sys.path.insert(0, HERE)
 
+from execution import OK, executed, run_execution  # noqa: E402
 from readout import parse  # noqa: E402
 
 ARMS = ("baseline", "checks", "full")
 CONTAMINATION_MARKERS = (ROOT, "/home/user/notes", "make_fixtures", "pass_rule", "/gold/")
 UNVERIFIED = "unverified (custom agent)"
+NEVER_GRADE = os.path.join(HERE, "never_grade.txt")
+
+
+def never_grade(results_dir):
+    """The reason a results directory must never be graded, from eval/never_grade.txt, or None."""
+    if not os.path.exists(NEVER_GRADE):
+        return None
+    name = os.path.basename(os.path.normpath(results_dir))
+    with open(NEVER_GRADE) as handle:
+        for line in handle:
+            entry, _, reason = line.strip().partition(" ")
+            if entry and not entry.startswith("#") and entry == name:
+                return reason.strip() or "listed in eval/never_grade.txt"
+    return None
 
 
 def load_gold(fixture):
@@ -127,18 +147,24 @@ def grade_dir(results_dir, allow_no_transcript=False):
         with open(os.path.join(run_dir, "result.md")) as handle:
             readout = parse(handle.read())
         gold = load_gold(meta["fixture"])
+        execution = run_execution(run_dir, meta)
         correct, reason, miss = grade_readout(readout, gold)
+        if not executed(execution):
+            # Nothing the agent did is being judged; isolation and skill-read stay as recorded below.
+            correct, reason, miss = False, f"execution failed: {execution}", "not_executed"
+        elif execution != OK:
+            reason = f"{execution}: {reason}"
         if allow_no_transcript and meta.get("transcript") is False:
             isolation = skill = UNVERIFIED
         else:
             tainted = contamination(run_dir)
-            if tainted:
+            if tainted and executed(execution):
                 correct, reason, miss = False, "contaminated: " + tainted, "contaminated"
             isolation, skill = tainted or "ok", skill_read(run_dir)
         runs.append({**meta, "correct": correct, "reason": reason, "miss": miss, "headline": readout.headline,
                      "dropped_alternative_lines": len(readout.dropped),
                      "checks_ran": checks_that_ran(run_dir), "skill_read": skill, "isolation": isolation,
-                     "kind": gold["kind"]})
+                     "kind": gold["kind"], "execution": execution})
     return runs
 
 
@@ -148,6 +174,8 @@ def majority_needed(rule):
 
 def cell_outcome(group, rule):
     """Majority outcome of one fixture x arm cell: 'correct', a miss kind, or 'incomplete'."""
+    if any(r["miss"] == "not_executed" for r in group):
+        return "not_executed"
     if len(group) != rule["runs_per_fixture"]:
         return "incomplete"
     if sum(r["correct"] for r in group) >= majority_needed(rule):
@@ -175,8 +203,10 @@ def summarize(runs, rule):
             "fixtures_false_alarm": outcomes.count("false_alarm"),
             "fixtures_abstain_answered": outcomes.count("answered_abstain_case"),
             "fixtures_incomplete": outcomes.count("incomplete"),
+            "fixtures_not_executed": outcomes.count("not_executed"),
             "runs_correct": sum(r["correct"] for r in arm_runs),
             "runs": len(arm_runs),
+            "runs_not_executed": sum(r["miss"] == "not_executed" for r in arm_runs),
             "runs_unparseable": sum(r["miss"] == "unparseable" for r in arm_runs),
             "runs_contaminated": sum(r["miss"] == "contaminated" for r in arm_runs),
             "runs_unverified_isolation": sum(r.get("isolation") == UNVERIFIED for r in arm_runs),
@@ -189,7 +219,13 @@ def summarize(runs, rule):
     verdict = {"n_fixtures": len(fixtures), "min_required": rule["min_holdout_fixtures"]}
     if "full" in per_arm and "baseline" in per_arm:
         verdict["rule_outcome_if_n_were_enough"] = "PASS" if passes(per_arm["full"], per_arm["baseline"], rule) else "FAIL"
-    if any(p["fixtures_incomplete"] for p in per_arm.values()):
+    failed = Counter(r["execution"] for r in runs if r["miss"] == "not_executed")
+    verdict["runs_not_executed"] = dict(failed)
+    if failed:
+        kinds = ", ".join(f"{kind} {n}" for kind, n in failed.most_common())
+        verdict["verdict"] = (f"INVALID ({sum(failed.values())} of {len(runs)} runs didn't execute: {kinds}; "
+                              "nothing here measures the model or the skill)")
+    elif any(p["fixtures_incomplete"] for p in per_arm.values()):
         verdict["verdict"] = "INCOMPLETE (some cells lack the pre-registered run count)"
     elif len(fixtures) < rule["min_holdout_fixtures"]:
         verdict["verdict"] = "INSUFFICIENT_N (smoke test, not a decision)"
@@ -248,6 +284,10 @@ def main(argv=None):
         print(__doc__)
         return 3
     results_dir = paths[0]
+    refused = never_grade(results_dir)
+    if refused:
+        print(f"grade: refusing {results_dir}: {refused}", file=sys.stderr)
+        return 2
     with open(os.path.join(HERE, "pass_rule.json")) as handle:
         rule = json.load(handle)
     runs = grade_dir(results_dir, allow_no_transcript=allow)
@@ -258,7 +298,7 @@ def main(argv=None):
     with open(os.path.join(results_dir, "summary.json"), "w") as handle:
         json.dump({"verdict": verdict, "per_arm": per_arm, "runs": runs}, handle, indent=2, default=str)
     print(report)
-    return 0
+    return 2 if verdict.get("runs_not_executed") else 0
 
 
 if __name__ == "__main__":

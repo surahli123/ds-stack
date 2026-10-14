@@ -1,0 +1,4 @@
+# Results directories that must never be graded. One per line: the directory name, a space, the reason.
+# grade.py and acceptance.py refuse these by name. The directories stay on the machine that made them.
+2026-10-14-codex-en Codex run before commit 1093ca9: the owner's global AGENTS.md and skills reached every arm
+2026-10-14-codex-zh Codex run before commit 1093ca9: the owner's global AGENTS.md and skills reached every arm

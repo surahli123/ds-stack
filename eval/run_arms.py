@@ -15,7 +15,8 @@ prompt goes on stdin. The template is split with shlex and run without a shell
 (use `sh -c '...'` for redirection or $(...)). The agent runs in the job's
 analysis directory and its stdout is the final reply, saved as result.md.
 A custom agent has no stream-json transcript, so no transcript.jsonl is written,
-cost and turns are null, and meta.json records "agent_cmd" and "transcript": false.
+cost and turns are null, and meta.json records "agent_cmd" and "transcript": false,
+plus the model and reasoning effort if the agent's log header names them (Codex does).
 The job's DS_CHECKS_LOG and DS_QUERIES_LOG still point into the analysis
 directory and are copied out as checks.log and queries.log. Isolation can't be
 audited without a transcript, and the agent keeps your real HOME so it stays
@@ -26,6 +27,14 @@ Arms:
   baseline  plain prompting
   checks    checks/ plus a one-line instruction to run them
   full      the ds-mode skill (method + checks + readout), pointed to by CLAUDE.md and AGENTS.md
+
+Execution: each run's meta.json records "execution" (eval/execution.py): "ok"; an agent limit (timeout,
+max_turns, empty_reply), graded as the miss it is; or why the run didn't execute: not_isolated, rate_limited,
+capacity, exit_<code> or agent_error. A rate_limited or capacity failure is retried in a fresh directory (--retries, default 2) after a pause that holds every worker
+(--backoff seconds, doubling); the failed attempts' logs stay in the run directory as attempt<k>.log. No new job
+starts after any run is not isolated, or after --max-failed-in-row jobs in a row end rate_limited or capacity.
+run-status.json in --out counts the outcomes. The exit code is 0 when every job executed (agent limits
+included), else 2.
 
 Every arm gets the identical prompt: the fixture's task plus the readout format.
 A fixture with an overlay/ folder (the team's metric definitions) gets it copied
@@ -40,6 +49,8 @@ import re
 import shlex
 import shutil
 import subprocess
+import sys
+import threading
 import time
 import uuid
 
@@ -47,12 +58,17 @@ HERE = os.path.dirname(os.path.abspath(__file__))
 ROOT = os.path.dirname(HERE)
 SKILL_DIR = os.path.join(ROOT, "skills", "ds-mode")
 FIXTURES = os.path.join(HERE, "fixtures")
+sys.path.insert(0, HERE)
+
+from execution import OK, RETRYABLE, agent_details, claude_result, classify, executed  # noqa: E402
+
 ARMS = ("baseline", "checks", "full")
 PASSTHROUGH_ENV = ("PATH", "ANTHROPIC_BASE_URL", "HTTPS_PROXY", "HTTP_PROXY", "NO_PROXY",
                    "https_proxy", "http_proxy", "no_proxy", "NODE_EXTRA_CA_CERTS", "SSL_CERT_FILE",
                    "REQUESTS_CA_BUNDLE", "ANTHROPIC_API_KEY", "CLAUDE_CODE_OAUTH_TOKEN")
 # A custom agent keeps its real login, so it also gets these (the default arm runs with HOME set to an empty dir).
-CUSTOM_AGENT_ENV = ("HOME", "USER", "LOGNAME", "XDG_CONFIG_HOME", "XDG_DATA_HOME", "XDG_CACHE_HOME", "CURSOR_API_KEY")
+CUSTOM_AGENT_ENV = ("HOME", "USER", "LOGNAME", "XDG_CONFIG_HOME", "XDG_DATA_HOME", "XDG_CACHE_HOME", "CURSOR_API_KEY",
+                    "CODEX_HOME", "DS_CODEX_MODEL", "DS_CODEX_EFFORT")
 SKIP_IN_COPY = shutil.ignore_patterns("__pycache__", "registry.json", ".ds-checks.log", ".ds-queries.log")
 CHECKS_ONLY_NOTE = ("Before reporting any number computed from data, run the checks in checks/ that apply "
                     "(python3 checks/run.py --list shows them) and include their results.\n")
@@ -128,8 +144,41 @@ def agent_argv(template, prompt_file, model):
     return argv, "{prompt_file}" not in template
 
 
-def run_job(job, model, out_dir, timeout, agent_cmd=None, suffix=""):
-    fixture, arm, run = job
+class Pacer:
+    """Shared by the workers. After a rate_limited or capacity failure no attempt starts until the pause ends.
+    After any run is not isolated, or `max_failed` jobs in a row end rate_limited or capacity, no job starts."""
+
+    def __init__(self, backoff=60, max_failed=3):
+        self.lock = threading.Lock()
+        self.backoff, self.max_failed = backoff, max_failed
+        self.resume_at, self.failed_in_row, self.stopped = 0.0, 0, None
+
+    def wait(self):
+        while True:
+            with self.lock:
+                delay = self.resume_at - time.time()
+            if delay <= 0:
+                return
+            time.sleep(min(delay, 5))
+
+    def pause(self, attempt):
+        with self.lock:
+            self.resume_at = max(self.resume_at, time.time() + self.backoff * 2 ** (attempt - 1))
+
+    def finished(self, execution):
+        with self.lock:
+            if execution.startswith("not_isolated"):
+                self.stopped = self.stopped or "a run was not isolated"
+            elif execution in RETRYABLE:
+                self.failed_in_row += 1
+                if self.failed_in_row >= self.max_failed and not self.stopped:
+                    self.stopped = f"{self.failed_in_row} jobs in a row ended {execution} after their retries"
+            else:
+                self.failed_in_row = 0
+
+
+def attempt_job(fixture, arm, model, timeout, agent_cmd=None, suffix=""):
+    """One run of the agent in a fresh job directory. The caller removes outcome["job_root"]."""
     job_root = os.path.join(os.environ.get("DS_RUN_ROOT", "/tmp/ds-runs"), uuid.uuid4().hex[:10])
     work = prepare_workdir(job_root, fixture, arm)
     config = os.path.join(job_root, "config")
@@ -168,42 +217,85 @@ def run_job(job, model, out_dir, timeout, agent_cmd=None, suffix=""):
         if not agent_cmd:
             raise
         stdout, stderr, code = "", str(err), f"error: {err}"
-
-    dest = os.path.join(out_dir, f"{fixture}__{arm}__{run}")
-    os.makedirs(dest, exist_ok=True)
-    result_text, cost, turns = "", None, None
     if agent_cmd:
-        result_text = stdout
+        reply, error_text, cost, turns = stdout, None, None, None
+    else:
+        reply, error_text, cost, turns = claude_result(stdout)
+    return {"job_root": job_root, "work": work, "stdout": stdout, "stderr": stderr, "code": code,
+            "seconds": round(time.time() - started, 1), "reply": reply, "cost": cost, "turns": turns,
+            "execution": classify(code, reply, stderr, error_text)}
+
+
+def run_job(job, model, out_dir, timeout, agent_cmd=None, suffix="", pacer=None, retries=0):
+    fixture, arm, run = job
+    if pacer and pacer.stopped:
+        return {"fixture": fixture, "arm": arm, "run": run, "execution": "not_started"}
+    dest = os.path.join(out_dir, f"{fixture}__{arm}__{run}")
+    earlier = []
+    attempt = 0
+    while True:
+        attempt += 1
+        if pacer:
+            pacer.wait()
+            if pacer.stopped and attempt == 1:
+                return {"fixture": fixture, "arm": arm, "run": run, "execution": "not_started"}
+        outcome = attempt_job(fixture, arm, model, timeout, agent_cmd, suffix)
+        if outcome["execution"] not in RETRYABLE or attempt > retries or (pacer and pacer.stopped):
+            break
+        # A refused request says nothing about the agent: keep its log, then try again in a fresh directory.
+        os.makedirs(dest, exist_ok=True)
+        with open(os.path.join(dest, f"attempt{attempt}.log"), "w") as handle:
+            handle.write(outcome["stderr"] if agent_cmd else outcome["stdout"])
+        earlier.append(outcome["execution"])
+        shutil.rmtree(outcome["job_root"], ignore_errors=True)
+        if pacer:
+            pacer.pause(attempt)
+
+    os.makedirs(dest, exist_ok=True)
+    if agent_cmd:
         with open(os.path.join(dest, "agent.log"), "w") as handle:
-            handle.write(stderr)
+            handle.write(outcome["stderr"])
     else:
         with open(os.path.join(dest, "transcript.jsonl"), "w") as handle:
-            handle.write(stdout)
-        for line in stdout.splitlines():
-            try:
-                event = json.loads(line)
-            except ValueError:
-                continue
-            if event.get("type") == "result":
-                result_text = event.get("result") or ""
-                cost = event.get("total_cost_usd")
-                turns = event.get("num_turns")
+            handle.write(outcome["stdout"])
     with open(os.path.join(dest, "result.md"), "w") as handle:
-        handle.write(result_text)
+        handle.write(outcome["reply"])
     for name, copy in ((".ds-checks.log", "checks.log"), (".ds-queries.log", "queries.log")):
-        log = os.path.join(work, name)
+        log = os.path.join(outcome["work"], name)
         if os.path.exists(log):
             shutil.copy(log, os.path.join(dest, copy))
-    meta = {"fixture": fixture, "arm": arm, "run": run, "model": model, "exit": code,
-            "seconds": round(time.time() - started, 1), "cost_usd": cost, "turns": turns}
+    # A custom agent picks its own model unless the template passes {model}.
+    meta = {"fixture": fixture, "arm": arm, "run": run,
+            "model": model if not agent_cmd or "{model}" in agent_cmd else None, "exit": outcome["code"],
+            "seconds": outcome["seconds"], "cost_usd": outcome["cost"], "turns": outcome["turns"],
+            "execution": outcome["execution"], "attempts": attempt}
+    if earlier:
+        meta.update(earlier_attempts=earlier)
     if agent_cmd:
-        meta.update(agent_cmd=agent_cmd, transcript=False)
+        meta.update(agent_cmd=agent_cmd, transcript=False, **agent_details(outcome["stderr"]))
     if suffix.strip():
         meta.update(prompt_suffix=suffix.strip())
     with open(os.path.join(dest, "meta.json"), "w") as handle:
         json.dump(meta, handle, indent=2)
-    shutil.rmtree(job_root, ignore_errors=True)
+    shutil.rmtree(outcome["job_root"], ignore_errors=True)
+    if pacer:
+        pacer.finished(outcome["execution"])
     return meta
+
+
+def run_status(metas, stopped):
+    """What run-status.json records: how many jobs executed, how the rest failed, which never started."""
+    failed, limits = {}, {}
+    for meta in metas:
+        kind = meta["execution"]
+        if kind == "not_started" or kind == OK:
+            continue
+        bucket = limits if executed(kind) else failed
+        bucket[kind] = bucket.get(kind, 0) + 1
+    not_started = sorted(f"{m['fixture']}__{m['arm']}__{m['run']}" for m in metas if m["execution"] == "not_started")
+    done = sum(executed(m["execution"]) for m in metas)
+    return {"jobs": len(metas), "executed": done, "agent_limits": limits, "failed": failed,
+            "not_started": not_started, "stopped": stopped, "exit": 0 if done == len(metas) else 2}
 
 
 def main():
@@ -220,6 +312,11 @@ def main():
                         help='text appended to every arm\'s prompt, e.g. "Write the prose in Chinese." (recorded in meta.json)')
     parser.add_argument("--parallel", type=int, default=6)
     parser.add_argument("--timeout", type=int, default=900)
+    parser.add_argument("--retries", type=int, default=2, help="retries of a rate_limited or capacity failure")
+    parser.add_argument("--backoff", type=float, default=60,
+                        help="seconds every worker pauses after such a failure, doubling with each retry")
+    parser.add_argument("--max-failed-in-row", type=int, default=3,
+                        help="stop starting jobs after this many in a row end rate_limited or capacity")
     parser.add_argument("--out", default=os.path.join(HERE, "results", time.strftime("%Y%m%d-%H%M%S")))
     args = parser.parse_args()
     agent_cmd = args.agent_cmd or None
@@ -238,15 +335,30 @@ def main():
                      "overwritten, so pick a new --out")
     os.makedirs(args.out, exist_ok=True)
     print(f"{len(jobs)} jobs -> {args.out}", flush=True)
+    pacer = Pacer(args.backoff, args.max_failed_in_row)
+    metas = []
     with futures.ThreadPoolExecutor(max_workers=args.parallel) as pool:
-        pending = {pool.submit(run_job, job, args.model, args.out, args.timeout, agent_cmd, args.prompt_suffix): job for job in jobs}
+        pending = {pool.submit(run_job, job, args.model, args.out, args.timeout, agent_cmd, args.prompt_suffix,
+                               pacer, args.retries): job for job in jobs}
         for done in futures.as_completed(pending):
             meta = done.result()
+            metas.append(meta)
+            if meta["execution"] == "not_started":
+                continue
             spend = "no transcript or cost data" if meta.get("transcript") is False else f"turns {meta['turns']}, ${meta['cost_usd']}"
-            print(f"{meta['fixture']} {meta['arm']:8} run {meta['run']}: exit {meta['exit']}, "
+            tries = f", {meta['attempts']} attempts" if meta["attempts"] > 1 else ""
+            print(f"{meta['fixture']} {meta['arm']:8} run {meta['run']}: {meta['execution']} (exit {meta['exit']}{tries}), "
                   f"{meta['seconds']}s, {spend}", flush=True)
-    print(f"done: {args.out}")
+    status = run_status(metas, pacer.stopped)
+    with open(os.path.join(args.out, "run-status.json"), "w") as handle:
+        json.dump(status, handle, indent=2)
+    failed = ", ".join(f"{kind} {n}" for kind, n in sorted(status["failed"].items())) or "none"
+    print(f"done: {args.out}\nexecuted {status['executed']} of {status['jobs']}; failed: {failed}; "
+          f"not started: {len(status['not_started'])}" + (f"; stopped: {status['stopped']}" if status["stopped"] else ""))
+    if status["exit"]:
+        print("Some jobs didn't execute, so this directory is not a result. Don't grade it into the acceptance table.")
+    return status["exit"]
 
 
 if __name__ == "__main__":
-    main()
+    sys.exit(main())
