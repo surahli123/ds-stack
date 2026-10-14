@@ -22,14 +22,20 @@ cd ~/ds-stack && test -f docs/acceptance.md && git log -1 --format=%H
 
 Stop and tell the owner if `docs/acceptance.md` doesn't exist yet. Record the commit hash. Also check that `codex --version` works and that `codex login status` shows a sign-in.
 
-### 2. Hide gold and Codex's global instructions while the agents run
+Each code block below is meant to run as one shell command. Blocks don't share variables, so every block from step 3 on reads the run id from `~/ds-run-id`.
+
+### 2. Fix the run id, then hide gold and Codex's global instructions
 
 ```bash
+for p in ~/ds-run-id ~/ds-gold-hidden ~/ds-codex-hidden; do [ -e "$p" ] && { echo "leftover $p from an unfinished run: stop and report"; exit 1; }; done
+date +%Y-%m-%d-%H%M > ~/ds-run-id && cat ~/ds-run-id
 mv ~/ds-stack/eval/gold ~/ds-gold-hidden
-mkdir -p ~/ds-codex-hidden
+mkdir ~/ds-codex-hidden
 for f in AGENTS.md skills prompts; do [ -e ~/.codex/$f ] && mv ~/.codex/$f ~/ds-codex-hidden/; done
 ls ~/ds-codex-hidden
 ```
+
+If the first line reports a leftover, stop: an earlier run didn't finish cleanly, and the owner decides what to restore.
 
 `--ignore-user-config` skips only `config.toml`. Global instructions in `~/.codex` would reach every arm, plain prompting included. Leave `auth.json` where it is. `eval/agents/codex.sh` also gives Codex an empty `HOME`, so skills in `~/.agents/skills` and plugins stay out.
 
@@ -39,38 +45,44 @@ Then confirm the isolation with one paid call:
 cd ~/ds-stack && sh eval/agents/codex-isolation-probe.sh
 ```
 
-It passes when Codex lists no skills and no instruction files (NONE for both), or only its built-in behaviour. If it names any skill, quotes any AGENTS.md or mentions a personal path, put everything back, then stop and report its reply.
-
-Move everything back only in step 5, after every agent has finished. If anything stops you early, move it back before you report.
+It passes when Codex lists no skills and no instruction files (NONE for both), or only its built-in behaviour. If it names any skill, quotes any AGENTS.md or mentions a personal path, run step 5's first block to put everything back, then stop and report the probe's reply.
 
 ### 3. Run the Codex column, in English and in Chinese
 
 ```bash
-cd ~/ds-stack && D=$(date +%Y-%m-%d-%H%M)
-python3 eval/run_arms.py --runs 3 --agent-cmd "sh $PWD/eval/agents/codex.sh {prompt_file}" --out eval/results/$D-codex-en
-python3 eval/run_arms.py --runs 3 --agent-cmd "sh $PWD/eval/agents/codex.sh {prompt_file}" --prompt-suffix "请用中文写结论。" --out eval/results/$D-codex-zh
+cd ~/ds-stack && D=$(cat ~/ds-run-id) && python3 eval/run_arms.py --runs 3 --agent-cmd "sh $PWD/eval/agents/codex.sh {prompt_file}" --out eval/results/$D-codex-en
+```
+
+```bash
+cd ~/ds-stack && D=$(cat ~/ds-run-id) && python3 eval/run_arms.py --runs 3 --agent-cmd "sh $PWD/eval/agents/codex.sh {prompt_file}" --prompt-suffix "请用中文写结论。" --out eval/results/$D-codex-zh
 ```
 
 Each command runs every fixture through three arms (plain prompting, checks only, full ds-mode), 3 times each. Each run's directory keeps `result.md`, `agent.log` (Codex's own log), `queries.log`, `checks.log` and `meta.json`.
 
-### 4. Skip the Cursor column
+### 4. Don't run Cursor
 
-A local Claude Code session runs it (`docs/prompts/local-claude.md`). Run Cursor yourself only if the person you work for asks.
+The Cursor column isn't run this round.
 
-### 5. Restore gold and grade
+### 5. Restore everything, then grade
+
+Restore first, also when you stop early:
 
 ```bash
-mv ~/ds-gold-hidden ~/ds-stack/eval/gold
-for f in ~/ds-codex-hidden/*; do [ -e "$f" ] && mv "$f" ~/.codex/; done; rmdir ~/ds-codex-hidden
-grep -l "is not isolated" eval/results/$D-codex-*/*/agent.log
-for R in eval/results/$D-codex-* eval/results/$D-cursor-*; do [ -d "$R" ] && python3 eval/grade.py "$R" --allow-no-transcript; done
-python3 eval/acceptance.py eval/results/$D-codex-* eval/results/$D-cursor-* --allow-no-transcript
+[ -e ~/ds-stack/eval/gold ] || mv ~/ds-gold-hidden ~/ds-stack/eval/gold
+for f in ~/ds-codex-hidden/* ~/ds-codex-hidden/.[!.]*; do [ -e "$f" ] && mv "$f" ~/.codex/; done; rmdir ~/ds-codex-hidden
+ls ~/ds-stack/eval/gold ~/.codex
+```
+
+Then grade:
+
+```bash
+cd ~/ds-stack && D=$(cat ~/ds-run-id) && grep -l "is not isolated" eval/results/$D-codex-*/*/agent.log; for R in eval/results/$D-codex-*; do python3 eval/grade.py "$R" --allow-no-transcript; done; python3 eval/acceptance.py eval/results/$D-codex-* --allow-no-transcript
 ```
 
 ### 6. Push the results
 
 ```bash
-git checkout -b results/$D-codex && git add eval/results/$D-* && git commit -m "Acceptance results from Codex, $D" && git push -u origin results/$D-codex
+cd ~/ds-stack && D=$(cat ~/ds-run-id) && git checkout -b results/$D-codex && git add eval/results/$D-codex-* && git commit -m "Acceptance results from Codex, $D" && git push -u origin results/$D-codex && rm ~/ds-run-id
 ```
 
 ## Report back
