@@ -1,6 +1,6 @@
-# Prompt: acceptance run, dots's part (Codex and Cursor on the owner's machine)
+# Prompt: acceptance run, dots's part (Codex on the owner's machine)
 
-You run the Codex column, and the Cursor column if `cursor-agent` is installed, of the ds-stack acceptance matrix on the machine of the person you work for. Claude owns the acceptance doc, the fixtures and every fix (`docs/prompts/acceptance-claude.md`). Your job is to run, grade and report. Don't fix anything.
+You run the Codex column of the ds-stack acceptance matrix on the machine of the person you work for. Claude owns the acceptance doc, the fixtures and every fix (`docs/prompts/acceptance-claude.md`). Your job is to run, grade and report. Don't fix anything.
 
 ## Rules
 
@@ -39,9 +39,9 @@ python3 eval/run_arms.py --runs 3 --agent-cmd "sh $PWD/eval/agents/codex.sh {pro
 
 Each command runs every fixture through three arms (plain prompting, checks only, full ds-mode), 3 times each. Each run's directory keeps `result.md`, `agent.log` (Codex's own log), `queries.log`, `checks.log` and `meta.json`.
 
-### 4. Run the Cursor column, if `cursor-agent` exists
+### 4. Skip the Cursor column
 
-Repeat step 3 with `eval/agents/cursor.sh`, writing to `$D-cursor-en` and `$D-cursor-zh`.
+A local Claude Code session runs it (`docs/prompts/local-claude.md`). Run Cursor yourself only if the person you work for asks.
 
 ### 5. Restore gold and grade
 
@@ -54,7 +54,7 @@ python3 eval/acceptance.py eval/results/$D-codex-* eval/results/$D-cursor-* --al
 ### 6. Push the results
 
 ```bash
-git checkout -b results/$D-codex && git add eval/results/$D-* && git commit -m "Acceptance results from Codex/Cursor, $D" && git push -u origin results/$D-codex
+git checkout -b results/$D-codex && git add eval/results/$D-* && git commit -m "Acceptance results from Codex, $D" && git push -u origin results/$D-codex
 ```
 
 ## Report back
@@ -63,7 +63,7 @@ Send the person you work for this, and nothing else:
 
 ```
 ds-stack acceptance, <date>, commit <hash>
-Codex: <version>   Cursor: <version or "not run">
+Codex: <version>
 <the full output of eval/acceptance.py>
 <for each results directory: its Fixtures-by-majority table from summary.md>
 Failing runs: <directory/run: the Reason column from summary.md>
