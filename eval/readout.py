@@ -15,6 +15,10 @@ read instead of guessing:
   empty list.
 - a headline with no number and words like "can't tell" or "insufficient" is an
   abstention.
+- the Answer's estimate lines (Observed, Adjusted, Causal effect) are read
+  separately, each as a number or as "not identified" / "not computed", so the
+  grader can score the estimand the task asks for. A headline with two
+  different estimates in the same unit before its parenthesis is a parse error.
 - alternative lines match "ruled in/out" anywhere; "not ruled in/out" reads as
   undetermined. Bullet lines in that list that match neither are kept in
   `dropped` so the summary can report parse loss per arm.
@@ -35,7 +39,8 @@ HEADING = re.compile(r"^#{1,4}\s+(.+?)\s*#*\s*$", re.M)
 HEADLINE = re.compile(r"^\s*[-*]?\s*headline\s*:\s*(.+?)\s*$", re.I | re.M)
 VERDICT = re.compile(r"\b(not\s+)?ruled[\s-]*(in|out)\b", re.I)
 NAME_SPLIT = re.compile(r"\s*(?::|—|–|\s-\s)\s*")
-CHECK = re.compile(r"^\s*[-*]\s*([a-z_]+)\s*:\s*(pass|flag|fail|could[ _]not[ _]run|skipped)\b", re.I)
+CHECK = re.compile(r"^\s*[-*]\s*([a-z_]+)(?:\s*\([^)]*\))?\s*:\s*(pass|flag|fail|could[ _]not[ _]run|skipped)\b", re.I)
+ESTIMATE = re.compile(r"^\s*[-*]?\s*(observed|adjusted|causal effect)\s*:\s*(.+?)\s*$", re.I | re.M)
 TRACE_TAGS = re.compile(r"\[\s*(?:q\d+|check:[a-z_]+#\d+|given)(?:\s*[,;|]\s*(?:q\d+|check:[a-z_]+#\d+|given))*\s*\]", re.I)
 LABEL = re.compile(r"\[(measured|inferred|guess)\]", re.I)
 INTERVAL = re.compile(r"([-+−]?\d+(?:\.\d+)?)\s*%?\s*(?:to|,|–|—|\.\.\.?)\s*([-+−]?\d+(?:\.\d+)?)", re.I)
@@ -51,6 +56,7 @@ class Readout:
     alternatives: list = field(default_factory=list)
     dropped: list = field(default_factory=list)
     checks: dict = field(default_factory=dict)
+    estimates: dict = field(default_factory=dict)
     sections: dict = field(default_factory=dict)
     errors: list = field(default_factory=list)
 
@@ -65,10 +71,19 @@ class Readout:
     def value_in(self, unit):
         """First headline number in `unit` ('pp' or 'percent'), else the first unitless
         number. None when the headline only has numbers in another unit."""
-        for number, found in self.candidates:
-            if found == unit:
-                return number
-        return next((number for number, found in self.candidates if found is None), None)
+        return pick(self.candidates, unit)
+
+    def estimate_in(self, name, unit):
+        """The number on an estimate line ('observed', 'adjusted', 'causal effect'), or None."""
+        line = self.estimates.get(name)
+        return pick(line["candidates"], unit) if line and line["status"] == "number" else None
+
+
+def pick(candidates, unit):
+    for number, found in candidates:
+        if found == unit:
+            return number
+    return next((number for number, found in candidates if found is None), None)
 
 
 def _clean(text):
@@ -127,6 +142,15 @@ def parse(text):
 
     out.headline = match.group(1)
     out.candidates = _candidates(out.headline)
+    head = CI_LEVEL.sub(" ", DATE.sub(" ", out.headline)).partition("(")[0]
+    estimates = {c for c in _numbers_with_units(head, False) if c[1] in ("pp", "percent")}
+    if len({unit for _, unit in estimates}) == 1 and len(estimates) > 1:
+        out.errors.append(f"headline gives {len(estimates)} different estimates before its parenthesis; give one")
+    for name, text in ESTIMATE.findall(answer):
+        status = re.match(r"\s*not\s+(identified|computed)", text, re.I)
+        found = _candidates(text)
+        out.estimates[name.lower()] = {"text": text, "candidates": found,
+                                       "status": f"not {status.group(1).lower()}" if status else ("number" if found else "unreadable")}
     if not out.candidates:
         if ABSTAIN_WORDS.search(out.headline):
             out.abstained = True

@@ -64,6 +64,9 @@ Your final reply is exactly this format, written for the person who acts on it:
 ## Answer
 Headline: <signed number> <unit> (<95% interval>) [q<n> | check:<name>#<n>]   or   Headline: can't tell
 <one plain sentence: what happened and how big> [q<n> | check:<name>#<n>]
+- Observed: <signed number> <unit> (<95% interval>) [q<n> | check:<name>#<n>]
+- Adjusted: <signed number> <unit> (<95% interval>), holding <what> fixed [check:<name>#<n>]   or   Adjusted: not computed (<reason>)
+- Causal effect: <signed number> <unit> (<95% interval>), from <design> [q<n>]   or   Causal effect: not identified (<what would identify it>)
 
 ## What it means for <the decision>
 <one or two sentences that compare the interval with the smallest change that would alter the decision> [q<n> | check:<name>#<n>] [given]
@@ -88,8 +91,12 @@ Headline: <signed number> <unit> (<95% interval>) [q<n> | check:<name>#<n>]   or
 - In Provenance, the logs are `.ds-queries.log` and `.ds-checks.log`, and a last line `- Verified: <the verify_readout.py result line, exactly as printed>` shows the reviewer the trace check passed.
 - The interval is required. `mix_shift` reports one for the overall change (`delta_ci95_pp`). For an experiment lift, use a two-proportion interval. When no interval can be computed, write `(no interval: <reason>)`.
 - Use causal words ("caused", "drove", "because of") only for a randomized test or a design that identifies the cause. Otherwise say "coincided with" or "is associated with", and name what would confirm it.
-- When the question asks how much of a change a launch caused and the design can't identify it (a 100% rollout, no holdout), don't abstain and don't headline the raw total. Headline the best estimate the data allows: after a `mix_shift` decomposition, that is the within-segment change. Name its assumption in the same sentence (for example "assuming v2 didn't change the traffic mix"), put the total change in the sentence below, and name what would identify the effect. `can't tell` is for when the data can't support the number itself.
-- Keep the readout's fixed words in English exactly as shown: the section headings, `Headline:`, `ruled in` and `ruled out`, check names and statuses, `can't tell`, and the unit `pp`. Scripts read them. Everything else can be in the reader's language.
+- The three estimate lines keep apart numbers that are easy to conflate:
+  - Observed is the raw number or change in the data.
+  - Adjusted is a descriptive estimate that holds something fixed, such as the within-segment change from `mix_shift`. Say what it holds fixed. It is not a causal effect.
+  - Causal effect is a number only for a randomized test or another design that identifies the cause. Otherwise write `not identified` and what would identify it. Never fill it with Adjusted, and never write 0 for an effect you couldn't identify.
+- The Headline gives the estimate that answers the question. For "how much of the change did the launch cause" after a 100% rollout, that is Adjusted, with its assumption in the sentence below (for example "if v2 didn't change the traffic mix"). An unidentified cause is not a reason to abstain. `can't tell` is for when the data can't support the number itself; then each estimate line may read `not computed (<reason>)`.
+- Keep the readout's fixed words in English exactly as shown: the section headings, `Headline:`, `Observed:`, `Adjusted:`, `Causal effect:`, `not identified`, `ruled in` and `ruled out`, check names and statuses, `can't tell`, and the unit `pp`. Scripts read them. Everything else can be in the reader's language.
 - measured means computed from data in this session.
 - inferred means it follows from measured facts by reasoning.
 - guess means neither.

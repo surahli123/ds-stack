@@ -13,7 +13,7 @@ Two evals ask whether ds-stack changes what an agent produces, compared with pla
 
 Fixtures come in three kinds: error (a planted problem), clean (nothing wrong, so any alarm is a false alarm) and abstain (the right answer is "can't tell").
 
-`grade.py` checks the headline against the gold value and tolerance, whether the run abstained, and which alternatives it ruled in. Whether checks ran comes from each run's `.ds-checks.log`, not from the readout. Each fixture is scored by majority vote over its runs, never per run. A run that touched the eval tree is marked contaminated.
+`grade.py` checks the estimand the gold names against its value and tolerance: the headline by default, or the readout's `Adjusted:` line when gold sets `"estimand": "adjusted"`. With `"causal_identified": false`, a number on the `Causal effect:` line fails. It also checks whether the run abstained, and which alternatives it ruled in. Whether checks ran comes from each run's `.ds-checks.log`, not from the readout. Each fixture is scored by majority vote over its runs, never per run. A run that touched the eval tree is marked contaminated.
 
 The pass rule: at least 15 holdout fixtures, 3 runs each. The full arm beats baseline by at least 4 fixtures, adds no false alarms over baseline, and answers no abstain case with a number. With fewer fixtures the verdict is `INSUFFICIENT_N`.
 

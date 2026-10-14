@@ -26,10 +26,10 @@ The repo is private, so cloning needs their GitHub access.
 ### 3. Install the skill and run the self-test
 
 ```bash
-mkdir -p ~/ds-skills && rm -rf ~/ds-skills/ds-mode && cp -R ~/ds-stack/skills/ds-mode ~/ds-skills/
+mkdir -p ~/ds-skills && if [ -e ~/ds-skills/ds-mode ]; then mv ~/ds-skills/ds-mode ~/ds-skills/ds-mode.bak-$(date +%Y%m%d-%H%M%S); fi && cp -R ~/ds-stack/skills/ds-mode ~/ds-skills/
 python3 ~/ds-stack/safety/selftest.py
 ```
-Every line of the self-test must start with `ok`.
+Every line of the self-test must start with `ok`. An existing `ds-mode` is moved aside, never deleted. ds-mode doesn't need the other ds-stack skills for this test; it uses ds-doc only when that is installed.
 
 ### 4. Run the analysis in Codex
 

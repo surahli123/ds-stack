@@ -23,7 +23,7 @@ echo "For any data analysis request, read and follow /Users/<you>/ds-skills/ds-m
 
 Open Codex or Cursor in that directory and paste in the text of `task.md`. It passes when:
 
-- the answer is about 0 pp, with mix shift (mobile's share rising) as the cause;
+- the readout's `Adjusted:` line is about 0 pp, `Causal effect:` says not identified, and mix shift (mobile's share rising) is ruled in;
 - `.ds-queries.log`, `.ds-checks.log` and `readout.md` appear in the directory;
 - `python3 ~/ds-skills/ds-mode/tools/verify_readout.py readout.md`, run by you, prints `pass`.
 

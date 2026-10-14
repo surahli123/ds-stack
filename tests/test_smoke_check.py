@@ -31,7 +31,7 @@ def test_a_wrong_answer_fails_on_the_gold_check_only(run_dir):
 def test_missing_logs_fail_the_trace(run_dir):
     os.remove(run_dir / ".ds-queries.log")
     results = dict((line.split(":")[0], ok) for ok, line in smoke_check.check(str(run_dir), "f1"))
-    assert not results["no logged queries"] and not results["verify_readout"]
+    assert not results["no logged queries"] and not results["verify_readout (trace only)"]
 
 
 def test_no_readout_and_no_directory(tmp_path):

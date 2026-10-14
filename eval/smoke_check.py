@@ -8,8 +8,10 @@ after the run, readout.md, .ds-queries.log and .ds-checks.log. Prints one line
 per check, then PASS or FAIL. Exit code: 0 pass, 1 fail, 3 usage error.
 
 The checks: the readout exists; queries were logged; at least one check names
-its source query; verify_readout.py passes; the headline and causes match the
-fixture's gold answer.
+its source query; verify_readout.py passes (every number traces to a log; this
+says nothing about whether the number is right); the estimand the fixture asks
+for and the causes match its gold answer, which is loaded only here, after the
+agent has finished.
 """
 
 import argparse
@@ -45,8 +47,8 @@ def check(run_dir, fixture):
                     else f"no completed check names its source query ({len(checks)} checks logged)"))
     if text:
         problems, _, _ = verify_readout.verify(text, queries, checks)
-        results.append((not problems, "verify_readout: pass" if not problems
-                        else "verify_readout: fail: " + "; ".join(problems[:3])))
+        results.append((not problems, "verify_readout (trace only): pass" if not problems
+                        else "verify_readout (trace only): fail: " + "; ".join(problems[:3])))
         correct, reason, _ = grade_readout(parse(text), load_gold(fixture))
         results.append((correct, f"answer vs gold: {reason}"))
     return results
