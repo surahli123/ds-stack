@@ -1,0 +1,54 @@
+{
+  "verdict": {
+    "n_fixtures": 1,
+    "min_required": 15,
+    "runs_not_executed": {
+      "not_isolated": 1
+    },
+    "verdict": "INVALID (1 of 1 runs didn't execute: not_isolated 1; nothing here measures the model or the skill)"
+  },
+  "per_arm": {
+    "baseline": {
+      "fixtures_correct": 0,
+      "fixtures_false_alarm": 0,
+      "fixtures_abstain_answered": 0,
+      "fixtures_incomplete": 0,
+      "fixtures_not_executed": 1,
+      "runs_correct": 0,
+      "runs": 1,
+      "runs_not_executed": 1,
+      "runs_unparseable": 0,
+      "runs_contaminated": 0,
+      "runs_unverified_isolation": 1,
+      "dropped_alternative_lines": 0,
+      "runs_with_any_check": 0,
+      "runs_reading_skill": 0,
+      "cost_usd": 0
+    }
+  },
+  "runs": [
+    {
+      "fixture": "f5",
+      "arm": "baseline",
+      "run": 1,
+      "model": null,
+      "exit": 4,
+      "seconds": 0.0,
+      "cost_usd": null,
+      "turns": null,
+      "execution": "not_isolated",
+      "attempts": 1,
+      "agent_cmd": "sh <HOME>/ds-stack/eval/agents/codex.sh {prompt_file}",
+      "transcript": false,
+      "correct": false,
+      "reason": "execution failed: not_isolated",
+      "miss": "not_executed",
+      "headline": "",
+      "dropped_alternative_lines": 0,
+      "checks_ran": {},
+      "skill_read": "unverified (custom agent)",
+      "isolation": "unverified (custom agent)",
+      "kind": "abstain"
+    }
+  ]
+}

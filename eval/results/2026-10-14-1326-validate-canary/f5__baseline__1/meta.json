@@ -1,0 +1,14 @@
+{
+  "fixture": "f5",
+  "arm": "baseline",
+  "run": 1,
+  "model": null,
+  "exit": 4,
+  "seconds": 0.0,
+  "cost_usd": null,
+  "turns": null,
+  "execution": "not_isolated",
+  "attempts": 1,
+  "agent_cmd": "sh <HOME>/ds-stack/eval/agents/codex.sh {prompt_file}",
+  "transcript": false
+}

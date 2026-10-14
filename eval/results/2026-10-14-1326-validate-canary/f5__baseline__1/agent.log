@@ -1,0 +1,2 @@
+Public log extract. Internal reasoning, telemetry and tool transcript omitted. Final response is in result.md. Raw source retained locally; SHA-256 in publication-manifest.json.
+[source line 1] ds-stack: <HOME>/.codex/skills/ds-canary is present, so this run is not isolated; Codex was not started

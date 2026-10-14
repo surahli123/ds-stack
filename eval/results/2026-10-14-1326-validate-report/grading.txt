@@ -1,0 +1,95 @@
+# Eval summary: 2026-10-14-1326-validate-canary
+
+**Verdict:** INVALID (1 of 1 runs didn't execute: not_isolated 1; nothing here measures the model or the skill). 1 fixtures; the pass rule needs 15. Rule outcome at this n: n/a.
+
+## Fixtures by majority vote
+
+| Fixture | Kind | baseline |
+|---|---|---|
+| f5 | abstain | ✗ not_executed (0/1) |
+
+## Per arm
+
+| Metric | baseline |
+|---|---|
+| fixtures_correct | 0 |
+| fixtures_false_alarm | 0 |
+| fixtures_abstain_answered | 0 |
+| fixtures_incomplete | 0 |
+| fixtures_not_executed | 1 |
+| runs_correct | 0 |
+| runs | 1 |
+| runs_not_executed | 1 |
+| runs_unparseable | 0 |
+| runs_contaminated | 0 |
+| runs_unverified_isolation | 1 |
+| dropped_alternative_lines | 0 |
+| runs_with_any_check | 0 |
+| runs_reading_skill | 0 |
+| cost_usd | 0 |
+
+## Every run
+
+| Run | Correct | Headline | Reason | Checks that ran | Isolation | Skill read |
+|---|---|---|---|---|---|---|
+| f5 baseline #1 | ✗ |  | execution failed: not_isolated | none | unverified (custom agent) | unverified (custom agent) |
+
+grade exit 2
+
+# Eval summary: 2026-10-14-1326-validate-codex
+
+**Verdict:** INCOMPLETE (some cells lack the pre-registered run count). 2 fixtures; the pass rule needs 15. Rule outcome at this n: FAIL.
+
+## Fixtures by majority vote
+
+| Fixture | Kind | baseline | full |
+|---|---|---|---|
+| f1 | error | ✗ incomplete (0/1) | ✗ incomplete (0/1) |
+| f6 | error | ✗ incomplete (0/1) | ✗ incomplete (1/1) |
+
+## Per arm
+
+| Metric | baseline | full |
+|---|---|---|
+| fixtures_correct | 0 | 0 |
+| fixtures_false_alarm | 0 | 0 |
+| fixtures_abstain_answered | 0 | 0 |
+| fixtures_incomplete | 2 | 2 |
+| fixtures_not_executed | 0 | 0 |
+| runs_correct | 0 | 1 |
+| runs | 2 | 2 |
+| runs_not_executed | 0 | 0 |
+| runs_unparseable | 0 | 0 |
+| runs_contaminated | 0 | 0 |
+| runs_unverified_isolation | 2 | 2 |
+| dropped_alternative_lines | 0 | 0 |
+| runs_with_any_check | 0 | 2 |
+| runs_reading_skill | 0 | 0 |
+| cost_usd | 0 | 0 |
+
+## Every run
+
+| Run | Correct | Headline | Reason | Checks that ran | Isolation | Skill read |
+|---|---|---|---|---|---|---|
+| f1 baseline #1 | ✗ | can't tell | abstained on a case with a valid answer | none | unverified (custom agent) | unverified (custom agent) |
+| f1 full #1 | ✗ | -0.0023 pp (95% interval: -0.153 to +0.148)   [measured] | ruled in a false cause: 'v2 as the cause' | completeness:could_not_run/pass/pass, mix_shift:flag/flag/pass | unverified (custom agent) | unverified (custom agent) |
+| f6 baseline #1 | ✗ | +46.05% (95% interval: 45.93%–46.17%) [measured; provisional definitio | headline 46.05 outside 50.053±0.3 | none | unverified (custom agent) | unverified (custom agent) |
+| f6 full #1 | ✓ | +50.05% (95% interval: 49.93%–50.18%)   [measured] | number within tolerance; causes consistent with gold | completeness:could_not_run/could_not_run/could_not_run/pass/pass/pass/pass | unverified (custom agent) | unverified (custom agent) |
+
+grade exit 0
+
+### 2026-10-14-1326-validate-canary (sh <HOME>/ds-stack/eval/agents/codex.sh {prompt_file}, en)
+
+INVALID, not an acceptance result: 1 of 1 runs didn't execute (not_isolated 1). The levels would measure these failures, not the agent, so fix the cause and rerun into a new directory.
+
+### 2026-10-14-1326-validate-codex (sh <HOME>/ds-stack/eval/agents/codex.sh {prompt_file}, en)
+
+| Level | Result | Counts |
+|---|---|---|
+| Plumbing | PASS | 2 of 2 full-arm runs |
+| Correctness | INCOMPLETE (not all of f1-f8 ran) | 0 of 2 fixtures right by majority |
+| Value | FAIL | plain prompting missed 100% of 1 runs on f6-f8; fixtures right: full 0, plain 0 |
+
+- Fixtures the full arm got wrong: f1, f6
+
+acceptance exit 2

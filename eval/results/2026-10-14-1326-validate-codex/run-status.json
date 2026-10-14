@@ -1,0 +1,9 @@
+{
+  "jobs": 4,
+  "executed": 4,
+  "agent_limits": {},
+  "failed": {},
+  "not_started": [],
+  "stopped": null,
+  "exit": 0
+}

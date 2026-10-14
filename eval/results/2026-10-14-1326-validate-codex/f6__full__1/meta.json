@@ -1,0 +1,16 @@
+{
+  "fixture": "f6",
+  "arm": "full",
+  "run": 1,
+  "model": null,
+  "exit": 0,
+  "seconds": 79.4,
+  "cost_usd": null,
+  "turns": null,
+  "execution": "ok",
+  "attempts": 1,
+  "agent_cmd": "sh <HOME>/ds-stack/eval/agents/codex.sh {prompt_file}",
+  "transcript": false,
+  "agent_model": "gpt-6-astra",
+  "reasoning_effort": "none"
+}

@@ -1,0 +1,11 @@
+{
+  "jobs": 1,
+  "executed": 0,
+  "agent_limits": {},
+  "failed": {
+    "not_isolated": 1
+  },
+  "not_started": [],
+  "stopped": "a run was not isolated",
+  "exit": 2
+}
