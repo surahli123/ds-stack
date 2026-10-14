@@ -121,3 +121,9 @@ def test_a_translated_abstention_fails_explicitly():
     readout = parse("## Answer\nHeadline: 无法判断\n")
     assert not readout.ok and not readout.abstained
     assert parse("## Answer\nHeadline: can't tell\n昨天的数据只加载了一部分。\n").abstained
+
+
+def test_ruled_it_out_counts_as_a_verdict():
+    # From eval/results/2026-10-14-estimand/f2__baseline__1: "I ruled it out because ..." was read as no verdict.
+    readout = parse(open(os.path.join(DATA, "f2-baseline-ruled-it-out.md")).read())
+    assert readout.ok and [a["verdict"] for a in readout.alternatives][:2] == ["out", "out"]

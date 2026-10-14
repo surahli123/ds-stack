@@ -2,22 +2,35 @@
 
 What the evals, the real-case review and the research found, with numbers. The README keeps a summary.
 
-## Seed eval (2026-10-13, `v0.3` seed)
+## Estimand and localization fixes (2026-10-14)
 
-The `v0.3` seed (traceable readouts) gets every analysis case right, and every full-arm readout passes `verify_readout.py`. The cases are still too easy to show a gain over plain prompting, so the verdict is `INSUFFICIENT_N`. Results: `eval/results/2026-10-13-seed/`. The setup is as before: Sonnet, 3 runs per setup, clean profiles.
+A local Codex smoke run failed (report on branch `docs/local-f1-smoke-20261014`): its Chinese readout headlined the observed −2.10 pp total, and the grader read the "95" of "95% CI" as the estimate. Two root causes:
+
+- **Ambiguous skill text.** "Headline the measured change" let Claude headline the within-segment change and Codex the total.
+- **An English-only grader.** It didn't handle 个百分点, full-width brackets or 至, took a number in the wrong unit, and silently dropped translated alternatives.
+
+What changed:
+
+- The readout now separates `Observed`, `Adjusted` (descriptive, saying what it holds fixed) and `Causal effect` (a number only from an identifying design).
+- Gold names the estimand it scores.
+- The parser normalizes Chinese and full-width input, ignores confidence levels, never takes a number in another unit, and fails loudly on translated fixed words or a headline with two estimates.
 
 | Metric | Plain prompting | Checks only | Full ds-mode |
 |---|---|---|---|
-| Cases right (majority of 3) | 5 of 5 | 4 of 5 | 5 of 5 |
-| Runs right | 15 of 15 | 13 of 15 | 15 of 15 |
+| Cases right (majority of 3) | 4 of 5 | 3 of 5 | 5 of 5 |
+| Runs right | 12 of 15 | 9 of 15 | 15 of 15 |
 | Readouts passing `verify_readout.py` | n/a | n/a | 15 of 15 |
-| Cost | $0.97 | $1.15 | $2.11 |
+| Cost | $1.02 | $1.18 | $2.24 |
 
-- Checks-only abstained on the clean control (f3) in 2 of 3 runs, reasoning that a 100% rollout leaves the ranker's effect unidentified. Checks without the method push toward abstaining.
-- The first seed run found three problems, all fixed before the run above:
-  - The f3 clean control had byte-identical rows in both weeks, which a careful agent reads as a stale copy. The fixture generator now adds seeded noise.
-  - Full-arm agents searched the filesystem for `metrics.json` and read the repo's example overlay; the grader flagged 5 runs as contaminated. ds-mode now reads the overlay only from `$DS_OVERLAY_DIR`.
-  - The full arm abstained on f3 for the same reason checks-only did. ds-mode now says an unidentified cause is a reason for "coincided with", not for "can't tell". This was tuned on these five cases, which are a build set, not a holdout.
+- The gap is mostly the new readout format, not better analysis. The three estimate lines, shown to every setup, lead the setups without ds-mode's rule to answer "can't tell" on the two full-rollout cases (f1, f3). ds-mode's rule that an unidentified cause is no reason to abstain prevents that. Read it as the rule being necessary under this format, not as a measured gain.
+- A Claude run of f1 asked to write in Chinese passed `smoke_check.py`. Its prose was Chinese, its fixed words English, and its three estimate lines were kept apart.
+- Regrading all 180 committed readouts flags two copies of one old baseline headline that gave two estimates. Results from Codex and Cursor are still to come from the owner's machine.
+
+Results: `eval/results/2026-10-14-estimand/`.
+
+## Seed eval (2026-10-13, `v0.3` seed)
+
+Before the estimate lines existed, runs right were 15 of 15 with plain prompting, 13 of 15 with checks only and 15 of 15 with full ds-mode; all 15 full readouts passed `verify_readout.py` (`eval/results/2026-10-13-seed/`). Its first run found three problems, fixed before that result: a clean control with byte-identical weeks (the generator now adds noise), agents searching the filesystem for `metrics.json` (ds-mode now reads only `$DS_OVERLAY_DIR`), and the full arm abstaining on f3.
 
 ## Evals
 
