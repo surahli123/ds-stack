@@ -1,0 +1,3 @@
+For any data analysis request, read and follow <HOME>/ds-skills/ds-mode/SKILL.md
+
+This is a synthetic smoke test. Work only in this test directory and read the installed ds-mode skill as needed. Never read eval/gold, company data, other projects, or DS_OVERLAY_DIR data. Do not use external integrations, commit, push, deploy, or run SMA tests. Use only the local synthetic warehouse.db.

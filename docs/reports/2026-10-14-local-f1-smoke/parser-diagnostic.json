@@ -1,0 +1,40 @@
+{
+  "method": "read-only parse of original readout; no grading and no gold loaded",
+  "headline": "-2.0968 个百分点（观测总 CTR 变化；95% CI：-2.248 至 -1.946），不是 v2 的因果效应。",
+  "candidates": [
+    [
+      95.0,
+      "percent"
+    ],
+    [
+      -2.0968,
+      null
+    ],
+    [
+      -2.248,
+      null
+    ],
+    [
+      -1.946,
+      null
+    ]
+  ],
+  "value_in_pp": 95.0,
+  "interval": null,
+  "abstained": false,
+  "alternatives": [],
+  "dropped_alternatives": [
+    "- 流量构成：纳入解释。较低 CTR 的移动端份额由 40.11% 升至 55.07%；仅按平台分解时，构成项为 -2.0932、组内项为 -0.0036 个百分点，与平台×国家结果一致。  [measured]",
+    "- v2：不能确认或排除因果影响。前期各组全部为 v1，后期全部为 v2，版本与时间完全重合；发布记录仅确认全量上线，没有同期旧版对照。  [inferred]",
+    "- 星期构成：两期均为完整周一至周日，排除比较窗口星期数量不同；只有两周记录，无法排除跨周需求或季节性变化。  [inferred]",
+    "- 数据不完整：未发现明显缺日或量级异常；共 14 天，每天 4 个分群单元，两期每组均覆盖 7 天，未发现空值、负值或点击大于搜索量的单元。无加载完成标记，不能严格证明数据已全部到齐。  [measured]",
+    "- 埋点或口径变化：无法排除。现有发布表只记载 ranker 上线，没有独立埋点审计、指标定义或可信看板可供核对。  [inferred]"
+  ],
+  "checks": {
+    "completeness": "pass",
+    "mix_shift": "flag",
+    "fanout": "skipped",
+    "srm": "skipped"
+  },
+  "errors": []
+}

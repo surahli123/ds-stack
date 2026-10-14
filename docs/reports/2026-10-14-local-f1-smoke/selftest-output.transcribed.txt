@@ -1,0 +1,11 @@
+ok   write outside scratch is blocked
+ok   second statement is blocked
+ok   raw-row dump is blocked
+ok   raw text in one cell is blocked
+ok   index on a non-scratch table is blocked
+ok   slow query is aborted
+ok   aggregate read is allowed
+ok   scratch write is allowed
+ok   every statement is logged
+ok   log ids are unique
+ok   blocked statements are logged as blocked

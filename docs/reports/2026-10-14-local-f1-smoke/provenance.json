@@ -1,0 +1,66 @@
+{
+  "base_commit": "b38292483163a55706fbefc5cfad6be06225e08c",
+  "branch_at_capture": "main",
+  "run_directory": "<HOME>/ds-test-20261013-213057",
+  "codex": "codex-cli 0.153.4",
+  "python": "Python 3.14.4",
+  "git": "git version 2.39.5 (Apple Git-154)",
+  "auth_status": "Logged in using ChatGPT",
+  "analysis_exit_code": 0,
+  "smoke_exit_code": 1,
+  "files": [
+    {
+      "source": ".ds-queries.log",
+      "evidence": "queries.jsonl",
+      "source_sha256": "6aa1276e7b4537d4a21df5db2555bd1ef341a72ba0b5f33236863ec92c749932",
+      "evidence_sha256": "6aa1276e7b4537d4a21df5db2555bd1ef341a72ba0b5f33236863ec92c749932",
+      "transformation": "byte-identical"
+    },
+    {
+      "source": ".ds-checks.log",
+      "evidence": "checks.jsonl",
+      "source_sha256": "f6fc4d555211da76814cef5578cfa74c896cdb4a7fd95123a579bc11ca4b2b69",
+      "evidence_sha256": "f6fc4d555211da76814cef5578cfa74c896cdb4a7fd95123a579bc11ca4b2b69",
+      "transformation": "byte-identical"
+    },
+    {
+      "source": "readout.md",
+      "evidence": "readout.original.md",
+      "source_sha256": "56066f4d96ecbd761fc44deaf6dd2e989cbf802831ae9ffb82d39da8e5e3ff32",
+      "evidence_sha256": "56066f4d96ecbd761fc44deaf6dd2e989cbf802831ae9ffb82d39da8e5e3ff32",
+      "transformation": "byte-identical"
+    },
+    {
+      "source": "task.md",
+      "evidence": "task.original.md",
+      "source_sha256": "d59049816014e10488d5b2521e92fe4c89028faae614b5a81cd66280038ee001",
+      "evidence_sha256": "d59049816014e10488d5b2521e92fe4c89028faae614b5a81cd66280038ee001",
+      "transformation": "byte-identical"
+    },
+    {
+      "source": "AGENTS.md",
+      "evidence": "AGENTS.redacted.txt",
+      "source_sha256": "1f2b8dbbcde516b79c8416b9a71eba387c023bfbc0c578b6d31903c02a5db221",
+      "evidence_sha256": "df3ce0ad0c61f506e755e67d8562a24b4ab5537f12c482f97f277da1fc4e5537",
+      "transformation": "home path redacted"
+    },
+    {
+      "source": "warehouse.db",
+      "source_sha256": "0bdecb8e48abdadc8aee9a75592625e4041f17fa68037a4cc7afe0bb0a6a514c",
+      "source_bytes": 12288,
+      "transformation": "not duplicated; compare existing eval/fixtures/f1/warehouse.db"
+    },
+    {
+      "source": "codex-run.log",
+      "source_sha256": "e51d094fd7d7cfa73c6f2236da9ffe23e2aac90ab9be0dc170112408c7404321",
+      "source_bytes": 314357,
+      "transformation": "database omitted: existing synthetic fixture; source log retained locally, curated transcript supplied"
+    }
+  ],
+  "warehouse_matches_f1": true,
+  "public_trace_section_counts": {
+    "user": 1,
+    "codex": 4,
+    "exec": 17
+  }
+}

@@ -1,0 +1,11 @@
+ds-stack smoke test, 2026-10-14
+Codex: codex-cli 0.153.4   Python: Python 3.14.4
+Self-test: ok
+ok   readout.md exists
+ok   5 logged queries ran
+ok   4 of 5 checks name their source query
+ok   verify_readout: pass
+FAIL answer vs gold: headline 95 outside 0±0.3
+FAIL (1 of 5 checks)
+Cursor: not run
+Problems: Step 5, python3 ~/ds-stack/eval/smoke_check.py ~/ds-test-20261013-213057 --fixture f1, exited 1 with headline 95 outside 0±0.3. No grading retry, per runbook. Saved headline: Headline: −2.0968 个百分点（观测总 CTR 变化；95% CI：−2.248 至 −1.946），不是 v2 的因果效应。[check:mix_shift#1]. During analysis, one malformed mix_shift specification failed and was corrected once; the referenced ds-doc skill was absent.

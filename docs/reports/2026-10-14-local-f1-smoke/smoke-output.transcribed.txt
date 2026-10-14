@@ -1,0 +1,6 @@
+ok   readout.md exists
+ok   5 logged queries ran
+ok   4 of 5 checks name their source query
+ok   verify_readout: pass
+FAIL answer vs gold: headline 95 outside 0±0.3
+FAIL (1 of 5 checks)

@@ -1,0 +1,872 @@
+Curated public execution trace; not the raw log. See TRACE-NOTES.md.
+
+===== source lines 53-56; public user section =====
+user
+Overall search CTR dropped week over week right after ranker v2 rolled out to 100% of traffic on 2026-09-28.
+The PM thinks v2 caused the drop. Compare the week of 2026-09-21 to 2026-09-27 with the week of 2026-09-28 to 2026-10-04.
+How much of the change in overall CTR is attributable to v2, in percentage points? This decides whether we roll it back.
+
+===== source lines 124-125; public codex section =====
+codex
+我会按项目要求使用 ds-mode 技能，先核实本地数据中的 CTR 口径、流量构成和 v2 分配方式，再判断下降中能归因于 v2 的百分点，避免把上线前后的相关性直接当作回滚依据。
+
+===== source lines 165-270; public exec section =====
+exec
+/bin/zsh -lc 'cat <HOME>/ds-skills/ds-mode/SKILL.md' in <HOME>/ds-test-20261013-213057
+ succeeded in 0ms:
+---
+name: ds-mode
+description: >-
+  Use for data analysis that produces a number someone will act on: a metric
+  moved, an experiment readout, a "did X cause Y" question, or a sizing.
+  Pins the metric definition first, runs mechanical checks on aggregates
+  before any number is reported, rules alternative explanations in or out
+  with evidence, and ends with a fixed readout in which every number traces to
+  a logged query or check. Also runs on /ds-mode.
+---
+
+# ds-mode
+
+You own the number and the inference. A number that passes every check but answers the wrong question, or tells the wrong story, is still wrong. A wrong number stated with confidence is worse than "can't tell".
+
+A data scientist will review your readout, and should be able to check it in under 10 minutes. So every number you report carries a tag that a script resolves to the logged query or check behind it.
+
+## Method
+
+This is a draft, to be replaced with the analyst's own first moves.
+
+1. Restate the question in one sentence and name the decision it feeds. Treat the requester's guess about the cause as one alternative, not the premise.
+2. Pin the metric before you query: numerator, denominator, filters, grain and source table. Take it from `metrics.json` in the overlay directory named by `$DS_OVERLAY_DIR` when the metric is there, and say so. If `$DS_OVERLAY_DIR` is unset or holds no `metrics.json`, there is none: never search the filesystem for one. When it isn't, write your definition into the readout and label it `[guess]`. Never invent a definition silently; a plausible number on the wrong definition is the most common wrong answer, and no check below catches it.
+3. Decide whether the question can be answered.
+   - If two readings of it give materially different numbers and nothing settles which one is meant, ask before computing. When no one can answer, pick the reading the decision most likely needs, state it in the Answer, and put the other in the caveats.
+   - If the data can't answer it (the metric isn't logged, the period hasn't landed), say so up front instead of computing a substitute.
+4. Check the data before the question. Make sure every period you use is complete (`completeness`). After any join, compare row counts before and after (`fanout`). When a dashboard or other trusted source shows the same metric, reconcile one number against it and record the result in Provenance.
+5. Size, then decompose.
+   - When a rate moved, run `mix_shift` on the segments whose mix could have shifted (platform, country, traffic source). Use the finest grain that keeps about 100 units per cell on both sides, then rerun at one coarser grain. If the two disagree, report both.
+   - For an experiment, run `srm` on the assignment counts before you read any lift.
+6. Rule each alternative in or out with evidence. Always consider mix-shift, seasonality and day of week, data completeness, logging or definition changes, and the requester's cause. The evidence names a check or a query result from this session. Label each conclusion measured, inferred or guess.
+7. Write the readout below to `readout.md`, run `python3 <dir of this SKILL.md>/tools/verify_readout.py readout.md`, and fix the readout until it passes. Then send the readout as your final reply.
+
+## Queries
+
+Run every query as `python3 <dir of this SKILL.md>/tools/query.py "<SQL>" --as-of <last complete period>`. It enforces the safety envelope (scratch-only writes, one statement, aggregates only, a time cap), prints the result with an id such as `q3`, and logs the statement and result to `.ds-queries.log`. Don't query the data any other way. If a result had to be computed elsewhere, for example by a person, log it with `--pasted --sql ... --columns ... --rows ...` so it gets an id. On a live warehouse, the overlay's adapter takes the place of the SQLite default, with the same log.
+
+## Checks
+
+Run each check as `python3 <dir of this SKILL.md>/checks/run.py <check> --json '<spec>'`. `--list` shows when to use each check and an example spec. Checks take aggregates you computed, never raw rows. Add `"from": "q<n>"` (or a list) to the spec, naming the queries the aggregates came from. Each check prints a JSON line with an id such as `mix_shift#1` and logs it to `.ds-checks.log`.
+
+| Check | Run it when |
+|---|---|
+| `completeness` | before reporting any period |
+| `fanout` | after any join |
+| `mix_shift` | a rate moved and segment mix could have changed |
+| `srm` | before reading any experiment lift |
+
+Statuses mean different things:
+
+- `pass`: nothing found.
+- `flag` is a finding, not a defect. From `mix_shift`, it means segment mix explains a real part of the move, so the Answer must say how much of the change is mix and how much is within-segment change.
+- `fail` is a data or query defect. It must change the answer, or the readout must show with evidence why it doesn't. If you can't resolve it, the headline is `can't tell`; say what is missing and what would settle it.
+- `could not run` because of how you called it (wrong spec, wrong grain): fix the call and rerun.
+- `could not run` because the data can't support the check at all (for example, `completeness` with no earlier periods): answer anyway, report the check as could not run, and put the gap in the caveats. Abstain only if that gap could plausibly change the answer.
+
+Report every check that applies, with its status. If you skip one, say why. Copy check output exactly; never edit it.
+
+## Readout
+
+Your final reply is exactly this format, written for the person who acts on it:
+
+```
+## Answer
+Headline: <signed number> <unit> (<95% interval>) [q<n> | check:<name>#<n>]   or   Headline: can't tell
+<one plain sentence: what happened and how big> [q<n> | check:<name>#<n>]
+
+## What it means for <the decision>
+<one or two sentences that compare the interval with the smallest change that would alter the decision> [q<n> | check:<name>#<n>] [given]
+
+## Why we believe it
+- Alternatives considered:
+  - <alternative>: ruled <in|out> by <evidence> [q<n> | check:<name>#<n>] [measured|inferred|guess]
+- Checks run:
+  - <check>: <pass|flag|fail|could not run|skipped> <one-line result or reason> [check:<name>#<n>]
+
+## Caveats, and what would change the answer
+- <short list>
+
+## Provenance
+- Metric: <definition>, from <metrics.json | stated here [guess]>
+- Data: <tables or views>, through <last complete period>
+- Reconciled: <metric> vs <dashboard or source>, delta <x> [q<n>]   or   Reconciled: not done (<reason>)
+- Queries and checks: <where they are logged>
+```
+
+- Every line in the Answer, What it means and Why we believe it sections that states a number carries a tag: `[q<n>]` for a logged query, `[check:<name>#<n>]` for a logged check, `[given]` for a number stated in the request, such as a threshold. One bracket can hold several: `[q3, q4]`. A number you can't tag doesn't belong in the readout.
+- In Provenance, the logs are `.ds-queries.log` and `.ds-checks.log`, and a last line `- Verified: <the verify_readout.py result line, exactly as printed>` shows the reviewer the trace check passed.
+- The interval is required. `mix_shift` reports one for the overall change (`delta_ci95_pp`). For an experiment lift, use a two-proportion interval. When no interval can be computed, write `(no interval: <reason>)`.
+- Use causal words ("caused", "drove", "because of") only for a randomized test or a design that identifies the cause. Otherwise say "coincided with" or "is associated with", and name what would confirm it.
+- A design that can't identify the cause (a 100% rollout, no holdout) is not a reason to abstain. Headline the measured change, say what it coincided with, and name what would identify the cause. `can't tell` is for when the data can't support the number itself.
+- measured means computed from data in this session.
+- inferred means it follows from measured facts by reasoning.
+- guess means neither.
+
+When this readout grows into a document for other people (a readout, memo, plan or handover), write it with the `ds-doc` skill.
+
+## References
+
+- `references/review-checklist.md`: what the reviewer checks, in order. Read it before writing the readout; it is the test the readout faces.
+- `references/plan-critique.md`: an optional critique before a non-routine analysis. Not part of the method above.
+- `references/mistake-classes.md`: candidate mistake classes for the analyst's wrong-number archive. They become checks only after two real incidents.
+
+===== source lines 284-292; public exec section =====
+exec
+/bin/zsh -lc "pwd && rg --files -g '"'!eval/**'"' -g '"'!gold/**'"' -g '"'!**/.git/**'"'" in <HOME>/ds-test-20261013-213057
+ succeeded in 0ms:
+<HOME>/ds-test-20261013-213057
+AGENTS.md
+warehouse.db
+task.md
+codex-run.log
+
+===== source lines 365-534; public exec section =====
+exec
+/bin/zsh -lc 'cat task.md; cat <HOME>/ds-skills/ds-mode/tools/query.py; cat <HOME>/ds-skills/ds-mode/references/review-checklist.md' in <HOME>/ds-test-20261013-213057
+ succeeded in 0ms:
+Overall search CTR dropped week over week right after ranker v2 rolled out to 100% of traffic on 2026-09-28.
+The PM thinks v2 caused the drop. Compare the week of 2026-09-21 to 2026-09-27 with the week of 2026-09-28 to 2026-10-04.
+How much of the change in overall CTR is attributable to v2, in percentage points? This decides whether we roll it back.
+#!/usr/bin/env python3
+"""Run one SQL statement through the guarded runner and log it.
+
+    python3 tools/query.py "SELECT ..." [--as-of 2026-10-04] [--params '[...]']
+    python3 tools/query.py --pasted --sql "<the SQL that was run>" \
+        --columns '["week", "ctr"]' --rows '[["2026-09-21", 0.304]]' [--as-of ...]
+
+Prints one JSON line with the query id (q1, q2, ...), columns and rows, and
+appends the statement and its result to .ds-queries.log (or $DS_QUERIES_LOG).
+Cite the id in the readout as [q<n>], and pass it to a check as "from": "q<n>".
+Use --pasted for a result computed outside this tool, such as SQL a person ran
+and pasted back: it gets an id and the same size caps.
+
+This file is the reference adapter. It opens SQLite: --db, else $DS_WAREHOUSE,
+else ./warehouse.db. A warehouse adapter replaces connect() and keeps the rest,
+log included. Limits and the scratch prefix come from runner.json in
+$DS_OVERLAY_DIR when it is set; $DS_RUN_ID names the per-run scratch suffix.
+
+Exit code: 0 ran, 1 blocked or failed (the attempt is still logged), 3 usage error.
+"""
+
+import argparse
+import json
+import os
+import sqlite3
+import sys
+
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+
+import guarded_query as gq  # noqa: E402
+
+DEFAULTS = {"scratch_prefix": "scratch_dsmode_", "per_run_suffix": True, "max_rows": 200,
+            "max_cell_chars": 200, "max_result_chars": 20_000, "max_seconds": 120}
+
+
+def load_config():
+    config = dict(DEFAULTS)
+    overlay = os.environ.get("DS_OVERLAY_DIR")
+    if overlay and os.path.exists(os.path.join(overlay, "runner.json")):
+        with open(os.path.join(overlay, "runner.json")) as handle:
+            config.update(json.load(handle))
+    if config.get("per_run_suffix"):
+        config["scratch_prefix"] += os.environ.get("DS_RUN_ID", "run") + "_"
+    return config
+
+
+def connect(args):
+    path = args.db or os.environ.get("DS_WAREHOUSE") or "warehouse.db"
+    if not os.path.exists(path):
+        raise FileNotFoundError(f"no database at {path}; pass --db or set DS_WAREHOUSE")
+    return sqlite3.connect(path)
+
+
+def limits(config, *names):
+    return {name: config[name] for name in names}
+
+
+def main(argv=None):
+    parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
+    parser.add_argument("statement", nargs="?", help="the SQL statement to run")
+    parser.add_argument("--sql", help="the SQL, as an alternative to the positional argument")
+    parser.add_argument("--params", default="[]", help="JSON list of query parameters")
+    parser.add_argument("--as-of", help="last complete period the result covers, for example 2026-10-04")
+    parser.add_argument("--db", help="SQLite file (reference adapter only)")
+    parser.add_argument("--pasted", action="store_true", help="log a result computed outside this tool")
+    parser.add_argument("--columns", help="with --pasted: JSON list of column names")
+    parser.add_argument("--rows", help="with --pasted: JSON list of rows")
+    args = parser.parse_args(argv)
+
+    sql = args.sql or args.statement
+    if not sql:
+        parser.print_usage(sys.stderr)
+        return 3
+    config = load_config()
+    try:
+        if args.pasted:
+            if args.columns is None or args.rows is None:
+                print("--pasted needs --columns and --rows", file=sys.stderr)
+                return 3
+            entry = gq.log_pasted(sql, json.loads(args.columns), json.loads(args.rows), as_of=args.as_of,
+                                  **limits(config, "max_rows", "max_cell_chars", "max_result_chars"))
+        else:
+            conn = connect(args)
+            entry = gq.run_logged(conn, sql, json.loads(args.params), as_of=args.as_of,
+                                  scratch_prefix=config["scratch_prefix"],
+                                  **limits(config, "max_rows", "max_cell_chars", "max_result_chars", "max_seconds"))
+    except ValueError as err:
+        print(f"unreadable JSON argument: {err}", file=sys.stderr)
+        return 3
+    except FileNotFoundError as err:
+        print(str(err), file=sys.stderr)
+        return 3
+    except Exception as err:  # blocked or failed; run_logged already logged it
+        last = gq.read_log()[-1:] or [{}]
+        print(json.dumps({"id": last[0].get("id"), "status": "blocked" if isinstance(err, gq.Blocked) else "error",
+                          "error": str(err)}))
+        return 1
+    print(json.dumps({key: entry.get(key) for key in ("id", "status", "row_count", "columns", "rows")}, default=str))
+    return 0
+
+
+if __name__ == "__main__":
+    sys.exit(main())
+# Review checklist
+
+What a reviewer verifies in a ds-mode readout, in order. The reviewer is a person or a fresh-context subagent that sees the request, the readout and the logs, not the analyst's reasoning. Every item is a yes/no question. Cheap, mechanical items come first, so a review fits in under 10 minutes.
+
+## 1. Do the numbers resolve?
+
+Run `tools/verify_readout.py` on the readout and its logs before reading anything else.
+
+- Does every number carry a tag, and does each tag resolve to a logged query `[q<n>]`, a logged check `[check:<name>#<n>]`, or the request `[given]`?
+- Does each tagged query compute what its sentence says (filter, period, grain)?
+
+If this fails, send it back now. Nothing below means anything for a number nobody can trace.
+
+## 2. Is it the right metric?
+
+- Does the Provenance definition (numerator, denominator, filters, grain, source table) match the source of truth, or is it labeled `[guess]`?
+- Does the reconciliation line tie the base number to a known figure, with any gap explained?
+- If the metric is a proxy for what the decision cares about, does the readout say so?
+
+## 3. Is it the question that was asked?
+
+- Does the restated question match the request, no narrower and no broader, and is the decision named?
+- If the request had two readings, did the analyst ask, or state the reading used and put the other in the caveats?
+
+## 4. Do the alternatives rule things in or out?
+
+- Are the standing alternatives all there: mix-shift, seasonality and day of week, data completeness, logging or definition changes, and the requester's cause?
+- Would each piece of evidence look different if its alternative were true? A check that can't see the alternative doesn't rule it out.
+- Could something else that changed at the same time (a launch, a pricing change, a tracking change) explain the move, and is it addressed?
+- Are the comparison windows the same length, the same weekdays and complete, and were they fixed before the results were seen?
+- Are segments defined the same way on both sides, and did a coarser grain agree with the finer one?
+
+## 5. Did the right checks run, and did their statuses land?
+
+- Did every applicable check run: `completeness` for each period, `fanout` after each join, `mix_shift` for a moved rate, `srm` before an experiment lift? Is each skipped one explained?
+- Does each check line match the logged output exactly?
+- Does each `fail` change the answer, or does the readout show with evidence why not? If it can't be resolved, is the headline `can't tell`?
+- Does each `flag` show up in the Answer as how much of the move is mix and how much is within-segment?
+
+## 6. Does causal language match the design?
+
+- Do "caused", "drove" and "because of" appear only for a randomized test or a design that identifies the cause?
+- Otherwise, does the text say "coincided with" or "is associated with" and name what would confirm it?
+- Were treated units chosen by something other than the outcome being measured?
+
+## 7. Is the interval compared with the threshold?
+
+- Is there a 95% interval, or `(no interval: <reason>)` with a reason that holds?
+- Does the decision section compare the interval with the smallest change that would alter the decision?
+- If the interval spans that threshold, does the readout say `can't tell` or name the uncertainty, not call it from the point estimate?
+- Is the sample large enough for the effect size that matters?
+
+## 8. Would a caveat change the answer?
+
+- Is each listed caveat followed by what would settle it?
+- Is any missing: a sample that doesn't represent the population the decision covers, an unverified definition, an incomplete period?
+
+## When an item fails
+
+Send the readout back with the item number and the question that failed. Don't fix it yourself or patch the number silently: the analyst owns the number, and a quiet fix hides how it went wrong. Review again from item 1 after the fix. If a wrong number had already reached a reader, log it in the wrong-number archive (see `mistake-classes.md`).
+
+===== source lines 555-570; public exec section =====
+exec
+/bin/zsh -lc 'python3 <HOME>/ds-skills/ds-mode/checks/run.py --list' in <HOME>/ds-test-20261013-213057
+ succeeded in 0ms:
+completeness: before reporting any period: is it fully loaded?
+  spec: {"series": [{"period": "2026-10-01", "rows": 100}, ...], "target": "2026-10-07"}
+
+fanout: after any join: did it add or lose rows?
+  spec: {"left_rows": 1000, "joined_rows": 1000, "relationship": "many_to_one", "join": "left", "right_rows": 1000, "right_distinct_keys": 1000, "matched_left_rows": 1000}
+
+mix_shift: when a rate moved: how much is segment mix vs within-segment change?
+  spec: {"segments": [{"name": "web", "before": {"n": 800, "k": 240}, "after": {"n": 820, "k": 250}}, ...]}  (n = denominator, k = numerator)
+
+srm: before reading any experiment lift: is the assignment split as planned?
+  spec: {"observed": [10120, 9880], "expected_ratio": [0.5, 0.5]}
+
+===== source lines 603-607; public exec section =====
+exec
+/bin/zsh -lc "env -u DS_OVERLAY_DIR python3 <HOME>/ds-skills/ds-mode/tools/query.py \"SELECT name, MAX(sql) AS schema FROM sqlite_master WHERE type='table' GROUP BY name\" --db ./warehouse.db --as-of 2026-10-04" in <HOME>/ds-test-20261013-213057
+ succeeded in 0ms:
+{"id": "q1", "status": "ok", "row_count": 2, "columns": ["name", "schema"], "rows": [["release_log", "CREATE TABLE release_log (date TEXT, change TEXT)"], ["search_daily", "CREATE TABLE search_daily (date TEXT, platform TEXT, country TEXT, ranker TEXT, searches INTEGER, clicks INTEGER)"]]}
+
+===== source lines 627-641; public exec section =====
+exec
+/bin/zsh -lc "rg --files <HOME>/ds-skills/ds-mode <HOME>/ds-skills/ds-doc -g '*.py' -g 'SKILL.md'" in <HOME>/ds-test-20261013-213057
+ exited 2 in 0ms:
+rg: <HOME>/ds-skills/ds-doc: No such file or directory (os error 2)
+<HOME>/ds-skills/ds-mode/SKILL.md
+<HOME>/ds-skills/ds-mode/checks/mix_shift.py
+<HOME>/ds-skills/ds-mode/checks/fanout.py
+<HOME>/ds-skills/ds-mode/checks/srm.py
+<HOME>/ds-skills/ds-mode/checks/completeness.py
+<HOME>/ds-skills/ds-mode/checks/_common.py
+<HOME>/ds-skills/ds-mode/checks/run.py
+<HOME>/ds-skills/ds-mode/tools/verify_readout.py
+<HOME>/ds-skills/ds-mode/tools/guarded_query.py
+<HOME>/ds-skills/ds-mode/tools/query.py
+
+===== source lines 657-658; public codex section =====
+codex
+本地表按日期、平台、国家和 ranker 汇总搜索与点击。我暂将 CTR 定义为总点击数除以总搜索数，并标为待确认口径；按测试边界不读取外部指标配置。接下来会检查分群变化以及同期发布记录，确认是否存在可用于归因的对照。
+
+===== source lines 676-680; public exec section =====
+exec
+/bin/zsh -lc 'env -u DS_OVERLAY_DIR python3 <HOME>/ds-skills/ds-mode/tools/query.py "SELECT date, change, COUNT(*) AS records FROM release_log GROUP BY date, change" --db ./warehouse.db --as-of 2026-10-04' in <HOME>/ds-test-20261013-213057
+ succeeded in 0ms:
+{"id": "q2", "status": "ok", "row_count": 1, "columns": ["date", "change", "records"], "rows": [["2026-09-28", "ranker v2 rolled out to 100% of traffic", 1]]}
+
+===== source lines 690-694; public exec section =====
+exec
+/bin/zsh -lc "env -u DS_OVERLAY_DIR python3 <HOME>/ds-skills/ds-mode/tools/query.py \"SELECT date, COUNT(*) AS cells, SUM(searches) AS searches, SUM(clicks) AS clicks, COUNT(DISTINCT platform || ':' || country) AS segments, SUM(CASE WHEN searches IS NULL OR clicks IS NULL OR searches < 0 OR clicks < 0 OR clicks > searches THEN 1 ELSE 0 END) AS invalid_cells FROM search_daily GROUP BY date ORDER BY date\" --db ./warehouse.db --as-of 2026-10-04" in <HOME>/ds-test-20261013-213057
+ succeeded in 0ms:
+{"id": "q3", "status": "ok", "row_count": 14, "columns": ["date", "cells", "searches", "clicks", "segments", "invalid_cells"], "rows": [["2026-09-21", 4, 100314, 30556, 4, 0], ["2026-09-22", 4, 103253, 31775, 4, 0], ["2026-09-23", 4, 97854, 29468, 4, 0], ["2026-09-24", 4, 101250, 30736, 4, 0], ["2026-09-25", 4, 96377, 29515, 4, 0], ["2026-09-26", 4, 98729, 29812, 4, 0], ["2026-09-27", 4, 101828, 30966, 4, 0], ["2026-09-28", 4, 99762, 28253, 4, 0], ["2026-09-29", 4, 102506, 29299, 4, 0], ["2026-09-30", 4, 98558, 27661, 4, 0], ["2026-10-01", 4, 101931, 28903, 4, 0], ["2026-10-02", 4, 96666, 27508, 4, 0], ["2026-10-03", 4, 99043, 27890, 4, 0], ["2026-10-04", 4, 101900, 28860, 4, 0]]}
+
+===== source lines 755-969; public exec section =====
+exec
+/bin/zsh -lc 'cat <HOME>/ds-skills/ds-mode/checks/completeness.py <HOME>/ds-skills/ds-mode/checks/mix_shift.py' in <HOME>/ds-test-20261013-213057
+ succeeded in 0ms:
+"""Is the period you are about to report fully loaded?
+
+Compares the target period's row count with the median of earlier periods.
+Daily ISO dates are compared with the same weekday (the last `baseline_periods`
+same-weekday days, default 4), so a normal Saturday isn't read as a partial
+load. With under three weeks of history it falls back to the trailing 7 days
+and says so. Any other period labels use the trailing `baseline_periods`
+(default 7).
+Fails when the target is missing, below `min_ratio` of that median (default
+0.9: late or partial data), or above `max_ratio` when given (double loads).
+"""
+
+import statistics
+from datetime import date
+
+from _common import COULD_NOT_RUN, FAIL, PASS, Result, SpecError, require
+
+NAME = "completeness"
+DEFAULT_MIN_RATIO = 0.9
+MIN_BASELINE = 3
+
+
+def _as_date(label):
+    try:
+        return date.fromisoformat(label)
+    except ValueError:
+        return None
+
+
+def run(spec):
+    try:
+        series = require(spec, "series", list)
+        target = require(spec, "target", str)
+        min_ratio = float(spec.get("min_ratio", DEFAULT_MIN_RATIO))
+        max_ratio = spec.get("max_ratio")
+        max_ratio = None if max_ratio is None else float(max_ratio)
+        rows = {}
+        for point in series:
+            period = require(point, "period", str)
+            if period in rows:
+                raise SpecError(f"period '{period}' appears twice")
+            rows[period] = require(point, "rows", int)
+    except (SpecError, TypeError, ValueError) as err:
+        return Result(NAME, COULD_NOT_RUN, f"could not run: {err}")
+
+    dates = {p: _as_date(p) for p in list(rows) + [target]}
+    daily = all(dates.values())
+    if daily:
+        prior = sorted((p for p in rows if dates[p] < dates[target]), key=dates.get)
+        earlier, basis = [], "trailing days"
+        if spec.get("same_weekday", True):
+            earlier = [p for p in prior if dates[p].weekday() == dates[target].weekday()][-int(spec.get("baseline_periods", 4)):]
+            basis = "same weekday"
+        if len(earlier) < MIN_BASELINE:
+            earlier = prior[-int(spec.get("trailing_days", 7)):]
+            basis = "trailing days" if basis == "trailing days" else "trailing days (under 3 weeks of same-weekday history)"
+    else:
+        k = int(spec.get("baseline_periods", 7))
+        earlier = sorted(p for p in rows if p < target)[-k:]
+        basis = "trailing periods"
+    if len(earlier) < MIN_BASELINE:
+        return Result(NAME, COULD_NOT_RUN,
+                      f"could not run: need at least {MIN_BASELINE} earlier periods ({basis}) before {target}, got {len(earlier)}")
+    baseline = statistics.median(rows[p] for p in earlier)
+    details = {"target": target, "basis": basis, "baseline_periods": earlier, "baseline_median_rows": baseline,
+               "min_ratio": min_ratio, "max_ratio": max_ratio}
+    if target not in rows:
+        return Result(NAME, FAIL, f"{target} has no rows loaded", details)
+    if baseline == 0:
+        return Result(NAME, COULD_NOT_RUN, "could not run: baseline median is 0 rows", details)
+
+    ratio = rows[target] / baseline
+    details.update(target_rows=rows[target], ratio=round(ratio, 4))
+    summary = f"{target}: {rows[target]} rows = {ratio:.0%} of the {basis} median ({baseline:g})"
+    if ratio < min_ratio:
+        return Result(NAME, FAIL, "incomplete: " + summary, details)
+    if max_ratio is not None and ratio > max_ratio:
+        return Result(NAME, FAIL, "possible double load: " + summary, details)
+    return Result(NAME, PASS, summary, details)
+"""Split a rate change into within-segment (rate) and segment-mix effects.
+
+Kitagawa decomposition with midpoint weights, so the two effects sum exactly to
+the overall change:
+
+    delta = sum_s (r_after - r_before) * (w_after + w_before) / 2       # rate effect
+          + sum_s (w_after - w_before) * ((r_after + r_before) / 2 - r)  # mix effect
+
+where r is the midpoint of the overall rates. Subtracting r leaves the total
+unchanged (the weight changes sum to zero) and makes each segment's mix term
+readable: a segment adds to the drop only if its share grew and its rate is
+below average, or its share shrank and its rate is above average.
+
+Returns "flag" (a finding the answer must report, not a data defect) when mix
+accounts for at least `threshold` of the movement, measured as
+|mix| / (|mix| + |rate|) so offsetting effects (Simpson's paradox) still show,
+AND the mix effect is larger than noise: at least `min_effect_pp` and at least
+`z` standard errors of the overall change. Standard errors are binomial and
+assume independent units; clustered units (sessions within users) make them
+too small, so treat the intervals as a lower bound on the uncertainty.
+"""
+
+import math
+
+from _common import COULD_NOT_RUN, FLAG, PASS, Result, SpecError, require
+
+NAME = "mix_shift"
+DEFAULT_THRESHOLD = 0.3
+DEFAULT_MIN_EFFECT_PP = 0.1
+DEFAULT_Z = 2.0
+Z95 = 1.96
+
+
+def _counts(segment, side):
+    part = segment.get(side)
+    if not isinstance(part, dict):
+        raise SpecError(f"segment '{segment.get('name')}' is missing '{side}'")
+    n = require(part, "n", int)
+    k = require(part, "k", int)
+    if k > n:
+        raise SpecError(f"segment '{segment.get('name')}' {side}: k > n")
+    return n, k
+
+
+def _var(rate, n):
+    return rate * (1 - rate) / n
+
+
+def decompose(segments):
+    parsed = []
+    for segment in segments:
+        name = segment.get("name", f"segment_{len(parsed)}")
+        nb, kb = _counts(segment, "before")
+        na, ka = _counts(segment, "after")
+        if nb == 0 or na == 0:
+            raise SpecError(f"segment '{name}' has n = 0 on one side; drop it or merge it")
+        parsed.append((name, nb, kb, na, ka))
+    total_b = sum(p[1] for p in parsed)
+    total_a = sum(p[3] for p in parsed)
+    overall_b = sum(p[2] for p in parsed) / total_b
+    overall_a = sum(p[4] for p in parsed) / total_a
+    midpoint = (overall_a + overall_b) / 2
+
+    rate_effect = mix_effect = rate_var = 0.0
+    per_segment = []
+    for name, nb, kb, na, ka in parsed:
+        wb, wa = nb / total_b, na / total_a
+        rb, ra = kb / nb, ka / na
+        weight = (wa + wb) / 2
+        rate_part = (ra - rb) * weight
+        mix_part = (wa - wb) * ((ra + rb) / 2 - midpoint)
+        rate_effect += rate_part
+        mix_effect += mix_part
+        rate_var += weight ** 2 * (_var(rb, nb) + _var(ra, na))
+        per_segment.append({
+            "name": name, "n_before": nb, "n_after": na,
+            "weight_before": round(wb, 6), "weight_after": round(wa, 6),
+            "rate_before": round(rb, 6), "rate_after": round(ra, 6),
+            "rate_effect_pp": round(100 * rate_part, 4), "mix_effect_pp": round(100 * mix_part, 4),
+        })
+    delta_se = math.sqrt(_var(overall_b, total_b) + _var(overall_a, total_a))
+    return {
+        "overall_before": overall_b, "overall_after": overall_a, "delta": overall_a - overall_b,
+        "delta_se": delta_se, "rate_effect": rate_effect, "rate_effect_se": math.sqrt(rate_var),
+        "mix_effect": mix_effect, "segments": per_segment,
+        "smallest_segment_n": min(min(p[1], p[3]) for p in parsed),
+    }
+
+
+def _ci_pp(value, se):
+    return [round(100 * (value - Z95 * se), 3), round(100 * (value + Z95 * se), 3)]
+
+
+def run(spec):
+    try:
+        segments = require(spec, "segments", list)
+        if len(segments) < 2:
+            raise SpecError("needs at least 2 segments to separate mix from rate")
+        threshold = float(spec.get("threshold", DEFAULT_THRESHOLD))
+        min_effect_pp = float(spec.get("min_effect_pp", DEFAULT_MIN_EFFECT_PP))
+        z = float(spec.get("z", DEFAULT_Z))
+        parts = decompose(segments)
+    except (SpecError, TypeError, ValueError) as err:
+        return Result(NAME, COULD_NOT_RUN, f"could not run: {err}")
+
+    rate, mix, delta = parts["rate_effect"], parts["mix_effect"], parts["delta"]
+    moved = abs(rate) + abs(mix)
+    share = abs(mix) / moved if moved > 1e-12 else 0.0
+    noise_floor = max(min_effect_pp / 100, z * parts["delta_se"])
+    details = {
+        "overall_before": round(parts["overall_before"], 6),
+        "overall_after": round(parts["overall_after"], 6),
+        "delta_pp": round(100 * delta, 4),
+        "delta_ci95_pp": _ci_pp(delta, parts["delta_se"]),
+        "rate_effect_pp": round(100 * rate, 4),
+        "rate_effect_ci95_pp": _ci_pp(rate, parts["rate_effect_se"]),
+        "mix_effect_pp": round(100 * mix, 4),
+        "mix_share": round(share, 4),
+        "noise_floor_pp": round(100 * noise_floor, 4),
+        "threshold": threshold, "min_effect_pp": min_effect_pp, "z": z,
+        "smallest_segment_n": parts["smallest_segment_n"],
+        "se_assumes_independent_units": True,
+        "segments": parts["segments"],
+    }
+    lo, hi = details["rate_effect_ci95_pp"]
+    summary = (f"overall change {100 * delta:+.2f} pp = within-segment {100 * rate:+.2f} pp "
+               f"(95% CI {lo:+.2f} to {hi:+.2f}) + mix {100 * mix:+.2f} pp (mix share {share:.0%})")
+    if share >= threshold and abs(mix) >= noise_floor:
+        return Result(NAME, FLAG, "mix-dominant: " + summary + "; report the mix shift as part of the answer", details)
+    if share >= threshold:
+        summary += f"; the mix effect is within noise (floor {100 * noise_floor:.2f} pp)"
+    return Result(NAME, PASS, summary, details)
+
+===== source lines 1001-1005; public exec section =====
+exec
+/bin/zsh -lc "env -u DS_OVERLAY_DIR python3 <HOME>/ds-skills/ds-mode/tools/query.py \"SELECT CASE WHEN date < '2026-09-28' THEN 'before' ELSE 'after' END AS period, platform, country, ranker, COUNT(*) AS days, SUM(searches) AS n, SUM(clicks) AS k FROM search_daily WHERE date BETWEEN '2026-09-21' AND '2026-10-04' GROUP BY period, platform, country, ranker ORDER BY platform, country, period\" --db ./warehouse.db --as-of 2026-10-04" in <HOME>/ds-test-20261013-213057
+ succeeded in 0ms:
+{"id": "q4", "status": "ok", "row_count": 8, "columns": ["period", "platform", "country", "ranker", "days", "n", "k"], "rows": [["after", "desktop", "US", "v2", 7, 173266, 64224], ["before", "desktop", "US", "v1", 7, 230805, 85557], ["after", "desktop", "other", "v2", 7, 141394, 49080], ["before", "desktop", "other", "v1", 7, 188199, 65478], ["after", "mobile", "US", "v2", 7, 211771, 48103], ["before", "mobile", "US", "v1", 7, 154512, 35018], ["after", "mobile", "other", "v2", 7, 173935, 36967], ["before", "mobile", "other", "v1", 7, 126089, 26775]]}
+
+===== source lines 1019-1023; public exec section =====
+exec
+/bin/zsh -lc "env -u DS_OVERLAY_DIR python3 <HOME>/ds-skills/ds-mode/tools/query.py \"SELECT CASE WHEN date < '2026-09-28' THEN 'before' ELSE 'after' END AS period, platform, SUM(searches) AS n, SUM(clicks) AS k FROM search_daily WHERE date BETWEEN '2026-09-21' AND '2026-10-04' GROUP BY period, platform\" --db ./warehouse.db --as-of 2026-10-04" in <HOME>/ds-test-20261013-213057
+ succeeded in 0ms:
+{"id": "q5", "status": "ok", "row_count": 4, "columns": ["period", "platform", "n", "k"], "rows": [["after", "desktop", 314660, 113304], ["after", "mobile", 385706, 85070], ["before", "desktop", 419004, 151035], ["before", "mobile", 280601, 61793]]}
+
+===== source lines 1074-1225; public exec section =====
+exec
+/bin/zsh -lc 'cat <HOME>/ds-skills/ds-mode/tools/verify_readout.py' in <HOME>/ds-test-20261013-213057
+ succeeded in 0ms:
+#!/usr/bin/env python3
+"""Check that every number in a ds-mode readout traces to a logged query or check.
+
+    python3 tools/verify_readout.py readout.md [--queries .ds-queries.log] [--checks .ds-checks.log]
+
+In the Answer, "What it means" and "Why we believe it" sections:
+- every line that states a number carries a tag: [q<n>] for a logged query,
+  [check:<name>#<n>] for a logged check, or [given] for a number stated in the
+  request (a threshold, a date range). One bracket may hold several: [q3, q4].
+- every [q<n>] is a query that ran (through the runner, or pasted with --pasted);
+- every [check:<name>#<n>] is a logged check whose "from" names queries that ran.
+The Provenance section must have a "Reconciled:" line.
+
+Dates, a "95%" in front of "interval" or "CI", and digits inside names (v2,
+q3) don't count as numbers. Logs default to $DS_QUERIES_LOG / $DS_CHECKS_LOG,
+else the files in the current directory.
+
+Prints "verify_readout: pass (...)" or "verify_readout: fail" with one line per
+problem, then the [given] lines for the reviewer to confirm against the request.
+Exit code: 0 pass, 1 fail, 3 usage error.
+"""
+
+import argparse
+import json
+import os
+import re
+import sys
+
+ONE_TAG = r"(?:q\d+|check:[a-z_]+#\d+|given)"
+TAGS = re.compile(r"\[\s*(" + ONE_TAG + r"(?:\s*[,;|]\s*" + ONE_TAG + r")*)\s*\]", re.I)
+LABELS = re.compile(r"\[(?:measured|inferred|guess)\]", re.I)
+HEADING = re.compile(r"^#{1,4}\s+(.+?)\s*#*\s*$", re.M)
+DATE = re.compile(r"\b\d{4}-\d{2}(?:-\d{2})?\b|\b\d{4}-W\d{2}\b", re.I)
+CI_LEVEL = re.compile(r"\b(?:80|90|95|99)\s*%\s*(?=(?:confidence\s+)?(?:interval|CI)\b)", re.I)
+LIST_MARKER = re.compile(r"^\s*(?:[-*+]|\d+[.)])\s+")
+NUMBER = re.compile(r"(?<![A-Za-z_#\d.])[-+−]?\d+(?:[.,]\d+)*")
+CHECKED_SECTIONS = ("answer", "what it means", "why we believe")
+
+
+def _clean(text):
+    text = re.sub(r"^```[a-z]*\s*$", "", text, flags=re.M)
+    return text.replace("**", "").replace("__", "").replace("`", "")
+
+
+def sections(text):
+    parts = HEADING.split(_clean(text))
+    return [(parts[i].strip(), parts[i + 1]) for i in range(1, len(parts) - 1, 2)]
+
+
+def numbers_in(line):
+    body = LIST_MARKER.sub("", TAGS.sub(" ", LABELS.sub(" ", line)))
+    body = CI_LEVEL.sub(" ", DATE.sub(" ", body))
+    return NUMBER.findall(body)
+
+
+def tags_in(line):
+    found = []
+    for group in TAGS.findall(line):
+        found += [tag.strip().lower() for tag in re.split(r"[,;|]", group) if tag.strip()]
+    return found
+
+
+def read_jsonl(path):
+    entries = []
+    try:
+        with open(path) as handle:
+            for line in handle:
+                try:
+                    entries.append(json.loads(line))
+                except ValueError:
+                    continue
+    except FileNotFoundError:
+        pass
+    return entries
+
+
+def verify(text, queries, checks):
+    """Return (problems, stats, given_lines)."""
+    ran = {e["id"].lower() for e in queries if e.get("id") and e.get("status") == "ok"}
+    tried = {e["id"].lower(): e.get("status") for e in queries if e.get("id")}
+    logged_checks = {e["id"].lower(): e for e in checks if e.get("id")}
+    problems, given, stats = [], [], {"lines": 0, "numbers": 0, "queries": set(), "checks": set()}
+    found = sections(text)
+    if not any(name.lower().startswith("answer") for name, _ in found):
+        problems.append("no Answer section")
+    for name, body in found:
+        lowered = name.lower()
+        if lowered.startswith("provenance") and not re.search(r"^\s*[-*]?\s*reconciled\s*:", body, re.I | re.M):
+            problems.append("Provenance has no 'Reconciled:' line (write 'Reconciled: not done (<reason>)' if none was possible)")
+        if not lowered.startswith(CHECKED_SECTIONS):
+            continue
+        for line in body.splitlines():
+            numbers, tags = numbers_in(line), tags_in(line)
+            if numbers:
+                stats["lines"] += 1
+                stats["numbers"] += len(numbers)
+                if not tags:
+                    problems.append(f"untagged number in '{name}': {line.strip()}")
+            for tag in tags:
+                if tag == "given":
+                    given.append(line.strip())
+                elif tag.startswith("q"):
+                    stats["queries"].add(tag)
+                    if tag not in ran:
+                        why = f"it was {tried[tag]}" if tag in tried else "it is not in the query log"
+                        problems.append(f"[{tag}] doesn't resolve: {why}")
+                else:
+                    check_id = tag.split(":", 1)[1]
+                    stats["checks"].add(check_id)
+                    entry = logged_checks.get(check_id)
+                    if entry is None:
+                        problems.append(f"[{tag}] doesn't resolve: it is not in the check log")
+                    elif not entry.get("from"):
+                        problems.append(f"[{tag}] has no source query: rerun it with \"from\": \"q<n>\" in the spec")
+                    else:
+                        missing = [q for q in entry["from"] if q.lower() not in ran]
+                        if missing:
+                            problems.append(f"[{tag}] names queries that didn't run: {', '.join(missing)}")
+    return list(dict.fromkeys(problems)), stats, given
+
+
+def main(argv=None):
+    parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
+    parser.add_argument("readout", help="the readout file (use - for stdin)")
+    parser.add_argument("--queries", default=os.environ.get("DS_QUERIES_LOG") or ".ds-queries.log")
+    parser.add_argument("--checks", default=os.environ.get("DS_CHECKS_LOG") or ".ds-checks.log")
+    args = parser.parse_args(argv)
+    try:
+        text = sys.stdin.read() if args.readout == "-" else open(args.readout).read()
+    except OSError as err:
+        print(f"verify_readout: can't read the readout ({err})", file=sys.stderr)
+        return 3
+    problems, stats, given = verify(text, read_jsonl(args.queries), read_jsonl(args.checks))
+    counts = (f"{stats['numbers']} numbers on {stats['lines']} lines; {len(stats['queries'])} queries, "
+              f"{len(stats['checks'])} checks, {len(given)} given")
+    if problems:
+        print(f"verify_readout: fail ({counts})")
+        for problem in problems:
+            print(f"  - {problem}")
+    else:
+        print(f"verify_readout: pass ({counts})")
+    for line in given:
+        print(f"  given (confirm against the request): {line}")
+    return 1 if problems else 0
+
+
+if __name__ == "__main__":
+    sys.exit(main())
+
+===== source lines 1251-1266; public exec section =====
+exec
+/bin/zsh -lc "env -u DS_OVERLAY_DIR python3 - <<'PY'
+import json, subprocess, os
+from pathlib import Path
+queries={x['id']:x for x in map(json.loads,Path('.ds-queries.log').read_text().splitlines())}
+runner='<HOME>/ds-skills/ds-mode/checks/run.py'
+series=[{'period':r[0],'rows':r[2]} for r in queries['q3']['rows']]
+for target in ['2026-09-27','2026-10-04']:
+    subprocess.run(['python3',runner,'completeness','--json',json.dumps({'series':series,'target':target,'max_ratio':1.1,'from':'q3'})],check=True)
+for q,keys,ni,ki in [('q4',[1,2],5,6),('q5',[1],2,3)]:
+    segments={}
+    for row in queries[q]['rows']:
+        name='/'.join(row[k] for k in keys)
+        segments.setdefault(name,{'name':name})[row[0]]={'n':row[ni],'k':row[ki]}
+    subprocess.run(['python3',runner,'mix_shift','--json',json.dumps({'segments':list(segments.values()),'from':q})],check=True)
+PY" in <HOME>/ds-test-20261013-213057
+
+===== source lines 1315-1319; public exec section =====
+exec
+/bin/zsh -lc "env -u DS_OVERLAY_DIR python3 <HOME>/ds-skills/ds-mode/checks/run.py mix_shift --json '{\"segments\":[{\"name\":\"desktop\",\"before\":{\"n\":419004,\"k\":151035},\"after\":{\"n\":314660,\"k\":113304}},{\"name\":\"mobile\",\"before\":{\"n\":280601,\"k\":61793},\"after\":{\"n\":385706,\"k\":85070}}],\"from\":\"q5\"'" in <HOME>/ds-test-20261013-213057
+ exited 2 in 0ms:
+{"check": "mix_shift", "details": {}, "from": [], "id": "mix_shift#2", "status": "could_not_run", "summary": "could not run: unreadable spec (Expecting ',' delimiter: line 1 column 191 (char 190))"}
+
+===== source lines 1333-1334; public codex section =====
+codex
+分解结果显示，总 CTR 下降约 2.10 个百分点，几乎全部对应流量构成变化；同平台、同国家内的变化接近零。但上线前全部是 v1、上线后全部是 v2，没有同期对照，所以不能把这项残差称为 v2 的因果影响，也不能断言 v2 的影响为零。
+
+===== source lines 1350-1362; public exec section =====
+exec
+/bin/zsh -lc "env -u DS_OVERLAY_DIR python3 - <<'PY'
+import json, subprocess
+from pathlib import Path
+queries={x['id']:x for x in map(json.loads,Path('.ds-queries.log').read_text().splitlines())}
+segments={}
+for row in queries['q5']['rows']:
+    segments.setdefault(row[1],{'name':row[1]})[row[0]]={'n':row[2],'k':row[3]}
+subprocess.run(['python3','<HOME>/ds-skills/ds-mode/checks/run.py','mix_shift','--json',json.dumps({'segments':list(segments.values()),'from':'q5'})])
+PY" in <HOME>/ds-test-20261013-213057
+ succeeded in 0ms:
+{"check": "mix_shift", "details": {"delta_ci95_pp": [-2.248, -1.946], "delta_pp": -2.0968, "min_effect_pp": 0.1, "mix_effect_pp": -2.0932, "mix_share": 0.9983, "noise_floor_pp": 0.1539, "overall_after": 0.283243, "overall_before": 0.304212, "rate_effect_ci95_pp": [-0.154, 0.147], "rate_effect_pp": -0.0036, "se_assumes_independent_units": true, "segments": [{"mix_effect_pp": -0.9958, "n_after": 314660, "n_before": 419004, "name": "desktop", "rate_after": 0.360084, "rate_before": 0.360462, "rate_effect_pp": -0.0198, "weight_after": 0.449279, "weight_before": 0.598915}, {"mix_effect_pp": -1.0974, "n_after": 385706, "n_before": 280601, "name": "mobile", "rate_after": 0.220557, "rate_before": 0.220217, "rate_effect_pp": 0.0162, "weight_after": 0.550721, "weight_before": 0.401085}], "smallest_segment_n": 280601, "threshold": 0.3, "z": 2.0}, "from": ["q5"], "id": "mix_shift#3", "status": "flag", "summary": "mix-dominant: overall change -2.10 pp = within-segment -0.00 pp (95% CI -0.15 to +0.15) + mix -2.09 pp (mix share 100%); report the mix shift as part of the answer"}
+
+===== source lines 1391-1432; public exec section =====
+exec
+/bin/zsh -lc "cat > readout.md <<'EOF'
+## Answer
+Headline: −2.0968 个百分点（观测总 CTR 变化；95% CI：−2.248 至 −1.946），不是 v2 的因果效应。[check:mix_shift#1]
+总体 CTR 从 30.4212% 降至 28.3243%；按平台×国家作中点权重分解，流量构成项为 −2.0945 个百分点，组内变化为 −0.0023 个百分点（95% CI：−0.153 至 +0.148）。**可归因于 v2 的百分点无法从这些数据识别，不能答成零，也不能把组内残差当作 v2 效应。** [q4, check:mix_shift#1]
+
+## What it means for 回滚决策
+不建议仅凭这次总体下降判定 v2 有害并回滚：构成变化已在算术上解释几乎全部下降，但这不证明 v2 无害，也不说明构成变化与它无关。[q4, check:mix_shift#1]
+尚未给出触发回滚的最小损害阈值；组内变化区间跨过零，且并非因果效应区间，不能用它保证满足回滚阈值。应通过同期随机分流的旧版对照估计影响，再按预设阈值决策。[q4, check:mix_shift#1]
+
+## Why we believe it
+- Alternatives considered:
+  - 流量构成：纳入解释。较低 CTR 的移动端份额由 40.11% 升至 55.07%；仅按平台分解时，构成项为 −2.0932、组内项为 −0.0036 个百分点，与平台×国家结果一致。[check:mix_shift#1, check:mix_shift#3] [measured]
+  - v2：不能确认或排除因果影响。前期各组全部为 v1，后期全部为 v2，版本与时间完全重合；发布记录仅确认全量上线，没有同期旧版对照。[q2, q4] [inferred]
+  - 星期构成：两期均为完整周一至周日，排除比较窗口星期数量不同；只有两周记录，无法排除跨周需求或季节性变化。[q3] [inferred]
+  - 数据不完整：未发现明显缺日或量级异常；共 14 天，每天 4 个分群单元，两期每组均覆盖 7 天，未发现空值、负值或点击大于搜索量的单元。无加载完成标记，不能严格证明数据已全部到齐。[q3, q4] [measured]
+  - 埋点或口径变化：无法排除。现有发布表只记载 ranker 上线，没有独立埋点审计、指标定义或可信看板可供核对。[q1, q2] [inferred]
+- Checks run:
+  - completeness: pass — 2026-09-27: 101828 rows = 102% of the trailing days (under 3 weeks of same-weekday history) median (99521.5) [check:completeness#1]
+  - completeness: pass — 2026-10-04: 101900 rows = 102% of the trailing days (under 3 weeks of same-weekday history) median (99762) [check:completeness#2]
+  - mix_shift: flag — mix-dominant: overall change -2.10 pp = within-segment -0.00 pp (95% CI -0.15 to +0.15) + mix -2.09 pp (mix share 100%); report the mix shift as part of the answer [check:mix_shift#1]
+  - mix_shift（粗粒度复核）: flag — mix-dominant: overall change -2.10 pp = within-segment -0.00 pp (95% CI -0.15 to +0.15) + mix -2.09 pp (mix share 100%); report the mix shift as part of the answer [check:mix_shift#3]
+  - 粗粒度检查曾因输入 JSON 格式错误未运行，已修正重跑；原始失败记录保留在日志中。
+  - fanout: skipped — 未使用 join。
+  - srm: skipped — 无随机实验分配或计划分流比例，未读取实验 lift。
+
+## Caveats, and what would change the answer
+- 分解是描述性恒等式。若版本影响重复搜索、用户返回或平台构成，构成项也可能包含版本作用；需要随机对照识别总效应。
+- 区间假设搜索之间独立且点击数可视为二项成功数；没有用户级数据，无法处理重复搜索聚类，也不能核实一次搜索是否可能多次计入点击。确认指标定义并取得用户级随机实验汇总后重算。
+- 完整性检查以搜索总量衡量日流量，不是原始事件行数；两周历史不足以形成稳定的同星期基线。需加载完成标记与更长历史验证。
+- 缺少流量来源维度、同期其他变更与埋点审计。补齐这些信息可以检验替代解释，但单纯前后比较仍不能识别因果效应。
+
+## Provenance
+- Metric: stated here [guess]：CTR = SUM(clicks) / SUM(searches)，来源 search_daily；以日期×平台×国家×ranker 汇总行累计分子分母，非日 CTR 简单平均。仅过滤 2026-09-21 至 2026-09-27 和 2026-09-28 至 2026-10-04，无其他过滤；按测试要求未读取 DS_OVERLAY_DIR。
+- Data: 仅本地 warehouse.db 中 search_daily 与 release_log；观察覆盖至 2026-10-04，加载完成状态未经独立认证。
+- Reconciled: not done（本地没有独立可信看板或指标来源，禁止外部集成）。
+- Queries and checks: .ds-queries.log 与 .ds-checks.log；检查摘要保留工具原文，完整输出见日志。
+EOF
+python3 <HOME>/ds-skills/ds-mode/tools/verify_readout.py readout.md" in <HOME>/ds-test-20261013-213057
+ succeeded in 0ms:
+verify_readout: pass (36 numbers on 8 lines; 4 queries, 4 checks, 0 given)
+
+===== source lines 1460-1464; public exec section =====
+exec
+/bin/zsh -lc "cat >> readout.md <<'EOF'
+- Verified: verify_readout: pass (36 numbers on 8 lines; 4 queries, 4 checks, 0 given)
+EOF" in <HOME>/ds-test-20261013-213057
+ succeeded in 0ms:
+
+===== source lines 1478-1521; public codex section =====
+codex
+## Answer
+
+Headline: **−2.0968 个百分点是观测到的总 CTR 变化，不是 v2 的因果效应**（95% CI：−2.248 至 −1.946）。[check:mix_shift#1]
+
+总体 CTR 从 **30.4212% 降至 28.3243%**。平台×国家分解中，流量构成项为 **−2.0945 个百分点**，组内变化仅 **−0.0023 个百分点**（95% CI：−0.153 至 +0.148）。**无法识别其中多少可归因于 v2；不能答成零，也不能把组内残差当作版本效应。** [check:mix_shift#1]
+
+## What it means for 回滚决策
+
+不建议仅凭这次总体下降判定 v2 有害并回滚。构成变化在算术上解释了几乎全部下降，但这不证明版本无害，也不能证明构成变化与版本无关。[q4, check:mix_shift#1]
+
+尚未给出回滚的最小损害阈值；上述区间不是因果效应区间，不能据此保证版本安全。应通过同期随机旧版对照估计影响，再与预设回滚阈值比较。
+
+## Why we believe it
+
+- Alternatives considered:
+  - **流量构成：纳入解释。** 较低 CTR 的移动端流量份额由 **40.11% 升至 55.07%**。仅按平台分解，构成项为 −2.0932、组内项为 −0.0036 个百分点，与细分结果一致。[check:mix_shift#1, check:mix_shift#3] [measured]
+  - **版本影响：无法确认或排除。** 前期全为旧版，后期全为新版，版本与时间完全重合，没有同期对照。[q2, q4] [inferred]
+  - **星期与季节性：部分排除。** 两期均覆盖周一至周日，星期数量相同；现有历史不足以排除跨周需求变化。[q3] [inferred]
+  - **数据不完整：未见明显迹象。** 共 14 天，每天均有 4 个分群单元，无空值、负值或点击大于搜索量的单元；但缺少加载完成标记。[q3] [measured]
+  - **埋点或定义变化：无法排除。** 本地没有独立埋点审计或可信指标来源；发布记录只确认版本上线。[q1, q2] [inferred]
+
+- Checks run:
+  - completeness: pass — 2026-09-27: 101828 rows = 102% of the trailing days (under 3 weeks of same-weekday history) median (99521.5) [check:completeness#1]
+  - completeness: pass — 2026-10-04: 101900 rows = 102% of the trailing days (under 3 weeks of same-weekday history) median (99762) [check:completeness#2]
+  - mix_shift，细分与粗分均为 flag — mix-dominant: overall change -2.10 pp = within-segment -0.00 pp (95% CI -0.15 to +0.15) + mix -2.09 pp (mix share 100%); report the mix shift as part of the answer [check:mix_shift#1, check:mix_shift#3]
+  - 粗粒度检查曾因输入格式错误未运行，已修正重跑。
+  - fanout: skipped — 未使用 join。
+  - srm: skipped — 无随机实验分配，未计算实验 lift。
+
+## Caveats, and what would change the answer
+
+- 分解是描述性结果。版本也可能影响重复搜索、用户返回或流量构成；随机对照才能识别总效应。
+- 区间假设搜索相互独立、点击数可视为二项成功数。需要确认点击口径，并用用户级数据处理重复搜索聚类。
+- 完整性检查使用搜索量衡量日流量，不能替代加载完成认证。
+- 补充流量来源、同期变更、埋点审计和更长历史，可进一步检验替代解释。
+
+## Provenance
+
+- Metric: stated here [guess]：`SUM(clicks) / SUM(searches)`，不是日 CTR 的简单平均；来源为 `search_daily`，按日期×平台×国家×ranker 汇总，分别过滤用户指定的两个完整星期。
+- Data: 仅本地 `warehouse.db` 的 `search_daily`、`release_log`；覆盖至 2026-10-04，加载完成状态未经独立认证。
+- Reconciled: not done（本地没有独立可信指标来源，禁止外部集成）。
+- Queries and checks: `.ds-queries.log`、`.ds-checks.log`；完整报告已保存至 [readout.md](<HOME>/ds-test-20261013-213057/readout.md)。
+- Verified: verify_readout: pass (36 numbers on 8 lines; 4 queries, 4 checks, 0 given)
