@@ -14,6 +14,8 @@ You need one folder and one line of config. Data comes through the tools you alr
 
 ## Test 1: synthetic data (about 5 minutes, no company data)
 
+To have an agent run this test and report back, give it [`agent-runbook.md`](agent-runbook.md).
+
 ```bash
 mkdir /tmp/ds-test && cp <ds-stack>/eval/fixtures/f1/* /tmp/ds-test/ && cd /tmp/ds-test
 echo "For any data analysis request, read and follow /Users/<you>/ds-skills/ds-mode/SKILL.md" > AGENTS.md
