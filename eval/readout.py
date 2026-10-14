@@ -5,7 +5,14 @@ markdown decoration and of common phrasings, and reports what it could not
 read instead of guessing:
 
 - the headline yields every (number, unit) candidate; the grader picks the one
-  in the gold unit. Numbers glued to letters (v2, W40) and dates are ignored.
+  in the gold unit, falls back to a unitless number, and never takes a number in
+  another unit. Numbers glued to letters (v2, W40), dates and confidence levels
+  ("95% CI") are ignored.
+- full-width punctuation, the Unicode minus and Chinese units and range words
+  (个百分点, 至) are normalized first. The fixed words the grader reads (section
+  headings, "Headline:", "ruled in/out", check names) are English by contract;
+  a readout whose alternatives all lack them gets a parse error, not a silent
+  empty list.
 - a headline with no number and words like "can't tell" or "insufficient" is an
   abstention.
 - alternative lines match "ruled in/out" anywhere; "not ruled in/out" reads as
@@ -17,7 +24,9 @@ import re
 from dataclasses import dataclass, field
 
 NUMBER = r"(?<![\w.\-−])([-+−]?\d+(?:\.\d+)?)"
-UNIT = r"\s*(pp\b|percentage[\s-]points?\b|points?\b|%|percent\b)"
+UNIT = r"\s*(pp\b|percentage[\s-]points?\b|points?\b|个?百分点|%|percent\b)"
+CI_LEVEL = re.compile(r"\b(?:80|90|95|99)\s*%\s*(?=(?:confidence\s+)?(?:interval|CI)\b|置信)", re.I)
+FULL_WIDTH = str.maketrans({"（": "(", "）": ")", "：": ":", "，": ",", "；": ";", "−": "-", "％": "%"})
 DATE = re.compile(r"\b\d{4}-\d{2}(?:-\d{2})?\b|\b\d{4}-W\d{2}\b", re.I)
 ABSTAIN_WORDS = re.compile(r"can['’]?t|cannot|can not|unable|unknown|insufficient|not enough|"
                            r"no reliable|indeterminate|undetermined|inconclusive|not possible", re.I)
@@ -54,17 +63,19 @@ class Readout:
         return self.candidates[0][0] if self.candidates else None
 
     def value_in(self, unit):
-        """First headline number in `unit` ('pp' or 'percent'), else the first number."""
+        """First headline number in `unit` ('pp' or 'percent'), else the first unitless
+        number. None when the headline only has numbers in another unit."""
         for number, found in self.candidates:
             if found == unit:
                 return number
-        return self.value
+        return next((number for number, found in self.candidates if found is None), None)
 
 
 def _clean(text):
     text = re.sub(r"^```[a-z]*\s*$", "", text, flags=re.M)
-    text = TRACE_TAGS.sub(" ", text)
-    return text.replace("**", "").replace("__", "").replace("`", "").replace("−", "-")
+    text = TRACE_TAGS.sub(" ", text).translate(FULL_WIDTH)
+    text = re.sub(r"\s*至\s*", " to ", text)
+    return text.replace("**", "").replace("__", "").replace("`", "")
 
 
 def _sections(text):
@@ -74,7 +85,7 @@ def _sections(text):
 
 def _unit(raw):
     raw = raw.lower().strip()
-    if raw.startswith("percentage") or raw.startswith("point") or raw == "pp":
+    if raw.startswith("percentage") or raw.startswith("point") or raw == "pp" or raw.endswith("百分点"):
         return "pp"
     return UNIT_NAMES.get(raw, raw)
 
@@ -93,7 +104,7 @@ def _numbers_with_units(text, negative):
 def _candidates(headline):
     """Order: numbers with a unit before the parenthesis, then with a unit inside
     it (an interval or a restatement), then unitless numbers before it."""
-    text = DATE.sub(" ", headline)
+    text = CI_LEVEL.sub(" ", DATE.sub(" ", headline))
     head, _, paren = text.partition("(")
     negative = bool(NEGATIVE_WORDS.search(head))
     in_head = _numbers_with_units(head, negative)
@@ -124,7 +135,7 @@ def parse(text):
     elif re.match(r"^\s*(can['’]?t|cannot|can not)\s+tell", out.headline, re.I):
         out.abstained = True
     if "(" in out.headline:
-        bounds = INTERVAL.search(DATE.sub(" ", out.headline.split("(", 1)[1]))
+        bounds = INTERVAL.search(CI_LEVEL.sub(" ", DATE.sub(" ", out.headline.split("(", 1)[1])))
         if bounds:
             low, high = (float(b) for b in bounds.groups())
             out.interval = (min(low, high), max(low, high))
@@ -160,4 +171,6 @@ def parse(text):
             })
         elif in_alternatives:
             out.dropped.append(stripped)
+    if out.dropped and not out.alternatives:
+        out.errors.append(f"none of the {len(out.dropped)} alternative lines says 'ruled in' or 'ruled out'")
     return out

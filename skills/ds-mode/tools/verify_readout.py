@@ -31,7 +31,7 @@ TAGS = re.compile(r"\[\s*(" + ONE_TAG + r"(?:\s*[,;|]\s*" + ONE_TAG + r")*)\s*\]
 LABELS = re.compile(r"\[(?:measured|inferred|guess)\]", re.I)
 HEADING = re.compile(r"^#{1,4}\s+(.+?)\s*#*\s*$", re.M)
 DATE = re.compile(r"\b\d{4}-\d{2}(?:-\d{2})?\b|\b\d{4}-W\d{2}\b", re.I)
-CI_LEVEL = re.compile(r"\b(?:80|90|95|99)\s*%\s*(?=(?:confidence\s+)?(?:interval|CI)\b)", re.I)
+CI_LEVEL = re.compile(r"\b(?:80|90|95|99)\s*[%％]\s*(?=(?:confidence\s+)?(?:interval|CI)\b|置信)", re.I)
 LIST_MARKER = re.compile(r"^\s*(?:[-*+]|\d+[.)])\s+")
 NUMBER = re.compile(r"(?<![A-Za-z_#\d.])[-+−]?\d+(?:[.,]\d+)*")
 CHECKED_SECTIONS = ("answer", "what it means", "why we believe")

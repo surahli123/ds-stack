@@ -52,6 +52,8 @@ def grade_readout(readout, gold):
             return True, "abstained (accepted)", None
         return False, "abstained on a case with a valid answer", "false_alarm" if gold["kind"] == "clean" else "miss"
     value = readout.value_in(gold["unit"])
+    if value is None:
+        return False, f"headline has no number in {gold['unit']}", "unparseable"
     if gold["kind"] == "abstain" and not gold["accept_values"]:
         return False, f"answered {value:g} where the right answer is can't tell", "answered_abstain_case"
     if not any(abs(value - v["value"]) <= v["tol"] for v in gold["accept_values"]):

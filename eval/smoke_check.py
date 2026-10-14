@@ -37,9 +37,12 @@ def check(run_dir, fixture):
     results.append((bool(ran), f"{len(ran)} logged queries ran" if ran
                     else "no logged queries: the agent queried the data without tools/query.py"))
     checks = verify_readout.read_jsonl(os.path.join(run_dir, ".ds-checks.log"))
-    sourced = [c for c in checks if c.get("from")]
-    results.append((bool(sourced), f"{len(sourced)} of {len(checks)} checks name their source query" if sourced
-                    else f"no check names its source query ({len(checks)} checks logged)"))
+    completed = [c for c in checks if c.get("status") != "could_not_run"]
+    sourced = [c for c in completed if c.get("from")]
+    skipped = len(checks) - len(completed)
+    note = f" ({skipped} more could not run, kept in the log)" if skipped else ""
+    results.append((bool(sourced), f"{len(sourced)} of {len(completed)} completed checks name their source query{note}" if sourced
+                    else f"no completed check names its source query ({len(checks)} checks logged)"))
     if text:
         problems, _, _ = verify_readout.verify(text, queries, checks)
         results.append((not problems, "verify_readout: pass" if not problems

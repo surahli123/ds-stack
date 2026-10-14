@@ -88,12 +88,13 @@ Headline: <signed number> <unit> (<95% interval>) [q<n> | check:<name>#<n>]   or
 - In Provenance, the logs are `.ds-queries.log` and `.ds-checks.log`, and a last line `- Verified: <the verify_readout.py result line, exactly as printed>` shows the reviewer the trace check passed.
 - The interval is required. `mix_shift` reports one for the overall change (`delta_ci95_pp`). For an experiment lift, use a two-proportion interval. When no interval can be computed, write `(no interval: <reason>)`.
 - Use causal words ("caused", "drove", "because of") only for a randomized test or a design that identifies the cause. Otherwise say "coincided with" or "is associated with", and name what would confirm it.
-- A design that can't identify the cause (a 100% rollout, no holdout) is not a reason to abstain. Headline the measured change, say what it coincided with, and name what would identify the cause. `can't tell` is for when the data can't support the number itself.
+- When the question asks how much of a change a launch caused and the design can't identify it (a 100% rollout, no holdout), don't abstain and don't headline the raw total. Headline the best estimate the data allows: after a `mix_shift` decomposition, that is the within-segment change. Name its assumption in the same sentence (for example "assuming v2 didn't change the traffic mix"), put the total change in the sentence below, and name what would identify the effect. `can't tell` is for when the data can't support the number itself.
+- Keep the readout's fixed words in English exactly as shown: the section headings, `Headline:`, `ruled in` and `ruled out`, check names and statuses, `can't tell`, and the unit `pp`. Scripts read them. Everything else can be in the reader's language.
 - measured means computed from data in this session.
 - inferred means it follows from measured facts by reasoning.
 - guess means neither.
 
-When this readout grows into a document for other people (a readout, memo, plan or handover), write it with the `ds-doc` skill.
+When this readout grows into a document for other people (a readout, memo, plan or handover), write it with the `ds-doc` skill, if it is installed.
 
 ## References
 
