@@ -9,6 +9,8 @@
 #   token could rotate mid-run. The operator moves AGENTS.md, skills/ and prompts/ out of it for the run
 #   (docs/prompts/acceptance-dots.md); this script reports any that are still there.
 # - HOME points at an empty temporary directory, so nothing under the real home reaches the agent.
+# - Plugins, remote plugins, apps and memories are disabled per run (Codex 0.153 feature flags).
+# Codex rebuilds its five system skills in $CODEX_HOME/skills/.system on every start; they are allowed.
 # Check the result once with eval/agents/codex-isolation-probe.sh before a matrix.
 CODEX_HOME=${CODEX_HOME:-$HOME/.codex}
 export CODEX_HOME
@@ -21,7 +23,9 @@ done
 if codex exec --help 2>/dev/null | grep -q -- '--approve-for-me'; then AUTO=--approve-for-me; else AUTO=--full-auto; fi
 EMPTY_HOME=$(mktemp -d "${TMPDIR:-/tmp}/ds-codex-home.XXXXXX")
 PROMPT=$(cat "$1")
-HOME="$EMPTY_HOME" codex exec "$AUTO" --skip-git-repo-check --ignore-user-config --ephemeral "$PROMPT"
+# Account-synced plugins (and their skills), apps and memories load regardless of config.toml; switch them off.
+HOME="$EMPTY_HOME" codex exec "$AUTO" --skip-git-repo-check --ignore-user-config --ephemeral \
+  --disable plugins --disable remote_plugin --disable apps --disable memories "$PROMPT"
 STATUS=$?
 rm -rf "$EMPTY_HOME"
 exit $STATUS
