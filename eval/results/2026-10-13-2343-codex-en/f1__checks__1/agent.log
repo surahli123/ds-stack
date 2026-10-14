@@ -1,0 +1,1348 @@
+Sanitized public log. Raw original retained locally; see sibling codex-report/TRACE-NOTES.md and artifact-manifest.json.
+ds-stack: <HOME>/.codex/skills is present, so this run is not isolated
+model: gpt-6-astra
+approval: on-request
+sandbox: workspace-write [workdir, /tmp, $TMPDIR]
+reasoning effort: none
+
+===== public user; source lines 14-48 =====
+user
+Overall search CTR dropped week over week right after ranker v2 rolled out to 100% of traffic on 2026-09-28.
+The PM thinks v2 caused the drop. Compare the week of 2026-09-21 to 2026-09-27 with the week of 2026-09-28 to 2026-10-04.
+How much of the change in overall CTR is attributable to v2, in percentage points? This decides whether we roll it back.
+
+The data is in warehouse.db (SQLite) in the current directory.
+
+End with exactly this readout as your final reply. Label each claim measured (computed from data here), inferred, or guess:
+
+```
+## Answer
+Headline: <signed number> <unit> (<95% interval>)   or   Headline: can't tell
+<one plain sentence: what happened and how big>
+- Observed: <signed number> <unit> (<95% interval>)
+- Adjusted: <signed number> <unit> (<95% interval>), holding <what> fixed   or   Adjusted: not computed (<reason>)
+- Causal effect: <signed number> <unit> (<95% interval>), from <design>   or   Causal effect: not identified (<what would identify it>)
+
+## What it means for <the decision>
+<one or two sentences that compare the interval with the smallest change that would alter the decision>
+
+## Why we believe it
+- Alternatives considered:
+  - <alternative>: ruled <in|out> by <evidence> [measured|inferred|guess]
+- Checks run:
+  - <check>: <pass|flag|fail|could not run|skipped> <one-line result or reason>
+
+## Caveats, and what would change the answer
+- <short list>
+
+## Provenance
+- Metric: <definition>, from <metrics.json | stated here [guess]>
+- Data: <tables or views>, through <last complete period>
+- Reconciled: <metric> vs <dashboard or source>, delta <x>   or   Reconciled: not done (<reason>)
+- Queries and checks: <where they are logged>
+```
+
+===== public codex; source lines 49-50 =====
+codex
+I’ll inspect the metric definition, rollout data, and required checks, then assess whether the data can distinguish v2’s effect from other changes between the weeks.
+
+===== public exec; source lines 51-61 =====
+exec
+/bin/zsh -lc 'ls -la' in /private/tmp/ds-runs-2026-10-13-2343/99c6d3976d/analysis
+ succeeded in 0ms:
+total 40
+drwxr-xr-x  6 surahli  wheel    192 Oct 13 23:45 .
+drwxr-xr-x  5 surahli  wheel    160 Oct 13 23:45 ..
+-rw-r--r--  1 surahli  wheel    154 Oct 13 23:45 AGENTS.md
+-rw-r--r--  1 surahli  wheel    154 Oct 13 23:45 CLAUDE.md
+drwxr-xr-x  8 surahli  wheel    256 Oct 13 21:30 checks
+-rw-r--r--  1 surahli  wheel  12288 Oct 13 23:45 warehouse.db
+
+===== public exec; source lines 62-77 =====
+exec
+/bin/zsh -lc 'python3 checks/run.py --list' in /private/tmp/ds-runs-2026-10-13-2343/99c6d3976d/analysis
+ succeeded in 0ms:
+completeness: before reporting any period: is it fully loaded?
+  spec: {"series": [{"period": "2026-10-01", "rows": 100}, ...], "target": "2026-10-07"}
+
+fanout: after any join: did it add or lose rows?
+  spec: {"left_rows": 1000, "joined_rows": 1000, "relationship": "many_to_one", "join": "left", "right_rows": 1000, "right_distinct_keys": 1000, "matched_left_rows": 1000}
+
+mix_shift: when a rate moved: how much is segment mix vs within-segment change?
+  spec: {"segments": [{"name": "web", "before": {"n": 800, "k": 240}, "after": {"n": 820, "k": 250}}, ...]}  (n = denominator, k = numerator)
+
+srm: before reading any experiment lift: is the assignment split as planned?
+  spec: {"observed": [10120, 9880], "expected_ratio": [0.5, 0.5]}
+
+===== public exec; source lines 78-91 =====
+exec
+/bin/zsh -lc 'rg --files -uuu' in /private/tmp/ds-runs-2026-10-13-2343/99c6d3976d/analysis
+ succeeded in 0ms:
+CLAUDE.md
+AGENTS.md
+warehouse.db
+checks/mix_shift.py
+checks/fanout.py
+checks/srm.py
+checks/completeness.py
+checks/__pycache__/_common.cpython-313.pyc
+checks/_common.py
+checks/run.py
+
+===== public exec; source lines 92-105 =====
+exec
+/bin/zsh -lc "python3 - <<'PY'
+import sqlite3
+c=sqlite3.connect('warehouse.db')
+for row in c.execute(\"select name,sql from sqlite_master where type in ('table','view')\"):
+ print(row)
+ print(c.execute('select * from \"'+row[0]+'\" limit 8').fetchall())
+PY" in /private/tmp/ds-runs-2026-10-13-2343/99c6d3976d/analysis
+ succeeded in 0ms:
+('search_daily', 'CREATE TABLE search_daily (date TEXT, platform TEXT, country TEXT, ranker TEXT, searches INTEGER, clicks INTEGER)')
+[('2026-09-21', 'desktop', 'US', 'v1', 33328, 12369), ('2026-09-21', 'desktop', 'other', 'v1', 26788, 9349), ('2026-09-21', 'mobile', 'US', 'v1', 21956, 4967), ('2026-09-21', 'mobile', 'other', 'v1', 18242, 3871), ('2026-09-22', 'desktop', 'US', 'v1', 34312, 12822), ('2026-09-22', 'desktop', 'other', 'v1', 27634, 9738), ('2026-09-22', 'mobile', 'US', 'v1', 22938, 5267), ('2026-09-22', 'mobile', 'other', 'v1', 18369, 3948)]
+('release_log', 'CREATE TABLE release_log (date TEXT, change TEXT)')
+[('2026-09-28', 'ranker v2 rolled out to 100% of traffic')]
+
+===== public exec; source lines 106-406 =====
+exec
+/bin/zsh -lc 'cat checks/run.py checks/completeness.py checks/mix_shift.py' in /private/tmp/ds-runs-2026-10-13-2343/99c6d3976d/analysis
+ succeeded in 0ms:
+#!/usr/bin/env python3
+"""Run one ds-mode check on a JSON spec of aggregates.
+
+    python3 checks/run.py <check> --json '<spec>'
+    python3 checks/run.py <check> --file spec.json
+    python3 checks/run.py --list
+
+Prints one JSON line and appends it to .ds-checks.log in the working directory.
+Add "from": "q3" (or a list of query ids) to the spec to record which logged
+queries the aggregates came from; the readout cites the printed id, such as
+[check:mix_shift#1].
+Statuses: pass; flag (a finding the answer must report, not a data defect);
+fail (a data or query defect); could_not_run.
+Exit code: 0 pass, 1 flag or fail, 2 could not run, 3 usage error.
+"""
+
+import argparse
+import importlib
+import json
+import os
+import re
+import sys
+
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+
+from _common import COULD_NOT_RUN, Result, emit  # noqa: E402
+
+QUERY_ID = re.compile(r"^q\d+$")
+
+CHECKS = ("completeness", "fanout", "mix_shift", "srm")
+
+USAGE = {
+    "completeness": ("before reporting any period: is it fully loaded?",
+                     '{"series": [{"period": "2026-10-01", "rows": 100}, ...], "target": "2026-10-07"}'),
+    "fanout": ("after any join: did it add or lose rows?",
+               '{"left_rows": 1000, "joined_rows": 1000, "relationship": "many_to_one", "join": "left", '
+               '"right_rows": 1000, "right_distinct_keys": 1000, "matched_left_rows": 1000}'),
+    "mix_shift": ("when a rate moved: how much is segment mix vs within-segment change?",
+                  '{"segments": [{"name": "web", "before": {"n": 800, "k": 240}, '
+                  '"after": {"n": 820, "k": 250}}, ...]}  (n = denominator, k = numerator)'),
+    "srm": ("before reading any experiment lift: is the assignment split as planned?",
+            '{"observed": [10120, 9880], "expected_ratio": [0.5, 0.5]}'),
+}
+
+
+def main(argv=None):
+    parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
+    parser.add_argument("check", nargs="?", choices=CHECKS)
+    source = parser.add_mutually_exclusive_group()
+    source.add_argument("--json", help="the spec as a JSON string")
+    source.add_argument("--file", help="path to a JSON spec")
+    parser.add_argument("--list", action="store_true", help="list checks, when to run them, and a spec example")
+    args = parser.parse_args(argv)
+
+    if args.list:
+        for name in CHECKS:
+            when, example = USAGE[name]
+            print(f"{name}: {when}\n  spec: {example}\n")
+        return 0
+    if not args.check or not (args.json or args.file):
+        parser.print_usage(sys.stderr)
+        return 3
+
+    try:
+        if args.file:
+            with open(args.file) as handle:
+                spec = json.load(handle)
+        else:
+            spec = json.loads(args.json)
+        if not isinstance(spec, dict):
+            raise ValueError("the spec must be a JSON object")
+    except (OSError, ValueError) as err:
+        return emit(Result(args.check, COULD_NOT_RUN, f"could not run: unreadable spec ({err})"))
+
+    sources = spec.pop("from", [])
+    if isinstance(sources, str):
+        sources = [sources]
+    if not isinstance(sources, list) or not all(isinstance(s, str) and QUERY_ID.match(s) for s in sources):
+        return emit(Result(args.check, COULD_NOT_RUN, "could not run: 'from' must be a query id like \"q3\" or a list of them"))
+
+    module = importlib.import_module(args.check)
+    return emit(module.run(spec), sources=sources)
+
+
+if __name__ == "__main__":
+    sys.exit(main())
+"""Is the period you are about to report fully loaded?
+
+Compares the target period's row count with the median of earlier periods.
+Daily ISO dates are compared with the same weekday (the last `baseline_periods`
+same-weekday days, default 4), so a normal Saturday isn't read as a partial
+load. With under three weeks of history it falls back to the trailing 7 days
+and says so. Any other period labels use the trailing `baseline_periods`
+(default 7).
+Fails when the target is missing, below `min_ratio` of that median (default
+0.9: late or partial data), or above `max_ratio` when given (double loads).
+"""
+
+import statistics
+from datetime import date
+
+from _common import COULD_NOT_RUN, FAIL, PASS, Result, SpecError, require
+
+NAME = "completeness"
+DEFAULT_MIN_RATIO = 0.9
+MIN_BASELINE = 3
+
+
+def _as_date(label):
+    try:
+        return date.fromisoformat(label)
+    except ValueError:
+        return None
+
+
+def run(spec):
+    try:
+        series = require(spec, "series", list)
+        target = require(spec, "target", str)
+        min_ratio = float(spec.get("min_ratio", DEFAULT_MIN_RATIO))
+        max_ratio = spec.get("max_ratio")
+        max_ratio = None if max_ratio is None else float(max_ratio)
+        rows = {}
+        for point in series:
+            period = require(point, "period", str)
+            if period in rows:
+                raise SpecError(f"period '{period}' appears twice")
+            rows[period] = require(point, "rows", int)
+    except (SpecError, TypeError, ValueError) as err:
+        return Result(NAME, COULD_NOT_RUN, f"could not run: {err}")
+
+    dates = {p: _as_date(p) for p in list(rows) + [target]}
+    daily = all(dates.values())
+    if daily:
+        prior = sorted((p for p in rows if dates[p] < dates[target]), key=dates.get)
+        earlier, basis = [], "trailing days"
+        if spec.get("same_weekday", True):
+            earlier = [p for p in prior if dates[p].weekday() == dates[target].weekday()][-int(spec.get("baseline_periods", 4)):]
+            basis = "same weekday"
+        if len(earlier) < MIN_BASELINE:
+            earlier = prior[-int(spec.get("trailing_days", 7)):]
+            basis = "trailing days" if basis == "trailing days" else "trailing days (under 3 weeks of same-weekday history)"
+    else:
+        k = int(spec.get("baseline_periods", 7))
+        earlier = sorted(p for p in rows if p < target)[-k:]
+        basis = "trailing periods"
+    if len(earlier) < MIN_BASELINE:
+        return Result(NAME, COULD_NOT_RUN,
+                      f"could not run: need at least {MIN_BASELINE} earlier periods ({basis}) before {target}, got {len(earlier)}")
+    baseline = statistics.median(rows[p] for p in earlier)
+    details = {"target": target, "basis": basis, "baseline_periods": earlier, "baseline_median_rows": baseline,
+               "min_ratio": min_ratio, "max_ratio": max_ratio}
+    if target not in rows:
+        return Result(NAME, FAIL, f"{target} has no rows loaded", details)
+    if baseline == 0:
+        return Result(NAME, COULD_NOT_RUN, "could not run: baseline median is 0 rows", details)
+
+    ratio = rows[target] / baseline
+    details.update(target_rows=rows[target], ratio=round(ratio, 4))
+    summary = f"{target}: {rows[target]} rows = {ratio:.0%} of the {basis} median ({baseline:g})"
+    if ratio < min_ratio:
+        return Result(NAME, FAIL, "incomplete: " + summary, details)
+    if max_ratio is not None and ratio > max_ratio:
+        return Result(NAME, FAIL, "possible double load: " + summary, details)
+    return Result(NAME, PASS, summary, details)
+"""Split a rate change into within-segment (rate) and segment-mix effects.
+
+Kitagawa decomposition with midpoint weights, so the two effects sum exactly to
+the overall change:
+
+    delta = sum_s (r_after - r_before) * (w_after + w_before) / 2       # rate effect
+          + sum_s (w_after - w_before) * ((r_after + r_before) / 2 - r)  # mix effect
+
+where r is the midpoint of the overall rates. Subtracting r leaves the total
+unchanged (the weight changes sum to zero) and makes each segment's mix term
+readable: a segment adds to the drop only if its share grew and its rate is
+below average, or its share shrank and its rate is above average.
+
+Returns "flag" (a finding the answer must report, not a data defect) when mix
+accounts for at least `threshold` of the movement, measured as
+|mix| / (|mix| + |rate|) so offsetting effects (Simpson's paradox) still show,
+AND the mix effect is larger than noise: at least `min_effect_pp` and at least
+`z` standard errors of the overall change. Standard errors are binomial and
+assume independent units; clustered units (sessions within users) make them
+too small, so treat the intervals as a lower bound on the uncertainty.
+"""
+
+import math
+
+from _common import COULD_NOT_RUN, FLAG, PASS, Result, SpecError, require
+
+NAME = "mix_shift"
+DEFAULT_THRESHOLD = 0.3
+DEFAULT_MIN_EFFECT_PP = 0.1
+DEFAULT_Z = 2.0
+Z95 = 1.96
+
+
+def _counts(segment, side):
+    part = segment.get(side)
+    if not isinstance(part, dict):
+        raise SpecError(f"segment '{segment.get('name')}' is missing '{side}'")
+    n = require(part, "n", int)
+    k = require(part, "k", int)
+    if k > n:
+        raise SpecError(f"segment '{segment.get('name')}' {side}: k > n")
+    return n, k
+
+
+def _var(rate, n):
+    return rate * (1 - rate) / n
+
+
+def decompose(segments):
+    parsed = []
+    for segment in segments:
+        name = segment.get("name", f"segment_{len(parsed)}")
+        nb, kb = _counts(segment, "before")
+        na, ka = _counts(segment, "after")
+        if nb == 0 or na == 0:
+            raise SpecError(f"segment '{name}' has n = 0 on one side; drop it or merge it")
+        parsed.append((name, nb, kb, na, ka))
+    total_b = sum(p[1] for p in parsed)
+    total_a = sum(p[3] for p in parsed)
+    overall_b = sum(p[2] for p in parsed) / total_b
+    overall_a = sum(p[4] for p in parsed) / total_a
+    midpoint = (overall_a + overall_b) / 2
+
+    rate_effect = mix_effect = rate_var = 0.0
+    per_segment = []
+    for name, nb, kb, na, ka in parsed:
+        wb, wa = nb / total_b, na / total_a
+        rb, ra = kb / nb, ka / na
+        weight = (wa + wb) / 2
+        rate_part = (ra - rb) * weight
+        mix_part = (wa - wb) * ((ra + rb) / 2 - midpoint)
+        rate_effect += rate_part
+        mix_effect += mix_part
+        rate_var += weight ** 2 * (_var(rb, nb) + _var(ra, na))
+        per_segment.append({
+            "name": name, "n_before": nb, "n_after": na,
+            "weight_before": round(wb, 6), "weight_after": round(wa, 6),
+            "rate_before": round(rb, 6), "rate_after": round(ra, 6),
+            "rate_effect_pp": round(100 * rate_part, 4), "mix_effect_pp": round(100 * mix_part, 4),
+        })
+    delta_se = math.sqrt(_var(overall_b, total_b) + _var(overall_a, total_a))
+    return {
+        "overall_before": overall_b, "overall_after": overall_a, "delta": overall_a - overall_b,
+        "delta_se": delta_se, "rate_effect": rate_effect, "rate_effect_se": math.sqrt(rate_var),
+        "mix_effect": mix_effect, "segments": per_segment,
+        "smallest_segment_n": min(min(p[1], p[3]) for p in parsed),
+    }
+
+
+def _ci_pp(value, se):
+    return [round(100 * (value - Z95 * se), 3), round(100 * (value + Z95 * se), 3)]
+
+
+def run(spec):
+    try:
+        segments = require(spec, "segments", list)
+        if len(segments) < 2:
+            raise SpecError("needs at least 2 segments to separate mix from rate")
+        threshold = float(spec.get("threshold", DEFAULT_THRESHOLD))
+        min_effect_pp = float(spec.get("min_effect_pp", DEFAULT_MIN_EFFECT_PP))
+        z = float(spec.get("z", DEFAULT_Z))
+        parts = decompose(segments)
+    except (SpecError, TypeError, ValueError) as err:
+        return Result(NAME, COULD_NOT_RUN, f"could not run: {err}")
+
+    rate, mix, delta = parts["rate_effect"], parts["mix_effect"], parts["delta"]
+    moved = abs(rate) + abs(mix)
+    share = abs(mix) / moved if moved > 1e-12 else 0.0
+    noise_floor = max(min_effect_pp / 100, z * parts["delta_se"])
+    details = {
+        "overall_before": round(parts["overall_before"], 6),
+        "overall_after": round(parts["overall_after"], 6),
+        "delta_pp": round(100 * delta, 4),
+        "delta_ci95_pp": _ci_pp(delta, parts["delta_se"]),
+        "rate_effect_pp": round(100 * rate, 4),
+        "rate_effect_ci95_pp": _ci_pp(rate, parts["rate_effect_se"]),
+        "mix_effect_pp": round(100 * mix, 4),
+        "mix_share": round(share, 4),
+        "noise_floor_pp": round(100 * noise_floor, 4),
+        "threshold": threshold, "min_effect_pp": min_effect_pp, "z": z,
+        "smallest_segment_n": parts["smallest_segment_n"],
+        "se_assumes_independent_units": True,
+        "segments": parts["segments"],
+    }
+    lo, hi = details["rate_effect_ci95_pp"]
+    summary = (f"overall change {100 * delta:+.2f} pp = within-segment {100 * rate:+.2f} pp "
+               f"(95% CI {lo:+.2f} to {hi:+.2f}) + mix {100 * mix:+.2f} pp (mix share {share:.0%})")
+    if share >= threshold and abs(mix) >= noise_floor:
+        return Result(NAME, FLAG, "mix-dominant: " + summary + "; report the mix shift as part of the answer", details)
+    if share >= threshold:
+        summary += f"; the mix effect is within noise (floor {100 * noise_floor:.2f} pp)"
+    return Result(NAME, PASS, summary, details)
+
+===== public codex; source lines 407-408 =====
+codex
+What is the smallest causal CTR loss, in percentage points, that would justify rolling v2 back?
+
+===== public exec; source lines 409-419 =====
+exec
+/bin/zsh -lc "python3 - <<'PY'
+import sqlite3
+c=sqlite3.connect('warehouse.db')
+print(c.execute('select * from search_daily order by date,platform,country').fetchall())
+print(c.execute('select * from release_log').fetchall())
+PY" in /private/tmp/ds-runs-2026-10-13-2343/99c6d3976d/analysis
+ succeeded in 0ms:
+[('2026-09-21', 'desktop', 'US', 'v1', 33328, 12369), ('2026-09-21', 'desktop', 'other', 'v1', 26788, 9349), ('2026-09-21', 'mobile', 'US', 'v1', 21956, 4967), ('2026-09-21', 'mobile', 'other', 'v1', 18242, 3871), ('2026-09-22', 'desktop', 'US', 'v1', 34312, 12822), ('2026-09-22', 'desktop', 'other', 'v1', 27634, 9738), ('2026-09-22', 'mobile', 'US', 'v1', 22938, 5267), ('2026-09-22', 'mobile', 'other', 'v1', 18369, 3948), ('2026-09-23', 'desktop', 'US', 'v1', 32195, 11822), ('2026-09-23', 'desktop', 'other', 'v1', 26545, 9103), ('2026-09-23', 'mobile', 'US', 'v1', 21669, 4875), ('2026-09-23', 'mobile', 'other', 'v1', 17445, 3668), ('2026-09-24', 'desktop', 'US', 'v1', 33530, 12384), ('2026-09-24', 'desktop', 'other', 'v1', 26939, 9374), ('2026-09-24', 'mobile', 'US', 'v1', 22459, 5104), ('2026-09-24', 'mobile', 'other', 'v1', 18322, 3874), ('2026-09-25', 'desktop', 'US', 'v1', 31605, 11804), ('2026-09-25', 'desktop', 'other', 'v1', 26332, 9229), ('2026-09-25', 'mobile', 'US', 'v1', 21111, 4793), ('2026-09-25', 'mobile', 'other', 'v1', 17329, 3689), ('2026-09-26', 'desktop', 'US', 'v1', 32388, 11920), ('2026-09-26', 'desktop', 'other', 'v1', 26675, 9219), ('2026-09-26', 'mobile', 'US', 'v1', 21792, 4896), ('2026-09-26', 'mobile', 'other', 'v1', 17874, 3777), ('2026-09-27', 'desktop', 'US', 'v1', 33447, 12436), ('2026-09-27', 'desktop', 'other', 'v1', 27286, 9466), ('2026-09-27', 'mobile', 'US', 'v1', 22587, 5116), ('2026-09-27', 'mobile', 'other', 'v1', 18508, 3948), ('2026-09-28', 'desktop', 'US', 'v2', 24539, 9131), ('2026-09-28', 'desktop', 'other', 'v2', 19953, 6918), ('2026-09-28', 'mobile', 'US', 'v2', 30390, 6907), ('2026-09-28', 'mobile', 'other', 'v2', 24880, 5297), ('2026-09-29', 'desktop', 'US', 'v2', 25368, 9492), ('2026-09-29', 'desktop', 'other', 'v2', 20767, 7251), ('2026-09-29', 'mobile', 'US', 'v2', 30719, 7041), ('2026-09-29', 'mobile', 'other', 'v2', 25652, 5515), ('2026-09-30', 'desktop', 'US', 'v2', 24612, 9060), ('2026-09-30', 'desktop', 'other', 'v2', 19683, 6746), ('2026-09-30', 'mobile', 'US', 'v2', 29751, 6692), ('2026-09-30', 'mobile', 'other', 'v2', 24512, 5163), ('2026-10-01', 'desktop', 'US', 'v2', 25210, 9353), ('2026-10-01', 'desktop', 'other', 'v2', 20719, 7216), ('2026-10-01', 'mobile', 'US', 'v2', 30902, 7027), ('2026-10-01', 'mobile', 'other', 'v2', 25100, 5307), ('2026-10-02', 'desktop', 'US', 'v2', 23995, 8906), ('2026-10-02', 'desktop', 'other', 'v2', 19470, 6802), ('2026-10-02', 'mobile', 'US', 'v2', 29410, 6714), ('2026-10-02', 'mobile', 'other', 'v2', 23791, 5086), ('2026-10-03', 'desktop', 'US', 'v2', 24461, 9004), ('2026-10-03', 'desktop', 'other', 'v2', 19924, 6903), ('2026-10-03', 'mobile', 'US', 'v2', 30006, 6768), ('2026-10-03', 'mobile', 'other', 'v2', 24652, 5215), ('2026-10-04', 'desktop', 'US', 'v2', 25081, 9278), ('2026-10-04', 'desktop', 'other', 'v2', 20878, 7244), ('2026-10-04', 'mobile', 'US', 'v2', 30593, 6954), ('2026-10-04', 'mobile', 'other', 'v2', 25348, 5384)]
+[('2026-09-28', 'ranker v2 rolled out to 100% of traffic')]
+
+===== public codex; source lines 420-421 =====
+codex
+The data has no concurrent v1 comparison group: ranker version changes with the week. That prevents causal attribution from this comparison alone. I also found a shift toward mobile traffic; I’ll quantify how much of the observed drop reflects that mix change.
+
+===== public exec; source lines 422-521 =====
+exec
+/bin/zsh -lc 'mkdir -p analysis_outputs' in /private/tmp/ds-runs-2026-10-13-2343/99c6d3976d/analysis
+ succeeded in 0ms:
+apply patch
+patch: completed
+/private/tmp/ds-runs-2026-10-13-2343/99c6d3976d/analysis/analysis_outputs/analyze.py
+diff --git a/analysis_outputs/analyze.py b/analysis_outputs/analyze.py
+new file mode 100644
+index 0000000000000000000000000000000000000000..0ae332056fbe1e4cc9cd8a06770245ccd0cab3fc
+--- /dev/null
++++ b/analysis_outputs/analyze.py
+@@ -0,0 +1,87 @@
++import datetime
++import json
++import math
++from pathlib import Path
++import sqlite3
++import subprocess
++import sys
++
++ROOT = Path(__file__).resolve().parents[1]
++OUT = ROOT / 'analysis_outputs'
++db = sqlite3.connect(f'file:{ROOT / "warehouse.db"}?mode=ro', uri=True)
++db.row_factory = sqlite3.Row
++queries = []
++
++
++def query(sql):
++    result = [dict(row) for row in db.execute(sql)]
++    qid = f'q{len(queries) + 1}'
++    queries.append({'id': qid, 'sql': sql, 'result': result})
++    return qid, result
++
++
++q1, daily = query('SELECT date, COUNT(*) AS rows, SUM(searches) AS searches, '
++                  'SUM(clicks) AS clicks FROM search_daily GROUP BY date ORDER BY date')
++q2, cells = query("SELECT CASE WHEN date <= '2026-09-27' THEN 'before' ELSE 'after' END AS period, "
++                  "platform, country, SUM(searches) AS n, SUM(clicks) AS k FROM search_daily "
++                  "WHERE date BETWEEN '2026-09-21' AND '2026-10-04' "
++                  "GROUP BY period, platform, country ORDER BY platform, country, period")
++q3, versions = query('SELECT date, ranker, SUM(searches) AS searches '
++                     'FROM search_daily GROUP BY date, ranker ORDER BY date, ranker')
++q4, releases = query('SELECT * FROM release_log ORDER BY date')
++q5, invalid = query('SELECT * FROM search_daily WHERE date IS NULL OR platform IS NULL '
++                    'OR country IS NULL OR ranker IS NULL OR searches IS NULL OR clicks IS NULL '
++                    'OR searches <= 0 OR clicks < 0 OR clicks > searches '
++                    'OR searches != CAST(searches AS INTEGER) OR clicks != CAST(clicks AS INTEGER)')
++q6, duplicates = query('SELECT date, platform, country, ranker, COUNT(*) AS n '
++                       'FROM search_daily GROUP BY date, platform, country, ranker HAVING COUNT(*) != 1')
++q7, grid = query('SELECT date, platform, country FROM search_daily ORDER BY date, platform, country')
++(OUT / 'queries.json').write_text(json.dumps(queries, indent=2))
++
++check_results = []
++
++
++def check(name, spec, label):
++    path = OUT / f'{label}.json'
++    path.write_text(json.dumps(spec, indent=2))
++    result = subprocess.run([sys.executable, 'checks/run.py', name, '--file', str(path)],
++                            cwd=ROOT, text=True, capture_output=True)
++    check_results.append(json.loads(result.stdout))
++
++
++for target in ['2026-09-27', '2026-10-04']:
++    check('completeness', {'series': [{'period': d['date'], 'rows': d['rows']} for d in daily],
++                           'target': target, 'max_ratio': 1.1, 'from': q1}, f'completeness-{target}')
++    check('completeness', {'series': [{'period': d['date'], 'rows': d['searches']} for d in daily],
++                           'target': target, 'max_ratio': 1.1, 'from': q1}, f'volume-{target}')
++
++segments = {}
++for c in cells:
++    name = f'{c["platform"]}/{c["country"]}'
++    segments.setdefault(name, {'name': name})[c['period']] = {'n': c['n'], 'k': c['k']}
++check('mix_shift', {'segments': list(segments.values()), 'from': q2}, 'mix-shift')
++
++expected_dates = [(datetime.date(2026, 9, 21) + datetime.timedelta(days=i)).isoformat()
++                  for i in range(14)]
++expected_grid = {(d, p, c) for d in expected_dates for p in ['desktop', 'mobile'] for c in ['US', 'other']}
++assert {(r['date'], r['platform'], r['country']) for r in grid} == expected_grid
++assert not invalid and not duplicates
++check_results.append({'check': 'integrity', 'status': 'pass',
++                      'summary': 'All requested dates and platform/country cells present; valid counts; unique keys.',
++                      'sources': [q5, q6, q7]})
++
++sys.path.insert(0, str(ROOT / 'checks'))
++from mix_shift import decompose
++parts = decompose(list(segments.values()))
++summary = {'decomposition': parts, 'interval_assumptions':
++           'Normal binomial intervals assuming independent searches, at most one counted click per search; fixed observed weights. Not causal intervals.'}
++for label, value, se in [('observed', parts['delta'], parts['delta_se']),
++                         ('adjusted', parts['rate_effect'], parts['rate_effect_se'])]:
++    summary[label] = {'pp': value * 100, 'ci95_pp': [100 * (value - 1.96 * se), 100 * (value + 1.96 * se)]}
++summary['mobile_share'] = {}
++for period in ['before', 'after']:
++    selected = [c for c in cells if c['period'] == period]
++    summary['mobile_share'][period] = sum(c['n'] for c in selected if c['platform'] == 'mobile') / sum(c['n'] for c in selected)
++(OUT / 'results.json').write_text(json.dumps(summary, indent=2))
++(OUT / 'check-results.json').write_text(json.dumps(check_results, indent=2))
++print(json.dumps({'results': summary, 'checks': check_results}, indent=2))
+
+===== public exec; source lines 522-893 =====
+exec
+/bin/zsh -lc 'python3 analysis_outputs/analyze.py' in /private/tmp/ds-runs-2026-10-13-2343/99c6d3976d/analysis
+ succeeded in 160ms:
+{
+  "results": {
+    "decomposition": {
+      "overall_before": 0.3042116622951523,
+      "overall_after": 0.2832433327717222,
+      "delta": -0.020968329523430085,
+      "delta_se": 0.000769690929539061,
+      "rate_effect": -2.2966428429074034e-05,
+      "rate_effect_se": 0.0007691136188300221,
+      "mix_effect": -0.02094536309500098,
+      "segments": [
+        {
+          "name": "desktop/US",
+          "n_before": 230805,
+          "n_after": 173266,
+          "weight_before": 0.329908,
+          "weight_after": 0.247394,
+          "rate_before": 0.37069,
+          "rate_after": 0.370667,
+          "rate_effect_pp": -0.0006,
+          "mix_effect_pp": -0.635
+        },
+        {
+          "name": "desktop/other",
+          "n_before": 188199,
+          "n_after": 141394,
+          "weight_before": 0.269008,
+          "weight_after": 0.201886,
+          "rate_before": 0.347919,
+          "rate_after": 0.347115,
+          "rate_effect_pp": -0.0189,
+          "mix_effect_pp": -0.361
+        },
+        {
+          "name": "mobile/US",
+          "n_before": 154512,
+          "n_after": 211771,
+          "weight_before": 0.220856,
+          "weight_after": 0.302372,
+          "rate_before": 0.226636,
+          "rate_after": 0.227146,
+          "rate_effect_pp": 0.0133,
+          "mix_effect_pp": -0.5448
+        },
+        {
+          "name": "mobile/other",
+          "n_before": 126089,
+          "n_after": 173935,
+          "weight_before": 0.180229,
+          "weight_after": 0.248349,
+          "rate_before": 0.21235,
+          "rate_after": 0.212533,
+          "rate_effect_pp": 0.0039,
+          "mix_effect_pp": -0.5537
+        }
+      ],
+      "smallest_segment_n": 126089
+    },
+    "interval_assumptions": "Normal binomial intervals assuming independent searches, at most one counted click per search; fixed observed weights. Not causal intervals.",
+    "observed": {
+      "pp": -2.0968329523430085,
+      "ci95_pp": [
+        -2.2476923745326642,
+        -1.9459735301533527
+      ]
+    },
+    "adjusted": {
+      "pp": -0.0022966428429074034,
+      "ci95_pp": [
+        -0.15304291213359175,
+        0.14844962644777693
+      ]
+    },
+    "mobile_share": {
+      "before": 0.4010848979066759,
+      "after": 0.5507206232170037
+    }
+  },
+  "checks": [
+    {
+      "check": "completeness",
+      "details": {
+        "baseline_median_rows": 4.0,
+        "baseline_periods": [
+          "2026-09-21",
+          "2026-09-22",
+          "2026-09-23",
+          "2026-09-24",
+          "2026-09-25",
+          "2026-09-26"
+        ],
+        "basis": "trailing days (under 3 weeks of same-weekday history)",
+        "max_ratio": 1.1,
+        "min_ratio": 0.9,
+        "ratio": 1.0,
+        "target": "2026-09-27",
+        "target_rows": 4
+      },
+      "from": [
+        "q1"
+      ],
+      "id": "completeness#1",
+      "status": "pass",
+      "summary": "2026-09-27: 4 rows = 100% of the trailing days (under 3 weeks of same-weekday history) median (4)"
+    },
+    {
+      "check": "completeness",
+      "details": {
+        "baseline_median_rows": 99521.5,
+        "baseline_periods": [
+          "2026-09-21",
+          "2026-09-22",
+          "2026-09-23",
+          "2026-09-24",
+          "2026-09-25",
+          "2026-09-26"
+        ],
+        "basis": "trailing days (under 3 weeks of same-weekday history)",
+        "max_ratio": 1.1,
+        "min_ratio": 0.9,
+        "ratio": 1.0232,
+        "target": "2026-09-27",
+        "target_rows": 101828
+      },
+      "from": [
+        "q1"
+      ],
+      "id": "completeness#2",
+      "status": "pass",
+      "summary": "2026-09-27: 101828 rows = 102% of the trailing days (under 3 weeks of same-weekday history) median (99521.5)"
+    },
+    {
+      "check": "completeness",
+      "details": {
+        "baseline_median_rows": 4,
+        "baseline_periods": [
+          "2026-09-27",
+          "2026-09-28",
+          "2026-09-29",
+          "2026-09-30",
+          "2026-10-01",
+          "2026-10-02",
+          "2026-10-03"
+        ],
+        "basis": "trailing days (under 3 weeks of same-weekday history)",
+        "max_ratio": 1.1,
+        "min_ratio": 0.9,
+        "ratio": 1.0,
+        "target": "2026-10-04",
+        "target_rows": 4
+      },
+      "from": [
+        "q1"
+      ],
+      "id": "completeness#3",
+      "status": "pass",
+      "summary": "2026-10-04: 4 rows = 100% of the trailing days (under 3 weeks of same-weekday history) median (4)"
+    },
+    {
+      "check": "completeness",
+      "details": {
+        "baseline_median_rows": 99762,
+        "baseline_periods": [
+          "2026-09-27",
+          "2026-09-28",
+          "2026-09-29",
+          "2026-09-30",
+          "2026-10-01",
+          "2026-10-02",
+          "2026-10-03"
+        ],
+        "basis": "trailing days (under 3 weeks of same-weekday history)",
+        "max_ratio": 1.1,
+        "min_ratio": 0.9,
+        "ratio": 1.0214,
+        "target": "2026-10-04",
+        "target_rows": 101900
+      },
+      "from": [
+        "q1"
+      ],
+      "id": "completeness#4",
+      "status": "pass",
+      "summary": "2026-10-04: 101900 rows = 102% of the trailing days (under 3 weeks of same-weekday history) median (99762)"
+    },
+    {
+      "check": "mix_shift",
+      "details": {
+        "delta_ci95_pp": [
+          -2.248,
+          -1.946
+        ],
+        "delta_pp": -2.0968,
+        "min_effect_pp": 0.1,
+        "mix_effect_pp": -2.0945,
+        "mix_share": 0.9989,
+        "noise_floor_pp": 0.1539,
+        "overall_after": 0.283243,
+        "overall_before": 0.304212,
+        "rate_effect_ci95_pp": [
+          -0.153,
+          0.148
+        ],
+        "rate_effect_pp": -0.0023,
+        "se_assumes_independent_units": true,
+        "segments": [
+          {
+            "mix_effect_pp": -0.635,
+            "n_after": 173266,
+            "n_before": 230805,
+            "name": "desktop/US",
+            "rate_after": 0.370667,
+            "rate_before": 0.37069,
+            "rate_effect_pp": -0.0006,
+            "weight_after": 0.247394,
+            "weight_before": 0.329908
+          },
+          {
+            "mix_effect_pp": -0.361,
+            "n_after": 141394,
+            "n_before": 188199,
+            "name": "desktop/other",
+            "rate_after": 0.347115,
+            "rate_before": 0.347919,
+            "rate_effect_pp": -0.0189,
+            "weight_after": 0.201886,
+            "weight_before": 0.269008
+          },
+          {
+            "mix_effect_pp": -0.5448,
+            "n_after": 211771,
+            "n_before": 154512,
+            "name": "mobile/US",
+            "rate_after": 0.227146,
+            "rate_before": 0.226636,
+            "rate_effect_pp": 0.0133,
+            "weight_after": 0.302372,
+            "weight_before": 0.220856
+          },
+          {
+            "mix_effect_pp": -0.5537,
+            "n_after": 173935,
+            "n_before": 126089,
+            "name": "mobile/other",
+            "rate_after": 0.212533,
+            "rate_before": 0.21235,
+            "rate_effect_pp": 0.0039,
+            "weight_after": 0.248349,
+            "weight_before": 0.180229
+          }
+        ],
+        "smallest_segment_n": 126089,
+        "threshold": 0.3,
+        "z": 2.0
+      },
+      "from": [
+        "q2"
+      ],
+      "id": "mix_shift#1",
+      "status": "flag",
+      "summary": "mix-dominant: overall change -2.10 pp = within-segment -0.00 pp (95% CI -0.15 to +0.15) + mix -2.09 pp (mix share 100%); report the mix shift as part of the answer"
+    },
+    {
+      "check": "integrity",
+      "status": "pass",
+      "summary": "All requested dates and platform/country cells present; valid counts; unique keys.",
+      "sources": [
+        "q5",
+        "q6",
+        "q7"
+      ]
+    }
+  ]
+}
+
+diff --git a/analysis_outputs/analyze.py b/analysis_outputs/analyze.py
+new file mode 100644
+index 0000000000000000000000000000000000000000..0ae332056fbe1e4cc9cd8a06770245ccd0cab3fc
+--- /dev/null
++++ b/analysis_outputs/analyze.py
+@@ -0,0 +1,87 @@
++import datetime
++import json
++import math
++from pathlib import Path
++import sqlite3
++import subprocess
++import sys
++
++ROOT = Path(__file__).resolve().parents[1]
++OUT = ROOT / 'analysis_outputs'
++db = sqlite3.connect(f'file:{ROOT / "warehouse.db"}?mode=ro', uri=True)
++db.row_factory = sqlite3.Row
++queries = []
++
++
++def query(sql):
++    result = [dict(row) for row in db.execute(sql)]
++    qid = f'q{len(queries) + 1}'
++    queries.append({'id': qid, 'sql': sql, 'result': result})
++    return qid, result
++
++
++q1, daily = query('SELECT date, COUNT(*) AS rows, SUM(searches) AS searches, '
++                  'SUM(clicks) AS clicks FROM search_daily GROUP BY date ORDER BY date')
++q2, cells = query("SELECT CASE WHEN date <= '2026-09-27' THEN 'before' ELSE 'after' END AS period, "
++                  "platform, country, SUM(searches) AS n, SUM(clicks) AS k FROM search_daily "
++                  "WHERE date BETWEEN '2026-09-21' AND '2026-10-04' "
++                  "GROUP BY period, platform, country ORDER BY platform, country, period")
++q3, versions = query('SELECT date, ranker, SUM(searches) AS searches '
++                     'FROM search_daily GROUP BY date, ranker ORDER BY date, ranker')
++q4, releases = query('SELECT * FROM release_log ORDER BY date')
++q5, invalid = query('SELECT * FROM search_daily WHERE date IS NULL OR platform IS NULL '
++                    'OR country IS NULL OR ranker IS NULL OR searches IS NULL OR clicks IS NULL '
++                    'OR searches <= 0 OR clicks < 0 OR clicks > searches '
++                    'OR searches != CAST(searches AS INTEGER) OR clicks != CAST(clicks AS INTEGER)')
++q6, duplicates = query('SELECT date, platform, country, ranker, COUNT(*) AS n '
++                       'FROM search_daily GROUP BY date, platform, country, ranker HAVING COUNT(*) != 1')
++q7, grid = query('SELECT date, platform, country FROM search_daily ORDER BY date, platform, country')
++(OUT / 'queries.json').write_text(json.dumps(queries, indent=2))
++
++check_results = []
++
++
++def check(name, spec, label):
++    path = OUT / f'{label}.json'
++    path.write_text(json.dumps(spec, indent=2))
++    result = subprocess.run([sys.executable, 'checks/run.py', name, '--file', str(path)],
++                            cwd=ROOT, text=True, capture_output=True)
++    check_results.append(json.loads(result.stdout))
++
++
++for target in ['2026-09-27', '2026-10-04']:
++    check('completeness', {'series': [{'period': d['date'], 'rows': d['rows']} for d in daily],
++                           'target': target, 'max_ratio': 1.1, 'from': q1}, f'completeness-{target}')
++    check('completeness', {'series': [{'period': d['date'], 'rows': d['searches']} for d in daily],
++                           'target': target, 'max_ratio': 1.1, 'from': q1}, f'volume-{target}')
++
++segments = {}
++for c in cells:
++    name = f'{c["platform"]}/{c["country"]}'
++    segments.setdefault(name, {'name': name})[c['period']] = {'n': c['n'], 'k': c['k']}
++check('mix_shift', {'segments': list(segments.values()), 'from': q2}, 'mix-shift')
++
++expected_dates = [(datetime.date(2026, 9, 21) + datetime.timedelta(days=i)).isoformat()
++                  for i in range(14)]
++expected_grid = {(d, p, c) for d in expected_dates for p in ['desktop', 'mobile'] for c in ['US', 'other']}
++assert {(r['date'], r['platform'], r['country']) for r in grid} == expected_grid
++assert not invalid and not duplicates
++check_results.append({'check': 'integrity', 'status': 'pass',
++                      'summary': 'All requested dates and platform/country cells present; valid counts; unique keys.',
++                      'sources': [q5, q6, q7]})
++
++sys.path.insert(0, str(ROOT / 'checks'))
++from mix_shift import decompose
++parts = decompose(list(segments.values()))
++summary = {'decomposition': parts, 'interval_assumptions':
++           'Normal binomial intervals assuming independent searches, at most one counted click per search; fixed observed weights. Not causal intervals.'}
++for label, value, se in [('observed', parts['delta'], parts['delta_se']),
++                         ('adjusted', parts['rate_effect'], parts['rate_effect_se'])]:
++    summary[label] = {'pp': value * 100, 'ci95_pp': [100 * (value - 1.96 * se), 100 * (value + 1.96 * se)]}
++summary['mobile_share'] = {}
++for period in ['before', 'after']:
++    selected = [c for c in cells if c['period'] == period]
++    summary['mobile_share'][period] = sum(c['n'] for c in selected if c['platform'] == 'mobile') / sum(c['n'] for c in selected)
++(OUT / 'results.json').write_text(json.dumps(summary, indent=2))
++(OUT / 'check-results.json').write_text(json.dumps(check_results, indent=2))
++print(json.dumps({'results': summary, 'checks': check_results}, indent=2))
+
+===== public codex; source lines 894-1033 =====
+codex
+The checks flag a traffic-mix shift: it accounts arithmetically for almost all of the observed decline. Holding platform and country mix fixed leaves a change near zero, but that is not an estimate of v2’s causal effect. The completeness and count-integrity checks passed; the data lacks a load watermark and user-level records to verify completeness or account for repeated searches in the intervals.
+apply patch
+patch: completed
+/private/tmp/ds-runs-2026-10-13-2343/99c6d3976d/analysis/analysis_outputs/README.md
+/private/tmp/ds-runs-2026-10-13-2343/99c6d3976d/analysis/analysis_outputs/analyze.py
+diff --git a/analysis_outputs/README.md b/analysis_outputs/README.md
+new file mode 100644
+index 0000000000000000000000000000000000000000..43a872634167451f4cefb7134f46ef4aba6a2838
+--- /dev/null
++++ b/analysis_outputs/README.md
+@@ -0,0 +1,30 @@
++# CTR comparison
++
++Run `python3 analysis_outputs/analyze.py` from the workspace root.
++SQL and returned aggregates are in queries.json; check inputs are in the
++completeness-*, volume-*, and mix-shift JSON files. Check outputs are in
++check-results.json and the supplied runner appends its outputs to ../.ds-checks.log.
++Results and interval assumptions are in results.json.
++
++Before: September 21–27, 2026. After: September 28–October 4, 2026.
++Provisional metric: SUM(clicks) / SUM(searches); no metrics.json or dashboard
++reference is supplied. Binomial intervals require clicks to count searches
++with a click, and independent searches. Neither assumption is verified by
++these daily aggregates. No user/session identifiers are available.
++
++Adjusted change uses platform × country rates and fixes segment weights at
++the arithmetic mean of the two weeks' search shares. The symmetric Kitagawa
++mix contribution plus adjusted change equals the observed change exactly.
++This is a descriptive decomposition, not causal attribution. Version and
++week are perfectly confounded. A randomized concurrent v1/v2 comparison
++would identify the causal effect under appropriate experiment assumptions.
++If v2 itself changes search composition, fixing the mix could remove part
++of its total effect. Other time changes can also offset a ranker effect.
++
++Completeness checks use row counts and search volumes at each week endpoint,
++with trailing-day baselines due to short history. The grid check covers all
++requested dates and segments. These checks cannot verify ingestion against
++an upstream watermark or detect consistent undercounting.
++
++The rollback threshold was requested but is not supplied in the initial task.
++The adjusted interval is not a causal bound and cannot certify v2's safety.
+diff --git a/analysis_outputs/analyze.py b/analysis_outputs/analyze.py
+new file mode 100644
+index 0000000000000000000000000000000000000000..dc15afab632e0fc193c2f05022c832ad8ce05993
+--- /dev/null
++++ b/analysis_outputs/analyze.py
+@@ -0,0 +1,91 @@
++import datetime
++import json
++import math
++from pathlib import Path
++import sqlite3
++import subprocess
++import sys
++
++ROOT = Path(__file__).resolve().parents[1]
++OUT = ROOT / 'analysis_outputs'
++db = sqlite3.connect(f'file:{ROOT / "warehouse.db"}?mode=ro', uri=True)
++db.row_factory = sqlite3.Row
++queries = []
++
++
++def query(sql):
++    result = [dict(row) for row in db.execute(sql)]
++    qid = f'q{len(queries) + 1}'
++    queries.append({'id': qid, 'sql': sql, 'result': result})
++    return qid, result
++
++
++q1, daily = query('SELECT date, COUNT(*) AS rows, SUM(searches) AS searches, '
++                  'SUM(clicks) AS clicks FROM search_daily GROUP BY date ORDER BY date')
++q2, cells = query("SELECT CASE WHEN date <= '2026-09-27' THEN 'before' ELSE 'after' END AS period, "
++                  "platform, country, SUM(searches) AS n, SUM(clicks) AS k FROM search_daily "
++                  "WHERE date BETWEEN '2026-09-21' AND '2026-10-04' "
++                  "GROUP BY period, platform, country ORDER BY platform, country, period")
++q3, versions = query('SELECT date, ranker, SUM(searches) AS searches '
++                     'FROM search_daily GROUP BY date, ranker ORDER BY date, ranker')
++q4, releases = query('SELECT * FROM release_log ORDER BY date')
++q5, invalid = query('SELECT * FROM search_daily WHERE date IS NULL OR platform IS NULL '
++                    'OR country IS NULL OR ranker IS NULL OR searches IS NULL OR clicks IS NULL '
++                    'OR searches <= 0 OR clicks < 0 OR clicks > searches '
++                    'OR searches != CAST(searches AS INTEGER) OR clicks != CAST(clicks AS INTEGER)')
++q6, duplicates = query('SELECT date, platform, country, ranker, COUNT(*) AS n '
++                       'FROM search_daily GROUP BY date, platform, country, ranker HAVING COUNT(*) != 1')
++q7, grid = query('SELECT date, platform, country FROM search_daily ORDER BY date, platform, country')
++(OUT / 'queries.json').write_text(json.dumps(queries, indent=2))
++
++check_results = []
++
++
++def check(name, spec, label):
++    path = OUT / f'{label}.json'
++    path.write_text(json.dumps(spec, indent=2))
++    result = subprocess.run([sys.executable, 'checks/run.py', name, '--file', str(path)],
++                            cwd=ROOT, text=True, capture_output=True)
++    check_results.append(json.loads(result.stdout))
++
++
++for target in ['2026-09-27', '2026-10-04']:
++    check('completeness', {'series': [{'period': d['date'], 'rows': d['rows']} for d in daily],
++                           'target': target, 'max_ratio': 1.1, 'from': q1}, f'completeness-{target}')
++    check('completeness', {'series': [{'period': d['date'], 'rows': d['searches']} for d in daily],
++                           'target': target, 'max_ratio': 1.1, 'from': q1}, f'volume-{target}')
++
++segments = {}
++for c in cells:
++    name = f'{c["platform"]}/{c["country"]}'
++    segments.setdefault(name, {'name': name})[c['period']] = {'n': c['n'], 'k': c['k']}
++check('mix_shift', {'segments': list(segments.values()), 'from': q2}, 'mix-shift')
++
++expected_dates = [(datetime.date(2026, 9, 21) + datetime.timedelta(days=i)).isoformat()
++                  for i in range(14)]
++expected_grid = {(d, p, c) for d in expected_dates for p in ['desktop', 'mobile'] for c in ['US', 'other']}
++assert {(r['date'], r['platform'], r['country']) for r in grid} == expected_grid
++assert not invalid and not duplicates
++check_results.append({'check': 'integrity', 'status': 'pass',
++                      'summary': 'All requested dates and platform/country cells present; valid counts; unique keys.',
++                      'sources': [q5, q6, q7]})
++check_results.extend([
++    {'check': 'fanout', 'status': 'skipped', 'summary': 'No joins used.'},
++    {'check': 'srm', 'status': 'skipped', 'summary': 'No randomized assignment or planned split available.'},
++])
++
++sys.path.insert(0, str(ROOT / 'checks'))
++from mix_shift import decompose
++parts = decompose(list(segments.values()))
++summary = {'decomposition': parts, 'interval_assumptions':
++           'Normal binomial intervals assuming independent searches, at most one counted click per search; fixed observed weights. Not causal intervals.'}
++for label, value, se in [('observed', parts['delta'], parts['delta_se']),
++                         ('adjusted', parts['rate_effect'], parts['rate_effect_se'])]:
++    summary[label] = {'pp': value * 100, 'ci95_pp': [100 * (value - 1.96 * se), 100 * (value + 1.96 * se)]}
++summary['mobile_share'] = {}
++for period in ['before', 'after']:
++    selected = [c for c in cells if c['period'] == period]
++    summary['mobile_share'][period] = sum(c['n'] for c in selected if c['platform'] == 'mobile') / sum(c['n'] for c in selected)
++(OUT / 'results.json').write_text(json.dumps(summary, indent=2))
++(OUT / 'check-results.json').write_text(json.dumps(check_results, indent=2))
++print(json.dumps({'results': summary, 'checks': check_results}, indent=2))
+
+===== public exec; source lines 1034-1170 =====
+exec
+/bin/zsh -lc 'python3 analysis_outputs/analyze.py > analysis_outputs/run-output.json' in /private/tmp/ds-runs-2026-10-13-2343/99c6d3976d/analysis
+ succeeded in 144ms:
+diff --git a/analysis_outputs/README.md b/analysis_outputs/README.md
+new file mode 100644
+index 0000000000000000000000000000000000000000..43a872634167451f4cefb7134f46ef4aba6a2838
+--- /dev/null
++++ b/analysis_outputs/README.md
+@@ -0,0 +1,30 @@
++# CTR comparison
++
++Run `python3 analysis_outputs/analyze.py` from the workspace root.
++SQL and returned aggregates are in queries.json; check inputs are in the
++completeness-*, volume-*, and mix-shift JSON files. Check outputs are in
++check-results.json and the supplied runner appends its outputs to ../.ds-checks.log.
++Results and interval assumptions are in results.json.
++
++Before: September 21–27, 2026. After: September 28–October 4, 2026.
++Provisional metric: SUM(clicks) / SUM(searches); no metrics.json or dashboard
++reference is supplied. Binomial intervals require clicks to count searches
++with a click, and independent searches. Neither assumption is verified by
++these daily aggregates. No user/session identifiers are available.
++
++Adjusted change uses platform × country rates and fixes segment weights at
++the arithmetic mean of the two weeks' search shares. The symmetric Kitagawa
++mix contribution plus adjusted change equals the observed change exactly.
++This is a descriptive decomposition, not causal attribution. Version and
++week are perfectly confounded. A randomized concurrent v1/v2 comparison
++would identify the causal effect under appropriate experiment assumptions.
++If v2 itself changes search composition, fixing the mix could remove part
++of its total effect. Other time changes can also offset a ranker effect.
++
++Completeness checks use row counts and search volumes at each week endpoint,
++with trailing-day baselines due to short history. The grid check covers all
++requested dates and segments. These checks cannot verify ingestion against
++an upstream watermark or detect consistent undercounting.
++
++The rollback threshold was requested but is not supplied in the initial task.
++The adjusted interval is not a causal bound and cannot certify v2's safety.
+diff --git a/analysis_outputs/analyze.py b/analysis_outputs/analyze.py
+new file mode 100644
+index 0000000000000000000000000000000000000000..dc15afab632e0fc193c2f05022c832ad8ce05993
+--- /dev/null
++++ b/analysis_outputs/analyze.py
+@@ -0,0 +1,91 @@
++import datetime
++import json
++import math
++from pathlib import Path
++import sqlite3
++import subprocess
++import sys
++
++ROOT = Path(__file__).resolve().parents[1]
++OUT = ROOT / 'analysis_outputs'
++db = sqlite3.connect(f'file:{ROOT / "warehouse.db"}?mode=ro', uri=True)
++db.row_factory = sqlite3.Row
++queries = []
++
++
++def query(sql):
++    result = [dict(row) for row in db.execute(sql)]
++    qid = f'q{len(queries) + 1}'
++    queries.append({'id': qid, 'sql': sql, 'result': result})
++    return qid, result
++
++
++q1, daily = query('SELECT date, COUNT(*) AS rows, SUM(searches) AS searches, '
++                  'SUM(clicks) AS clicks FROM search_daily GROUP BY date ORDER BY date')
++q2, cells = query("SELECT CASE WHEN date <= '2026-09-27' THEN 'before' ELSE 'after' END AS period, "
++                  "platform, country, SUM(searches) AS n, SUM(clicks) AS k FROM search_daily "
++                  "WHERE date BETWEEN '2026-09-21' AND '2026-10-04' "
++                  "GROUP BY period, platform, country ORDER BY platform, country, period")
++q3, versions = query('SELECT date, ranker, SUM(searches) AS searches '
++                     'FROM search_daily GROUP BY date, ranker ORDER BY date, ranker')
++q4, releases = query('SELECT * FROM release_log ORDER BY date')
++q5, invalid = query('SELECT * FROM search_daily WHERE date IS NULL OR platform IS NULL '
++                    'OR country IS NULL OR ranker IS NULL OR searches IS NULL OR clicks IS NULL '
++                    'OR searches <= 0 OR clicks < 0 OR clicks > searches '
++                    'OR searches != CAST(searches AS INTEGER) OR clicks != CAST(clicks AS INTEGER)')
++q6, duplicates = query('SELECT date, platform, country, ranker, COUNT(*) AS n '
++                       'FROM search_daily GROUP BY date, platform, country, ranker HAVING COUNT(*) != 1')
++q7, grid = query('SELECT date, platform, country FROM search_daily ORDER BY date, platform, country')
++(OUT / 'queries.json').write_text(json.dumps(queries, indent=2))
++
++check_results = []
++
++
++def check(name, spec, label):
++    path = OUT / f'{label}.json'
++    path.write_text(json.dumps(spec, indent=2))
++    result = subprocess.run([sys.executable, 'checks/run.py', name, '--file', str(path)],
++                            cwd=ROOT, text=True, capture_output=True)
++    check_results.append(json.loads(result.stdout))
++
++
++for target in ['2026-09-27', '2026-10-04']:
++    check('completeness', {'series': [{'period': d['date'], 'rows': d['rows']} for d in daily],
++                           'target': target, 'max_ratio': 1.1, 'from': q1}, f'completeness-{target}')
++    check('completeness', {'series': [{'period': d['date'], 'rows': d['searches']} for d in daily],
++                           'target': target, 'max_ratio': 1.1, 'from': q1}, f'volume-{target}')
++
++segments = {}
++for c in cells:
++    name = f'{c["platform"]}/{c["country"]}'
++    segments.setdefault(name, {'name': name})[c['period']] = {'n': c['n'], 'k': c['k']}
++check('mix_shift', {'segments': list(segments.values()), 'from': q2}, 'mix-shift')
++
++expected_dates = [(datetime.date(2026, 9, 21) + datetime.timedelta(days=i)).isoformat()
++                  for i in range(14)]
++expected_grid = {(d, p, c) for d in expected_dates for p in ['desktop', 'mobile'] for c in ['US', 'other']}
++assert {(r['date'], r['platform'], r['country']) for r in grid} == expected_grid
++assert not invalid and not duplicates
++check_results.append({'check': 'integrity', 'status': 'pass',
++                      'summary': 'All requested dates and platform/country cells present; valid counts; unique keys.',
++                      'sources': [q5, q6, q7]})
++check_results.extend([
++    {'check': 'fanout', 'status': 'skipped', 'summary': 'No joins used.'},
++    {'check': 'srm', 'status': 'skipped', 'summary': 'No randomized assignment or planned split available.'},
++])
++
++sys.path.insert(0, str(ROOT / 'checks'))
++from mix_shift import decompose
++parts = decompose(list(segments.values()))
++summary = {'decomposition': parts, 'interval_assumptions':
++           'Normal binomial intervals assuming independent searches, at most one counted click per search; fixed observed weights. Not causal intervals.'}
++for label, value, se in [('observed', parts['delta'], parts['delta_se']),
++                         ('adjusted', parts['rate_effect'], parts['rate_effect_se'])]:
++    summary[label] = {'pp': value * 100, 'ci95_pp': [100 * (value - 1.96 * se), 100 * (value + 1.96 * se)]}
++summary['mobile_share'] = {}
++for period in ['before', 'after']:
++    selected = [c for c in cells if c['period'] == period]
++    summary['mobile_share'][period] = sum(c['n'] for c in selected if c['platform'] == 'mobile') / sum(c['n'] for c in selected)
++(OUT / 'results.json').write_text(json.dumps(summary, indent=2))
++(OUT / 'check-results.json').write_text(json.dumps(check_results, indent=2))
++print(json.dumps({'results': summary, 'checks': check_results}, indent=2))
+
+===== public codex; source lines 1171-1337 =====
+codex
+## Answer
+Headline: can't tell [inferred]  
+Overall CTR fell from 30.421% to 28.324%, a decline of 2.097 percentage points, almost entirely explained arithmetically by traffic mix [measured].
+
+- Observed: −2.097 percentage points (95% interval: −2.248 to −1.946) [measured]
+- Adjusted: −0.002 percentage points (95% interval: −0.153 to +0.148), holding platform × country shares fixed at their two-week midpoint [measured]
+- Causal effect: not identified (a concurrent randomized v1/v2 comparison would identify it; version and week are confounded here) [inferred]
+
+## What it means for the rollback decision
+The smallest loss warranting rollback was not supplied; the adjusted interval includes losses up to 0.153 percentage points, but does not bound causal harm [inferred]. This comparison alone supports neither blaming v2 nor declaring it safe [inferred].
+
+## Why we believe it
+- Alternatives considered:
+  - Traffic composition: ruled in by mobile share rising from 40.108% to 55.072%; the platform × country mix contribution is −2.095 percentage points [measured].
+  - Other changes over time: ruled in as unresolved explanations because there is no concurrent control group [inferred].
+- Checks run:
+  - Completeness: pass — both week endpoints pass row-count and search-volume checks using trailing-day baselines [measured].
+  - Integrity: pass — all requested dates and segment cells present; unique keys and valid counts [measured].
+  - Mix shift: flag — composition accounts arithmetically for almost all the decline [measured].
+  - Fanout: skipped — no joins used [measured].
+  - SRM: skipped — no randomized assignment or planned allocation available [measured].
+
+## Caveats, and what would change the answer
+- Intervals assume independent searches and clicks representing searches with a click; daily aggregates cannot verify these assumptions [guess].
+- If v2 changed search composition, adjustment could remove part of its effect [inferred].
+- A randomized comparison, verified metric semantics, and an explicit rollback threshold would make the decision actionable [inferred].
+
+## Provenance
+- Metric: SUM(clicks) / SUM(searches), from stated here [guess]; no metrics.json supplied [measured].
+- Data: search_daily and release_log, through 2026-10-04; apparently complete by checks, without an ingestion watermark [inferred].
+- Reconciled: not done (no dashboard or independent source supplied) [measured].
+- Queries and checks: [SQL and results](analysis_outputs/queries.json), [check results](analysis_outputs/check-results.json), [reproducible analysis](analysis_outputs/analyze.py), and [.ds-checks.log](.ds-checks.log) [measured].
+diff --git a/analysis_outputs/README.md b/analysis_outputs/README.md
+new file mode 100644
+index 0000000000000000000000000000000000000000..43a872634167451f4cefb7134f46ef4aba6a2838
+--- /dev/null
++++ b/analysis_outputs/README.md
+@@ -0,0 +1,30 @@
++# CTR comparison
++
++Run `python3 analysis_outputs/analyze.py` from the workspace root.
++SQL and returned aggregates are in queries.json; check inputs are in the
++completeness-*, volume-*, and mix-shift JSON files. Check outputs are in
++check-results.json and the supplied runner appends its outputs to ../.ds-checks.log.
++Results and interval assumptions are in results.json.
++
++Before: September 21–27, 2026. After: September 28–October 4, 2026.
++Provisional metric: SUM(clicks) / SUM(searches); no metrics.json or dashboard
++reference is supplied. Binomial intervals require clicks to count searches
++with a click, and independent searches. Neither assumption is verified by
++these daily aggregates. No user/session identifiers are available.
++
++Adjusted change uses platform × country rates and fixes segment weights at
++the arithmetic mean of the two weeks' search shares. The symmetric Kitagawa
++mix contribution plus adjusted change equals the observed change exactly.
++This is a descriptive decomposition, not causal attribution. Version and
++week are perfectly confounded. A randomized concurrent v1/v2 comparison
++would identify the causal effect under appropriate experiment assumptions.
++If v2 itself changes search composition, fixing the mix could remove part
++of its total effect. Other time changes can also offset a ranker effect.
++
++Completeness checks use row counts and search volumes at each week endpoint,
++with trailing-day baselines due to short history. The grid check covers all
++requested dates and segments. These checks cannot verify ingestion against
++an upstream watermark or detect consistent undercounting.
++
++The rollback threshold was requested but is not supplied in the initial task.
++The adjusted interval is not a causal bound and cannot certify v2's safety.
+diff --git a/analysis_outputs/analyze.py b/analysis_outputs/analyze.py
+new file mode 100644
+index 0000000000000000000000000000000000000000..dc15afab632e0fc193c2f05022c832ad8ce05993
+--- /dev/null
++++ b/analysis_outputs/analyze.py
+@@ -0,0 +1,91 @@
++import datetime
++import json
++import math
++from pathlib import Path
++import sqlite3
++import subprocess
++import sys
++
++ROOT = Path(__file__).resolve().parents[1]
++OUT = ROOT / 'analysis_outputs'
++db = sqlite3.connect(f'file:{ROOT / "warehouse.db"}?mode=ro', uri=True)
++db.row_factory = sqlite3.Row
++queries = []
++
++
++def query(sql):
++    result = [dict(row) for row in db.execute(sql)]
++    qid = f'q{len(queries) + 1}'
++    queries.append({'id': qid, 'sql': sql, 'result': result})
++    return qid, result
++
++
++q1, daily = query('SELECT date, COUNT(*) AS rows, SUM(searches) AS searches, '
++                  'SUM(clicks) AS clicks FROM search_daily GROUP BY date ORDER BY date')
++q2, cells = query("SELECT CASE WHEN date <= '2026-09-27' THEN 'before' ELSE 'after' END AS period, "
++                  "platform, country, SUM(searches) AS n, SUM(clicks) AS k FROM search_daily "
++                  "WHERE date BETWEEN '2026-09-21' AND '2026-10-04' "
++                  "GROUP BY period, platform, country ORDER BY platform, country, period")
++q3, versions = query('SELECT date, ranker, SUM(searches) AS searches '
++                     'FROM search_daily GROUP BY date, ranker ORDER BY date, ranker')
++q4, releases = query('SELECT * FROM release_log ORDER BY date')
++q5, invalid = query('SELECT * FROM search_daily WHERE date IS NULL OR platform IS NULL '
++                    'OR country IS NULL OR ranker IS NULL OR searches IS NULL OR clicks IS NULL '
++                    'OR searches <= 0 OR clicks < 0 OR clicks > searches '
++                    'OR searches != CAST(searches AS INTEGER) OR clicks != CAST(clicks AS INTEGER)')
++q6, duplicates = query('SELECT date, platform, country, ranker, COUNT(*) AS n '
++                       'FROM search_daily GROUP BY date, platform, country, ranker HAVING COUNT(*) != 1')
++q7, grid = query('SELECT date, platform, country FROM search_daily ORDER BY date, platform, country')
++(OUT / 'queries.json').write_text(json.dumps(queries, indent=2))
++
++check_results = []
++
++
++def check(name, spec, label):
++    path = OUT / f'{label}.json'
++    path.write_text(json.dumps(spec, indent=2))
++    result = subprocess.run([sys.executable, 'checks/run.py', name, '--file', str(path)],
++                            cwd=ROOT, text=True, capture_output=True)
++    check_results.append(json.loads(result.stdout))
++
++
++for target in ['2026-09-27', '2026-10-04']:
++    check('completeness', {'series': [{'period': d['date'], 'rows': d['rows']} for d in daily],
++                           'target': target, 'max_ratio': 1.1, 'from': q1}, f'completeness-{target}')
++    check('completeness', {'series': [{'period': d['date'], 'rows': d['searches']} for d in daily],
++                           'target': target, 'max_ratio': 1.1, 'from': q1}, f'volume-{target}')
++
++segments = {}
++for c in cells:
++    name = f'{c["platform"]}/{c["country"]}'
++    segments.setdefault(name, {'name': name})[c['period']] = {'n': c['n'], 'k': c['k']}
++check('mix_shift', {'segments': list(segments.values()), 'from': q2}, 'mix-shift')
++
++expected_dates = [(datetime.date(2026, 9, 21) + datetime.timedelta(days=i)).isoformat()
++                  for i in range(14)]
++expected_grid = {(d, p, c) for d in expected_dates for p in ['desktop', 'mobile'] for c in ['US', 'other']}
++assert {(r['date'], r['platform'], r['country']) for r in grid} == expected_grid
++assert not invalid and not duplicates
++check_results.append({'check': 'integrity', 'status': 'pass',
++                      'summary': 'All requested dates and platform/country cells present; valid counts; unique keys.',
++                      'sources': [q5, q6, q7]})
++check_results.extend([
++    {'check': 'fanout', 'status': 'skipped', 'summary': 'No joins used.'},
++    {'check': 'srm', 'status': 'skipped', 'summary': 'No randomized assignment or planned split available.'},
++])
++
++sys.path.insert(0, str(ROOT / 'checks'))
++from mix_shift import decompose
++parts = decompose(list(segments.values()))
++summary = {'decomposition': parts, 'interval_assumptions':
++           'Normal binomial intervals assuming independent searches, at most one counted click per search; fixed observed weights. Not causal intervals.'}
++for label, value, se in [('observed', parts['delta'], parts['delta_se']),
++                         ('adjusted', parts['rate_effect'], parts['rate_effect_se'])]:
++    summary[label] = {'pp': value * 100, 'ci95_pp': [100 * (value - 1.96 * se), 100 * (value + 1.96 * se)]}
++summary['mobile_share'] = {}
++for period in ['before', 'after']:
++    selected = [c for c in cells if c['period'] == period]
++    summary['mobile_share'][period] = sum(c['n'] for c in selected if c['platform'] == 'mobile') / sum(c['n'] for c in selected)
++(OUT / 'results.json').write_text(json.dumps(summary, indent=2))
++(OUT / 'check-results.json').write_text(json.dumps(check_results, indent=2))
++print(json.dumps({'results': summary, 'checks': check_results}, indent=2))

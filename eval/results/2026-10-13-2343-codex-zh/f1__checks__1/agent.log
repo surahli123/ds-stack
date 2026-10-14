@@ -1,0 +1,987 @@
+Sanitized public log. Raw original retained locally; see sibling codex-report/TRACE-NOTES.md and artifact-manifest.json.
+ds-stack: <HOME>/.codex/skills is present, so this run is not isolated
+model: gpt-6-astra
+approval: on-request
+sandbox: workspace-write [workdir, /tmp, $TMPDIR]
+reasoning effort: none
+
+===== public user; source lines 14-50 =====
+user
+Overall search CTR dropped week over week right after ranker v2 rolled out to 100% of traffic on 2026-09-28.
+The PM thinks v2 caused the drop. Compare the week of 2026-09-21 to 2026-09-27 with the week of 2026-09-28 to 2026-10-04.
+How much of the change in overall CTR is attributable to v2, in percentage points? This decides whether we roll it back.
+
+The data is in warehouse.db (SQLite) in the current directory.
+
+End with exactly this readout as your final reply. Label each claim measured (computed from data here), inferred, or guess:
+
+```
+## Answer
+Headline: <signed number> <unit> (<95% interval>)   or   Headline: can't tell
+<one plain sentence: what happened and how big>
+- Observed: <signed number> <unit> (<95% interval>)
+- Adjusted: <signed number> <unit> (<95% interval>), holding <what> fixed   or   Adjusted: not computed (<reason>)
+- Causal effect: <signed number> <unit> (<95% interval>), from <design>   or   Causal effect: not identified (<what would identify it>)
+
+## What it means for <the decision>
+<one or two sentences that compare the interval with the smallest change that would alter the decision>
+
+## Why we believe it
+- Alternatives considered:
+  - <alternative>: ruled <in|out> by <evidence> [measured|inferred|guess]
+- Checks run:
+  - <check>: <pass|flag|fail|could not run|skipped> <one-line result or reason>
+
+## Caveats, and what would change the answer
+- <short list>
+
+## Provenance
+- Metric: <definition>, from <metrics.json | stated here [guess]>
+- Data: <tables or views>, through <last complete period>
+- Reconciled: <metric> vs <dashboard or source>, delta <x>   or   Reconciled: not done (<reason>)
+- Queries and checks: <where they are logged>
+```
+
+请用中文写结论。
+
+===== public codex; source lines 51-52 =====
+codex
+我会先核对 CTR 定义、上线前后的流量与实验分配，并运行适用的数据检查，判断能否把整体变化归因于 v2。
+
+===== public exec; source lines 53-65 =====
+exec
+/bin/zsh -lc "pwd; rg --files -g '"'!warehouse.db'"' -g '"'!warehouse.db-*'"'" in /private/tmp/ds-runs-2026-10-13-2343/3f94c24424/analysis
+ succeeded in 0ms:
+/private/tmp/ds-runs-2026-10-13-2343/3f94c24424/analysis
+CLAUDE.md
+AGENTS.md
+checks/mix_shift.py
+checks/fanout.py
+checks/srm.py
+checks/completeness.py
+checks/_common.py
+checks/run.py
+
+===== public exec; source lines 66-81 =====
+exec
+/bin/zsh -lc 'python3 checks/run.py --list' in /private/tmp/ds-runs-2026-10-13-2343/3f94c24424/analysis
+ succeeded in 0ms:
+completeness: before reporting any period: is it fully loaded?
+  spec: {"series": [{"period": "2026-10-01", "rows": 100}, ...], "target": "2026-10-07"}
+
+fanout: after any join: did it add or lose rows?
+  spec: {"left_rows": 1000, "joined_rows": 1000, "relationship": "many_to_one", "join": "left", "right_rows": 1000, "right_distinct_keys": 1000, "matched_left_rows": 1000}
+
+mix_shift: when a rate moved: how much is segment mix vs within-segment change?
+  spec: {"segments": [{"name": "web", "before": {"n": 800, "k": 240}, "after": {"n": 820, "k": 250}}, ...]}  (n = denominator, k = numerator)
+
+srm: before reading any experiment lift: is the assignment split as planned?
+  spec: {"observed": [10120, 9880], "expected_ratio": [0.5, 0.5]}
+
+===== public exec; source lines 82-625 =====
+exec
+/bin/zsh -lc 'cat AGENTS.md CLAUDE.md checks/run.py checks/completeness.py checks/mix_shift.py checks/srm.py checks/fanout.py checks/_common.py' in /private/tmp/ds-runs-2026-10-13-2343/3f94c24424/analysis
+ succeeded in 0ms:
+Before reporting any number computed from data, run the checks in checks/ that apply (python3 checks/run.py --list shows them) and include their results.
+Before reporting any number computed from data, run the checks in checks/ that apply (python3 checks/run.py --list shows them) and include their results.
+#!/usr/bin/env python3
+"""Run one ds-mode check on a JSON spec of aggregates.
+
+    python3 checks/run.py <check> --json '<spec>'
+    python3 checks/run.py <check> --file spec.json
+    python3 checks/run.py --list
+
+Prints one JSON line and appends it to .ds-checks.log in the working directory.
+Add "from": "q3" (or a list of query ids) to the spec to record which logged
+queries the aggregates came from; the readout cites the printed id, such as
+[check:mix_shift#1].
+Statuses: pass; flag (a finding the answer must report, not a data defect);
+fail (a data or query defect); could_not_run.
+Exit code: 0 pass, 1 flag or fail, 2 could not run, 3 usage error.
+"""
+
+import argparse
+import importlib
+import json
+import os
+import re
+import sys
+
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+
+from _common import COULD_NOT_RUN, Result, emit  # noqa: E402
+
+QUERY_ID = re.compile(r"^q\d+$")
+
+CHECKS = ("completeness", "fanout", "mix_shift", "srm")
+
+USAGE = {
+    "completeness": ("before reporting any period: is it fully loaded?",
+                     '{"series": [{"period": "2026-10-01", "rows": 100}, ...], "target": "2026-10-07"}'),
+    "fanout": ("after any join: did it add or lose rows?",
+               '{"left_rows": 1000, "joined_rows": 1000, "relationship": "many_to_one", "join": "left", '
+               '"right_rows": 1000, "right_distinct_keys": 1000, "matched_left_rows": 1000}'),
+    "mix_shift": ("when a rate moved: how much is segment mix vs within-segment change?",
+                  '{"segments": [{"name": "web", "before": {"n": 800, "k": 240}, '
+                  '"after": {"n": 820, "k": 250}}, ...]}  (n = denominator, k = numerator)'),
+    "srm": ("before reading any experiment lift: is the assignment split as planned?",
+            '{"observed": [10120, 9880], "expected_ratio": [0.5, 0.5]}'),
+}
+
+
+def main(argv=None):
+    parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
+    parser.add_argument("check", nargs="?", choices=CHECKS)
+    source = parser.add_mutually_exclusive_group()
+    source.add_argument("--json", help="the spec as a JSON string")
+    source.add_argument("--file", help="path to a JSON spec")
+    parser.add_argument("--list", action="store_true", help="list checks, when to run them, and a spec example")
+    args = parser.parse_args(argv)
+
+    if args.list:
+        for name in CHECKS:
+            when, example = USAGE[name]
+            print(f"{name}: {when}\n  spec: {example}\n")
+        return 0
+    if not args.check or not (args.json or args.file):
+        parser.print_usage(sys.stderr)
+        return 3
+
+    try:
+        if args.file:
+            with open(args.file) as handle:
+                spec = json.load(handle)
+        else:
+            spec = json.loads(args.json)
+        if not isinstance(spec, dict):
+            raise ValueError("the spec must be a JSON object")
+    except (OSError, ValueError) as err:
+        return emit(Result(args.check, COULD_NOT_RUN, f"could not run: unreadable spec ({err})"))
+
+    sources = spec.pop("from", [])
+    if isinstance(sources, str):
+        sources = [sources]
+    if not isinstance(sources, list) or not all(isinstance(s, str) and QUERY_ID.match(s) for s in sources):
+        return emit(Result(args.check, COULD_NOT_RUN, "could not run: 'from' must be a query id like \"q3\" or a list of them"))
+
+    module = importlib.import_module(args.check)
+    return emit(module.run(spec), sources=sources)
+
+
+if __name__ == "__main__":
+    sys.exit(main())
+"""Is the period you are about to report fully loaded?
+
+Compares the target period's row count with the median of earlier periods.
+Daily ISO dates are compared with the same weekday (the last `baseline_periods`
+same-weekday days, default 4), so a normal Saturday isn't read as a partial
+load. With under three weeks of history it falls back to the trailing 7 days
+and says so. Any other period labels use the trailing `baseline_periods`
+(default 7).
+Fails when the target is missing, below `min_ratio` of that median (default
+0.9: late or partial data), or above `max_ratio` when given (double loads).
+"""
+
+import statistics
+from datetime import date
+
+from _common import COULD_NOT_RUN, FAIL, PASS, Result, SpecError, require
+
+NAME = "completeness"
+DEFAULT_MIN_RATIO = 0.9
+MIN_BASELINE = 3
+
+
+def _as_date(label):
+    try:
+        return date.fromisoformat(label)
+    except ValueError:
+        return None
+
+
+def run(spec):
+    try:
+        series = require(spec, "series", list)
+        target = require(spec, "target", str)
+        min_ratio = float(spec.get("min_ratio", DEFAULT_MIN_RATIO))
+        max_ratio = spec.get("max_ratio")
+        max_ratio = None if max_ratio is None else float(max_ratio)
+        rows = {}
+        for point in series:
+            period = require(point, "period", str)
+            if period in rows:
+                raise SpecError(f"period '{period}' appears twice")
+            rows[period] = require(point, "rows", int)
+    except (SpecError, TypeError, ValueError) as err:
+        return Result(NAME, COULD_NOT_RUN, f"could not run: {err}")
+
+    dates = {p: _as_date(p) for p in list(rows) + [target]}
+    daily = all(dates.values())
+    if daily:
+        prior = sorted((p for p in rows if dates[p] < dates[target]), key=dates.get)
+        earlier, basis = [], "trailing days"
+        if spec.get("same_weekday", True):
+            earlier = [p for p in prior if dates[p].weekday() == dates[target].weekday()][-int(spec.get("baseline_periods", 4)):]
+            basis = "same weekday"
+        if len(earlier) < MIN_BASELINE:
+            earlier = prior[-int(spec.get("trailing_days", 7)):]
+            basis = "trailing days" if basis == "trailing days" else "trailing days (under 3 weeks of same-weekday history)"
+    else:
+        k = int(spec.get("baseline_periods", 7))
+        earlier = sorted(p for p in rows if p < target)[-k:]
+        basis = "trailing periods"
+    if len(earlier) < MIN_BASELINE:
+        return Result(NAME, COULD_NOT_RUN,
+                      f"could not run: need at least {MIN_BASELINE} earlier periods ({basis}) before {target}, got {len(earlier)}")
+    baseline = statistics.median(rows[p] for p in earlier)
+    details = {"target": target, "basis": basis, "baseline_periods": earlier, "baseline_median_rows": baseline,
+               "min_ratio": min_ratio, "max_ratio": max_ratio}
+    if target not in rows:
+        return Result(NAME, FAIL, f"{target} has no rows loaded", details)
+    if baseline == 0:
+        return Result(NAME, COULD_NOT_RUN, "could not run: baseline median is 0 rows", details)
+
+    ratio = rows[target] / baseline
+    details.update(target_rows=rows[target], ratio=round(ratio, 4))
+    summary = f"{target}: {rows[target]} rows = {ratio:.0%} of the {basis} median ({baseline:g})"
+    if ratio < min_ratio:
+        return Result(NAME, FAIL, "incomplete: " + summary, details)
+    if max_ratio is not None and ratio > max_ratio:
+        return Result(NAME, FAIL, "possible double load: " + summary, details)
+    return Result(NAME, PASS, summary, details)
+"""Split a rate change into within-segment (rate) and segment-mix effects.
+
+Kitagawa decomposition with midpoint weights, so the two effects sum exactly to
+the overall change:
+
+    delta = sum_s (r_after - r_before) * (w_after + w_before) / 2       # rate effect
+          + sum_s (w_after - w_before) * ((r_after + r_before) / 2 - r)  # mix effect
+
+where r is the midpoint of the overall rates. Subtracting r leaves the total
+unchanged (the weight changes sum to zero) and makes each segment's mix term
+readable: a segment adds to the drop only if its share grew and its rate is
+below average, or its share shrank and its rate is above average.
+
+Returns "flag" (a finding the answer must report, not a data defect) when mix
+accounts for at least `threshold` of the movement, measured as
+|mix| / (|mix| + |rate|) so offsetting effects (Simpson's paradox) still show,
+AND the mix effect is larger than noise: at least `min_effect_pp` and at least
+`z` standard errors of the overall change. Standard errors are binomial and
+assume independent units; clustered units (sessions within users) make them
+too small, so treat the intervals as a lower bound on the uncertainty.
+"""
+
+import math
+
+from _common import COULD_NOT_RUN, FLAG, PASS, Result, SpecError, require
+
+NAME = "mix_shift"
+DEFAULT_THRESHOLD = 0.3
+DEFAULT_MIN_EFFECT_PP = 0.1
+DEFAULT_Z = 2.0
+Z95 = 1.96
+
+
+def _counts(segment, side):
+    part = segment.get(side)
+    if not isinstance(part, dict):
+        raise SpecError(f"segment '{segment.get('name')}' is missing '{side}'")
+    n = require(part, "n", int)
+    k = require(part, "k", int)
+    if k > n:
+        raise SpecError(f"segment '{segment.get('name')}' {side}: k > n")
+    return n, k
+
+
+def _var(rate, n):
+    return rate * (1 - rate) / n
+
+
+def decompose(segments):
+    parsed = []
+    for segment in segments:
+        name = segment.get("name", f"segment_{len(parsed)}")
+        nb, kb = _counts(segment, "before")
+        na, ka = _counts(segment, "after")
+        if nb == 0 or na == 0:
+            raise SpecError(f"segment '{name}' has n = 0 on one side; drop it or merge it")
+        parsed.append((name, nb, kb, na, ka))
+    total_b = sum(p[1] for p in parsed)
+    total_a = sum(p[3] for p in parsed)
+    overall_b = sum(p[2] for p in parsed) / total_b
+    overall_a = sum(p[4] for p in parsed) / total_a
+    midpoint = (overall_a + overall_b) / 2
+
+    rate_effect = mix_effect = rate_var = 0.0
+    per_segment = []
+    for name, nb, kb, na, ka in parsed:
+        wb, wa = nb / total_b, na / total_a
+        rb, ra = kb / nb, ka / na
+        weight = (wa + wb) / 2
+        rate_part = (ra - rb) * weight
+        mix_part = (wa - wb) * ((ra + rb) / 2 - midpoint)
+        rate_effect += rate_part
+        mix_effect += mix_part
+        rate_var += weight ** 2 * (_var(rb, nb) + _var(ra, na))
+        per_segment.append({
+            "name": name, "n_before": nb, "n_after": na,
+            "weight_before": round(wb, 6), "weight_after": round(wa, 6),
+            "rate_before": round(rb, 6), "rate_after": round(ra, 6),
+            "rate_effect_pp": round(100 * rate_part, 4), "mix_effect_pp": round(100 * mix_part, 4),
+        })
+    delta_se = math.sqrt(_var(overall_b, total_b) + _var(overall_a, total_a))
+    return {
+        "overall_before": overall_b, "overall_after": overall_a, "delta": overall_a - overall_b,
+        "delta_se": delta_se, "rate_effect": rate_effect, "rate_effect_se": math.sqrt(rate_var),
+        "mix_effect": mix_effect, "segments": per_segment,
+        "smallest_segment_n": min(min(p[1], p[3]) for p in parsed),
+    }
+
+
+def _ci_pp(value, se):
+    return [round(100 * (value - Z95 * se), 3), round(100 * (value + Z95 * se), 3)]
+
+
+def run(spec):
+    try:
+        segments = require(spec, "segments", list)
+        if len(segments) < 2:
+            raise SpecError("needs at least 2 segments to separate mix from rate")
+        threshold = float(spec.get("threshold", DEFAULT_THRESHOLD))
+        min_effect_pp = float(spec.get("min_effect_pp", DEFAULT_MIN_EFFECT_PP))
+        z = float(spec.get("z", DEFAULT_Z))
+        parts = decompose(segments)
+    except (SpecError, TypeError, ValueError) as err:
+        return Result(NAME, COULD_NOT_RUN, f"could not run: {err}")
+
+    rate, mix, delta = parts["rate_effect"], parts["mix_effect"], parts["delta"]
+    moved = abs(rate) + abs(mix)
+    share = abs(mix) / moved if moved > 1e-12 else 0.0
+    noise_floor = max(min_effect_pp / 100, z * parts["delta_se"])
+    details = {
+        "overall_before": round(parts["overall_before"], 6),
+        "overall_after": round(parts["overall_after"], 6),
+        "delta_pp": round(100 * delta, 4),
+        "delta_ci95_pp": _ci_pp(delta, parts["delta_se"]),
+        "rate_effect_pp": round(100 * rate, 4),
+        "rate_effect_ci95_pp": _ci_pp(rate, parts["rate_effect_se"]),
+        "mix_effect_pp": round(100 * mix, 4),
+        "mix_share": round(share, 4),
+        "noise_floor_pp": round(100 * noise_floor, 4),
+        "threshold": threshold, "min_effect_pp": min_effect_pp, "z": z,
+        "smallest_segment_n": parts["smallest_segment_n"],
+        "se_assumes_independent_units": True,
+        "segments": parts["segments"],
+    }
+    lo, hi = details["rate_effect_ci95_pp"]
+    summary = (f"overall change {100 * delta:+.2f} pp = within-segment {100 * rate:+.2f} pp "
+               f"(95% CI {lo:+.2f} to {hi:+.2f}) + mix {100 * mix:+.2f} pp (mix share {share:.0%})")
+    if share >= threshold and abs(mix) >= noise_floor:
+        return Result(NAME, FLAG, "mix-dominant: " + summary + "; report the mix shift as part of the answer", details)
+    if share >= threshold:
+        summary += f"; the mix effect is within noise (floor {100 * noise_floor:.2f} pp)"
+    return Result(NAME, PASS, summary, details)
+"""Sample ratio mismatch: are assignment counts consistent with the planned split?
+
+Chi-square goodness-of-fit with k - 1 degrees of freedom. Fails when the
+p-value is below `alpha` (default 0.001, the usual SRM bar). A failed SRM means
+the arms are not comparable, so any lift computed from them is untrustworthy.
+"""
+
+import math
+
+from _common import COULD_NOT_RUN, FAIL, PASS, Result, SpecError, require
+
+NAME = "srm"
+DEFAULT_ALPHA = 0.001
+
+
+def _gamma_q(a, x):
+    """Regularized upper incomplete gamma Q(a, x) (Numerical Recipes gammq)."""
+    if x <= 0:
+        return 1.0
+    log_prefix = -x + a * math.log(x) - math.lgamma(a)
+    if x < a + 1:
+        term = total = 1.0 / a
+        ap = a
+        for _ in range(10_000):
+            ap += 1
+            term *= x / ap
+            total += term
+            if abs(term) < abs(total) * 1e-15:
+                break
+        return max(0.0, 1.0 - total * math.exp(log_prefix))
+    b = x + 1 - a
+    c = 1 / 1e-300
+    d = 1 / b
+    h = d
+    for i in range(1, 10_000):
+        an = -i * (i - a)
+        b += 2
+        d = an * d + b
+        d = 1e-300 if abs(d) < 1e-300 else d
+        c = b + an / c
+        c = 1e-300 if abs(c) < 1e-300 else c
+        d = 1 / d
+        delta = d * c
+        h *= delta
+        if abs(delta - 1) < 1e-15:
+            break
+    return math.exp(log_prefix) * h
+
+
+def chi_square_p(observed, ratios):
+    total = sum(observed)
+    stat = sum((o - total * r) ** 2 / (total * r) for o, r in zip(observed, ratios))
+    return stat, _gamma_q((len(observed) - 1) / 2, stat / 2)
+
+
+def run(spec):
+    try:
+        observed = require(spec, "observed", list)
+        ratios = require(spec, "expected_ratio", list)
+        if len(observed) < 2 or len(observed) != len(ratios):
+            raise SpecError("'observed' and 'expected_ratio' need the same length, at least 2")
+        for count in observed:
+            if isinstance(count, bool) or not isinstance(count, int) or count < 0:
+                raise SpecError("'observed' must be non-negative integer counts")
+        ratios = [float(r) for r in ratios]
+        if any(r <= 0 for r in ratios) or abs(sum(ratios) - 1) > 1e-6:
+            raise SpecError("'expected_ratio' must be positive and sum to 1")
+        if sum(observed) == 0:
+            raise SpecError("no units observed")
+        alpha = float(spec.get("alpha", DEFAULT_ALPHA))
+    except (SpecError, TypeError, ValueError) as err:
+        return Result(NAME, COULD_NOT_RUN, f"could not run: {err}")
+
+    stat, p_value = chi_square_p(observed, ratios)
+    total = sum(observed)
+    shares = [round(o / total, 6) for o in observed]
+    details = {"observed": observed, "observed_share": shares, "expected_ratio": ratios,
+               "chi2": round(stat, 4), "p_value": p_value, "alpha": alpha}
+    summary = f"observed shares {shares} vs expected {ratios}: chi2 {stat:.2f}, p {p_value:.3g}"
+    if p_value < alpha:
+        return Result(NAME, FAIL, "sample ratio mismatch: " + summary
+                      + "; arms are not comparable until the cause is found", details)
+    return Result(NAME, PASS, summary, details)
+"""Catch joins that silently add or lose rows.
+
+Pass the row counts around a join. Fails when the right side has duplicate keys
+for a join meant to be many-to-one or one-to-one, when the left side has
+duplicate keys for a one-to-one join, when the join added rows, or
+when a left join lost rows. An inner join that drops rows passes with the drop
+reported, unless it exceeds `max_drop_fraction`.
+
+Row counts alone miss a fan-out that dropped rows cancel out. Pass
+`matched_left_rows` (left rows with at least one match) to catch it: a
+many-to-one or one-to-one join can't return more rows than that.
+"""
+
+from _common import COULD_NOT_RUN, FAIL, PASS, Result, SpecError, require
+
+NAME = "fanout"
+RELATIONSHIPS = {"many_to_one", "one_to_one"}
+JOINS = {"left", "inner"}
+
+
+def run(spec):
+    try:
+        left_rows = require(spec, "left_rows", int)
+        joined_rows = require(spec, "joined_rows", int)
+        relationship = spec.get("relationship", "many_to_one")
+        join = spec.get("join", "left")
+        if relationship not in RELATIONSHIPS:
+            raise SpecError(f"'relationship' must be one of {sorted(RELATIONSHIPS)}")
+        if join not in JOINS:
+            raise SpecError(f"'join' must be one of {sorted(JOINS)}")
+        right_rows = spec.get("right_rows")
+        right_keys = spec.get("right_distinct_keys")
+        if (right_rows is None) != (right_keys is None):
+            raise SpecError("pass both 'right_rows' and 'right_distinct_keys', or neither")
+        if right_rows is not None:
+            right_rows = require(spec, "right_rows", int)
+            right_keys = require(spec, "right_distinct_keys", int)
+        left_keys = spec.get("left_distinct_keys")
+        if left_keys is not None:
+            left_keys = require(spec, "left_distinct_keys", int)
+        matched = spec.get("matched_left_rows")
+        if matched is not None:
+            matched = require(spec, "matched_left_rows", int)
+            if matched > left_rows:
+                raise SpecError("'matched_left_rows' can't exceed 'left_rows'")
+        max_drop = spec.get("max_drop_fraction")
+    except (SpecError, TypeError, ValueError) as err:
+        return Result(NAME, COULD_NOT_RUN, f"could not run: {err}")
+
+    details = {"left_rows": left_rows, "joined_rows": joined_rows,
+               "relationship": relationship, "join": join}
+    problems = []
+    if right_rows is not None:
+        details.update(right_rows=right_rows, right_distinct_keys=right_keys)
+        if right_rows > right_keys:
+            problems.append(
+                f"right side has {right_rows - right_keys} duplicate-key rows "
+                f"({right_rows} rows for {right_keys} keys); dedupe or filter before joining"
+            )
+    if relationship == "one_to_one" and left_keys is not None and left_rows > left_keys:
+        details["left_distinct_keys"] = left_keys
+        problems.append(f"left side has {left_rows - left_keys} duplicate-key rows for a one-to-one join")
+    if joined_rows > left_rows:
+        problems.append(f"join added {joined_rows - left_rows} rows (fan-out)")
+    elif matched is not None:
+        expected = matched if join == "inner" else left_rows
+        details["matched_left_rows"] = matched
+        if joined_rows > expected:
+            problems.append(f"join returned {joined_rows} rows for {expected} expected; "
+                            "a fan-out is hidden by dropped rows")
+    dropped = left_rows - joined_rows if joined_rows < left_rows else 0
+    if dropped:
+        fraction = dropped / left_rows
+        details["dropped_rows"] = dropped
+        details["dropped_fraction"] = round(fraction, 6)
+        if join == "left":
+            problems.append(f"left join lost {dropped} rows; the query is not the join you think")
+        elif max_drop is not None and fraction > float(max_drop):
+            problems.append(f"inner join dropped {fraction:.1%} of rows (limit {float(max_drop):.1%})")
+
+    if problems:
+        return Result(NAME, FAIL, "; ".join(problems), details)
+    note = f"; inner join dropped {dropped} rows" if dropped else ""
+    return Result(NAME, PASS, f"row counts consistent with a {relationship} {join} join{note}", details)
+"""Shared result format and run log for every check.
+
+Every check returns a Result. `emit` prints it as one JSON line and appends it
+to .ds-checks.log in the working directory (or to $DS_CHECKS_LOG when set), so
+whether a check ran can be read from the log instead of trusted from the
+agent's own report. Each logged run gets an id (`mix_shift#2`: the second
+mix_shift in this log) for the readout to cite, and records the query ids its
+inputs came from (`from`), so a reviewer can trace a check back to its data.
+"""
+
+import json
+import os
+import time
+from dataclasses import asdict, dataclass, field
+
+PASS = "pass"
+FLAG = "flag"
+FAIL = "fail"
+COULD_NOT_RUN = "could_not_run"
+
+LOG_NAME = ".ds-checks.log"
+EXIT_CODES = {PASS: 0, FLAG: 1, FAIL: 1, COULD_NOT_RUN: 2}
+
+
+@dataclass
+class Result:
+    check: str
+    status: str
+    summary: str
+    details: dict = field(default_factory=dict)
+
+
+class SpecError(ValueError):
+    """The spec is missing or malformed, so the check cannot run."""
+
+
+def require(spec, key, kind):
+    if key not in spec:
+        raise SpecError(f"missing '{key}'")
+    value = spec[key]
+    if kind is int:
+        if isinstance(value, bool) or not isinstance(value, int) or value < 0:
+            raise SpecError(f"'{key}' must be a non-negative integer")
+    elif not isinstance(value, kind):
+        raise SpecError(f"'{key}' must be {kind.__name__}")
+    return value
+
+
+def log_path(log_dir=None):
+    return os.environ.get("DS_CHECKS_LOG") or os.path.join(log_dir or os.getcwd(), LOG_NAME)
+
+
+def read_log(path):
+    entries = []
+    try:
+        with open(path) as handle:
+            for line in handle:
+                try:
+                    entries.append(json.loads(line))
+                except ValueError:
+                    continue
+    except FileNotFoundError:
+        pass
+    return entries
+
+
+def emit(result, log_dir=None, sources=None):
+    path = log_path(log_dir)
+    runs = sum(1 for entry in read_log(path) if entry.get("check") == result.check)
+    payload = {"id": f"{result.check}#{runs + 1}", "from": list(sources or []), **asdict(result)}
+    print(json.dumps(payload, sort_keys=True))
+    with open(path, "a") as log:
+        log.write(json.dumps({"ts": round(time.time(), 3), **payload}, sort_keys=True) + "\n")
+    return EXIT_CODES[result.status]
+
+===== public exec; source lines 626-636 =====
+exec
+/bin/zsh -lc "python3 - <<'PY'
+import sqlite3
+c=sqlite3.connect('warehouse.db')
+for row in c.execute(\"select name, type, sql from sqlite_master where type in ('table','view')\"):
+ print(row)
+PY" in /private/tmp/ds-runs-2026-10-13-2343/3f94c24424/analysis
+ succeeded in 0ms:
+('search_daily', 'table', 'CREATE TABLE search_daily (date TEXT, platform TEXT, country TEXT, ranker TEXT, searches INTEGER, clicks INTEGER)')
+('release_log', 'table', 'CREATE TABLE release_log (date TEXT, change TEXT)')
+
+===== public exec; source lines 637-707 =====
+exec
+/bin/zsh -lc "python3 - <<'PY'
+import sqlite3
+c=sqlite3.connect('warehouse.db'); c.row_factory=sqlite3.Row
+for q in ['select * from release_log','select * from search_daily order by date,platform,country,ranker','select count(*) n from search_daily']:
+ print(q)
+ for r in c.execute(q): print(dict(r))
+PY" in /private/tmp/ds-runs-2026-10-13-2343/3f94c24424/analysis
+ succeeded in 0ms:
+select * from release_log
+{'date': '2026-09-28', 'change': 'ranker v2 rolled out to 100% of traffic'}
+select * from search_daily order by date,platform,country,ranker
+{'date': '2026-09-21', 'platform': 'desktop', 'country': 'US', 'ranker': 'v1', 'searches': 33328, 'clicks': 12369}
+{'date': '2026-09-21', 'platform': 'desktop', 'country': 'other', 'ranker': 'v1', 'searches': 26788, 'clicks': 9349}
+{'date': '2026-09-21', 'platform': 'mobile', 'country': 'US', 'ranker': 'v1', 'searches': 21956, 'clicks': 4967}
+{'date': '2026-09-21', 'platform': 'mobile', 'country': 'other', 'ranker': 'v1', 'searches': 18242, 'clicks': 3871}
+{'date': '2026-09-22', 'platform': 'desktop', 'country': 'US', 'ranker': 'v1', 'searches': 34312, 'clicks': 12822}
+{'date': '2026-09-22', 'platform': 'desktop', 'country': 'other', 'ranker': 'v1', 'searches': 27634, 'clicks': 9738}
+{'date': '2026-09-22', 'platform': 'mobile', 'country': 'US', 'ranker': 'v1', 'searches': 22938, 'clicks': 5267}
+{'date': '2026-09-22', 'platform': 'mobile', 'country': 'other', 'ranker': 'v1', 'searches': 18369, 'clicks': 3948}
+{'date': '2026-09-23', 'platform': 'desktop', 'country': 'US', 'ranker': 'v1', 'searches': 32195, 'clicks': 11822}
+{'date': '2026-09-23', 'platform': 'desktop', 'country': 'other', 'ranker': 'v1', 'searches': 26545, 'clicks': 9103}
+{'date': '2026-09-23', 'platform': 'mobile', 'country': 'US', 'ranker': 'v1', 'searches': 21669, 'clicks': 4875}
+{'date': '2026-09-23', 'platform': 'mobile', 'country': 'other', 'ranker': 'v1', 'searches': 17445, 'clicks': 3668}
+{'date': '2026-09-24', 'platform': 'desktop', 'country': 'US', 'ranker': 'v1', 'searches': 33530, 'clicks': 12384}
+{'date': '2026-09-24', 'platform': 'desktop', 'country': 'other', 'ranker': 'v1', 'searches': 26939, 'clicks': 9374}
+{'date': '2026-09-24', 'platform': 'mobile', 'country': 'US', 'ranker': 'v1', 'searches': 22459, 'clicks': 5104}
+{'date': '2026-09-24', 'platform': 'mobile', 'country': 'other', 'ranker': 'v1', 'searches': 18322, 'clicks': 3874}
+{'date': '2026-09-25', 'platform': 'desktop', 'country': 'US', 'ranker': 'v1', 'searches': 31605, 'clicks': 11804}
+{'date': '2026-09-25', 'platform': 'desktop', 'country': 'other', 'ranker': 'v1', 'searches': 26332, 'clicks': 9229}
+{'date': '2026-09-25', 'platform': 'mobile', 'country': 'US', 'ranker': 'v1', 'searches': 21111, 'clicks': 4793}
+{'date': '2026-09-25', 'platform': 'mobile', 'country': 'other', 'ranker': 'v1', 'searches': 17329, 'clicks': 3689}
+{'date': '2026-09-26', 'platform': 'desktop', 'country': 'US', 'ranker': 'v1', 'searches': 32388, 'clicks': 11920}
+{'date': '2026-09-26', 'platform': 'desktop', 'country': 'other', 'ranker': 'v1', 'searches': 26675, 'clicks': 9219}
+{'date': '2026-09-26', 'platform': 'mobile', 'country': 'US', 'ranker': 'v1', 'searches': 21792, 'clicks': 4896}
+{'date': '2026-09-26', 'platform': 'mobile', 'country': 'other', 'ranker': 'v1', 'searches': 17874, 'clicks': 3777}
+{'date': '2026-09-27', 'platform': 'desktop', 'country': 'US', 'ranker': 'v1', 'searches': 33447, 'clicks': 12436}
+{'date': '2026-09-27', 'platform': 'desktop', 'country': 'other', 'ranker': 'v1', 'searches': 27286, 'clicks': 9466}
+{'date': '2026-09-27', 'platform': 'mobile', 'country': 'US', 'ranker': 'v1', 'searches': 22587, 'clicks': 5116}
+{'date': '2026-09-27', 'platform': 'mobile', 'country': 'other', 'ranker': 'v1', 'searches': 18508, 'clicks': 3948}
+{'date': '2026-09-28', 'platform': 'desktop', 'country': 'US', 'ranker': 'v2', 'searches': 24539, 'clicks': 9131}
+{'date': '2026-09-28', 'platform': 'desktop', 'country': 'other', 'ranker': 'v2', 'searches': 19953, 'clicks': 6918}
+{'date': '2026-09-28', 'platform': 'mobile', 'country': 'US', 'ranker': 'v2', 'searches': 30390, 'clicks': 6907}
+{'date': '2026-09-28', 'platform': 'mobile', 'country': 'other', 'ranker': 'v2', 'searches': 24880, 'clicks': 5297}
+{'date': '2026-09-29', 'platform': 'desktop', 'country': 'US', 'ranker': 'v2', 'searches': 25368, 'clicks': 9492}
+{'date': '2026-09-29', 'platform': 'desktop', 'country': 'other', 'ranker': 'v2', 'searches': 20767, 'clicks': 7251}
+{'date': '2026-09-29', 'platform': 'mobile', 'country': 'US', 'ranker': 'v2', 'searches': 30719, 'clicks': 7041}
+{'date': '2026-09-29', 'platform': 'mobile', 'country': 'other', 'ranker': 'v2', 'searches': 25652, 'clicks': 5515}
+{'date': '2026-09-30', 'platform': 'desktop', 'country': 'US', 'ranker': 'v2', 'searches': 24612, 'clicks': 9060}
+{'date': '2026-09-30', 'platform': 'desktop', 'country': 'other', 'ranker': 'v2', 'searches': 19683, 'clicks': 6746}
+{'date': '2026-09-30', 'platform': 'mobile', 'country': 'US', 'ranker': 'v2', 'searches': 29751, 'clicks': 6692}
+{'date': '2026-09-30', 'platform': 'mobile', 'country': 'other', 'ranker': 'v2', 'searches': 24512, 'clicks': 5163}
+{'date': '2026-10-01', 'platform': 'desktop', 'country': 'US', 'ranker': 'v2', 'searches': 25210, 'clicks': 9353}
+{'date': '2026-10-01', 'platform': 'desktop', 'country': 'other', 'ranker': 'v2', 'searches': 20719, 'clicks': 7216}
+{'date': '2026-10-01', 'platform': 'mobile', 'country': 'US', 'ranker': 'v2', 'searches': 30902, 'clicks': 7027}
+{'date': '2026-10-01', 'platform': 'mobile', 'country': 'other', 'ranker': 'v2', 'searches': 25100, 'clicks': 5307}
+{'date': '2026-10-02', 'platform': 'desktop', 'country': 'US', 'ranker': 'v2', 'searches': 23995, 'clicks': 8906}
+{'date': '2026-10-02', 'platform': 'desktop', 'country': 'other', 'ranker': 'v2', 'searches': 19470, 'clicks': 6802}
+{'date': '2026-10-02', 'platform': 'mobile', 'country': 'US', 'ranker': 'v2', 'searches': 29410, 'clicks': 6714}
+{'date': '2026-10-02', 'platform': 'mobile', 'country': 'other', 'ranker': 'v2', 'searches': 23791, 'clicks': 5086}
+{'date': '2026-10-03', 'platform': 'desktop', 'country': 'US', 'ranker': 'v2', 'searches': 24461, 'clicks': 9004}
+{'date': '2026-10-03', 'platform': 'desktop', 'country': 'other', 'ranker': 'v2', 'searches': 19924, 'clicks': 6903}
+{'date': '2026-10-03', 'platform': 'mobile', 'country': 'US', 'ranker': 'v2', 'searches': 30006, 'clicks': 6768}
+{'date': '2026-10-03', 'platform': 'mobile', 'country': 'other', 'ranker': 'v2', 'searches': 24652, 'clicks': 5215}
+{'date': '2026-10-04', 'platform': 'desktop', 'country': 'US', 'ranker': 'v2', 'searches': 25081, 'clicks': 9278}
+{'date': '2026-10-04', 'platform': 'desktop', 'country': 'other', 'ranker': 'v2', 'searches': 20878, 'clicks': 7244}
+{'date': '2026-10-04', 'platform': 'mobile', 'country': 'US', 'ranker': 'v2', 'searches': 30593, 'clicks': 6954}
+{'date': '2026-10-04', 'platform': 'mobile', 'country': 'other', 'ranker': 'v2', 'searches': 25348, 'clicks': 5384}
+select count(*) n from search_daily
+{'n': 56}
+
+===== public codex; source lines 708-709 =====
+codex
+多大的 CTR 因果下降（百分点）会触发回滚？若已有决策阈值，请提供。
+
+===== public exec; source lines 710-911 =====
+exec
+/bin/zsh -lc "mkdir -p analysis_output
+cat > analysis_output/analyze.py <<'PY'
+import json, sqlite3, subprocess, math
+from pathlib import Path
+out=Path('analysis_output')
+c=sqlite3.connect('file:warehouse.db?mode=ro',uri=True); c.row_factory=sqlite3.Row
+queries=[]
+def query(sql):
+    rows=[dict(r) for r in c.execute(sql)]
+    ident=f'q{len(queries)+1}'
+    queries.append({'id':ident,'sql':sql,'rows':rows})
+    (out/'queries.json').write_text(json.dumps(queries,indent=2))
+    return ident, rows
+checks=[]
+def check(name,spec):
+    p=subprocess.run(['python3','checks/run.py',name,'--json',json.dumps(spec)],text=True,capture_output=True)
+    r=json.loads(p.stdout); checks.append(r)
+    return r
+q1,daily=query('SELECT date AS period, count(*) AS rows, sum(searches) AS searches, sum(clicks) AS clicks FROM search_daily GROUP BY date ORDER BY date')
+# Test both requested endpoints and every day with sufficient baseline history.
+for i,d in enumerate(daily):
+    if i>=3:
+        check('completeness',{'series':[{'period':x['period'],'rows':x['rows']} for x in daily], 'target':d['period'],'from':q1})
+for target in ['2026-09-27','2026-10-04']:
+    check('completeness',{'series':[{'period':x['period'],'rows':x['searches']} for x in daily], 'target':target,'from':q1})
+q2,segments=query(\"SELECT CASE WHEN date BETWEEN '2026-09-21' AND '2026-09-27' THEN 'before' ELSE 'after' END AS period, platform, country, sum(searches) AS n, sum(clicks) AS k FROM search_daily WHERE date BETWEEN '2026-09-21' AND '2026-10-04' GROUP BY period, platform, country ORDER BY platform,country,period\")
+s={}
+for r in segments:
+    name=r['platform']+'/'+r['country']; s.setdefault(name,{'name':name})[r['period']]={'n':r['n'],'k':r['k']}
+mix=check('mix_shift',{'segments':list(s.values()),'from':q2})
+q3,rankers=query('SELECT date, ranker, sum(searches) AS searches FROM search_daily GROUP BY date,ranker ORDER BY date,ranker')
+q4,releases=query('SELECT * FROM release_log ORDER BY date')
+q5,invalid=query('SELECT * FROM search_daily WHERE date IS NULL OR platform IS NULL OR country IS NULL OR ranker IS NULL OR searches IS NULL OR clicks IS NULL OR searches<=0 OR clicks<0 OR clicks>searches')
+q6,duplicates=query('SELECT date,platform,country,ranker,count(*) AS n FROM search_daily GROUP BY date,platform,country,ranker HAVING count(*)>1')
+q7,schema=query(\"SELECT name,type,sql FROM sqlite_master WHERE type IN ('table','view')\")
+res={'checks':checks,'mix':mix['details'],'totals':{},'integrity':{'invalid':len(invalid),'duplicate_keys':len(duplicates)},'interval_method':'Normal 95% binomial intervals assuming independent searches and at most one click per search; adjusted uses fixed midpoint segment weights. These assumptions are not verifiable from aggregate data.'}
+for period in ['before','after']:
+    n=sum(r['n'] for r in segments if r['period']==period); k=sum(r['k'] for r in segments if r['period']==period)
+    mobile=sum(r['n'] for r in segments if r['period']==period and r['platform']=='mobile')
+    res['totals'][period]={'searches':n,'clicks':k,'ctr':k/n,'mobile_share':mobile/n}
+(out/'results.json').write_text(json.dumps(res,indent=2))
+print(json.dumps({'mix':res['mix'],'totals':res['totals'],'integrity':res['integrity'],'completeness':[(x['details'].get('target'),x['status'],x['summary']) for x in checks if x['check']=='completeness']},indent=2))
+PY
+python3 analysis_output/analyze.py" in /private/tmp/ds-runs-2026-10-13-2343/3f94c24424/analysis
+ succeeded in 459ms:
+{
+  "mix": {
+    "delta_ci95_pp": [
+      -2.248,
+      -1.946
+    ],
+    "delta_pp": -2.0968,
+    "min_effect_pp": 0.1,
+    "mix_effect_pp": -2.0945,
+    "mix_share": 0.9989,
+    "noise_floor_pp": 0.1539,
+    "overall_after": 0.283243,
+    "overall_before": 0.304212,
+    "rate_effect_ci95_pp": [
+      -0.153,
+      0.148
+    ],
+    "rate_effect_pp": -0.0023,
+    "se_assumes_independent_units": true,
+    "segments": [
+      {
+        "mix_effect_pp": -0.635,
+        "n_after": 173266,
+        "n_before": 230805,
+        "name": "desktop/US",
+        "rate_after": 0.370667,
+        "rate_before": 0.37069,
+        "rate_effect_pp": -0.0006,
+        "weight_after": 0.247394,
+        "weight_before": 0.329908
+      },
+      {
+        "mix_effect_pp": -0.361,
+        "n_after": 141394,
+        "n_before": 188199,
+        "name": "desktop/other",
+        "rate_after": 0.347115,
+        "rate_before": 0.347919,
+        "rate_effect_pp": -0.0189,
+        "weight_after": 0.201886,
+        "weight_before": 0.269008
+      },
+      {
+        "mix_effect_pp": -0.5448,
+        "n_after": 211771,
+        "n_before": 154512,
+        "name": "mobile/US",
+        "rate_after": 0.227146,
+        "rate_before": 0.226636,
+        "rate_effect_pp": 0.0133,
+        "weight_after": 0.302372,
+        "weight_before": 0.220856
+      },
+      {
+        "mix_effect_pp": -0.5537,
+        "n_after": 173935,
+        "n_before": 126089,
+        "name": "mobile/other",
+        "rate_after": 0.212533,
+        "rate_before": 0.21235,
+        "rate_effect_pp": 0.0039,
+        "weight_after": 0.248349,
+        "weight_before": 0.180229
+      }
+    ],
+    "smallest_segment_n": 126089,
+    "threshold": 0.3,
+    "z": 2.0
+  },
+  "totals": {
+    "before": {
+      "searches": 699605,
+      "clicks": 212828,
+      "ctr": 0.3042116622951523,
+      "mobile_share": 0.4010848979066759
+    },
+    "after": {
+      "searches": 700366,
+      "clicks": 198374,
+      "ctr": 0.2832433327717222,
+      "mobile_share": 0.5507206232170037
+    }
+  },
+  "integrity": {
+    "invalid": 0,
+    "duplicate_keys": 0
+  },
+  "completeness": [
+    [
+      "2026-09-24",
+      "pass",
+      "2026-09-24: 4 rows = 100% of the trailing days (under 3 weeks of same-weekday history) median (4)"
+    ],
+    [
+      "2026-09-25",
+      "pass",
+      "2026-09-25: 4 rows = 100% of the trailing days (under 3 weeks of same-weekday history) median (4)"
+    ],
+    [
+      "2026-09-26",
+      "pass",
+      "2026-09-26: 4 rows = 100% of the trailing days (under 3 weeks of same-weekday history) median (4)"
+    ],
+    [
+      "2026-09-27",
+      "pass",
+      "2026-09-27: 4 rows = 100% of the trailing days (under 3 weeks of same-weekday history) median (4)"
+    ],
+    [
+      "2026-09-28",
+      "pass",
+      "2026-09-28: 4 rows = 100% of the trailing days (under 3 weeks of same-weekday history) median (4)"
+    ],
+    [
+      "2026-09-29",
+      "pass",
+      "2026-09-29: 4 rows = 100% of the trailing days (under 3 weeks of same-weekday history) median (4)"
+    ],
+    [
+      "2026-09-30",
+      "pass",
+      "2026-09-30: 4 rows = 100% of the trailing days (under 3 weeks of same-weekday history) median (4)"
+    ],
+    [
+      "2026-10-01",
+      "pass",
+      "2026-10-01: 4 rows = 100% of the trailing days (under 3 weeks of same-weekday history) median (4)"
+    ],
+    [
+      "2026-10-02",
+      "pass",
+      "2026-10-02: 4 rows = 100% of the trailing days (under 3 weeks of same-weekday history) median (4)"
+    ],
+    [
+      "2026-10-03",
+      "pass",
+      "2026-10-03: 4 rows = 100% of the trailing days (under 3 weeks of same-weekday history) median (4)"
+    ],
+    [
+      "2026-10-04",
+      "pass",
+      "2026-10-04: 4 rows = 100% of the trailing days (under 3 weeks of same-weekday history) median (4)"
+    ],
+    [
+      "2026-09-27",
+      "pass",
+      "2026-09-27: 101828 rows = 102% of the trailing days (under 3 weeks of same-weekday history) median (99521.5)"
+    ],
+    [
+      "2026-10-04",
+      "pass",
+      "2026-10-04: 101900 rows = 102% of the trailing days (under 3 weeks of same-weekday history) median (99762)"
+    ]
+  ]
+}
+
+===== public codex; source lines 912-913 =====
+codex
+检查显示，整体 CTR 的下降几乎全部可由平台与国家的流量占比变化解释；固定这些占比后，变化接近零。不过，版本切换与周次完全重合，数据中没有同期对照，因此不能把调整后的差值当作 v2 的因果效果，也不能据此证明 v2 无害。
+
+===== public exec; source lines 914-942 =====
+exec
+/bin/zsh -lc "python3 - <<'PY'
+from pathlib import Path
+p=Path('analysis_output/analyze.py')
+s=p.read_text().replace(\"    if i>=3:\\n        check('completeness',\", \"    if True:\\n        check('completeness',\")
+p.write_text(s)
+PY
+python3 analysis_output/analyze.py > analysis_output/run_output.json
+cat > analysis_output/methodology.md <<'EOF'
+# Search CTR week-over-week analysis
+
+Windows are inclusive: 2026-09-21–2026-09-27 and 2026-09-28–2026-10-04.
+Metric assumption (no metrics.json supplied): sum(clicks) / sum(searches), not mean of row CTRs.
+The source does not document whether clicks means searches with a click or all click events.
+
+Observed difference is after minus before. Adjusted difference uses platform × country strata and fixes each stratum's weight to the arithmetic mean of its two weekly search shares. Kitagawa decomposition: observed difference = adjusted within-stratum difference + mix difference. This is descriptive, not causal. Traffic mix itself might respond to the ranker.
+
+Intervals are 95% normal binomial intervals, conditional on independent binary search outcomes; adjusted variance sums stratum variances multiplied by squared fixed weights. No user/session identifiers are available to estimate clustering. No uncertainty interval for a causal effect is identified.
+
+All dates and expected platform × country cells are present. Count-based completeness checks pass when sufficient baseline exists; the first three dates cannot be tested due to insufficient history. There is no ETL watermark; load completeness is provisional. Search-volume completeness is also checked at both weekly endpoints. Integrity queries found no invalid counts or duplicate date/platform/country/ranker keys.
+
+No joins were used: fanout skipped. No experimental assignment or planned allocation is available: SRM skipped. Ranker is perfectly confounded with week. The only release-log entry is the rollout; this is not proof that nothing else changed. No dashboard or independent source is present: reconciliation not done. No rollback threshold was supplied at analysis time.
+
+Reproduce from the working directory: python3 analysis_output/analyze.py
+SQL and retrieved aggregates: analysis_output/queries.json
+Calculations, assumptions, and check outputs: analysis_output/results.json
+Built-in checks (including query IDs): .ds-checks.log
+EOF" in /private/tmp/ds-runs-2026-10-13-2343/3f94c24424/analysis
+ succeeded in 511ms:
+
+===== public codex; source lines 943-977 =====
+codex
+## Answer
+Headline: can't tell [inferred]  
+整体 CTR 从 30.421% 降至 28.324%，下降 2.097 个百分点，但无法确定其中多少由 v2 引起。[measured；归因判断 inferred]
+
+- Observed: −2.097 个百分点（95% 区间：−2.248 至 −1.946）[measured]
+- Adjusted: −0.002 个百分点（95% 区间：−0.153 至 +0.148），holding 平台 × 国家占比固定为两周占比的平均值。[measured]
+- Causal effect: not identified；需要同期随机分配的 v1/v2 对照，才能区分版本效果与时间变化。[inferred]
+
+## What it means for 回滚决策
+尚未提供触发回滚的最小下降阈值；调整后区间仍容许约 0.15 个百分点的下降，但它不是因果区间，不能用于确认 v2 安全。[inferred] 目前证据不足以仅凭这次周环比下降决定回滚，建议通过随机对照验证。[inferred]
+
+## Why we believe it
+- Alternatives considered:
+  - 流量结构变化：ruled in；移动端搜索占比从 40.108% 升至 55.072%，平台 × 国家构成变化的描述性贡献为 −2.0945 个百分点。[measured]
+  - 各细分人群 CTR 普遍恶化：ruled out 作为整体下降的主要描述性解释；固定占比后变化接近零。[inferred]
+  - 同期需求变化或 v2 引发的流量结构变化：无法 ruled in/out；版本与周次完全重合，没有同期对照。[inferred]
+- Checks run:
+  - completeness：pass；两周末的行数与搜索量检查通过；无加载水位，不能保证源数据完整。[measured；限制 inferred]
+  - completeness：could not run；最早几个日期缺少足够历史基线。[measured]
+  - mix_shift：flag；下降主要来自流量构成变化。[measured]
+  - 数据有效性与键唯一性：pass；未发现非法计数或重复键。[measured]
+  - fanout：skipped；未使用关联查询。[measured]
+  - srm：skipped；无实验分配记录或预定分流比例。[measured]
+
+## Caveats, and what would change the answer
+- 区间假设每次搜索是独立的二元点击事件；汇总数据无法验证该假设或处理用户内相关性，实际不确定性可能更大。[inferred]
+- 流量结构也可能受 v2 影响；调整可能移除其部分效果，不能把结构贡献直接认定为非 v2 原因。[inferred]
+- 随机对照数据、明确的回滚阈值及点击口径，会改变可支持的决策。[inferred]
+
+## Provenance
+- Metric: `SUM(clicks) / SUM(searches)`；from stated here [guess]，未提供 metrics.json。
+- Data: `warehouse.db` 的 `search_daily`、`release_log`；截至 2026-10-04，完整性仅通过计数检查，未获加载水位确认。[measured]
+- Reconciled: not done（未提供仪表盘或独立来源）。[measured]
+- Queries and checks: [查询与数据](analysis_output/queries.json)、[计算结果](analysis_output/results.json)、[检查日志](.ds-checks.log)、[方法与复现](analysis_output/methodology.md)。[measured]

@@ -1,0 +1,12 @@
+{
+  "fixture": "f5",
+  "arm": "full",
+  "run": 3,
+  "model": "sonnet",
+  "exit": 1,
+  "seconds": 11.1,
+  "cost_usd": null,
+  "turns": null,
+  "agent_cmd": "sh <HOME>/ds-stack/eval/agents/codex.sh {prompt_file}",
+  "transcript": false
+}

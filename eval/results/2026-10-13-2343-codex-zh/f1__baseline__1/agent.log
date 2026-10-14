@@ -1,0 +1,829 @@
+Sanitized public log. Raw original retained locally; see sibling codex-report/TRACE-NOTES.md and artifact-manifest.json.
+ds-stack: <HOME>/.codex/skills is present, so this run is not isolated
+model: gpt-6-astra
+approval: on-request
+sandbox: workspace-write [workdir, /tmp, $TMPDIR]
+reasoning effort: none
+
+===== public user; source lines 14-50 =====
+user
+Overall search CTR dropped week over week right after ranker v2 rolled out to 100% of traffic on 2026-09-28.
+The PM thinks v2 caused the drop. Compare the week of 2026-09-21 to 2026-09-27 with the week of 2026-09-28 to 2026-10-04.
+How much of the change in overall CTR is attributable to v2, in percentage points? This decides whether we roll it back.
+
+The data is in warehouse.db (SQLite) in the current directory.
+
+End with exactly this readout as your final reply. Label each claim measured (computed from data here), inferred, or guess:
+
+```
+## Answer
+Headline: <signed number> <unit> (<95% interval>)   or   Headline: can't tell
+<one plain sentence: what happened and how big>
+- Observed: <signed number> <unit> (<95% interval>)
+- Adjusted: <signed number> <unit> (<95% interval>), holding <what> fixed   or   Adjusted: not computed (<reason>)
+- Causal effect: <signed number> <unit> (<95% interval>), from <design>   or   Causal effect: not identified (<what would identify it>)
+
+## What it means for <the decision>
+<one or two sentences that compare the interval with the smallest change that would alter the decision>
+
+## Why we believe it
+- Alternatives considered:
+  - <alternative>: ruled <in|out> by <evidence> [measured|inferred|guess]
+- Checks run:
+  - <check>: <pass|flag|fail|could not run|skipped> <one-line result or reason>
+
+## Caveats, and what would change the answer
+- <short list>
+
+## Provenance
+- Metric: <definition>, from <metrics.json | stated here [guess]>
+- Data: <tables or views>, through <last complete period>
+- Reconciled: <metric> vs <dashboard or source>, delta <x>   or   Reconciled: not done (<reason>)
+- Queries and checks: <where they are logged>
+```
+
+请用中文写结论。
+
+===== public codex; source lines 51-52 =====
+codex
+我会先核对 CTR 定义、上线记录和数据分层，判断能否把同期变化与 v2 的因果影响区分开，并保存查询与检查记录。
+
+===== public exec; source lines 53-60 =====
+exec
+/bin/zsh -lc 'ls -la' in /private/tmp/ds-runs-2026-10-13-2343/d41702d767/analysis
+ succeeded in 0ms:
+total 24
+drwxr-xr-x  3 surahli  wheel     96 Oct 13 23:48 .
+drwxr-xr-x  5 surahli  wheel    160 Oct 13 23:48 ..
+-rw-r--r--  1 surahli  wheel  12288 Oct 13 23:48 warehouse.db
+
+===== public exec; source lines 61-63 =====
+exec
+/bin/zsh -lc 'find .. -name AGENTS.md -print' in /private/tmp/ds-runs-2026-10-13-2343/d41702d767/analysis
+ succeeded in 0ms:
+
+===== public exec; source lines 64-75 =====
+exec
+/bin/zsh -lc "python - <<'PY'
+import sqlite3
+c=sqlite3.connect('file:warehouse.db?mode=ro',uri=True)
+for row in c.execute(\"select name,sql from sqlite_master where type in ('table','view')\"):
+ print(row)
+ print(c.execute('select * from \"'+row[0]+'\" limit 15').description)
+ print(c.execute('select * from \"'+row[0]+'\" limit 15').fetchall())
+PY" in /private/tmp/ds-runs-2026-10-13-2343/d41702d767/analysis
+ exited 127 in 0ms:
+zsh:1: command not found: python
+
+===== public exec; source lines 76-92 =====
+exec
+/bin/zsh -lc "python3 - <<'PY'
+import sqlite3
+c=sqlite3.connect('file:warehouse.db?mode=ro',uri=True)
+for row in c.execute(\"select name,sql from sqlite_master where type in ('table','view')\"):
+ print(row)
+ print(c.execute('select * from \"'+row[0]+'\" limit 15').description)
+ print(c.execute('select * from \"'+row[0]+'\" limit 15').fetchall())
+PY" in /private/tmp/ds-runs-2026-10-13-2343/d41702d767/analysis
+ succeeded in 0ms:
+('search_daily', 'CREATE TABLE search_daily (date TEXT, platform TEXT, country TEXT, ranker TEXT, searches INTEGER, clicks INTEGER)')
+(('date', None, None, None, None, None, None), ('platform', None, None, None, None, None, None), ('country', None, None, None, None, None, None), ('ranker', None, None, None, None, None, None), ('searches', None, None, None, None, None, None), ('clicks', None, None, None, None, None, None))
+[('2026-09-21', 'desktop', 'US', 'v1', 33328, 12369), ('2026-09-21', 'desktop', 'other', 'v1', 26788, 9349), ('2026-09-21', 'mobile', 'US', 'v1', 21956, 4967), ('2026-09-21', 'mobile', 'other', 'v1', 18242, 3871), ('2026-09-22', 'desktop', 'US', 'v1', 34312, 12822), ('2026-09-22', 'desktop', 'other', 'v1', 27634, 9738), ('2026-09-22', 'mobile', 'US', 'v1', 22938, 5267), ('2026-09-22', 'mobile', 'other', 'v1', 18369, 3948), ('2026-09-23', 'desktop', 'US', 'v1', 32195, 11822), ('2026-09-23', 'desktop', 'other', 'v1', 26545, 9103), ('2026-09-23', 'mobile', 'US', 'v1', 21669, 4875), ('2026-09-23', 'mobile', 'other', 'v1', 17445, 3668), ('2026-09-24', 'desktop', 'US', 'v1', 33530, 12384), ('2026-09-24', 'desktop', 'other', 'v1', 26939, 9374), ('2026-09-24', 'mobile', 'US', 'v1', 22459, 5104)]
+('release_log', 'CREATE TABLE release_log (date TEXT, change TEXT)')
+(('date', None, None, None, None, None, None), ('change', None, None, None, None, None, None))
+[('2026-09-28', 'ranker v2 rolled out to 100% of traffic')]
+
+===== public codex; source lines 93-94 =====
+codex
+用于回滚决策的最小 CTR 损失是多少个百分点（例如下降 0.2 个百分点就回滚）？
+
+===== public exec; source lines 95-168 =====
+exec
+/bin/zsh -lc "python3 - <<'PY'
+import sqlite3,importlib.util
+c=sqlite3.connect('file:warehouse.db?mode=ro',uri=True)
+print('scipy available',bool(importlib.util.find_spec('scipy')))
+for q in [\"select min(date),max(date),count(*) from search_daily\", \"select ranker,min(date),max(date),count(*),sum(searches),sum(clicks) from search_daily group by ranker\", \"select * from search_daily order by date,platform,country\"]:
+ print(q)
+ for r in c.execute(q): print(r)
+PY" in /private/tmp/ds-runs-2026-10-13-2343/d41702d767/analysis
+ succeeded in 0ms:
+scipy available True
+select min(date),max(date),count(*) from search_daily
+('2026-09-21', '2026-10-04', 56)
+select ranker,min(date),max(date),count(*),sum(searches),sum(clicks) from search_daily group by ranker
+('v1', '2026-09-21', '2026-09-27', 28, 699605, 212828)
+('v2', '2026-09-28', '2026-10-04', 28, 700366, 198374)
+select * from search_daily order by date,platform,country
+('2026-09-21', 'desktop', 'US', 'v1', 33328, 12369)
+('2026-09-21', 'desktop', 'other', 'v1', 26788, 9349)
+('2026-09-21', 'mobile', 'US', 'v1', 21956, 4967)
+('2026-09-21', 'mobile', 'other', 'v1', 18242, 3871)
+('2026-09-22', 'desktop', 'US', 'v1', 34312, 12822)
+('2026-09-22', 'desktop', 'other', 'v1', 27634, 9738)
+('2026-09-22', 'mobile', 'US', 'v1', 22938, 5267)
+('2026-09-22', 'mobile', 'other', 'v1', 18369, 3948)
+('2026-09-23', 'desktop', 'US', 'v1', 32195, 11822)
+('2026-09-23', 'desktop', 'other', 'v1', 26545, 9103)
+('2026-09-23', 'mobile', 'US', 'v1', 21669, 4875)
+('2026-09-23', 'mobile', 'other', 'v1', 17445, 3668)
+('2026-09-24', 'desktop', 'US', 'v1', 33530, 12384)
+('2026-09-24', 'desktop', 'other', 'v1', 26939, 9374)
+('2026-09-24', 'mobile', 'US', 'v1', 22459, 5104)
+('2026-09-24', 'mobile', 'other', 'v1', 18322, 3874)
+('2026-09-25', 'desktop', 'US', 'v1', 31605, 11804)
+('2026-09-25', 'desktop', 'other', 'v1', 26332, 9229)
+('2026-09-25', 'mobile', 'US', 'v1', 21111, 4793)
+('2026-09-25', 'mobile', 'other', 'v1', 17329, 3689)
+('2026-09-26', 'desktop', 'US', 'v1', 32388, 11920)
+('2026-09-26', 'desktop', 'other', 'v1', 26675, 9219)
+('2026-09-26', 'mobile', 'US', 'v1', 21792, 4896)
+('2026-09-26', 'mobile', 'other', 'v1', 17874, 3777)
+('2026-09-27', 'desktop', 'US', 'v1', 33447, 12436)
+('2026-09-27', 'desktop', 'other', 'v1', 27286, 9466)
+('2026-09-27', 'mobile', 'US', 'v1', 22587, 5116)
+('2026-09-27', 'mobile', 'other', 'v1', 18508, 3948)
+('2026-09-28', 'desktop', 'US', 'v2', 24539, 9131)
+('2026-09-28', 'desktop', 'other', 'v2', 19953, 6918)
+('2026-09-28', 'mobile', 'US', 'v2', 30390, 6907)
+('2026-09-28', 'mobile', 'other', 'v2', 24880, 5297)
+('2026-09-29', 'desktop', 'US', 'v2', 25368, 9492)
+('2026-09-29', 'desktop', 'other', 'v2', 20767, 7251)
+('2026-09-29', 'mobile', 'US', 'v2', 30719, 7041)
+('2026-09-29', 'mobile', 'other', 'v2', 25652, 5515)
+('2026-09-30', 'desktop', 'US', 'v2', 24612, 9060)
+('2026-09-30', 'desktop', 'other', 'v2', 19683, 6746)
+('2026-09-30', 'mobile', 'US', 'v2', 29751, 6692)
+('2026-09-30', 'mobile', 'other', 'v2', 24512, 5163)
+('2026-10-01', 'desktop', 'US', 'v2', 25210, 9353)
+('2026-10-01', 'desktop', 'other', 'v2', 20719, 7216)
+('2026-10-01', 'mobile', 'US', 'v2', 30902, 7027)
+('2026-10-01', 'mobile', 'other', 'v2', 25100, 5307)
+('2026-10-02', 'desktop', 'US', 'v2', 23995, 8906)
+('2026-10-02', 'desktop', 'other', 'v2', 19470, 6802)
+('2026-10-02', 'mobile', 'US', 'v2', 29410, 6714)
+('2026-10-02', 'mobile', 'other', 'v2', 23791, 5086)
+('2026-10-03', 'desktop', 'US', 'v2', 24461, 9004)
+('2026-10-03', 'desktop', 'other', 'v2', 19924, 6903)
+('2026-10-03', 'mobile', 'US', 'v2', 30006, 6768)
+('2026-10-03', 'mobile', 'other', 'v2', 24652, 5215)
+('2026-10-04', 'desktop', 'US', 'v2', 25081, 9278)
+('2026-10-04', 'desktop', 'other', 'v2', 20878, 7244)
+('2026-10-04', 'mobile', 'US', 'v2', 30593, 6954)
+('2026-10-04', 'mobile', 'other', 'v2', 25348, 5384)
+
+===== public exec; source lines 169-249 =====
+exec
+/bin/zsh -lc 'mkdir -p analysis_output' in /private/tmp/ds-runs-2026-10-13-2343/d41702d767/analysis
+ succeeded in 0ms:
+apply patch
+patch: completed
+/private/tmp/ds-runs-2026-10-13-2343/d41702d767/analysis/analysis_output/analyze.py
+diff --git a/analysis_output/analyze.py b/analysis_output/analyze.py
+new file mode 100644
+index 0000000000000000000000000000000000000000..21bb14fc2a782be1c5723711ff2ccbe07d1b5c7c
+--- /dev/null
++++ b/analysis_output/analyze.py
+@@ -0,0 +1,68 @@
++import sqlite3
++import json
++import math
++import hashlib
++from pathlib import Path
++from statistics import mean, stdev
++from scipy.stats import t
++
++ROOT = Path(__file__).resolve().parents[1]
++OUT = ROOT / 'analysis_output'
++db = sqlite3.connect(f'file:{ROOT / "warehouse.db"}?mode=ro', uri=True)
++db.row_factory = sqlite3.Row
++queries = []
++
++def query(sql):
++    rows = [dict(r) for r in db.execute(sql)]
++    queries.append({'sql': sql, 'rows': rows})
++    return rows
++
++schema = query("SELECT name, sql FROM sqlite_master WHERE type IN ('table','view')")
++releases = query('SELECT * FROM release_log ORDER BY date')
++rows = query("SELECT * FROM search_daily WHERE date BETWEEN '2026-09-21' AND '2026-10-04' ORDER BY date, platform, country")
++coverage = query('SELECT MIN(date) AS first_date, MAX(date) AS last_date, COUNT(*) AS rows FROM search_daily')
++duplicates = query('SELECT date, platform, country, ranker, COUNT(*) AS n FROM search_daily GROUP BY date, platform, country, ranker HAVING COUNT(*) > 1')
++invalid = query('SELECT * FROM search_daily WHERE date IS NULL OR platform IS NULL OR country IS NULL OR ranker IS NULL OR searches IS NULL OR clicks IS NULL OR searches <= 0 OR clicks < 0 OR clicks > searches OR searches != CAST(searches AS INTEGER) OR clicks != CAST(clicks AS INTEGER)')
++cells = query("SELECT CASE WHEN date < '2026-09-28' THEN 'pre' ELSE 'post' END AS period, platform, country, SUM(searches) AS n, SUM(clicks) AS c FROM search_daily WHERE date BETWEEN '2026-09-21' AND '2026-10-04' GROUP BY period, platform, country ORDER BY period, platform, country")
++groups = sorted({(r['platform'],r['country']) for r in rows})
++data = {period: {(r['platform'],r['country']):r for r in cells if r['period']==period} for period in ['pre','post']}
++totals = {k: {'searches':sum(x['n'] for x in v.values()), 'clicks':sum(x['c'] for x in v.values())} for k,v in data.items()}
++for v in totals.values():
++    v['ctr'] = v['clicks']/v['searches']
++w = {k:{g:data[k][g]['n']/totals[k]['searches'] for g in groups} for k in data}
++p = {k:{g:data[k][g]['c']/data[k][g]['n'] for g in groups} for k in data}
++
++def interval(estimate, variance):
++    se=math.sqrt(variance)
++    return {'pp':100*estimate, 'ci95_pp':[100*(estimate-1.959963984540054*se),100*(estimate+1.959963984540054*se)]}
++
++observed = interval(totals['post']['ctr']-totals['pre']['ctr'],sum(v['ctr']*(1-v['ctr'])/v['searches'] for v in totals.values()))
++adjusted = {}
++for reference in ['pre','post']:
++    weights=w[reference]
++    estimate=sum(weights[g]*(p['post'][g]-p['pre'][g]) for g in groups)
++    variance=sum(weights[g]**2*sum(p[k][g]*(1-p[k][g])/data[k][g]['n'] for k in data) for g in groups)
++    adjusted[reference]=interval(estimate,variance)
++composition=sum((w['post'][g]-w['pre'][g])*p['post'][g] for g in groups)
++strata = [{'platform':g[0],'country':g[1], 'pre_ctr_pct':100*p['pre'][g], 'post_ctr_pct':100*p['post'][g], 'pre_share_pct':100*w['pre'][g], 'post_share_pct':100*w['post'][g], 'difference_pp':100*(p['post'][g]-p['pre'][g])} for g in groups]
++
++# Sensitivity to the independence-of-searches assumption: pair matching weekdays,
++# treating seven day-pair differences as independent observations. This uses
++# equal day weights and is a slightly different estimand from weekly pooled CTR.
++dates=sorted({r['date'] for r in rows})
++daily={date:{(r['platform'],r['country']):r for r in rows if r['date']==date} for date in dates}
++paired={'observed':[], 'adjusted_pre_weights':[]}
++for d0,d1 in zip(dates[:7],dates[7:]):
++    a,b=daily[d0],daily[d1]
++    paired['observed'].append(sum(r['clicks'] for r in b.values())/sum(r['searches'] for r in b.values())-sum(r['clicks'] for r in a.values())/sum(r['searches'] for r in a.values()))
++    paired['adjusted_pre_weights'].append(sum(w['pre'][g]*(b[g]['clicks']/b[g]['searches']-a[g]['clicks']/a[g]['searches']) for g in groups))
++paired_result={}
++for name,values in paired.items():
++    est=mean(values)
++    half=t.ppf(.975,6)*stdev(values)/math.sqrt(7)
++    paired_result[name]={'pp':100*est,'ci95_pp':[100*(est-half),100*(est+half)],'daily_differences_pp':[100*v for v in values]}
++
++result={'database_sha256':hashlib.sha256((ROOT/'warehouse.db').read_bytes()).hexdigest(), 'totals':totals, 'observed':observed, 'adjusted':adjusted, 'strata':strata, 'composition_pp_using_post_rates':100*composition, 'decomposition_residual_pp':observed['pp']-adjusted['pre']['pp']-100*composition, 'paired_weekday_t_sensitivity':paired_result, 'checks':{'duplicate_keys':len(duplicates),'invalid_rows':len(invalid),'days':len(dates),'rows_per_day':{d:len(daily[d]) for d in dates},'complete_observed_grid':len(rows)==56 and all(len(daily[d])==4 for d in dates), 'pre_rankers':sorted({r['ranker'] for r in rows if r['date']<'2026-09-28'}),'post_rankers':sorted({r['ranker'] for r in rows if r['date']>='2026-09-28'})}, 'interval_method':'Independent binomial searches; observed weights fixed. Metric assumes clicks counts searches with a click. Day-pair t sensitivity assumes independent matched weekday pairs; only seven pairs.', 'identification':'Ranker and week perfectly confounded; no contemporaneous control or randomization. Adjusted difference is descriptive, not causal.'}
++(OUT/'queries_and_results.json').write_text(json.dumps(queries,indent=2)+'\n')
++(OUT/'results.json').write_text(json.dumps(result,indent=2)+'\n')
++print(json.dumps(result,indent=2))
+
+===== public exec; source lines 250-470 =====
+exec
+/bin/zsh -lc 'python3 analysis_output/analyze.py' in /private/tmp/ds-runs-2026-10-13-2343/d41702d767/analysis
+ succeeded in 727ms:
+{
+  "database_sha256": "0bdecb8e48abdadc8aee9a75592625e4041f17fa68037a4cc7afe0bb0a6a514c",
+  "totals": {
+    "pre": {
+      "searches": 699605,
+      "clicks": 212828,
+      "ctr": 0.3042116622951523
+    },
+    "post": {
+      "searches": 700366,
+      "clicks": 198374,
+      "ctr": 0.2832433327717222
+    }
+  },
+  "observed": {
+    "pp": -2.0968329523430085,
+    "ci95_pp": [
+      -2.24768960245538,
+      -1.945976302230637
+    ]
+  },
+  "adjusted": {
+    "pre": {
+      "pp": -0.007791114146689937,
+      "ci95_pp": [
+        -0.16334231433766347,
+        0.14776008604428362
+      ]
+    },
+    "post": {
+      "pp": 0.0031978284608751304,
+      "ci95_pp": [
+        -0.14598947576838878,
+        0.15238513269013904
+      ]
+    }
+  },
+  "strata": [
+    {
+      "platform": "desktop",
+      "country": "US",
+      "pre_ctr_pct": 37.06895431208162,
+      "post_ctr_pct": 37.06670668221116,
+      "pre_share_pct": 32.990759071190176,
+      "post_share_pct": 24.739350568131517,
+      "difference_pp": -0.00224762987046101
+    },
+    {
+      "platform": "desktop",
+      "country": "other",
+      "pre_ctr_pct": 34.79189581241133,
+      "post_ctr_pct": 34.71151534011344,
+      "pre_share_pct": 26.900751138142237,
+      "post_share_pct": 20.188587110168115,
+      "difference_pp": -0.0803804722978918
+    },
+    {
+      "platform": "mobile",
+      "country": "US",
+      "pre_ctr_pct": 22.66361188774982,
+      "post_ctr_pct": 22.71463042626233,
+      "pre_share_pct": 22.085605448788957,
+      "post_share_pct": 30.237190269087876,
+      "difference_pp": 0.05101853851251226
+    },
+    {
+      "platform": "mobile",
+      "country": "other",
+      "pre_ctr_pct": 21.235000674127004,
+      "post_ctr_pct": 21.253341765602094,
+      "pre_share_pct": 18.02288434187863,
+      "post_share_pct": 24.834872052612493,
+      "difference_pp": 0.01834109147508811
+    }
+  ],
+  "composition_pp_using_post_rates": -2.089041838196316,
+  "decomposition_residual_pp": -2.6645352591003757e-15,
+  "paired_weekday_t_sensitivity": {
+    "observed": {
+      "pp": -2.096155770628149,
+      "ci95_pp": [
+        -2.162668670686995,
+        -2.029642870569303
+      ],
+      "daily_differences_pp": [
+        -2.1399519288228532,
+        -2.1912071350895013,
+        -2.0485443424033303,
+        -2.0010870679766257,
+        -2.1677786210975434,
+        -2.036302187737066,
+        -2.0882191112701234
+      ]
+    },
+    "adjusted_pre_weights": {
+      "pp": -0.007100012404153795,
+      "ci95_pp": [
+        -0.062024714319588344,
+        0.04782468951128075
+      ],
+      "daily_differences_pp": [
+        0.006482262876243632,
+        -0.0789155155568874,
+        0.030638443173779707,
+        0.06608089818025421,
+        -0.06320436024569932,
+        0.04886062291494379,
+        -0.05964243817171118
+      ]
+    }
+  },
+  "checks": {
+    "duplicate_keys": 0,
+    "invalid_rows": 0,
+    "days": 14,
+    "rows_per_day": {
+      "2026-09-21": 4,
+      "2026-09-22": 4,
+      "2026-09-23": 4,
+      "2026-09-24": 4,
+      "2026-09-25": 4,
+      "2026-09-26": 4,
+      "2026-09-27": 4,
+      "2026-09-28": 4,
+      "2026-09-29": 4,
+      "2026-09-30": 4,
+      "2026-10-01": 4,
+      "2026-10-02": 4,
+      "2026-10-03": 4,
+      "2026-10-04": 4
+    },
+    "complete_observed_grid": true,
+    "pre_rankers": [
+      "v1"
+    ],
+    "post_rankers": [
+      "v2"
+    ]
+  },
+  "interval_method": "Independent binomial searches; observed weights fixed. Metric assumes clicks counts searches with a click. Day-pair t sensitivity assumes independent matched weekday pairs; only seven pairs.",
+  "identification": "Ranker and week perfectly confounded; no contemporaneous control or randomization. Adjusted difference is descriptive, not causal."
+}
+
+diff --git a/analysis_output/analyze.py b/analysis_output/analyze.py
+new file mode 100644
+index 0000000000000000000000000000000000000000..21bb14fc2a782be1c5723711ff2ccbe07d1b5c7c
+--- /dev/null
++++ b/analysis_output/analyze.py
+@@ -0,0 +1,68 @@
++import sqlite3
++import json
++import math
++import hashlib
++from pathlib import Path
++from statistics import mean, stdev
++from scipy.stats import t
++
++ROOT = Path(__file__).resolve().parents[1]
++OUT = ROOT / 'analysis_output'
++db = sqlite3.connect(f'file:{ROOT / "warehouse.db"}?mode=ro', uri=True)
++db.row_factory = sqlite3.Row
++queries = []
++
++def query(sql):
++    rows = [dict(r) for r in db.execute(sql)]
++    queries.append({'sql': sql, 'rows': rows})
++    return rows
++
++schema = query("SELECT name, sql FROM sqlite_master WHERE type IN ('table','view')")
++releases = query('SELECT * FROM release_log ORDER BY date')
++rows = query("SELECT * FROM search_daily WHERE date BETWEEN '2026-09-21' AND '2026-10-04' ORDER BY date, platform, country")
++coverage = query('SELECT MIN(date) AS first_date, MAX(date) AS last_date, COUNT(*) AS rows FROM search_daily')
++duplicates = query('SELECT date, platform, country, ranker, COUNT(*) AS n FROM search_daily GROUP BY date, platform, country, ranker HAVING COUNT(*) > 1')
++invalid = query('SELECT * FROM search_daily WHERE date IS NULL OR platform IS NULL OR country IS NULL OR ranker IS NULL OR searches IS NULL OR clicks IS NULL OR searches <= 0 OR clicks < 0 OR clicks > searches OR searches != CAST(searches AS INTEGER) OR clicks != CAST(clicks AS INTEGER)')
++cells = query("SELECT CASE WHEN date < '2026-09-28' THEN 'pre' ELSE 'post' END AS period, platform, country, SUM(searches) AS n, SUM(clicks) AS c FROM search_daily WHERE date BETWEEN '2026-09-21' AND '2026-10-04' GROUP BY period, platform, country ORDER BY period, platform, country")
++groups = sorted({(r['platform'],r['country']) for r in rows})
++data = {period: {(r['platform'],r['country']):r for r in cells if r['period']==period} for period in ['pre','post']}
++totals = {k: {'searches':sum(x['n'] for x in v.values()), 'clicks':sum(x['c'] for x in v.values())} for k,v in data.items()}
++for v in totals.values():
++    v['ctr'] = v['clicks']/v['searches']
++w = {k:{g:data[k][g]['n']/totals[k]['searches'] for g in groups} for k in data}
++p = {k:{g:data[k][g]['c']/data[k][g]['n'] for g in groups} for k in data}
++
++def interval(estimate, variance):
++    se=math.sqrt(variance)
++    return {'pp':100*estimate, 'ci95_pp':[100*(estimate-1.959963984540054*se),100*(estimate+1.959963984540054*se)]}
++
++observed = interval(totals['post']['ctr']-totals['pre']['ctr'],sum(v['ctr']*(1-v['ctr'])/v['searches'] for v in totals.values()))
++adjusted = {}
++for reference in ['pre','post']:
++    weights=w[reference]
++    estimate=sum(weights[g]*(p['post'][g]-p['pre'][g]) for g in groups)
++    variance=sum(weights[g]**2*sum(p[k][g]*(1-p[k][g])/data[k][g]['n'] for k in data) for g in groups)
++    adjusted[reference]=interval(estimate,variance)
++composition=sum((w['post'][g]-w['pre'][g])*p['post'][g] for g in groups)
++strata = [{'platform':g[0],'country':g[1], 'pre_ctr_pct':100*p['pre'][g], 'post_ctr_pct':100*p['post'][g], 'pre_share_pct':100*w['pre'][g], 'post_share_pct':100*w['post'][g], 'difference_pp':100*(p['post'][g]-p['pre'][g])} for g in groups]
++
++# Sensitivity to the independence-of-searches assumption: pair matching weekdays,
++# treating seven day-pair differences as independent observations. This uses
++# equal day weights and is a slightly different estimand from weekly pooled CTR.
++dates=sorted({r['date'] for r in rows})
++daily={date:{(r['platform'],r['country']):r for r in rows if r['date']==date} for date in dates}
++paired={'observed':[], 'adjusted_pre_weights':[]}
++for d0,d1 in zip(dates[:7],dates[7:]):
++    a,b=daily[d0],daily[d1]
++    paired['observed'].append(sum(r['clicks'] for r in b.values())/sum(r['searches'] for r in b.values())-sum(r['clicks'] for r in a.values())/sum(r['searches'] for r in a.values()))
++    paired['adjusted_pre_weights'].append(sum(w['pre'][g]*(b[g]['clicks']/b[g]['searches']-a[g]['clicks']/a[g]['searches']) for g in groups))
++paired_result={}
++for name,values in paired.items():
++    est=mean(values)
++    half=t.ppf(.975,6)*stdev(values)/math.sqrt(7)
++    paired_result[name]={'pp':100*est,'ci95_pp':[100*(est-half),100*(est+half)],'daily_differences_pp':[100*v for v in values]}
++
++result={'database_sha256':hashlib.sha256((ROOT/'warehouse.db').read_bytes()).hexdigest(), 'totals':totals, 'observed':observed, 'adjusted':adjusted, 'strata':strata, 'composition_pp_using_post_rates':100*composition, 'decomposition_residual_pp':observed['pp']-adjusted['pre']['pp']-100*composition, 'paired_weekday_t_sensitivity':paired_result, 'checks':{'duplicate_keys':len(duplicates),'invalid_rows':len(invalid),'days':len(dates),'rows_per_day':{d:len(daily[d]) for d in dates},'complete_observed_grid':len(rows)==56 and all(len(daily[d])==4 for d in dates), 'pre_rankers':sorted({r['ranker'] for r in rows if r['date']<'2026-09-28'}),'post_rankers':sorted({r['ranker'] for r in rows if r['date']>='2026-09-28'})}, 'interval_method':'Independent binomial searches; observed weights fixed. Metric assumes clicks counts searches with a click. Day-pair t sensitivity assumes independent matched weekday pairs; only seven pairs.', 'identification':'Ranker and week perfectly confounded; no contemporaneous control or randomization. Adjusted difference is descriptive, not causal.'}
++(OUT/'queries_and_results.json').write_text(json.dumps(queries,indent=2)+'\n')
++(OUT/'results.json').write_text(json.dumps(result,indent=2)+'\n')
++print(json.dumps(result,indent=2))
+
+===== public codex; source lines 471-683 =====
+codex
+总体 CTR 确实下降了 2.097 个百分点，但移动端搜索占比从 40.11% 升至 55.07%；固定平台和国家构成后，差异仅为 −0.008 个百分点。关键限制是上线前全部为 v1、上线后全部为 v2，没有同期对照，因此无法把这个调整后差异认定为 v2 的因果影响。
+apply patch
+patch: completed
+/private/tmp/ds-runs-2026-10-13-2343/d41702d767/analysis/analysis_output/methods.md
+diff --git a/analysis_output/analyze.py b/analysis_output/analyze.py
+new file mode 100644
+index 0000000000000000000000000000000000000000..21bb14fc2a782be1c5723711ff2ccbe07d1b5c7c
+--- /dev/null
++++ b/analysis_output/analyze.py
+@@ -0,0 +1,68 @@
++import sqlite3
++import json
++import math
++import hashlib
++from pathlib import Path
++from statistics import mean, stdev
++from scipy.stats import t
++
++ROOT = Path(__file__).resolve().parents[1]
++OUT = ROOT / 'analysis_output'
++db = sqlite3.connect(f'file:{ROOT / "warehouse.db"}?mode=ro', uri=True)
++db.row_factory = sqlite3.Row
++queries = []
++
++def query(sql):
++    rows = [dict(r) for r in db.execute(sql)]
++    queries.append({'sql': sql, 'rows': rows})
++    return rows
++
++schema = query("SELECT name, sql FROM sqlite_master WHERE type IN ('table','view')")
++releases = query('SELECT * FROM release_log ORDER BY date')
++rows = query("SELECT * FROM search_daily WHERE date BETWEEN '2026-09-21' AND '2026-10-04' ORDER BY date, platform, country")
++coverage = query('SELECT MIN(date) AS first_date, MAX(date) AS last_date, COUNT(*) AS rows FROM search_daily')
++duplicates = query('SELECT date, platform, country, ranker, COUNT(*) AS n FROM search_daily GROUP BY date, platform, country, ranker HAVING COUNT(*) > 1')
++invalid = query('SELECT * FROM search_daily WHERE date IS NULL OR platform IS NULL OR country IS NULL OR ranker IS NULL OR searches IS NULL OR clicks IS NULL OR searches <= 0 OR clicks < 0 OR clicks > searches OR searches != CAST(searches AS INTEGER) OR clicks != CAST(clicks AS INTEGER)')
++cells = query("SELECT CASE WHEN date < '2026-09-28' THEN 'pre' ELSE 'post' END AS period, platform, country, SUM(searches) AS n, SUM(clicks) AS c FROM search_daily WHERE date BETWEEN '2026-09-21' AND '2026-10-04' GROUP BY period, platform, country ORDER BY period, platform, country")
++groups = sorted({(r['platform'],r['country']) for r in rows})
++data = {period: {(r['platform'],r['country']):r for r in cells if r['period']==period} for period in ['pre','post']}
++totals = {k: {'searches':sum(x['n'] for x in v.values()), 'clicks':sum(x['c'] for x in v.values())} for k,v in data.items()}
++for v in totals.values():
++    v['ctr'] = v['clicks']/v['searches']
++w = {k:{g:data[k][g]['n']/totals[k]['searches'] for g in groups} for k in data}
++p = {k:{g:data[k][g]['c']/data[k][g]['n'] for g in groups} for k in data}
++
++def interval(estimate, variance):
++    se=math.sqrt(variance)
++    return {'pp':100*estimate, 'ci95_pp':[100*(estimate-1.959963984540054*se),100*(estimate+1.959963984540054*se)]}
++
++observed = interval(totals['post']['ctr']-totals['pre']['ctr'],sum(v['ctr']*(1-v['ctr'])/v['searches'] for v in totals.values()))
++adjusted = {}
++for reference in ['pre','post']:
++    weights=w[reference]
++    estimate=sum(weights[g]*(p['post'][g]-p['pre'][g]) for g in groups)
++    variance=sum(weights[g]**2*sum(p[k][g]*(1-p[k][g])/data[k][g]['n'] for k in data) for g in groups)
++    adjusted[reference]=interval(estimate,variance)
++composition=sum((w['post'][g]-w['pre'][g])*p['post'][g] for g in groups)
++strata = [{'platform':g[0],'country':g[1], 'pre_ctr_pct':100*p['pre'][g], 'post_ctr_pct':100*p['post'][g], 'pre_share_pct':100*w['pre'][g], 'post_share_pct':100*w['post'][g], 'difference_pp':100*(p['post'][g]-p['pre'][g])} for g in groups]
++
++# Sensitivity to the independence-of-searches assumption: pair matching weekdays,
++# treating seven day-pair differences as independent observations. This uses
++# equal day weights and is a slightly different estimand from weekly pooled CTR.
++dates=sorted({r['date'] for r in rows})
++daily={date:{(r['platform'],r['country']):r for r in rows if r['date']==date} for date in dates}
++paired={'observed':[], 'adjusted_pre_weights':[]}
++for d0,d1 in zip(dates[:7],dates[7:]):
++    a,b=daily[d0],daily[d1]
++    paired['observed'].append(sum(r['clicks'] for r in b.values())/sum(r['searches'] for r in b.values())-sum(r['clicks'] for r in a.values())/sum(r['searches'] for r in a.values()))
++    paired['adjusted_pre_weights'].append(sum(w['pre'][g]*(b[g]['clicks']/b[g]['searches']-a[g]['clicks']/a[g]['searches']) for g in groups))
++paired_result={}
++for name,values in paired.items():
++    est=mean(values)
++    half=t.ppf(.975,6)*stdev(values)/math.sqrt(7)
++    paired_result[name]={'pp':100*est,'ci95_pp':[100*(est-half),100*(est+half)],'daily_differences_pp':[100*v for v in values]}
++
++result={'database_sha256':hashlib.sha256((ROOT/'warehouse.db').read_bytes()).hexdigest(), 'totals':totals, 'observed':observed, 'adjusted':adjusted, 'strata':strata, 'composition_pp_using_post_rates':100*composition, 'decomposition_residual_pp':observed['pp']-adjusted['pre']['pp']-100*composition, 'paired_weekday_t_sensitivity':paired_result, 'checks':{'duplicate_keys':len(duplicates),'invalid_rows':len(invalid),'days':len(dates),'rows_per_day':{d:len(daily[d]) for d in dates},'complete_observed_grid':len(rows)==56 and all(len(daily[d])==4 for d in dates), 'pre_rankers':sorted({r['ranker'] for r in rows if r['date']<'2026-09-28'}),'post_rankers':sorted({r['ranker'] for r in rows if r['date']>='2026-09-28'})}, 'interval_method':'Independent binomial searches; observed weights fixed. Metric assumes clicks counts searches with a click. Day-pair t sensitivity assumes independent matched weekday pairs; only seven pairs.', 'identification':'Ranker and week perfectly confounded; no contemporaneous control or randomization. Adjusted difference is descriptive, not causal.'}
++(OUT/'queries_and_results.json').write_text(json.dumps(queries,indent=2)+'\n')
++(OUT/'results.json').write_text(json.dumps(result,indent=2)+'\n')
++print(json.dumps(result,indent=2))
+diff --git a/analysis_output/methods.md b/analysis_output/methods.md
+new file mode 100644
+index 0000000000000000000000000000000000000000..acfa2881e34bfd7b864e142661b0d98f8a8a084e
+--- /dev/null
++++ b/analysis_output/methods.md
+@@ -0,0 +1,23 @@
++# CTR comparison and identification audit
++
++Comparison: 2026-09-21–2026-09-27 versus 2026-09-28–2026-10-04, inclusive. Read-only SQLite connection; no source data changed.
++
++No metrics.json, dashboard export, event-level data, experiment assignment, completion watermark, or rollback threshold was supplied. Define CTR provisionally as SUM(clicks)/SUM(searches), not the average of row CTRs. Whether clicks means distinct searches with a click is unverified. Observed date/segment coverage is complete through October 4; ingestion completeness cannot be independently verified.
++
++Let n[t,s] and c[t,s] denote searches and clicks for week t and platform-country stratum s; p=c/n, w=n/sum(n).
++
++- Observed change: sum(w[post]*p[post])-sum(w[pre]*p[pre]).
++- Adjusted change: sum(w[pre]*(p[post]-p[pre])). Baseline stratum weights are fixed.
++- Composition component: sum((w[post]-w[pre])*p[post]). Together with adjusted change this exactly reconstructs the observed change. This is an accounting decomposition, not a causal mediation analysis. Its value depends on the reference rates/weights.
++- Primary 95% intervals: estimate +/- 1.959964 standard errors. Observed variance is the sum of p_week*(1-p_week)/n_week. Adjusted variance is sum_s w[pre,s]^2 * sum_t p[t,s]*(1-p[t,s])/n[t,s]. Independent Bernoulli search outcomes and fixed weights are assumptions; repeat users, serial correlation, and multiple clicks cannot be assessed. For this database's fully enumerated rows the descriptive totals are exact; intervals quantify hypothetical sampling uncertainty under the stated model, not uncertainty about causal identification.
++- Sensitivity: repeat adjustment using post-period weights. Also pair each weekday with the same weekday in the following week; compute equal-day-weighted observed and baseline-stratum-weighted changes, then a t interval over seven independent pairs (6 degrees of freedom). These are slightly different estimands and cannot validate user-level independence or eliminate confounding.
++
++Interpretation: lower-CTR mobile searches gained share. The composition component is -2.089042 pp; the within-stratum component is -0.007791 pp. It is unsupported to call either component the effect of v2. The release may itself affect search frequency and hence composition. Calendar effects, query intent, acquisition mix within strata, and instrumentation changes are unmeasured. Four strata have point changes between -0.080380 and +0.051019 pp; these point estimates do not establish equivalence.
++
++The release log contains only the September 28 full rollout. All pre rows use v1, all post rows v2: version and period are perfectly confounded. No randomized holdout, overlap, untreated comparison group, or longer pre-trend exists here. A concurrent randomized v1/v2 comparison with stable logging and the intended search/user estimand would identify an effect under its design assumptions; a validated switchback is another option. An adjusted before/after difference would need untestable assumptions about absence of other within-stratum time changes and whether standardization conditions on treatment effects.
++
++Decision: the causal magnitude and interval are not identified, so neither rollback benefit nor v2 safety follows. No minimum material loss was supplied. For a purely descriptive benchmark, a loss threshold larger than 0.163342 pp lies outside the primary adjusted interval, while smaller thresholds may remain inside. This comparison cannot substitute for a causal decision interval.
++
++Checks: schema and all table contents inspected; 56 rows, 14 days, four strata per day, no duplicate keys or invalid/null counts/dimensions; both periods contain the same weekdays; no concurrent version overlap. Source reconciliation and ingestion-watermark validation could not run. The initial `python` executable was unavailable; rerun successfully with `python3`.
++
++Reproduce with `python3 analysis_output/analyze.py`. Exact SQL and result rows are in queries_and_results.json; numeric outputs, checks, interval sensitivity, and the database SHA-256 are in results.json.
+
+diff --git a/analysis_output/analyze.py b/analysis_output/analyze.py
+new file mode 100644
+index 0000000000000000000000000000000000000000..21bb14fc2a782be1c5723711ff2ccbe07d1b5c7c
+--- /dev/null
++++ b/analysis_output/analyze.py
+@@ -0,0 +1,68 @@
++import sqlite3
++import json
++import math
++import hashlib
++from pathlib import Path
++from statistics import mean, stdev
++from scipy.stats import t
++
++ROOT = Path(__file__).resolve().parents[1]
++OUT = ROOT / 'analysis_output'
++db = sqlite3.connect(f'file:{ROOT / "warehouse.db"}?mode=ro', uri=True)
++db.row_factory = sqlite3.Row
++queries = []
++
++def query(sql):
++    rows = [dict(r) for r in db.execute(sql)]
++    queries.append({'sql': sql, 'rows': rows})
++    return rows
++
++schema = query("SELECT name, sql FROM sqlite_master WHERE type IN ('table','view')")
++releases = query('SELECT * FROM release_log ORDER BY date')
++rows = query("SELECT * FROM search_daily WHERE date BETWEEN '2026-09-21' AND '2026-10-04' ORDER BY date, platform, country")
++coverage = query('SELECT MIN(date) AS first_date, MAX(date) AS last_date, COUNT(*) AS rows FROM search_daily')
++duplicates = query('SELECT date, platform, country, ranker, COUNT(*) AS n FROM search_daily GROUP BY date, platform, country, ranker HAVING COUNT(*) > 1')
++invalid = query('SELECT * FROM search_daily WHERE date IS NULL OR platform IS NULL OR country IS NULL OR ranker IS NULL OR searches IS NULL OR clicks IS NULL OR searches <= 0 OR clicks < 0 OR clicks > searches OR searches != CAST(searches AS INTEGER) OR clicks != CAST(clicks AS INTEGER)')
++cells = query("SELECT CASE WHEN date < '2026-09-28' THEN 'pre' ELSE 'post' END AS period, platform, country, SUM(searches) AS n, SUM(clicks) AS c FROM search_daily WHERE date BETWEEN '2026-09-21' AND '2026-10-04' GROUP BY period, platform, country ORDER BY period, platform, country")
++groups = sorted({(r['platform'],r['country']) for r in rows})
++data = {period: {(r['platform'],r['country']):r for r in cells if r['period']==period} for period in ['pre','post']}
++totals = {k: {'searches':sum(x['n'] for x in v.values()), 'clicks':sum(x['c'] for x in v.values())} for k,v in data.items()}
++for v in totals.values():
++    v['ctr'] = v['clicks']/v['searches']
++w = {k:{g:data[k][g]['n']/totals[k]['searches'] for g in groups} for k in data}
++p = {k:{g:data[k][g]['c']/data[k][g]['n'] for g in groups} for k in data}
++
++def interval(estimate, variance):
++    se=math.sqrt(variance)
++    return {'pp':100*estimate, 'ci95_pp':[100*(estimate-1.959963984540054*se),100*(estimate+1.959963984540054*se)]}
++
++observed = interval(totals['post']['ctr']-totals['pre']['ctr'],sum(v['ctr']*(1-v['ctr'])/v['searches'] for v in totals.values()))
++adjusted = {}
++for reference in ['pre','post']:
++    weights=w[reference]
++    estimate=sum(weights[g]*(p['post'][g]-p['pre'][g]) for g in groups)
++    variance=sum(weights[g]**2*sum(p[k][g]*(1-p[k][g])/data[k][g]['n'] for k in data) for g in groups)
++    adjusted[reference]=interval(estimate,variance)
++composition=sum((w['post'][g]-w['pre'][g])*p['post'][g] for g in groups)
++strata = [{'platform':g[0],'country':g[1], 'pre_ctr_pct':100*p['pre'][g], 'post_ctr_pct':100*p['post'][g], 'pre_share_pct':100*w['pre'][g], 'post_share_pct':100*w['post'][g], 'difference_pp':100*(p['post'][g]-p['pre'][g])} for g in groups]
++
++# Sensitivity to the independence-of-searches assumption: pair matching weekdays,
++# treating seven day-pair differences as independent observations. This uses
++# equal day weights and is a slightly different estimand from weekly pooled CTR.
++dates=sorted({r['date'] for r in rows})
++daily={date:{(r['platform'],r['country']):r for r in rows if r['date']==date} for date in dates}
++paired={'observed':[], 'adjusted_pre_weights':[]}
++for d0,d1 in zip(dates[:7],dates[7:]):
++    a,b=daily[d0],daily[d1]
++    paired['observed'].append(sum(r['clicks'] for r in b.values())/sum(r['searches'] for r in b.values())-sum(r['clicks'] for r in a.values())/sum(r['searches'] for r in a.values()))
++    paired['adjusted_pre_weights'].append(sum(w['pre'][g]*(b[g]['clicks']/b[g]['searches']-a[g]['clicks']/a[g]['searches']) for g in groups))
++paired_result={}
++for name,values in paired.items():
++    est=mean(values)
++    half=t.ppf(.975,6)*stdev(values)/math.sqrt(7)
++    paired_result[name]={'pp':100*est,'ci95_pp':[100*(est-half),100*(est+half)],'daily_differences_pp':[100*v for v in values]}
++
++result={'database_sha256':hashlib.sha256((ROOT/'warehouse.db').read_bytes()).hexdigest(), 'totals':totals, 'observed':observed, 'adjusted':adjusted, 'strata':strata, 'composition_pp_using_post_rates':100*composition, 'decomposition_residual_pp':observed['pp']-adjusted['pre']['pp']-100*composition, 'paired_weekday_t_sensitivity':paired_result, 'checks':{'duplicate_keys':len(duplicates),'invalid_rows':len(invalid),'days':len(dates),'rows_per_day':{d:len(daily[d]) for d in dates},'complete_observed_grid':len(rows)==56 and all(len(daily[d])==4 for d in dates), 'pre_rankers':sorted({r['ranker'] for r in rows if r['date']<'2026-09-28'}),'post_rankers':sorted({r['ranker'] for r in rows if r['date']>='2026-09-28'})}, 'interval_method':'Independent binomial searches; observed weights fixed. Metric assumes clicks counts searches with a click. Day-pair t sensitivity assumes independent matched weekday pairs; only seven pairs.', 'identification':'Ranker and week perfectly confounded; no contemporaneous control or randomization. Adjusted difference is descriptive, not causal.'}
++(OUT/'queries_and_results.json').write_text(json.dumps(queries,indent=2)+'\n')
++(OUT/'results.json').write_text(json.dumps(result,indent=2)+'\n')
++print(json.dumps(result,indent=2))
+diff --git a/analysis_output/methods.md b/analysis_output/methods.md
+new file mode 100644
+index 0000000000000000000000000000000000000000..acfa2881e34bfd7b864e142661b0d98f8a8a084e
+--- /dev/null
++++ b/analysis_output/methods.md
+@@ -0,0 +1,23 @@
++# CTR comparison and identification audit
++
++Comparison: 2026-09-21–2026-09-27 versus 2026-09-28–2026-10-04, inclusive. Read-only SQLite connection; no source data changed.
++
++No metrics.json, dashboard export, event-level data, experiment assignment, completion watermark, or rollback threshold was supplied. Define CTR provisionally as SUM(clicks)/SUM(searches), not the average of row CTRs. Whether clicks means distinct searches with a click is unverified. Observed date/segment coverage is complete through October 4; ingestion completeness cannot be independently verified.
++
++Let n[t,s] and c[t,s] denote searches and clicks for week t and platform-country stratum s; p=c/n, w=n/sum(n).
++
++- Observed change: sum(w[post]*p[post])-sum(w[pre]*p[pre]).
++- Adjusted change: sum(w[pre]*(p[post]-p[pre])). Baseline stratum weights are fixed.
++- Composition component: sum((w[post]-w[pre])*p[post]). Together with adjusted change this exactly reconstructs the observed change. This is an accounting decomposition, not a causal mediation analysis. Its value depends on the reference rates/weights.
++- Primary 95% intervals: estimate +/- 1.959964 standard errors. Observed variance is the sum of p_week*(1-p_week)/n_week. Adjusted variance is sum_s w[pre,s]^2 * sum_t p[t,s]*(1-p[t,s])/n[t,s]. Independent Bernoulli search outcomes and fixed weights are assumptions; repeat users, serial correlation, and multiple clicks cannot be assessed. For this database's fully enumerated rows the descriptive totals are exact; intervals quantify hypothetical sampling uncertainty under the stated model, not uncertainty about causal identification.
++- Sensitivity: repeat adjustment using post-period weights. Also pair each weekday with the same weekday in the following week; compute equal-day-weighted observed and baseline-stratum-weighted changes, then a t interval over seven independent pairs (6 degrees of freedom). These are slightly different estimands and cannot validate user-level independence or eliminate confounding.
++
++Interpretation: lower-CTR mobile searches gained share. The composition component is -2.089042 pp; the within-stratum component is -0.007791 pp. It is unsupported to call either component the effect of v2. The release may itself affect search frequency and hence composition. Calendar effects, query intent, acquisition mix within strata, and instrumentation changes are unmeasured. Four strata have point changes between -0.080380 and +0.051019 pp; these point estimates do not establish equivalence.
++
++The release log contains only the September 28 full rollout. All pre rows use v1, all post rows v2: version and period are perfectly confounded. No randomized holdout, overlap, untreated comparison group, or longer pre-trend exists here. A concurrent randomized v1/v2 comparison with stable logging and the intended search/user estimand would identify an effect under its design assumptions; a validated switchback is another option. An adjusted before/after difference would need untestable assumptions about absence of other within-stratum time changes and whether standardization conditions on treatment effects.
++
++Decision: the causal magnitude and interval are not identified, so neither rollback benefit nor v2 safety follows. No minimum material loss was supplied. For a purely descriptive benchmark, a loss threshold larger than 0.163342 pp lies outside the primary adjusted interval, while smaller thresholds may remain inside. This comparison cannot substitute for a causal decision interval.
++
++Checks: schema and all table contents inspected; 56 rows, 14 days, four strata per day, no duplicate keys or invalid/null counts/dimensions; both periods contain the same weekdays; no concurrent version overlap. Source reconciliation and ingestion-watermark validation could not run. The initial `python` executable was unavailable; rerun successfully with `python3`.
++
++Reproduce with `python3 analysis_output/analyze.py`. Exact SQL and result rows are in queries_and_results.json; numeric outputs, checks, interval sensitivity, and the database SHA-256 are in results.json.
+
+===== public codex; source lines 684-820 =====
+codex
+## Answer
+Headline: can't tell
+
+总体 CTR 从 30.421% 降至 28.324%，下降主要对应流量构成变化，但无法确定其中多少由 v2 导致。[measured；inferred]
+- Observed: −2.097 个百分点（95% 区间：−2.248 至 −1.946）。[measured]
+- Adjusted: −0.008 个百分点（95% 区间：−0.163 至 +0.148），holding 上线前的平台×国家搜索占比 fixed。[measured]
+- Causal effect: not identified；需要同期随机分配的 v1/v2 对照实验，才能区分版本影响与时间变化。[inferred]
+
+## What it means for 回滚决策
+尚未提供会触发回滚的最小损失阈值；调整后区间包含零及最多约 0.163 个百分点的下降。[measured] 即使阈值大于这个数，该区间也不是因果区间，不能据此证明应回滚或 v2 无害。[inferred]
+
+## Why we believe it
+- Alternatives considered:
+  - 流量构成变化：ruled in；低 CTR 的移动端搜索占比从 40.11% 升至 55.07%，按上线后各层 CTR 分解，构成项为 −2.089 个百分点。[measured]
+  - 各层 CTR 普遍大幅下降：ruled out；四层变化介于 −0.080 至 +0.051 个百分点。[measured]
+  - 同期其他变化或 v2 自身改变流量构成：ruled in，仍属可能；数据没有同期对照，也未记录查询意图、获客或埋点变化。[inferred]
+- Checks run:
+  - 日期与分层覆盖：pass；14 天、每天四层，共 56 行，无重复键、空值或非法计数。[measured]
+  - 上线与对照：flag；前周全部 v1，后周全部 v2，版本与周完全重合。[measured]
+  - 权重敏感性：pass；改用后周权重，调整差异为 +0.003 个百分点。[measured]
+  - 同星期配对：pass；按天等权的调整差异为 −0.007 个百分点，95% 区间为 −0.062 至 +0.048。[measured]
+
+## Caveats, and what would change the answer
+- 主区间假设每次搜索是独立的二项结果、权重固定；重复用户、多次点击及时间相关性无法验证。[guess]
+- 构成分解是描述性计算；若 v2 改变搜索频次，固定构成可能移除部分真实影响。[inferred]
+- 随机对照、明确的点击口径及回滚阈值，会使因果判断与决策更可靠。[inferred]
+
+## Provenance
+- Metric: SUM(clicks) / SUM(searches)；未提供 metrics.json，stated here [guess]。
+- Data: warehouse.db 的 search_daily、release_log；所比较两周为 2026-09-21–09-27 与 2026-09-28–10-04，日期分层齐全至 10-04，但无入库完成标记。[measured]
+- Reconciled: not done（未提供 dashboard 或独立来源）。
+- Queries and checks: [查询及原始结果](analysis_output/queries_and_results.json)、[计算结果](analysis_output/results.json)、[复现脚本](analysis_output/analyze.py)、[方法与限制](analysis_output/methods.md)。
+diff --git a/analysis_output/analyze.py b/analysis_output/analyze.py
+new file mode 100644
+index 0000000000000000000000000000000000000000..21bb14fc2a782be1c5723711ff2ccbe07d1b5c7c
+--- /dev/null
++++ b/analysis_output/analyze.py
+@@ -0,0 +1,68 @@
++import sqlite3
++import json
++import math
++import hashlib
++from pathlib import Path
++from statistics import mean, stdev
++from scipy.stats import t
++
++ROOT = Path(__file__).resolve().parents[1]
++OUT = ROOT / 'analysis_output'
++db = sqlite3.connect(f'file:{ROOT / "warehouse.db"}?mode=ro', uri=True)
++db.row_factory = sqlite3.Row
++queries = []
++
++def query(sql):
++    rows = [dict(r) for r in db.execute(sql)]
++    queries.append({'sql': sql, 'rows': rows})
++    return rows
++
++schema = query("SELECT name, sql FROM sqlite_master WHERE type IN ('table','view')")
++releases = query('SELECT * FROM release_log ORDER BY date')
++rows = query("SELECT * FROM search_daily WHERE date BETWEEN '2026-09-21' AND '2026-10-04' ORDER BY date, platform, country")
++coverage = query('SELECT MIN(date) AS first_date, MAX(date) AS last_date, COUNT(*) AS rows FROM search_daily')
++duplicates = query('SELECT date, platform, country, ranker, COUNT(*) AS n FROM search_daily GROUP BY date, platform, country, ranker HAVING COUNT(*) > 1')
++invalid = query('SELECT * FROM search_daily WHERE date IS NULL OR platform IS NULL OR country IS NULL OR ranker IS NULL OR searches IS NULL OR clicks IS NULL OR searches <= 0 OR clicks < 0 OR clicks > searches OR searches != CAST(searches AS INTEGER) OR clicks != CAST(clicks AS INTEGER)')
++cells = query("SELECT CASE WHEN date < '2026-09-28' THEN 'pre' ELSE 'post' END AS period, platform, country, SUM(searches) AS n, SUM(clicks) AS c FROM search_daily WHERE date BETWEEN '2026-09-21' AND '2026-10-04' GROUP BY period, platform, country ORDER BY period, platform, country")
++groups = sorted({(r['platform'],r['country']) for r in rows})
++data = {period: {(r['platform'],r['country']):r for r in cells if r['period']==period} for period in ['pre','post']}
++totals = {k: {'searches':sum(x['n'] for x in v.values()), 'clicks':sum(x['c'] for x in v.values())} for k,v in data.items()}
++for v in totals.values():
++    v['ctr'] = v['clicks']/v['searches']
++w = {k:{g:data[k][g]['n']/totals[k]['searches'] for g in groups} for k in data}
++p = {k:{g:data[k][g]['c']/data[k][g]['n'] for g in groups} for k in data}
++
++def interval(estimate, variance):
++    se=math.sqrt(variance)
++    return {'pp':100*estimate, 'ci95_pp':[100*(estimate-1.959963984540054*se),100*(estimate+1.959963984540054*se)]}
++
++observed = interval(totals['post']['ctr']-totals['pre']['ctr'],sum(v['ctr']*(1-v['ctr'])/v['searches'] for v in totals.values()))
++adjusted = {}
++for reference in ['pre','post']:
++    weights=w[reference]
++    estimate=sum(weights[g]*(p['post'][g]-p['pre'][g]) for g in groups)
++    variance=sum(weights[g]**2*sum(p[k][g]*(1-p[k][g])/data[k][g]['n'] for k in data) for g in groups)
++    adjusted[reference]=interval(estimate,variance)
++composition=sum((w['post'][g]-w['pre'][g])*p['post'][g] for g in groups)
++strata = [{'platform':g[0],'country':g[1], 'pre_ctr_pct':100*p['pre'][g], 'post_ctr_pct':100*p['post'][g], 'pre_share_pct':100*w['pre'][g], 'post_share_pct':100*w['post'][g], 'difference_pp':100*(p['post'][g]-p['pre'][g])} for g in groups]
++
++# Sensitivity to the independence-of-searches assumption: pair matching weekdays,
++# treating seven day-pair differences as independent observations. This uses
++# equal day weights and is a slightly different estimand from weekly pooled CTR.
++dates=sorted({r['date'] for r in rows})
++daily={date:{(r['platform'],r['country']):r for r in rows if r['date']==date} for date in dates}
++paired={'observed':[], 'adjusted_pre_weights':[]}
++for d0,d1 in zip(dates[:7],dates[7:]):
++    a,b=daily[d0],daily[d1]
++    paired['observed'].append(sum(r['clicks'] for r in b.values())/sum(r['searches'] for r in b.values())-sum(r['clicks'] for r in a.values())/sum(r['searches'] for r in a.values()))
++    paired['adjusted_pre_weights'].append(sum(w['pre'][g]*(b[g]['clicks']/b[g]['searches']-a[g]['clicks']/a[g]['searches']) for g in groups))
++paired_result={}
++for name,values in paired.items():
++    est=mean(values)
++    half=t.ppf(.975,6)*stdev(values)/math.sqrt(7)
++    paired_result[name]={'pp':100*est,'ci95_pp':[100*(est-half),100*(est+half)],'daily_differences_pp':[100*v for v in values]}
++
++result={'database_sha256':hashlib.sha256((ROOT/'warehouse.db').read_bytes()).hexdigest(), 'totals':totals, 'observed':observed, 'adjusted':adjusted, 'strata':strata, 'composition_pp_using_post_rates':100*composition, 'decomposition_residual_pp':observed['pp']-adjusted['pre']['pp']-100*composition, 'paired_weekday_t_sensitivity':paired_result, 'checks':{'duplicate_keys':len(duplicates),'invalid_rows':len(invalid),'days':len(dates),'rows_per_day':{d:len(daily[d]) for d in dates},'complete_observed_grid':len(rows)==56 and all(len(daily[d])==4 for d in dates), 'pre_rankers':sorted({r['ranker'] for r in rows if r['date']<'2026-09-28'}),'post_rankers':sorted({r['ranker'] for r in rows if r['date']>='2026-09-28'})}, 'interval_method':'Independent binomial searches; observed weights fixed. Metric assumes clicks counts searches with a click. Day-pair t sensitivity assumes independent matched weekday pairs; only seven pairs.', 'identification':'Ranker and week perfectly confounded; no contemporaneous control or randomization. Adjusted difference is descriptive, not causal.'}
++(OUT/'queries_and_results.json').write_text(json.dumps(queries,indent=2)+'\n')
++(OUT/'results.json').write_text(json.dumps(result,indent=2)+'\n')
++print(json.dumps(result,indent=2))
+diff --git a/analysis_output/methods.md b/analysis_output/methods.md
+new file mode 100644
+index 0000000000000000000000000000000000000000..acfa2881e34bfd7b864e142661b0d98f8a8a084e
+--- /dev/null
++++ b/analysis_output/methods.md
+@@ -0,0 +1,23 @@
++# CTR comparison and identification audit
++
++Comparison: 2026-09-21–2026-09-27 versus 2026-09-28–2026-10-04, inclusive. Read-only SQLite connection; no source data changed.
++
++No metrics.json, dashboard export, event-level data, experiment assignment, completion watermark, or rollback threshold was supplied. Define CTR provisionally as SUM(clicks)/SUM(searches), not the average of row CTRs. Whether clicks means distinct searches with a click is unverified. Observed date/segment coverage is complete through October 4; ingestion completeness cannot be independently verified.
++
++Let n[t,s] and c[t,s] denote searches and clicks for week t and platform-country stratum s; p=c/n, w=n/sum(n).
++
++- Observed change: sum(w[post]*p[post])-sum(w[pre]*p[pre]).
++- Adjusted change: sum(w[pre]*(p[post]-p[pre])). Baseline stratum weights are fixed.
++- Composition component: sum((w[post]-w[pre])*p[post]). Together with adjusted change this exactly reconstructs the observed change. This is an accounting decomposition, not a causal mediation analysis. Its value depends on the reference rates/weights.
++- Primary 95% intervals: estimate +/- 1.959964 standard errors. Observed variance is the sum of p_week*(1-p_week)/n_week. Adjusted variance is sum_s w[pre,s]^2 * sum_t p[t,s]*(1-p[t,s])/n[t,s]. Independent Bernoulli search outcomes and fixed weights are assumptions; repeat users, serial correlation, and multiple clicks cannot be assessed. For this database's fully enumerated rows the descriptive totals are exact; intervals quantify hypothetical sampling uncertainty under the stated model, not uncertainty about causal identification.
++- Sensitivity: repeat adjustment using post-period weights. Also pair each weekday with the same weekday in the following week; compute equal-day-weighted observed and baseline-stratum-weighted changes, then a t interval over seven independent pairs (6 degrees of freedom). These are slightly different estimands and cannot validate user-level independence or eliminate confounding.
++
++Interpretation: lower-CTR mobile searches gained share. The composition component is -2.089042 pp; the within-stratum component is -0.007791 pp. It is unsupported to call either component the effect of v2. The release may itself affect search frequency and hence composition. Calendar effects, query intent, acquisition mix within strata, and instrumentation changes are unmeasured. Four strata have point changes between -0.080380 and +0.051019 pp; these point estimates do not establish equivalence.
++
++The release log contains only the September 28 full rollout. All pre rows use v1, all post rows v2: version and period are perfectly confounded. No randomized holdout, overlap, untreated comparison group, or longer pre-trend exists here. A concurrent randomized v1/v2 comparison with stable logging and the intended search/user estimand would identify an effect under its design assumptions; a validated switchback is another option. An adjusted before/after difference would need untestable assumptions about absence of other within-stratum time changes and whether standardization conditions on treatment effects.
++
++Decision: the causal magnitude and interval are not identified, so neither rollback benefit nor v2 safety follows. No minimum material loss was supplied. For a purely descriptive benchmark, a loss threshold larger than 0.163342 pp lies outside the primary adjusted interval, while smaller thresholds may remain inside. This comparison cannot substitute for a causal decision interval.
++
++Checks: schema and all table contents inspected; 56 rows, 14 days, four strata per day, no duplicate keys or invalid/null counts/dimensions; both periods contain the same weekdays; no concurrent version overlap. Source reconciliation and ingestion-watermark validation could not run. The initial `python` executable was unavailable; rerun successfully with `python3`.
++
++Reproduce with `python3 analysis_output/analyze.py`. Exact SQL and result rows are in queries_and_results.json; numeric outputs, checks, interval sensitivity, and the database SHA-256 are in results.json.

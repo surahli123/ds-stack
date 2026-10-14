@@ -1,0 +1,1095 @@
+Sanitized public log. Raw original retained locally; see sibling codex-report/TRACE-NOTES.md and artifact-manifest.json.
+ds-stack: <HOME>/.codex/skills is present, so this run is not isolated
+model: gpt-6-astra
+approval: on-request
+sandbox: workspace-write [workdir, /tmp, $TMPDIR]
+reasoning effort: none
+
+===== public user; source lines 14-50 =====
+user
+Overall search CTR dropped week over week right after ranker v2 rolled out to 100% of traffic on 2026-09-28.
+The PM thinks v2 caused the drop. Compare the week of 2026-09-21 to 2026-09-27 with the week of 2026-09-28 to 2026-10-04.
+How much of the change in overall CTR is attributable to v2, in percentage points? This decides whether we roll it back.
+
+The data is in warehouse.db (SQLite) in the current directory.
+
+End with exactly this readout as your final reply. Label each claim measured (computed from data here), inferred, or guess:
+
+```
+## Answer
+Headline: <signed number> <unit> (<95% interval>)   or   Headline: can't tell
+<one plain sentence: what happened and how big>
+- Observed: <signed number> <unit> (<95% interval>)
+- Adjusted: <signed number> <unit> (<95% interval>), holding <what> fixed   or   Adjusted: not computed (<reason>)
+- Causal effect: <signed number> <unit> (<95% interval>), from <design>   or   Causal effect: not identified (<what would identify it>)
+
+## What it means for <the decision>
+<one or two sentences that compare the interval with the smallest change that would alter the decision>
+
+## Why we believe it
+- Alternatives considered:
+  - <alternative>: ruled <in|out> by <evidence> [measured|inferred|guess]
+- Checks run:
+  - <check>: <pass|flag|fail|could not run|skipped> <one-line result or reason>
+
+## Caveats, and what would change the answer
+- <short list>
+
+## Provenance
+- Metric: <definition>, from <metrics.json | stated here [guess]>
+- Data: <tables or views>, through <last complete period>
+- Reconciled: <metric> vs <dashboard or source>, delta <x>   or   Reconciled: not done (<reason>)
+- Queries and checks: <where they are logged>
+```
+
+请用中文写结论。
+
+===== public codex; source lines 51-53 =====
+codex
+我会先核对 CTR 定义、数据完整性和 v2 的分流记录，再区分整体变化、流量结构变化与可识别的因果效应。所有查询和检查会保存到本地，便于复核回滚依据。
+
+===== public exec; source lines 54-61 =====
+exec
+/bin/zsh -lc 'ls -la' in /private/tmp/ds-runs-2026-10-13-2343/1c5bf337cb/analysis
+ succeeded in 0ms:
+total 24
+drwxr-xr-x  3 surahli  wheel     96 Oct 13 23:48 .
+drwxr-xr-x  5 surahli  wheel    160 Oct 13 23:48 ..
+-rw-r--r--  1 surahli  wheel  12288 Oct 13 23:48 warehouse.db
+
+===== public exec; source lines 62-64 =====
+exec
+/bin/zsh -lc "rg --files -g 'AGENTS.md' -g 'metrics.json' -g '*.md' -g '*.json'" in /private/tmp/ds-runs-2026-10-13-2343/1c5bf337cb/analysis
+ exited 1 in 0ms:
+
+===== public exec; source lines 65-76 =====
+exec
+/bin/zsh -lc "python - <<'PY'
+import sqlite3
+c=sqlite3.connect('file:warehouse.db?mode=ro',uri=True)
+for r in c.execute(\"select name,sql from sqlite_master where type in ('table','view')\"):
+ print(r)
+ print(c.execute('select * from \"'+r[0]+'\" limit 8').description)
+ print(c.execute('select * from \"'+r[0]+'\" limit 8').fetchall())
+PY" in /private/tmp/ds-runs-2026-10-13-2343/1c5bf337cb/analysis
+ exited 127 in 0ms:
+zsh:1: command not found: python
+
+===== public exec; source lines 77-93 =====
+exec
+/bin/zsh -lc "python3 - <<'PY'
+import sqlite3
+c=sqlite3.connect('file:warehouse.db?mode=ro',uri=True)
+for r in c.execute(\"select name,sql from sqlite_master where type in ('table','view')\").fetchall():
+ print(r)
+ print(c.execute('select * from \"'+r[0]+'\" limit 8').description)
+ print(c.execute('select * from \"'+r[0]+'\" limit 8').fetchall())
+PY" in /private/tmp/ds-runs-2026-10-13-2343/1c5bf337cb/analysis
+ succeeded in 0ms:
+('search_daily', 'CREATE TABLE search_daily (date TEXT, platform TEXT, country TEXT, ranker TEXT, searches INTEGER, clicks INTEGER)')
+(('date', None, None, None, None, None, None), ('platform', None, None, None, None, None, None), ('country', None, None, None, None, None, None), ('ranker', None, None, None, None, None, None), ('searches', None, None, None, None, None, None), ('clicks', None, None, None, None, None, None))
+[('2026-09-21', 'desktop', 'US', 'v1', 33328, 12369), ('2026-09-21', 'desktop', 'other', 'v1', 26788, 9349), ('2026-09-21', 'mobile', 'US', 'v1', 21956, 4967), ('2026-09-21', 'mobile', 'other', 'v1', 18242, 3871), ('2026-09-22', 'desktop', 'US', 'v1', 34312, 12822), ('2026-09-22', 'desktop', 'other', 'v1', 27634, 9738), ('2026-09-22', 'mobile', 'US', 'v1', 22938, 5267), ('2026-09-22', 'mobile', 'other', 'v1', 18369, 3948)]
+('release_log', 'CREATE TABLE release_log (date TEXT, change TEXT)')
+(('date', None, None, None, None, None, None), ('change', None, None, None, None, None, None))
+[('2026-09-28', 'ranker v2 rolled out to 100% of traffic')]
+
+===== public codex; source lines 94-95 =====
+codex
+回滚决策中，v2 导致 CTR 至少下降多少个百分点才会改变决策（最小重要变化）？
+
+===== public exec; source lines 96-164 =====
+exec
+/bin/zsh -lc "python3 - <<'PY'
+import sqlite3
+c=sqlite3.connect('file:warehouse.db?mode=ro',uri=True)
+for table in ['search_daily','release_log']:
+ print(table)
+ for r in c.execute('select * from '+table):print(r)
+PY" in /private/tmp/ds-runs-2026-10-13-2343/1c5bf337cb/analysis
+ succeeded in 0ms:
+search_daily
+('2026-09-21', 'desktop', 'US', 'v1', 33328, 12369)
+('2026-09-21', 'desktop', 'other', 'v1', 26788, 9349)
+('2026-09-21', 'mobile', 'US', 'v1', 21956, 4967)
+('2026-09-21', 'mobile', 'other', 'v1', 18242, 3871)
+('2026-09-22', 'desktop', 'US', 'v1', 34312, 12822)
+('2026-09-22', 'desktop', 'other', 'v1', 27634, 9738)
+('2026-09-22', 'mobile', 'US', 'v1', 22938, 5267)
+('2026-09-22', 'mobile', 'other', 'v1', 18369, 3948)
+('2026-09-23', 'desktop', 'US', 'v1', 32195, 11822)
+('2026-09-23', 'desktop', 'other', 'v1', 26545, 9103)
+('2026-09-23', 'mobile', 'US', 'v1', 21669, 4875)
+('2026-09-23', 'mobile', 'other', 'v1', 17445, 3668)
+('2026-09-24', 'desktop', 'US', 'v1', 33530, 12384)
+('2026-09-24', 'desktop', 'other', 'v1', 26939, 9374)
+('2026-09-24', 'mobile', 'US', 'v1', 22459, 5104)
+('2026-09-24', 'mobile', 'other', 'v1', 18322, 3874)
+('2026-09-25', 'desktop', 'US', 'v1', 31605, 11804)
+('2026-09-25', 'desktop', 'other', 'v1', 26332, 9229)
+('2026-09-25', 'mobile', 'US', 'v1', 21111, 4793)
+('2026-09-25', 'mobile', 'other', 'v1', 17329, 3689)
+('2026-09-26', 'desktop', 'US', 'v1', 32388, 11920)
+('2026-09-26', 'desktop', 'other', 'v1', 26675, 9219)
+('2026-09-26', 'mobile', 'US', 'v1', 21792, 4896)
+('2026-09-26', 'mobile', 'other', 'v1', 17874, 3777)
+('2026-09-27', 'desktop', 'US', 'v1', 33447, 12436)
+('2026-09-27', 'desktop', 'other', 'v1', 27286, 9466)
+('2026-09-27', 'mobile', 'US', 'v1', 22587, 5116)
+('2026-09-27', 'mobile', 'other', 'v1', 18508, 3948)
+('2026-09-28', 'desktop', 'US', 'v2', 24539, 9131)
+('2026-09-28', 'desktop', 'other', 'v2', 19953, 6918)
+('2026-09-28', 'mobile', 'US', 'v2', 30390, 6907)
+('2026-09-28', 'mobile', 'other', 'v2', 24880, 5297)
+('2026-09-29', 'desktop', 'US', 'v2', 25368, 9492)
+('2026-09-29', 'desktop', 'other', 'v2', 20767, 7251)
+('2026-09-29', 'mobile', 'US', 'v2', 30719, 7041)
+('2026-09-29', 'mobile', 'other', 'v2', 25652, 5515)
+('2026-09-30', 'desktop', 'US', 'v2', 24612, 9060)
+('2026-09-30', 'desktop', 'other', 'v2', 19683, 6746)
+('2026-09-30', 'mobile', 'US', 'v2', 29751, 6692)
+('2026-09-30', 'mobile', 'other', 'v2', 24512, 5163)
+('2026-10-01', 'desktop', 'US', 'v2', 25210, 9353)
+('2026-10-01', 'desktop', 'other', 'v2', 20719, 7216)
+('2026-10-01', 'mobile', 'US', 'v2', 30902, 7027)
+('2026-10-01', 'mobile', 'other', 'v2', 25100, 5307)
+('2026-10-02', 'desktop', 'US', 'v2', 23995, 8906)
+('2026-10-02', 'desktop', 'other', 'v2', 19470, 6802)
+('2026-10-02', 'mobile', 'US', 'v2', 29410, 6714)
+('2026-10-02', 'mobile', 'other', 'v2', 23791, 5086)
+('2026-10-03', 'desktop', 'US', 'v2', 24461, 9004)
+('2026-10-03', 'desktop', 'other', 'v2', 19924, 6903)
+('2026-10-03', 'mobile', 'US', 'v2', 30006, 6768)
+('2026-10-03', 'mobile', 'other', 'v2', 24652, 5215)
+('2026-10-04', 'desktop', 'US', 'v2', 25081, 9278)
+('2026-10-04', 'desktop', 'other', 'v2', 20878, 7244)
+('2026-10-04', 'mobile', 'US', 'v2', 30593, 6954)
+('2026-10-04', 'mobile', 'other', 'v2', 25348, 5384)
+release_log
+('2026-09-28', 'ranker v2 rolled out to 100% of traffic')
+
+===== public codex; source lines 165-244 =====
+codex
+数据中，前一周全部使用 v1，后一周全部使用 v2，没有同期对照，因此无法把版本影响与时间变化分开。同时，后一周移动端搜索占比明显上升；我会计算固定平台和国家构成后的 CTR 变化，检验整体下降有多少与流量构成有关。
+
+apply patch
+patch: completed
+/private/tmp/ds-runs-2026-10-13-2343/1c5bf337cb/analysis/analyze.py
+diff --git a/analyze.py b/analyze.py
+new file mode 100644
+index 0000000000000000000000000000000000000000..150a56a33a80a74c4c6f9aa04e8f476605cb084a
+--- /dev/null
++++ b/analyze.py
+@@ -0,0 +1,67 @@
++import json
++import math
++import sqlite3
++from pathlib import Path
++
++ROOT = Path(__file__).resolve().parent
++db = sqlite3.connect(f'file:{ROOT / "warehouse.db"}?mode=ro', uri=True)
++db.row_factory = sqlite3.Row
++log = []
++
++def query(name, sql):
++    rows = [dict(r) for r in db.execute(sql)]
++    log.append({'check': name, 'sql': sql, 'result': rows})
++    return rows
++
++query('schema', "SELECT name, sql FROM sqlite_master WHERE type IN ('table','view')")
++query('integrity', 'PRAGMA integrity_check')
++query('coverage', 'SELECT MIN(date) AS first_date, MAX(date) AS last_date, COUNT(*) AS rows, COUNT(DISTINCT date) AS days FROM search_daily')
++query('daily coverage and deployment', 'SELECT date, ranker, COUNT(*) AS cells, SUM(searches) AS searches, SUM(clicks) AS clicks FROM search_daily GROUP BY date, ranker ORDER BY date, ranker')
++query('duplicates', 'SELECT date, platform, country, ranker, COUNT(*) AS n FROM search_daily GROUP BY date, platform, country, ranker HAVING COUNT(*) > 1')
++query('invalid or missing fields', 'SELECT * FROM search_daily WHERE date IS NULL OR platform IS NULL OR country IS NULL OR ranker IS NULL OR searches IS NULL OR clicks IS NULL OR searches <= 0 OR clicks < 0 OR clicks > searches OR searches != CAST(searches AS INTEGER) OR clicks != CAST(clicks AS INTEGER)')
++query('release history', 'SELECT * FROM release_log ORDER BY date')
++week = "CASE WHEN date BETWEEN '2026-09-21' AND '2026-09-27' THEN 'pre' ELSE 'post' END"
++where = "date BETWEEN '2026-09-21' AND '2026-10-04'"
++totals = query('weekly totals', f'SELECT {week} AS week, SUM(searches) AS n, SUM(clicks) AS k FROM search_daily WHERE {where} GROUP BY week')
++cells = query('platform country weekly totals', f'SELECT {week} AS week, platform, country, SUM(searches) AS n, SUM(clicks) AS k FROM search_daily WHERE {where} GROUP BY week, platform, country')
++weekday_cells = query('weekday platform country totals', f"SELECT {week} AS week, strftime('%w',date) AS weekday, platform, country, SUM(searches) AS n, SUM(clicks) AS k FROM search_daily WHERE {where} GROUP BY week, weekday, platform, country")
++t = {r['week']: r for r in totals}
++for r in t.values():
++    r['rate'] = r['k'] / r['n']
++
++def interval(value, variance):
++    half = 1.959963984540054 * math.sqrt(variance)
++    return {'estimate_pp': 100 * value, 'ci95_pp': [100 * (value-half), 100 * (value+half)]}
++
++observed = interval(t['post']['rate'] - t['pre']['rate'], sum(r['rate'] * (1-r['rate']) / r['n'] for r in t.values()))
++
++def standardize(rows, keys):
++    groups = {}
++    for r in rows:
++        groups.setdefault(tuple(r[k] for k in keys), {})[r['week']] = r
++    delta = variance = mix = post_std = 0
++    details = []
++    for key, g in sorted(groups.items()):
++        a, b = g['pre'], g['post']
++        pa, pb = a['k']/a['n'], b['k']/b['n']
++        wa, wb = a['n']/t['pre']['n'], b['n']/t['post']['n']
++        delta += wa*(pb-pa)
++        post_std += wa*pb
++        variance += wa**2*(pa*(1-pa)/a['n']+pb*(1-pb)/b['n'])
++        mix += (wb-wa)*pb
++        details.append({'stratum': key, 'pre_weight': wa, 'post_weight': wb, 'pre_ctr_pct': 100*pa, 'post_ctr_pct': 100*pb, **interval(pb-pa, pa*(1-pa)/a['n']+pb*(1-pb)/b['n'])})
++    result = {**interval(delta, variance), 'post_standardized_ctr_pct': 100*post_std, 'composition_component_pp': 100*mix, 'decomposition_error_pp': observed['estimate_pp']-100*(delta+mix), 'strata': details}
++    return result
++
++result = {
++    'metric_assumption': 'CTR = SUM(clicks)/SUM(searches). No metrics.json; binary clicked-search semantics unverified.',
++    'interval_assumption': 'Normal 95% binomial intervals, independent searches and independent periods; standardization weights fixed at observed pre-week shares. Not causal intervals; user/session clustering unavailable.',
++    'totals': t,
++    'observed': observed,
++    'adjusted_platform_country': standardize(cells, ['platform', 'country']),
++    'sensitivity_weekday_platform_country': standardize(weekday_cells, ['weekday', 'platform', 'country']),
++    'causal_identification': 'Not identified: ranker and week perfectly confounded; no contemporaneous control or assignment records.',
++}
++(ROOT/'queries_and_checks.json').write_text(json.dumps(log, ensure_ascii=False, indent=2)+'\n')
++(ROOT/'results.json').write_text(json.dumps(result, ensure_ascii=False, indent=2)+'\n')
++print(json.dumps(result, ensure_ascii=False, indent=2))
+
+===== public exec; source lines 245-880 =====
+exec
+/bin/zsh -lc 'python3 analyze.py' in /private/tmp/ds-runs-2026-10-13-2343/1c5bf337cb/analysis
+ succeeded in 0ms:
+{
+  "metric_assumption": "CTR = SUM(clicks)/SUM(searches). No metrics.json; binary clicked-search semantics unverified.",
+  "interval_assumption": "Normal 95% binomial intervals, independent searches and independent periods; standardization weights fixed at observed pre-week shares. Not causal intervals; user/session clustering unavailable.",
+  "totals": {
+    "post": {
+      "week": "post",
+      "n": 700366,
+      "k": 198374,
+      "rate": 0.2832433327717222
+    },
+    "pre": {
+      "week": "pre",
+      "n": 699605,
+      "k": 212828,
+      "rate": 0.3042116622951523
+    }
+  },
+  "observed": {
+    "estimate_pp": -2.0968329523430085,
+    "ci95_pp": [
+      -2.24768960245538,
+      -1.945976302230637
+    ]
+  },
+  "adjusted_platform_country": {
+    "estimate_pp": -0.007791114146689937,
+    "ci95_pp": [
+      -0.16334231433766347,
+      0.14776008604428362
+    ],
+    "post_standardized_ctr_pct": 30.413375115368535,
+    "composition_component_pp": -2.089041838196316,
+    "decomposition_error_pp": -2.6645352591003757e-15,
+    "strata": [
+      {
+        "stratum": [
+          "desktop",
+          "US"
+        ],
+        "pre_weight": 0.32990759071190173,
+        "post_weight": 0.24739350568131518,
+        "pre_ctr_pct": 37.06895431208162,
+        "post_ctr_pct": 37.06670668221116,
+        "estimate_pp": -0.00224762987046101,
+        "ci95_pp": [
+          -0.3031545681494441,
+          0.29865930840852206
+        ]
+      },
+      {
+        "stratum": [
+          "desktop",
+          "other"
+        ],
+        "pre_weight": 0.26900751138142237,
+        "post_weight": 0.20188587110168113,
+        "pre_ctr_pct": 34.79189581241133,
+        "post_ctr_pct": 34.71151534011344,
+        "estimate_pp": -0.0803804722978918,
+        "ci95_pp": [
+          -0.4088300855568271,
+          0.24806914096104352
+        ]
+      },
+      {
+        "stratum": [
+          "mobile",
+          "US"
+        ],
+        "pre_weight": 0.22085605448788959,
+        "post_weight": 0.30237190269087877,
+        "pre_ctr_pct": 22.66361188774982,
+        "post_ctr_pct": 22.71463042626233,
+        "estimate_pp": 0.05101853851251226,
+        "ci95_pp": [
+          -0.22360908413769195,
+          0.3256461611627165
+        ]
+      },
+      {
+        "stratum": [
+          "mobile",
+          "other"
+        ],
+        "pre_weight": 0.1802288434187863,
+        "post_weight": 0.24834872052612492,
+        "pre_ctr_pct": 21.235000674127004,
+        "post_ctr_pct": 21.253341765602094,
+        "estimate_pp": 0.01834109147508811,
+        "ci95_pp": [
+          -0.27817230574228907,
+          0.3148544886924653
+        ]
+      }
+    ]
+  },
+  "sensitivity_weekday_platform_country": {
+    "estimate_pp": -0.007209675301690055,
+    "ci95_pp": [
+      -0.1627669387965063,
+      0.14834758819312618
+    ],
+    "post_standardized_ctr_pct": 30.413956554213534,
+    "composition_component_pp": -2.0896232770413157,
+    "decomposition_error_pp": -2.6645352591003757e-15,
+    "strata": [
+      {
+        "stratum": [
+          "0",
+          "desktop",
+          "US"
+        ],
+        "pre_weight": 0.04780840617205423,
+        "post_weight": 0.03581127581864339,
+        "pre_ctr_pct": 37.181212066852034,
+        "post_ctr_pct": 36.99214544874606,
+        "estimate_pp": -0.1890666181059708,
+        "ci95_pp": [
+          -0.9797923795700559,
+          0.6016591433581143
+        ]
+      },
+      {
+        "stratum": [
+          "0",
+          "desktop",
+          "other"
+        ],
+        "pre_weight": 0.039002008276098656,
+        "post_weight": 0.029810127847439766,
+        "pre_ctr_pct": 34.691783332111704,
+        "post_ctr_pct": 34.696810039275796,
+        "estimate_pp": 0.005026707164090816,
+        "ci95_pp": [
+          -0.8528019703688087,
+          0.8628553846969903
+        ]
+      },
+      {
+        "stratum": [
+          "0",
+          "mobile",
+          "US"
+        ],
+        "pre_weight": 0.03228536102514991,
+        "post_weight": 0.04368144655794256,
+        "pre_ctr_pct": 22.650197015982645,
+        "post_ctr_pct": 22.73069002713039,
+        "estimate_pp": 0.08049301114774476,
+        "ci95_pp": [
+          -0.6395838601064552,
+          0.8005698824019447
+        ]
+      },
+      {
+        "stratum": [
+          "0",
+          "mobile",
+          "other"
+        ],
+        "pre_weight": 0.02645492813802074,
+        "post_weight": 0.0361925050616392,
+        "pre_ctr_pct": 21.331316187594553,
+        "post_ctr_pct": 21.24033454315922,
+        "estimate_pp": -0.09098164443533119,
+        "ci95_pp": [
+          -0.8667557117932674,
+          0.6847924229226049
+        ]
+      },
+      {
+        "stratum": [
+          "1",
+          "desktop",
+          "US"
+        ],
+        "pre_weight": 0.04763831018932112,
+        "post_weight": 0.03503739473361071,
+        "pre_ctr_pct": 37.11293807009122,
+        "post_ctr_pct": 37.21015526305065,
+        "estimate_pp": 0.09721719295943676,
+        "ci95_pp": [
+          -0.6995061833710441,
+          0.8939405692899176
+        ]
+      },
+      {
+        "stratum": [
+          "1",
+          "desktop",
+          "other"
+        ],
+        "pre_weight": 0.03829017802903067,
+        "post_weight": 0.028489389833315722,
+        "pre_ctr_pct": 34.89995520382261,
+        "post_ctr_pct": 34.67147797323711,
+        "estimate_pp": -0.22847723058549985,
+        "ci95_pp": [
+          -1.1013375944835195,
+          0.6443831333125198
+        ]
+      },
+      {
+        "stratum": [
+          "1",
+          "mobile",
+          "US"
+        ],
+        "pre_weight": 0.03138342350326256,
+        "post_weight": 0.04339159810727534,
+        "pre_ctr_pct": 22.622517762798324,
+        "post_ctr_pct": 22.727871010200722,
+        "estimate_pp": 0.10535324740239826,
+        "ci95_pp": [
+          -0.6214636467858321,
+          0.8321701415906286
+        ]
+      },
+      {
+        "stratum": [
+          "1",
+          "mobile",
+          "other"
+        ],
+        "pre_weight": 0.026074713588382016,
+        "post_weight": 0.03552428301773644,
+        "pre_ctr_pct": 21.220260936300843,
+        "post_ctr_pct": 21.290192926045016,
+        "estimate_pp": 0.06993198974417081,
+        "ci95_pp": [
+          -0.7115870405119623,
+          0.8514510200003039
+        ]
+      },
+      {
+        "stratum": [
+          "2",
+          "desktop",
+          "US"
+        ],
+        "pre_weight": 0.049044818147383165,
+        "post_weight": 0.03622106155924188,
+        "pre_ctr_pct": 37.36885054791327,
+        "post_ctr_pct": 37.41721854304636,
+        "estimate_pp": 0.04836799513309176,
+        "ci95_pp": [
+          -0.7368883811958539,
+          0.8336243714620374
+        ]
+      },
+      {
+        "stratum": [
+          "2",
+          "desktop",
+          "other"
+        ],
+        "pre_weight": 0.03949943182224255,
+        "post_weight": 0.029651639285744883,
+        "pre_ctr_pct": 35.23919808931027,
+        "post_ctr_pct": 34.915972456300864,
+        "estimate_pp": -0.3232256330094052,
+        "ci95_pp": [
+          -1.1820629864761256,
+          0.5356117204573152
+        ]
+      },
+      {
+        "stratum": [
+          "2",
+          "mobile",
+          "US"
+        ],
+        "pre_weight": 0.03278707270531228,
+        "post_weight": 0.043861352492839456,
+        "pre_ctr_pct": 22.961897288342488,
+        "post_ctr_pct": 22.92066799049448,
+        "estimate_pp": -0.04122929784800833,
+        "ci95_pp": [
+          -0.76037936924211,
+          0.6779207735460934
+        ]
+      },
+      {
+        "stratum": [
+          "2",
+          "mobile",
+          "other"
+        ],
+        "pre_weight": 0.026256244595164416,
+        "post_weight": 0.036626563825199965,
+        "pre_ctr_pct": 21.4927323207578,
+        "post_ctr_pct": 21.49929830032746,
+        "estimate_pp": 0.00656597956966154,
+        "ci95_pp": [
+          -0.7716417075498369,
+          0.7847736666891598
+        ]
+      },
+      {
+        "stratum": [
+          "3",
+          "desktop",
+          "US"
+        ],
+        "pre_weight": 0.04601882490834114,
+        "post_weight": 0.0351416259498605,
+        "pre_ctr_pct": 36.71998757571052,
+        "post_ctr_pct": 36.81131155533886,
+        "estimate_pp": 0.09132397962834382,
+        "ci95_pp": [
+          -0.7088674152286858,
+          0.8915153744853734
+        ]
+      },
+      {
+        "stratum": [
+          "3",
+          "desktop",
+          "other"
+        ],
+        "pre_weight": 0.03794283917353364,
+        "post_weight": 0.028103877115679517,
+        "pre_ctr_pct": 34.292710491618,
+        "post_ctr_pct": 34.27323070670121,
+        "estimate_pp": -0.019479784916792697,
+        "ci95_pp": [
+          -0.8945389702203063,
+          0.8555794003867209
+        ]
+      },
+      {
+        "stratum": [
+          "3",
+          "mobile",
+          "US"
+        ],
+        "pre_weight": 0.030973192015494456,
+        "post_weight": 0.04247921800886965,
+        "pre_ctr_pct": 22.49757718399557,
+        "post_ctr_pct": 22.493361567678395,
+        "estimate_pp": -0.004215616317174153,
+        "ci95_pp": [
+          -0.7351144224756212,
+          0.7266831898412729
+        ]
+      },
+      {
+        "stratum": [
+          "3",
+          "mobile",
+          "other"
+        ],
+        "pre_weight": 0.024935499317472003,
+        "post_weight": 0.03499884346184709,
+        "pre_ctr_pct": 21.026081971911722,
+        "post_ctr_pct": 21.06315274151436,
+        "estimate_pp": 0.03707076960263733,
+        "ci95_pp": [
+          -0.7542693024477305,
+          0.8284108416530052
+        ]
+      },
+      {
+        "stratum": [
+          "4",
+          "desktop",
+          "US"
+        ],
+        "pre_weight": 0.04792704454656556,
+        "post_weight": 0.035995465228180694,
+        "pre_ctr_pct": 36.934088875633755,
+        "post_ctr_pct": 37.100357001190005,
+        "estimate_pp": 0.16626812555624593,
+        "ci95_pp": [
+          -0.6226873856607309,
+          0.9552236367732228
+        ]
+      },
+      {
+        "stratum": [
+          "4",
+          "desktop",
+          "other"
+        ],
+        "pre_weight": 0.03850601410796092,
+        "post_weight": 0.029583103691498445,
+        "pre_ctr_pct": 34.797134266305356,
+        "post_ctr_pct": 34.827935711182974,
+        "estimate_pp": 0.030801444877615047,
+        "ci95_pp": [
+          -0.8319715782074537,
+          0.8935744679626838
+        ]
+      },
+      {
+        "stratum": [
+          "4",
+          "mobile",
+          "US"
+        ],
+        "pre_weight": 0.032102400640361343,
+        "post_weight": 0.044122644445904,
+        "pre_ctr_pct": 22.725856004274455,
+        "post_ctr_pct": 22.739628503009516,
+        "estimate_pp": 0.01377249873505959,
+        "ci95_pp": [
+          -0.7064851535490111,
+          0.7340301510191303
+        ]
+      },
+      {
+        "stratum": [
+          "4",
+          "mobile",
+          "other"
+        ],
+        "pre_weight": 0.026189063828874867,
+        "post_weight": 0.035838404491365945,
+        "pre_ctr_pct": 21.143979914856455,
+        "post_ctr_pct": 21.143426294820717,
+        "estimate_pp": -0.0005536200357397769,
+        "ci95_pp": [
+          -0.7782117961590125,
+          0.7771045560875329
+        ]
+      },
+      {
+        "stratum": [
+          "5",
+          "desktop",
+          "US"
+        ],
+        "pre_weight": 0.04517549188470637,
+        "post_weight": 0.03426065799881776,
+        "pre_ctr_pct": 37.348520803670304,
+        "post_ctr_pct": 37.11606584705147,
+        "estimate_pp": -0.23245495661883275,
+        "ci95_pp": [
+          -1.0436704430804586,
+          0.5787605298427931
+        ]
+      },
+      {
+        "stratum": [
+          "5",
+          "desktop",
+          "other"
+        ],
+        "pre_weight": 0.03763838165822143,
+        "post_weight": 0.027799750416210953,
+        "pre_ctr_pct": 35.048610056205376,
+        "post_ctr_pct": 34.93579866461222,
+        "estimate_pp": -0.1128113915931539,
+        "ci95_pp": [
+          -0.9963169085644085,
+          0.7706941253781007
+        ]
+      },
+      {
+        "stratum": [
+          "5",
+          "mobile",
+          "US"
+        ],
+        "pre_weight": 0.030175599088056834,
+        "post_weight": 0.04199232972474392,
+        "pre_ctr_pct": 22.703803704230022,
+        "post_ctr_pct": 22.82896973818429,
+        "estimate_pp": 0.12516603395426873,
+        "ci95_pp": [
+          -0.6160805928053552,
+          0.8664126607138927
+        ]
+      },
+      {
+        "stratum": [
+          "5",
+          "mobile",
+          "other"
+        ],
+        "pre_weight": 0.02476969146875737,
+        "post_weight": 0.0339693817232704,
+        "pre_ctr_pct": 21.288014311270125,
+        "post_ctr_pct": 21.377831953259633,
+        "estimate_pp": 0.08981764198950914,
+        "ci95_pp": [
+          -0.7119538523749364,
+          0.8915891363539546
+        ]
+      },
+      {
+        "stratum": [
+          "6",
+          "desktop",
+          "US"
+        ],
+        "pre_weight": 0.046294694863530134,
+        "post_weight": 0.034926024392960255,
+        "pre_ctr_pct": 36.80375447696677,
+        "post_ctr_pct": 36.8096153059973,
+        "estimate_pp": 0.005860829030523984,
+        "ci95_pp": [
+          -0.7948584101064576,
+          0.8065800681675056
+        ]
+      },
+      {
+        "stratum": [
+          "6",
+          "desktop",
+          "other"
+        ],
+        "pre_weight": 0.03812865831433452,
+        "post_weight": 0.028447982911791833,
+        "pre_ctr_pct": 34.56044985941893,
+        "post_ctr_pct": 34.64665729773138,
+        "estimate_pp": 0.08620743831245226,
+        "ci95_pp": [
+          -0.7868676704939742,
+          0.9592825471188787
+        ]
+      },
+      {
+        "stratum": [
+          "6",
+          "mobile",
+          "US"
+        ],
+        "pre_weight": 0.031149005510252212,
+        "post_weight": 0.042843313353303845,
+        "pre_ctr_pct": 22.46696035242291,
+        "post_ctr_pct": 22.555488902219555,
+        "estimate_pp": 0.0885285497966487,
+        "ci95_pp": [
+          -0.6399598824991944,
+          0.8170169820924919
+        ]
+      },
+      {
+        "stratum": [
+          "6",
+          "mobile",
+          "other"
+        ],
+        "pre_weight": 0.025548702482114907,
+        "post_weight": 0.035198738945065866,
+        "pre_ctr_pct": 21.13125209801947,
+        "post_ctr_pct": 21.15447022553951,
+        "estimate_pp": 0.023218127520038823,
+        "ci95_pp": [
+          -0.7629706903746992,
+          0.8094069454147769
+        ]
+      }
+    ]
+  },
+  "causal_identification": "Not identified: ranker and week perfectly confounded; no contemporaneous control or assignment records."
+}
+
+diff --git a/analyze.py b/analyze.py
+new file mode 100644
+index 0000000000000000000000000000000000000000..150a56a33a80a74c4c6f9aa04e8f476605cb084a
+--- /dev/null
++++ b/analyze.py
+@@ -0,0 +1,67 @@
++import json
++import math
++import sqlite3
++from pathlib import Path
++
++ROOT = Path(__file__).resolve().parent
++db = sqlite3.connect(f'file:{ROOT / "warehouse.db"}?mode=ro', uri=True)
++db.row_factory = sqlite3.Row
++log = []
++
++def query(name, sql):
++    rows = [dict(r) for r in db.execute(sql)]
++    log.append({'check': name, 'sql': sql, 'result': rows})
++    return rows
++
++query('schema', "SELECT name, sql FROM sqlite_master WHERE type IN ('table','view')")
++query('integrity', 'PRAGMA integrity_check')
++query('coverage', 'SELECT MIN(date) AS first_date, MAX(date) AS last_date, COUNT(*) AS rows, COUNT(DISTINCT date) AS days FROM search_daily')
++query('daily coverage and deployment', 'SELECT date, ranker, COUNT(*) AS cells, SUM(searches) AS searches, SUM(clicks) AS clicks FROM search_daily GROUP BY date, ranker ORDER BY date, ranker')
++query('duplicates', 'SELECT date, platform, country, ranker, COUNT(*) AS n FROM search_daily GROUP BY date, platform, country, ranker HAVING COUNT(*) > 1')
++query('invalid or missing fields', 'SELECT * FROM search_daily WHERE date IS NULL OR platform IS NULL OR country IS NULL OR ranker IS NULL OR searches IS NULL OR clicks IS NULL OR searches <= 0 OR clicks < 0 OR clicks > searches OR searches != CAST(searches AS INTEGER) OR clicks != CAST(clicks AS INTEGER)')
++query('release history', 'SELECT * FROM release_log ORDER BY date')
++week = "CASE WHEN date BETWEEN '2026-09-21' AND '2026-09-27' THEN 'pre' ELSE 'post' END"
++where = "date BETWEEN '2026-09-21' AND '2026-10-04'"
++totals = query('weekly totals', f'SELECT {week} AS week, SUM(searches) AS n, SUM(clicks) AS k FROM search_daily WHERE {where} GROUP BY week')
++cells = query('platform country weekly totals', f'SELECT {week} AS week, platform, country, SUM(searches) AS n, SUM(clicks) AS k FROM search_daily WHERE {where} GROUP BY week, platform, country')
++weekday_cells = query('weekday platform country totals', f"SELECT {week} AS week, strftime('%w',date) AS weekday, platform, country, SUM(searches) AS n, SUM(clicks) AS k FROM search_daily WHERE {where} GROUP BY week, weekday, platform, country")
++t = {r['week']: r for r in totals}
++for r in t.values():
++    r['rate'] = r['k'] / r['n']
++
++def interval(value, variance):
++    half = 1.959963984540054 * math.sqrt(variance)
++    return {'estimate_pp': 100 * value, 'ci95_pp': [100 * (value-half), 100 * (value+half)]}
++
++observed = interval(t['post']['rate'] - t['pre']['rate'], sum(r['rate'] * (1-r['rate']) / r['n'] for r in t.values()))
++
++def standardize(rows, keys):
++    groups = {}
++    for r in rows:
++        groups.setdefault(tuple(r[k] for k in keys), {})[r['week']] = r
++    delta = variance = mix = post_std = 0
++    details = []
++    for key, g in sorted(groups.items()):
++        a, b = g['pre'], g['post']
++        pa, pb = a['k']/a['n'], b['k']/b['n']
++        wa, wb = a['n']/t['pre']['n'], b['n']/t['post']['n']
++        delta += wa*(pb-pa)
++        post_std += wa*pb
++        variance += wa**2*(pa*(1-pa)/a['n']+pb*(1-pb)/b['n'])
++        mix += (wb-wa)*pb
++        details.append({'stratum': key, 'pre_weight': wa, 'post_weight': wb, 'pre_ctr_pct': 100*pa, 'post_ctr_pct': 100*pb, **interval(pb-pa, pa*(1-pa)/a['n']+pb*(1-pb)/b['n'])})
++    result = {**interval(delta, variance), 'post_standardized_ctr_pct': 100*post_std, 'composition_component_pp': 100*mix, 'decomposition_error_pp': observed['estimate_pp']-100*(delta+mix), 'strata': details}
++    return result
++
++result = {
++    'metric_assumption': 'CTR = SUM(clicks)/SUM(searches). No metrics.json; binary clicked-search semantics unverified.',
++    'interval_assumption': 'Normal 95% binomial intervals, independent searches and independent periods; standardization weights fixed at observed pre-week shares. Not causal intervals; user/session clustering unavailable.',
++    'totals': t,
++    'observed': observed,
++    'adjusted_platform_country': standardize(cells, ['platform', 'country']),
++    'sensitivity_weekday_platform_country': standardize(weekday_cells, ['weekday', 'platform', 'country']),
++    'causal_identification': 'Not identified: ranker and week perfectly confounded; no contemporaneous control or assignment records.',
++}
++(ROOT/'queries_and_checks.json').write_text(json.dumps(log, ensure_ascii=False, indent=2)+'\n')
++(ROOT/'results.json').write_text(json.dumps(result, ensure_ascii=False, indent=2)+'\n')
++print(json.dumps(result, ensure_ascii=False, indent=2))
+
+===== public exec; source lines 881-979 =====
+exec
+/bin/zsh -lc "python3 - <<'PY'
+import json
+q=json.load(open('queries_and_checks.json'))
+for x in q[:7]:print(x['check'], x['result'])
+r=json.load(open('results.json'))
+a=r['adjusted_platform_country']
+for w in ['pre','post']:
+ print(w,'mobile share',sum(s[w+'_weight'] for s in a['strata'] if s['stratum'][0]=='mobile'))
+print('composition fraction',a['composition_component_pp']/r['observed']['estimate_pp'])
+print('decomposition error',a['decomposition_error_pp'])
+PY" in /private/tmp/ds-runs-2026-10-13-2343/1c5bf337cb/analysis
+ succeeded in 0ms:
+schema [{'name': 'search_daily', 'sql': 'CREATE TABLE search_daily (date TEXT, platform TEXT, country TEXT, ranker TEXT, searches INTEGER, clicks INTEGER)'}, {'name': 'release_log', 'sql': 'CREATE TABLE release_log (date TEXT, change TEXT)'}]
+integrity [{'integrity_check': 'ok'}]
+coverage [{'first_date': '2026-09-21', 'last_date': '2026-10-04', 'rows': 56, 'days': 14}]
+daily coverage and deployment [{'date': '2026-09-21', 'ranker': 'v1', 'cells': 4, 'searches': 100314, 'clicks': 30556}, {'date': '2026-09-22', 'ranker': 'v1', 'cells': 4, 'searches': 103253, 'clicks': 31775}, {'date': '2026-09-23', 'ranker': 'v1', 'cells': 4, 'searches': 97854, 'clicks': 29468}, {'date': '2026-09-24', 'ranker': 'v1', 'cells': 4, 'searches': 101250, 'clicks': 30736}, {'date': '2026-09-25', 'ranker': 'v1', 'cells': 4, 'searches': 96377, 'clicks': 29515}, {'date': '2026-09-26', 'ranker': 'v1', 'cells': 4, 'searches': 98729, 'clicks': 29812}, {'date': '2026-09-27', 'ranker': 'v1', 'cells': 4, 'searches': 101828, 'clicks': 30966}, {'date': '2026-09-28', 'ranker': 'v2', 'cells': 4, 'searches': 99762, 'clicks': 28253}, {'date': '2026-09-29', 'ranker': 'v2', 'cells': 4, 'searches': 102506, 'clicks': 29299}, {'date': '2026-09-30', 'ranker': 'v2', 'cells': 4, 'searches': 98558, 'clicks': 27661}, {'date': '2026-10-01', 'ranker': 'v2', 'cells': 4, 'searches': 101931, 'clicks': 28903}, {'date': '2026-10-02', 'ranker': 'v2', 'cells': 4, 'searches': 96666, 'clicks': 27508}, {'date': '2026-10-03', 'ranker': 'v2', 'cells': 4, 'searches': 99043, 'clicks': 27890}, {'date': '2026-10-04', 'ranker': 'v2', 'cells': 4, 'searches': 101900, 'clicks': 28860}]
+duplicates []
+invalid or missing fields []
+release history [{'date': '2026-09-28', 'change': 'ranker v2 rolled out to 100% of traffic'}]
+pre mobile share 0.4010848979066759
+post mobile share 0.5507206232170037
+composition fraction 0.9962843419939643
+decomposition error -2.6645352591003757e-15
+
+diff --git a/analyze.py b/analyze.py
+new file mode 100644
+index 0000000000000000000000000000000000000000..150a56a33a80a74c4c6f9aa04e8f476605cb084a
+--- /dev/null
++++ b/analyze.py
+@@ -0,0 +1,67 @@
++import json
++import math
++import sqlite3
++from pathlib import Path
++
++ROOT = Path(__file__).resolve().parent
++db = sqlite3.connect(f'file:{ROOT / "warehouse.db"}?mode=ro', uri=True)
++db.row_factory = sqlite3.Row
++log = []
++
++def query(name, sql):
++    rows = [dict(r) for r in db.execute(sql)]
++    log.append({'check': name, 'sql': sql, 'result': rows})
++    return rows
++
++query('schema', "SELECT name, sql FROM sqlite_master WHERE type IN ('table','view')")
++query('integrity', 'PRAGMA integrity_check')
++query('coverage', 'SELECT MIN(date) AS first_date, MAX(date) AS last_date, COUNT(*) AS rows, COUNT(DISTINCT date) AS days FROM search_daily')
++query('daily coverage and deployment', 'SELECT date, ranker, COUNT(*) AS cells, SUM(searches) AS searches, SUM(clicks) AS clicks FROM search_daily GROUP BY date, ranker ORDER BY date, ranker')
++query('duplicates', 'SELECT date, platform, country, ranker, COUNT(*) AS n FROM search_daily GROUP BY date, platform, country, ranker HAVING COUNT(*) > 1')
++query('invalid or missing fields', 'SELECT * FROM search_daily WHERE date IS NULL OR platform IS NULL OR country IS NULL OR ranker IS NULL OR searches IS NULL OR clicks IS NULL OR searches <= 0 OR clicks < 0 OR clicks > searches OR searches != CAST(searches AS INTEGER) OR clicks != CAST(clicks AS INTEGER)')
++query('release history', 'SELECT * FROM release_log ORDER BY date')
++week = "CASE WHEN date BETWEEN '2026-09-21' AND '2026-09-27' THEN 'pre' ELSE 'post' END"
++where = "date BETWEEN '2026-09-21' AND '2026-10-04'"
++totals = query('weekly totals', f'SELECT {week} AS week, SUM(searches) AS n, SUM(clicks) AS k FROM search_daily WHERE {where} GROUP BY week')
++cells = query('platform country weekly totals', f'SELECT {week} AS week, platform, country, SUM(searches) AS n, SUM(clicks) AS k FROM search_daily WHERE {where} GROUP BY week, platform, country')
++weekday_cells = query('weekday platform country totals', f"SELECT {week} AS week, strftime('%w',date) AS weekday, platform, country, SUM(searches) AS n, SUM(clicks) AS k FROM search_daily WHERE {where} GROUP BY week, weekday, platform, country")
++t = {r['week']: r for r in totals}
++for r in t.values():
++    r['rate'] = r['k'] / r['n']
++
++def interval(value, variance):
++    half = 1.959963984540054 * math.sqrt(variance)
++    return {'estimate_pp': 100 * value, 'ci95_pp': [100 * (value-half), 100 * (value+half)]}
++
++observed = interval(t['post']['rate'] - t['pre']['rate'], sum(r['rate'] * (1-r['rate']) / r['n'] for r in t.values()))
++
++def standardize(rows, keys):
++    groups = {}
++    for r in rows:
++        groups.setdefault(tuple(r[k] for k in keys), {})[r['week']] = r
++    delta = variance = mix = post_std = 0
++    details = []
++    for key, g in sorted(groups.items()):
++        a, b = g['pre'], g['post']
++        pa, pb = a['k']/a['n'], b['k']/b['n']
++        wa, wb = a['n']/t['pre']['n'], b['n']/t['post']['n']
++        delta += wa*(pb-pa)
++        post_std += wa*pb
++        variance += wa**2*(pa*(1-pa)/a['n']+pb*(1-pb)/b['n'])
++        mix += (wb-wa)*pb
++        details.append({'stratum': key, 'pre_weight': wa, 'post_weight': wb, 'pre_ctr_pct': 100*pa, 'post_ctr_pct': 100*pb, **interval(pb-pa, pa*(1-pa)/a['n']+pb*(1-pb)/b['n'])})
++    result = {**interval(delta, variance), 'post_standardized_ctr_pct': 100*post_std, 'composition_component_pp': 100*mix, 'decomposition_error_pp': observed['estimate_pp']-100*(delta+mix), 'strata': details}
++    return result
++
++result = {
++    'metric_assumption': 'CTR = SUM(clicks)/SUM(searches). No metrics.json; binary clicked-search semantics unverified.',
++    'interval_assumption': 'Normal 95% binomial intervals, independent searches and independent periods; standardization weights fixed at observed pre-week shares. Not causal intervals; user/session clustering unavailable.',
++    'totals': t,
++    'observed': observed,
++    'adjusted_platform_country': standardize(cells, ['platform', 'country']),
++    'sensitivity_weekday_platform_country': standardize(weekday_cells, ['weekday', 'platform', 'country']),
++    'causal_identification': 'Not identified: ranker and week perfectly confounded; no contemporaneous control or assignment records.',
++}
++(ROOT/'queries_and_checks.json').write_text(json.dumps(log, ensure_ascii=False, indent=2)+'\n')
++(ROOT/'results.json').write_text(json.dumps(result, ensure_ascii=False, indent=2)+'\n')
++print(json.dumps(result, ensure_ascii=False, indent=2))
+
+===== public codex; source lines 980-1087 =====
+codex
+## Answer
+Headline: can't tell [inferred]  
+整体 CTR 从 30.421% 降至 28.324%，下降 2.097 个百分点，但无法确定其中多少由 v2 导致。[measured；归因判断 inferred]
+
+- Observed: -2.097 个百分点（95% 区间：-2.248 至 -1.946）[measured]
+- Adjusted: -0.008 个百分点（95% 区间：-0.163 至 +0.148），holding 前一周的平台 × 国家搜索占比 fixed [measured]
+- Causal effect: not identified（版本与周次完全重合；需要同期随机分配的 v1/v2 对照实验识别）[inferred]
+
+## What it means for 回滚决策
+尚未提供改变回滚决策的最小降幅；调整后区间仍包含下降 0.163 个百分点，但它不是因果区间，不能据此排除 v2 的损害。[inferred] 当前证据不足以把整体下降归责于 v2 并据此回滚，也不足以证明 v2 无害。[inferred]
+
+## Why we believe it
+- Alternatives considered:
+  - 流量构成变化：ruled in；移动端搜索占比从 40.108% 升至 55.072%，其 CTR 较低；按后一周各层 CTR 分解，构成项为 -2.089 个百分点，占整体降幅的 99.63%，这是算术分解而非因果归因。[measured]
+  - 星期构成变化：ruled out 为主要解释；额外固定星期后，调整变化仍为 -0.007 个百分点。[measured]
+  - 同期需求、埋点或其他产品变化：未排除；只有两周汇总数据，发布日志仅记录 v2 上线，不能证明不存在其他变化。[inferred]
+- Checks run:
+  - 数据完整性：pass；14 天、每天 4 个平台 × 国家组合，无重复键、空值或非法计数。[measured]
+  - 上线记录：pass；前周全部 v1，后周全部 v2，与日志一致。[measured]
+  - 分解核验：pass；构成项加调整项等于整体变化，误差小于 0.000001 个百分点。[measured]
+  - 因果识别：fail；没有同期版本重叠、对照组或随机分配记录。[measured]
+  - 入库完整性与用户聚类：could not run；缺少水位及用户、会话级数据。[measured]
+
+## Caveats, and what would change the answer
+- 区间采用独立搜索的二项近似，并固定观测权重；每次搜索是否最多计一次点击无法验证，重复用户相关性可能使区间偏窄。[guess]
+- 若 v2 本身改变搜索频次或流量构成，固定构成会移除部分影响；调整结果不能当作 v2 总效应。[inferred]
+- 明确回滚阈值、核实指标口径并开展同期随机对照实验，才能形成可靠的因果决策依据。[inferred]
+
+## Provenance
+- Metric: `SUM(clicks) / SUM(searches)`，from stated here [guess]；目录中无 `metrics.json`。[measured]
+- Data: `search_daily`、`release_log`；比较 2026-09-21—09-27 与 2026-09-28—10-04，记录覆盖至 2026-10-04，但无入库完成证明。[measured]
+- Reconciled: not done（未提供仪表盘或独立源）；前周 212,828 / 699,605，后周 198,374 / 700,366。[measured]
+- Queries and checks: [查询与检查日志](queries_and_checks.json)、[计算脚本](analyze.py)、[完整结果](results.json)。[measured]
+diff --git a/analyze.py b/analyze.py
+new file mode 100644
+index 0000000000000000000000000000000000000000..150a56a33a80a74c4c6f9aa04e8f476605cb084a
+--- /dev/null
++++ b/analyze.py
+@@ -0,0 +1,67 @@
++import json
++import math
++import sqlite3
++from pathlib import Path
++
++ROOT = Path(__file__).resolve().parent
++db = sqlite3.connect(f'file:{ROOT / "warehouse.db"}?mode=ro', uri=True)
++db.row_factory = sqlite3.Row
++log = []
++
++def query(name, sql):
++    rows = [dict(r) for r in db.execute(sql)]
++    log.append({'check': name, 'sql': sql, 'result': rows})
++    return rows
++
++query('schema', "SELECT name, sql FROM sqlite_master WHERE type IN ('table','view')")
++query('integrity', 'PRAGMA integrity_check')
++query('coverage', 'SELECT MIN(date) AS first_date, MAX(date) AS last_date, COUNT(*) AS rows, COUNT(DISTINCT date) AS days FROM search_daily')
++query('daily coverage and deployment', 'SELECT date, ranker, COUNT(*) AS cells, SUM(searches) AS searches, SUM(clicks) AS clicks FROM search_daily GROUP BY date, ranker ORDER BY date, ranker')
++query('duplicates', 'SELECT date, platform, country, ranker, COUNT(*) AS n FROM search_daily GROUP BY date, platform, country, ranker HAVING COUNT(*) > 1')
++query('invalid or missing fields', 'SELECT * FROM search_daily WHERE date IS NULL OR platform IS NULL OR country IS NULL OR ranker IS NULL OR searches IS NULL OR clicks IS NULL OR searches <= 0 OR clicks < 0 OR clicks > searches OR searches != CAST(searches AS INTEGER) OR clicks != CAST(clicks AS INTEGER)')
++query('release history', 'SELECT * FROM release_log ORDER BY date')
++week = "CASE WHEN date BETWEEN '2026-09-21' AND '2026-09-27' THEN 'pre' ELSE 'post' END"
++where = "date BETWEEN '2026-09-21' AND '2026-10-04'"
++totals = query('weekly totals', f'SELECT {week} AS week, SUM(searches) AS n, SUM(clicks) AS k FROM search_daily WHERE {where} GROUP BY week')
++cells = query('platform country weekly totals', f'SELECT {week} AS week, platform, country, SUM(searches) AS n, SUM(clicks) AS k FROM search_daily WHERE {where} GROUP BY week, platform, country')
++weekday_cells = query('weekday platform country totals', f"SELECT {week} AS week, strftime('%w',date) AS weekday, platform, country, SUM(searches) AS n, SUM(clicks) AS k FROM search_daily WHERE {where} GROUP BY week, weekday, platform, country")
++t = {r['week']: r for r in totals}
++for r in t.values():
++    r['rate'] = r['k'] / r['n']
++
++def interval(value, variance):
++    half = 1.959963984540054 * math.sqrt(variance)
++    return {'estimate_pp': 100 * value, 'ci95_pp': [100 * (value-half), 100 * (value+half)]}
++
++observed = interval(t['post']['rate'] - t['pre']['rate'], sum(r['rate'] * (1-r['rate']) / r['n'] for r in t.values()))
++
++def standardize(rows, keys):
++    groups = {}
++    for r in rows:
++        groups.setdefault(tuple(r[k] for k in keys), {})[r['week']] = r
++    delta = variance = mix = post_std = 0
++    details = []
++    for key, g in sorted(groups.items()):
++        a, b = g['pre'], g['post']
++        pa, pb = a['k']/a['n'], b['k']/b['n']
++        wa, wb = a['n']/t['pre']['n'], b['n']/t['post']['n']
++        delta += wa*(pb-pa)
++        post_std += wa*pb
++        variance += wa**2*(pa*(1-pa)/a['n']+pb*(1-pb)/b['n'])
++        mix += (wb-wa)*pb
++        details.append({'stratum': key, 'pre_weight': wa, 'post_weight': wb, 'pre_ctr_pct': 100*pa, 'post_ctr_pct': 100*pb, **interval(pb-pa, pa*(1-pa)/a['n']+pb*(1-pb)/b['n'])})
++    result = {**interval(delta, variance), 'post_standardized_ctr_pct': 100*post_std, 'composition_component_pp': 100*mix, 'decomposition_error_pp': observed['estimate_pp']-100*(delta+mix), 'strata': details}
++    return result
++
++result = {
++    'metric_assumption': 'CTR = SUM(clicks)/SUM(searches). No metrics.json; binary clicked-search semantics unverified.',
++    'interval_assumption': 'Normal 95% binomial intervals, independent searches and independent periods; standardization weights fixed at observed pre-week shares. Not causal intervals; user/session clustering unavailable.',
++    'totals': t,
++    'observed': observed,
++    'adjusted_platform_country': standardize(cells, ['platform', 'country']),
++    'sensitivity_weekday_platform_country': standardize(weekday_cells, ['weekday', 'platform', 'country']),
++    'causal_identification': 'Not identified: ranker and week perfectly confounded; no contemporaneous control or assignment records.',
++}
++(ROOT/'queries_and_checks.json').write_text(json.dumps(log, ensure_ascii=False, indent=2)+'\n')
++(ROOT/'results.json').write_text(json.dumps(result, ensure_ascii=False, indent=2)+'\n')
++print(json.dumps(result, ensure_ascii=False, indent=2))

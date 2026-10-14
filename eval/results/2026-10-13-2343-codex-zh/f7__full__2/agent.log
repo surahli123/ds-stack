@@ -1,0 +1,633 @@
+Sanitized public log. Raw original retained locally; see sibling codex-report/TRACE-NOTES.md and artifact-manifest.json.
+ds-stack: <HOME>/.codex/skills is present, so this run is not isolated
+model: gpt-6-astra
+approval: on-request
+sandbox: workspace-write [workdir, /tmp, $TMPDIR]
+reasoning effort: none
+ERROR: Reconnecting... 2/5
+ERROR: Reconnecting... 3/5
+ERROR: Reconnecting... 4/5
+ERROR: Reconnecting... 5/5
+
+===== public user; source lines 14-49 =====
+user
+What share of searches in the week of 2026-10-05 to 2026-10-11 led to a purchase, in percent?
+Finance wants it for the quarterly model.
+
+The data is in warehouse.db (SQLite) in the current directory.
+
+End with exactly this readout as your final reply. Label each claim measured (computed from data here), inferred, or guess:
+
+```
+## Answer
+Headline: <signed number> <unit> (<95% interval>)   or   Headline: can't tell
+<one plain sentence: what happened and how big>
+- Observed: <signed number> <unit> (<95% interval>)
+- Adjusted: <signed number> <unit> (<95% interval>), holding <what> fixed   or   Adjusted: not computed (<reason>)
+- Causal effect: <signed number> <unit> (<95% interval>), from <design>   or   Causal effect: not identified (<what would identify it>)
+
+## What it means for <the decision>
+<one or two sentences that compare the interval with the smallest change that would alter the decision>
+
+## Why we believe it
+- Alternatives considered:
+  - <alternative>: ruled <in|out> by <evidence> [measured|inferred|guess]
+- Checks run:
+  - <check>: <pass|flag|fail|could not run|skipped> <one-line result or reason>
+
+## Caveats, and what would change the answer
+- <short list>
+
+## Provenance
+- Metric: <definition>, from <metrics.json | stated here [guess]>
+- Data: <tables or views>, through <last complete period>
+- Reconciled: <metric> vs <dashboard or source>, delta <x>   or   Reconciled: not done (<reason>)
+- Queries and checks: <where they are logged>
+```
+
+请用中文写结论。
+
+===== public codex; source lines 63-65 =====
+codex
+我会先按 ds-mode 技能核对指标定义、数据完整性和搜索到购买的关联方式，再计算该周比例及区间。
+
+===== public exec; source lines 66-179 =====
+exec
+/bin/zsh -lc 'cat .claude/skills/ds-mode/SKILL.md' in /private/tmp/ds-runs-2026-10-13-2343/c3fad32dbc/analysis
+ succeeded in 0ms:
+---
+name: ds-mode
+description: >-
+  Use for data analysis that produces a number someone will act on: a metric
+  moved, an experiment readout, a "did X cause Y" question, or a sizing.
+  Pins the metric definition first, runs mechanical checks on aggregates
+  before any number is reported, rules alternative explanations in or out
+  with evidence, and ends with a fixed readout in which every number traces to
+  a logged query or check. Also runs on /ds-mode.
+---
+
+# ds-mode
+
+You own the number and the inference. A number that passes every check but answers the wrong question, or tells the wrong story, is still wrong. A wrong number stated with confidence is worse than "can't tell".
+
+A data scientist will review your readout, and should be able to check it in under 10 minutes. So every number you report carries a tag that a script resolves to the logged query or check behind it.
+
+## Method
+
+This is a draft, to be replaced with the analyst's own first moves.
+
+1. Restate the question in one sentence and name the decision it feeds. Treat the requester's guess about the cause as one alternative, not the premise.
+2. Pin the metric before you query: numerator, denominator, filters, grain and source table. Take it from `metrics.json` in the overlay directory named by `$DS_OVERLAY_DIR` when the metric is there, and say so. If `$DS_OVERLAY_DIR` is unset or holds no `metrics.json`, there is none: never search the filesystem for one. When it isn't, write your definition into the readout and label it `[guess]`. Never invent a definition silently; a plausible number on the wrong definition is the most common wrong answer, and no check below catches it.
+3. Decide whether the question can be answered.
+   - If two readings of it give materially different numbers and nothing settles which one is meant, ask before computing. When no one can answer, pick the reading the decision most likely needs, state it in the Answer, and put the other in the caveats.
+   - If the data can't answer it (the metric isn't logged, the period hasn't landed), say so up front instead of computing a substitute.
+4. Check the data before the question. Make sure every period you use is complete (`completeness`). After any join, compare row counts before and after (`fanout`). When a dashboard or other trusted source shows the same metric, reconcile one number against it and record the result in Provenance.
+5. Size, then decompose.
+   - When a rate moved, run `mix_shift` on the segments whose mix could have shifted (platform, country, traffic source). Use the finest grain that keeps about 100 units per cell on both sides, then rerun at one coarser grain. If the two disagree, report both.
+   - For an experiment, run `srm` on the assignment counts before you read any lift.
+6. Rule each alternative in or out with evidence. Always consider mix-shift, seasonality and day of week, data completeness, logging or definition changes, and the requester's cause. The evidence names a check or a query result from this session. Label each conclusion measured, inferred or guess.
+7. Write the readout below to `readout.md`, run `python3 <dir of this SKILL.md>/tools/verify_readout.py readout.md`, and fix the readout until it passes. Then send the readout as your final reply.
+
+## Queries
+
+Run every query as `python3 <dir of this SKILL.md>/tools/query.py "<SQL>" --as-of <last complete period>`. It enforces the safety envelope (scratch-only writes, one statement, aggregates only, a time cap), prints the result with an id such as `q3`, and logs the statement and result to `.ds-queries.log`. Don't query the data any other way. If a result had to be computed elsewhere, for example by a person, log it with `--pasted --sql ... --columns ... --rows ...` so it gets an id. On a live warehouse, the overlay's adapter takes the place of the SQLite default, with the same log.
+
+## Checks
+
+Run each check as `python3 <dir of this SKILL.md>/checks/run.py <check> --json '<spec>'`. `--list` shows when to use each check and an example spec. Checks take aggregates you computed, never raw rows. Add `"from": "q<n>"` (or a list) to the spec, naming the queries the aggregates came from. Each check prints a JSON line with an id such as `mix_shift#1` and logs it to `.ds-checks.log`.
+
+| Check | Run it when |
+|---|---|
+| `completeness` | before reporting any period |
+| `fanout` | after any join |
+| `mix_shift` | a rate moved and segment mix could have changed |
+| `srm` | before reading any experiment lift |
+
+Statuses mean different things:
+
+- `pass`: nothing found.
+- `flag` is a finding, not a defect. From `mix_shift`, it means segment mix explains a real part of the move, so the Answer must say how much of the change is mix and how much is within-segment change.
+- `fail` is a data or query defect. It must change the answer, or the readout must show with evidence why it doesn't. If you can't resolve it, the headline is `can't tell`; say what is missing and what would settle it.
+- `could not run` because of how you called it (wrong spec, wrong grain): fix the call and rerun.
+- `could not run` because the data can't support the check at all (for example, `completeness` with no earlier periods): answer anyway, report the check as could not run, and put the gap in the caveats. Abstain only if that gap could plausibly change the answer.
+
+Report every check that applies, with its status. If you skip one, say why. Copy check output exactly; never edit it.
+
+## Readout
+
+Your final reply is exactly this format, written for the person who acts on it:
+
+```
+## Answer
+Headline: <signed number> <unit> (<95% interval>) [q<n> | check:<name>#<n>]   or   Headline: can't tell
+<one plain sentence: what happened and how big> [q<n> | check:<name>#<n>]
+- Observed: <signed number> <unit> (<95% interval>) [q<n> | check:<name>#<n>]
+- Adjusted: <signed number> <unit> (<95% interval>), holding <what> fixed [check:<name>#<n>]   or   Adjusted: not computed (<reason>)
+- Causal effect: <signed number> <unit> (<95% interval>), from <design> [q<n>]   or   Causal effect: not identified (<what would identify it>)
+
+## What it means for <the decision>
+<one or two sentences that compare the interval with the smallest change that would alter the decision> [q<n> | check:<name>#<n>] [given]
+
+## Why we believe it
+- Alternatives considered:
+  - <alternative>: ruled <in|out> by <evidence> [q<n> | check:<name>#<n>] [measured|inferred|guess]
+- Checks run:
+  - <check>: <pass|flag|fail|could not run|skipped> <one-line result or reason> [check:<name>#<n>]
+
+## Caveats, and what would change the answer
+- <short list>
+
+## Provenance
+- Metric: <definition>, from <metrics.json | stated here [guess]>
+- Data: <tables or views>, through <last complete period>
+- Reconciled: <metric> vs <dashboard or source>, delta <x> [q<n>]   or   Reconciled: not done (<reason>)
+- Queries and checks: <where they are logged>
+```
+
+- Every line in the Answer, What it means and Why we believe it sections that states a number carries a tag: `[q<n>]` for a logged query, `[check:<name>#<n>]` for a logged check, `[given]` for a number stated in the request, such as a threshold. One bracket can hold several: `[q3, q4]`. A number you can't tag doesn't belong in the readout.
+- In Provenance, the logs are `.ds-queries.log` and `.ds-checks.log`, and a last line `- Verified: <the verify_readout.py result line, exactly as printed>` shows the reviewer the trace check passed.
+- The interval is required. `mix_shift` reports one for the overall change (`delta_ci95_pp`). For an experiment lift, use a two-proportion interval. When no interval can be computed, write `(no interval: <reason>)`.
+- Use causal words ("caused", "drove", "because of") only for a randomized test or a design that identifies the cause. Otherwise say "coincided with" or "is associated with", and name what would confirm it.
+- The three estimate lines keep apart numbers that are easy to conflate:
+  - Observed is the raw number or change in the data.
+  - Adjusted is a descriptive estimate that holds something fixed, such as the within-segment change from `mix_shift`. Say what it holds fixed. It is not a causal effect.
+  - Causal effect is a number only for a randomized test or another design that identifies the cause. Otherwise write `not identified` and what would identify it. Never fill it with Adjusted, and never write 0 for an effect you couldn't identify.
+- The Headline gives the estimate that answers the question. For "how much of the change did the launch cause" after a 100% rollout, that is Adjusted, with its assumption in the sentence below (for example "if v2 didn't change the traffic mix"). An unidentified cause is not a reason to abstain. `can't tell` is for when the data can't support the number itself; then each estimate line may read `not computed (<reason>)`.
+- Keep the readout's fixed words in English exactly as shown: the section headings, `Headline:`, `Observed:`, `Adjusted:`, `Causal effect:`, `not identified`, `ruled in` and `ruled out`, check names and statuses, `can't tell`, and the unit `pp`. Scripts read them. Everything else can be in the reader's language.
+- measured means computed from data in this session.
+- inferred means it follows from measured facts by reasoning.
+- guess means neither.
+
+When this readout grows into a document for other people (a readout, memo, plan or handover), write it with the `ds-doc` skill, if it is installed.
+
+## References
+
+- `references/review-checklist.md`: what the reviewer checks, in order. Read it before writing the readout; it is the test the readout faces.
+- `references/plan-critique.md`: an optional critique before a non-routine analysis. Not part of the method above.
+- `references/mistake-classes.md`: candidate mistake classes for the analyst's wrong-number archive. They become checks only after two real incidents.
+
+===== public exec; source lines 180-353 =====
+exec
+/bin/zsh -lc 'printenv DS_OVERLAY_DIR; ls -a; cat .claude/skills/ds-mode/tools/query.py; cat .claude/skills/ds-mode/references/review-checklist.md' in /private/tmp/ds-runs-2026-10-13-2343/c3fad32dbc/analysis
+ succeeded in 0ms:
+/tmp/ds-runs-2026-10-13-2343/c3fad32dbc/overlay
+.
+..
+.claude
+AGENTS.md
+CLAUDE.md
+warehouse.db
+#!/usr/bin/env python3
+"""Run one SQL statement through the guarded runner and log it.
+
+    python3 tools/query.py "SELECT ..." [--as-of 2026-10-04] [--params '[...]']
+    python3 tools/query.py --pasted --sql "<the SQL that was run>" \
+        --columns '["week", "ctr"]' --rows '[["2026-09-21", 0.304]]' [--as-of ...]
+
+Prints one JSON line with the query id (q1, q2, ...), columns and rows, and
+appends the statement and its result to .ds-queries.log (or $DS_QUERIES_LOG).
+Cite the id in the readout as [q<n>], and pass it to a check as "from": "q<n>".
+Use --pasted for a result computed outside this tool, such as SQL a person ran
+and pasted back: it gets an id and the same size caps.
+
+This file is the reference adapter. It opens SQLite: --db, else $DS_WAREHOUSE,
+else ./warehouse.db. A warehouse adapter replaces connect() and keeps the rest,
+log included. Limits and the scratch prefix come from runner.json in
+$DS_OVERLAY_DIR when it is set; $DS_RUN_ID names the per-run scratch suffix.
+
+Exit code: 0 ran, 1 blocked or failed (the attempt is still logged), 3 usage error.
+"""
+
+import argparse
+import json
+import os
+import sqlite3
+import sys
+
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+
+import guarded_query as gq  # noqa: E402
+
+DEFAULTS = {"scratch_prefix": "scratch_dsmode_", "per_run_suffix": True, "max_rows": 200,
+            "max_cell_chars": 200, "max_result_chars": 20_000, "max_seconds": 120}
+
+
+def load_config():
+    config = dict(DEFAULTS)
+    overlay = os.environ.get("DS_OVERLAY_DIR")
+    if overlay and os.path.exists(os.path.join(overlay, "runner.json")):
+        with open(os.path.join(overlay, "runner.json")) as handle:
+            config.update(json.load(handle))
+    if config.get("per_run_suffix"):
+        config["scratch_prefix"] += os.environ.get("DS_RUN_ID", "run") + "_"
+    return config
+
+
+def connect(args):
+    path = args.db or os.environ.get("DS_WAREHOUSE") or "warehouse.db"
+    if not os.path.exists(path):
+        raise FileNotFoundError(f"no database at {path}; pass --db or set DS_WAREHOUSE")
+    return sqlite3.connect(path)
+
+
+def limits(config, *names):
+    return {name: config[name] for name in names}
+
+
+def main(argv=None):
+    parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
+    parser.add_argument("statement", nargs="?", help="the SQL statement to run")
+    parser.add_argument("--sql", help="the SQL, as an alternative to the positional argument")
+    parser.add_argument("--params", default="[]", help="JSON list of query parameters")
+    parser.add_argument("--as-of", help="last complete period the result covers, for example 2026-10-04")
+    parser.add_argument("--db", help="SQLite file (reference adapter only)")
+    parser.add_argument("--pasted", action="store_true", help="log a result computed outside this tool")
+    parser.add_argument("--columns", help="with --pasted: JSON list of column names")
+    parser.add_argument("--rows", help="with --pasted: JSON list of rows")
+    args = parser.parse_args(argv)
+
+    sql = args.sql or args.statement
+    if not sql:
+        parser.print_usage(sys.stderr)
+        return 3
+    config = load_config()
+    try:
+        if args.pasted:
+            if args.columns is None or args.rows is None:
+                print("--pasted needs --columns and --rows", file=sys.stderr)
+                return 3
+            entry = gq.log_pasted(sql, json.loads(args.columns), json.loads(args.rows), as_of=args.as_of,
+                                  **limits(config, "max_rows", "max_cell_chars", "max_result_chars"))
+        else:
+            conn = connect(args)
+            entry = gq.run_logged(conn, sql, json.loads(args.params), as_of=args.as_of,
+                                  scratch_prefix=config["scratch_prefix"],
+                                  **limits(config, "max_rows", "max_cell_chars", "max_result_chars", "max_seconds"))
+    except ValueError as err:
+        print(f"unreadable JSON argument: {err}", file=sys.stderr)
+        return 3
+    except FileNotFoundError as err:
+        print(str(err), file=sys.stderr)
+        return 3
+    except Exception as err:  # blocked or failed; run_logged already logged it
+        last = gq.read_log()[-1:] or [{}]
+        print(json.dumps({"id": last[0].get("id"), "status": "blocked" if isinstance(err, gq.Blocked) else "error",
+                          "error": str(err)}))
+        return 1
+    print(json.dumps({key: entry.get(key) for key in ("id", "status", "row_count", "columns", "rows")}, default=str))
+    return 0
+
+
+if __name__ == "__main__":
+    sys.exit(main())
+# Review checklist
+
+What a reviewer verifies in a ds-mode readout, in order. The reviewer is a person or a fresh-context subagent that sees the request, the readout and the logs, not the analyst's reasoning. Every item is a yes/no question. Cheap, mechanical items come first, so a review fits in under 10 minutes.
+
+## 1. Do the numbers resolve?
+
+Run `tools/verify_readout.py` on the readout and its logs before reading anything else.
+
+- Does every number carry a tag, and does each tag resolve to a logged query `[q<n>]`, a logged check `[check:<name>#<n>]`, or the request `[given]`?
+- Does each tagged query compute what its sentence says (filter, period, grain)?
+
+If this fails, send it back now. Nothing below means anything for a number nobody can trace.
+
+## 2. Is it the right metric?
+
+- Does the Provenance definition (numerator, denominator, filters, grain, source table) match the source of truth, or is it labeled `[guess]`?
+- Does the reconciliation line tie the base number to a known figure, with any gap explained?
+- If the metric is a proxy for what the decision cares about, does the readout say so?
+
+## 3. Is it the question that was asked?
+
+- Does the restated question match the request, no narrower and no broader, and is the decision named?
+- If the request had two readings, did the analyst ask, or state the reading used and put the other in the caveats?
+
+## 4. Do the alternatives rule things in or out?
+
+- Are the standing alternatives all there: mix-shift, seasonality and day of week, data completeness, logging or definition changes, and the requester's cause?
+- Would each piece of evidence look different if its alternative were true? A check that can't see the alternative doesn't rule it out.
+- Could something else that changed at the same time (a launch, a pricing change, a tracking change) explain the move, and is it addressed?
+- Are the comparison windows the same length, the same weekdays and complete, and were they fixed before the results were seen?
+- Are segments defined the same way on both sides, and did a coarser grain agree with the finer one?
+
+## 5. Did the right checks run, and did their statuses land?
+
+- Did every applicable check run: `completeness` for each period, `fanout` after each join, `mix_shift` for a moved rate, `srm` before an experiment lift? Is each skipped one explained?
+- Does each check line match the logged output exactly?
+- Does each `fail` change the answer, or does the readout show with evidence why not? If it can't be resolved, is the headline `can't tell`?
+- Does each `flag` show up in the Answer as how much of the move is mix and how much is within-segment?
+
+## 6. Does causal language match the design?
+
+- Do "caused", "drove" and "because of" appear only for a randomized test or a design that identifies the cause?
+- Otherwise, does the text say "coincided with" or "is associated with" and name what would confirm it?
+- Were treated units chosen by something other than the outcome being measured?
+
+## 7. Is the interval compared with the threshold?
+
+- Is there a 95% interval, or `(no interval: <reason>)` with a reason that holds?
+- Does the decision section compare the interval with the smallest change that would alter the decision?
+- If the interval spans that threshold, does the readout say `can't tell` or name the uncertainty, not call it from the point estimate?
+- Is the sample large enough for the effect size that matters?
+
+## 8. Would a caveat change the answer?
+
+- Is each listed caveat followed by what would settle it?
+- Is any missing: a sample that doesn't represent the population the decision covers, an unverified definition, an incomplete period?
+
+## When an item fails
+
+Send the readout back with the item number and the question that failed. Don't fix it yourself or patch the number silently: the analyst owns the number, and a quiet fix hides how it went wrong. Review again from item 1 after the fix. If a wrong number had already reached a reader, log it in the wrong-number archive (see `mistake-classes.md`).
+
+===== public exec; source lines 354-391 =====
+exec
+/bin/zsh -lc 'cat "$DS_OVERLAY_DIR/metrics.json"; cat CLAUDE.md; python3 .claude/skills/ds-mode/checks/run.py --list; python3 .claude/skills/ds-mode/tools/query.py "SELECT name, sql FROM sqlite_master WHERE type IN ('"'table','view')\" --as-of 2026-10-11" in /private/tmp/ds-runs-2026-10-13-2343/c3fad32dbc/analysis
+ succeeded in 0ms:
+{
+  "ctr": {
+    "denominator": "searches",
+    "filters": [],
+    "grain": "search",
+    "numerator": "clicks",
+    "owner": "search analytics",
+    "pitfalls": [],
+    "source": "search_daily_c",
+    "verified": "2026-10-01: matched the dashboard"
+  },
+  "search_purchase_rate": {
+    "available": false,
+    "note": "purchases are logged only in the orders system, which this warehouse doesn't hold",
+    "owner": "search analytics",
+    "pitfalls": [
+      "search_daily_c.conversions counts add-to-cart events, not purchases"
+    ]
+  }
+}
+For any data analysis request, read and follow .claude/skills/ds-mode/SKILL.md.
+completeness: before reporting any period: is it fully loaded?
+  spec: {"series": [{"period": "2026-10-01", "rows": 100}, ...], "target": "2026-10-07"}
+
+fanout: after any join: did it add or lose rows?
+  spec: {"left_rows": 1000, "joined_rows": 1000, "relationship": "many_to_one", "join": "left", "right_rows": 1000, "right_distinct_keys": 1000, "matched_left_rows": 1000}
+
+mix_shift: when a rate moved: how much is segment mix vs within-segment change?
+  spec: {"segments": [{"name": "web", "before": {"n": 800, "k": 240}, "after": {"n": 820, "k": 250}}, ...]}  (n = denominator, k = numerator)
+
+srm: before reading any experiment lift: is the assignment split as planned?
+  spec: {"observed": [10120, 9880], "expected_ratio": [0.5, 0.5]}
+
+{"id": "q1", "status": "ok", "row_count": 1, "columns": ["name", "sql"], "rows": [["search_daily_c", "CREATE TABLE search_daily_c (date TEXT, searches INTEGER, clicks INTEGER, conversions INTEGER)"]]}
+
+===== public codex; source lines 392-394 =====
+codex
+指标定义明确说明：该仓库没有购买数据，`conversions` 记录的是加购事件。因此无法计算财务所需的购买比例。我会核对日期覆盖，并把缺失的数据和口径记录在结论中。
+
+===== public exec; source lines 395-547 =====
+exec
+/bin/zsh -lc 'python3 .claude/skills/ds-mode/tools/query.py "SELECT date, COUNT(*) AS rows, SUM(searches) AS searches FROM search_daily_c GROUP BY date ORDER BY date" --as-of 2026-10-11; cat .claude/skills/ds-mode/tools/verify_readout.py' in /private/tmp/ds-runs-2026-10-13-2343/c3fad32dbc/analysis
+ succeeded in 0ms:
+{"id": "q2", "status": "ok", "row_count": 7, "columns": ["date", "rows", "searches"], "rows": [["2026-10-05", 1, 119685], ["2026-10-06", 1, 125382], ["2026-10-07", 1, 119253], ["2026-10-08", 1, 122689], ["2026-10-09", 1, 115643], ["2026-10-10", 1, 117664], ["2026-10-11", 1, 123422]]}
+#!/usr/bin/env python3
+"""Check that every number in a ds-mode readout traces to a logged query or check.
+
+    python3 tools/verify_readout.py readout.md [--queries .ds-queries.log] [--checks .ds-checks.log]
+
+In the Answer, "What it means" and "Why we believe it" sections:
+- every line that states a number carries a tag: [q<n>] for a logged query,
+  [check:<name>#<n>] for a logged check, or [given] for a number stated in the
+  request (a threshold, a date range). One bracket may hold several: [q3, q4].
+- every [q<n>] is a query that ran (through the runner, or pasted with --pasted);
+- every [check:<name>#<n>] is a logged check whose "from" names queries that ran.
+The Provenance section must have a "Reconciled:" line.
+
+Dates, a "95%" in front of "interval" or "CI", and digits inside names (v2,
+q3) don't count as numbers. Logs default to $DS_QUERIES_LOG / $DS_CHECKS_LOG,
+else the files in the current directory.
+
+Prints "verify_readout: pass (...)" or "verify_readout: fail" with one line per
+problem, then the [given] lines for the reviewer to confirm against the request.
+Exit code: 0 pass, 1 fail, 3 usage error.
+"""
+
+import argparse
+import json
+import os
+import re
+import sys
+
+ONE_TAG = r"(?:q\d+|check:[a-z_]+#\d+|given)"
+TAGS = re.compile(r"\[\s*(" + ONE_TAG + r"(?:\s*[,;|]\s*" + ONE_TAG + r")*)\s*\]", re.I)
+LABELS = re.compile(r"\[(?:measured|inferred|guess)\]", re.I)
+HEADING = re.compile(r"^#{1,4}\s+(.+?)\s*#*\s*$", re.M)
+DATE = re.compile(r"\b\d{4}-\d{2}(?:-\d{2})?\b|\b\d{4}-W\d{2}\b", re.I)
+CI_LEVEL = re.compile(r"\b(?:80|90|95|99)\s*[%％]\s*(?=(?:confidence\s+)?(?:interval|CI)\b|置信)", re.I)
+LIST_MARKER = re.compile(r"^\s*(?:[-*+]|\d+[.)])\s+")
+NUMBER = re.compile(r"(?<![A-Za-z_#\d.])[-+−]?\d+(?:[.,]\d+)*")
+CHECKED_SECTIONS = ("answer", "what it means", "why we believe")
+
+
+def _clean(text):
+    text = re.sub(r"^```[a-z]*\s*$", "", text, flags=re.M)
+    return text.replace("**", "").replace("__", "").replace("`", "")
+
+
+def sections(text):
+    parts = HEADING.split(_clean(text))
+    return [(parts[i].strip(), parts[i + 1]) for i in range(1, len(parts) - 1, 2)]
+
+
+def numbers_in(line):
+    body = LIST_MARKER.sub("", TAGS.sub(" ", LABELS.sub(" ", line)))
+    body = CI_LEVEL.sub(" ", DATE.sub(" ", body))
+    return NUMBER.findall(body)
+
+
+def tags_in(line):
+    found = []
+    for group in TAGS.findall(line):
+        found += [tag.strip().lower() for tag in re.split(r"[,;|]", group) if tag.strip()]
+    return found
+
+
+def read_jsonl(path):
+    entries = []
+    try:
+        with open(path) as handle:
+            for line in handle:
+                try:
+                    entries.append(json.loads(line))
+                except ValueError:
+                    continue
+    except FileNotFoundError:
+        pass
+    return entries
+
+
+def verify(text, queries, checks):
+    """Return (problems, stats, given_lines)."""
+    ran = {e["id"].lower() for e in queries if e.get("id") and e.get("status") == "ok"}
+    tried = {e["id"].lower(): e.get("status") for e in queries if e.get("id")}
+    logged_checks = {e["id"].lower(): e for e in checks if e.get("id")}
+    problems, given, stats = [], [], {"lines": 0, "numbers": 0, "queries": set(), "checks": set()}
+    found = sections(text)
+    if not any(name.lower().startswith("answer") for name, _ in found):
+        problems.append("no Answer section")
+    for name, body in found:
+        lowered = name.lower()
+        if lowered.startswith("provenance") and not re.search(r"^\s*[-*]?\s*reconciled\s*:", body, re.I | re.M):
+            problems.append("Provenance has no 'Reconciled:' line (write 'Reconciled: not done (<reason>)' if none was possible)")
+        if not lowered.startswith(CHECKED_SECTIONS):
+            continue
+        for line in body.splitlines():
+            numbers, tags = numbers_in(line), tags_in(line)
+            if numbers:
+                stats["lines"] += 1
+                stats["numbers"] += len(numbers)
+                if not tags:
+                    problems.append(f"untagged number in '{name}': {line.strip()}")
+            for tag in tags:
+                if tag == "given":
+                    given.append(line.strip())
+                elif tag.startswith("q"):
+                    stats["queries"].add(tag)
+                    if tag not in ran:
+                        why = f"it was {tried[tag]}" if tag in tried else "it is not in the query log"
+                        problems.append(f"[{tag}] doesn't resolve: {why}")
+                else:
+                    check_id = tag.split(":", 1)[1]
+                    stats["checks"].add(check_id)
+                    entry = logged_checks.get(check_id)
+                    if entry is None:
+                        problems.append(f"[{tag}] doesn't resolve: it is not in the check log")
+                    elif not entry.get("from"):
+                        problems.append(f"[{tag}] has no source query: rerun it with \"from\": \"q<n>\" in the spec")
+                    else:
+                        missing = [q for q in entry["from"] if q.lower() not in ran]
+                        if missing:
+                            problems.append(f"[{tag}] names queries that didn't run: {', '.join(missing)}")
+    return list(dict.fromkeys(problems)), stats, given
+
+
+def main(argv=None):
+    parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
+    parser.add_argument("readout", help="the readout file (use - for stdin)")
+    parser.add_argument("--queries", default=os.environ.get("DS_QUERIES_LOG") or ".ds-queries.log")
+    parser.add_argument("--checks", default=os.environ.get("DS_CHECKS_LOG") or ".ds-checks.log")
+    args = parser.parse_args(argv)
+    try:
+        text = sys.stdin.read() if args.readout == "-" else open(args.readout).read()
+    except OSError as err:
+        print(f"verify_readout: can't read the readout ({err})", file=sys.stderr)
+        return 3
+    problems, stats, given = verify(text, read_jsonl(args.queries), read_jsonl(args.checks))
+    counts = (f"{stats['numbers']} numbers on {stats['lines']} lines; {len(stats['queries'])} queries, "
+              f"{len(stats['checks'])} checks, {len(given)} given")
+    if problems:
+        print(f"verify_readout: fail ({counts})")
+        for problem in problems:
+            print(f"  - {problem}")
+    else:
+        print(f"verify_readout: pass ({counts})")
+    for line in given:
+        print(f"  given (confirm against the request): {line}")
+    return 1 if problems else 0
+
+
+if __name__ == "__main__":
+    sys.exit(main())
+
+===== public exec; source lines 548-552 =====
+exec
+/bin/zsh -lc "python3 .claude/skills/ds-mode/checks/run.py completeness --json '{\"series\":[{\"period\":\"2026-10-05\",\"rows\":119685},{\"period\":\"2026-10-06\",\"rows\":125382},{\"period\":\"2026-10-07\",\"rows\":119253},{\"period\":\"2026-10-08\",\"rows\":122689},{\"period\":\"2026-10-09\",\"rows\":115643},{\"period\":\"2026-10-10\",\"rows\":117664},{\"period\":\"2026-10-11\",\"rows\":123422}],\"target\":\"2026-10-11\",\"from\":\"q2\"}'" in /private/tmp/ds-runs-2026-10-13-2343/c3fad32dbc/analysis
+ succeeded in 0ms:
+{"check": "completeness", "details": {"baseline_median_rows": 119469.0, "baseline_periods": ["2026-10-05", "2026-10-06", "2026-10-07", "2026-10-08", "2026-10-09", "2026-10-10"], "basis": "trailing days (under 3 weeks of same-weekday history)", "max_ratio": null, "min_ratio": 0.9, "ratio": 1.0331, "target": "2026-10-11", "target_rows": 123422}, "from": ["q2"], "id": "completeness#1", "status": "pass", "summary": "2026-10-11: 123422 rows = 103% of the trailing days (under 3 weeks of same-weekday history) median (119469)"}
+
+===== public exec; source lines 553-591 =====
+exec
+/bin/zsh -lc "cat > readout.md <<'EOF'
+## Answer
+Headline: can't tell [inferred]
+无法确定该周有多少百分比的搜索关联了购买：仓库缺少购买记录，现有 conversions 仅表示加购。[q1] [inferred]
+- Observed: not computed（缺少购买分子，无法计算比例或区间）[inferred]
+- Adjusted: not computed（原始购买比例不可计算）[inferred]
+- Causal effect: not identified（需要随机实验或其他可识别因果关系的设计）[inferred]
+
+## What it means for 季度财务模型
+当前无法提供购买转化率及其区间，不应将加购率填入购买率参数。[inferred] 财务尚未提供会改变模型决策的最小变化阈值，因此也无法判断估计精度是否足够。[inferred]
+
+## Why we believe it
+- Alternatives considered:
+  - 用 conversions 代表购买：ruled out，metrics.json 明确规定它记录加购，且购买数据仅在订单系统中。[inferred]
+  - 缺失购买数据：ruled in，指标注册表标为不可用，数据库结构仅包含搜索日汇总表。[q1] [measured]
+  - 目标周日期缺失：ruled out，所有目标日期都有搜索汇总；这不证明订单完整或搜索已全部入库。[q2] [measured]
+  - 流量构成、季节性、星期效应及日志口径变更：ruled in 为潜在影响因素；当前仅有单周汇总，无法排除或量化其影响。[q1, q2] [inferred]
+- Checks run:
+  - completeness: pass 2026-10-11: 123422 rows = 103% of the trailing days (under 3 weeks of same-weekday history) median (119469) [check:completeness#1] [measured]
+  - completeness 范围：flag 上述 rows 输入为每日搜索数；检查仅识别末日搜索量异常下降，不能确认购买数据完整性。[q2] [inferred]
+  - fanout: skipped 未进行关联。[inferred]
+  - mix_shift: skipped 未估计跨期变化，且没有细分维度。[q1] [inferred]
+  - srm: skipped 无实验分组。[q1] [inferred]
+
+## Caveats, and what would change the answer
+- 接入订单及搜索关联数据，明确购买成功状态、归因窗口、时区和去重规则，并等待归因窗口结束后，才能计算比例及适当区间。[inferred]
+- 搜索与购买的关联比例不等于搜索带来的增量购买效应。[inferred]
+
+## Provenance
+- Metric: search_purchase_rate，from metrics.json，标记 available=false；精确分子、过滤和归因规则尚未给出。拟用“该周至少关联一次有效购买的搜索数／该周全部符合条件的搜索数”，搜索粒度，stated here [guess]
+- Data: search_daily_c，覆盖 2026-10-05 至 2026-10-11；最后完整入库期未获确认，订单数据不在仓库中。[q1, q2] [measured]
+- Reconciled: not done（没有购买数据或同口径购买率看板可供核对）[inferred]
+- Queries and checks: .ds-queries.log、.ds-checks.log；结论文件 readout.md。[measured]
+EOF
+python3 .claude/skills/ds-mode/tools/verify_readout.py readout.md" in /private/tmp/ds-runs-2026-10-13-2343/c3fad32dbc/analysis
+ succeeded in 0ms:
+verify_readout: pass (4 numbers on 1 lines; 2 queries, 1 checks, 0 given)
+
+===== public exec; source lines 592-596 =====
+exec
+/bin/zsh -lc "cat >> readout.md <<'EOF'
+- Verified: verify_readout: pass (4 numbers on 1 lines; 2 queries, 1 checks, 0 given)
+EOF" in /private/tmp/ds-runs-2026-10-13-2343/c3fad32dbc/analysis
+ succeeded in 0ms:
+
+===== public codex; source lines 597-635 =====
+codex
+## Answer
+Headline: can't tell [inferred]
+
+无法确定该周有多少百分比的搜索关联了购买：仓库缺少购买记录，现有 conversions 仅表示加购。[q1] [inferred]
+
+- Observed: not computed（缺少购买分子，无法计算比例或区间）[inferred]
+- Adjusted: not computed（原始购买比例不可计算）[inferred]
+- Causal effect: not identified（需要随机实验或其他可识别因果关系的设计）[inferred]
+
+## What it means for 季度财务模型
+当前无法提供购买转化率及其区间，不应将加购率填入购买率参数。[inferred] 财务尚未提供会改变模型决策的最小变化阈值，因此也无法判断估计精度是否足够。[inferred]
+
+## Why we believe it
+
+- Alternatives considered:
+  - 用 conversions 代表购买：ruled out，metrics.json 明确规定它记录加购，且购买数据仅在订单系统中。[inferred]
+  - 缺失购买数据：ruled in，指标注册表标为不可用，数据库结构仅包含搜索日汇总表。[q1] [measured]
+  - 目标周日期缺失：ruled out，所有目标日期都有搜索汇总；这不证明订单完整或搜索已全部入库。[q2] [measured]
+  - 流量构成、季节性、星期效应及日志口径变更：ruled in 为潜在影响因素；当前仅有单周汇总，无法排除或量化其影响。[q1, q2] [inferred]
+- Checks run:
+  - completeness: pass 2026-10-11: 123422 rows = 103% of the trailing days (under 3 weeks of same-weekday history) median (119469) [check:completeness#1] [measured]
+  - completeness 范围：flag 上述 rows 输入为每日搜索数；检查仅识别末日搜索量异常下降，不能确认购买数据完整性。[q2] [inferred]
+  - fanout: skipped 未进行关联。[inferred]
+  - mix_shift: skipped 未估计跨期变化，且没有细分维度。[q1] [inferred]
+  - srm: skipped 无实验分组。[q1] [inferred]
+
+## Caveats, and what would change the answer
+
+- 接入订单及搜索关联数据，明确购买成功状态、归因窗口、时区和去重规则，并等待归因窗口结束后，才能计算比例及适当区间。[inferred]
+- 搜索与购买的关联比例不等于搜索带来的增量购买效应。[inferred]
+
+## Provenance
+
+- Metric: search_purchase_rate，from metrics.json，标记 available=false；精确分子、过滤和归因规则尚未给出。拟用“该周至少关联一次有效购买的搜索数／该周全部符合条件的搜索数”，搜索粒度，stated here [guess]
+- Data: search_daily_c，覆盖 2026-10-05 至 2026-10-11；最后完整入库期未获确认，订单数据不在仓库中。[q1, q2] [measured]
+- Reconciled: not done（没有购买数据或同口径购买率看板可供核对）[inferred]
+- Queries and checks: .ds-queries.log、.ds-checks.log；结论文件 readout.md。[measured]
+- Verified: verify_readout: pass (4 numbers on 1 lines; 2 queries, 1 checks, 0 given)

@@ -1,0 +1,1010 @@
+[
+  {
+    "directory": "eval/results/2026-10-13-2343-codex-en/f8__baseline__2",
+    "exit": 1,
+    "not_isolated": true,
+    "http429": true,
+    "model_capacity": false
+  },
+  {
+    "directory": "eval/results/2026-10-13-2343-codex-en/f7__full__1",
+    "exit": 1,
+    "not_isolated": true,
+    "http429": true,
+    "model_capacity": false
+  },
+  {
+    "directory": "eval/results/2026-10-13-2343-codex-en/f6__full__1",
+    "exit": 1,
+    "not_isolated": true,
+    "http429": true,
+    "model_capacity": false
+  },
+  {
+    "directory": "eval/results/2026-10-13-2343-codex-en/f7__baseline__1",
+    "exit": 1,
+    "not_isolated": true,
+    "http429": true,
+    "model_capacity": false
+  },
+  {
+    "directory": "eval/results/2026-10-13-2343-codex-en/f8__baseline__3",
+    "exit": 1,
+    "not_isolated": true,
+    "http429": true,
+    "model_capacity": false
+  },
+  {
+    "directory": "eval/results/2026-10-13-2343-codex-en/f4__checks__1",
+    "exit": 1,
+    "not_isolated": true,
+    "http429": true,
+    "model_capacity": false
+  },
+  {
+    "directory": "eval/results/2026-10-13-2343-codex-en/f5__checks__3",
+    "exit": 1,
+    "not_isolated": true,
+    "http429": true,
+    "model_capacity": false
+  },
+  {
+    "directory": "eval/results/2026-10-13-2343-codex-en/f8__checks__2",
+    "exit": 1,
+    "not_isolated": true,
+    "http429": true,
+    "model_capacity": false
+  },
+  {
+    "directory": "eval/results/2026-10-13-2343-codex-en/f1__checks__1",
+    "exit": 0,
+    "not_isolated": true,
+    "http429": false,
+    "model_capacity": false
+  },
+  {
+    "directory": "eval/results/2026-10-13-2343-codex-en/f4__full__2",
+    "exit": 1,
+    "not_isolated": true,
+    "http429": true,
+    "model_capacity": false
+  },
+  {
+    "directory": "eval/results/2026-10-13-2343-codex-en/f5__full__2",
+    "exit": 1,
+    "not_isolated": true,
+    "http429": false,
+    "model_capacity": true
+  },
+  {
+    "directory": "eval/results/2026-10-13-2343-codex-en/f1__baseline__1",
+    "exit": 1,
+    "not_isolated": true,
+    "http429": true,
+    "model_capacity": false
+  },
+  {
+    "directory": "eval/results/2026-10-13-2343-codex-en/f8__checks__3",
+    "exit": 1,
+    "not_isolated": true,
+    "http429": true,
+    "model_capacity": false
+  },
+  {
+    "directory": "eval/results/2026-10-13-2343-codex-en/f6__baseline__1",
+    "exit": 1,
+    "not_isolated": true,
+    "http429": true,
+    "model_capacity": false
+  },
+  {
+    "directory": "eval/results/2026-10-13-2343-codex-en/f5__checks__2",
+    "exit": 1,
+    "not_isolated": true,
+    "http429": true,
+    "model_capacity": false
+  },
+  {
+    "directory": "eval/results/2026-10-13-2343-codex-en/f4__full__3",
+    "exit": 1,
+    "not_isolated": true,
+    "http429": true,
+    "model_capacity": false
+  },
+  {
+    "directory": "eval/results/2026-10-13-2343-codex-en/f5__full__3",
+    "exit": 1,
+    "not_isolated": true,
+    "http429": true,
+    "model_capacity": false
+  },
+  {
+    "directory": "eval/results/2026-10-13-2343-codex-en/f4__baseline__3",
+    "exit": 1,
+    "not_isolated": true,
+    "http429": true,
+    "model_capacity": false
+  },
+  {
+    "directory": "eval/results/2026-10-13-2343-codex-en/f3__full__2",
+    "exit": 1,
+    "not_isolated": true,
+    "http429": true,
+    "model_capacity": false
+  },
+  {
+    "directory": "eval/results/2026-10-13-2343-codex-en/f2__full__2",
+    "exit": 1,
+    "not_isolated": true,
+    "http429": true,
+    "model_capacity": false
+  },
+  {
+    "directory": "eval/results/2026-10-13-2343-codex-en/f8__full__3",
+    "exit": 1,
+    "not_isolated": true,
+    "http429": true,
+    "model_capacity": false
+  },
+  {
+    "directory": "eval/results/2026-10-13-2343-codex-en/f3__baseline__3",
+    "exit": 1,
+    "not_isolated": true,
+    "http429": true,
+    "model_capacity": false
+  },
+  {
+    "directory": "eval/results/2026-10-13-2343-codex-en/f2__checks__2",
+    "exit": 1,
+    "not_isolated": true,
+    "http429": true,
+    "model_capacity": false
+  },
+  {
+    "directory": "eval/results/2026-10-13-2343-codex-en/f6__checks__1",
+    "exit": 1,
+    "not_isolated": true,
+    "http429": true,
+    "model_capacity": false
+  },
+  {
+    "directory": "eval/results/2026-10-13-2343-codex-en/f2__checks__3",
+    "exit": 1,
+    "not_isolated": true,
+    "http429": true,
+    "model_capacity": false
+  },
+  {
+    "directory": "eval/results/2026-10-13-2343-codex-en/f3__baseline__2",
+    "exit": 1,
+    "not_isolated": true,
+    "http429": true,
+    "model_capacity": false
+  },
+  {
+    "directory": "eval/results/2026-10-13-2343-codex-en/f3__full__3",
+    "exit": 1,
+    "not_isolated": true,
+    "http429": true,
+    "model_capacity": false
+  },
+  {
+    "directory": "eval/results/2026-10-13-2343-codex-en/f2__full__3",
+    "exit": 1,
+    "not_isolated": true,
+    "http429": true,
+    "model_capacity": false
+  },
+  {
+    "directory": "eval/results/2026-10-13-2343-codex-en/f4__baseline__2",
+    "exit": 1,
+    "not_isolated": true,
+    "http429": true,
+    "model_capacity": false
+  },
+  {
+    "directory": "eval/results/2026-10-13-2343-codex-en/f8__full__2",
+    "exit": 1,
+    "not_isolated": true,
+    "http429": true,
+    "model_capacity": false
+  },
+  {
+    "directory": "eval/results/2026-10-13-2343-codex-en/f3__checks__1",
+    "exit": 1,
+    "not_isolated": true,
+    "http429": true,
+    "model_capacity": false
+  },
+  {
+    "directory": "eval/results/2026-10-13-2343-codex-en/f2__baseline__3",
+    "exit": 1,
+    "not_isolated": true,
+    "http429": true,
+    "model_capacity": false
+  },
+  {
+    "directory": "eval/results/2026-10-13-2343-codex-en/f5__baseline__3",
+    "exit": 1,
+    "not_isolated": true,
+    "http429": true,
+    "model_capacity": false
+  },
+  {
+    "directory": "eval/results/2026-10-13-2343-codex-en/f7__checks__3",
+    "exit": 1,
+    "not_isolated": true,
+    "http429": true,
+    "model_capacity": false
+  },
+  {
+    "directory": "eval/results/2026-10-13-2343-codex-en/f1__full__1",
+    "exit": 1,
+    "not_isolated": true,
+    "http429": true,
+    "model_capacity": false
+  },
+  {
+    "directory": "eval/results/2026-10-13-2343-codex-en/f5__baseline__2",
+    "exit": 1,
+    "not_isolated": true,
+    "http429": true,
+    "model_capacity": false
+  },
+  {
+    "directory": "eval/results/2026-10-13-2343-codex-en/f2__baseline__2",
+    "exit": 1,
+    "not_isolated": true,
+    "http429": true,
+    "model_capacity": false
+  },
+  {
+    "directory": "eval/results/2026-10-13-2343-codex-en/f7__checks__2",
+    "exit": 1,
+    "not_isolated": true,
+    "http429": true,
+    "model_capacity": false
+  },
+  {
+    "directory": "eval/results/2026-10-13-2343-codex-en/f4__checks__3",
+    "exit": 1,
+    "not_isolated": true,
+    "http429": true,
+    "model_capacity": false
+  },
+  {
+    "directory": "eval/results/2026-10-13-2343-codex-en/f7__baseline__3",
+    "exit": 1,
+    "not_isolated": true,
+    "http429": true,
+    "model_capacity": false
+  },
+  {
+    "directory": "eval/results/2026-10-13-2343-codex-en/f8__baseline__1",
+    "exit": 1,
+    "not_isolated": true,
+    "http429": true,
+    "model_capacity": false
+  },
+  {
+    "directory": "eval/results/2026-10-13-2343-codex-en/f7__full__3",
+    "exit": 1,
+    "not_isolated": true,
+    "http429": true,
+    "model_capacity": false
+  },
+  {
+    "directory": "eval/results/2026-10-13-2343-codex-en/f6__full__3",
+    "exit": 1,
+    "not_isolated": true,
+    "http429": true,
+    "model_capacity": false
+  },
+  {
+    "directory": "eval/results/2026-10-13-2343-codex-en/f7__baseline__2",
+    "exit": 1,
+    "not_isolated": true,
+    "http429": true,
+    "model_capacity": false
+  },
+  {
+    "directory": "eval/results/2026-10-13-2343-codex-en/f4__checks__2",
+    "exit": 1,
+    "not_isolated": true,
+    "http429": true,
+    "model_capacity": false
+  },
+  {
+    "directory": "eval/results/2026-10-13-2343-codex-en/f7__full__2",
+    "exit": 1,
+    "not_isolated": true,
+    "http429": true,
+    "model_capacity": false
+  },
+  {
+    "directory": "eval/results/2026-10-13-2343-codex-en/f6__full__2",
+    "exit": 1,
+    "not_isolated": true,
+    "http429": true,
+    "model_capacity": false
+  },
+  {
+    "directory": "eval/results/2026-10-13-2343-codex-en/f4__full__1",
+    "exit": 1,
+    "not_isolated": true,
+    "http429": true,
+    "model_capacity": false
+  },
+  {
+    "directory": "eval/results/2026-10-13-2343-codex-en/f5__full__1",
+    "exit": 1,
+    "not_isolated": true,
+    "http429": true,
+    "model_capacity": false
+  },
+  {
+    "directory": "eval/results/2026-10-13-2343-codex-en/f1__checks__2",
+    "exit": 1,
+    "not_isolated": true,
+    "http429": true,
+    "model_capacity": false
+  },
+  {
+    "directory": "eval/results/2026-10-13-2343-codex-en/f1__baseline__3",
+    "exit": 1,
+    "not_isolated": true,
+    "http429": true,
+    "model_capacity": false
+  },
+  {
+    "directory": "eval/results/2026-10-13-2343-codex-en/f6__baseline__3",
+    "exit": 1,
+    "not_isolated": true,
+    "http429": true,
+    "model_capacity": false
+  },
+  {
+    "directory": "eval/results/2026-10-13-2343-codex-en/f8__checks__1",
+    "exit": 1,
+    "not_isolated": true,
+    "http429": true,
+    "model_capacity": false
+  },
+  {
+    "directory": "eval/results/2026-10-13-2343-codex-en/f1__checks__3",
+    "exit": 0,
+    "not_isolated": true,
+    "http429": false,
+    "model_capacity": false
+  },
+  {
+    "directory": "eval/results/2026-10-13-2343-codex-en/f6__baseline__2",
+    "exit": 1,
+    "not_isolated": true,
+    "http429": true,
+    "model_capacity": false
+  },
+  {
+    "directory": "eval/results/2026-10-13-2343-codex-en/f5__checks__1",
+    "exit": 1,
+    "not_isolated": true,
+    "http429": true,
+    "model_capacity": false
+  },
+  {
+    "directory": "eval/results/2026-10-13-2343-codex-en/f1__baseline__2",
+    "exit": 1,
+    "not_isolated": true,
+    "http429": true,
+    "model_capacity": false
+  },
+  {
+    "directory": "eval/results/2026-10-13-2343-codex-en/f3__full__1",
+    "exit": 1,
+    "not_isolated": true,
+    "http429": true,
+    "model_capacity": false
+  },
+  {
+    "directory": "eval/results/2026-10-13-2343-codex-en/f2__full__1",
+    "exit": 1,
+    "not_isolated": true,
+    "http429": true,
+    "model_capacity": false
+  },
+  {
+    "directory": "eval/results/2026-10-13-2343-codex-en/f2__checks__1",
+    "exit": 1,
+    "not_isolated": true,
+    "http429": true,
+    "model_capacity": false
+  },
+  {
+    "directory": "eval/results/2026-10-13-2343-codex-en/f6__checks__3",
+    "exit": 1,
+    "not_isolated": true,
+    "http429": true,
+    "model_capacity": false
+  },
+  {
+    "directory": "eval/results/2026-10-13-2343-codex-en/f4__baseline__1",
+    "exit": 1,
+    "not_isolated": true,
+    "http429": true,
+    "model_capacity": false
+  },
+  {
+    "directory": "eval/results/2026-10-13-2343-codex-en/f8__full__1",
+    "exit": 1,
+    "not_isolated": true,
+    "http429": true,
+    "model_capacity": false
+  },
+  {
+    "directory": "eval/results/2026-10-13-2343-codex-en/f3__baseline__1",
+    "exit": 1,
+    "not_isolated": true,
+    "http429": true,
+    "model_capacity": false
+  },
+  {
+    "directory": "eval/results/2026-10-13-2343-codex-en/f6__checks__2",
+    "exit": 1,
+    "not_isolated": true,
+    "http429": true,
+    "model_capacity": false
+  },
+  {
+    "directory": "eval/results/2026-10-13-2343-codex-en/f3__checks__2",
+    "exit": 1,
+    "not_isolated": true,
+    "http429": true,
+    "model_capacity": false
+  },
+  {
+    "directory": "eval/results/2026-10-13-2343-codex-en/f1__full__3",
+    "exit": 1,
+    "not_isolated": true,
+    "http429": true,
+    "model_capacity": false
+  },
+  {
+    "directory": "eval/results/2026-10-13-2343-codex-en/f7__checks__1",
+    "exit": 1,
+    "not_isolated": true,
+    "http429": true,
+    "model_capacity": false
+  },
+  {
+    "directory": "eval/results/2026-10-13-2343-codex-en/f1__full__2",
+    "exit": 1,
+    "not_isolated": true,
+    "http429": true,
+    "model_capacity": false
+  },
+  {
+    "directory": "eval/results/2026-10-13-2343-codex-en/f3__checks__3",
+    "exit": 1,
+    "not_isolated": true,
+    "http429": true,
+    "model_capacity": false
+  },
+  {
+    "directory": "eval/results/2026-10-13-2343-codex-en/f2__baseline__1",
+    "exit": 1,
+    "not_isolated": true,
+    "http429": true,
+    "model_capacity": false
+  },
+  {
+    "directory": "eval/results/2026-10-13-2343-codex-en/f5__baseline__1",
+    "exit": 1,
+    "not_isolated": true,
+    "http429": true,
+    "model_capacity": false
+  },
+  {
+    "directory": "eval/results/2026-10-13-2343-codex-zh/f8__baseline__2",
+    "exit": 1,
+    "not_isolated": true,
+    "http429": true,
+    "model_capacity": false
+  },
+  {
+    "directory": "eval/results/2026-10-13-2343-codex-zh/f7__full__1",
+    "exit": 1,
+    "not_isolated": true,
+    "http429": true,
+    "model_capacity": false
+  },
+  {
+    "directory": "eval/results/2026-10-13-2343-codex-zh/f6__full__1",
+    "exit": 1,
+    "not_isolated": true,
+    "http429": true,
+    "model_capacity": false
+  },
+  {
+    "directory": "eval/results/2026-10-13-2343-codex-zh/f7__baseline__1",
+    "exit": 1,
+    "not_isolated": true,
+    "http429": true,
+    "model_capacity": false
+  },
+  {
+    "directory": "eval/results/2026-10-13-2343-codex-zh/f8__baseline__3",
+    "exit": 1,
+    "not_isolated": true,
+    "http429": true,
+    "model_capacity": false
+  },
+  {
+    "directory": "eval/results/2026-10-13-2343-codex-zh/f4__checks__1",
+    "exit": 1,
+    "not_isolated": true,
+    "http429": true,
+    "model_capacity": false
+  },
+  {
+    "directory": "eval/results/2026-10-13-2343-codex-zh/f5__checks__3",
+    "exit": 1,
+    "not_isolated": true,
+    "http429": true,
+    "model_capacity": false
+  },
+  {
+    "directory": "eval/results/2026-10-13-2343-codex-zh/f8__checks__2",
+    "exit": 1,
+    "not_isolated": true,
+    "http429": true,
+    "model_capacity": false
+  },
+  {
+    "directory": "eval/results/2026-10-13-2343-codex-zh/f1__checks__1",
+    "exit": 0,
+    "not_isolated": true,
+    "http429": false,
+    "model_capacity": false
+  },
+  {
+    "directory": "eval/results/2026-10-13-2343-codex-zh/f4__full__2",
+    "exit": 1,
+    "not_isolated": true,
+    "http429": true,
+    "model_capacity": false
+  },
+  {
+    "directory": "eval/results/2026-10-13-2343-codex-zh/f5__full__2",
+    "exit": 1,
+    "not_isolated": true,
+    "http429": true,
+    "model_capacity": false
+  },
+  {
+    "directory": "eval/results/2026-10-13-2343-codex-zh/f1__baseline__1",
+    "exit": 0,
+    "not_isolated": true,
+    "http429": false,
+    "model_capacity": false
+  },
+  {
+    "directory": "eval/results/2026-10-13-2343-codex-zh/f8__checks__3",
+    "exit": 1,
+    "not_isolated": true,
+    "http429": true,
+    "model_capacity": false
+  },
+  {
+    "directory": "eval/results/2026-10-13-2343-codex-zh/f6__baseline__1",
+    "exit": 1,
+    "not_isolated": true,
+    "http429": true,
+    "model_capacity": false
+  },
+  {
+    "directory": "eval/results/2026-10-13-2343-codex-zh/f5__checks__2",
+    "exit": 1,
+    "not_isolated": true,
+    "http429": true,
+    "model_capacity": false
+  },
+  {
+    "directory": "eval/results/2026-10-13-2343-codex-zh/f4__full__3",
+    "exit": 1,
+    "not_isolated": true,
+    "http429": true,
+    "model_capacity": false
+  },
+  {
+    "directory": "eval/results/2026-10-13-2343-codex-zh/f5__full__3",
+    "exit": 1,
+    "not_isolated": true,
+    "http429": true,
+    "model_capacity": false
+  },
+  {
+    "directory": "eval/results/2026-10-13-2343-codex-zh/f4__baseline__3",
+    "exit": 1,
+    "not_isolated": true,
+    "http429": true,
+    "model_capacity": false
+  },
+  {
+    "directory": "eval/results/2026-10-13-2343-codex-zh/f3__full__2",
+    "exit": 1,
+    "not_isolated": true,
+    "http429": true,
+    "model_capacity": false
+  },
+  {
+    "directory": "eval/results/2026-10-13-2343-codex-zh/f2__full__2",
+    "exit": 1,
+    "not_isolated": true,
+    "http429": true,
+    "model_capacity": false
+  },
+  {
+    "directory": "eval/results/2026-10-13-2343-codex-zh/f8__full__3",
+    "exit": 1,
+    "not_isolated": true,
+    "http429": true,
+    "model_capacity": false
+  },
+  {
+    "directory": "eval/results/2026-10-13-2343-codex-zh/f3__baseline__3",
+    "exit": 1,
+    "not_isolated": true,
+    "http429": true,
+    "model_capacity": false
+  },
+  {
+    "directory": "eval/results/2026-10-13-2343-codex-zh/f2__checks__2",
+    "exit": 1,
+    "not_isolated": true,
+    "http429": true,
+    "model_capacity": false
+  },
+  {
+    "directory": "eval/results/2026-10-13-2343-codex-zh/f6__checks__1",
+    "exit": 1,
+    "not_isolated": true,
+    "http429": true,
+    "model_capacity": false
+  },
+  {
+    "directory": "eval/results/2026-10-13-2343-codex-zh/f2__checks__3",
+    "exit": 1,
+    "not_isolated": true,
+    "http429": true,
+    "model_capacity": false
+  },
+  {
+    "directory": "eval/results/2026-10-13-2343-codex-zh/f3__baseline__2",
+    "exit": 1,
+    "not_isolated": true,
+    "http429": true,
+    "model_capacity": false
+  },
+  {
+    "directory": "eval/results/2026-10-13-2343-codex-zh/f3__full__3",
+    "exit": 1,
+    "not_isolated": true,
+    "http429": true,
+    "model_capacity": false
+  },
+  {
+    "directory": "eval/results/2026-10-13-2343-codex-zh/f2__full__3",
+    "exit": 1,
+    "not_isolated": true,
+    "http429": true,
+    "model_capacity": false
+  },
+  {
+    "directory": "eval/results/2026-10-13-2343-codex-zh/f4__baseline__2",
+    "exit": 1,
+    "not_isolated": true,
+    "http429": true,
+    "model_capacity": false
+  },
+  {
+    "directory": "eval/results/2026-10-13-2343-codex-zh/f8__full__2",
+    "exit": 1,
+    "not_isolated": true,
+    "http429": true,
+    "model_capacity": false
+  },
+  {
+    "directory": "eval/results/2026-10-13-2343-codex-zh/f3__checks__1",
+    "exit": 1,
+    "not_isolated": true,
+    "http429": true,
+    "model_capacity": false
+  },
+  {
+    "directory": "eval/results/2026-10-13-2343-codex-zh/f2__baseline__3",
+    "exit": 1,
+    "not_isolated": true,
+    "http429": true,
+    "model_capacity": false
+  },
+  {
+    "directory": "eval/results/2026-10-13-2343-codex-zh/f5__baseline__3",
+    "exit": 1,
+    "not_isolated": true,
+    "http429": true,
+    "model_capacity": false
+  },
+  {
+    "directory": "eval/results/2026-10-13-2343-codex-zh/f7__checks__3",
+    "exit": 0,
+    "not_isolated": true,
+    "http429": false,
+    "model_capacity": false
+  },
+  {
+    "directory": "eval/results/2026-10-13-2343-codex-zh/f1__full__1",
+    "exit": 1,
+    "not_isolated": true,
+    "http429": true,
+    "model_capacity": false
+  },
+  {
+    "directory": "eval/results/2026-10-13-2343-codex-zh/f5__baseline__2",
+    "exit": 1,
+    "not_isolated": true,
+    "http429": true,
+    "model_capacity": false
+  },
+  {
+    "directory": "eval/results/2026-10-13-2343-codex-zh/f2__baseline__2",
+    "exit": 1,
+    "not_isolated": true,
+    "http429": true,
+    "model_capacity": false
+  },
+  {
+    "directory": "eval/results/2026-10-13-2343-codex-zh/f7__checks__2",
+    "exit": 1,
+    "not_isolated": true,
+    "http429": false,
+    "model_capacity": true
+  },
+  {
+    "directory": "eval/results/2026-10-13-2343-codex-zh/f4__checks__3",
+    "exit": 1,
+    "not_isolated": true,
+    "http429": true,
+    "model_capacity": false
+  },
+  {
+    "directory": "eval/results/2026-10-13-2343-codex-zh/f7__baseline__3",
+    "exit": 1,
+    "not_isolated": true,
+    "http429": false,
+    "model_capacity": true
+  },
+  {
+    "directory": "eval/results/2026-10-13-2343-codex-zh/f8__baseline__1",
+    "exit": 1,
+    "not_isolated": true,
+    "http429": true,
+    "model_capacity": false
+  },
+  {
+    "directory": "eval/results/2026-10-13-2343-codex-zh/f7__full__3",
+    "exit": 1,
+    "not_isolated": true,
+    "http429": true,
+    "model_capacity": false
+  },
+  {
+    "directory": "eval/results/2026-10-13-2343-codex-zh/f6__full__3",
+    "exit": 1,
+    "not_isolated": true,
+    "http429": true,
+    "model_capacity": false
+  },
+  {
+    "directory": "eval/results/2026-10-13-2343-codex-zh/f7__baseline__2",
+    "exit": 1,
+    "not_isolated": true,
+    "http429": true,
+    "model_capacity": false
+  },
+  {
+    "directory": "eval/results/2026-10-13-2343-codex-zh/f4__checks__2",
+    "exit": 1,
+    "not_isolated": true,
+    "http429": true,
+    "model_capacity": false
+  },
+  {
+    "directory": "eval/results/2026-10-13-2343-codex-zh/f7__full__2",
+    "exit": 0,
+    "not_isolated": true,
+    "http429": false,
+    "model_capacity": false
+  },
+  {
+    "directory": "eval/results/2026-10-13-2343-codex-zh/f6__full__2",
+    "exit": 1,
+    "not_isolated": true,
+    "http429": true,
+    "model_capacity": false
+  },
+  {
+    "directory": "eval/results/2026-10-13-2343-codex-zh/f4__full__1",
+    "exit": 1,
+    "not_isolated": true,
+    "http429": true,
+    "model_capacity": false
+  },
+  {
+    "directory": "eval/results/2026-10-13-2343-codex-zh/f5__full__1",
+    "exit": 1,
+    "not_isolated": true,
+    "http429": true,
+    "model_capacity": false
+  },
+  {
+    "directory": "eval/results/2026-10-13-2343-codex-zh/f1__checks__2",
+    "exit": 1,
+    "not_isolated": true,
+    "http429": true,
+    "model_capacity": false
+  },
+  {
+    "directory": "eval/results/2026-10-13-2343-codex-zh/f1__baseline__3",
+    "exit": 0,
+    "not_isolated": true,
+    "http429": false,
+    "model_capacity": false
+  },
+  {
+    "directory": "eval/results/2026-10-13-2343-codex-zh/f6__baseline__3",
+    "exit": 1,
+    "not_isolated": true,
+    "http429": true,
+    "model_capacity": false
+  },
+  {
+    "directory": "eval/results/2026-10-13-2343-codex-zh/f8__checks__1",
+    "exit": 1,
+    "not_isolated": true,
+    "http429": true,
+    "model_capacity": false
+  },
+  {
+    "directory": "eval/results/2026-10-13-2343-codex-zh/f1__checks__3",
+    "exit": 1,
+    "not_isolated": true,
+    "http429": true,
+    "model_capacity": false
+  },
+  {
+    "directory": "eval/results/2026-10-13-2343-codex-zh/f6__baseline__2",
+    "exit": 1,
+    "not_isolated": true,
+    "http429": true,
+    "model_capacity": false
+  },
+  {
+    "directory": "eval/results/2026-10-13-2343-codex-zh/f5__checks__1",
+    "exit": 1,
+    "not_isolated": true,
+    "http429": true,
+    "model_capacity": false
+  },
+  {
+    "directory": "eval/results/2026-10-13-2343-codex-zh/f1__baseline__2",
+    "exit": 1,
+    "not_isolated": true,
+    "http429": true,
+    "model_capacity": false
+  },
+  {
+    "directory": "eval/results/2026-10-13-2343-codex-zh/f3__full__1",
+    "exit": 1,
+    "not_isolated": true,
+    "http429": true,
+    "model_capacity": false
+  },
+  {
+    "directory": "eval/results/2026-10-13-2343-codex-zh/f2__full__1",
+    "exit": 1,
+    "not_isolated": true,
+    "http429": true,
+    "model_capacity": false
+  },
+  {
+    "directory": "eval/results/2026-10-13-2343-codex-zh/f2__checks__1",
+    "exit": 1,
+    "not_isolated": true,
+    "http429": true,
+    "model_capacity": false
+  },
+  {
+    "directory": "eval/results/2026-10-13-2343-codex-zh/f6__checks__3",
+    "exit": 1,
+    "not_isolated": true,
+    "http429": true,
+    "model_capacity": false
+  },
+  {
+    "directory": "eval/results/2026-10-13-2343-codex-zh/f4__baseline__1",
+    "exit": 1,
+    "not_isolated": true,
+    "http429": true,
+    "model_capacity": false
+  },
+  {
+    "directory": "eval/results/2026-10-13-2343-codex-zh/f8__full__1",
+    "exit": 1,
+    "not_isolated": true,
+    "http429": true,
+    "model_capacity": false
+  },
+  {
+    "directory": "eval/results/2026-10-13-2343-codex-zh/f3__baseline__1",
+    "exit": 1,
+    "not_isolated": true,
+    "http429": true,
+    "model_capacity": false
+  },
+  {
+    "directory": "eval/results/2026-10-13-2343-codex-zh/f6__checks__2",
+    "exit": 1,
+    "not_isolated": true,
+    "http429": true,
+    "model_capacity": false
+  },
+  {
+    "directory": "eval/results/2026-10-13-2343-codex-zh/f3__checks__2",
+    "exit": 1,
+    "not_isolated": true,
+    "http429": true,
+    "model_capacity": false
+  },
+  {
+    "directory": "eval/results/2026-10-13-2343-codex-zh/f1__full__3",
+    "exit": 1,
+    "not_isolated": true,
+    "http429": true,
+    "model_capacity": false
+  },
+  {
+    "directory": "eval/results/2026-10-13-2343-codex-zh/f7__checks__1",
+    "exit": 1,
+    "not_isolated": true,
+    "http429": false,
+    "model_capacity": true
+  },
+  {
+    "directory": "eval/results/2026-10-13-2343-codex-zh/f1__full__2",
+    "exit": 1,
+    "not_isolated": true,
+    "http429": true,
+    "model_capacity": false
+  },
+  {
+    "directory": "eval/results/2026-10-13-2343-codex-zh/f3__checks__3",
+    "exit": 1,
+    "not_isolated": true,
+    "http429": true,
+    "model_capacity": false
+  },
+  {
+    "directory": "eval/results/2026-10-13-2343-codex-zh/f2__baseline__1",
+    "exit": 1,
+    "not_isolated": true,
+    "http429": true,
+    "model_capacity": false
+  },
+  {
+    "directory": "eval/results/2026-10-13-2343-codex-zh/f5__baseline__1",
+    "exit": 1,
+    "not_isolated": true,
+    "http429": true,
+    "model_capacity": false
+  }
+]

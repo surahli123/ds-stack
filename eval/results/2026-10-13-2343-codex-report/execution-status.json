@@ -1,0 +1,39 @@
+{
+  "run_id": "2026-10-13-2343",
+  "tested_commit": "63ab57af0230408b2a97865ca287433fb2d9d6d8",
+  "cursor": "not run",
+  "probe": "PASS; five allowed system skills; INSTRUCTIONS: NONE",
+  "commands": [
+    {
+      "language": "en",
+      "argv": [
+        "python3",
+        "eval/run_arms.py",
+        "--runs",
+        "3",
+        "--agent-cmd",
+        "sh <HOME>/ds-stack/eval/agents/codex.sh {prompt_file}",
+        "--out",
+        "eval/results/2026-10-13-2343-codex-en"
+      ],
+      "exit": 0
+    },
+    {
+      "language": "zh",
+      "argv": [
+        "python3",
+        "eval/run_arms.py",
+        "--runs",
+        "3",
+        "--agent-cmd",
+        "sh <HOME>/ds-stack/eval/agents/codex.sh {prompt_file}",
+        "--out",
+        "eval/results/2026-10-13-2343-codex-zh",
+        "--prompt-suffix",
+        "\u8bf7\u7528\u4e2d\u6587\u5199\u7ed3\u8bba\u3002"
+      ],
+      "exit": 0
+    }
+  ],
+  "restored": true
+}

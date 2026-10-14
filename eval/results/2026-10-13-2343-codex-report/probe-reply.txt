@@ -1,0 +1,3 @@
+SKILLS: imagegen, openai-docs, plugin-creator, skill-creator, skill-installer
+INSTRUCTIONS: NONE
+PASS

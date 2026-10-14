@@ -1,0 +1,13 @@
+{
+  "fixture": "f8",
+  "arm": "checks",
+  "run": 1,
+  "model": "sonnet",
+  "exit": 1,
+  "seconds": 2.4,
+  "cost_usd": null,
+  "turns": null,
+  "agent_cmd": "sh <HOME>/ds-stack/eval/agents/codex.sh {prompt_file}",
+  "transcript": false,
+  "prompt_suffix": "\u8bf7\u7528\u4e2d\u6587\u5199\u7ed3\u8bba\u3002"
+}
