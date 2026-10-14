@@ -1,0 +1,18 @@
+{
+  "ctr": {
+    "denominator": "searches_with_results",
+    "filters": [
+      "traffic_type = 'external'"
+    ],
+    "grain": "search",
+    "numerator": "searches_with_click",
+    "owner": "search analytics",
+    "pitfalls": [
+      "clicks counts every click, so a search with three clicks counts three times",
+      "a search with no results shown is not in the denominator",
+      "bot and internal traffic are excluded"
+    ],
+    "source": "search_daily_v",
+    "verified": "2026-10-01: matched the weekly business review dashboard to 0.1 pp"
+  }
+}

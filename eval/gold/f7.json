@@ -1,0 +1,11 @@
+{
+  "accept_abstain": true,
+  "accept_values": [],
+  "id": "f7",
+  "kind": "abstain",
+  "must_not_rule_in": [],
+  "must_rule_in": [],
+  "naive_answer_percent": 8.3,
+  "planted": "purchases aren't logged here (overlay metric catalog); conversions are add-to-cart events, so any purchase rate is a substitute",
+  "unit": "percent"
+}

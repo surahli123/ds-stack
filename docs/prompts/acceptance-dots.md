@@ -48,6 +48,7 @@ Repeat step 3 with `eval/agents/cursor.sh`, writing to `$D-cursor-en` and `$D-cu
 ```bash
 mv ~/ds-gold-hidden ~/ds-stack/eval/gold
 for R in eval/results/$D-codex-* eval/results/$D-cursor-*; do [ -d "$R" ] && python3 eval/grade.py "$R" --allow-no-transcript; done
+python3 eval/acceptance.py eval/results/$D-codex-* eval/results/$D-cursor-* --allow-no-transcript
 ```
 
 ### 6. Push the results
@@ -63,7 +64,8 @@ Send the person you work for this, and nothing else:
 ```
 ds-stack acceptance, <date>, commit <hash>
 Codex: <version>   Cursor: <version or "not run">
-<for each results directory: its Fixtures-by-majority table and the per-arm runs_correct line from summary.md>
+<the full output of eval/acceptance.py>
+<for each results directory: its Fixtures-by-majority table from summary.md>
 Failing runs: <directory/run: the Reason column from summary.md>
 Pushed: <branch name>
 Problems: <none, or the step, the command and its error>

@@ -1,0 +1,16 @@
+{
+  "accept_abstain": false,
+  "accept_values": [
+    {
+      "tol": 0.3,
+      "value": 36.97
+    }
+  ],
+  "id": "f8",
+  "kind": "error",
+  "must_not_rule_in": [],
+  "must_rule_in": [],
+  "naive_answer_percent": 40.902,
+  "planted": "a 2026-10-09 backfill loaded 250 high-CTR queries into query_category a second time, so a join counts them twice and inflates the rate",
+  "unit": "percent"
+}

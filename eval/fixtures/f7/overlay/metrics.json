@@ -1,0 +1,20 @@
+{
+  "ctr": {
+    "denominator": "searches",
+    "filters": [],
+    "grain": "search",
+    "numerator": "clicks",
+    "owner": "search analytics",
+    "pitfalls": [],
+    "source": "search_daily_c",
+    "verified": "2026-10-01: matched the dashboard"
+  },
+  "search_purchase_rate": {
+    "available": false,
+    "note": "purchases are logged only in the orders system, which this warehouse doesn't hold",
+    "owner": "search analytics",
+    "pitfalls": [
+      "search_daily_c.conversions counts add-to-cart events, not purchases"
+    ]
+  }
+}

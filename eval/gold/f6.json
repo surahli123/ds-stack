@@ -1,0 +1,15 @@
+{
+  "accept_abstain": false,
+  "accept_values": [
+    {
+      "tol": 0.3,
+      "value": 50.053
+    }
+  ],
+  "id": "f6",
+  "kind": "error",
+  "must_not_rule_in": [],
+  "must_rule_in": [],
+  "planted": "the team's CTR is searches_with_click / searches_with_results for external traffic (overlay metrics.json); clicks / searches over all traffic is about 8 points higher",
+  "unit": "percent"
+}
