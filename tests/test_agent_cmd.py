@@ -354,3 +354,13 @@ def test_a_fixture_overlay_is_named_by_env_and_kept_out_of_the_analysis_dir(tmp_
     monkeypatch.setenv("DS_RUN_ROOT", str(tmp_path / "runs"))
     run_arms.run_job((fixture, "baseline", 1), "auto", str(tmp_path / "out"), 60, agent_cmd=PRINT_OVERLAY)
     assert (tmp_path / "out" / f"{fixture}__baseline__1" / "result.md").read_text().strip() == expected
+
+
+def test_run_arms_refuses_to_overwrite_an_existing_run(tmp_path, monkeypatch, capsys):
+    out = tmp_path / "out"
+    (out / "f1__baseline__1").mkdir(parents=True)
+    monkeypatch.setattr(sys, "argv", ["run_arms.py", "--fixtures", "f1", "--arms", "baseline", "--runs", "1",
+                                      "--agent-cmd", "true", "--out", str(out)])
+    with pytest.raises(SystemExit) as stop:
+        run_arms.main()
+    assert stop.value.code == 2 and "never overwritten" in capsys.readouterr().err

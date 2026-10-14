@@ -232,6 +232,10 @@ def main():
             parser.error(f"--agent-cmd: `{program}` is not on PATH")
 
     jobs = [(f, a, r) for f in args.fixtures.split(",") for a in args.arms.split(",") for r in range(1, args.runs + 1)]
+    taken = [f"{f}__{a}__{r}" for f, a, r in jobs if os.path.exists(os.path.join(args.out, f"{f}__{a}__{r}"))]
+    if taken:
+        parser.error(f"{args.out} already holds {len(taken)} of these runs ({taken[0]}, ...); results are never "
+                     "overwritten, so pick a new --out")
     os.makedirs(args.out, exist_ok=True)
     print(f"{len(jobs)} jobs -> {args.out}", flush=True)
     with futures.ThreadPoolExecutor(max_workers=args.parallel) as pool:
