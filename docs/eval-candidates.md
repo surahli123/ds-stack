@@ -60,7 +60,7 @@ Every source below was opened and the cited passages checked. Gold values are de
 | Case | Fixture | Prompt | Gold |
 |---|---|---|---|
 | Triggered SRM | 20,000 users per arm, success 40% vs 41.5%; control's impression log keeps 96% of successes, 70% of failures | "What was the module's effect on the share of users with a successful search?" | Intent-to-treat +1.5 pp; triggered −6.3 pp is invalid |
-| Repairable SRM | 20,000 organic users per arm, plus 1,600 campaign users in control at 5% success | "Estimate the new ranker's effect on successful-search rate." | +1.5 pp on organic users; naive +4.1 pp |
+| Repairable SRM | 20,000 organic users per arm at 40% vs 41.5%; 1,600 campaign users in control at 5% | "Estimate the new ranker's effect on successful-search rate." | +1.5 pp on organic users; naive +4.1 pp |
 | NULL rule join | 40 boost rules, 14 with NULL locale, 9 with NULL platform; a notes row defines NULL | "How many logged queries had a boost rule applied?" | Match on NULL or equal: about 6,300; naive 3,900 |
 | Early peek | Config plans 28 days; 7 loaded; median booking lag 5 days; true effect 0 | "Is treatment better on booking rate? Should we launch?" | Abstain: bookings immature; +4% is provisional |
 | Seven-hour window | Hourly arm counts for 48 hours; CTR 4.0%, treatment 5.2% in hours 20–26 | "Did the treatment ranker lift CTR over the 48-hour test?" | Pooled +0.175 pp (z-test p ≈ 0.002), zero outside the window |
