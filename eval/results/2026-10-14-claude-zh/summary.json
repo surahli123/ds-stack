@@ -1,0 +1,1825 @@
+{
+  "verdict": {
+    "n_fixtures": 8,
+    "min_required": 15,
+    "rule_outcome_if_n_were_enough": "PASS",
+    "verdict": "INSUFFICIENT_N (smoke test, not a decision)"
+  },
+  "per_arm": {
+    "baseline": {
+      "fixtures_correct": 0,
+      "fixtures_false_alarm": 0,
+      "fixtures_abstain_answered": 0,
+      "fixtures_incomplete": 0,
+      "runs_correct": 4,
+      "runs": 24,
+      "runs_unparseable": 17,
+      "runs_contaminated": 0,
+      "runs_unverified_isolation": 0,
+      "dropped_alternative_lines": 73,
+      "runs_with_any_check": 0,
+      "runs_reading_skill": 0,
+      "cost_usd": 1.61
+    },
+    "checks": {
+      "fixtures_correct": 0,
+      "fixtures_false_alarm": 0,
+      "fixtures_abstain_answered": 0,
+      "fixtures_incomplete": 0,
+      "runs_correct": 2,
+      "runs": 24,
+      "runs_unparseable": 20,
+      "runs_contaminated": 0,
+      "runs_unverified_isolation": 0,
+      "dropped_alternative_lines": 89,
+      "runs_with_any_check": 24,
+      "runs_reading_skill": 0,
+      "cost_usd": 1.93
+    },
+    "full": {
+      "fixtures_correct": 8,
+      "fixtures_false_alarm": 0,
+      "fixtures_abstain_answered": 0,
+      "fixtures_incomplete": 0,
+      "runs_correct": 23,
+      "runs": 24,
+      "runs_unparseable": 1,
+      "runs_contaminated": 0,
+      "runs_unverified_isolation": 0,
+      "dropped_alternative_lines": 28,
+      "runs_with_any_check": 24,
+      "runs_reading_skill": 23,
+      "cost_usd": 3.56
+    }
+  },
+  "runs": [
+    {
+      "fixture": "f1",
+      "arm": "baseline",
+      "run": 1,
+      "model": "sonnet",
+      "exit": 0,
+      "seconds": 26.6,
+      "cost_usd": 0.07077270000000001,
+      "turns": 5,
+      "prompt_suffix": "\u8bf7\u7528\u4e2d\u6587\u5199\u7ed3\u8bba\u3002",
+      "correct": false,
+      "reason": "unparseable: none of the 4 alternative lines says 'ruled in' or 'ruled out'",
+      "miss": "unparseable",
+      "headline": "\u5728\u56fa\u5b9a\u5e73\u53f0\u00d7\u56fd\u5bb6\u6784\u6210\u540e,v2 \u7684\u5f71\u54cd\u7ea6\u4e3a -0.01 \u4e2a\u767e\u5206\u70b9(-0.16 \u5230 +0.15 pp),\u4e0e\u96f6\u65e0\u6cd5\u533a\u5206\u3002",
+      "dropped_alternative_lines": 4,
+      "checks_ran": {},
+      "skill_read": false,
+      "isolation": "ok",
+      "kind": "error"
+    },
+    {
+      "fixture": "f1",
+      "arm": "baseline",
+      "run": 2,
+      "model": "sonnet",
+      "exit": 0,
+      "seconds": 32.1,
+      "cost_usd": 0.07672759999999999,
+      "turns": 5,
+      "prompt_suffix": "\u8bf7\u7528\u4e2d\u6587\u5199\u7ed3\u8bba\u3002",
+      "correct": false,
+      "reason": "unparseable: none of the 4 alternative lines says 'ruled in' or 'ruled out'",
+      "miss": "unparseable",
+      "headline": "-0.01 \u4e2a\u767e\u5206\u70b9 (95% \u533a\u95f4 -0.16 ~ +0.15),\u8fd9\u662f\u5728\u56fa\u5b9a\u5e73\u53f0\u00d7\u56fd\u5bb6\u6784\u6210\u540e\u7684\u4f30\u8ba1,\u5c5e\u4e8e\u63a8\u65ad [inferred],\u4e0d\u662f\u968f\u673a\u5b9e\u9a8c\u7684\u7ed3\u679c\u3002",
+      "dropped_alternative_lines": 4,
+      "checks_ran": {},
+      "skill_read": false,
+      "isolation": "ok",
+      "kind": "error"
+    },
+    {
+      "fixture": "f1",
+      "arm": "baseline",
+      "run": 3,
+      "model": "sonnet",
+      "exit": 0,
+      "seconds": 30.0,
+      "cost_usd": 0.0731264,
+      "turns": 5,
+      "prompt_suffix": "\u8bf7\u7528\u4e2d\u6587\u5199\u7ed3\u8bba\u3002",
+      "correct": false,
+      "reason": "unparseable: none of the 4 alternative lines says 'ruled in' or 'ruled out'",
+      "miss": "unparseable",
+      "headline": "can't tell(\u6ca1\u6709\u5bf9\u7167\u7ec4,\u65e0\u6cd5\u628a v2 \u7684\u56e0\u679c\u6548\u5e94\u5355\u72ec\u5206\u79bb\u51fa\u6765;\u4f46\u5df2\u6709\u8bc1\u636e\u663e\u793a v2 \u5728\u5404\u7ec6\u5206\u5185\u51e0\u4e4e\u6ca1\u6709\u5f71\u54cd)",
+      "dropped_alternative_lines": 4,
+      "checks_ran": {},
+      "skill_read": false,
+      "isolation": "ok",
+      "kind": "error"
+    },
+    {
+      "fixture": "f1",
+      "arm": "checks",
+      "run": 1,
+      "model": "sonnet",
+      "exit": 0,
+      "seconds": 29.1,
+      "cost_usd": 0.0811093,
+      "turns": 5,
+      "prompt_suffix": "\u8bf7\u7528\u4e2d\u6587\u5199\u7ed3\u8bba\u3002",
+      "correct": false,
+      "reason": "abstained on a case with a valid answer",
+      "miss": "miss",
+      "headline": "can't tell(v2 \u7684\u56e0\u679c\u6548\u5e94\u65e0\u6cd5\u8bc6\u522b;\u4f46\u6574\u4f53 CTR \u7684\u4e0b\u964d\u51e0\u4e4e\u5168\u90e8\u6765\u81ea\u6d41\u91cf\u7ed3\u6784\u53d8\u5316)",
+      "dropped_alternative_lines": 3,
+      "checks_ran": {
+        "mix_shift": [
+          "flag"
+        ],
+        "completeness": [
+          "pass"
+        ],
+        "srm": [
+          "pass"
+        ]
+      },
+      "skill_read": false,
+      "isolation": "ok",
+      "kind": "error"
+    },
+    {
+      "fixture": "f1",
+      "arm": "checks",
+      "run": 2,
+      "model": "sonnet",
+      "exit": 0,
+      "seconds": 32.9,
+      "cost_usd": 0.0918283,
+      "turns": 5,
+      "prompt_suffix": "\u8bf7\u7528\u4e2d\u6587\u5199\u7ed3\u8bba\u3002",
+      "correct": false,
+      "reason": "unparseable: none of the 5 alternative lines says 'ruled in' or 'ruled out'",
+      "miss": "unparseable",
+      "headline": "can't tell(v2 \u7684\u56e0\u679c\u6548\u5e94\u65e0\u6cd5\u8bc6\u522b;\u6309\u5e73\u53f0\u00d7\u56fd\u5bb6\u8c03\u6574\u540e,v2 \u524d\u540e\u7684\u53d8\u5316\u7ea6\u4e3a -0.00 \u4e2a\u767e\u5206\u70b9)",
+      "dropped_alternative_lines": 5,
+      "checks_ran": {
+        "mix_shift": [
+          "flag"
+        ],
+        "completeness": [
+          "pass"
+        ]
+      },
+      "skill_read": false,
+      "isolation": "ok",
+      "kind": "error"
+    },
+    {
+      "fixture": "f1",
+      "arm": "checks",
+      "run": 3,
+      "model": "sonnet",
+      "exit": 0,
+      "seconds": 27.0,
+      "cost_usd": 0.07749330000000001,
+      "turns": 5,
+      "prompt_suffix": "\u8bf7\u7528\u4e2d\u6587\u5199\u7ed3\u8bba\u3002",
+      "correct": false,
+      "reason": "unparseable: none of the 4 alternative lines says 'ruled in' or 'ruled out'",
+      "miss": "unparseable",
+      "headline": "\u7ea6 0 \u4e2a\u767e\u5206\u70b9(-0.00 pp,95% \u533a\u95f4 -0.15 to +0.15)\u2014\u2014\u4f46\u8fd9\u662f\"\u8c03\u6574\u540e\"\u7684\u6570\u5b57,\u4e0d\u662f\u56e0\u679c\u7ed3\u8bba",
+      "dropped_alternative_lines": 4,
+      "checks_ran": {
+        "mix_shift": [
+          "flag"
+        ],
+        "completeness": [
+          "pass"
+        ]
+      },
+      "skill_read": false,
+      "isolation": "ok",
+      "kind": "error"
+    },
+    {
+      "fixture": "f1",
+      "arm": "full",
+      "run": 1,
+      "model": "sonnet",
+      "exit": 0,
+      "seconds": 43.8,
+      "cost_usd": 0.1514721,
+      "turns": 10,
+      "prompt_suffix": "\u8bf7\u7528\u4e2d\u6587\u5199\u7ed3\u8bba\u3002",
+      "correct": true,
+      "reason": "number within tolerance; causes consistent with gold",
+      "miss": null,
+      "headline": "-0.00 pp (-0.15 to +0.15 pp)",
+      "dropped_alternative_lines": 0,
+      "checks_ran": {
+        "completeness": [
+          "could_not_run"
+        ],
+        "mix_shift": [
+          "flag",
+          "flag"
+        ]
+      },
+      "skill_read": true,
+      "isolation": "ok",
+      "kind": "error"
+    },
+    {
+      "fixture": "f1",
+      "arm": "full",
+      "run": 2,
+      "model": "sonnet",
+      "exit": 0,
+      "seconds": 55.7,
+      "cost_usd": 0.18108639999999998,
+      "turns": 12,
+      "prompt_suffix": "\u8bf7\u7528\u4e2d\u6587\u5199\u7ed3\u8bba\u3002",
+      "correct": true,
+      "reason": "number within tolerance; causes consistent with gold",
+      "miss": null,
+      "headline": "-0.00 pp (95% \u533a\u95f4 -0.15 \u5230 +0.15 pp),\u5373\u5728\u5e73\u53f0\u00d7\u56fd\u5bb6\u5185\u90e8 CTR \u57fa\u672c\u6ca1\u53d8",
+      "dropped_alternative_lines": 6,
+      "checks_ran": {
+        "mix_shift": [
+          "flag",
+          "flag"
+        ],
+        "completeness": [
+          "could_not_run",
+          "fail",
+          "pass"
+        ]
+      },
+      "skill_read": true,
+      "isolation": "ok",
+      "kind": "error"
+    },
+    {
+      "fixture": "f1",
+      "arm": "full",
+      "run": 3,
+      "model": "sonnet",
+      "exit": 0,
+      "seconds": 43.4,
+      "cost_usd": 0.1514411,
+      "turns": 9,
+      "prompt_suffix": "\u8bf7\u7528\u4e2d\u6587\u5199\u7ed3\u8bba\u3002",
+      "correct": true,
+      "reason": "number within tolerance; causes consistent with gold",
+      "miss": null,
+      "headline": "-0.00 pp (-0.15 to +0.15 pp)",
+      "dropped_alternative_lines": 0,
+      "checks_ran": {
+        "mix_shift": [
+          "flag",
+          "flag"
+        ],
+        "completeness": [
+          "pass"
+        ]
+      },
+      "skill_read": true,
+      "isolation": "ok",
+      "kind": "error"
+    },
+    {
+      "fixture": "f2",
+      "arm": "baseline",
+      "run": 1,
+      "model": "sonnet",
+      "exit": 0,
+      "seconds": 23.7,
+      "cost_usd": 0.06607560000000001,
+      "turns": 5,
+      "prompt_suffix": "\u8bf7\u7528\u4e2d\u6587\u5199\u7ed3\u8bba\u3002",
+      "correct": true,
+      "reason": "number within tolerance; causes consistent with gold",
+      "miss": null,
+      "headline": "55.0 %(95% \u533a\u95f4 54.3 \u5230 55.7)",
+      "dropped_alternative_lines": 0,
+      "checks_ran": {},
+      "skill_read": false,
+      "isolation": "ok",
+      "kind": "error"
+    },
+    {
+      "fixture": "f2",
+      "arm": "baseline",
+      "run": 2,
+      "model": "sonnet",
+      "exit": 0,
+      "seconds": 25.3,
+      "cost_usd": 0.0688314,
+      "turns": 5,
+      "prompt_suffix": "\u8bf7\u7528\u4e2d\u6587\u5199\u7ed3\u8bba\u3002",
+      "correct": false,
+      "reason": "unparseable: none of the 3 alternative lines says 'ruled in' or 'ruled out'",
+      "miss": "unparseable",
+      "headline": "55.0 %(95% \u533a\u95f4 54.9%\u201355.0%)",
+      "dropped_alternative_lines": 3,
+      "checks_ran": {},
+      "skill_read": false,
+      "isolation": "ok",
+      "kind": "error"
+    },
+    {
+      "fixture": "f2",
+      "arm": "baseline",
+      "run": 3,
+      "model": "sonnet",
+      "exit": 0,
+      "seconds": 24.5,
+      "cost_usd": 0.0682271,
+      "turns": 5,
+      "prompt_suffix": "\u8bf7\u7528\u4e2d\u6587\u5199\u7ed3\u8bba\u3002",
+      "correct": false,
+      "reason": "unparseable: none of the 3 alternative lines says 'ruled in' or 'ruled out'",
+      "miss": "unparseable",
+      "headline": "54.98 %(95% \u533a\u95f4 54.95\u201355.01)",
+      "dropped_alternative_lines": 3,
+      "checks_ran": {},
+      "skill_read": false,
+      "isolation": "ok",
+      "kind": "error"
+    },
+    {
+      "fixture": "f2",
+      "arm": "checks",
+      "run": 1,
+      "model": "sonnet",
+      "exit": 0,
+      "seconds": 32.3,
+      "cost_usd": 0.085541,
+      "turns": 7,
+      "prompt_suffix": "\u8bf7\u7528\u4e2d\u6587\u5199\u7ed3\u8bba\u3002",
+      "correct": false,
+      "reason": "unparseable: none of the 4 alternative lines says 'ruled in' or 'ruled out'",
+      "miss": "unparseable",
+      "headline": "54.98%(95% \u533a\u95f4 54.58%\u201355.38%)",
+      "dropped_alternative_lines": 4,
+      "checks_ran": {
+        "fanout": [
+          "pass",
+          "fail"
+        ],
+        "completeness": [
+          "could_not_run"
+        ]
+      },
+      "skill_read": false,
+      "isolation": "ok",
+      "kind": "error"
+    },
+    {
+      "fixture": "f2",
+      "arm": "checks",
+      "run": 2,
+      "model": "sonnet",
+      "exit": 0,
+      "seconds": 26.9,
+      "cost_usd": 0.073511,
+      "turns": 5,
+      "prompt_suffix": "\u8bf7\u7528\u4e2d\u6587\u5199\u7ed3\u8bba\u3002",
+      "correct": false,
+      "reason": "unparseable: none of the 3 alternative lines says 'ruled in' or 'ruled out'",
+      "miss": "unparseable",
+      "headline": "55.0%(95% \u533a\u95f4 54.6%\u201355.4%)",
+      "dropped_alternative_lines": 3,
+      "checks_ran": {
+        "fanout": [
+          "pass"
+        ],
+        "completeness": [
+          "could_not_run"
+        ]
+      },
+      "skill_read": false,
+      "isolation": "ok",
+      "kind": "error"
+    },
+    {
+      "fixture": "f2",
+      "arm": "checks",
+      "run": 3,
+      "model": "sonnet",
+      "exit": 0,
+      "seconds": 26.5,
+      "cost_usd": 0.0737477,
+      "turns": 5,
+      "prompt_suffix": "\u8bf7\u7528\u4e2d\u6587\u5199\u7ed3\u8bba\u3002",
+      "correct": true,
+      "reason": "number within tolerance; causes consistent with gold",
+      "miss": null,
+      "headline": "55.0 % (95% \u533a\u95f4 54.6%\u201355.4%)",
+      "dropped_alternative_lines": 1,
+      "checks_ran": {
+        "fanout": [
+          "pass"
+        ],
+        "completeness": [
+          "could_not_run"
+        ]
+      },
+      "skill_read": false,
+      "isolation": "ok",
+      "kind": "error"
+    },
+    {
+      "fixture": "f2",
+      "arm": "full",
+      "run": 1,
+      "model": "sonnet",
+      "exit": 0,
+      "seconds": 52.6,
+      "cost_usd": 0.1462541,
+      "turns": 11,
+      "prompt_suffix": "\u8bf7\u7528\u4e2d\u6587\u5199\u7ed3\u8bba\u3002",
+      "correct": false,
+      "reason": "headline has no number in percent",
+      "miss": "unparseable",
+      "headline": "+54.98 pp (54.58 to 55.38)",
+      "dropped_alternative_lines": 2,
+      "checks_ran": {
+        "fanout": [
+          "pass"
+        ],
+        "completeness": [
+          "could_not_run"
+        ]
+      },
+      "skill_read": true,
+      "isolation": "ok",
+      "kind": "error"
+    },
+    {
+      "fixture": "f2",
+      "arm": "full",
+      "run": 2,
+      "model": "sonnet",
+      "exit": 0,
+      "seconds": 46.5,
+      "cost_usd": 0.14334590000000003,
+      "turns": 10,
+      "prompt_suffix": "\u8bf7\u7528\u4e2d\u6587\u5199\u7ed3\u8bba\u3002",
+      "correct": true,
+      "reason": "number within tolerance; causes consistent with gold",
+      "miss": null,
+      "headline": "+54.98 % (95% \u533a\u95f4 54.58 % to 55.38 %)",
+      "dropped_alternative_lines": 1,
+      "checks_ran": {
+        "fanout": [
+          "pass",
+          "fail"
+        ],
+        "completeness": [
+          "could_not_run"
+        ]
+      },
+      "skill_read": true,
+      "isolation": "ok",
+      "kind": "error"
+    },
+    {
+      "fixture": "f2",
+      "arm": "full",
+      "run": 3,
+      "model": "sonnet",
+      "exit": 0,
+      "seconds": 41.4,
+      "cost_usd": 0.1345016,
+      "turns": 10,
+      "prompt_suffix": "\u8bf7\u7528\u4e2d\u6587\u5199\u7ed3\u8bba\u3002",
+      "correct": true,
+      "reason": "number within tolerance; causes consistent with gold",
+      "miss": null,
+      "headline": "55.0 % (54.6 % to 55.4 %)",
+      "dropped_alternative_lines": 2,
+      "checks_ran": {
+        "fanout": [
+          "pass"
+        ],
+        "completeness": [
+          "could_not_run"
+        ]
+      },
+      "skill_read": true,
+      "isolation": "ok",
+      "kind": "error"
+    },
+    {
+      "fixture": "f3",
+      "arm": "baseline",
+      "run": 1,
+      "model": "sonnet",
+      "exit": 0,
+      "seconds": 27.7,
+      "cost_usd": 0.0652218,
+      "turns": 4,
+      "prompt_suffix": "\u8bf7\u7528\u4e2d\u6587\u5199\u7ed3\u8bba\u3002",
+      "correct": false,
+      "reason": "abstained on a case with a valid answer",
+      "miss": "false_alarm",
+      "headline": "can't tell(\u6574\u4f53 CTR \u89c2\u6d4b\u53d8\u5316\u4e3a -1.83 \u4e2a\u767e\u5206\u70b9,\u4f46\u5176\u4e2d\u6709\u591a\u5c11\u5f52\u56e0\u4e8e v3,\u73b0\u6709\u6570\u636e\u65e0\u6cd5\u786e\u5b9a)",
+      "dropped_alternative_lines": 3,
+      "checks_ran": {},
+      "skill_read": false,
+      "isolation": "ok",
+      "kind": "clean"
+    },
+    {
+      "fixture": "f3",
+      "arm": "baseline",
+      "run": 2,
+      "model": "sonnet",
+      "exit": 0,
+      "seconds": 29.8,
+      "cost_usd": 0.0755749,
+      "turns": 5,
+      "prompt_suffix": "\u8bf7\u7528\u4e2d\u6587\u5199\u7ed3\u8bba\u3002",
+      "correct": false,
+      "reason": "unparseable: none of the 4 alternative lines says 'ruled in' or 'ruled out'",
+      "miss": "unparseable",
+      "headline": "can't tell(\u6574\u4f53 CTR \u7684\u4e0b\u964d\u662f\u771f\u5b9e\u7684,\u4f46\u6ca1\u6709\u5bf9\u7167\u7ec4,\u65e0\u6cd5\u628a\u5b83\u5355\u72ec\u5f52\u56e0\u7ed9 v3)",
+      "dropped_alternative_lines": 4,
+      "checks_ran": {},
+      "skill_read": false,
+      "isolation": "ok",
+      "kind": "clean"
+    },
+    {
+      "fixture": "f3",
+      "arm": "baseline",
+      "run": 3,
+      "model": "sonnet",
+      "exit": 0,
+      "seconds": 27.1,
+      "cost_usd": 0.066666,
+      "turns": 4,
+      "prompt_suffix": "\u8bf7\u7528\u4e2d\u6587\u5199\u7ed3\u8bba\u3002",
+      "correct": false,
+      "reason": "unparseable: none of the 4 alternative lines says 'ruled in' or 'ruled out'",
+      "miss": "unparseable",
+      "headline": "-1.83 \u4e2a\u767e\u5206\u70b9 (95% \u533a\u95f4 -1.98 ~ -1.68),\u8fd9\u662f\u89c2\u6d4b\u5230\u7684\u53d8\u5316,\u5e76\u975e\u5df2\u786e\u8ba4\u7684\u56e0\u679c\u6548\u5e94\u3002",
+      "dropped_alternative_lines": 4,
+      "checks_ran": {},
+      "skill_read": false,
+      "isolation": "ok",
+      "kind": "clean"
+    },
+    {
+      "fixture": "f3",
+      "arm": "checks",
+      "run": 1,
+      "model": "sonnet",
+      "exit": 0,
+      "seconds": 32.6,
+      "cost_usd": 0.08949480000000001,
+      "turns": 6,
+      "prompt_suffix": "\u8bf7\u7528\u4e2d\u6587\u5199\u7ed3\u8bba\u3002",
+      "correct": false,
+      "reason": "unparseable: none of the 4 alternative lines says 'ruled in' or 'ruled out'",
+      "miss": "unparseable",
+      "headline": "can't tell",
+      "dropped_alternative_lines": 4,
+      "checks_ran": {
+        "mix_shift": [
+          "pass"
+        ],
+        "completeness": [
+          "pass"
+        ],
+        "srm": [
+          "pass"
+        ]
+      },
+      "skill_read": false,
+      "isolation": "ok",
+      "kind": "clean"
+    },
+    {
+      "fixture": "f3",
+      "arm": "checks",
+      "run": 2,
+      "model": "sonnet",
+      "exit": 0,
+      "seconds": 31.6,
+      "cost_usd": 0.0854424,
+      "turns": 5,
+      "prompt_suffix": "\u8bf7\u7528\u4e2d\u6587\u5199\u7ed3\u8bba\u3002",
+      "correct": false,
+      "reason": "unparseable: none of the 5 alternative lines says 'ruled in' or 'ruled out'",
+      "miss": "unparseable",
+      "headline": "can't tell(\u6ca1\u6709\u5bf9\u7167\u7ec4,\u65e0\u6cd5\u628a -1.83 \u4e2a\u767e\u5206\u70b9\u7684\u4e0b\u964d\u5355\u72ec\u5f52\u56e0\u4e8e v3)",
+      "dropped_alternative_lines": 5,
+      "checks_ran": {
+        "mix_shift": [
+          "pass"
+        ],
+        "completeness": [
+          "pass"
+        ],
+        "srm": [
+          "pass"
+        ]
+      },
+      "skill_read": false,
+      "isolation": "ok",
+      "kind": "clean"
+    },
+    {
+      "fixture": "f3",
+      "arm": "checks",
+      "run": 3,
+      "model": "sonnet",
+      "exit": 0,
+      "seconds": 28.8,
+      "cost_usd": 0.08110089999999999,
+      "turns": 5,
+      "prompt_suffix": "\u8bf7\u7528\u4e2d\u6587\u5199\u7ed3\u8bba\u3002",
+      "correct": false,
+      "reason": "unparseable: none of the 5 alternative lines says 'ruled in' or 'ruled out'",
+      "miss": "unparseable",
+      "headline": "can't tell",
+      "dropped_alternative_lines": 5,
+      "checks_ran": {
+        "mix_shift": [
+          "pass"
+        ],
+        "completeness": [
+          "could_not_run"
+        ]
+      },
+      "skill_read": false,
+      "isolation": "ok",
+      "kind": "clean"
+    },
+    {
+      "fixture": "f3",
+      "arm": "full",
+      "run": 1,
+      "model": "sonnet",
+      "exit": 0,
+      "seconds": 52.0,
+      "cost_usd": 0.1636273,
+      "turns": 10,
+      "prompt_suffix": "\u8bf7\u7528\u4e2d\u6587\u5199\u7ed3\u8bba\u3002",
+      "correct": true,
+      "reason": "number within tolerance; causes consistent with gold",
+      "miss": null,
+      "headline": "-1.82 pp (95% CI -1.97 to -1.67)",
+      "dropped_alternative_lines": 0,
+      "checks_ran": {
+        "completeness": [
+          "pass"
+        ],
+        "mix_shift": [
+          "pass",
+          "pass"
+        ]
+      },
+      "skill_read": true,
+      "isolation": "ok",
+      "kind": "clean"
+    },
+    {
+      "fixture": "f3",
+      "arm": "full",
+      "run": 2,
+      "model": "sonnet",
+      "exit": 0,
+      "seconds": 49.8,
+      "cost_usd": 0.1680187,
+      "turns": 10,
+      "prompt_suffix": "\u8bf7\u7528\u4e2d\u6587\u5199\u7ed3\u8bba\u3002",
+      "correct": true,
+      "reason": "number within tolerance; causes consistent with gold",
+      "miss": null,
+      "headline": "-1.82 pp (95% \u533a\u95f4 -1.97 \u5230 -1.67)",
+      "dropped_alternative_lines": 1,
+      "checks_ran": {
+        "mix_shift": [
+          "pass",
+          "pass"
+        ],
+        "completeness": [
+          "pass"
+        ]
+      },
+      "skill_read": true,
+      "isolation": "ok",
+      "kind": "clean"
+    },
+    {
+      "fixture": "f3",
+      "arm": "full",
+      "run": 3,
+      "model": "sonnet",
+      "exit": 0,
+      "seconds": 49.5,
+      "cost_usd": 0.1630976,
+      "turns": 10,
+      "prompt_suffix": "\u8bf7\u7528\u4e2d\u6587\u5199\u7ed3\u8bba\u3002",
+      "correct": true,
+      "reason": "number within tolerance; causes consistent with gold",
+      "miss": null,
+      "headline": "-1.82 pp (95% \u533a\u95f4 -1.97 to -1.67)",
+      "dropped_alternative_lines": 1,
+      "checks_ran": {
+        "completeness": [
+          "pass"
+        ],
+        "mix_shift": [
+          "pass",
+          "pass"
+        ]
+      },
+      "skill_read": true,
+      "isolation": "ok",
+      "kind": "clean"
+    },
+    {
+      "fixture": "f4",
+      "arm": "baseline",
+      "run": 1,
+      "model": "sonnet",
+      "exit": 0,
+      "seconds": 28.4,
+      "cost_usd": 0.07632199999999999,
+      "turns": 6,
+      "prompt_suffix": "\u8bf7\u7528\u4e2d\u6587\u5199\u7ed3\u8bba\u3002",
+      "correct": false,
+      "reason": "unparseable: none of the 3 alternative lines says 'ruled in' or 'ruled out'",
+      "miss": "unparseable",
+      "headline": "can't tell\u3002\u6309\u540c\u4e00\u65f6\u6bb5\u53e3\u5f84,\u70b9\u51fb\u7387\u53d8\u5316\u4e3a 0.0 \u4e2a\u767e\u5206\u70b9(95% \u533a\u95f4 -0.66 \u5230 +0.66)\u3002",
+      "dropped_alternative_lines": 3,
+      "checks_ran": {},
+      "skill_read": false,
+      "isolation": "ok",
+      "kind": "abstain"
+    },
+    {
+      "fixture": "f4",
+      "arm": "baseline",
+      "run": 2,
+      "model": "sonnet",
+      "exit": 0,
+      "seconds": 34.4,
+      "cost_usd": 0.0712841,
+      "turns": 5,
+      "prompt_suffix": "\u8bf7\u7528\u4e2d\u6587\u5199\u7ed3\u8bba\u3002",
+      "correct": false,
+      "reason": "unparseable: none of the 4 alternative lines says 'ruled in' or 'ruled out'",
+      "miss": "unparseable",
+      "headline": "can't tell (\u6628\u5929\u7684\u6570\u636e\u53ea\u6709 0\u20139 \u70b9,\u4e0d\u662f\u5b8c\u6574\u4e00\u5929)",
+      "dropped_alternative_lines": 4,
+      "checks_ran": {},
+      "skill_read": false,
+      "isolation": "ok",
+      "kind": "abstain"
+    },
+    {
+      "fixture": "f4",
+      "arm": "baseline",
+      "run": 3,
+      "model": "sonnet",
+      "exit": 0,
+      "seconds": 30.3,
+      "cost_usd": 0.0705639,
+      "turns": 5,
+      "prompt_suffix": "\u8bf7\u7528\u4e2d\u6587\u5199\u7ed3\u8bba\u3002",
+      "correct": true,
+      "reason": "number within tolerance; causes consistent with gold",
+      "miss": null,
+      "headline": "0.0 \u4e2a\u767e\u5206\u70b9(95% \u533a\u95f4 -0.7 to +0.7 pp)\u3002\u6211\u6ca1\u6709\u53d1\u73b0 CTR \u771f\u7684\u4e0b\u964d\u3002",
+      "dropped_alternative_lines": 0,
+      "checks_ran": {},
+      "skill_read": false,
+      "isolation": "ok",
+      "kind": "abstain"
+    },
+    {
+      "fixture": "f4",
+      "arm": "checks",
+      "run": 1,
+      "model": "sonnet",
+      "exit": 0,
+      "seconds": 31.1,
+      "cost_usd": 0.0852314,
+      "turns": 6,
+      "prompt_suffix": "\u8bf7\u7528\u4e2d\u6587\u5199\u7ed3\u8bba\u3002",
+      "correct": false,
+      "reason": "unparseable: none of the 5 alternative lines says 'ruled in' or 'ruled out'",
+      "miss": "unparseable",
+      "headline": "can't tell(\u6628\u65e5\u6570\u636e\u53ea\u52a0\u8f7d\u4e86 0\u20139 \u70b9,\u4e0d\u662f\u5b8c\u6574\u7684\u4e00\u5929)",
+      "dropped_alternative_lines": 5,
+      "checks_ran": {
+        "completeness": [
+          "fail"
+        ],
+        "mix_shift": [
+          "pass"
+        ]
+      },
+      "skill_read": false,
+      "isolation": "ok",
+      "kind": "abstain"
+    },
+    {
+      "fixture": "f4",
+      "arm": "checks",
+      "run": 2,
+      "model": "sonnet",
+      "exit": 0,
+      "seconds": 30.4,
+      "cost_usd": 0.0810754,
+      "turns": 6,
+      "prompt_suffix": "\u8bf7\u7528\u4e2d\u6587\u5199\u7ed3\u8bba\u3002",
+      "correct": false,
+      "reason": "unparseable: none of the 4 alternative lines says 'ruled in' or 'ruled out'",
+      "miss": "unparseable",
+      "headline": "can't tell(\u6628\u5929\u6570\u636e\u53ea\u52a0\u8f7d\u4e86\u4e00\u90e8\u5206,\u65e0\u6cd5\u7ed9\u51fa\u5168\u5929 CTR)",
+      "dropped_alternative_lines": 4,
+      "checks_ran": {
+        "completeness": [
+          "fail"
+        ],
+        "mix_shift": [
+          "pass"
+        ]
+      },
+      "skill_read": false,
+      "isolation": "ok",
+      "kind": "abstain"
+    },
+    {
+      "fixture": "f4",
+      "arm": "checks",
+      "run": 3,
+      "model": "sonnet",
+      "exit": 0,
+      "seconds": 26.0,
+      "cost_usd": 0.0730065,
+      "turns": 5,
+      "prompt_suffix": "\u8bf7\u7528\u4e2d\u6587\u5199\u7ed3\u8bba\u3002",
+      "correct": true,
+      "reason": "abstained (accepted)",
+      "miss": null,
+      "headline": "can't tell\u3002\u6628\u5929(10-07)\u7684\u6570\u636e\u53ea\u52a0\u8f7d\u5230 0\u20139 \u70b9,\u662f\u4e0d\u5b8c\u6574\u7684\u4e00\u5929\u3002",
+      "dropped_alternative_lines": 2,
+      "checks_ran": {
+        "completeness": [
+          "fail"
+        ]
+      },
+      "skill_read": false,
+      "isolation": "ok",
+      "kind": "abstain"
+    },
+    {
+      "fixture": "f4",
+      "arm": "full",
+      "run": 1,
+      "model": "sonnet",
+      "exit": 0,
+      "seconds": 47.2,
+      "cost_usd": 0.1510858,
+      "turns": 10,
+      "prompt_suffix": "\u8bf7\u7528\u4e2d\u6587\u5199\u7ed3\u8bba\u3002",
+      "correct": true,
+      "reason": "abstained (accepted)",
+      "miss": null,
+      "headline": "can't tell",
+      "dropped_alternative_lines": 0,
+      "checks_ran": {
+        "completeness": [
+          "fail"
+        ],
+        "mix_shift": [
+          "pass",
+          "could_not_run"
+        ]
+      },
+      "skill_read": true,
+      "isolation": "ok",
+      "kind": "abstain"
+    },
+    {
+      "fixture": "f4",
+      "arm": "full",
+      "run": 2,
+      "model": "sonnet",
+      "exit": 0,
+      "seconds": 54.4,
+      "cost_usd": 0.16516039999999998,
+      "turns": 10,
+      "prompt_suffix": "\u8bf7\u7528\u4e2d\u6587\u5199\u7ed3\u8bba\u3002",
+      "correct": true,
+      "reason": "number within tolerance; causes consistent with gold",
+      "miss": null,
+      "headline": "+0.0 pp (-0.66 \u5230 +0.66 pp)",
+      "dropped_alternative_lines": 1,
+      "checks_ran": {
+        "completeness": [
+          "fail"
+        ],
+        "mix_shift": [
+          "pass"
+        ]
+      },
+      "skill_read": true,
+      "isolation": "ok",
+      "kind": "abstain"
+    },
+    {
+      "fixture": "f4",
+      "arm": "full",
+      "run": 3,
+      "model": "sonnet",
+      "exit": 0,
+      "seconds": 54.6,
+      "cost_usd": 0.15658829999999999,
+      "turns": 10,
+      "prompt_suffix": "\u8bf7\u7528\u4e2d\u6587\u5199\u7ed3\u8bba\u3002",
+      "correct": true,
+      "reason": "number within tolerance; causes consistent with gold",
+      "miss": null,
+      "headline": "0.0 pp (-0.66 \u5230 +0.66 pp)",
+      "dropped_alternative_lines": 1,
+      "checks_ran": {
+        "completeness": [
+          "fail"
+        ],
+        "mix_shift": [
+          "pass",
+          "could_not_run"
+        ]
+      },
+      "skill_read": true,
+      "isolation": "ok",
+      "kind": "abstain"
+    },
+    {
+      "fixture": "f5",
+      "arm": "baseline",
+      "run": 1,
+      "model": "sonnet",
+      "exit": 0,
+      "seconds": 30.1,
+      "cost_usd": 0.0723679,
+      "turns": 5,
+      "prompt_suffix": "\u8bf7\u7528\u4e2d\u6587\u5199\u7ed3\u8bba\u3002",
+      "correct": true,
+      "reason": "abstained (accepted)",
+      "miss": null,
+      "headline": "can't tell\u3002\u89c2\u6d4b\u5230\u7684 CTR \u5dee\u4e3a +1.20 \u4e2a\u767e\u5206\u70b9,\u4f46\u5206\u6d41\u6bd4\u4f8b\u4e25\u91cd\u5931\u8861(\u6837\u672c\u6bd4\u4f8b\u4e0d\u5339\u914d),\u6240\u4ee5\u8fd9\u4e2a\u6570\u5b57\u4e0d\u80fd\u5f53\u4f5c ranker_boost \u7684\u56e0\u679c\u6548\u5e94\u3002",
+      "dropped_alternative_lines": 3,
+      "checks_ran": {},
+      "skill_read": false,
+      "isolation": "ok",
+      "kind": "abstain"
+    },
+    {
+      "fixture": "f5",
+      "arm": "baseline",
+      "run": 2,
+      "model": "sonnet",
+      "exit": 0,
+      "seconds": 22.7,
+      "cost_usd": 0.0591782,
+      "turns": 4,
+      "prompt_suffix": "\u8bf7\u7528\u4e2d\u6587\u5199\u7ed3\u8bba\u3002",
+      "correct": false,
+      "reason": "unparseable: none of the 3 alternative lines says 'ruled in' or 'ruled out'",
+      "miss": "unparseable",
+      "headline": "can't tell",
+      "dropped_alternative_lines": 3,
+      "checks_ran": {},
+      "skill_read": false,
+      "isolation": "ok",
+      "kind": "abstain"
+    },
+    {
+      "fixture": "f5",
+      "arm": "baseline",
+      "run": 3,
+      "model": "sonnet",
+      "exit": 0,
+      "seconds": 26.5,
+      "cost_usd": 0.0645521,
+      "turns": 4,
+      "prompt_suffix": "\u8bf7\u7528\u4e2d\u6587\u5199\u7ed3\u8bba\u3002",
+      "correct": false,
+      "reason": "unparseable: none of the 4 alternative lines says 'ruled in' or 'ruled out'",
+      "miss": "unparseable",
+      "headline": "can't tell",
+      "dropped_alternative_lines": 4,
+      "checks_ran": {},
+      "skill_read": false,
+      "isolation": "ok",
+      "kind": "abstain"
+    },
+    {
+      "fixture": "f5",
+      "arm": "checks",
+      "run": 1,
+      "model": "sonnet",
+      "exit": 0,
+      "seconds": 25.1,
+      "cost_usd": 0.0712565,
+      "turns": 5,
+      "prompt_suffix": "\u8bf7\u7528\u4e2d\u6587\u5199\u7ed3\u8bba\u3002",
+      "correct": false,
+      "reason": "unparseable: none of the 4 alternative lines says 'ruled in' or 'ruled out'",
+      "miss": "unparseable",
+      "headline": "can't tell(\u89c2\u6d4b\u5230 +1.20 \u4e2a\u767e\u5206\u70b9,\u4f46\u5206\u6d41\u6bd4\u4f8b\u4e25\u91cd\u5931\u8861,\u65e0\u6cd5\u786e\u8ba4\u8fd9\u662f\u5904\u7406\u5e26\u6765\u7684\u6548\u679c)",
+      "dropped_alternative_lines": 4,
+      "checks_ran": {
+        "srm": [
+          "fail",
+          "fail"
+        ],
+        "completeness": [
+          "could_not_run"
+        ]
+      },
+      "skill_read": false,
+      "isolation": "ok",
+      "kind": "abstain"
+    },
+    {
+      "fixture": "f5",
+      "arm": "checks",
+      "run": 2,
+      "model": "sonnet",
+      "exit": 0,
+      "seconds": 31.0,
+      "cost_usd": 0.08175669999999999,
+      "turns": 6,
+      "prompt_suffix": "\u8bf7\u7528\u4e2d\u6587\u5199\u7ed3\u8bba\u3002",
+      "correct": false,
+      "reason": "unparseable: none of the 4 alternative lines says 'ruled in' or 'ruled out'",
+      "miss": "unparseable",
+      "headline": "can't tell",
+      "dropped_alternative_lines": 4,
+      "checks_ran": {
+        "srm": [
+          "fail",
+          "fail"
+        ],
+        "completeness": [
+          "could_not_run"
+        ]
+      },
+      "skill_read": false,
+      "isolation": "ok",
+      "kind": "abstain"
+    },
+    {
+      "fixture": "f5",
+      "arm": "checks",
+      "run": 3,
+      "model": "sonnet",
+      "exit": 0,
+      "seconds": 25.8,
+      "cost_usd": 0.07075759999999999,
+      "turns": 5,
+      "prompt_suffix": "\u8bf7\u7528\u4e2d\u6587\u5199\u7ed3\u8bba\u3002",
+      "correct": false,
+      "reason": "unparseable: none of the 4 alternative lines says 'ruled in' or 'ruled out'",
+      "miss": "unparseable",
+      "headline": "can't tell",
+      "dropped_alternative_lines": 4,
+      "checks_ran": {
+        "srm": [
+          "fail"
+        ],
+        "completeness": [
+          "could_not_run"
+        ]
+      },
+      "skill_read": false,
+      "isolation": "ok",
+      "kind": "abstain"
+    },
+    {
+      "fixture": "f5",
+      "arm": "full",
+      "run": 1,
+      "model": "sonnet",
+      "exit": 0,
+      "seconds": 52.6,
+      "cost_usd": 0.15837059999999997,
+      "turns": 10,
+      "prompt_suffix": "\u8bf7\u7528\u4e2d\u6587\u5199\u7ed3\u8bba\u3002",
+      "correct": true,
+      "reason": "abstained (accepted)",
+      "miss": null,
+      "headline": "can't tell",
+      "dropped_alternative_lines": 3,
+      "checks_ran": {
+        "srm": [
+          "fail"
+        ],
+        "completeness": [
+          "pass"
+        ]
+      },
+      "skill_read": true,
+      "isolation": "ok",
+      "kind": "abstain"
+    },
+    {
+      "fixture": "f5",
+      "arm": "full",
+      "run": 2,
+      "model": "sonnet",
+      "exit": 0,
+      "seconds": 51.6,
+      "cost_usd": 0.1522605,
+      "turns": 10,
+      "prompt_suffix": "\u8bf7\u7528\u4e2d\u6587\u5199\u7ed3\u8bba\u3002",
+      "correct": true,
+      "reason": "abstained (accepted)",
+      "miss": null,
+      "headline": "can't tell",
+      "dropped_alternative_lines": 3,
+      "checks_ran": {
+        "srm": [
+          "fail",
+          "fail"
+        ],
+        "completeness": [
+          "pass"
+        ]
+      },
+      "skill_read": true,
+      "isolation": "ok",
+      "kind": "abstain"
+    },
+    {
+      "fixture": "f5",
+      "arm": "full",
+      "run": 3,
+      "model": "sonnet",
+      "exit": 0,
+      "seconds": 61.0,
+      "cost_usd": 0.16601760000000002,
+      "turns": 12,
+      "prompt_suffix": "\u8bf7\u7528\u4e2d\u6587\u5199\u7ed3\u8bba\u3002",
+      "correct": true,
+      "reason": "abstained (accepted)",
+      "miss": null,
+      "headline": "can't tell",
+      "dropped_alternative_lines": 1,
+      "checks_ran": {
+        "srm": [
+          "fail"
+        ],
+        "completeness": [
+          "pass"
+        ]
+      },
+      "skill_read": true,
+      "isolation": "ok",
+      "kind": "abstain"
+    },
+    {
+      "fixture": "f6",
+      "arm": "baseline",
+      "run": 1,
+      "model": "sonnet",
+      "exit": 0,
+      "seconds": 26.7,
+      "cost_usd": 0.0612206,
+      "turns": 4,
+      "prompt_suffix": "\u8bf7\u7528\u4e2d\u6587\u5199\u7ed3\u8bba\u3002",
+      "correct": false,
+      "reason": "headline 46.05 outside 50.053\u00b10.3",
+      "miss": "miss",
+      "headline": "46.05%(95% \u533a\u95f4 45.93%\u201346.17%)",
+      "dropped_alternative_lines": 2,
+      "checks_ran": {},
+      "skill_read": false,
+      "isolation": "ok",
+      "kind": "error"
+    },
+    {
+      "fixture": "f6",
+      "arm": "baseline",
+      "run": 2,
+      "model": "sonnet",
+      "exit": 0,
+      "seconds": 29.9,
+      "cost_usd": 0.0616141,
+      "turns": 4,
+      "prompt_suffix": "\u8bf7\u7528\u4e2d\u6587\u5199\u7ed3\u8bba\u3002",
+      "correct": false,
+      "reason": "unparseable: none of the 4 alternative lines says 'ruled in' or 'ruled out'",
+      "miss": "unparseable",
+      "headline": "46.0%(95% \u533a\u95f4\u7ea6 45.9%\u201346.2%,\u4ec5\u4e3a\u4e8c\u9879\u8fd1\u4f3c)",
+      "dropped_alternative_lines": 4,
+      "checks_ran": {},
+      "skill_read": false,
+      "isolation": "ok",
+      "kind": "error"
+    },
+    {
+      "fixture": "f6",
+      "arm": "baseline",
+      "run": 3,
+      "model": "sonnet",
+      "exit": 0,
+      "seconds": 35.5,
+      "cost_usd": 0.06782930000000001,
+      "turns": 5,
+      "prompt_suffix": "\u8bf7\u7528\u4e2d\u6587\u5199\u7ed3\u8bba\u3002",
+      "correct": false,
+      "reason": "headline 46 outside 50.053\u00b10.3",
+      "miss": "miss",
+      "headline": "46.0 %(95% \u533a\u95f4 45.97%\u201346.13%)",
+      "dropped_alternative_lines": 4,
+      "checks_ran": {},
+      "skill_read": false,
+      "isolation": "ok",
+      "kind": "error"
+    },
+    {
+      "fixture": "f6",
+      "arm": "checks",
+      "run": 1,
+      "model": "sonnet",
+      "exit": 0,
+      "seconds": 42.8,
+      "cost_usd": 0.08924770000000001,
+      "turns": 6,
+      "prompt_suffix": "\u8bf7\u7528\u4e2d\u6587\u5199\u7ed3\u8bba\u3002",
+      "correct": false,
+      "reason": "unparseable: none of the 4 alternative lines says 'ruled in' or 'ruled out'",
+      "miss": "unparseable",
+      "headline": "46.0 %(95% \u533a\u95f4 45.9% to 46.2%)",
+      "dropped_alternative_lines": 4,
+      "checks_ran": {
+        "completeness": [
+          "pass"
+        ]
+      },
+      "skill_read": false,
+      "isolation": "ok",
+      "kind": "error"
+    },
+    {
+      "fixture": "f6",
+      "arm": "checks",
+      "run": 2,
+      "model": "sonnet",
+      "exit": 0,
+      "seconds": 47.1,
+      "cost_usd": 0.0909473,
+      "turns": 7,
+      "prompt_suffix": "\u8bf7\u7528\u4e2d\u6587\u5199\u7ed3\u8bba\u3002",
+      "correct": false,
+      "reason": "unparseable: none of the 4 alternative lines says 'ruled in' or 'ruled out'",
+      "miss": "unparseable",
+      "headline": "46.05 %(95% \u533a\u95f4 45.93\u201346.17 %)",
+      "dropped_alternative_lines": 4,
+      "checks_ran": {
+        "completeness": [
+          "pass"
+        ]
+      },
+      "skill_read": false,
+      "isolation": "ok",
+      "kind": "error"
+    },
+    {
+      "fixture": "f6",
+      "arm": "checks",
+      "run": 3,
+      "model": "sonnet",
+      "exit": 0,
+      "seconds": 37.9,
+      "cost_usd": 0.0779818,
+      "turns": 5,
+      "prompt_suffix": "\u8bf7\u7528\u4e2d\u6587\u5199\u7ed3\u8bba\u3002",
+      "correct": false,
+      "reason": "headline 46 outside 50.053\u00b10.3",
+      "miss": "miss",
+      "headline": "46.0%(95% \u533a\u95f4 45.9% to 46.2%),\u53e3\u5f84\u4e3a\u5916\u90e8\u771f\u5b9e\u7528\u6237\u3001\u6709\u70b9\u51fb\u7684\u641c\u7d22\u6570 \u00f7 \u641c\u7d22\u6570\u3002[measured,\u53e3\u5f84\u9009\u62e9\u4e3a guess]",
+      "dropped_alternative_lines": 3,
+      "checks_ran": {
+        "completeness": [
+          "pass"
+        ],
+        "mix_shift": [
+          "pass"
+        ]
+      },
+      "skill_read": false,
+      "isolation": "ok",
+      "kind": "error"
+    },
+    {
+      "fixture": "f6",
+      "arm": "full",
+      "run": 1,
+      "model": "sonnet",
+      "exit": 0,
+      "seconds": 59.1,
+      "cost_usd": 0.13708449999999997,
+      "turns": 10,
+      "prompt_suffix": "\u8bf7\u7528\u4e2d\u6587\u5199\u7ed3\u8bba\u3002",
+      "correct": true,
+      "reason": "number within tolerance; causes consistent with gold",
+      "miss": null,
+      "headline": "+50.05 % (95% CI 49.93 to 50.17)",
+      "dropped_alternative_lines": 1,
+      "checks_ran": {
+        "completeness": [
+          "pass"
+        ]
+      },
+      "skill_read": true,
+      "isolation": "ok",
+      "kind": "error"
+    },
+    {
+      "fixture": "f6",
+      "arm": "full",
+      "run": 2,
+      "model": "sonnet",
+      "exit": 0,
+      "seconds": 56.4,
+      "cost_usd": 0.1344285,
+      "turns": 10,
+      "prompt_suffix": "\u8bf7\u7528\u4e2d\u6587\u5199\u7ed3\u8bba\u3002",
+      "correct": true,
+      "reason": "number within tolerance; causes consistent with gold",
+      "miss": null,
+      "headline": "+50.05 % (95% \u533a\u95f4 49.93 \u5230 50.18 %)",
+      "dropped_alternative_lines": 2,
+      "checks_ran": {
+        "completeness": [
+          "pass"
+        ]
+      },
+      "skill_read": true,
+      "isolation": "ok",
+      "kind": "error"
+    },
+    {
+      "fixture": "f6",
+      "arm": "full",
+      "run": 3,
+      "model": "sonnet",
+      "exit": 0,
+      "seconds": 52.2,
+      "cost_usd": 0.14986950000000002,
+      "turns": 10,
+      "prompt_suffix": "\u8bf7\u7528\u4e2d\u6587\u5199\u7ed3\u8bba\u3002",
+      "correct": true,
+      "reason": "number within tolerance; causes consistent with gold",
+      "miss": null,
+      "headline": "+50.05 pp (95% CI 49.93 to 50.17;\u8fd9\u662f CTR \u7684\u6c34\u5e73\u503c 50.05%,\u4e0d\u662f\u53d8\u5316\u91cf)",
+      "dropped_alternative_lines": 1,
+      "checks_ran": {
+        "completeness": [
+          "pass"
+        ]
+      },
+      "skill_read": true,
+      "isolation": "ok",
+      "kind": "error"
+    },
+    {
+      "fixture": "f7",
+      "arm": "baseline",
+      "run": 1,
+      "model": "sonnet",
+      "exit": 0,
+      "seconds": 25.4,
+      "cost_usd": 0.052740100000000005,
+      "turns": 4,
+      "prompt_suffix": "\u8bf7\u7528\u4e2d\u6587\u5199\u7ed3\u8bba\u3002",
+      "correct": false,
+      "reason": "unparseable: none of the 3 alternative lines says 'ruled in' or 'ruled out'",
+      "miss": "unparseable",
+      "headline": "8.30 %(95% \u533a\u95f4 8.24\u20138.36 %)",
+      "dropped_alternative_lines": 3,
+      "checks_ran": {},
+      "skill_read": false,
+      "isolation": "ok",
+      "kind": "abstain"
+    },
+    {
+      "fixture": "f7",
+      "arm": "baseline",
+      "run": 2,
+      "model": "sonnet",
+      "exit": 0,
+      "seconds": 31.7,
+      "cost_usd": 0.055944600000000004,
+      "turns": 5,
+      "prompt_suffix": "\u8bf7\u7528\u4e2d\u6587\u5199\u7ed3\u8bba\u3002",
+      "correct": false,
+      "reason": "unparseable: none of the 3 alternative lines says 'ruled in' or 'ruled out'",
+      "miss": "unparseable",
+      "headline": "8.30 %(95% \u533a\u95f4 8.24%\u20138.36%)",
+      "dropped_alternative_lines": 3,
+      "checks_ran": {},
+      "skill_read": false,
+      "isolation": "ok",
+      "kind": "abstain"
+    },
+    {
+      "fixture": "f7",
+      "arm": "baseline",
+      "run": 3,
+      "model": "sonnet",
+      "exit": 0,
+      "seconds": 29.4,
+      "cost_usd": 0.056544,
+      "turns": 4,
+      "prompt_suffix": "\u8bf7\u7528\u4e2d\u6587\u5199\u7ed3\u8bba\u3002",
+      "correct": false,
+      "reason": "unparseable: none of the 3 alternative lines says 'ruled in' or 'ruled out'",
+      "miss": "unparseable",
+      "headline": "8.30%(95% \u533a\u95f4 8.24%\u20138.36%)",
+      "dropped_alternative_lines": 3,
+      "checks_ran": {},
+      "skill_read": false,
+      "isolation": "ok",
+      "kind": "abstain"
+    },
+    {
+      "fixture": "f7",
+      "arm": "checks",
+      "run": 1,
+      "model": "sonnet",
+      "exit": 0,
+      "seconds": 35.3,
+      "cost_usd": 0.0703507,
+      "turns": 5,
+      "prompt_suffix": "\u8bf7\u7528\u4e2d\u6587\u5199\u7ed3\u8bba\u3002",
+      "correct": false,
+      "reason": "unparseable: none of the 4 alternative lines says 'ruled in' or 'ruled out'",
+      "miss": "unparseable",
+      "headline": "8.30%(95% \u533a\u95f4 8.24%\u20138.36%)",
+      "dropped_alternative_lines": 4,
+      "checks_ran": {
+        "completeness": [
+          "pass"
+        ]
+      },
+      "skill_read": false,
+      "isolation": "ok",
+      "kind": "abstain"
+    },
+    {
+      "fixture": "f7",
+      "arm": "checks",
+      "run": 2,
+      "model": "sonnet",
+      "exit": 0,
+      "seconds": 34.4,
+      "cost_usd": 0.0668678,
+      "turns": 5,
+      "prompt_suffix": "\u8bf7\u7528\u4e2d\u6587\u5199\u7ed3\u8bba\u3002",
+      "correct": false,
+      "reason": "unparseable: none of the 3 alternative lines says 'ruled in' or 'ruled out'",
+      "miss": "unparseable",
+      "headline": "8.30 %(95% \u533a\u95f4 8.24%\u20138.36%)",
+      "dropped_alternative_lines": 3,
+      "checks_ran": {
+        "completeness": [
+          "pass"
+        ]
+      },
+      "skill_read": false,
+      "isolation": "ok",
+      "kind": "abstain"
+    },
+    {
+      "fixture": "f7",
+      "arm": "checks",
+      "run": 3,
+      "model": "sonnet",
+      "exit": 0,
+      "seconds": 30.3,
+      "cost_usd": 0.07526240000000001,
+      "turns": 6,
+      "prompt_suffix": "\u8bf7\u7528\u4e2d\u6587\u5199\u7ed3\u8bba\u3002",
+      "correct": false,
+      "reason": "unparseable: none of the 4 alternative lines says 'ruled in' or 'ruled out'",
+      "miss": "unparseable",
+      "headline": "8.30 %(95% \u533a\u95f4 8.24%\u20138.36%)",
+      "dropped_alternative_lines": 4,
+      "checks_ran": {
+        "completeness": [
+          "pass"
+        ]
+      },
+      "skill_read": false,
+      "isolation": "ok",
+      "kind": "abstain"
+    },
+    {
+      "fixture": "f7",
+      "arm": "full",
+      "run": 1,
+      "model": "sonnet",
+      "exit": 0,
+      "seconds": 43.2,
+      "cost_usd": 0.1161177,
+      "turns": 9,
+      "prompt_suffix": "\u8bf7\u7528\u4e2d\u6587\u5199\u7ed3\u8bba\u3002",
+      "correct": true,
+      "reason": "abstained (accepted)",
+      "miss": null,
+      "headline": "can't tell",
+      "dropped_alternative_lines": 0,
+      "checks_ran": {
+        "completeness": [
+          "pass"
+        ]
+      },
+      "skill_read": true,
+      "isolation": "ok",
+      "kind": "abstain"
+    },
+    {
+      "fixture": "f7",
+      "arm": "full",
+      "run": 2,
+      "model": "sonnet",
+      "exit": 0,
+      "seconds": 39.9,
+      "cost_usd": 0.1099157,
+      "turns": 9,
+      "prompt_suffix": "\u8bf7\u7528\u4e2d\u6587\u5199\u7ed3\u8bba\u3002",
+      "correct": true,
+      "reason": "abstained (accepted)",
+      "miss": null,
+      "headline": "can't tell",
+      "dropped_alternative_lines": 0,
+      "checks_ran": {
+        "completeness": [
+          "pass"
+        ]
+      },
+      "skill_read": true,
+      "isolation": "ok",
+      "kind": "abstain"
+    },
+    {
+      "fixture": "f7",
+      "arm": "full",
+      "run": 3,
+      "model": "sonnet",
+      "exit": 0,
+      "seconds": 49.9,
+      "cost_usd": 0.11991329999999997,
+      "turns": 9,
+      "prompt_suffix": "\u8bf7\u7528\u4e2d\u6587\u5199\u7ed3\u8bba\u3002",
+      "correct": true,
+      "reason": "abstained (accepted)",
+      "miss": null,
+      "headline": "can't tell",
+      "dropped_alternative_lines": 0,
+      "checks_ran": {
+        "completeness": [
+          "pass"
+        ]
+      },
+      "skill_read": true,
+      "isolation": "ok",
+      "kind": "abstain"
+    },
+    {
+      "fixture": "f8",
+      "arm": "baseline",
+      "run": 1,
+      "model": "sonnet",
+      "exit": 0,
+      "seconds": 31.2,
+      "cost_usd": 0.0675697,
+      "turns": 5,
+      "prompt_suffix": "\u8bf7\u7528\u4e2d\u6587\u5199\u7ed3\u8bba\u3002",
+      "correct": false,
+      "reason": "unparseable: none of the 4 alternative lines says 'ruled in' or 'ruled out'",
+      "miss": "unparseable",
+      "headline": "36.97 %(95% \u533a\u95f4 36.18\u201337.76 %)",
+      "dropped_alternative_lines": 4,
+      "checks_ran": {},
+      "skill_read": false,
+      "isolation": "ok",
+      "kind": "error"
+    },
+    {
+      "fixture": "f8",
+      "arm": "baseline",
+      "run": 2,
+      "model": "sonnet",
+      "exit": 0,
+      "seconds": 31.6,
+      "cost_usd": 0.06787570000000001,
+      "turns": 5,
+      "prompt_suffix": "\u8bf7\u7528\u4e2d\u6587\u5199\u7ed3\u8bba\u3002",
+      "correct": false,
+      "reason": "unparseable: none of the 3 alternative lines says 'ruled in' or 'ruled out'",
+      "miss": "unparseable",
+      "headline": "36.97 %(95% \u533a\u95f4 36.68\u201337.26 %)",
+      "dropped_alternative_lines": 3,
+      "checks_ran": {},
+      "skill_read": false,
+      "isolation": "ok",
+      "kind": "error"
+    },
+    {
+      "fixture": "f8",
+      "arm": "baseline",
+      "run": 3,
+      "model": "sonnet",
+      "exit": 0,
+      "seconds": 32.5,
+      "cost_usd": 0.0687682,
+      "turns": 5,
+      "prompt_suffix": "\u8bf7\u7528\u4e2d\u6587\u5199\u7ed3\u8bba\u3002",
+      "correct": true,
+      "reason": "number within tolerance; causes consistent with gold",
+      "miss": null,
+      "headline": "36.97 %(95% \u533a\u95f4 36.68%\u201337.26%,\u4ec5\u4e3a\u4e8c\u9879\u5206\u5e03\u8fd1\u4f3c)",
+      "dropped_alternative_lines": 1,
+      "checks_ran": {},
+      "skill_read": false,
+      "isolation": "ok",
+      "kind": "error"
+    },
+    {
+      "fixture": "f8",
+      "arm": "checks",
+      "run": 1,
+      "model": "sonnet",
+      "exit": 0,
+      "seconds": 29.7,
+      "cost_usd": 0.0839393,
+      "turns": 6,
+      "prompt_suffix": "\u8bf7\u7528\u4e2d\u6587\u5199\u7ed3\u8bba\u3002",
+      "correct": false,
+      "reason": "unparseable: none of the 3 alternative lines says 'ruled in' or 'ruled out'",
+      "miss": "unparseable",
+      "headline": "36.97 %(95% \u533a\u95f4 36.68%\u201337.26%)",
+      "dropped_alternative_lines": 3,
+      "checks_ran": {
+        "fanout": [
+          "fail",
+          "pass"
+        ],
+        "completeness": [
+          "could_not_run"
+        ]
+      },
+      "skill_read": false,
+      "isolation": "ok",
+      "kind": "error"
+    },
+    {
+      "fixture": "f8",
+      "arm": "checks",
+      "run": 2,
+      "model": "sonnet",
+      "exit": 0,
+      "seconds": 40.6,
+      "cost_usd": 0.085057,
+      "turns": 6,
+      "prompt_suffix": "\u8bf7\u7528\u4e2d\u6587\u5199\u7ed3\u8bba\u3002",
+      "correct": false,
+      "reason": "unparseable: none of the 3 alternative lines says 'ruled in' or 'ruled out'",
+      "miss": "unparseable",
+      "headline": "36.97 % (the CTR is a point value; no interval was computed, and the number is the full-week ratio across all shopping queries)",
+      "dropped_alternative_lines": 3,
+      "checks_ran": {
+        "fanout": [
+          "fail",
+          "pass"
+        ],
+        "completeness": [
+          "could_not_run"
+        ]
+      },
+      "skill_read": false,
+      "isolation": "ok",
+      "kind": "error"
+    },
+    {
+      "fixture": "f8",
+      "arm": "checks",
+      "run": 3,
+      "model": "sonnet",
+      "exit": 0,
+      "seconds": 40.5,
+      "cost_usd": 0.08356449999999999,
+      "turns": 6,
+      "prompt_suffix": "\u8bf7\u7528\u4e2d\u6587\u5199\u7ed3\u8bba\u3002",
+      "correct": false,
+      "reason": "unparseable: none of the 4 alternative lines says 'ruled in' or 'ruled out'",
+      "miss": "unparseable",
+      "headline": "36.97 %(95% \u533a\u95f4:\u672a\u8ba1\u7b97,\u89c1\u4e0b)",
+      "dropped_alternative_lines": 4,
+      "checks_ran": {
+        "fanout": [
+          "fail",
+          "pass"
+        ],
+        "completeness": [
+          "could_not_run"
+        ]
+      },
+      "skill_read": false,
+      "isolation": "ok",
+      "kind": "error"
+    },
+    {
+      "fixture": "f8",
+      "arm": "full",
+      "run": 1,
+      "model": "sonnet",
+      "exit": 0,
+      "seconds": 57.9,
+      "cost_usd": 0.1432671,
+      "turns": 11,
+      "prompt_suffix": "\u8bf7\u7528\u4e2d\u6587\u5199\u7ed3\u8bba\u3002",
+      "correct": true,
+      "reason": "number within tolerance; causes consistent with gold",
+      "miss": null,
+      "headline": "36.97 % (95% \u533a\u95f4 36.68\u201337.26 %)",
+      "dropped_alternative_lines": 1,
+      "checks_ran": {
+        "fanout": [
+          "fail"
+        ],
+        "completeness": [
+          "could_not_run"
+        ]
+      },
+      "skill_read": true,
+      "isolation": "ok",
+      "kind": "error"
+    },
+    {
+      "fixture": "f8",
+      "arm": "full",
+      "run": 2,
+      "model": "sonnet",
+      "exit": 0,
+      "seconds": 62.7,
+      "cost_usd": 0.14769230000000003,
+      "turns": 11,
+      "prompt_suffix": "\u8bf7\u7528\u4e2d\u6587\u5199\u7ed3\u8bba\u3002",
+      "correct": true,
+      "reason": "number within tolerance; causes consistent with gold",
+      "miss": null,
+      "headline": "+36.97 % (36.18% to 37.76%)",
+      "dropped_alternative_lines": 0,
+      "checks_ran": {
+        "fanout": [
+          "fail"
+        ],
+        "completeness": [
+          "could_not_run"
+        ]
+      },
+      "skill_read": true,
+      "isolation": "ok",
+      "kind": "error"
+    },
+    {
+      "fixture": "f8",
+      "arm": "full",
+      "run": 3,
+      "model": "sonnet",
+      "exit": 0,
+      "seconds": 70.0,
+      "cost_usd": 0.1537953,
+      "turns": 12,
+      "prompt_suffix": "\u8bf7\u7528\u4e2d\u6587\u5199\u7ed3\u8bba\u3002",
+      "correct": true,
+      "reason": "number within tolerance; causes consistent with gold",
+      "miss": null,
+      "headline": "36.97 % (95% \u533a\u95f4 36.68\u201337.26 %)",
+      "dropped_alternative_lines": 1,
+      "checks_ran": {
+        "fanout": [
+          "fail",
+          "pass"
+        ],
+        "completeness": [
+          "could_not_run"
+        ]
+      },
+      "skill_read": false,
+      "isolation": "ok",
+      "kind": "error"
+    }
+  ]
+}

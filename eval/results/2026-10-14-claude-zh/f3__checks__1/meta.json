@@ -1,0 +1,11 @@
+{
+  "fixture": "f3",
+  "arm": "checks",
+  "run": 1,
+  "model": "sonnet",
+  "exit": 0,
+  "seconds": 32.6,
+  "cost_usd": 0.08949480000000001,
+  "turns": 6,
+  "prompt_suffix": "\u8bf7\u7528\u4e2d\u6587\u5199\u7ed3\u8bba\u3002"
+}
