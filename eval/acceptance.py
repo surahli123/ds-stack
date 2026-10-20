@@ -1,12 +1,20 @@
 #!/usr/bin/env python3
 """Fill in the acceptance table in docs/acceptance.md from results directories.
 
-    python3 eval/acceptance.py eval/results/<dir> [<dir> ...] [--allow-no-transcript]
+    python3 eval/acceptance.py eval/results/<dir> [<dir> ...] [--allow-no-transcript] [--diagnostic]
 
 Each directory is one harness and one language (zh when its runs carry a prompt
 suffix). For each, prints the Plumbing, Correctness and Value levels with their
 counts and PASS or FAIL. The thresholds below are the ones docs/acceptance.md
 fixed before the first acceptance run; changing one restarts the count.
+
+A directory where any run didn't execute (rate-limited, at capacity, not isolated,
+crashed, or an API error), or where run_arms.py left jobs unstarted, is
+INVALID: its levels aren't computed, because they would measure the failures,
+not the agent. --diagnostic prints them anyway, marked as diagnostic only. A
+directory named in eval/never_grade.txt is refused, and one with no runs is
+skipped. Exit code: 0 when every directory was assessed, 2 when any was INVALID
+or refused, 3 when none exists.
 """
 
 import argparse
@@ -43,6 +51,30 @@ def plumbing_ok(run_dir):
     return reasons
 
 
+def not_started(results_dir):
+    path = os.path.join(results_dir, "run-status.json")
+    if not os.path.exists(path):
+        return []
+    with open(path) as handle:
+        return json.load(handle).get("not_started", [])
+
+
+def invalid_reason(runs, results_dir):
+    """Why a directory's levels can't be computed, or None."""
+    failed = {}
+    for r in runs:
+        if r["miss"] == "not_executed":
+            failed[r["execution"]] = failed.get(r["execution"], 0) + 1
+    unstarted = not_started(results_dir)
+    if not failed and not unstarted:
+        return None
+    kinds = ", ".join(f"{kind} {n}" for kind, n in sorted(failed.items(), key=lambda kv: -kv[1]))
+    parts = [f"{sum(failed.values())} of {len(runs)} runs didn't execute" + (f" ({kinds})" if kinds else "")]
+    if unstarted:
+        parts.append(f"{len(unstarted)} jobs never started")
+    return "; ".join(parts)
+
+
 def assess(results_dir, allow_no_transcript):
     runs = grade.grade_dir(results_dir, allow_no_transcript)
     with open(os.path.join(HERE, "pass_rule.json")) as handle:
@@ -69,13 +101,21 @@ def assess(results_dir, allow_no_transcript):
     base_fixtures = sum(correct(f, "baseline") for f in VALUE_FIXTURES)
     return {
         "dir": os.path.basename(results_dir.rstrip("/")), "harness": harness, "language": language,
+        "invalid": invalid_reason(runs, results_dir),
         "plumbing": (len(full_runs) - len(plumbing_fail), len(full_runs), plumbing_fail),
         "correctness": (len(present) - len(wrong), len(present), wrong, present == FIXTURES),
         "value": (miss_rate, full_value, base_fixtures, len(base_value)),
     }
 
 
-def render(row):
+def render(row, diagnostic=False):
+    title = f"### {row['dir']} ({row['harness']}, {row['language']})"
+    if row["invalid"]:
+        verdict = (f"INVALID, not an acceptance result: {row['invalid']}. The levels would measure these failures, "
+                   "not the agent, so fix the cause and rerun into a new directory.")
+        if not diagnostic:
+            return f"{title}\n\n{verdict}\n"
+        title = f"{title}: DIAGNOSTIC ONLY\n\n{verdict}"
     ok_runs, n_runs, failed = row["plumbing"]
     right, n_fix, wrong, complete = row["correctness"]
     miss_rate, full_value, base_value, n_base = row["value"]
@@ -85,7 +125,7 @@ def render(row):
         value = "INCOMPLETE (no baseline runs on f6-f8)"
     else:
         value = "PASS" if miss_rate >= MIN_BASELINE_MISS and full_value > base_value else "FAIL"
-    lines = [f"### {row['dir']} ({row['harness']}, {row['language']})", "",
+    lines = [title, "",
              "| Level | Result | Counts |", "|---|---|---|",
              f"| Plumbing | {plumbing} | {ok_runs} of {n_runs} full-arm runs |",
              f"| Correctness | {correctness} | {right} of {n_fix} fixtures right by majority |",
@@ -103,15 +143,28 @@ def main(argv=None):
     parser.add_argument("results_dirs", nargs="+")
     parser.add_argument("--allow-no-transcript", action="store_true",
                         help="grade runs from a custom agent (Codex, Cursor) whose isolation can't be checked")
+    parser.add_argument("--diagnostic", action="store_true",
+                        help="also print the levels of an INVALID directory, marked diagnostic only")
     args = parser.parse_args(argv)
     found = [d for d in args.results_dirs if os.path.isdir(d)]
     for missing in sorted(set(args.results_dirs) - set(found)):
         print(f"acceptance: skipping {missing}: not a directory (a harness that didn't run?)", file=sys.stderr)
     if not found:
         return 3
+    status = 0
     for results_dir in found:
-        print(render(assess(results_dir, args.allow_no_transcript)))
-    return 0
+        refused = grade.never_grade(results_dir)
+        if refused:
+            print(f"### {os.path.basename(os.path.normpath(results_dir))}\n\nREFUSED: {refused}\n")
+            status = 2
+            continue
+        if not grade.grade_dir(results_dir, args.allow_no_transcript):
+            print(f"acceptance: skipping {results_dir}: it holds no runs (a report directory?)", file=sys.stderr)
+            continue
+        row = assess(results_dir, args.allow_no_transcript)
+        print(render(row, args.diagnostic))
+        status = 2 if row["invalid"] else status
+    return status
 
 
 if __name__ == "__main__":

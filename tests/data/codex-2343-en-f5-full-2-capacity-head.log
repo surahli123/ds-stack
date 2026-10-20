@@ -1,0 +1,12 @@
+Sanitized public log. Raw original retained locally; see sibling codex-report/TRACE-NOTES.md and artifact-manifest.json.
+ds-stack: <HOME>/.codex/skills is present, so this run is not isolated
+model: gpt-6-astra
+approval: on-request
+sandbox: workspace-write [workdir, /tmp, $TMPDIR]
+reasoning effort: none
+ERROR: Reconnecting... 2/5
+ERROR: Reconnecting... 3/5
+ERROR: Reconnecting... 4/5
+ERROR: Reconnecting... 5/5
+ERROR: Selected model is at capacity. Please try a different model.
+ERROR: Selected model is at capacity. Please try a different model.

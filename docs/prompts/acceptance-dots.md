@@ -8,7 +8,9 @@ You run the Codex column of the ds-stack acceptance matrix on the machine of the
 - Don't edit `docs/acceptance.md`, any skill, the grader or the fixtures. If something looks wrong, report it.
 - Gold stays hidden while agents run, as step 2 describes.
 - Never overwrite a results or report directory. Each run gets a new one; `run_arms.py` refuses an existing run.
-- Codex results made before commit `1093ca9` (a `codex.sh` without an empty `HOME`) are contaminated by the owner's global instructions and skills. Keep them, list them as contaminated in the report, and never grade them into the acceptance table.
+- `eval/never_grade.txt` names the contaminated Codex directories, made before commit `1093ca9`; `grade.py` and `acceptance.py` refuse them. Keep them and list them in the report.
+- A run that didn't execute (rate-limited, at capacity, not isolated, crashed) is not a result. `acceptance.py` then prints INVALID instead of levels, as for `2026-10-13-2343-codex-*`. Never report `--diagnostic` output as an acceptance result.
+- Start step 3 only after the owner confirms that `docs/prompts/codex-validation-dots.md` passed on this commit.
 - Push only your results, to a new branch named `results/<date>-<harness>`. Don't merge anything, and don't open a PR unless the owner asks.
 
 ## Steps
@@ -31,13 +33,13 @@ for p in ~/ds-run-id ~/ds-gold-hidden ~/ds-codex-hidden; do [ -e "$p" ] && { ech
 date +%Y-%m-%d-%H%M > ~/ds-run-id && cat ~/ds-run-id
 mv ~/ds-stack/eval/gold ~/ds-gold-hidden
 mkdir ~/ds-codex-hidden
-for f in AGENTS.md skills prompts; do [ -e ~/.codex/$f ] && mv ~/.codex/$f ~/ds-codex-hidden/; done
+for f in AGENTS.md AGENTS.override.md skills prompts; do [ -e ~/.codex/$f ] && mv ~/.codex/$f ~/ds-codex-hidden/; done
 ls ~/ds-codex-hidden
 ```
 
 If the first line reports a leftover, stop: an earlier run didn't finish cleanly, and the owner decides what to restore.
 
-`--ignore-user-config` skips only `config.toml`. Global instructions in `~/.codex` would reach every arm, plain prompting included. Leave `auth.json` and `plugins/` where they are. `eval/agents/codex.sh` also gives Codex an empty `HOME`, so skills in `~/.agents/skills` stay out, and switches off plugins, remote plugins, apps and memories for each run.
+`--ignore-user-config` skips only `config.toml`. Global instructions in `~/.codex` would reach every arm, plain prompting included. Leave `auth.json` and `plugins/` where they are. `eval/agents/codex.sh` also gives Codex an empty `HOME`, so skills in `~/.agents/skills` stay out, and switches off plugins, remote plugins, apps and memories for each run. Codex rebuilds `~/.codex/skills/.system` on its first start; `codex.sh` allows only that folder, and refuses to start Codex (exit 4) if anything else is back.
 
 Then confirm the isolation with one paid call:
 
@@ -45,19 +47,21 @@ Then confirm the isolation with one paid call:
 cd ~/ds-stack && sh eval/agents/codex-isolation-probe.sh
 ```
 
-The script prints Codex's two-line reply, then `PASS` or `FAIL`. It passes only when every listed skill is one of Codex's five rebuilt system skills (imagegen, openai-docs, plugin-creator, skill-creator, skill-installer) and no instruction file is listed. On `FAIL`, run step 5's first block to put everything back, then stop and report the reply.
+The script prints Codex's two-line reply, then `PASS` or `FAIL`. It passes only when every listed skill is one of Codex's six system skills (imagegen, openai-docs, plugin-creator, review-agent, skill-creator, skill-installer) and no instruction file is listed. The model may list fewer; `codex.sh` checks the folder itself on every run. On `FAIL`, run step 5's first block to put everything back, then stop and report the reply.
 
 ### 3. Run the Codex column, in English and in Chinese
 
 ```bash
-cd ~/ds-stack && D=$(cat ~/ds-run-id) && python3 eval/run_arms.py --runs 3 --agent-cmd "sh $PWD/eval/agents/codex.sh {prompt_file}" --out eval/results/$D-codex-en
+cd ~/ds-stack && D=$(cat ~/ds-run-id) && python3 eval/run_arms.py --runs 3 --parallel 2 --agent-cmd "sh $PWD/eval/agents/codex.sh {prompt_file}" --out eval/results/$D-codex-en; echo "run_arms exit $?"
 ```
 
 ```bash
-cd ~/ds-stack && D=$(cat ~/ds-run-id) && python3 eval/run_arms.py --runs 3 --agent-cmd "sh $PWD/eval/agents/codex.sh {prompt_file}" --prompt-suffix "请用中文写结论。" --out eval/results/$D-codex-zh
+cd ~/ds-stack && D=$(cat ~/ds-run-id) && python3 eval/run_arms.py --runs 3 --parallel 2 --agent-cmd "sh $PWD/eval/agents/codex.sh {prompt_file}" --prompt-suffix "请用中文写结论。" --out eval/results/$D-codex-zh; echo "run_arms exit $?"
 ```
 
-Each command runs every fixture through three arms (plain prompting, checks only, full ds-mode), 3 times each. Each run's directory keeps `result.md`, `agent.log` (Codex's own log), `queries.log`, `checks.log` and `meta.json`.
+Each command runs every fixture through three arms (plain prompting, checks only, full ds-mode), 3 times each, two at a time. Each run's directory keeps `result.md`, `agent.log` (Codex's own log), `queries.log`, `checks.log` and `meta.json`. A rate-limited or at-capacity run is retried after a pause, and its earlier attempts' logs stay in the run directory. `run-status.json` counts what executed.
+
+`run_arms exit 0` means every job executed. On `run_arms exit 2`, don't start the Chinese block: go to step 5, and report `run-status.json`.
 
 ### 4. Don't run Cursor
 
@@ -81,7 +85,7 @@ ls ~/ds-stack/eval/gold ~/.codex ~/ds-codex-recreated-$D 2>/dev/null
 Then grade:
 
 ```bash
-cd ~/ds-stack && D=$(cat ~/ds-run-id) && grep -l "is not isolated" eval/results/$D-codex-*/*/agent.log; for R in eval/results/$D-codex-*; do python3 eval/grade.py "$R" --allow-no-transcript; done; python3 eval/acceptance.py eval/results/$D-codex-* --allow-no-transcript
+cd ~/ds-stack && D=$(cat ~/ds-run-id) && cat eval/results/$D-codex-en/run-status.json eval/results/$D-codex-zh/run-status.json; for R in eval/results/$D-codex-en eval/results/$D-codex-zh; do python3 eval/grade.py "$R" --allow-no-transcript; done; python3 eval/acceptance.py eval/results/$D-codex-en eval/results/$D-codex-zh --allow-no-transcript; echo "acceptance exit $?"
 ```
 
 ### 6. Push the results
@@ -96,12 +100,13 @@ Send the person you work for this, and nothing else:
 
 ```
 ds-stack acceptance, <date>, commit <hash>
-Codex: <version>
-<the full output of eval/acceptance.py>
+Codex: <version>; model and reasoning effort: <agent_model and reasoning_effort from any meta.json>
+run-status.json, per directory: <executed of jobs; failed by kind; not started; stopped>
+<the full output of eval/acceptance.py, and its exit code>
 <for each results directory: its Fixtures-by-majority table from summary.md>
 Failing runs: <directory/run: the Reason column from summary.md>
 Pushed: <branch name>
 Contaminated earlier directories: <list, or "none">
-Hidden from ~/.codex: <what step 2 moved, or "nothing">; isolation probe: <its reply, shortened>; runs flagged "not isolated": <count>
+Hidden from ~/.codex: <what step 2 moved, or "nothing">; isolation probe: <its reply, shortened>
 Problems: <none, or the step, the command and its error>
 ```
