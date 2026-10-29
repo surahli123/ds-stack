@@ -427,3 +427,71 @@ def test_the_probe_and_the_wrapper_allow_the_same_skills():
     agents = os.path.join(ROOT, "eval", "agents")
     assert listed(os.path.join(agents, "codex.sh"), "SYSTEM_SKILLS") == SYSTEM_SKILLS
     assert listed(os.path.join(agents, "codex-isolation-probe.sh"), "ALLOWED") == SYSTEM_SKILLS
+
+
+# --- the owner's daily model and effort --------------------------------------------------------------------
+
+DAILY = os.path.join(ROOT, "eval", "agents", "codex-daily.py")
+
+
+def run_daily(home):
+    return subprocess.run([sys.executable, DAILY], capture_output=True, text=True,
+                          env={**os.environ, "CODEX_HOME": str(home)})
+
+
+@pytest.mark.parametrize("config, expected", [
+    ('model = "gpt-6-astra"\nmodel_reasoning_effort = "high"\n', "gpt-6-astra high"),
+    ("model = 'gpt-x' # daily\nmodel_reasoning_effort='medium'\n[mcp_servers.x]\nmodel = \"other\"\n", "gpt-x medium"),
+    ('model = "gpt-x"\nmodel_reasoning_effort = "low"\nprofile = "daily"\n\n[profiles.daily]\nmodel = "gpt-y"\n'
+     'model_reasoning_effort = "xhigh"\n[profiles.fast]\nmodel_reasoning_effort = "minimal"\n', "gpt-y xhigh"),
+    ('profile = "daily"\nmodel_reasoning_effort = "high"\n[profiles."daily"]\nmodel = "gpt-z"\n[[skills.config]]\n'
+     'model = "not this"\n', "gpt-z high"),
+])
+def test_codex_daily_reads_the_model_and_effort(tmp_path, config, expected):
+    (tmp_path / "config.toml").write_text(config)
+    proc = run_daily(tmp_path)
+    assert proc.returncode == 0 and proc.stdout.strip() == expected, proc.stderr
+
+
+def test_codex_daily_says_what_is_missing(tmp_path):
+    assert "doesn't exist" in run_daily(tmp_path).stderr
+    (tmp_path / "config.toml").write_text('model = "gpt-x"\n[profiles.p]\nmodel_reasoning_effort = "high"\n')
+    proc = run_daily(tmp_path)
+    assert proc.returncode == 1 and proc.stdout == "" and "no model_reasoning_effort" in proc.stderr
+
+
+@pytest.mark.parametrize("pin, verdict", [
+    ({}, "PASS"),
+    ({"DS_CODEX_MODEL": "m1", "DS_CODEX_EFFORT": "high"}, "PASS"),
+    ({"DS_CODEX_MODEL": "m1", "DS_CODEX_EFFORT": "xhigh"}, "FAIL: Codex didn't run the pinned reasoning effort xhigh"),
+    ({"DS_CODEX_MODEL": "m2"}, "FAIL: Codex didn't run the pinned model m2"),
+])
+def test_the_probe_checks_the_pinned_model_and_effort(tmp_path, monkeypatch, pin, verdict):
+    bin_dir = tmp_path / "bin"
+    bin_dir.mkdir()
+    codex = bin_dir / "codex"
+    # Codex prints its header on stderr; this fake ignores the pin and always runs m1 at high effort.
+    codex.write_text('#!/bin/sh\nif [ "$2" = "--help" ]; then exit 0; fi\n'
+                     'printf "model: m1\\nreasoning effort: high\\n" >&2\n'
+                     'printf "SKILLS: imagegen\\nINSTRUCTIONS: NONE\\n"\n')
+    codex.chmod(0o755)
+    (tmp_path / "home").mkdir()
+    env = {**os.environ, "PATH": f"{bin_dir}{os.pathsep}{os.environ['PATH']}", "CODEX_HOME": str(tmp_path / "home"),
+           **pin}
+    for name in ("DS_CODEX_MODEL", "DS_CODEX_EFFORT"):
+        if name not in pin:
+            env.pop(name, None)
+    proc = subprocess.run(["sh", os.path.join(ROOT, "eval", "agents", "codex-isolation-probe.sh")],
+                          capture_output=True, text=True, env=env)
+    assert proc.stdout.strip().splitlines()[-1] == verdict
+    assert "reasoning effort: high" in proc.stdout
+
+
+def test_run_arms_passes_the_pin_to_a_custom_agent(tmp_path, monkeypatch):
+    monkeypatch.setenv("DS_RUN_ROOT", str(tmp_path / "runs"))
+    monkeypatch.setenv("DS_CODEX_MODEL", "gpt-x")
+    monkeypatch.setenv("DS_CODEX_EFFORT", "high")
+    echo = shlex.join([sys.executable, "-c",
+                       "import os; print(os.environ['DS_CODEX_MODEL'], os.environ['DS_CODEX_EFFORT'])"])
+    run_arms.run_job(("f5", "baseline", 1), "auto", str(tmp_path / "out"), 60, agent_cmd=echo)
+    assert (tmp_path / "out" / "f5__baseline__1" / "result.md").read_text().strip() == "gpt-x high"
