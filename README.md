@@ -15,6 +15,7 @@ This repo holds only the generic core. Company facts live in a private overlay o
 | Skill | Fixes | Enforced by |
 |---|---|---|
 | `ds-mode` | Analyses: pins the metric, checks the data, decomposes a movement, rules alternatives in or out, writes a traceable readout | A logged query runner, four logged check scripts, and `verify_readout.py`, which fails any untraced number |
+| `ds-verify` | Checking a finished readout against its logs, its data and the team's metric definitions | `ds_verify.py`: replays every logged query on a copy of the data, plus six more checks |
 | `ds-doc` | Doc structure and narrative: doc type, the spine (reader, decision, one-sentence answer, takeaways), answer-first drafting, DS claim rules | A step checklist; skipped steps stay visible |
 | `doc-tighten` | Format and concision: answer placement, bold, log drift, tables, clutter, length budget | `doc_lint.py`, 14 rules |
 | `cold-read` | Whether the doc works: a fresh reader must recover the answer and decision from a skim, and every takeaway from a full read | `cold_read.py`: a fresh reader (`claude -p` by default, any agent CLI through `DS_AGENT_CMD`), graded by script against `spine.json` |
@@ -25,8 +26,8 @@ Word-level polish is not duplicated here. If ai-writing-suite is installed, `ds-
 
 ## Reviewing a readout
 
-1. Run `python3 skills/ds-mode/tools/verify_readout.py readout.md` in the analysis directory. It resolves every tag against `.ds-queries.log` and `.ds-checks.log` and lists the `[given]` numbers to confirm against the request.
-2. Read each cited query's SQL and stored result in `.ds-queries.log`, which holds the as-of period and the capped result rows, so nothing needs re-running.
+1. Run `python3 skills/ds-verify/tools/ds_verify.py readout.md --db <database> --request <request file>` in the analysis directory. It replays the logged queries on a copy of the data, resolves every tag, and lists the failures, the numbers to check by hand and the `[given]` numbers to confirm against the request.
+2. Read the cited SQL in `.ds-queries.log` for each number on the "check by hand" list.
 3. Work through `skills/ds-mode/references/review-checklist.md`. A failed item goes back to the analyst with its number.
 
 ## What came from the retired tools
