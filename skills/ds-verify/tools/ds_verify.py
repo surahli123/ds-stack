@@ -8,36 +8,34 @@
 Seven checks, each with a status of pass, fail, warn, could_not_verify or skipped:
 
   trace         every number traces to a logged query or check (ds-mode's verify_readout.py)
-  replay        every logged query, replayed in order on a temporary copy of the database,
-                returns the rows that were logged. Needs --db (or $DS_WAREHOUSE); never
-                touches the original. A pasted result can't be replayed: could_not_verify.
+  replay        every logged query, replayed in order on a private copy of the database,
+                returns the rows that were logged. A pasted result can't be replayed.
   sources       the point estimate on each Headline, Observed, Adjusted and Causal effect line
-                appears in the output it cites. A miss is a warn: the number may be derived by
-                hand, so the report lists it under "Check by hand" for the reviewer.
-  estimand      the Headline is in the unit the request asks for (percent or percentage points,
-                when --request names one); a Causal effect number names an identifying design;
-                and the Headline number is one of the estimate lines' numbers.
-  alternatives  at least one alternative says "ruled in" or "ruled out" (a line without either is
-                a warn). "ruled in" means the evidence shows it: a hedged "ruled in" ("unresolved",
-                "possible") fails unless it cites a check that flagged, and one that cites no query
-                or check is a warn.
-  flags         every check that flagged or failed is reported in the readout.
-  overlay       when the overlay's metrics.json names the metric, the readout takes its
-                definition from metrics.json, and gives no number for a metric marked
-                available: false. Needs --overlay (or $DS_OVERLAY_DIR).
+                appears in the output it cites. A miss may be a number derived by hand, so it
+                goes on the "check by hand" list; for the Headline it is could_not_verify.
+  estimand      the Headline is in the unit the request asks for; a Causal effect number comes
+                from a named, un-negated design; the Headline matches an estimate line.
+  alternatives  some alternative says "ruled in" or "ruled out". "ruled in" means the evidence
+                shows it: a hedged "ruled in" fails unless a flagged check backs it.
+  flags         every check that flagged or failed is reported by its tag, unless the same check
+                was rerun later on the same input (then it is a warn, for the reviewer).
+  overlay       when metrics.json names the metric, the Metric line uses its numerator,
+                denominator and filters, and no estimate line gives a number (rather than "not
+                computed") for a metric marked available: false.
 
-The report never weakens a check to pass: what it can't check is could_not_verify, with the
-reason. Exit code: 0 no fail, 1 at least one fail, 3 usage error.
+The first line is "ds-verify: fail" when any check fails, "ds-verify: unverified" when nothing
+fails but something that matters couldn't be checked (a missing input, a pasted or unreplayable
+source, a Headline number not found in its source), and "ds-verify: pass" otherwise. The report
+never weakens a check to pass. Exit code: 0 pass, 1 fail, 2 unverified, 3 usage error.
 
-Replay uses this reference SQLite adapter (connect()); a warehouse port replaces connect() and
-replays into its scratch area, the same way tools/query.py is ported.
+Port point: scratch_copy() opens a private copy of a SQLite file. A warehouse port replaces that
+one function with a copy or scratch schema it may write to; everything else stays.
 """
 
 import argparse
 import json
 import os
 import re
-import shutil
 import sqlite3
 import sys
 import tempfile
@@ -47,16 +45,27 @@ DS_MODE_TOOLS = os.path.join(os.path.dirname(os.path.dirname(HERE)), "ds-mode", 
 sys.path.insert(0, DS_MODE_TOOLS)
 
 import guarded_query as gq  # noqa: E402
+import query as ds_query  # noqa: E402
 import verify_readout as vr  # noqa: E402
 
-STATUSES = ("fail", "warn", "could_not_verify", "pass", "skipped")
+STATUSES = ("fail", "could_not_verify", "warn", "pass", "skipped")
 ESTIMATE = re.compile(r"^\s*[-*]?\s*(headline|observed|adjusted|causal effect)\s*:\s*(.*)$", re.I)
-DESIGN = re.compile(r"random|experiment|a/b|\bab test|holdout|control group|diff(?:erence)?-in-diff|"
-                    r"regression discontinuity|instrument|synthetic control|stagger|随机|实验|对照组|双重差分|断点", re.I)
-RULED = re.compile(r"\bruled\s+(in|out)\b|\bruled\s+it\s+(out|in)\b", re.I)
+FROM_CLAUSE = re.compile(r"(?:\bfrom\b|来自|基于|根据|通过)([^;；。]*)", re.I)
+DESIGN = re.compile(r"random|experiment|a/b|\bab test|split test|holdout|holdback|control group|treatment|"
+                    r"diff(?:erence)?-in-diff|regression discontinuity|instrument|synthetic control|stagger|"
+                    r"随机|实验|对照|分流|双重差分|断点", re.I)
+NEGATION = re.compile(r"\bno\b|\bnot\b|\bwithout\b|\bnon-?|n't\b|没有|无|非|未", re.I)
+RULED = re.compile(r"\bruled\s+(?:it\s+)?(in|out)\b", re.I)
+NEGATED_VERDICT = re.compile(r"(?:\bnot|n't|\bcannot|\bnever)\s+(?:be\s+|been\s+|yet\s+)*$", re.I)
 HEDGE = re.compile(r"unresolved|possib|can'?t\s+(?:be\s+)?rule|cannot\s+(?:be\s+)?rule|not\s+(?:yet\s+)?excluded|"
-                   r"open question|未排除|无法排除|不能排除|可能", re.I)
+                   r"open question|\bmaybe\b|\bperhaps\b|\bmight\b|未排除|无法排除|不能排除|可能|待定", re.I)
+CLAUSE_END = re.compile(r"[;；。:：,，]|\.\s")
+ALT_LABEL = re.compile(r"^\s*[-*]?\s*(?:alternatives considered|考虑过的其他解释|其他解释|替代解释|备选解释)", re.I)
+CHECKS_LABEL = re.compile(r"^\s*[-*]?\s*(?:checks run|已运行的检查|运行的检查|检查项)", re.I)
+METRIC_LINE = re.compile(r"^\s*[-*]?\s*(?:metric|指标)\s*[:：]", re.I)
 GENERIC_WORDS = {"search", "rate", "share", "count", "per", "the", "of"}
+DIRECTION = {"down": re.compile(r"下降|降低|减少|\bfell\b|\bdrop|\bdecline|\bdown\b", re.I),
+             "up": re.compile(r"上升|提高|增加|\brose\b|\bincrease|\bup\b", re.I)}
 
 
 def finding(check, status, message, **extra):
@@ -76,6 +85,11 @@ def estimate_lines(text):
     return found
 
 
+def body_of(line):
+    match = ESTIMATE.match(line or "")
+    return match.group(2) if match else (line or "")
+
+
 def first_number(line):
     numbers = vr.numbers_in(line)
     return numbers[0] if numbers else None
@@ -86,6 +100,21 @@ def as_float(token):
         return float(token.replace("−", "-").replace(",", ""))
     except (AttributeError, ValueError):
         return None
+
+
+def decimals(token):
+    clean = token.replace("−", "-").replace(",", "")
+    return len(clean.split(".")[1]) if "." in clean else 0
+
+
+def close(shown, value):
+    """True when `value` rounds to `shown` at the precision `shown` is written with (sign ignored)."""
+    number = as_float(shown)
+    return number is not None and abs(abs(value) - abs(number)) <= 0.5 * 10 ** -decimals(shown) + 1e-9
+
+
+def signed(token):
+    return token.strip()[:1] in "+-−"
 
 
 def values_in(obj, out):
@@ -105,30 +134,50 @@ def values_in(obj, out):
     return out
 
 
-def shown_in(token, values):
-    """True when a value, or a fraction of it times 100, rounds to the number as displayed."""
-    number = as_float(token)
-    if number is None:
-        return True
-    clean = token.replace("−", "-").replace(",", "")
-    decimals = len(clean.split(".")[1]) if "." in clean else 0
-    tolerance = 0.5 * 10 ** -decimals + 1e-9
-    return any(abs(abs(x) - abs(number)) <= tolerance for v in values for x in (v, v * 100))
-
-
-# --- the checks ----------------------------------------------------------------------------------------------
+# --- trace ---------------------------------------------------------------------------------------------------
 
 def check_trace(text, queries, checks):
-    problems, stats, given = vr.verify(text, queries, checks)
+    problems, stats, given = vr.verify(text, queries or [], checks or [])
     if problems:
         return [finding("trace", "fail", problem) for problem in problems], given
     return [finding("trace", "pass", f"{stats['numbers']} numbers on {stats['lines']} lines trace to "
                                       f"{len(stats['queries'])} queries and {len(stats['checks'])} checks")], given
 
 
-def connect(db):
-    """Reference adapter: a SQLite file."""
-    return sqlite3.connect(db)
+# --- replay --------------------------------------------------------------------------------------------------
+
+def scratch_prefix():
+    """The runner's scratch prefix without the per-run suffix, as tools/query.py configures it."""
+    prefix = ds_query.DEFAULTS["scratch_prefix"]
+    overlay = os.environ.get("DS_OVERLAY_DIR")
+    if overlay and os.path.exists(os.path.join(overlay, "runner.json")):
+        with open(os.path.join(overlay, "runner.json")) as handle:
+            prefix = json.load(handle).get("scratch_prefix", prefix)
+    return prefix
+
+
+def scratch_copy(db, workdir, prefix):
+    """Port point. Return a connection to a private copy of the database with no scratch objects in it.
+
+    The copy goes through SQLite's backup API on a read-only connection, so it includes what is still in
+    a WAL file and never writes to the source. It lands in `workdir` ($TMPDIR by default)."""
+    if not db:
+        raise FileNotFoundError("no database to replay against; pass --db or set DS_WAREHOUSE")
+    if not os.path.exists(db):
+        raise FileNotFoundError(f"no database at {db}")
+    source = sqlite3.connect(f"file:{os.path.abspath(db)}?mode=ro", uri=True)
+    copy = sqlite3.connect(os.path.join(workdir, "replay.db"))
+    try:
+        source.backup(copy)
+    finally:
+        source.close()
+    objects = copy.execute("select type, name from sqlite_master where name like ? escape '\\' and type in "
+                           "('view', 'table') order by type = 'table'",
+                           (prefix.replace("_", "\\_") + "%",)).fetchall()
+    for kind, name in objects:
+        copy.execute(f'drop {kind} if exists "{name}"')
+    copy.commit()
+    return copy
 
 
 def same_rows(logged, replayed):
@@ -138,27 +187,26 @@ def same_rows(logged, replayed):
         if len(a) != len(b):
             return False, f"row {i} has {len(a)} columns in the log, {len(b)} in the replay"
         for x, y in zip(a, b):
-            if isinstance(x, (int, float)) and isinstance(y, (int, float)) and not isinstance(x, bool):
-                if abs(x - y) > 1e-9 * max(1.0, abs(x), abs(y)):
-                    return False, f"row {i}: logged {x}, replay {y}"
-            elif x != y:
+            numbers = all(isinstance(v, (int, float)) and not isinstance(v, bool) for v in (x, y))
+            if numbers and abs(x - y) > 1e-9 * max(1.0, abs(x), abs(y)):
+                return False, f"row {i}: logged {x}, replay {y}"
+            # The log stores non-JSON cells (bytes, dates) as str(), so compare them that way.
+            if not numbers and str(x) != str(y):
                 return False, f"row {i}: logged {x!r}, replay {y!r}"
     return True, ""
 
 
 def check_replay(queries, db):
-    ran = [q for q in queries if q.get("status") == "ok" and q.get("id")]
+    ran = [q for q in queries or [] if q.get("status") == "ok" and q.get("id")]
     if not ran:
         return [finding("replay", "skipped", "no logged query ran")]
-    if not db:
-        return [finding("replay", "could_not_verify", "no database to replay against; pass --db or set DS_WAREHOUSE")]
-    if not os.path.exists(db):
-        return [finding("replay", "could_not_verify", f"no database at {db}")]
+    prefix = scratch_prefix()
     results = []
-    with tempfile.TemporaryDirectory(prefix="ds-verify-") as scratch:
-        copy = os.path.join(scratch, os.path.basename(db))
-        shutil.copy(db, copy)
-        conn = connect(copy)
+    with tempfile.TemporaryDirectory(prefix="ds-verify-") as workdir:
+        try:
+            conn = scratch_copy(db, workdir, prefix)
+        except (FileNotFoundError, sqlite3.Error) as err:
+            return [finding("replay", "could_not_verify", str(err))]
         try:
             for query in ran:
                 qid = query["id"]
@@ -166,8 +214,7 @@ def check_replay(queries, db):
                     results.append(finding("replay", "could_not_verify", f"[{qid}] is a pasted result, so it can't be replayed", ref=qid))
                     continue
                 try:
-                    # The statements passed the runner's guard when they ran; this is a private copy.
-                    rows = gq.run(conn, query["sql"], query.get("params") or (), scratch_prefix="",
+                    rows = gq.run(conn, query["sql"], query.get("params") or (), scratch_prefix=prefix,
                                   max_rows=10_000, max_cell_chars=10_000, max_result_chars=10_000_000, max_seconds=120)
                 except Exception as err:  # noqa: BLE001 - any failure is reported, not raised
                     results.append(finding("replay", "fail", f"[{qid}] no longer runs: {err}", ref=qid))
@@ -180,158 +227,253 @@ def check_replay(queries, db):
     return results
 
 
+# --- sources -------------------------------------------------------------------------------------------------
+
 def check_sources(text, queries, checks):
-    by_query = {q["id"].lower(): q for q in queries if q.get("id")}
-    by_check = {c["id"].lower(): c for c in checks if c.get("id")}
+    by_query = {q["id"].lower(): q for q in queries or [] if q.get("id")}
+    by_check = {c["id"].lower(): c for c in checks or [] if c.get("id")}
     results = []
     for name, line in estimate_lines(text).items():
         number = first_number(line)
-        tags = vr.tags_in(line)
+        tags = [t for t in vr.tags_in(line) if t != "given"]
         if number is None or not tags:
             continue
-        values = []
+        values, replayable = [], False
         for tag in tags:
             if tag.startswith("q") and tag in by_query:
                 values_in(by_query[tag].get("rows"), values)
+                replayable |= by_query[tag].get("source") != "pasted"
             elif tag.startswith("check:") and tag.split(":", 1)[1] in by_check:
                 entry = by_check[tag.split(":", 1)[1]]
                 values_in({"summary": entry.get("summary"), "details": entry.get("details")}, values)
-        if not values or "given" in tags:
-            continue
-        if shown_in(number, values):
+                replayable = True
+        miss = "could_not_verify" if name == "headline" else "warn"
+        if not replayable:
+            results.append(finding("sources", miss, f"{name}: {number} cites only pasted results, which can't be replayed",
+                                   number=number, tags=tags, line=line))
+        elif not values:
+            results.append(finding("sources", miss, f"{name}: {number} cites output with no numbers in it",
+                                   number=number, tags=tags, line=line))
+        elif any(close(number, v) or close(number, v * 100) for v in values):
             results.append(finding("sources", "pass", f"{name}: {number} is in {', '.join(tags)}"))
         else:
-            results.append(finding("sources", "warn", f"{name}: {number} isn't in {', '.join(tags)}; check it by hand",
+            results.append(finding("sources", miss, f"{name}: {number} isn't in {', '.join(tags)}; check it by hand",
                                    number=number, tags=tags, line=line))
     return results
 
 
-def asked_unit(request):
-    """The unit the request asks for, when it names one: 'pp' or 'percent'."""
-    lowered = (request or "").lower()
+# --- estimand ------------------------------------------------------------------------------------------------
+
+def sentences(text):
+    return [s for s in re.split(r"(?<=[.?!。？！])\s*|\n", text or "") if s.strip()]
+
+
+def units_named(text):
+    lowered = text.lower()
+    found = set()
     if re.search(r"percentage points?|\bin pp\b|百分点", lowered):
-        return "pp"
-    if re.search(r"\bin percent\b|as a percent|in %|百分比", lowered):
-        return "percent"
+        found.add("pp")
+    if re.search(r"\bin percent\b|as a percent|in %|百分比|\bpercent\b(?! ?points?)", lowered):
+        found.add("percent")
+    return found
+
+
+def asked_unit(request):
+    """The unit the request asks for: from its question sentence first, else the whole request when that
+    names only one unit. None when it names none, or both without saying which."""
+    questions = [s for s in sentences(request) if re.search(r"[?？]|多少|\bhow\b|\bwhat\b", s, re.I)]
+    for scope in (" ".join(questions), request or ""):
+        units = units_named(scope)
+        if len(units) == 1:
+            return units.pop()
+        if len(units) > 1:
+            return None
     return None
 
 
-def headline_unit(line):
-    """The unit right after the Headline's first number: 'pp', 'percent' or None."""
-    match = re.search(r"[-+−]?\d+(?:[.,]\d+)*\s*(pp|个?百分点|%|％|percent)", line, re.I)
-    if not match:
-        return None
-    return "pp" if match.group(1).lower() in ("pp", "百分点", "个百分点") else "percent"
+def unit_pairs(line):
+    """[(number, unit or None)] in a line, in order, skipping dates, CI levels and digits inside names."""
+    pairs = []
+    cleaned = vr.CI_LEVEL.sub(" ", vr.DATE.sub(" ", line))
+    for match in re.finditer(r"(?<![A-Za-z_#\d.])([-+−]?\d+(?:[.,]\d+)*)\s*(pp|个?百分点|%|％|percent)?", cleaned):
+        unit = match.group(2)
+        unit = None if not unit else ("pp" if unit.lower() in ("pp", "百分点", "个百分点") else "percent")
+        pairs.append((match.group(1), unit))
+    return pairs
 
 
-def check_estimand(text, request=""):
+def check_estimand(text, request=None):
     lines = estimate_lines(text)
     if "headline" not in lines:
         return [finding("estimand", "fail", "the Answer has no Headline line")]
     results = []
-    wanted, given_unit = asked_unit(request), headline_unit(lines["headline"])
-    if wanted and given_unit and wanted != given_unit:
-        results.append(finding("estimand", "fail", f"the request asks for {'percentage points' if wanted == 'pp' else 'percent'}, "
-                                                   f"and the Headline is in {'pp' if given_unit == 'pp' else 'percent'}: "
-                                                   f"{lines['headline']}"))
-    elif wanted and given_unit:
-        results.append(finding("estimand", "pass", f"the Headline is in the unit the request asks for"))
-    causal = lines.get("causal effect", "")
-    causal_body = ESTIMATE.match(causal).group(2) if causal else ""
-    if causal and first_number(causal) is not None and not re.search(r"not identified", causal_body, re.I):
-        if DESIGN.search(causal_body):
-            results.append(finding("estimand", "pass", "the Causal effect number names its design"))
-        else:
-            results.append(finding("estimand", "fail", "the Causal effect gives a number but names no identifying "
-                                                       f"design (randomized test, holdout, ...): {causal}"))
-    headline = ESTIMATE.match(lines["headline"]).group(2)
-    head_number = first_number(lines["headline"])
-    if head_number is None or re.match(r"\s*can'?t tell", headline, re.I):
-        results.append(finding("estimand", "pass", "the Headline abstains, so it needs no estimate line"))
-        return results
+    headline = body_of(lines["headline"])
+    abstains = bool(re.match(r"\s*can'?t tell", headline, re.I))
     estimates = {name: first_number(line) for name, line in lines.items() if name != "headline"}
-    matching = [name for name, number in estimates.items()
-                if number is not None and as_float(number) == as_float(head_number)]
-    if matching:
-        results.append(finding("estimand", "pass", f"the Headline {head_number} is the {matching[0]} estimate"))
+    pairs = unit_pairs(vr.TAGS.sub(" ", headline))
+    matched = next(((n, u, e) for n, u in pairs for e, v in estimates.items()
+                    if v is not None and as_float(v) is not None and close(n, as_float(v))), None)
+
+    # The unit, read off the Headline number that is an estimate (else the first number with a unit).
+    if request is None:
+        results.append(finding("estimand", "could_not_verify", "no request was given, so the Headline's unit wasn't checked"))
+    elif pairs and not abstains:
+        wanted = asked_unit(request)
+        unit = matched[1] if matched and matched[1] else next((u for _, u in pairs if u), None)
+        if wanted and unit and wanted != unit:
+            results.append(finding("estimand", "fail", f"the request asks for {'percentage points' if wanted == 'pp' else 'percent'}, "
+                                                       f"and the Headline is in {'pp' if unit == 'pp' else 'percent'}: {lines['headline']}"))
+        elif wanted and unit:
+            results.append(finding("estimand", "pass", "the Headline is in the unit the request asks for"))
+
+    causal = lines.get("causal effect", "")
+    causal_body = body_of(causal)
+    if causal and first_number(causal) is not None and not re.search(r"not identified", causal_body, re.I):
+        designs = []
+        for clause in FROM_CLAUSE.findall(causal_body):
+            for hit in DESIGN.finditer(clause):
+                if not NEGATION.search(clause[max(0, hit.start() - 30):hit.start()]):
+                    designs.append(hit.group(0))
+        if designs:
+            results.append(finding("estimand", "pass", f"the Causal effect number comes from a named design ({designs[0]})"))
+        else:
+            results.append(finding("estimand", "fail", "the Causal effect gives a number without 'from <design>' naming an "
+                                                       f"identifying design (randomized test, holdout, ...): {causal}"))
+
+    if not pairs or abstains:
+        results.append(finding("estimand", "pass", "the Headline abstains, so it needs no estimate line"))
+    elif matched:
+        number, _, name = matched
+        estimate = estimates[name]
+        contradicting = "up" if as_float(estimate) < 0 else "down"
+        if signed(number) and signed(estimate) and (as_float(number) < 0) != (as_float(estimate) < 0):
+            results.append(finding("estimand", "fail", f"the Headline {number} and the {name} estimate {estimate} differ in sign"))
+        elif not signed(number) and as_float(estimate) and DIRECTION[contradicting].search(headline) \
+                and not DIRECTION["up" if contradicting == "down" else "down"].search(headline):
+            results.append(finding("estimand", "fail", f"the Headline's direction word contradicts the {name} estimate {estimate}"))
+        else:
+            results.append(finding("estimand", "pass", f"the Headline {number} is the {name} estimate"))
     elif any(number is not None for number in estimates.values()):
-        results.append(finding("estimand", "fail", f"the Headline {head_number} is none of the estimate lines' numbers "
+        results.append(finding("estimand", "fail", f"no Headline number is one of the estimate lines' numbers "
                                                    f"({', '.join(f'{k} {v}' for k, v in estimates.items() if v)})"))
     else:
         results.append(finding("estimand", "fail", "the Headline gives a number, but no estimate line does"))
     return results
 
 
+# --- alternatives --------------------------------------------------------------------------------------------
+
 def alternative_lines(text):
+    """The list items under 'Alternatives considered', indented or not, or under a heading of that name."""
     for name, body in vr.sections(text):
+        if ALT_LABEL.match(name):
+            yield from (line.strip() for line in body.splitlines() if re.match(r"^\s*[-*]\s+\S", line))
+            continue
         if not name.lower().startswith("why we believe"):
             continue
         inside = False
         for line in body.splitlines():
-            stripped = line.strip().lower()
-            if stripped.startswith(("- alternatives considered", "alternatives considered")):
+            if ALT_LABEL.match(line):
                 inside = True
                 continue
-            if stripped.startswith(("- checks run", "checks run")):
+            if CHECKS_LABEL.match(line):
                 inside = False
-            if inside and re.match(r"^\s+[-*]\s+\S", line):
+            if inside and re.match(r"^\s*[-*]\s+\S", line):
                 yield line.strip()
 
 
+def verdict_of(line):
+    """('in' or 'out', end index) for the line's first verdict that isn't negated, else (None, None)."""
+    for match in RULED.finditer(line):
+        if not NEGATED_VERDICT.search(line[:match.start()]):
+            return match.group(1).lower(), match.end()
+    return None, None
+
+
 def check_alternatives(text, checks=()):
-    raised = {c["id"].lower() for c in checks if c.get("id") and c.get("status") in ("flag", "fail")}
+    raised = {c["id"].lower() for c in checks or [] if c.get("id") and c.get("status") in ("flag", "fail")}
     results = []
     lines = list(alternative_lines(text))
     if not lines:
         return [finding("alternatives", "fail", "no alternatives are listed under 'Alternatives considered'")]
-    if not any(RULED.search(line) for line in lines):
+    verdicts = [verdict_of(line) for line in lines]
+    if not any(v for v, _ in verdicts):
         results.append(finding("alternatives", "fail", f"none of the {len(lines)} alternatives says 'ruled in' or 'ruled out'"))
-    for line in lines:
-        verdict = RULED.search(line)
+    for line, (verdict, end) in zip(lines, verdicts):
         if not verdict:
             results.append(finding("alternatives", "warn", f"says neither 'ruled in' nor 'ruled out': {line}"))
             continue
-        if (verdict.group(1) or verdict.group(2)).lower() == "in":
-            after = line[verdict.end():]
-            tags = vr.tags_in(line)
-            anomaly = any(t.startswith("check:") and t.split(":", 1)[1] in raised for t in tags)
-            if HEDGE.search(after) and not anomaly:
-                results.append(finding("alternatives", "fail", "'ruled in' is hedged and no flagged check backs it: an "
-                                                               "alternative that wasn't ruled out is not ruled in. Say "
-                                                               f"what would decide it: {line}"))
-            elif HEDGE.search(after):
-                results.append(finding("alternatives", "warn", "'ruled in' is hedged; a flagged check shows the anomaly, "
-                                                               f"but say which cause is still open: {line}"))
-            elif not any(t.startswith(("q", "check:")) for t in tags):
-                results.append(finding("alternatives", "warn", f"'ruled in' cites no query or check: {line}"))
-            else:
-                results.append(finding("alternatives", "pass", f"ruled in with evidence: {line[:80]}"))
-        else:
+        if verdict == "out":
             results.append(finding("alternatives", "pass", f"ruled out: {line[:80]}"))
+            continue
+        after = line[end:]
+        clause = CLAUSE_END.split(after, 1)[0]
+        hedged = HEDGE.search(clause) or re.match(r"\s*[,，]\s*(?:可能|未排除|无法排除|possibly|maybe|perhaps)", after, re.I)
+        tags = vr.tags_in(line)
+        anomaly = any(t.startswith("check:") and t.split(":", 1)[1] in raised for t in tags)
+        if hedged and not anomaly:
+            results.append(finding("alternatives", "fail", "'ruled in' is hedged and no flagged check backs it: an "
+                                                           "alternative that wasn't ruled out is not ruled in. Say "
+                                                           f"what would decide it: {line}"))
+        elif hedged:
+            results.append(finding("alternatives", "warn", "'ruled in' is hedged; a flagged check shows the anomaly, "
+                                                           f"but say which cause is still open: {line}"))
+        elif not any(t.startswith(("q", "check:")) for t in tags):
+            results.append(finding("alternatives", "warn", f"'ruled in' cites no query or check: {line}"))
+        else:
+            results.append(finding("alternatives", "pass", f"ruled in with evidence: {line[:80]}"))
     return results
 
+
+# --- flags ---------------------------------------------------------------------------------------------------
 
 def check_flags(text, checks):
-    raised = [c for c in checks if c.get("status") in ("flag", "fail") and c.get("id")]
-    if not raised:
-        return [finding("flags", "pass", "no check flagged or failed")]
+    if checks is None:
+        return [finding("flags", "could_not_verify", "no check log, so flagged or failed checks can't be listed")]
+    if not checks:
+        return [finding("flags", "warn", "the check log is empty: no check ran")]
     lowered = vr._clean(text).lower()
     results = []
-    for entry in raised:
+    for i, entry in enumerate(checks):
+        if entry.get("status") not in ("flag", "fail") or not entry.get("id"):
+            continue
+        same = [c for c in checks if c.get("check") == entry.get("check") and c.get("status") in ("flag", "fail")]
         cited = f"check:{entry['id'].lower()}" in lowered
-        named = re.search(rf"^\s*[-*]?\s*{re.escape(entry['check'].lower())}\s*:\s*(flag|fail)", lowered, re.M)
+        named = len(same) == 1 and re.search(rf"^\s*[-*]?\s*{re.escape(str(entry.get('check')).lower())}\s*:\s*(flag|fail)",
+                                             lowered, re.M)
+        rerun = next((later["id"] for later in checks[i + 1:] if later.get("id")
+                      and later.get("check") == entry.get("check") and later.get("from") == entry.get("from")
+                      and (later.get("details") or {}).get("target") == (entry.get("details") or {}).get("target")), None)
         if cited or named:
             results.append(finding("flags", "pass", f"{entry['id']} ({entry['status']}) is reported"))
+        elif rerun:
+            results.append(finding("flags", "warn", f"{entry['id']} {entry['status']}ed and was rerun on the same input as "
+                                                    f"{rerun}; the readout should say why if it matters"))
         else:
-            results.append(finding("flags", "fail", f"{entry['id']} {entry['status']}ed and the readout doesn't report "
-                                                    f"it: {entry.get('summary', '')[:120]}"))
-    return results
+            results.append(finding("flags", "fail", f"{entry['id']} {entry['status']}ed and the readout doesn't report it by "
+                                                    f"its tag: {str(entry.get('summary', ''))[:120]}"))
+    return results or [finding("flags", "pass", "no check flagged or failed")]
+
+
+# --- overlay -------------------------------------------------------------------------------------------------
+
+def normal(text):
+    return re.sub(r"\s+", " ", str(text).lower().replace("_", " ")).strip()
 
 
 def metric_named(key, entry, text):
-    words = [w for w in re.split(r"[_\W]+", key.lower()) if w and w not in GENERIC_WORDS]
-    words = words or [key.lower()]
-    return all(re.search(rf"\b{re.escape(w)}", text) for w in words)
+    names = [key] + [a for a in entry.get("aliases", []) if isinstance(a, str)]
+    for name in names:
+        words = [w for w in re.split(r"[_\W]+", name.lower()) if w and w not in GENERIC_WORDS] or [name.lower()]
+        if all(re.search(rf"(?<![a-z]){re.escape(w)}(?![a-z])", text) for w in words):
+            return True
+    return False
+
+
+def filter_words(expression):
+    """The column names and values in a filter such as "traffic_type = 'external'"."""
+    return [w for w in re.findall(r"[A-Za-z_][A-Za-z0-9_]*|\d+", str(expression))
+            if w.lower() not in {"and", "or", "not", "in", "is", "null", "like"}]
 
 
 def check_overlay(text, overlay, request):
@@ -342,55 +484,85 @@ def check_overlay(text, overlay, request):
         catalog = json.load(handle)
     clean = vr._clean(text)
     lines = estimate_lines(text)
-    metric_line = next((l for l in clean.splitlines() if re.match(r"^\s*[-*]?\s*metric\s*:", l, re.I)), "")
-    where = f"{request}\n{lines.get('headline', '')}\n{metric_line}".lower()
+    metric_line = next((l for l in clean.splitlines() if METRIC_LINE.match(l)), "")
+    where = f"{request or ''}\n{lines.get('headline', '')}\n{metric_line}".lower()
     results = []
     for key, entry in catalog.items():
-        if not isinstance(entry, dict) or not metric_named(key, entry, where):
-            continue
-        head_number = first_number(lines.get("headline", ""))
-        if entry.get("available") is False:
-            if head_number is None:
-                results.append(finding("overlay", "pass", f"{key} is unavailable in the overlay, and the Headline gives no number"))
-            else:
-                results.append(finding("overlay", "fail", f"the overlay marks {key} unavailable "
-                                                          f"({entry.get('note', 'no reason given')}), but the Headline gives {head_number}"))
+        if not isinstance(entry, dict):
             continue
         parts = [entry.get("numerator"), entry.get("denominator")]
-        if "metrics.json" in metric_line.lower() or all(p and p.lower() in metric_line.lower() for p in parts):
-            results.append(finding("overlay", "pass", f"{key} is taken from metrics.json"))
+        by_columns = all(parts) and all(normal(p) in normal(metric_line) for p in parts)
+        if not (metric_named(key, entry, where) or by_columns):
+            continue
+        if entry.get("available") is False:
+            numbered = [name for name, line in lines.items() if first_number(line) is not None
+                        and not re.match(r"\s*(?:not computed|not identified|can'?t tell)", body_of(line), re.I)]
+            if numbered:
+                results.append(finding("overlay", "fail", f"the overlay marks {key} unavailable "
+                                                          f"({entry.get('note', 'no reason given')}), but the readout gives "
+                                                          f"a number on its {', '.join(numbered)} line"))
+            else:
+                results.append(finding("overlay", "pass", f"{key} is unavailable in the overlay, and no estimate gives a number"))
+            continue
+        missing = [p for p in parts if p and normal(p) not in normal(metric_line)]
+        missing += [w for f in entry.get("filters", []) for w in filter_words(f) if normal(w) not in normal(metric_line)]
+        if not missing:
+            results.append(finding("overlay", "pass", f"the Metric line uses the overlay's definition of {key}"))
         else:
+            claimed = " although it says metrics.json" if "metrics.json" in metric_line.lower() else ""
             results.append(finding("overlay", "fail", f"the overlay defines {key} as {entry.get('numerator')} / "
-                                                      f"{entry.get('denominator')}, and the readout's Metric line doesn't "
-                                                      f"use it: {metric_line.strip() or 'no Metric line'}"))
-    return results or [finding("overlay", "skipped", "the overlay doesn't define the metric this readout reports")]
+                                                      f"{entry.get('denominator')} with filters {entry.get('filters', [])}; "
+                                                      f"the Metric line lacks {', '.join(missing)}{claimed}: "
+                                                      f"{metric_line.strip() or 'no Metric line'}"))
+    return results or [finding("overlay", "skipped", "the overlay doesn't define the metric this readout reports "
+                                                     "(add aliases to metrics.json if it should)")]
+
+
+# --- what needs a person -------------------------------------------------------------------------------------
+
+def needs_human(text, checks, findings, given):
+    """What a reviewer has to judge, in review order."""
+    items = [f"{f['check']}: {f['message']}" for f in findings if f["status"] in ("fail", "could_not_verify")]
+    items += [f"check by hand: {f['number']} [{', '.join(f['tags'])}]: {f['line'][:90]}"
+              for f in findings if f["check"] == "sources" and f["status"] == "warn"]
+    clean = vr._clean(text)
+    head = estimate_lines(text).get("headline", "")
+    if re.search(r"can'?t tell", head, re.I):
+        items.append(f"the Headline abstains: {head}")
+    items += [f"[guess]: {line.strip()[:120]}" for line in clean.splitlines() if re.search(r"\[guess\]", line, re.I)]
+    items += [f"{c['id']} could not run: {str(c.get('summary', ''))[:100]}"
+              for c in checks or [] if c.get("status") == "could_not_run"]
+    items += [f"not reconciled: {line.strip()}" for line in clean.splitlines()
+              if re.match(r"^\s*[-*]?\s*reconciled\s*:\s*not done", line, re.I)]
+    items += [f"[given], confirm against the request: {line}" for line in given]
+    return items
 
 
 # --- running and reporting ---------------------------------------------------------------------------------
 
-def run_all(text, queries, checks, db=None, overlay=None, request=""):
+def run_all(text, queries, checks, db=None, overlay=None, request=None):
+    """queries or checks is None when its log is missing; request is None when none was given."""
     trace, given = check_trace(text, queries, checks)
-    findings = (trace + check_replay(queries, db) + check_sources(text, queries, checks) + check_estimand(text, request)
-                + check_alternatives(text, checks) + check_flags(text, checks) + check_overlay(text, overlay, request))
+    findings = (trace + check_replay(queries, db) + check_sources(text, queries, checks)
+                + check_estimand(text, request) + check_alternatives(text, checks) + check_flags(text, checks)
+                + check_overlay(text, overlay, request))
     counts = {status: sum(f["status"] == status for f in findings) for status in STATUSES}
-    return {"verdict": "fail" if counts["fail"] else "pass", "counts": counts, "findings": findings, "given": given}
+    verdict = "fail" if counts["fail"] else "unverified" if counts["could_not_verify"] else "pass"
+    return {"verdict": verdict, "counts": counts, "findings": findings, "given": given,
+            "needs_human": needs_human(text, checks, findings, given)}
 
 
 def render(report):
     counts = report["counts"]
-    head = (f"ds-verify: {report['verdict']} ({counts['fail']} fail, {counts['warn']} warn, "
-            f"{counts['could_not_verify']} could not verify, {counts['pass']} pass)")
-    lines = [head]
+    lines = [f"ds-verify: {report['verdict']} ({counts['fail']} fail, {counts['could_not_verify']} could not verify, "
+             f"{counts['warn']} warn, {counts['pass']} pass)"]
     for status in ("fail", "could_not_verify", "warn"):
         for item in report["findings"]:
             if item["status"] == status:
                 lines.append(f"  {status.upper():16} {item['check']:12} {item['message']}")
-    by_hand = [f for f in report["findings"] if f["check"] == "sources" and f["status"] == "warn"]
-    if by_hand:
-        lines.append("Check by hand (numbers not found in the output they cite):")
-        lines += [f"  {f['number']} [{', '.join(f['tags'])}]  {f['line'][:100]}" for f in by_hand]
-    for line in report["given"]:
-        lines.append(f"Given (confirm against the request): {line}")
+    if report["needs_human"]:
+        lines.append("Needs a human, in this order:")
+        lines += [f"  {i}. {item}" for i, item in enumerate(report["needs_human"], 1)]
     return "\n".join(lines)
 
 
@@ -400,9 +572,9 @@ def main(argv=None):
     parser.add_argument("--run-dir", help="a run directory holding result.md, queries.log and checks.log")
     parser.add_argument("--queries", help="query log (default $DS_QUERIES_LOG, else .ds-queries.log)")
     parser.add_argument("--checks", help="check log (default $DS_CHECKS_LOG, else .ds-checks.log)")
-    parser.add_argument("--db", default=os.environ.get("DS_WAREHOUSE"), help="SQLite file to replay the queries on")
+    parser.add_argument("--db", help="SQLite file the queries ran on (default $DS_WAREHOUSE, else ./warehouse.db)")
     parser.add_argument("--overlay", default=os.environ.get("DS_OVERLAY_DIR"), help="overlay folder with metrics.json")
-    parser.add_argument("--request", help="a file holding the original request, to match metric names")
+    parser.add_argument("--request", help="a file holding the original request")
     parser.add_argument("--json", help="also write the report as JSON to this file")
     args = parser.parse_args(argv)
 
@@ -410,26 +582,29 @@ def main(argv=None):
         readout = args.readout or os.path.join(args.run_dir, "result.md")
         queries = args.queries or os.path.join(args.run_dir, "queries.log")
         checks = args.checks or os.path.join(args.run_dir, "checks.log")
+        db = args.db
     elif args.readout:
         readout = args.readout
         queries = args.queries or os.environ.get("DS_QUERIES_LOG") or ".ds-queries.log"
         checks = args.checks or os.environ.get("DS_CHECKS_LOG") or ".ds-checks.log"
+        db = args.db or os.environ.get("DS_WAREHOUSE") or ("warehouse.db" if os.path.exists("warehouse.db") else None)
     else:
         parser.print_usage(sys.stderr)
         return 3
     try:
         with open(readout, encoding="utf-8") as handle:
             text = handle.read()
-        request = open(args.request, encoding="utf-8").read() if args.request else ""
+        request = open(args.request, encoding="utf-8").read() if args.request else None
     except OSError as err:
         print(f"ds-verify: {err}", file=sys.stderr)
         return 3
-    report = run_all(text, vr.read_jsonl(queries), vr.read_jsonl(checks), args.db, args.overlay, request)
+    logs = [vr.read_jsonl(path) if os.path.exists(path) else None for path in (queries, checks)]
+    report = run_all(text, logs[0], logs[1], db, args.overlay, request)
     print(render(report))
     if args.json:
         with open(args.json, "w") as handle:
             json.dump(report, handle, indent=2, default=str)
-    return 1 if report["verdict"] == "fail" else 0
+    return {"pass": 0, "fail": 1, "unverified": 2}[report["verdict"]]
 
 
 if __name__ == "__main__":

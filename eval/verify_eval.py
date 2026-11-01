@@ -45,7 +45,7 @@ def main(argv=None):
     parser.add_argument("--allow-no-transcript", action="store_true")
     args = parser.parse_args(argv)
     arms = args.arms.split(",")
-    table = collections.defaultdict(lambda: collections.Counter())
+    table = collections.defaultdict(collections.Counter)
     fired = collections.defaultdict(collections.Counter)
     details = []
     for results_dir in args.results_dirs:
@@ -55,22 +55,21 @@ def main(argv=None):
             run_dir = os.path.join(results_dir, f"{run['fixture']}__{run['arm']}__{run['run']}")
             report = verify_run(run_dir, run["fixture"])
             side = "right" if run["correct"] else "wrong"
-            flagged = report["verdict"] == "fail"
-            table[run["arm"]][(side, flagged)] += 1
+            table[run["arm"]][(side, report["verdict"])] += 1
             for check in sorted({f["check"] for f in report["findings"] if f["status"] == "fail"}):
                 fired[(run["arm"], side)][check] += 1
-            if flagged != (side == "wrong"):
-                first = next(f for f in report["findings"] if f["status"] == "fail") if flagged else None
+            if (report["verdict"] == "fail") != (side == "wrong"):
+                first = next((f for f in report["findings"] if f["status"] == "fail"), None)
+                said = f"fail: {first['check']}: {first['message'][:90]}" if first else report["verdict"]
                 details.append(f"{os.path.basename(results_dir)}/{os.path.basename(run_dir)}: grade {side}"
-                               f" ({run['reason'][:60]}); ds-verify {'fail: ' + first['check'] + ': ' + first['message'][:90] if flagged else 'pass'}")
+                               f" ({run['reason'][:60]}); ds-verify {said}")
     for arm, counts in table.items():
-        wrong = counts[("wrong", True)] + counts[("wrong", False)]
-        right = counts[("right", True)] + counts[("right", False)]
-        print(f"{arm}: caught {counts[('wrong', True)]} of {wrong} wrong runs; "
-              f"false alarms on {counts[('right', True)]} of {right} right runs")
         for side in ("wrong", "right"):
-            print(f"  checks that failed on {side} runs: {dict(fired[(arm, side)])}")
-    print("Disagreements:")
+            total = sum(n for (s, _), n in counts.items() if s == side)
+            spread = ", ".join(f"{v} {counts[(side, v)]}" for v in ("fail", "unverified", "pass"))
+            print(f"{arm}, {side} runs ({total}): {spread}")
+            print(f"  checks that failed: {dict(fired[(arm, side)])}")
+    print("Disagreements (a wrong run not failed, or a right run failed):")
     for line in details:
         print(f"  {line}")
     return 0
