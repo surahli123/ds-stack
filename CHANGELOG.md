@@ -4,7 +4,7 @@ Each version is the one in the plugin manifests (`.claude-plugin/`, `.codex-plug
 
 ## 0.5.0 (2026-11-02)
 
-- New skill `ds-interrogate`. It runs a reviewer agent from another model family (Codex for a Claude analyst, Claude Code for a Codex analyst, any family through Cursor) as its own process. The reviewer tries to break a readout with its own logged queries on a private copy of the data. A finding is kept only when its quote is in the readout and its query reruns to the rows it cites. The reviewers come from `reviewers.json` in the overlay.
+- New skill `ds-interrogate`. It runs a reviewer agent from another model family (Codex for a Claude analyst, Claude Code for a Codex analyst, any family through Cursor) as its own process. The reviewer tries to break a readout with its own logged queries on a private copy of the data. A finding is kept only when four rules hold: its quote is a real claim in the readout, its query reads a data table, the query reruns to the same rows, and its numbers are anchored in those rows. Reviewers work in a temporary folder outside the project, with a small environment and the CLI's sandbox. They come from `reviewers.json` in the overlay.
 
 ## 0.4.0 (2026-11-01)
 

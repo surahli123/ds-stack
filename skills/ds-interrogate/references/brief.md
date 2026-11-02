@@ -18,12 +18,12 @@ Look for these faults:
 - an alternative explanation that the readout rules out wrongly, rules in without evidence, or doesn't consider;
 - a claim stronger than its evidence, such as causal words without a randomized test, or "ruled in" for something not shown.
 
-Prove each finding with a query you ran. Then write `findings.json` in this directory: a JSON list of objects with these keys:
+Prove each finding with a query you ran. The query that proves a finding must read the data tables in `warehouse.db` directly: not a table you created, and not a constant. Then write `findings.json` in this directory: a JSON list of objects with these keys:
 
 - `title`: the fault in one line;
-- `readout_quote`: the exact words in `readout.md` that are wrong, copied character for character;
+- `readout_quote`: the exact words in `readout.md` that are wrong, copied character for character: the whole claim, not one word;
 - `query_id`: the id the query command printed for the query that proves it;
-- `shows`: what that query's output shows, with its numbers;
+- `shows`: what that query's output shows, quoting its numbers as the output prints them (write a share as 0.5507 or 55.07%);
 - `why_it_matters`: how it changes the answer or the decision.
 
 Leave out anything you did not prove with a query, and anything about style or wording. An empty list, `[]`, is a valid result. Don't edit `readout.md` or the logs. When `findings.json` is written, reply with one line: the number of findings.

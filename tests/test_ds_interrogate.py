@@ -8,6 +8,8 @@ import json
 import os
 import subprocess
 import sys
+import tempfile
+import time
 
 import pytest
 from conftest import ROOT
@@ -97,7 +99,7 @@ def test_a_proven_finding_is_kept_with_its_query(setup, capsys):
 
 
 @pytest.mark.parametrize("change, reason", [
-    ({"shows": "the query gives 123456789"}, "none of its numbers (123456789)"),
+    ({"shows": "the query gives 123456789"}, "none of its specific numbers is in the output"),
     ({"shows": "the query gives {n}, then 111111, 222222 and 333333"}, "most of its numbers aren't in the output"),
     ({"readout_quote": "a sentence the readout never said"}, "quote isn't in the readout"),
     ({"query_id": "q99"}, "isn't a query that ran"),
@@ -192,3 +194,112 @@ def test_derived_numbers_and_the_readouts_own_numbers_do_not_drop_a_proven_findi
     code, report = run(tmp, "--analyst-family", "claude")
     assert code == 1 and report["findings"][0]["unmatched"] == ["98765.4"]
     assert "not in the rows (derived or unproven): 98765.4" in capsys.readouterr().out
+
+
+
+# --- regressions from the adversarial review ----------------------------------------------------------------
+
+@pytest.mark.parametrize("sql", ["select 12345.6 as fake", "select 'search_daily' as t, 12345.6 as fake"])
+def test_a_query_that_reads_no_table_proves_nothing(setup, sql):
+    tmp = setup(["gpt"], {"sql": sql, "findings": [finding(shows="the data gives 12345.6")]})
+    code, report = run(tmp, "--analyst-family", "claude")
+    assert code == 0 and "reads no data table" in report["results"][0]["dropped"][0]["reason"]
+
+
+@pytest.mark.parametrize("change, reason", [
+    ({"readout_quote": "pp"}, "too short"),
+    ({"shows": "The data does not support this at all."}, "quotes no number"),
+    ({"shows": "0 days support this; see the 9 and 21 figures for 2026"}, "none of its specific numbers"),
+    ({"shows": "{n} {n} {n} {n} and 777.7 888.8 999.9"}, "most of its numbers aren't in the output"),
+])
+def test_weak_or_padded_findings_are_dropped(setup, change, reason):
+    tmp = setup(["gpt"], {"sql": SQL, "findings": [finding(**change)]})
+    code, report = run(tmp, "--analyst-family", "claude")
+    assert code == 0 and reason in report["results"][0]["dropped"][0]["reason"]
+
+
+def test_a_number_matches_times_100_only_when_written_as_a_percent():
+    assert interrogate.in_values("55.07", True, [0.5507])
+    assert not interrogate.in_values("55.07", False, [0.5507])
+    assert interrogate.cell_values([["2026-09-21", "mobile 40.1"]]) == [40.1]
+
+
+def test_two_findings_on_one_line_are_both_kept(setup):
+    tmp = setup(["gpt"], {"sql": SQL, "findings": [finding(), finding(title="A second, different fault")]})
+    code, report = run(tmp, "--analyst-family", "claude")
+    assert code == 1 and len(report["findings"]) == 2 and report["findings"][0]["reviewers"] == ["gpt:gpt-m"]
+
+
+PROBE = """
+import json, os, sys
+print("CWD=" + os.getcwd())
+print("KEYS=" + ",".join(sorted(os.environ)))
+sys.stdout.flush()
+sys.stdout.buffer.write(b"\\xff\\xfe not utf-8\\n")
+open("review.queries.log", "w").write(json.dumps({"id": 7, "status": "ok"}) + "\\n")
+open("findings.json", "w").write("[]")
+"""
+
+
+def test_the_reviewer_runs_outside_the_project_with_a_small_environment(tmp_path, monkeypatch):
+    probe = tmp_path / "probe.py"
+    probe.write_text(PROBE)
+    overlay = tmp_path / "overlay"
+    overlay.mkdir()
+    (overlay / "reviewers.json").write_text(json.dumps({"reviewers": [
+        {"family": "gpt", "cmd": [sys.executable, str(probe), "{prompt_file}"]}]}))
+    monkeypatch.setenv("DS_OVERLAY_DIR", str(overlay))
+    monkeypatch.setenv("SOME_COMPANY_SECRET", "x")
+    code, report = run(tmp_path, "--analyst-family", "claude")
+    assert code == 0 and report["results"][0]["ran"]
+    log = open(os.path.join(report["results"][0]["dir"], "reviewer.log"), encoding="utf-8").read()
+    cwd = log.split("CWD=")[1].split("\n")[0]
+    assert cwd.startswith(tempfile.gettempdir()) and not cwd.startswith(str(tmp_path))
+    assert not os.path.exists(cwd)  # cleaned up; only the record came back
+    keys = log.split("KEYS=")[1].split("\n")[0].split(",")
+    assert "SOME_COMPANY_SECRET" not in keys and "DS_QUERIES_LOG" in keys
+    assert not os.path.exists(os.path.join(report["results"][0]["dir"], "warehouse.db"))
+
+
+def test_two_runs_in_the_same_second_do_not_collide(setup):
+    tmp = setup(["gpt"], {"sql": SQL, "findings": []})
+    assert run(tmp, "--analyst-family", "claude")[0] == 0
+    assert run(tmp, "--analyst-family", "claude")[0] == 0
+    assert (tmp / "out" / ".gitignore").read_text().endswith("*\n")
+
+
+def test_an_internal_error_is_exit_4_not_a_finding(setup, monkeypatch, capsys):
+    tmp = setup(["gpt"], {"sql": SQL, "findings": []})
+    monkeypatch.setattr(interrogate, "choose", lambda *a: 1 / 0)
+    assert interrogate.main([os.path.join(RUN, "result.md"), "--request", os.path.join(ROOT, "eval", "fixtures", "f1", "task.md"),
+                             "--db", DB, "--out", str(tmp / "out")]) == 4
+    assert "ZeroDivisionError" in capsys.readouterr().err
+
+
+def test_a_timeout_kills_everything_the_reviewer_started(tmp_path, monkeypatch):
+    hang = tmp_path / "hang.py"
+    hang.write_text("import subprocess, time\nsubprocess.Popen(['sleep', '313'])\ntime.sleep(60)\n")
+    overlay = tmp_path / "overlay"
+    overlay.mkdir()
+    (overlay / "reviewers.json").write_text(json.dumps({"reviewers": [
+        {"family": "gpt", "cmd": [sys.executable, str(hang), "{prompt_file}"]}]}))
+    monkeypatch.setenv("DS_OVERLAY_DIR", str(overlay))
+    code, report = run(tmp_path, "--analyst-family", "claude", "--timeout", "2")
+    assert code == 2 and report["results"][0]["exit"] == "timeout"
+    time.sleep(0.5)
+    alive = subprocess.run(["pgrep", "-f", "sleep 313"], capture_output=True, text=True).stdout.strip()
+    assert alive == ""
+
+
+def test_family_names_are_compared_without_case_and_unknown_families_are_flagged(tmp_path, monkeypatch):
+    overlay = tmp_path / "overlay"
+    overlay.mkdir()
+    monkeypatch.setenv("DS_OVERLAY_DIR", str(overlay))
+    entry = {"cmd": [sys.executable, "-c", "pass"]}
+    (overlay / "reviewers.json").write_text(json.dumps({"reviewers": [{**entry, "family": "GPT"}]}))
+    assert interrogate.choose(interrogate.load_reviewers(), "gpt", 1)[1].startswith("not independent")
+    (overlay / "reviewers.json").write_text(json.dumps({"reviewers": [{**entry, "model": "mystery-9"}]}))
+    assert "family is unknown" in interrogate.choose(interrogate.load_reviewers(), "claude", 1)[1]
+    assert interrogate.family_of("sonnet-4.5") == interrogate.family_of("opus-4[1m]") == "claude"
+    (overlay / "reviewers.json").write_text(json.dumps({"reviewers": [{"family": "gpt"}, {**entry, "family": "claude"}]}))
+    assert [r["family"] for r in interrogate.load_reviewers()] == ["claude"]
