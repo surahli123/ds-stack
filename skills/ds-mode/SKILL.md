@@ -29,7 +29,8 @@ This is a draft, to be replaced with the analyst's own first moves.
    - When a rate moved, run `mix_shift` on the segments whose mix could have shifted (platform, country, traffic source). Use the finest grain that keeps about 100 units per cell on both sides, then rerun at one coarser grain. If the two disagree, report both.
    - For an experiment, run `srm` on the assignment counts before you read any lift.
 6. Rule each alternative in or out with evidence, or say it is not ruled out. Always consider mix-shift, seasonality and day of week, data completeness, logging or definition changes, and the requester's cause. The evidence names a check or a query result from this session. Label each conclusion measured, inferred or guess.
-7. Write the readout below to `readout.md`, run `python3 <dir of this SKILL.md>/tools/verify_readout.py readout.md`, and fix the readout until it passes. Then send the readout as your final reply.
+7. Write the readout below to `readout.md`, run `python3 <dir of this SKILL.md>/tools/verify_readout.py readout.md`, and fix the readout until it passes.
+8. If ds-verify sits next to this skill (`<dir of this SKILL.md>/../ds-verify/tools/ds_verify.py`), save the person's question as `request.md`, word for word and without these instructions. Then run `python3 <that file> readout.md --request request.md`, adding `--db <file>` when the data isn't `./warehouse.db` or `$DS_WAREHOUSE`. Fix what each FAIL line names and run it again until none is left. When a FAIL is about a number or a definition, fix the analysis and rerun the queries; rewording the readout doesn't fix it. Never edit a log or a check's output. `unverified` is fine: its "Needs a human" list is for the reviewer. Then send the readout as your final reply.
 
 ## Queries
 
@@ -89,7 +90,7 @@ Headline: <signed number> <unit> (<95% interval>) [q<n> | check:<name>#<n>]   or
 ```
 
 - Every line in the Answer, What it means and Why we believe it sections that states a number carries a tag: `[q<n>]` for a logged query, `[check:<name>#<n>]` for a logged check, `[given]` for a number stated in the request, such as a threshold. One bracket can hold several: `[q3, q4]`. A number you can't tag doesn't belong in the readout.
-- In Provenance, the logs are `.ds-queries.log` and `.ds-checks.log`, and a last line `- Verified: <the verify_readout.py result line, exactly as printed>` shows the reviewer the trace check passed.
+- In Provenance, the logs are `.ds-queries.log` and `.ds-checks.log`, and a last line `- Verified: <the verify_readout.py result line>; <ds-verify's first line, when it ran>`, each exactly as printed, shows the reviewer what passed.
 - The interval is required. `mix_shift` reports one for the overall change (`delta_ci95_pp`). For an experiment lift, use a two-proportion interval. When no interval can be computed, write `(no interval: <reason>)`.
 - Each alternative gets one of three verdicts. `ruled in` means the evidence shows it happened. `ruled out` means the evidence excludes it. An alternative the data can neither show nor exclude is `not ruled out`, followed by what would decide it. Never write `ruled in as possible` or `ruled in as unresolved`: a reader who skims sees `ruled in` and takes it as shown.
 - Use causal words ("caused", "drove", "because of") only for a randomized test or a design that identifies the cause. Otherwise say "coincided with" or "is associated with", and name what would confirm it.

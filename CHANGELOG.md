@@ -2,6 +2,11 @@
 
 Each version is the one in the plugin manifests (`.claude-plugin/`, `.codex-plugin/`, `.cursor-plugin/`). Change the version in all of them, and add its section here, in the same pull request; `tests/test_packaging.py` checks both.
 
+## 0.8.0 (2026-11-02)
+
+- ds-mode runs ds-verify as its last step when ds-verify sits next to it, as in a plugin install. It saves the question as `request.md`, fixes every failure (in the analysis when it is about a number or a definition), and adds ds-verify's first line to Provenance. The eval's full arm now carries ds-verify beside ds-mode.
+- ds-verify's overlay check reads the SQL behind the Headline, not only the Metric line. Once ds-verify became a gate, rewording the Metric line could have passed a number computed on another definition. On the 3 wrong f6 runs from the arm without the overlay step, that rewording now still fails all 3; before, it passed all 3. It adds no failure to the 107 right runs.
+
 ## 0.7.0 (2026-11-02)
 
 - ds-mode gains a third verdict for alternatives, `not ruled out`, followed by what would decide it. `ruled in` now only means the evidence shows it. In the Codex matrix, "ruled in as an unresolved possibility" cost f1 in English.

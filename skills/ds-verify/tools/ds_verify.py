@@ -24,8 +24,9 @@ Seven checks, each with a status of pass, fail, warn, could_not_verify or skippe
   flags         every check that flagged or failed is reported by its tag, unless the same check
                 was rerun later on the same input (then it is a warn, for the reviewer).
   overlay       when metrics.json names the metric, the Metric line uses its numerator,
-                denominator and filters, and no estimate line gives a number (rather than "not
-                computed") for a metric marked available: false.
+                denominator and filters, and so does the SQL of the queries the Headline cites;
+                no estimate line gives a number (rather than "not computed") for a metric marked
+                available: false. A query that computes both definitions passes the SQL part.
 
 The first line is "ds-verify: fail" when any check fails, "ds-verify: unverified" when nothing
 fails but something that matters couldn't be checked (a missing input, a pasted or unreplayable
@@ -507,7 +508,111 @@ def filter_words(expression):
             if w.lower() not in {"and", "or", "not", "in", "is", "null", "like"}]
 
 
-def check_overlay(text, overlay, request):
+SQL_WORDS = {"sum", "count", "distinct", "avg", "min", "max", "case", "when", "then", "else", "end", "coalesce",
+             "nullif", "cast", "as", "and", "or", "not", "in", "is", "null", "like", "real", "float", "integer"}
+
+
+def identifiers(expression):
+    """The column-like names in a metric expression, without SQL keywords and functions."""
+    return [w for w in re.findall(r"[A-Za-z_][A-Za-z0-9_]*", str(expression or "")) if w.lower() not in SQL_WORDS]
+
+
+def sql_behind_estimates(text, queries, checks):
+    """SQL of the runner queries the Headline, Observed and Adjusted lines cite, directly, through a check's
+    "from", or through the query ids a pasted entry names (such as "interval computed from q5")."""
+    lines = estimate_lines(text)
+    by_query = {q.get("id"): q for q in queries or []}
+    by_check = {str(c.get("id", "")).lower(): c for c in checks or []}
+    todo = []
+    for name in ("headline", "observed", "adjusted"):
+        for tag in vr.tags_in(lines.get(name, "")):
+            if tag.startswith("check:"):
+                source = (by_check.get(tag.split(":", 1)[1].lower()) or {}).get("from") or []
+                todo += [source] if isinstance(source, str) else list(source)
+            else:
+                todo.append(tag)
+    seen, sqls = set(), []
+    while todo:
+        qid = todo.pop()
+        if qid in seen or qid not in by_query:
+            continue
+        seen.add(qid)
+        sql = str(by_query[qid].get("sql") or "")
+        if by_query[qid].get("source") == "pasted":
+            todo += re.findall(r"\bq\d+\b", sql)  # its text is a description, not SQL the data ran
+        else:
+            sqls.append(sql)
+    return sqls
+
+
+def base_columns(db):
+    """Port point, with scratch_copy(). The lower-cased column names of every table and view, read only;
+    an empty set when there is no database."""
+    if not db or not os.path.exists(db):
+        return set()
+    try:
+        con = sqlite3.connect(f"file:{os.path.abspath(db)}?mode=ro", uri=True)
+        try:
+            names = [r[0] for r in con.execute("select name from sqlite_master where type in ('table', 'view')")]
+            return {r[1].lower() for n in names for r in con.execute(f'pragma table_info("{n}")')}
+        finally:
+            con.close()
+    except sqlite3.Error:
+        return set()
+
+
+def select_items(sql):
+    """{output column name: expression} for the top-level SELECT list of a query, best effort."""
+    depth, select_at, from_at = 0, None, None
+    for match in re.finditer(r"[()]|\bselect\b|\bfrom\b|'(?:[^']|'')*'", sql, re.I):
+        token = match.group(0).lower()
+        if token == "(":
+            depth += 1
+        elif token == ")":
+            depth -= 1
+        elif depth == 0 and token == "select" and select_at is None:
+            select_at = match.end()
+        elif depth == 0 and token == "from" and select_at is not None:
+            from_at = match.start()
+            break
+    if select_at is None:
+        return {}
+    body, items, depth, start = sql[select_at:from_at], {}, 0, 0
+    for i, char in enumerate(body + ","):
+        depth += char == "("
+        depth -= char == ")"
+        if char == "," and depth == 0:
+            item = body[start:i].strip()
+            start = i + 1
+            named = re.match(r"(?is)^(.*?\S)\s+(?:as\s+)?\"?([A-Za-z_][A-Za-z0-9_]*)\"?$", item)
+            if named and named.group(2).lower() not in SQL_WORDS and named.group(1).lower() not in ("distinct", "all"):
+                items[named.group(2).lower()] = named.group(1)
+            items.setdefault(item.lower(), item)
+    return items
+
+
+def headline_column(text, queries):
+    """(query id, column, expression) for the one result column, in a runner query the Headline cites,
+    that holds the Headline number; None when that can't be told."""
+    line = estimate_lines(text).get("headline", "")
+    number = first_number(line)
+    if number is None:
+        return None
+    by_query = {q.get("id"): q for q in queries or []}
+    found = []
+    for tag in vr.tags_in(line):
+        query = by_query.get(tag)
+        if not query or query.get("source") == "pasted" or not query.get("columns"):
+            continue
+        columns = [str(c).lower() for c in query["columns"]]
+        hits = {columns[i] for row in query.get("rows") or [] for i, v in enumerate(row[:len(columns)])
+                if isinstance(v, (int, float)) and not isinstance(v, bool) and (close(number, v) or close(number, v * 100))}
+        expressions = select_items(str(query.get("sql") or ""))
+        found += [(tag, c, expressions[c]) for c in hits if c in expressions]
+    return found[0] if len(found) == 1 else None
+
+
+def check_overlay(text, overlay, request, queries=None, checks=None, db=None):
     path = os.path.join(overlay, "metrics.json") if overlay else None
     if not path or not os.path.exists(path):
         return [finding("overlay", "skipped", "no metrics.json in the overlay")]
@@ -537,6 +642,30 @@ def check_overlay(text, overlay, request):
             continue
         missing = [p for p in parts if p and normal(p) not in normal(metric_line)]
         missing += [w for f in entry.get("filters", []) for w in filter_words(f) if normal(w) not in normal(metric_line)]
+        sqls = sql_behind_estimates(text, queries, checks)
+        if sqls:
+            # The words on the Metric line are easy to fix; the query behind the number has to use them too.
+            blob = " ".join(sqls).lower()
+            needed = identifiers(parts[0]) + identifiers(parts[1])
+            for expression in entry.get("filters", []):
+                needed += identifiers(expression)[:1]  # its column; grouping by it and reading one group is fine
+            absent = [w for w in dict.fromkeys(needed)
+                      if not re.search(rf"(?<![a-z0-9_]){re.escape(w.lower())}(?![a-z0-9_])", blob)]
+            if absent:
+                results.append(finding("overlay", "fail", f"no query behind the Headline uses {', '.join(absent)} from "
+                                                          f"the overlay's definition of {key}: rerun the analysis on that "
+                                                          "definition; rewording the Metric line doesn't change the number"))
+            else:
+                # A query can compute both definitions; the Headline's own column has to be the overlay's.
+                hit = headline_column(text, queries)
+                if hit:
+                    qid, column, expression = hit
+                    used = {w.lower() for w in identifiers(expression)}
+                    lacking = [w for w in identifiers(parts[0]) + identifiers(parts[1]) if w.lower() not in used]
+                    if lacking and used & base_columns(db):
+                        results.append(finding("overlay", "fail", f"the Headline is column {column} of {qid}, computed as "
+                                                                  f"{' '.join(expression.split())[:90]}, which doesn't use "
+                                                                  f"{', '.join(lacking)} from the overlay's definition of {key}"))
         if not missing:
             results.append(finding("overlay", "pass", f"the Metric line uses the overlay's definition of {key}"))
         else:
@@ -576,7 +705,7 @@ def run_all(text, queries, checks, db=None, overlay=None, request=None):
     trace, given = check_trace(text, queries, checks)
     findings = (trace + check_replay(queries, db) + check_sources(text, queries, checks)
                 + check_estimand(text, request, checks) + check_alternatives(text, checks) + check_flags(text, checks)
-                + check_overlay(text, overlay, request))
+                + check_overlay(text, overlay, request, queries, checks, db))
     counts = {status: sum(f["status"] == status for f in findings) for status in STATUSES}
     verdict = "fail" if counts["fail"] else "unverified" if counts["could_not_verify"] else "pass"
     return {"verdict": verdict, "counts": counts, "findings": findings, "given": given,
