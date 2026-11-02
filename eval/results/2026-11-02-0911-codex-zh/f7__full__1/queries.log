@@ -1,0 +1,1 @@
+{"id": "q1", "ts": 1793645544.095, "source": "runner", "sql": "SELECT name, sql FROM sqlite_master WHERE type IN ('table','view')", "params": [], "as_of": "2026-10-11", "status": "ok", "seconds": 0.0, "row_count": 1, "columns": ["name", "sql"], "rows": [["search_daily_c", "CREATE TABLE search_daily_c (date TEXT, searches INTEGER, clicks INTEGER, conversions INTEGER)"]]}

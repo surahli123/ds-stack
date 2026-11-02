@@ -1,0 +1,23 @@
+[
+  {
+    "title": "Post-rollout mobile share is 55.1%, not 45.1%.",
+    "readout_quote": "Mix-shift: ruled in as the explanation; mobile share of searches rose from 40.1% to 45.1% while mobile CTR (22.0%) is far below desktop (36.0%), giving -2.09 pp of mix effect [check:mix_shift#2] [measured]",
+    "query_id": "q1",
+    "shows": "Before: 280601 mobile searches out of 699605, mobile_share 0.401085. After: 385706 out of 700366, mobile_share 0.550721. The share rose by about 15 percentage points, not 5.",
+    "why_it_matters": "The readout understates the traffic-composition change by about 10 percentage points. Its stated 5-point shift cannot account for the reported -2.09 pp mix effect at the stated platform CTRs; the actual roughly 15-point shift can."
+  },
+  {
+    "title": "The pooled near-zero change is incorrectly reported as the change in every segment.",
+    "readout_quote": "v2 lowered CTR (PM's cause): ruled out as the main driver; within-segment change is -0.00 pp in all four platform x country cells [check:mix_shift#1] [measured]",
+    "query_id": "q2",
+    "shows": "The four ctr_change_pp values are desktop/US -0.002248, desktop/other -0.08038, mobile/US 0.051019, and mobile/other 0.018341. They do not all round to -0.00 pp.",
+    "why_it_matters": "Opposing segment changes partly cancel in the aggregate. A near-zero weighted average does not establish flat CTR in every segment or support the claimed uniform absence of a decline."
+  },
+  {
+    "title": "A before/after interval is presented as a bound on the causal effect of v2 and used to reject rollback.",
+    "readout_quote": "The within-segment effect of v2 is bounded to about ±0.15 pp [check:mix_shift#1], far below the 2.10 pp drop [check:mix_shift#1], so the CTR drop is not a reason to roll back; a loss of 0.3 pp or more would be needed to matter (this threshold is my assumption, not given) [check:mix_shift#1].",
+    "query_id": "q3",
+    "shows": "The only period/ranker groups are before/v1 (7 days, 28 segment_day_rows, 699605 searches, ctr_pct 30.421166) and after/v2 (7 days, 28 segment_day_rows, 700366 searches, ctr_pct 28.324333). There is no concurrent v1 comparison after rollout or v2 comparison before rollout.",
+    "why_it_matters": "Ranker and week are perfectly confounded. Adjusting platform and country does not separate a ranker effect from other changes over time, including offsetting changes within segments. The interval on the observed adjusted difference cannot bound the causal effect to ±0.15 pp or exclude a loss of 0.3 pp. The data supports a descriptive decomposition, but leaves the requested attributable effect and this rollback justification unidentified."
+  }
+]

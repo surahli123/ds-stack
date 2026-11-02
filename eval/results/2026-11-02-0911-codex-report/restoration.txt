@@ -1,0 +1,1 @@
+All six gold directories and original AGENTS.md, skills, prompts restored. Rebuilt skills preserved separately.

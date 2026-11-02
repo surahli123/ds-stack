@@ -1,0 +1,22 @@
+### 2026-11-02-0911-codex-en (sh <HOME>/ds-accept/eval/agents/codex.sh {prompt_file}, en)
+
+| Level | Result | Counts |
+|---|---|---|
+| Plumbing | PASS | 24 of 24 full-arm runs |
+| Correctness | FAIL | 7 of 8 fixtures right by majority |
+| Value | FAIL | plain prompting missed 22% of 9 runs on f6-f8; fixtures right: full 3, plain 2 |
+
+- Fixtures the full arm got wrong: f1
+
+### 2026-11-02-0911-codex-zh (sh <HOME>/ds-accept/eval/agents/codex.sh {prompt_file}, zh)
+
+| Level | Result | Counts |
+|---|---|---|
+| Plumbing | PASS | 24 of 24 full-arm runs |
+| Correctness | FAIL | 6 of 8 fixtures right by majority |
+| Value | FAIL | plain prompting missed 11% of 9 runs on f6-f8; fixtures right: full 3, plain 3 |
+
+- Fixtures the full arm got wrong: f1, f3
+
+
+acceptance exit 0
