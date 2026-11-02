@@ -1,7 +1,7 @@
 {
   "name": "ds-stack",
   "version": "0.6.0",
-  "description": "Data-science skills that make agent work trustworthy: check scripts and a fixed readout for analyses (ds-mode), a checker for finished readouts (ds-verify), a cross-model second opinion that keeps only proven findings (ds-interrogate), a readiness audit for a work project (ds-ready), and structure, format, concision and reader tests for documents (ds-doc, doc-tighten, cold-read).",
+  "description": "Data-science skills that make agent work trustworthy: check scripts and a fixed readout for analyses (ds-mode), a checker for finished readouts (ds-verify), a cross-model second opinion that keeps only proven findings (ds-interrogate), a readiness audit for a work project (ds-ready), proposals from the mistakes that repeat (ds-retro), and structure, format, concision and reader tests for documents (ds-doc, doc-tighten, cold-read).",
   "author": {
     "name": "surahli123"
   },
@@ -20,7 +20,7 @@
   "interface": {
     "displayName": "ds-stack",
     "shortDescription": "Trustworthy analyses and readable docs from agents.",
-    "longDescription": "Data-science skills that make agent work trustworthy: check scripts and a fixed readout for analyses (ds-mode), a checker for finished readouts (ds-verify), a cross-model second opinion that keeps only proven findings (ds-interrogate), a readiness audit for a work project (ds-ready), and structure, format, concision and reader tests for documents (ds-doc, doc-tighten, cold-read).",
+    "longDescription": "Data-science skills that make agent work trustworthy: check scripts and a fixed readout for analyses (ds-mode), a checker for finished readouts (ds-verify), a cross-model second opinion that keeps only proven findings (ds-interrogate), a readiness audit for a work project (ds-ready), proposals from the mistakes that repeat (ds-retro), and structure, format, concision and reader tests for documents (ds-doc, doc-tighten, cold-read).",
     "developerName": "surahli123",
     "category": "Productivity",
     "capabilities": [

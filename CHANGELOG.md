@@ -5,6 +5,7 @@ Each version is the one in the plugin manifests (`.claude-plugin/`, `.codex-plug
 ## 0.6.0 (2026-11-02)
 
 - New skill `ds-ready`. It audits a work project before ds-stack runs on it. It checks the overlay's metric definitions (required fields, aliases, prose numerators), the sources against the database, the project's AGENTS.md, and the tables and metrics that past query logs and readouts used. It lists the gaps as blocking or recommended and writes questions for each metric owner. It never drafts a definition.
+- New skill `ds-retro`, a first version. It reads finished analyses or eval runs and counts the ds-verify failures and grader misses that repeat in two or more runs. For each pattern it proposes where the fix belongs (the ds-mode skill, the overlay or the project setup), with a fixture sketch for the eval gate. It notes when ds-mode already has the rule, so a gate is better than more text. It changes nothing. It doesn't yet read conversations.
 - The overlay gains `tables.json`, notes on the tables the work reads.
 - dots' acceptance run uses its own worktree, `~/ds-accept`, and hides every copy of the gold answers on the machine.
 
