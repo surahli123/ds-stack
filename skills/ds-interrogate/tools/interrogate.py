@@ -288,7 +288,8 @@ def main(argv=None):
         return 3
     analyst = (args.analyst_family or family_of(args.analyst_model) or "").lower() or None
     chosen, independence = choose(load_reviewers(), analyst, args.reviewers)
-    out_dir = os.path.join(args.out, time.strftime("%Y%m%d-%H%M%S"))
+    # Absolute, because each reviewer runs with its own directory as the working directory.
+    out_dir = os.path.abspath(os.path.join(args.out, time.strftime("%Y%m%d-%H%M%S")))
     os.makedirs(out_dir, exist_ok=True)
     with futures.ThreadPoolExecutor(max_workers=max(1, len(chosen))) as pool:
         results = list(pool.map(lambda pair: review(pair[1], args, request, out_dir, pair[0]), enumerate(chosen, 1)))

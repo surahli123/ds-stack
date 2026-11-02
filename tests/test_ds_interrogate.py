@@ -173,3 +173,12 @@ def test_cli_usage_errors():
     proc = subprocess.run([sys.executable, SCRIPT, os.path.join(RUN, "result.md"), "--request", "/nope"],
                           capture_output=True, text=True)
     assert proc.returncode == 3
+
+
+def test_a_relative_out_directory_still_reaches_the_reviewer(setup, monkeypatch):
+    tmp = setup(["gpt"], {"sql": SQL, "findings": [finding()]})
+    monkeypatch.chdir(tmp)
+    code = interrogate.main([os.path.join(RUN, "result.md"), "--request", os.path.join(ROOT, "eval", "fixtures", "f1", "task.md"),
+                             "--queries", os.path.join(RUN, "queries.log"), "--checks", os.path.join(RUN, "checks.log"),
+                             "--db", DB, "--analyst-family", "claude", "--out", "relative-out"])
+    assert code == 1
