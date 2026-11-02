@@ -1,0 +1,41 @@
+ds-interrogate Codex reviewer smoke test, 2026-11-02
+
+Source code commit b197e903f2982ad41a10e43b12ab59d48a5369a0; invocation HEAD cca4093 (results-only commits on source). Exactly two calls; no retries; normal restored Codex configuration.
+
+planted: python=1 tee=0
+
+ds-interrogate: 3 verified finding(s) from gpt:-; independent: reviewer family differs from the analyst's (claude)
+
+Post-rollout mobile share is 55.1%, not 45.1%.
+
+Quote: Mix-shift: ruled in as the explanation; mobile share of searches rose from 40.1% to 45.1% while mobile CTR (22.0%) is far below desktop (36.0%), giving -2.09 pp of mix effect [check:mix_shift#2] [measured]
+
+The pooled near-zero change is incorrectly reported as the change in every segment.
+
+Quote: v2 lowered CTR (PM's cause): ruled out as the main driver; within-segment change is -0.00 pp in all four platform x country cells [check:mix_shift#1] [measured]
+
+A before/after interval is presented as a bound on the causal effect of v2 and used to reject rollback.
+
+Quote: The within-segment effect of v2 is bounded to about ±0.15 pp [check:mix_shift#1], far below the 2.10 pp drop [check:mix_shift#1], so the CTR drop is not a reason to roll back; a loss of 0.3 pp or more would be needed to matter (this threshold is my assumption, not given) [check:mix_shift#1].
+
+Dropped: []
+
+original: python=1 tee=0
+
+ds-interrogate: 2 verified finding(s) from gpt:-; independent: reviewer family differs from the analyst's (claude)
+
+将前后对比的置信区间当作 v2 的因果效应界限，并据此否定回滚理由
+
+Quote: The within-segment effect of v2 is bounded to about ±0.15 pp [check:mix_shift#1], far below the 2.10 pp drop [check:mix_shift#1], so the CTR drop is not a reason to roll back; a loss of 0.3 pp or more would be needed to matter (this threshold is my assumption, not given) [check:mix_shift#1].
+
+把加权汇总接近零误报为四个分组的变化都为 -0.00 pp
+
+Quote: v2 lowered CTR (PM's cause): ruled out as the main driver; within-segment change is -0.00 pp in all four platform x country cells [check:mix_shift#1] [measured]
+
+Dropped: []
+
+Pushed: NOT PUSHED; intended branch results/2026-11-02-interrogate-codex. Existing GitHub authentication is blocked; see push-status.txt after attempt.
+
+Raw input/output evidence retained locally at <HOME>/ds-accept-control-2026-11-02-0911/raw-interrogate. No database copied into published result directory. Reviewer logs reduced to public metadata/error extracts; identifying paths redacted.
+
+Verified findings mean the harness replay checks passed; interpretation still requires human judgment.
