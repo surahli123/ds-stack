@@ -97,7 +97,8 @@ def test_a_proven_finding_is_kept_with_its_query(setup, capsys):
 
 
 @pytest.mark.parametrize("change, reason", [
-    ({"shows": "the query gives 123456789"}, "doesn't show 123456789"),
+    ({"shows": "the query gives 123456789"}, "none of its numbers (123456789)"),
+    ({"shows": "the query gives {n}, then 111111, 222222 and 333333"}, "most of its numbers aren't in the output"),
     ({"readout_quote": "a sentence the readout never said"}, "quote isn't in the readout"),
     ({"query_id": "q99"}, "isn't a query that ran"),
     ({"why_it_matters": ""}, "missing why_it_matters"),
@@ -182,3 +183,12 @@ def test_a_relative_out_directory_still_reaches_the_reviewer(setup, monkeypatch)
                              "--queries", os.path.join(RUN, "queries.log"), "--checks", os.path.join(RUN, "checks.log"),
                              "--db", DB, "--analyst-family", "claude", "--out", "relative-out"])
     assert code == 1
+
+
+def test_derived_numbers_and_the_readouts_own_numbers_do_not_drop_a_proven_finding(setup, capsys):
+    # As in the first live run: the reviewer quoted the readout's wrong number and a difference it worked out.
+    shows = "the query gives {n}; the readout's own figures say otherwise, and the gap is 98765.4"
+    tmp = setup(["gpt"], {"sql": SQL, "findings": [finding(shows=shows)]})
+    code, report = run(tmp, "--analyst-family", "claude")
+    assert code == 1 and report["findings"][0]["unmatched"] == ["98765.4"]
+    assert "not in the rows (derived or unproven): 98765.4" in capsys.readouterr().out

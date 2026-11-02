@@ -19,7 +19,9 @@ findings.json (references/brief.md). A finding is kept only when all four hold:
   1. its readout_quote is in the readout;
   2. its query_id is a query that ran in the reviewer's log;
   3. that query, replayed on a fresh copy of the data, gives the logged rows;
-  4. every number in its "shows" text is in that query's output.
+  4. its "shows" text quotes that query's output: at least one of its numbers is in the rows, and most of
+     the numbers that aren't already in the readout or the analyst's logs are too. The others (differences,
+     ratios) are listed as "not in the rows" for the person who judges.
 Whether a kept finding breaks the answer is for a person to judge; the report says so.
 
 Exit code: 0 no verified finding, 1 at least one, 2 no reviewer could run, 3 usage error.
@@ -179,11 +181,26 @@ def vr_clean(text):
     return dv.vr._clean(text)
 
 
-def verify_findings(findings, readout_text, review_queries, db):
-    """(kept, dropped): each kept finding carries its query; each dropped one its reason."""
+def shown_numbers(text):
+    """The numbers in a finding's "shows" text, without dates, date ranges ("09-21..27") or CI levels."""
+    return dv.vr.numbers_in(re.sub(r"\b\d{2}-\d{2}\b", " ", str(text)))
+
+
+def matched(number, values):
+    return any(dv.close(number, v) or dv.close(number, v * 100) for v in values)
+
+
+def verify_findings(findings, readout_text, review_queries, db, evidence=()):
+    """(kept, dropped): each kept finding carries its query; each dropped one its reason.
+
+    The "shows" text must quote the query's output: at least one of its numbers is in the rows, and of the
+    numbers that aren't already in the readout or the analyst's logs, at least half are. The rest are
+    derived (a difference, a ratio) or unproven, and the report lists them for the person who judges."""
     replay = {f.get("ref"): f for f in dv.check_replay(review_queries, db)} if review_queries else {}
     by_id = {q["id"].lower(): q for q in review_queries if q.get("id")}
     readout = normal(readout_text)
+    readout_numbers = [float(n.replace(",", "").replace("−", "-")) for n in re.findall(r"[-+−]?\d+(?:[.,]\d+)*", readout_text)
+                       if re.fullmatch(r"[-+−]?\d+(?:\.\d+)?", n.replace(",", ""))]
     kept, dropped = [], []
     for finding in findings:
         missing = [k for k in KEYS if not str(finding.get(k, "")).strip()]
@@ -198,15 +215,23 @@ def verify_findings(findings, readout_text, review_queries, db):
         elif replay.get(query["id"], {}).get("status") != "pass":
             reason = f"{query['id']} didn't reproduce: {replay.get(query['id'], {}).get('message', 'not replayed')}"
         else:
-            numbers = dv.vr.numbers_in(str(finding["shows"]))
-            values = dv.values_in(query.get("rows"), [])
-            unmatched = [n for n in numbers if not any(dv.close(n, v) or dv.close(n, v * 100) for v in values)]
-            reason = f"its output doesn't show {', '.join(unmatched)}" if unmatched else None
+            numbers = shown_numbers(finding["shows"])
+            rows = dv.values_in(query.get("rows"), [])
+            context = dv.values_in(readout_numbers, []) + list(evidence)
+            in_rows = [n for n in numbers if matched(n, rows)]
+            others = [n for n in numbers if n not in in_rows and not matched(n, context)]
+            if numbers and not in_rows:
+                reason = f"none of its numbers ({', '.join(numbers[:6])}) is in the output of {query['id']}"
+            elif others and len(others) > len(in_rows):
+                reason = f"most of its numbers aren't in the output of {query['id']}: {', '.join(others[:6])}"
+            else:
+                reason = None
+                finding = {**finding, "unmatched": others}
         if reason:
             dropped.append({"title": str(finding.get("title", ""))[:120], "reason": reason})
         else:
             kept.append({**{k: finding[k] for k in KEYS}, "sql": query.get("sql"), "rows": (query.get("rows") or [])[:8],
-                         "columns": query.get("columns")})
+                         "columns": query.get("columns"), "unmatched": finding.get("unmatched", [])})
     return kept, dropped
 
 
@@ -221,8 +246,10 @@ def review(reviewer, args, request, out_dir, index):
         return {**result, "ran": False, "kept": [], "dropped": [],
                 "problem": "no findings.json and no JSON list in its reply" + (f" (exit {code})" if code != 0 else "")}
     review_queries = dv.vr.read_jsonl(os.path.join(workdir, "review.queries.log"))
+    evidence = dv.values_in([q.get("rows") for q in dv.vr.read_jsonl(args.queries)]
+                            + [{"s": c.get("summary"), "d": c.get("details")} for c in dv.vr.read_jsonl(args.checks)], [])
     with open(args.readout, encoding="utf-8") as handle:
-        kept, dropped = verify_findings(findings, handle.read(), review_queries, args.db)
+        kept, dropped = verify_findings(findings, handle.read(), review_queries, args.db, evidence)
     return {**result, "ran": True, "kept": kept, "dropped": dropped}
 
 
@@ -247,7 +274,8 @@ def render(report):
                   f"   readout says: {finding['readout_quote']}",
                   f"   query: {finding['sql']}",
                   f"   rows: {json.dumps(finding['rows'], default=str)[:300]}",
-                  f"   shows: {finding['shows']}",
+                  f"   shows: {finding['shows']}"
+                  + (f"\n   not in the rows (derived or unproven): {', '.join(finding['unmatched'])}" if finding.get("unmatched") else ""),
                   f"   why it matters (the reviewer's claim, for you to judge): {finding['why_it_matters']}"]
     for result in report["results"]:
         if not result["ran"]:

@@ -48,10 +48,15 @@ A finding is kept only when all four hold:
 1. Its quote is in the readout, word for word.
 2. Its query ran through ds-mode's runner, in the reviewer's own log.
 3. That query, replayed on a fresh copy of the data, gives the same rows.
-4. Every number in its "shows" text is in those rows.
+4. Its "shows" text quotes those rows. At least one of its numbers is in them. Of the numbers that aren't already in the readout or the analyst's logs, at least half are in them too. The rest, such as differences the reviewer worked out, are listed as "not in the rows" for you to check.
 
 The reviewer's private copy of the data has no scratch tables from the analysis. Its writes never reach the analysis database. The brief it gets is `references/brief.md`.
 
-## Not yet proved
+## First live run
 
-The checks above are tested with a scripted stand-in for the reviewer, not yet with a model on a planted fault. Treat the first real runs as the test: record what each finding was and whether it held.
+On 2026-11-02 a Claude reviewer, standing in for a Codex analyst, reviewed one correct f1 readout and a copy with one planted fault. The planted fault changed "mobile share rose from 40.1% to 55.1%" to "45.1%" in an alternative line, which ds-verify passes.
+
+- The reviewer found the planted fault with its own query. The first version of rule 4 dropped the finding, because the finding quoted the readout's wrong number and a difference the reviewer had worked out. Rule 4 now allows both, and the finding is kept.
+- On the correct readout, 3 findings were kept. Each questions the reasoning, not a number: the mix shift happened on the rollout day, seasonality was ruled out on one week of data, and a logging change was ruled out on the release log alone. Whether they change the answer is a person's call.
+
+The GPT reviewer through Codex hasn't run yet; it needs the work laptop. Record each finding and whether it held, so the next change to the rules rests on data.
