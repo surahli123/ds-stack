@@ -1,0 +1,17 @@
+{
+  "fixture": "f6",
+  "arm": "baseline",
+  "run": 1,
+  "model": null,
+  "exit": 0,
+  "seconds": 53.9,
+  "cost_usd": null,
+  "turns": null,
+  "execution": "ok",
+  "attempts": 1,
+  "agent_cmd": "sh <HOME>/ds-accept/eval/agents/codex.sh {prompt_file}",
+  "transcript": false,
+  "agent_model": "gpt-6-astra",
+  "reasoning_effort": "medium",
+  "prompt_suffix": "\u8bf7\u7528\u4e2d\u6587\u5199\u7ed3\u8bba\u3002"
+}

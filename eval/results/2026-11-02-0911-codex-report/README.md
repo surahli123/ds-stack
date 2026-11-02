@@ -1,0 +1,2 @@
+# Publication notes
+Raw pre-grading synthetic artifacts retained locally at ~/ds-accept-control-2026-11-02-0911/raw-results-before-grading/. Logs are public metadata/error extracts with source line references; internal reasoning, telemetry and tool transcripts omitted. Home paths and identifying patterns redacted. SHA-256 manifest provides traceability. Result text and grading conclusions otherwise retained. report.txt contains the full runbook report.
