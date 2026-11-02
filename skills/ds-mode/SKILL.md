@@ -30,7 +30,12 @@ This is a draft, to be replaced with the analyst's own first moves.
    - For an experiment, run `srm` on the assignment counts before you read any lift.
 6. Rule each alternative in or out with evidence, or say it is not ruled out. Always consider mix-shift, seasonality and day of week, data completeness, logging or definition changes, and the requester's cause. The evidence names a check or a query result from this session. Label each conclusion measured, inferred or guess.
 7. Write the readout below to `readout.md`, run `python3 <dir of this SKILL.md>/tools/verify_readout.py readout.md`, and fix the readout until it passes.
-8. If ds-verify sits next to this skill (`<dir of this SKILL.md>/../ds-verify/tools/ds_verify.py`), save the person's question as `request.md`, word for word and without these instructions. Then run `python3 <that file> readout.md --request request.md`, adding `--db <file>` when the data isn't `./warehouse.db` or `$DS_WAREHOUSE`. Fix what each FAIL line names and run it again until none is left. When a FAIL is about a number or a definition, fix the analysis and rerun the queries; rewording the readout doesn't fix it. Never edit a log or a check's output. `unverified` is fine: its "Needs a human" list is for the reviewer. Then send the readout as your final reply.
+8. If ds-verify sits next to this skill (`<dir of this SKILL.md>/../ds-verify/tools/ds_verify.py`), save the person's question as `request.md`, word for word and without these instructions. Then run `python3 <that file> readout.md --request request.md`, adding `--db <file>` when the data isn't `./warehouse.db` or `$DS_WAREHOUSE`. Fix what each FAIL line names and run it again:
+   - A FAIL about a number or a definition is fixed in the analysis, by rerunning the queries. Rewording the readout doesn't fix it.
+   - Never clear a FAIL by deleting a number, abstaining, pasting a result, citing a different query, or editing a log or a check's output. Tag an untagged number instead: `[given]` for one stated in the request. The Headline cites the query or check that produced it.
+   - If the same FAIL remains after two honest reruns and you believe the analysis is right, keep it, quote the FAIL line under Caveats, and send.
+
+   `unverified` is fine when the cause is outside your control, such as a result a person computed; its "Needs a human" list is for the reviewer. Then send the readout as your final reply.
 
 ## Queries
 

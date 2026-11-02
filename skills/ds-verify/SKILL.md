@@ -40,7 +40,7 @@ A ds-mode readout says where each number came from. This skill checks that the r
 4. Act on it:
    - Analyst: fix each failure, then run the script again. A failure about a number or a definition is fixed in the analysis, by rerunning the queries; rewording the readout doesn't fix it. Add its first line to Provenance's `- Verified:` line, after the verify_readout.py result. Don't change a check, a log or the request to make a failure go away.
    - Reviewer: work down the "Needs a human" list. It holds the failures and unchecked items, the numbers to check by hand, `[guess]` lines, checks that couldn't run, a missing reconciliation, and the `[given]` numbers to confirm against the request. A readout with a failure goes back to the analyst with the failure's line.
-   - An `overlay` failure means the readout and the team's metric definition disagree. Fix the readout. A change to `metrics.json` needs a person's approval; this skill never edits it.
+   - An `overlay` failure means the analysis and the team's metric definition disagree. Rerun the analysis on the definition. A change to `metrics.json` needs its owner's approval; this skill never edits it.
 
 ## The checks
 
@@ -56,7 +56,7 @@ A ds-mode readout says where each number came from. This skill checks that the r
 
 The overlay check finds a metric by its key in `metrics.json`, by an `aliases` list in its entry (for example `"aliases": ["点击率", "click-through rate"]`), or by its numerator and denominator in the Metric line.
 
-The Metric line's words are easy to change, so the check also reads the runner queries the Headline, Observed and Adjusted lines cite, directly, through a check's `from`, or through the query ids a pasted entry names. Their SQL must use the numerator, the denominator and each filter's column. When one query computes both definitions, the result column that holds the Headline number must be computed from the overlay's numerator and denominator. Each column name is read from the database (`base_columns()`, the second port point), so a ratio of aliases from a CTE is left alone. A Headline computed by hand is left alone too: it is already `unverified`.
+The Metric line's words are easy to change, so with a database the check also reads the SQL behind the estimates. It follows the runner queries the Headline, Observed and Adjusted lines cite: directly, through a check's `from`, through the query ids a pasted entry names, and back to the statement that created any scratch table those queries read. That SQL must use the numerator's and denominator's columns and each filter's column. When a query computes both definitions, the columns that hold the Headline number must include one computed from the overlay's numerator and denominator. An expression is judged only when every name in it is a column of the database (`base_columns()`, the second port point, which leaves scratch tables out), so a ratio of aliases from a CTE or a scratch table is left alone. A numerator or denominator written as prose rather than columns gives `could_not_verify`, for its owner to fix in metrics.json. The aggregates fed to a check aren't traced back to SQL.
 
 ## Porting replay to the warehouse
 
@@ -66,15 +66,6 @@ The Metric line's words are easy to change, so the check also reads the runner q
 
 It checks the readout against its own evidence. It can't tell whether the analysis asked the right question, chose the right comparison, or missed an alternative nobody listed. That is the reviewer's part: `ds-mode/references/review-checklist.md`.
 
-## How it was proved
+## How well it works
 
-`eval/verify_eval.py` runs this script on graded eval runs, without gold. The results below are in-sample: the rules were written after reading these runs and an adversarial review of them.
-
-- 68 Claude full-arm runs in the current readout format:
-  - It fails all 7 that the grader marks wrong: 5 ignored the overlay in the arm without the overlay step, 1 gave a percent level in pp, and 1 wrote no "ruled in/out" verdicts. None of the 7 is a wrong number caught by replay, because no run had one.
-  - Of the 61 marked right, 50 pass and 10 are unverified, for a pasted result or a Headline derived by hand.
-  - 1 fails. Its Headline gives a percent level in pp, a unit the grader let through.
-- All 381 runner queries replay to the logged rows.
-- 2 Codex validation runs: it fails both. The one marked right wrote "ruled in as unresolved possibilities".
-
-The held-out test ran on the 48 full-arm runs of the 2026-11-02 Codex matrix. It failed 9 of 10 wrong runs. It failed 22 of 38 right runs, each for a "ruled in" that meant "not excluded". 7 of the wrong runs were abstentions, which it couldn't yet see. Details: `docs/results.md`.
+Measured on graded eval runs with `eval/verify_eval.py`, in `docs/results.md`. That page stays out of this folder because the eval's full arm reads this skill.

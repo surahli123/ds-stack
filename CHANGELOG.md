@@ -5,7 +5,13 @@ Each version is the one in the plugin manifests (`.claude-plugin/`, `.codex-plug
 ## 0.8.0 (2026-11-02)
 
 - ds-mode runs ds-verify as its last step when ds-verify sits next to it, as in a plugin install. It saves the question as `request.md`, fixes every failure (in the analysis when it is about a number or a definition), and adds ds-verify's first line to Provenance. The eval's full arm now carries ds-verify beside ds-mode.
-- ds-verify's overlay check reads the SQL behind the Headline, not only the Metric line. Once ds-verify became a gate, rewording the Metric line could have passed a number computed on another definition. On the 3 wrong f6 runs from the arm without the overlay step, that rewording now still fails all 3; before, it passed all 3. It adds no failure to the 107 right runs.
+- ds-verify's overlay check reads the SQL behind the Headline, not only the Metric line. Once ds-verify became a gate, rewording the Metric line could have passed a number computed on another definition. On the 3 wrong f6 runs from the arm without the overlay step, that rewording now still fails all 3; before, it passed all 3. It adds no failure to the 112 right runs.
+- An adversarial review closed the remaining ways around the SQL check, and the false failures an honest agent couldn't fix:
+  - The check follows pasted entries and checks to the queries behind them, and judges every column that holds the Headline number, text cells included.
+  - It follows scratch tables back to the statement that made them, leaves expressions of aliases alone, and returns `could_not_verify` for a definition written as prose.
+  - A crash inside any check becomes a `could_not_verify` finding, so the report still prints.
+  - ds-mode's step 8 forbids clearing a FAIL by deleting a number, abstaining, pasting or citing another query, and stops after two honest reruns of the same FAIL.
+  - ds-verify's in-sample results moved to `docs/results.md`, out of the skill the eval's full arm reads.
 
 ## 0.7.0 (2026-11-02)
 
