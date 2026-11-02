@@ -2,6 +2,13 @@
 
 Each version is the one in the plugin manifests (`.claude-plugin/`, `.codex-plugin/`, `.cursor-plugin/`). Change the version in all of them, and add its section here, in the same pull request; `tests/test_packaging.py` checks both.
 
+## 0.7.0 (2026-11-02)
+
+- ds-mode gains a third verdict for alternatives, `not ruled out`, followed by what would decide it. `ruled in` now only means the evidence shows it. In the Codex matrix, "ruled in as an unresolved possibility" cost f1 in English.
+- ds-verify accepts `not ruled out`, and its failure for a hedged "ruled in" names it. It also fails a `can't tell` Headline when Adjusted has a number, the Causal effect is not identified and no completeness, srm or fanout check flagged. Codex did this on f1 and f3 in Chinese.
+- ds-interrogate records the model a reviewer CLI ran when `reviewers.json` leaves it as "-", and asks for findings in the readout's language.
+- The Codex acceptance and ds-interrogate smoke results from 2026-11-02 are recorded, with ds-verify's held-out test (`docs/results.md`).
+
 ## 0.6.0 (2026-11-02)
 
 - New skill `ds-ready`. It audits a work project before ds-stack runs on it. It checks the overlay's metric definitions (required fields, aliases, prose numerators), the sources against the database, the project's AGENTS.md, and the tables and metrics that past query logs and readouts used. It lists the gaps as blocking or recommended and writes questions for each metric owner. It never drafts a definition.

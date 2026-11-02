@@ -165,6 +165,15 @@ def reviewer_env(workdir):
     return env
 
 
+SERVED_MODEL = re.compile(r"^model:\s*([\w.:/-]+)\s*$", re.M)  # the header Codex prints on stderr
+
+
+def served_model(log_text):
+    """The model a reviewer CLI says it ran, when it prints one, else None."""
+    match = SERVED_MODEL.search(log_text or "")
+    return match.group(1) if match else None
+
+
 def run_reviewer(reviewer, workdir, prompt_file, timeout):
     cmd = [tok.replace("{model}", reviewer["model"] or "-").replace("{prompt_file}", prompt_file) for tok in reviewer["cmd"]]
     started = time.time()
@@ -180,7 +189,7 @@ def run_reviewer(reviewer, workdir, prompt_file, timeout):
     stdout, stderr = (b.decode("utf-8", errors="replace") for b in (out or b"", err or b""))
     with open(os.path.join(workdir, "reviewer.log"), "w", encoding="utf-8") as handle:
         handle.write(f"$ {shlex.join(cmd)}\nexit {code} after {time.time() - started:.0f}s\n\n{stderr}\n\n{stdout}")
-    return stdout, code
+    return stdout, code, served_model(stderr) if reviewer["model"] in (None, "", "-") else None
 
 
 def read_findings(workdir, stdout):
@@ -319,8 +328,10 @@ def review(reviewer, args, request, out_dir, index):
     workdir = tempfile.mkdtemp(prefix="ds-interrogate-review-")
     try:
         prompt_file = prepare(workdir, args.readout, request, args.queries, args.checks, args.db)
-        stdout, code = run_reviewer(reviewer, workdir, prompt_file, args.timeout)
+        stdout, code, served = run_reviewer(reviewer, workdir, prompt_file, args.timeout)
         result["exit"] = code
+        if served:  # "-" means the CLI's default model; record which one it was
+            result["reviewer"] = f"{reviewer['family']}:{served}"
         findings = read_findings(workdir, stdout)
         review_queries = dv.vr.read_jsonl(os.path.join(workdir, "review.queries.log"))
         if findings is None:

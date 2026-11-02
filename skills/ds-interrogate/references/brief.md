@@ -26,4 +26,6 @@ Prove each finding with a query you ran. The query that proves a finding must re
 - `shows`: what that query's output shows, quoting its numbers as the output prints them (write a share as 0.5507 or 55.07%);
 - `why_it_matters`: how it changes the answer or the decision.
 
+Write `title`, `shows` and `why_it_matters` in the language of the readout's prose, whatever your own settings say.
+
 Leave out anything you did not prove with a query, and anything about style or wording. An empty list, `[]`, is a valid result. Don't edit `readout.md` or the logs. When `findings.json` is written, reply with one line: the number of findings.

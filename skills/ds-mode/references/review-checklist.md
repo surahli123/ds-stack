@@ -26,6 +26,7 @@ If this fails, send it back now. Nothing below means anything for a number nobod
 
 - Are the standing alternatives all there: mix-shift, seasonality and day of week, data completeness, logging or definition changes, and the requester's cause?
 - Would each piece of evidence look different if its alternative were true? A check that can't see the alternative doesn't rule it out.
+- Does `ruled in` mean shown? An alternative the data can't decide should read `not ruled out`, with what would decide it.
 - Could something else that changed at the same time (a launch, a pricing change, a tracking change) explain the move, and is it addressed?
 - Are the comparison windows the same length, the same weekdays and complete, and were they fixed before the results were seen?
 - Are segments defined the same way on both sides, and did a coarser grain agree with the finer one?
@@ -35,6 +36,7 @@ If this fails, send it back now. Nothing below means anything for a number nobod
 - Did every applicable check run: `completeness` for each period, `fanout` after each join, `mix_shift` for a moved rate, `srm` before an experiment lift? Is each skipped one explained?
 - Does each check line match the logged output exactly?
 - Does each `fail` change the answer, or does the readout show with evidence why not? If it can't be resolved, is the headline `can't tell`?
+- If the headline is `can't tell`, is the reason a data problem? An unidentified cause alone isn't one: the headline should be Adjusted, with its assumption.
 - Does each `flag` show up in the Answer as how much of the move is mix and how much is within-segment?
 
 ## 6. Does causal language match the design?

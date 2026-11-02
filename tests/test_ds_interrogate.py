@@ -27,6 +27,7 @@ QUOTE = next(line.split("[")[0].strip() for line in open(os.path.join(RUN, "resu
 # The template's {id} becomes the printed query id and {n} the first number in the first row.
 FAKE = r'''
 import json, re, subprocess, sys
+print("model: gpt-served-1", file=sys.stderr)  # the header Codex prints
 brief = open(sys.argv[2]).read()
 spec = json.loads(open("SPEC").read()) if __import__("os").path.exists("SPEC") else None
 cmd = re.search(r'^    (python3 .+?) "SELECT \.\.\."$', brief, re.M).group(1)
@@ -228,6 +229,21 @@ def test_two_findings_on_one_line_are_both_kept(setup):
     tmp = setup(["gpt"], {"sql": SQL, "findings": [finding(), finding(title="A second, different fault")]})
     code, report = run(tmp, "--analyst-family", "claude")
     assert code == 1 and len(report["findings"]) == 2 and report["findings"][0]["reviewers"] == ["gpt:gpt-m"]
+
+
+def test_the_default_model_is_recorded_as_the_one_that_ran(setup):
+    tmp = setup(["gpt"], {"sql": SQL, "findings": [finding()]})
+    reviewers = tmp / "overlay" / "reviewers.json"
+    config = json.loads(reviewers.read_text())
+    config["reviewers"][0]["model"] = "-"
+    reviewers.write_text(json.dumps(config))
+    code, report = run(tmp, "--analyst-family", "claude")
+    assert code == 1 and report["findings"][0]["reviewers"] == ["gpt:gpt-served-1"]
+
+
+def test_the_brief_asks_for_findings_in_the_readouts_language():
+    with open(os.path.join(ROOT, "skills", "ds-interrogate", "references", "brief.md"), encoding="utf-8") as handle:
+        assert "in the language of the readout's prose" in handle.read()
 
 
 PROBE = """

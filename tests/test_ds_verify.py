@@ -299,9 +299,47 @@ def test_a_hedge_counts_only_when_it_qualifies_the_verdict(line, status):
     assert statuses(readout(alternatives=(line,)), "alternatives")[-1][0] == status
 
 
-def test_not_ruled_out_is_not_a_verdict():
-    lines = ("  - v2: not ruled out; nothing separates it [q1] [guess]", "  - Mix: cannot be ruled out [q1] [guess]")
-    assert ("fail", "none of the 2 alternatives says 'ruled in' or 'ruled out'") in statuses(readout(alternatives=lines), "alternatives")
+def test_not_ruled_out_is_the_verdict_for_an_open_alternative():
+    lines = ("  - v2: not ruled out; a holdout would decide it [q1] [guess]", "  - Mix: cannot be ruled out [q1] [guess]")
+    found = statuses(readout(alternatives=lines), "alternatives")
+    assert [s for s, _ in found] == ["pass", "pass"] and found[0][1].startswith("not ruled out")
+
+
+def test_not_ruled_in_alone_is_no_verdict():
+    found = statuses(readout(alternatives=("  - v2: not ruled in [q1] [guess]",)), "alternatives")
+    assert ("fail", "none of the 1 alternatives says 'ruled in', 'ruled out' or 'not ruled out'") in found
+
+
+def test_a_hedged_ruled_in_points_to_not_ruled_out():
+    # The Codex wording on 2026-11-02: an open alternative written as "ruled in".
+    line = "  - Logging changes: ruled in as unresolved possibilities; no audit exists [q1] [inferred]"
+    status, message = statuses(readout(alternatives=(line,)), "alternatives")[-1]
+    assert status == "fail" and "Write 'not ruled out'" in message
+
+
+ONLY_MIX = [{"id": "mix_shift#1", "check": "mix_shift", "status": "flag", "from": ["q1"], "summary": "mix -1.36 pp"},
+            {"id": "completeness#1", "check": "completeness", "status": "pass", "from": ["q1"], "summary": "100%"}]
+
+
+def test_abstaining_only_because_the_cause_is_unidentified_fails():
+    # Codex, 2026-11-02, f1 and f3 in Chinese: "Headline: can't tell" next to a computed Adjusted.
+    found = statuses(readout(headline="Headline: can't tell [inferred]"), "estimand", checks=ONLY_MIX)
+    assert found[-1][0] == "fail" and "not a reason to abstain" in found[-1][1]
+
+
+@pytest.mark.parametrize("checks, adjusted, causal", [
+    (CHECKS, None, None),                                                             # srm failed: a data problem
+    ([*ONLY_MIX, {"id": "completeness#2", "check": "completeness", "status": "could not run"}], None, None),
+    (ONLY_MIX, "- Adjusted: not computed (one week only, 7 days)", None),
+    (ONLY_MIX, None, "- Causal effect: -1.36 pp, from the randomized test [q1]"),
+    (None, None, None),                                                               # no check log: not judged here
+])
+def test_abstaining_is_left_alone_when_the_data_or_design_explains_it(checks, adjusted, causal):
+    text = readout(headline="Headline: can't tell", causal=causal or "- Causal effect: not identified (a holdout would)")
+    if adjusted:
+        text = "\n".join(adjusted if l.startswith("- Adjusted") else l for l in text.splitlines())
+    found = statuses(text, "estimand", checks=checks)
+    assert not any("not a reason to abstain" in m for _, m in found), found
 
 
 @pytest.mark.parametrize("block", [
