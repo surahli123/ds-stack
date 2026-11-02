@@ -27,7 +27,8 @@ Open Codex or Cursor in that directory and paste in the text of `task.md`. It pa
 
 - the readout's `Adjusted:` line is about 0 pp, `Causal effect:` says not identified, and mix shift (mobile's share rising) is ruled in;
 - `.ds-queries.log`, `.ds-checks.log` and `readout.md` appear in the directory;
-- `python3 ~/ds-skills/ds-verify/tools/ds_verify.py readout.md --db warehouse.db --request task.md`, run by you, prints `ds-verify: pass`.
+- the readout's `- Verified:` line ends with `ds-verify: pass`, which shows ds-mode's last step ran it;
+- `python3 ~/ds-skills/ds-verify/tools/ds_verify.py readout.md --db warehouse.db --request task.md`, run by you, prints `ds-verify: pass` too.
 
 When it fails, the usual cause is a script path the agent can't resolve. Check that `AGENTS.md` uses an absolute path.
 
