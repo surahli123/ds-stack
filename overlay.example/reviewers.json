@@ -1,0 +1,6 @@
+{
+  "reviewers": [
+    {"family": "gpt", "model": "-", "cmd": ["sh", "{tools}/reviewers/codex.sh", "{model}", "{prompt_file}"]},
+    {"family": "claude", "model": "-", "cmd": ["sh", "{tools}/reviewers/claude.sh", "{model}", "{prompt_file}"]}
+  ]
+}

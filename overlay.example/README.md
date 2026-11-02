@@ -23,6 +23,8 @@ git config core.hooksPath .githooks                 # in this repo: enables the 
 
 **metrics.json.** Each metric needs a name, numerator, denominator, filters, grain, source and an owner. Add `verified` (when and how the definition was reconciled with the dashboard), `pitfalls` (traps a newcomer falls into) and `aliases` (other names people use, such as "点击率", so ds-verify can match a request to the entry). Write the numerator, denominator and filters as the column names and expressions the agent will write, because ds-verify looks for them in the readout's Metric line. The agent reads this file so that "CTR" means the dashboard's CTR and not one it invented. Write each entry yourself and verify it against data. Don't let an agent draft it, because a wrong definition here becomes every later answer. Keep it as definitions only, with no data.
 
+**reviewers.json.** The reviewer agents ds-interrogate may run, in order of preference. Each entry gives a model family (`gpt`, `claude`, `grok`, ...), a model (`-` for the CLI's own default) and a command; `{tools}` is the skill's `tools/` folder. List only CLIs approved for company data. For Cursor, add an entry with the family of the model and `["sh", "{tools}/reviewers/cursor.sh", "<model slug>", "{prompt_file}"]`, using a slug from Cursor's model list.
+
 **runner.json.** Settings for the guarded query runner. A warehouse adapter must keep the same contract as `safety/guarded_query.py`:
 - writes only to tables that start with `scratch_prefix`, plus a per-run suffix
 - one statement per call

@@ -4,11 +4,12 @@ You need one folder and one line of config. Data comes through the tools you alr
 
 ## Set up (about 10 minutes)
 
-1. Copy `skills/ds-mode/` and `skills/ds-verify/` to a place outside every repo, for example `~/ds-skills/`. Keep them side by side: ds-verify uses ds-mode's tools. Both run on Python's standard library, so there is nothing to install. For test 1, also copy the two files in `eval/fixtures/f1/`.
+1. Copy `skills/ds-mode/`, `skills/ds-verify/` and `skills/ds-interrogate/` to a place outside every repo, for example `~/ds-skills/`. Keep them side by side: the later two use ds-mode's tools. Both run on Python's standard library, so there is nothing to install. For test 1, also copy the two files in `eval/fixtures/f1/`.
 2. In the root of the project you work in (the SMA project, for example), create `AGENTS.md` with one line. Codex and Cursor both read it. Use the absolute path:
    ```
    For any data analysis request, read and follow /Users/<you>/ds-skills/ds-mode/SKILL.md
    To check a finished readout, read and follow /Users/<you>/ds-skills/ds-verify/SKILL.md
+   For a second opinion from another model, read and follow /Users/<you>/ds-skills/ds-interrogate/SKILL.md
    ```
    To keep the file out of that project's git, add `AGENTS.md` to `.git/info/exclude`.
 3. Optional: write the definitions of 2-3 metrics you use often into `~/ds-overlay/metrics.json`, giving numerator, denominator, filters, grain and source for each, then `export DS_OVERLAY_DIR=~/ds-overlay`. Without it, ds-mode still runs and labels the definition `[guess]`.
