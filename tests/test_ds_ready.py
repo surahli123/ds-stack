@@ -148,3 +148,147 @@ def test_the_audit_never_writes_to_the_overlay(tmp_path):
 
 def test_a_missing_project_is_a_usage_error(tmp_path):
     assert audit.main(["--project", str(tmp_path / "nope")]) == 3
+
+
+# --- regressions from the adversarial review ----------------------------------------------------------------
+
+def readout_with(folder, name, metric_line):
+    path = folder / name
+    path.mkdir(parents=True)
+    (path / "readout.md").write_text(f"## Answer\nHeadline: 8.3 %\n\n## Provenance\n- Metric: {metric_line}\n", encoding="utf-8")
+
+
+def test_an_out_folder_with_other_files_is_refused_and_never_overwritten(tmp_path):
+    proj = project(tmp_path)
+    (proj / ".gitignore").write_text("*.pyc\nsecrets.env\n")
+    assert audit.main(["--project", str(proj), "--overlay", str(overlay(tmp_path)), "--out", str(proj)]) == 3
+    assert (proj / ".gitignore").read_text() == "*.pyc\nsecrets.env\n"
+
+
+def test_the_default_out_is_inside_the_project(tmp_path, monkeypatch):
+    proj = project(tmp_path)
+    elsewhere = tmp_path / "elsewhere"
+    elsewhere.mkdir()
+    monkeypatch.chdir(elsewhere)
+    audit.main(["--project", str(proj), "--overlay", str(overlay(tmp_path))])
+    assert (proj / "ds-ready" / ".gitignore").exists() and not (elsewhere / "ds-ready").exists()
+
+
+def test_one_metric_guessed_in_four_wordings_is_one_blocking_gap(tmp_path):
+    proj = project(tmp_path)
+    for i, line in enumerate(["conversions / searches, stated here [guess]. There is no metrics.json.",
+                              "sum(conversions) / sum(searches), stated here [guess]",
+                              "conversion rate = conversions ÷ searches over the week, stated here [guess]",
+                              "转化率 = conversions ÷ searches（周合计），stated here [guess]"]):
+        readout_with(proj, f"r{i}", line)
+    code, report, _ = audit_of(tmp_path, overlay(tmp_path), proj)
+    guessed = [m for m in messages(report, "blocking") if "defined a metric that metrics.json lacks" in m]
+    assert code == 1 and len(guessed) == 1 and guessed[0].startswith("4 readout(s)")
+
+
+def test_a_line_taken_from_metrics_json_is_not_a_guess(tmp_path):
+    proj = project(tmp_path)
+    for i in range(2):
+        readout_with(proj, f"r{i}", "searches_with_click / searches_with_results, from metrics.json")
+    _, report, _ = audit_of(tmp_path, overlay(tmp_path), proj)
+    assert not any("defined a metric" in m or "wrote their own" in m for m in messages(report))
+
+
+@pytest.mark.parametrize("change, words", [
+    ({"numerator": []}, "wrongly typed numerator"),
+    ({"denominator": "   "}, "wrongly typed denominator"),
+    ({"filters": "traffic_type = 'external'"}, "filters (a list of strings)"),
+    ({"available": "false"}, "available must be the JSON value true or false"),
+])
+def test_wrong_types_are_blocking(tmp_path, change, words):
+    code, report, _ = audit_of(tmp_path, overlay(tmp_path, {"ctr": {**CTR, "aliases": ["x"], **change}}), project(tmp_path))
+    assert code == 1 and any(words in m for m in messages(report, "blocking")), messages(report)
+
+
+def test_odd_but_harmless_values_do_not_crash(tmp_path):
+    metrics = {"ctr": {**CTR, "aliases": None, "owner": ["alice", "bob"]}}
+    proj = project(tmp_path)
+    readout_with(proj, "r1", "clicks / searches, stated here [guess]")
+    code, report, _ = audit_of(tmp_path, overlay(tmp_path, metrics), proj)
+    assert code in (0, 1) and report["gaps"]
+
+
+def test_a_scan_cut_short_is_blocking(tmp_path):
+    proj = project(tmp_path)
+    for i in range(12):
+        (proj / f"note{i}.md").write_text("notes")
+    code = audit.main(["--project", str(proj), "--overlay", str(overlay(tmp_path)), "--max-files", "10",
+                       "--out", str(tmp_path / "q"), "--json", str(tmp_path / "r.json")])
+    report = json.loads((tmp_path / "r.json").read_text())
+    assert code == 1 and any("scan stopped" in m for m in messages(report, "blocking"))
+
+
+@pytest.mark.parametrize("line, blocking", [
+    ("read and follow `{root}/skills/ds-mode/SKILL.md`.", False),
+    ("read and follow [ds-mode]({root}/skills/ds-mode/SKILL.md)", False),
+    ("read and follow skills/ds-mode/SKILL.md", False),
+    ("<!-- read and follow {root}/skills/ds-mode/SKILL.md -->", True),
+])
+def test_agents_md_paths_are_read_like_a_person_would(tmp_path, line, blocking):
+    proj = tmp_path / "project"
+    proj.mkdir()
+    if "skills/ds-mode" in line and "{root}" not in line:
+        os.symlink(os.path.join(ROOT, "skills"), proj / "skills")
+    (proj / "AGENTS.md").write_text(line.format(root=ROOT) + "\n")
+    _, report, _ = audit_of(tmp_path, overlay(tmp_path), proj)
+    assert any("ds-mode" in m for m in messages(report, "blocking")) == blocking
+
+
+def test_home_in_agents_md_is_expanded_and_a_stale_ds_verify_is_only_recommended(tmp_path, monkeypatch):
+    monkeypatch.setenv("HOME", str(tmp_path / "home"))
+    os.makedirs(tmp_path / "home")
+    os.symlink(os.path.join(ROOT, "skills"), tmp_path / "home" / "ds-skills")
+    proj = tmp_path / "project"
+    proj.mkdir()
+    (proj / "AGENTS.md").write_text("Follow $HOME/ds-skills/ds-mode/SKILL.md\nCheck with /nowhere/ds-verify/SKILL.md\n")
+    _, report, _ = audit_of(tmp_path, overlay(tmp_path), proj)
+    assert not any("playbook" == g["area"] and g["severity"] == "blocking" for g in report["gaps"])
+    assert any("ds-verify/SKILL.md, which doesn't exist" in m for m in messages(report, "recommended"))
+
+
+def test_the_column_check_ignores_literals_functions_and_case(tmp_path):
+    db = os.path.join(FIXTURES, "f6", "warehouse.db")
+    good = {**CTR, "source": "main.search_daily_v", "numerator": "SEARCHES_WITH_CLICK",
+            "filters": ["traffic_type = 'local_services'", "date >= date('now', '-7 day')"], "aliases": ["x"]}
+    code, report, _ = audit_of(tmp_path, overlay(tmp_path, {"ctr": good}), project(tmp_path), db)
+    assert not any(g["area"] == "data" for g in report["gaps"]), messages(report)
+    typo = {**CTR, "numerator": "clickz", "aliases": ["x"]}
+    _, report, _ = audit_of(tmp_path / "t2", overlay(mk(tmp_path / "t2"), {"ctr": typo}), project(tmp_path / "t2"), db)
+    assert any("clickz isn't a column" in m for m in messages(report, "blocking"))
+
+
+def mk(path):
+    path.mkdir(parents=True, exist_ok=True)
+    return path
+
+
+def test_a_database_that_is_not_sqlite_is_a_gap_not_a_crash(tmp_path):
+    bogus = tmp_path / "warehouse.db"
+    bogus.write_text("this is not a database")
+    code, report, _ = audit_of(tmp_path, overlay(tmp_path), project(tmp_path), str(bogus))
+    assert code == 1 and any("can't be read as a SQLite database" in m for m in messages(report, "blocking"))
+
+
+def test_a_denylist_in_another_encoding_does_not_crash(tmp_path):
+    ov = overlay(tmp_path)
+    (ov / "denylist.txt").write_bytes("内部代号\n".encode("gbk"))
+    code, _, _ = audit_of(tmp_path, ov, project(tmp_path))
+    assert code in (0, 1)
+
+
+def test_an_internal_error_is_exit_3(tmp_path, monkeypatch, capsys):
+    monkeypatch.setattr(audit, "audit_overlay", lambda *a: 1 / 0)
+    assert audit.main(["--project", str(project(tmp_path)), "--out", str(tmp_path / "q")]) == 3
+    assert "internal error: ZeroDivisionError" in capsys.readouterr().err
+
+
+def test_only_real_tables_are_read_from_query_logs():
+    sql = ("with t as (select * from search_daily), u as (select 1 from Search_Daily) "
+           "select extract(day from ts), * from t join main.search_daily s on 1=1 -- from old_table\n"
+           "join information_schema.columns c on 1=1 where x = 'from fake_table'")
+    assert audit.tables_in(sql) == {"search_daily"}

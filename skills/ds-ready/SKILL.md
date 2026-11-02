@@ -22,7 +22,7 @@ ds-mode can only be as right as the definitions it reads. This skill checks that
    python3 <skills>/ds-ready/tools/audit.py --db <warehouse.db>
    ```
 
-   `--db` checks that each metric's source table and columns exist, through the SQLite reference adapter. A warehouse port replaces `table_columns()` in `tools/audit.py`; without either, the source check is skipped. `--project <folder>` audits a folder other than the current one.
+   `--db` (else `$DS_WAREHOUSE`) checks each metric's source table and columns through the SQLite reference adapter. A warehouse port replaces `table_columns()` in `tools/audit.py`; without either, the source check is skipped. `--project <folder>` audits another folder. The questions go to `<project>/ds-ready/`, or to an empty `--out`; the audit refuses a folder that holds anything else. `--json` writes the report wherever you point it, outside that folder's `.gitignore`.
 2. Read the first line: `ready` or `not ready`, with the count of blocking and recommended gaps and the number of past query logs and readouts it read.
 3. Fix the blocking gaps first:
    - a missing or invalid overlay or metrics.json;
@@ -38,10 +38,13 @@ ds-mode can only be as right as the definitions it reads. This skill checks that
 | Area | Blocking when | Recommended when |
 |---|---|---|
 | Overlay | `DS_OVERLAY_DIR` is unset, the folder is missing, or metrics.json is missing or invalid | runner.json, reviewers.json or denylist.txt is missing, or the denylist is empty |
-| Metrics | An entry lacks a required field, or an unavailable one lacks its note or owner | It lacks `verified`, `pitfalls` or `aliases`, or its numerator reads like prose |
-| Data (`--db`) | A source table or a named column doesn't exist | |
-| Playbook | AGENTS.md is missing, or doesn't point to an existing ds-mode SKILL.md | It doesn't point to ds-verify, or readouts wrote their own version of a metric the overlay defines |
-| Tables | | A table in past query logs has no grain, keys, `complete_when`, owner or pitfalls in tables.json |
-| Past readouts | Two or more readouts defined, by themselves, a metric that metrics.json lacks | One readout did |
+| Metrics | An entry lacks a field, has an empty or wrongly typed one, or sets `available` to anything but true or false | It lacks `verified`, `pitfalls` or `aliases`, or its numerator reads like prose |
+| Data (`--db`) | The database can't be read, a source doesn't exist, or a numerator or denominator names a missing column | A filter names something that isn't a column (quote it if it is a value) |
+| Playbook | AGENTS.md is missing, or doesn't point to an existing ds-mode SKILL.md | Its ds-verify path is missing or stale, or readouts wrote their own version of a metric the overlay defines |
+| Tables | tables.json is invalid | A table in past query logs has no grain, keys, `complete_when`, owner or pitfalls in tables.json |
+| Past readouts | Two or more readouts defined the same metric themselves ([guess]), and metrics.json lacks it | One readout did |
+| Scan | It stopped at `--max-files` (default 5000) readouts and logs, so some were missed | |
 
-The questions and the report name internal metrics and tables, so `ds-ready/` gets a `.gitignore`.
+Paths in AGENTS.md may use `~`, `$HOME` or a path relative to the project; one inside an HTML comment doesn't count. Readouts that define one metric in different words are grouped by the columns they use.
+
+The questions name internal metrics and tables, so a folder the audit creates gets a `.gitignore`. Exit code: 0 ready, 1 not ready, 3 a usage or internal error.
