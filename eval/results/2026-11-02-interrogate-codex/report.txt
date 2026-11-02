@@ -34,7 +34,7 @@ Quote: v2 lowered CTR (PM's cause): ruled out as the main driver; within-segment
 
 Dropped: []
 
-Pushed: NOT PUSHED; intended branch results/2026-11-02-interrogate-codex. Existing GitHub authentication is blocked; see push-status.txt after attempt.
+Pushed: NOT PUSHED; intended branch results/2026-11-02-interrogate-codex. Existing GitHub authentication is blocked; see push-status.txt (push exit 128).
 
 Raw input/output evidence retained locally at <HOME>/ds-accept-control-2026-11-02-0911/raw-interrogate. No database copied into published result directory. Reviewer logs reduced to public metadata/error extracts; identifying paths redacted.
 
