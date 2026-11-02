@@ -158,7 +158,7 @@ Failing runs:
 
 2026-11-02-0911-codex-zh/f6__checks__3: abstained on a case with a valid answer
 
-Pushed: results/2026-11-02-0911-codex (remote SHA recorded in final handoff after verification).
+Pushed: NOT PUSHED. Local branch results/2026-11-02-0911-codex. Git push failed: fatal: could not read Username for https://github.com: Device not configured. gh repository check also returned HTTP 401. Credentials unchanged; run markers retained.
 
 Contaminated earlier directories: eval/results/2026-10-14-codex-en; eval/results/2026-10-14-codex-zh; retained ungraded in original checkout.
 
