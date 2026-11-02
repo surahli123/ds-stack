@@ -4,6 +4,7 @@ can score the runs that leave no transcript. A tiny fake agent (python3 -c ...) 
 import json
 import os
 import shlex
+import subprocess
 import sys
 
 import cold_read
@@ -330,6 +331,20 @@ def test_the_arm_note_is_written_for_claude_codex_and_cursor(tmp_path, arm, note
     work = run_arms.prepare_workdir(str(tmp_path), "f1", arm)
     for name in ("CLAUDE.md", "AGENTS.md"):
         assert open(os.path.join(work, name)).read() == note
+
+
+def test_the_full_arm_carries_a_ds_verify_that_runs_from_there(tmp_path):
+    work = run_arms.prepare_workdir(str(tmp_path), "f1", "full")
+    script = os.path.join(work, ".claude", "skills", "ds-verify", "tools", "ds_verify.py")
+    readout = os.path.join(work, "readout.md")
+    with open(readout, "w") as handle:
+        handle.write("## Answer\nHeadline: can't tell\n")
+    # It imports ds-mode's tools from the copy beside it, never from the repository.
+    done = subprocess.run([sys.executable, "-I", script, readout], cwd=work, capture_output=True, text=True)
+    assert done.returncode in (1, 2) and done.stdout.startswith("ds-verify: "), done.stderr
+    for arm in ("baseline", "checks"):
+        other = run_arms.prepare_workdir(str(tmp_path / arm), "f1", arm)
+        assert not os.path.exists(os.path.join(other, ".claude", "skills", "ds-verify"))
 
 
 def test_the_baseline_arm_gets_no_note(tmp_path):

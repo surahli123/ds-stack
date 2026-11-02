@@ -26,7 +26,8 @@ so grade such runs with `grade.py --allow-no-transcript`.
 Arms:
   baseline  plain prompting
   checks    checks/ plus a one-line instruction to run them
-  full      the ds-mode skill (method + checks + readout), pointed to by CLAUDE.md and AGENTS.md
+  full      the ds-mode skill (method + checks + readout) with ds-verify next to it, pointed to by
+            CLAUDE.md and AGENTS.md
 
 Execution: each run's meta.json records "execution" (eval/execution.py): "ok"; an agent limit (timeout,
 max_turns, empty_reply), graded as the miss it is; or why the run didn't execute: not_isolated, rate_limited,
@@ -57,6 +58,7 @@ import uuid
 HERE = os.path.dirname(os.path.abspath(__file__))
 ROOT = os.path.dirname(HERE)
 SKILL_DIR = os.path.join(ROOT, "skills", "ds-mode")
+VERIFY_DIR = os.path.join(ROOT, "skills", "ds-verify")
 FIXTURES = os.path.join(HERE, "fixtures")
 sys.path.insert(0, HERE)
 
@@ -123,6 +125,8 @@ def prepare_workdir(job_root, fixture, arm):
         write_note(work, CHECKS_ONLY_NOTE)
     elif arm == "full":
         shutil.copytree(SKILL_DIR, os.path.join(work, ".claude", "skills", "ds-mode"), ignore=SKIP_IN_COPY)
+        # ds-mode's last step runs ds-verify when it sits next to it, as it does in a plugin install.
+        shutil.copytree(VERIFY_DIR, os.path.join(work, ".claude", "skills", "ds-verify"), ignore=SKIP_IN_COPY)
         write_note(work, FULL_NOTE)
     return work
 

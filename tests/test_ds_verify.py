@@ -93,7 +93,8 @@ def test_without_a_database_replay_could_not_verify_and_a_pasted_result_never_pa
 
 # --- each rule on a small readout ----------------------------------------------------------------------------
 
-QUERIES = [{"id": "q1", "status": "ok", "source": "runner", "sql": "select 1", "rows": [[0.3012, 0.2876]]}]
+QUERIES = [{"id": "q1", "status": "ok", "source": "runner", "rows": [[0.3012, 0.2876]],
+            "sql": "select sum(searches_with_click), sum(searches_with_results) from search_daily"}]
 CHECKS = [{"id": "srm#1", "check": "srm", "status": "fail", "from": ["q1"], "summary": "51.2/48.8 against 50/50"},
           {"id": "mix_shift#1", "check": "mix_shift", "status": "flag", "from": ["q1"], "summary": "mix -1.36 pp"}]
 
@@ -299,6 +300,39 @@ def test_a_hedge_counts_only_when_it_qualifies_the_verdict(line, status):
     assert statuses(readout(alternatives=(line,)), "alternatives")[-1][0] == status
 
 
+F6_DB = os.path.join(FIXTURES, "f6", "warehouse.db")  # has searches_with_click, searches_with_results, traffic_type
+CTR_OVERLAY = {"ctr": {"numerator": "searches_with_click", "denominator": "searches_with_results",
+                       "filters": ["traffic_type = 'external'"]}}
+EXTERNAL = [{"id": "q1", "status": "ok", "source": "runner", "rows": [[0.3012, 0.2876]],
+             "sql": "select sum(searches_with_click), sum(searches_with_results) from search_daily_v "
+                    "where traffic_type = 'external'"}]
+
+
+def overlay_findings(tmp_path, queries, text=None):
+    (tmp_path / "metrics.json").write_text(json.dumps(CTR_OVERLAY))
+    text = text or readout().replace("from metrics.json", "traffic_type = 'external', from metrics.json")
+    report = ds_verify.run_all(text, queries, CHECKS, F6_DB, str(tmp_path), "What was CTR?")
+    return [(f["status"], f["message"]) for f in report["findings"] if f["check"] == "overlay"]
+
+
+def test_the_query_behind_the_headline_must_use_the_overlay_definition(tmp_path):
+    assert all(s == "pass" for s, _ in overlay_findings(tmp_path, EXTERNAL))
+    # The Metric line copied from metrics.json, the number computed another way: rewording doesn't pass.
+    other = [{**EXTERNAL[0], "sql": "select sum(clicks), sum(searches) from search_daily_v"}]
+    found = overlay_findings(tmp_path, other)
+    assert any(s == "fail" and "searches_with_click, searches_with_results, traffic_type from" in m
+               and "rewording" in m for s, m in found), found
+
+
+def test_a_pasted_interval_is_followed_to_the_query_it_names(tmp_path):
+    pasted = {"id": "q2", "status": "ok", "source": "pasted", "sql": "Wilson interval computed from q1", "rows": [[1]]}
+    text = readout().replace("from metrics.json", "traffic_type = 'external', from metrics.json") \
+                    .replace("Headline: -1.36 pp (-1.5 to -1.2) [q1]", "Headline: -1.36 pp (-1.5 to -1.2) [q2]")
+    assert all(s == "pass" for s, _ in overlay_findings(tmp_path, [*EXTERNAL, pasted], text))
+    lone = {**pasted, "sql": "Wilson interval, by hand"}
+    assert ds_verify.sql_behind_estimates("## Answer\nHeadline: 50.1% [q2]\n", [*EXTERNAL, lone], []) == []
+
+
 def test_not_ruled_out_is_the_verdict_for_an_open_alternative():
     lines = ("  - v2: not ruled out; a holdout would decide it [q1] [guess]", "  - Mix: cannot be ruled out [q1] [guess]")
     found = statuses(readout(alternatives=lines), "alternatives")
@@ -382,3 +416,151 @@ def test_the_cli_defaults_to_warehouse_db_in_the_analysis_directory(tmp_path):
     proc = subprocess.run([sys.executable, SCRIPT, "readout.md", "--request", "request.md"], cwd=tmp_path,
                           capture_output=True, text=True, env=env)
     assert proc.returncode == 0 and proc.stdout.startswith("ds-verify: pass"), proc.stdout
+
+
+def test_the_headline_column_must_be_the_overlay_definition_when_a_query_computes_both(tmp_path):
+    # From the arm without the overlay step: one query computed both rates and the Headline took the wrong one.
+    (tmp_path / "metrics.json").write_text(json.dumps(CTR_OVERLAY))
+    both = [{"id": "q1", "status": "ok", "source": "runner", "columns": ["p", "p_res"], "rows": [[46.05, 50.05]],
+             "sql": "select 100.0*sum(searches_with_click)/sum(searches) p, "
+                    "100.0*sum(searches_with_click)/sum(searches_with_results) as p_res "
+                    "from search_daily_v where traffic_type = 'external'"}]
+    metric = "- Metric: CTR = searches_with_click / searches_with_results, traffic_type = 'external', from metrics.json"
+    db = os.path.join(FIXTURES, "f6", "warehouse.db")
+
+    def overlay_of(value):
+        text = "\n".join(["## Answer", f"Headline: {value}% [q1]", "CTR was this. [q1]", f"- Observed: {value}% [q1]",
+                          "- Adjusted: not computed (a level)", "- Causal effect: not identified (no design)",
+                          "## Provenance", metric])
+        report = ds_verify.run_all(text, both, [], db, str(tmp_path), "What was CTR?")
+        return [(f["status"], f["message"]) for f in report["findings"] if f["check"] == "overlay"]
+
+    wrong = overlay_of("46.05")
+    assert any(s == "fail" and "column p of q1" in m and "searches_with_results" in m for s, m in wrong), wrong
+    assert all(s == "pass" for s, _ in overlay_of("50.05"))
+
+
+@pytest.mark.parametrize("sql, expected", [
+    ("select a*1.0/b as ctr, count(*) from t", {"ctr": "a*1.0/b"}),
+    ("with x as (select 1 as a from z) select k*100.0/n ctr from x where s = 'from here'", {"ctr": "k*100.0/n"}),
+    ("select case when a then b end, distinct_x from t", {"distinct_x": "distinct_x"}),
+])
+def test_select_items_reads_the_top_level_select_list(sql, expected):
+    items = ds_verify.select_items(sql)
+    assert {k: v for k, v in items.items() if k in expected} == expected
+    assert "end" not in items and "a" not in items
+
+
+# --- the adversarial review of the SQL definition check (2026-11-02) -----------------------------------------
+
+WRONG_AND_RIGHT = ("select 100.0*sum(searches_with_click)/sum(searches) p, "
+                   "100.0*sum(searches_with_click)/sum(searches_with_results) p_res "
+                   "from search_daily_v where traffic_type = 'external'")
+METRIC = "- Metric: CTR = searches_with_click / searches_with_results, traffic_type = 'external', from metrics.json"
+
+
+def runner(qid, sql, columns, rows):
+    return {"id": qid, "status": "ok", "source": "runner", "sql": sql, "columns": columns, "rows": rows}
+
+
+def overlay_of(tmp_path, headline, observed, queries, checks=()):
+    (tmp_path / "metrics.json").write_text(json.dumps(CTR_OVERLAY))
+    text = "\n".join(["## Answer", f"Headline: {headline}", "CTR was this. [q1]", f"- Observed: {observed}",
+                      "- Adjusted: not computed (a level)", "- Causal effect: not identified (no design)",
+                      "## Provenance", METRIC])
+    report = ds_verify.run_all(text, queries, list(checks), F6_DB, str(tmp_path), "What was CTR?")
+    return [(f["status"], f["message"]) for f in report["findings"] if f["check"] == "overlay"]
+
+
+def failed(found):
+    return any(s == "fail" for s, _ in found)
+
+
+def test_a_pasted_detour_does_not_hide_the_wrong_column(tmp_path):
+    both = runner("q6", WRONG_AND_RIGHT, ["p", "p_res"], [[46.05, 50.05]])
+    pasted = {"id": "q7", "status": "ok", "source": "pasted", "sql": "Wilson interval computed from q6",
+              "columns": ["p", "lo", "hi"], "rows": [[46.05, 45.93, 46.17]]}
+    assert failed(overlay_of(tmp_path, "46.05 % (45.93 to 46.17) [q7]", "46.05 % [q6]", [both, pasted]))
+    assert not failed(overlay_of(tmp_path, "50.05 % [q7]", "50.05 % [q6]",
+                                 [both, {**pasted, "rows": [[50.05, 49.93, 50.17]]}]))
+
+
+@pytest.mark.parametrize("sql, columns, row", [
+    (WRONG_AND_RIGHT.replace(" p_res", " p_res, round(100.0*sum(searches_with_click)/sum(searches), 2) p_rounded"),
+     ["p", "p_res", "p_rounded"], [46.0512, 50.0529, 46.05]),
+    (WRONG_AND_RIGHT.replace("100.0*sum(searches_with_click)/sum(searches) p",
+                             "printf('%.2f', 100.0*sum(searches_with_click)/sum(searches)) p"),
+     ["p", "p_res"], ["46.05", 50.0529]),
+])
+def test_several_matching_columns_or_text_cells_still_get_judged(tmp_path, sql, columns, row):
+    assert failed(overlay_of(tmp_path, "46.05 % [q1]", "46.05 % [q1]", [runner("q1", sql, columns, [row])]))
+
+
+def test_the_same_wrong_query_cited_twice_fails(tmp_path):
+    q6 = runner("q6", WRONG_AND_RIGHT, ["p", "p_res"], [[46.05, 50.05]])
+    assert failed(overlay_of(tmp_path, "46.05 % [q6, q7]", "46.05 % [q6]", [q6, {**q6, "id": "q7"}]))
+
+
+def test_an_analysis_through_a_scratch_table_passes(tmp_path):
+    made = runner("q1", "create table scratch_dsmode_abc_agg as select sum(searches_with_click) as c, "
+                        "sum(searches_with_results) as r from search_daily_v where traffic_type = 'external'", [], [])
+    read = runner("q2", "select 100.0*c/r as ctr from scratch_dsmode_abc_agg", ["ctr"], [[50.0529]])
+    for cited in ("[q2]", "[q1, q2]"):
+        found = overlay_of(tmp_path, f"50.05 % {cited}", f"50.05 % {cited}", [made, read])
+        assert not failed(found), found
+
+
+@pytest.mark.parametrize("sql", [
+    # A CTE alias that equals a base column name.
+    "with t as (select sum(searches_with_click) as clicked, sum(searches_with_results) as searches from search_daily_v "
+    "where traffic_type = 'external') select 100.0*clicked/searches as ctr from t",
+    # Aliases mixed with a base column.
+    "with a as (select date, sum(searches_with_click) c, sum(searches_with_results) r from search_daily_v "
+    "where traffic_type = 'external' group by date) select 100.0*sum(case when date >= '2026-10-05' then c end)"
+    "/sum(case when date >= '2026-10-05' then r end) as ctr from a",
+])
+def test_an_expression_of_aliases_is_left_alone(tmp_path, sql):
+    found = overlay_of(tmp_path, "50.05 % [q1]", "50.05 % [q1]", [runner("q1", sql, ["ctr"], [[50.0529]])])
+    assert not failed(found), found
+
+
+@pytest.mark.parametrize("change, status", [
+    ({"numerator": "searches with at least one click"}, "could_not_verify"),
+    ({"filters": ["lower(traffic_type) = 'external'"]}, "pass"),
+    ({"numerator": "search_daily_v.searches_with_click"}, "pass"),
+    ({"filters": None}, "pass"),
+    ({"numerator": ["searches_with_click"]}, None),
+])
+def test_overlay_forms_people_write_do_not_block_an_honest_analysis(tmp_path, change, status):
+    overlay = {"ctr": {**CTR_OVERLAY["ctr"], **change}}
+    (tmp_path / "metrics.json").write_text(json.dumps(overlay))
+    text = "\n".join(["## Answer", "Headline: 50.05 % [q1]", "CTR. [q1]", "- Observed: 50.05 % [q1]",
+                      "- Adjusted: not computed (a level)", "- Causal effect: not identified (no design)", METRIC])
+    report = ds_verify.run_all(text, [runner("q1", WRONG_AND_RIGHT, ["p", "p_res"], [[46.05, 50.05]])], [], F6_DB,
+                               str(tmp_path), "What was CTR?")
+    found = [(f["status"], f["message"]) for f in report["findings"] if f["check"] == "overlay"]
+    assert not any("internal error" in m for _, m in found), found
+    if status == "could_not_verify":
+        assert any(s == status and "names no column" in m for s, m in found), found
+    elif status == "pass":
+        assert not any(s == "fail" and ("query behind" in m or "column p" in m) for s, m in found), found
+
+
+def test_a_null_row_or_a_broken_log_line_does_not_crash(tmp_path):
+    (tmp_path / "metrics.json").write_text(json.dumps(CTR_OVERLAY))
+    text = readout().replace("from metrics.json", "traffic_type = 'external', from metrics.json")
+    queries = [{**EXTERNAL[0], "columns": ["a", "b"], "rows": [None, [0.3012, 0.2876]]}, "not an object", 5]
+    checks = [*CHECKS, {"id": "x#1", "check": "x", "status": "pass", "from": 5}, ["junk"]]
+    report = ds_verify.run_all(text, queries, checks, F6_DB, str(tmp_path), "What was CTR?")
+    assert report["verdict"] in ("pass", "fail", "unverified")
+
+
+def test_an_exception_inside_a_check_is_reported_not_raised(monkeypatch):
+    monkeypatch.setattr(ds_verify, "check_flags", lambda *a: 1 / 0)
+    report = ds_verify.run_all(readout(), QUERIES, CHECKS, None, None, "")
+    assert ("flags", "could_not_verify") in {(f["check"], f["status"]) for f in report["findings"]}
+    assert report["verdict"] in ("fail", "unverified")
+
+
+def test_an_unaliased_expression_ending_in_a_column_is_not_an_alias():
+    assert ds_verify.select_items("select n, k * 100.0 / n from x")["n"] == "n"

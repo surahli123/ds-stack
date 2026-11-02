@@ -33,6 +33,14 @@ cd ~/ds-accept && test -f docs/acceptance.md && git log -1 --format=%H
 
 The worktree leaves `~/ds-stack` and its branches as they are. Stop and tell the owner if `docs/acceptance.md` doesn't exist yet. Record the commit hash. Also check that `codex --version` works and that `codex login status` shows a sign-in.
 
+Then check that step 6 will be able to push. On 2026-11-02 the push failed at the end ("could not read Username"; `gh` returned 401):
+
+```bash
+gh auth status && git -C ~/ds-accept push --dry-run origin HEAD:refs/heads/results/push-check 2>&1 | tail -1
+```
+
+If either fails, stop before any paid call. Ask the owner to run `gh auth login` and then `gh auth setup-git`, and check again.
+
 Each code block below is meant to run as one shell command. Blocks don't share variables, so later blocks read the run id from `~/ds-run-id` and the daily model and effort from `~/ds-codex-pin`.
 
 ### 2. Pin the daily model, fix the run id, then hide gold and Codex's global instructions
@@ -75,7 +83,15 @@ cd ~/ds-accept && read M E < ~/ds-codex-pin && DS_CODEX_MODEL=$M DS_CODEX_EFFORT
 
 The script prints Codex's two-line reply and the model and effort from Codex's log, then `PASS` or `FAIL`. It fails if Codex didn't run the pinned model and effort. It passes only when every listed skill is one of Codex's six system skills (imagegen, openai-docs, plugin-creator, review-agent, skill-creator, skill-installer) and no instruction file is listed. The model may list fewer; `codex.sh` checks the folder itself on every run. On `FAIL`, run step 5's first block to put everything back, then stop and report the reply.
 
-### 3. Run the Codex column, in English and in Chinese
+### 3. Run a quick check of f1 and f3, then the Codex column
+
+The fixes in 0.7.0 and 0.8.0 target the two fixtures Codex missed on 2026-11-02. Check them first: 12 runs of the full arm, f1 and f3, 3 runs each, in both languages.
+
+```bash
+cd ~/ds-accept && D=$(cat ~/ds-run-id) && read M E < ~/ds-codex-pin && for L in en zh; do S=""; [ $L = zh ] && S="请用中文写结论。"; DS_CODEX_MODEL=$M DS_CODEX_EFFORT=$E python3 eval/run_arms.py --fixtures f1,f3 --arms full --runs 3 --parallel 2 --timeout 1800 --agent-cmd "sh $PWD/eval/agents/codex.sh {prompt_file}" --prompt-suffix "$S" --out eval/results/$D-codex-quick-$L; c=$?; echo "run_arms $L exit $c"; [ $c = 0 ] || break; done
+```
+
+This is round 1. Go straight to step 5 (restore and grade) and step 6 (push), which also clears the run id. Go on only if, on both f1 and f3 and in both languages, the full arm is right in at least 2 of 3 runs. Then start round 2 at step 1, which puts `~/ds-accept` back on `origin/main`, with a new run id and a new probe. In round 2, run the two blocks below instead of this one. Otherwise stop and report. The quick check isn't an acceptance result; only round 2 is.
 
 ```bash
 cd ~/ds-accept && D=$(cat ~/ds-run-id) && read M E < ~/ds-codex-pin && DS_CODEX_MODEL=$M DS_CODEX_EFFORT=$E python3 eval/run_arms.py --runs 3 --parallel 2 --timeout 1800 --agent-cmd "sh $PWD/eval/agents/codex.sh {prompt_file}" --out eval/results/$D-codex-en; echo "run_arms exit $?"
@@ -115,7 +131,7 @@ ls ~/ds-accept/eval/gold ~/.codex ~/ds-codex-recreated-$D 2>/dev/null
 Then grade:
 
 ```bash
-cd ~/ds-accept && D=$(cat ~/ds-run-id) && cat eval/results/$D-codex-en/run-status.json eval/results/$D-codex-zh/run-status.json; for R in eval/results/$D-codex-en eval/results/$D-codex-zh; do python3 eval/grade.py "$R" --allow-no-transcript; done; python3 eval/acceptance.py eval/results/$D-codex-en eval/results/$D-codex-zh --allow-no-transcript; echo "acceptance exit $?"
+cd ~/ds-accept && D=$(cat ~/ds-run-id) && for R in eval/results/$D-codex-*; do cat "$R/run-status.json"; python3 eval/grade.py "$R" --allow-no-transcript; done; if [ -d eval/results/$D-codex-en ]; then python3 eval/acceptance.py eval/results/$D-codex-en eval/results/$D-codex-zh --allow-no-transcript; echo "acceptance exit $?"; fi
 ```
 
 ### 6. Push the results
@@ -130,6 +146,7 @@ Send the person you work for this, and nothing else:
 
 ```
 ds-stack acceptance, <date>, commit <hash>
+Quick check (f1, f3, full arm): <for each quick directory: its Fixtures-by-majority table>; matrix run: <yes, or no and why>
 Codex: <version>; pinned: <~/ds-codex-pin>; model and reasoning effort in meta.json: <agent_model and reasoning_effort, and whether every run matches the pin>
 run-status.json, per directory: <executed of jobs; failed by kind; not started; stopped>
 <the full output of eval/acceptance.py, and its exit code>
