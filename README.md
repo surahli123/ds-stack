@@ -17,6 +17,7 @@ This repo holds only the generic core. Company facts live in a private overlay o
 | `ds-mode` | Analyses: pins the metric, checks the data, decomposes a movement, rules alternatives in or out, writes a traceable readout | A logged query runner, four logged check scripts, and `verify_readout.py`, which fails any untraced number |
 | `ds-verify` | Checking a finished readout against its logs, its data and the team's metric definitions | `ds_verify.py`: replays every logged query on a copy of the data, plus six more checks |
 | `ds-interrogate` | A second opinion from a model of another family | `interrogate.py`: a reviewer CLI tries to break the readout with its own queries; only findings a rerun proves are kept |
+| `ds-ready` | Whether a work project gives ds-mode what it needs | `audit.py`: overlay, sources, AGENTS.md and past usage; gaps and questions for the metric owners |
 | `ds-doc` | Doc structure and narrative: doc type, the spine (reader, decision, one-sentence answer, takeaways), answer-first drafting, DS claim rules | A step checklist; skipped steps stay visible |
 | `doc-tighten` | Format and concision: answer placement, bold, log drift, tables, clutter, length budget | `doc_lint.py`, 14 rules |
 | `cold-read` | Whether the doc works: a fresh reader must recover the answer and decision from a skim, and every takeaway from a full read | `cold_read.py`: a fresh reader (`claude -p` by default, any agent CLI through `DS_AGENT_CMD`), graded by script against `spine.json` |
