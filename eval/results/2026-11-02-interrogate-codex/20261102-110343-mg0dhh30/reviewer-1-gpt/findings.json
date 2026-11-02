@@ -1,0 +1,16 @@
+[
+  {
+    "title": "将前后对比的置信区间当作 v2 的因果效应界限，并据此否定回滚理由",
+    "readout_quote": "The within-segment effect of v2 is bounded to about ±0.15 pp [check:mix_shift#1], far below the 2.10 pp drop [check:mix_shift#1], so the CTR drop is not a reason to roll back; a loss of 0.3 pp or more would be needed to matter (this threshold is my assumption, not given) [check:mix_shift#1].",
+    "query_id": "q1",
+    "shows": "before 只有 v1：7 days、28 segment_rows、699605 searches、212828 clicks；after 只有 v2：7 days、28 segment_rows、700366 searches、198374 clicks。两个版本完全与时间窗口重合，没有同期对照。",
+    "why_it_matters": "平台和国家调整不能消除版本与周次的完全混杂；同期其他变化可能抵消或放大版本影响。因此 ±0.15 pp 只能描述特定假设下前后变化的抽样不确定性，不能约束 v2 的因果效应。数据不能回答可归因于 v2 的百分点，更不能据此排除回滚理由。"
+  },
+  {
+    "title": "把加权汇总接近零误报为四个分组的变化都为 -0.00 pp",
+    "readout_quote": "v2 lowered CTR (PM's cause): ruled out as the main driver; within-segment change is -0.00 pp in all four platform x country cells [check:mix_shift#1] [measured]",
+    "query_id": "q2",
+    "shows": "四个分组的 ctr_change_pp 分别为 desktop/US -0.002248、desktop/other -0.08038、mobile/US 0.051019、mobile/other 0.018341。后面三个分组按两位小数报告分别为 -0.08、+0.05、+0.02 pp，并非全部 -0.00 pp。",
+    "why_it_matters": "汇总接近零包含不同分组升降相抵，不能证明所有分组表现不变，也不能用作排除 v2 负面影响的证据。回滚判断需要区分观察到的分组异质性与尚未识别的版本因果效应。"
+  }
+]

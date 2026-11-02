@@ -59,7 +59,7 @@ codex plugin marketplace add surahli123/ds-stack && codex plugin add ds-stack
 
 For Cursor, the `.cursor-plugin/plugin.json` manifest points at `skills/`. To install a single skill instead, copy its folder from `skills/` into your tool's skills directory. The skills are plain SKILL.md files with standard-library Python tools.
 
-Status by tool: in Claude Code the plugin validates, installs, and exposes all four skills (`ds-stack:ds-mode`, `ds-doc`, `doc-tighten`, `cold-read`), and both evals ran there. Codex and Cursor have not been smoke-tested yet. The eval runner and `cold_read.py` take any agent CLI through `--agent-cmd` or `DS_AGENT_CMD`; runs without a transcript are graded with `grade.py --allow-no-transcript` and reported as unverified isolation. In the eval's full arm, the skill is pointed to from a `CLAUDE.md` note, which another agent may not read; check that first when porting.
+Status by tool: in Claude Code the plugin validates, installs, and exposes all four skills (`ds-stack:ds-mode`, `ds-doc`, `doc-tighten`, `cold-read`), and both evals ran there. In Codex, the acceptance matrix ran on 2026-11-02: Plumbing passes, Correctness and Value fail ([`docs/results.md`](docs/results.md)). Cursor has not been tested yet. The eval runner and `cold_read.py` take any agent CLI through `--agent-cmd` or `DS_AGENT_CMD`; runs without a transcript are graded with `grade.py --allow-no-transcript` and reported as unverified isolation. In the eval's full arm, the skill is pointed to from a `CLAUDE.md` note, which another agent may not read; check that first when porting.
 
 ## Results so far
 

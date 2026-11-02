@@ -1,0 +1,181 @@
+ds-stack acceptance, 2026-11-02, commit b197e903f2982ad41a10e43b12ab59d48a5369a0
+
+Codex: 0.166.0; pinned: gpt-6-astra medium; model and reasoning effort in meta.json: all 144 match gpt-6-astra medium.
+
+run-status.json, per directory: en 72/72, zh 72/72; failed none; not started 0; stopped null; runner exits both 0; every run one attempt.
+
+### 2026-11-02-0911-codex-en (sh <HOME>/ds-accept/eval/agents/codex.sh {prompt_file}, en)
+
+| Level | Result | Counts |
+|---|---|---|
+| Plumbing | PASS | 24 of 24 full-arm runs |
+| Correctness | FAIL | 7 of 8 fixtures right by majority |
+| Value | FAIL | plain prompting missed 22% of 9 runs on f6-f8; fixtures right: full 3, plain 2 |
+
+- Fixtures the full arm got wrong: f1
+
+### 2026-11-02-0911-codex-zh (sh <HOME>/ds-accept/eval/agents/codex.sh {prompt_file}, zh)
+
+| Level | Result | Counts |
+|---|---|---|
+| Plumbing | PASS | 24 of 24 full-arm runs |
+| Correctness | FAIL | 6 of 8 fixtures right by majority |
+| Value | FAIL | plain prompting missed 11% of 9 runs on f6-f8; fixtures right: full 3, plain 3 |
+
+- Fixtures the full arm got wrong: f1, f3
+
+
+acceptance exit 0
+
+
+2026-11-02-0911-codex-en
+
+# Eval summary: 2026-11-02-0911-codex-en
+
+**Verdict:** INSUFFICIENT_N (smoke test, not a decision). 8 fixtures; the pass rule needs 15. Rule outcome at this n: FAIL.
+
+## Fixtures by majority vote
+
+| Fixture | Kind | baseline | checks | full |
+|---|---|---|---|---|
+| f1 | error | ✗ miss (0/3) | ✗ miss (0/3) | ✗ miss (0/3) |
+| f2 | error | ✓ (3/3) | ✓ (3/3) | ✓ (3/3) |
+| f3 | clean | ✗ false_alarm (0/3) | ✗ false_alarm (0/3) | ✓ (2/3) |
+| f4 | abstain | ✓ (3/3) | ✓ (3/3) | ✓ (3/3) |
+| f5 | abstain | ✓ (3/3) | ✓ (3/3) | ✓ (3/3) |
+| f6 | error | ✗ miss (1/3) | ✗ miss (0/3) | ✓ (3/3) |
+| f7 | abstain | ✓ (3/3) | ✓ (3/3) | ✓ (3/3) |
+| f8 | error | ✓ (3/3) | ✓ (3/3) | ✓ (3/3) |
+
+
+
+2026-11-02-0911-codex-zh
+
+# Eval summary: 2026-11-02-0911-codex-zh
+
+**Verdict:** INSUFFICIENT_N (smoke test, not a decision). 8 fixtures; the pass rule needs 15. Rule outcome at this n: FAIL.
+
+## Fixtures by majority vote
+
+| Fixture | Kind | baseline | checks | full |
+|---|---|---|---|---|
+| f1 | error | ✗ miss (0/3) | ✗ miss (0/3) | ✗ miss (0/3) |
+| f2 | error | ✓ (3/3) | ✓ (3/3) | ✓ (3/3) |
+| f3 | clean | ✗ false_alarm (0/3) | ✗ false_alarm (0/3) | ✗ false_alarm (0/3) |
+| f4 | abstain | ✓ (3/3) | ✓ (3/3) | ✓ (3/3) |
+| f5 | abstain | ✓ (3/3) | ✓ (3/3) | ✓ (3/3) |
+| f6 | error | ✓ (2/3) | ✗ miss (0/3) | ✓ (3/3) |
+| f7 | abstain | ✓ (3/3) | ✓ (3/3) | ✓ (3/3) |
+| f8 | error | ✓ (3/3) | ✓ (3/3) | ✓ (3/3) |
+
+
+
+Failing runs:
+
+2026-11-02-0911-codex-en/f1__baseline__1: abstained on a case with a valid answer
+
+2026-11-02-0911-codex-en/f1__baseline__2: abstained on a case with a valid answer
+
+2026-11-02-0911-codex-en/f1__baseline__3: abstained on a case with a valid answer
+
+2026-11-02-0911-codex-en/f1__checks__1: abstained on a case with a valid answer
+
+2026-11-02-0911-codex-en/f1__checks__2: abstained on a case with a valid answer
+
+2026-11-02-0911-codex-en/f1__checks__3: abstained on a case with a valid answer
+
+2026-11-02-0911-codex-en/f1__full__1: ruled in a false cause: 'ranker effect'
+
+2026-11-02-0911-codex-en/f1__full__2: ruled in a false cause: 'ranker harm'
+
+2026-11-02-0911-codex-en/f1__full__3: ruled in a false cause: 'v2 harm or another concurrent change'
+
+2026-11-02-0911-codex-en/f3__baseline__1: abstained on a case with a valid answer
+
+2026-11-02-0911-codex-en/f3__baseline__2: abstained on a case with a valid answer
+
+2026-11-02-0911-codex-en/f3__baseline__3: abstained on a case with a valid answer
+
+2026-11-02-0911-codex-en/f3__checks__1: abstained on a case with a valid answer
+
+2026-11-02-0911-codex-en/f3__checks__2: abstained on a case with a valid answer
+
+2026-11-02-0911-codex-en/f3__checks__3: abstained on a case with a valid answer
+
+2026-11-02-0911-codex-en/f3__full__1: abstained on a case with a valid answer
+
+2026-11-02-0911-codex-en/f6__baseline__2: abstained on a case with a valid answer
+
+2026-11-02-0911-codex-en/f6__baseline__3: headline 46.05 outside 50.053±0.3
+
+2026-11-02-0911-codex-en/f6__checks__1: headline 46.05 outside 50.053±0.3
+
+2026-11-02-0911-codex-en/f6__checks__2: abstained on a case with a valid answer
+
+2026-11-02-0911-codex-en/f6__checks__3: abstained on a case with a valid answer
+
+2026-11-02-0911-codex-zh/f1__baseline__1: abstained on a case with a valid answer
+
+2026-11-02-0911-codex-zh/f1__baseline__2: abstained on a case with a valid answer
+
+2026-11-02-0911-codex-zh/f1__baseline__3: abstained on a case with a valid answer
+
+2026-11-02-0911-codex-zh/f1__checks__1: abstained on a case with a valid answer
+
+2026-11-02-0911-codex-zh/f1__checks__2: abstained on a case with a valid answer
+
+2026-11-02-0911-codex-zh/f1__checks__3: abstained on a case with a valid answer
+
+2026-11-02-0911-codex-zh/f1__full__1: abstained on a case with a valid answer
+
+2026-11-02-0911-codex-zh/f1__full__2: abstained on a case with a valid answer
+
+2026-11-02-0911-codex-zh/f1__full__3: abstained on a case with a valid answer
+
+2026-11-02-0911-codex-zh/f3__baseline__1: abstained on a case with a valid answer
+
+2026-11-02-0911-codex-zh/f3__baseline__2: abstained on a case with a valid answer
+
+2026-11-02-0911-codex-zh/f3__baseline__3: abstained on a case with a valid answer
+
+2026-11-02-0911-codex-zh/f3__checks__1: abstained on a case with a valid answer
+
+2026-11-02-0911-codex-zh/f3__checks__2: abstained on a case with a valid answer
+
+2026-11-02-0911-codex-zh/f3__checks__3: abstained on a case with a valid answer
+
+2026-11-02-0911-codex-zh/f3__full__1: abstained on a case with a valid answer
+
+2026-11-02-0911-codex-zh/f3__full__2: abstained on a case with a valid answer
+
+2026-11-02-0911-codex-zh/f3__full__3: abstained on a case with a valid answer
+
+2026-11-02-0911-codex-zh/f6__baseline__2: abstained on a case with a valid answer
+
+2026-11-02-0911-codex-zh/f6__checks__1: abstained on a case with a valid answer
+
+2026-11-02-0911-codex-zh/f6__checks__2: abstained on a case with a valid answer
+
+2026-11-02-0911-codex-zh/f6__checks__3: abstained on a case with a valid answer
+
+Pushed: NOT PUSHED. Local branch results/2026-11-02-0911-codex. Git push failed: fatal: could not read Username for https://github.com: Device not configured. gh repository check also returned HTTP 401. Credentials unchanged; run markers retained.
+
+Contaminated earlier directories: eval/results/2026-10-14-codex-en; eval/results/2026-10-14-codex-zh; retained ungraded in original checkout.
+
+Gold copies hidden: <HOME>/ds-accept/eval/gold -> <HOME>/ds-gold-hidden; <HOME>/.claude/plugins/cache/ds-stack/ds-stack/0.3.0/eval/gold -> <HOME>/ds-gold-hidden-extra/1
+<HOME>/.claude/plugins/marketplaces/ds-stack/eval/gold -> <HOME>/ds-gold-hidden-extra/2
+<HOME>/Documents/Codex/2026-10-14/task/audit-cleanup-20261015/ds-main/eval/gold -> <HOME>/ds-gold-hidden-extra/3
+<HOME>/ds-stack-local/eval/gold -> <HOME>/ds-gold-hidden-extra/4
+<HOME>/ds-stack/eval/gold -> <HOME>/ds-gold-hidden-extra/5
+
+
+Hidden from ~/.codex: AGENTS.md, skills, prompts. All originals and six gold copies restored and verified before grading. Rebuilt skills preserved separately.
+
+Isolation probe: SKILLS: imagegen, openai-docs, skill-creator, skill-installer
+INSTRUCTIONS: NONE
+model: gpt-6-astra
+reasoning effort: medium
+PASS
+
+
+Problems: no execution failures. Acceptance Correctness and Value FAIL; both summaries INSUFFICIENT_N (8 fixtures; needs 15). Custom-agent isolation and skill-read remain unverified by transcript. Home scan excluded Library; Photos Library and .Trash were inaccessible; no bypass. User confirmed Claude standby before hiding copies.

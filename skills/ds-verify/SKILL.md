@@ -75,4 +75,4 @@ It checks the readout against its own evidence. It can't tell whether the analys
 - All 381 runner queries replay to the logged rows.
 - 2 Codex validation runs: it fails both. The one marked right wrote "ruled in as unresolved possibilities".
 
-The held-out test is the Codex matrix that started on 2026-10-29 (`eval/README.md`).
+The held-out test ran on the 48 full-arm runs of the 2026-11-02 Codex matrix. It failed 9 of 10 wrong runs. It failed 22 of 38 right runs, each for a "ruled in" that meant "not excluded". 7 of the wrong runs were abstentions, which it couldn't yet see. Details: `docs/results.md`.

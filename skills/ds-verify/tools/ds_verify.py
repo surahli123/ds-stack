@@ -14,9 +14,13 @@ Seven checks, each with a status of pass, fail, warn, could_not_verify or skippe
                 appears in the output it cites. A miss may be a number derived by hand, so it
                 goes on the "check by hand" list; for the Headline it is could_not_verify.
   estimand      the Headline is in the unit the request asks for; a Causal effect number comes
-                from a named, un-negated design; the Headline matches an estimate line.
-  alternatives  some alternative says "ruled in" or "ruled out". "ruled in" means the evidence
-                shows it: a hedged "ruled in" fails unless a flagged check backs it.
+                from a named, un-negated design; the Headline matches an estimate line. A
+                "can't tell" Headline fails when Adjusted has a number, the Causal effect is
+                "not identified" and no completeness, srm or fanout check flagged: an
+                unidentified cause is not a reason to abstain.
+  alternatives  each alternative says "ruled in", "ruled out" or "not ruled out". "ruled in"
+                means the evidence shows it: a hedged "ruled in" fails unless a flagged check
+                backs it. An open alternative is "not ruled out".
   flags         every check that flagged or failed is reported by its tag, unless the same check
                 was rerun later on the same input (then it is a warn, for the reviewer).
   overlay       when metrics.json names the metric, the Metric line uses its numerator,
@@ -302,7 +306,21 @@ def unit_pairs(line):
     return pairs
 
 
-def check_estimand(text, request=None):
+VALIDITY_CHECKS = ("completeness", "srm", "fanout")
+
+
+def validity_raised(checks):
+    """Names of the data-validity checks that flagged, failed or couldn't run on the data."""
+    names = set()
+    for c in checks or []:
+        name = str(c.get("check") or c.get("id", "")).split("#")[0].lower()
+        if name in VALIDITY_CHECKS and str(c.get("status", "")).replace(" ", "_") in ("flag", "fail", "could_not_run"):
+            names.add(name)
+    return sorted(names)
+
+
+def check_estimand(text, request=None, checks=None):
+    """checks is the check log, or None when it is missing (then the abstain rule is skipped)."""
     lines = estimate_lines(text)
     if "headline" not in lines:
         return [finding("estimand", "fail", "the Answer has no Headline line")]
@@ -340,7 +358,15 @@ def check_estimand(text, request=None):
             results.append(finding("estimand", "fail", "the Causal effect gives a number without 'from <design>' naming an "
                                                        f"identifying design (randomized test, holdout, ...): {causal}"))
 
-    if not pairs or abstains:
+    adjusted = lines.get("adjusted", "")
+    adjusted_number = first_number(adjusted) is not None and not re.search(r"not computed", adjusted, re.I)
+    only_cause_missing = adjusted_number and re.search(r"not identified", causal_body, re.I)
+    if abstains and only_cause_missing and checks is not None and not validity_raised(checks):
+        results.append(finding("estimand", "fail", "the Headline says can't tell, but Adjusted has a number, the Causal "
+                                                   "effect is not identified and no completeness, srm or fanout check "
+                                                   "flagged. An unidentified cause is not a reason to abstain: make the "
+                                                   "Headline the Adjusted estimate and state its assumption below it"))
+    elif not pairs or abstains:
         results.append(finding("estimand", "pass", "the Headline abstains, so it needs no estimate line"))
     elif matched:
         number, _, name = matched
@@ -383,10 +409,14 @@ def alternative_lines(text):
 
 
 def verdict_of(line):
-    """('in' or 'out', end index) for the line's first verdict that isn't negated, else (None, None)."""
+    """('in', 'out' or 'open', end index) for the line's first verdict, else (None, None).
+
+    "not ruled out" (or "can't be ruled out") is 'open'; a negated "ruled in" is no verdict."""
     for match in RULED.finditer(line):
         if not NEGATED_VERDICT.search(line[:match.start()]):
             return match.group(1).lower(), match.end()
+        if match.group(1).lower() == "out":
+            return "open", match.end()
     return None, None
 
 
@@ -398,13 +428,14 @@ def check_alternatives(text, checks=()):
         return [finding("alternatives", "fail", "no alternatives are listed under 'Alternatives considered'")]
     verdicts = [verdict_of(line) for line in lines]
     if not any(v for v, _ in verdicts):
-        results.append(finding("alternatives", "fail", f"none of the {len(lines)} alternatives says 'ruled in' or 'ruled out'"))
+        results.append(finding("alternatives", "fail", f"none of the {len(lines)} alternatives says 'ruled in', "
+                                                       "'ruled out' or 'not ruled out'"))
     for line, (verdict, end) in zip(lines, verdicts):
         if not verdict:
-            results.append(finding("alternatives", "warn", f"says neither 'ruled in' nor 'ruled out': {line}"))
+            results.append(finding("alternatives", "warn", f"says none of 'ruled in', 'ruled out' or 'not ruled out': {line}"))
             continue
-        if verdict == "out":
-            results.append(finding("alternatives", "pass", f"ruled out: {line[:80]}"))
+        if verdict in ("out", "open"):
+            results.append(finding("alternatives", "pass", f"{'ruled out' if verdict == 'out' else 'not ruled out'}: {line[:80]}"))
             continue
         after = line[end:]
         clause = CLAUSE_END.split(after, 1)[0]
@@ -413,8 +444,8 @@ def check_alternatives(text, checks=()):
         anomaly = any(t.startswith("check:") and t.split(":", 1)[1] in raised for t in tags)
         if hedged and not anomaly:
             results.append(finding("alternatives", "fail", "'ruled in' is hedged and no flagged check backs it: an "
-                                                           "alternative that wasn't ruled out is not ruled in. Say "
-                                                           f"what would decide it: {line}"))
+                                                           "alternative that wasn't ruled out is not ruled in. Write "
+                                                           f"'not ruled out' and what would decide it: {line}"))
         elif hedged:
             results.append(finding("alternatives", "warn", "'ruled in' is hedged; a flagged check shows the anomaly, "
                                                            f"but say which cause is still open: {line}"))
@@ -544,7 +575,7 @@ def run_all(text, queries, checks, db=None, overlay=None, request=None):
     """queries or checks is None when its log is missing; request is None when none was given."""
     trace, given = check_trace(text, queries, checks)
     findings = (trace + check_replay(queries, db) + check_sources(text, queries, checks)
-                + check_estimand(text, request) + check_alternatives(text, checks) + check_flags(text, checks)
+                + check_estimand(text, request, checks) + check_alternatives(text, checks) + check_flags(text, checks)
                 + check_overlay(text, overlay, request))
     counts = {status: sum(f["status"] == status for f in findings) for status in STATUSES}
     verdict = "fail" if counts["fail"] else "unverified" if counts["could_not_verify"] else "pass"
