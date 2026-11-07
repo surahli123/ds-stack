@@ -95,6 +95,15 @@ def rows_from_json(doc):
     return [{k: _num(v) for k, v in r.items()} for r in rows]
 
 
+def rows_from_csv(path):
+    """Rows from a CSV download of the SQL editor: a header row, then values as text. An empty value is NULL.
+    The download goes in unchanged; a file saved again from a spreadsheet can change numbers (the checksum refuses it)."""
+    import csv
+    with open(path, newline="", encoding="utf-8-sig") as handle:
+        return [{k: None if v is None or v.strip() == "" or v.strip().lower() == "null" else _num(v) for k, v in row.items()}
+                for row in csv.DictReader(handle)]
+
+
 CHECKSUM = (("n", 1), ("sx", 1), ("sy", 2), ("sxx", 3), ("syy", 5), ("sxy", 7))
 
 
@@ -132,9 +141,11 @@ class CommandWarehouse:
 
 
 class HandoffWarehouse:
-    """For a warehouse that only the chat agent can reach. A statement without a result is
-    written to DIR/pending/<id>.sql and raises Pending (the run records an access gap and
-    goes on). After the agent saves DIR/results/<id>.json, the next run reads it."""
+    """For a warehouse that kangaroo cannot reach itself. A statement without a result is written to
+    DIR/pending/<id>.sql and raises Pending (the run records an access gap and goes on). Then either
+    the chat agent runs it with the warehouse tool and saves the output as DIR/results/<id>.json, or a
+    person runs it in the SQL editor and saves the CSV download as DIR/results/<id>.csv (no tokens).
+    The next run reads it. A cut result with a changed number fails its checksum either way."""
 
     def __init__(self, folder, dialect="spark"):
         self.folder, self.dialect = folder, dialect
@@ -144,8 +155,11 @@ class HandoffWarehouse:
     def query(self, sql, params=None, label=""):
         guard(sql)
         sha = statement_sha(sql, params)
-        result = os.path.join(self.folder, "results", f"{sha}.json")
-        if os.path.exists(result):
+        result = self._result(sha)
+        if result and result.endswith(".csv"):
+            rows, sid = verify(rows_from_csv(result)), f"handoff-{sha}"
+            return {"statement_id": sid, "label": label, "rows": rows, "row_count": len(rows), "sql_sha": sha}
+        if result:
             with open(result, encoding="utf-8") as handle:
                 doc = json.load(handle)
             rows = verify(rows_from_json(doc))
@@ -155,9 +169,13 @@ class HandoffWarehouse:
             handle.write(f"-- {label}\n{bind(sql, params, 'spark')[0]}\n")
         raise Pending(f"waiting for results: {len(self.pending())} statements in {self.folder}/pending")
 
+    def _result(self, sha):
+        return next((p for p in (os.path.join(self.folder, "results", f"{sha}.{ext}") for ext in ("json", "csv"))
+                     if os.path.exists(p)), None)
+
     def pending(self):
         return sorted(p for p in glob.glob(os.path.join(self.folder, "pending", "*.sql"))
-                      if not os.path.exists(os.path.join(self.folder, "results", os.path.basename(p)[:-4] + ".json")))
+                      if not self._result(os.path.basename(p)[:-4]))
 
 
 class SplitWarehouse:

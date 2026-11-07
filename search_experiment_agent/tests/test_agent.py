@@ -276,6 +276,7 @@ class Flights(unittest.TestCase):
         self.assertEqual(bind("a = :a AND b IN :b AND c = :c AND d = :d", {"a": 1.5, "b": ["x", 2], "c": None, "d": True}, "spark"),
                          ("a = 1.5 AND b IN ('x', 2) AND c = NULL AND d = TRUE", None))
         # The two work routes give the direct run's cuts: a command (the Databricks skill's script) and a hand-off
+        # (a CSV download from the SQL editor, or the tool output of the Databricks MCP).
         # (the Databricks MCP, which only the chat agent can call). A copied result with a changed number is refused.
         name, direct = "synth-auth-requery", self.runs["synth-auth-requery"][0]["counts"]
         fake = os.path.join(STATE["tmp"], "fake_databricks.py")
@@ -298,18 +299,27 @@ class Flights(unittest.TestCase):
         folder = tempfile.mkdtemp(dir=STATE["tmp"])
         handoff, rounds = session(f"handoff:{folder}"), 0
         out = handoff()
-        while out["pending"] and rounds < 6:  # the agent runs each pending statement and saves the tool output unchanged
-            rounds += 1
+        while out["pending"] and rounds < 6:  # each pending statement runs, and its result is saved unchanged:
+            rounds += 1                           # first as the SQL editor's CSV download, then as the tool output
             for p in out["pending"]:
-                save(os.path.join(folder, "results", os.path.basename(p)[:-4] + ".json"),
-                     fake_databricks.run(STATE["db"], open(p, encoding="utf-8").read()))
+                doc, stem = fake_databricks.run(STATE["db"], open(p, encoding="utf-8").read()), os.path.basename(p)[:-4]
+                if rounds == 1:
+                    with open(os.path.join(folder, "results", stem + ".csv"), "w", newline="", encoding="utf-8-sig") as handle:
+                        writer = csv.writer(handle)
+                        writer.writerow([c["name"] for c in doc["manifest"]["schema"]["columns"]])
+                        writer.writerows([["" if v is None else v for v in r] for r in doc["result"]["data_array"]])
+                else:
+                    save(os.path.join(folder, "results", stem + ".json"), doc)
             out = handoff()
         self.assertEqual((out["counts"]["cuts_ran"], out["pending"]), (direct["cuts_ran"], []))
         self.assertGreater(rounds, 1)  # a control cut is asked for only after its cut agrees
-        result = sorted(os.listdir(os.path.join(folder, "results")))[0]
-        doc = load(os.path.join(folder, "results", result))
-        doc["result"]["data_array"][0][2] = str(float(doc["result"]["data_array"][0][2]) + 1)
-        save(os.path.join(folder, "results", result), doc)
+        downloads = sorted(f for f in os.listdir(os.path.join(folder, "results")) if f.endswith(".csv"))
+        self.assertTrue(downloads)
+        with open(os.path.join(folder, "results", downloads[0]), newline="", encoding="utf-8-sig") as handle:
+            table = list(csv.reader(handle))
+        table[1][table[0].index("sx")] = str(float(table[1][table[0].index("sx")]) + 1)  # a number changed by hand
+        with open(os.path.join(folder, "results", downloads[0]), "w", newline="", encoding="utf-8") as handle:
+            csv.writer(handle).writerows(table)
         tampered = handoff()
         gaps = [a["source_or_access_gap"] for a in load(os.path.join(tampered["run_dir"], "trace.json"))["action_records"]
                 if a["status"] == "access gap"]

@@ -64,7 +64,7 @@ python3 -m search_agent dry-run --out DIR       # each cut template's SQL with L
 python3 -m search_agent check-report            # the writing rules on the latest report
 ```
 
-`--warehouse` takes `sqlite:PATH` at home. At work it takes `cmd:COMMAND` (a Databricks skill script) or `handoff:DIR` (the Databricks MCP, through the chat agent). See `PORTING.md` section 4.
+`--warehouse` takes `sqlite:PATH` at home. At work it takes `cmd:COMMAND` (a Databricks skill script) or `handoff:DIR` (the Databricks MCP through the chat agent, or the SQL editor's CSV download). See `PORTING.md` section 4.
 
 Runs, frozen cases, lessons and cards are in one workspace: `KANGAROO_HOME` (the default is `~/.kangaroo`).
 

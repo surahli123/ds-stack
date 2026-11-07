@@ -156,7 +156,8 @@ def analyze(experiment=None, scorecard=None, contract=None, config=None, warehou
 def _handoff_text(wh):
     n = len(wh.pending())
     return (f"{n} statement{'s' if n != 1 else ''} wait for the warehouse in {wh.folder}/pending. Run each one with the "
-            f"warehouse tool. Save the tool output, without changes, as {wh.folder}/results/<same name>.json. "
+            f"warehouse tool, or in the SQL editor. Save each result in {wh.folder}/results with the same name, without "
+            "changes: the tool output as .json, or the CSV download as .csv. Do not open the CSV in a spreadsheet first. "
             "Then run analyze again.")
 
 
