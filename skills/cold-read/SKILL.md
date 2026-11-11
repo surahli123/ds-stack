@@ -14,7 +14,7 @@ A doc passes when its reader gets the point, not when its author likes it. This 
 
 ## 1. Write the answer key first
 
-The key is `spine.json` from `ds-doc`: the reader's role, the answer in one sentence, the decision and three takeaways. If you have none, write it now from what you meant to say. Do not derive it from the doc, or the test can't fail.
+The key is `spine.json` from `ds-doc`: the reader's role, the answer in one sentence, the decision and three takeaways, plus, if set, the reader's vocabulary and the misread. If you have none, write it now from what you meant to say. Do not derive it from the doc, or the test can't fail.
 
 ## 2. Run it
 
@@ -27,7 +27,7 @@ The script builds the skim view (the first 120 words, then each heading with its
 | Pass | Passes when |
 |---|---|
 | Skim | The reader states the answer and the decision |
-| Full | The reader recovers all three takeaways |
+| Full | The reader recovers the three takeaways and the misread, names no word they didn't understand, and finds no two statements that disagree |
 
 To use another agent instead of Claude, set `DS_AGENT_CMD` (or pass `--agent-cmd`) to a command template such as `my-agent --model {model}` (`--reader-model` fills `{model}`): the prompt goes to its stdin, or into a file if the template contains `{prompt_file}`, and its stdout is the reply. With no headless agent at all (for example in Cursor's editor), run with `--prompts-only`. Send each prompt to a fresh subagent with nothing else, save the replies as `{"skim": "...", "full": "..."}`, and grade with `--replies replies.json`. A reader from a different model family than the author is better, because it doesn't share the author's blind spots.
 
