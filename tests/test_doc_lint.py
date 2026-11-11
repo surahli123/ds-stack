@@ -130,6 +130,49 @@ def test_cli_exit_codes(tmp_path):
     assert subprocess.run([sys.executable, LINT, str(tmp_path / "missing.md")], capture_output=True).returncode == 2
 
 
+ZH_EXAMPLE = os.path.join(ROOT, "tests", "data", "zh-renewables-readout.md")
+ZH_TIGHT = """# 德国提高得更多
+
+德国可再生能源发电占比提高 48.5 个百分点（6.2% 到 54.7%），法国提高 14.2 个（12.7% 到 26.9%）。德国 2014 年首次达到 25%，法国到 2023 年才达到。
+
+这里的可再生能源不含核电。法国发电以核电为主，所以这个比例会低估它的低碳电力。两国每年都有数据，没有缺失或重复。
+
+## 附录：计算方法
+
+占比取数据集自带的 renewables_share_elec 字段，提高幅度是 2023 年的 share_2023 减 2000 年的 share_2000。
+"""
+
+
+def test_han_characters_count_toward_length():
+    _, words = doc_lint.check("# 结论\n\n" + "这是一句很长的话。" * 200 + "\n", "readout")
+    assert 930 <= words <= 950  # 1,600 Han characters / 1.7
+    assert "D12" in rules("# 结论\n\n" + "这是一句很长的话。" * 200 + "\n", "readout")
+
+
+def test_the_chinese_example_flags_repeats_field_names_and_a_stale_caveat():
+    with open(ZH_EXAMPLE, encoding="utf-8") as handle:
+        found = rules(handle.read(), "readout")
+    assert {"D15", "D16", "D17"} <= found
+
+
+def test_the_tightened_chinese_example_is_clean():
+    found, words = doc_lint.check(ZH_TIGHT, "readout")
+    assert found == [] and words < 150
+
+
+def test_a_number_repeated_inside_one_paragraph_is_not_restated():
+    one = CLEAN.replace("The open question", "Below 0.3 pp it is noise, and 0.3 pp is the floor we use. The open question")
+    assert "D15" not in rules(one)
+    two = CLEAN + "\n## Again\nThe mobile share went from 40% to 55%, and 36.0% and 22.0% held.\n"
+    assert "D15" in rules(two)
+
+
+def test_field_names_are_fine_in_handovers_and_reference_pages():
+    text = CLEAN + "\nThe job reads load_events, client_ts and server_ts.\n"
+    assert "D16" in rules(text, "readout")
+    assert "D16" not in rules(text, "handover") and "D16" not in rules(text, "reference")
+
+
 def test_every_rule_has_evidence():
     for rule_id, rule in doc_lint.load_rules().items():
         assert rule["severity"] in ("fail", "warn") and rule["evidence"], rule_id

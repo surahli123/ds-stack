@@ -1,5 +1,5 @@
 {
-  "_source": "Counts come from 119 agent-written docs in the owner's notes repo (2026-10-09 analysis), plus the owner's DS editing guide (ai-writing-suite notes/ai-editing-guide-for-ds.md). A rule without evidence does not belong here.",
+  "_source": "Counts come from 119 agent-written docs in the owner's notes repo (2026-10-09 analysis), plus the owner's DS editing guide (ai-writing-suite notes/ai-editing-guide-for-ds.md). A rule without evidence does not belong here. D15-D17 come from one real Chinese readout the owner shared on 2026-11-11 and stay provisional until counted on the corpus.",
   "D1": {
     "name": "answer first",
     "severity": "fail",
@@ -90,5 +90,22 @@
     "name": "hedges in the answer",
     "severity": "warn",
     "evidence": "DS editing guide: about one hedge per claim, none in the TL;DR"
+  },
+  "D15": {
+    "name": "same number restated",
+    "severity": "warn",
+    "min_repeated": 2,
+    "evidence": "owner's Chinese readout (2026-11-11): 6.2%, 12.7% and the 25% threshold each stated two to five times in the body prose"
+  },
+  "D16": {
+    "name": "field names in prose",
+    "severity": "warn",
+    "threshold": 3,
+    "evidence": "same readout: 32 snake_case field names in the text, five of them renewables_share_elec"
+  },
+  "D17": {
+    "name": "stale 'not checked' statement",
+    "severity": "warn",
+    "evidence": "same readout: 'didn't look at the raw rows, so it's unknown whether 2000 or 2023 is missing' stayed in after its own audit table showed both years present"
   }
 }
