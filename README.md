@@ -14,6 +14,7 @@ This repo holds only the generic core. Company facts live in a private overlay o
 
 | Skill | Fixes | Enforced by |
 |---|---|---|
+| `ds-plan` | Plans: the decision and its options, the unit and segment definitions, data access, a requester's objection | A fixed plan block, graded by script in `eval/plan/` |
 | `ds-mode` | Analyses: pins the metric, checks the data, decomposes a movement, rules alternatives in or out, writes a traceable readout | A logged query runner, four logged check scripts, and `verify_readout.py`, which fails any untraced number |
 | `ds-doc` | Doc structure and narrative: doc type, the spine (reader, decision, one-sentence answer, takeaways), answer-first drafting, DS claim rules | A step checklist; skipped steps stay visible |
 | `doc-tighten` | Format and concision: answer placement, bold, log drift, tables, clutter, length budget | `doc_lint.py`, 17 rules |
@@ -39,7 +40,7 @@ Three earlier tools (ds-brainstorm-agent, and ds-review and ds-trace in ds-produ
 | Recording what the agent did | ds-trace | the query log and readout tags, written by script rather than by the agent |
 | Verifying one result against a second source | ds-trace | the readout's `Reconciled:` line |
 | Mistake classes with detection rules | ds-brainstorm anti-patterns | `skills/ds-mode/references/mistake-classes.md`, to seed the wrong-number archive |
-| Methodology, decision and feasibility lenses | ds-brainstorm personas | `skills/ds-mode/references/plan-critique.md`, optional and not wired into the method |
+| Methodology, decision and feasibility lenses | ds-brainstorm personas | `skills/ds-plan/SKILL.md`, its own skill since two plan-stage mistakes in real work (`docs/plan-stage-case.md`) |
 | Lessons on judge noise and regression to the mean | autoresearch | `eval/README.md` |
 
 Dropped: scoring frameworks (uncalibrated), domain digests (stale, with invented entries tagged authoritative), the writer-judge loop (no gain beyond noise), report generation and stakeholder profiles.
@@ -55,7 +56,7 @@ codex plugin marketplace add surahli123/ds-stack && codex plugin add ds-stack
 
 For Cursor, the `.cursor-plugin/plugin.json` manifest points at `skills/`. To install a single skill instead, copy its folder from `skills/` into your tool's skills directory. The skills are plain SKILL.md files with standard-library Python tools.
 
-Status by tool: in Claude Code the plugin validates, installs, and exposes all four skills (`ds-stack:ds-mode`, `ds-doc`, `doc-tighten`, `cold-read`), and both evals ran there. Codex and Cursor have not been smoke-tested yet. The eval runner and `cold_read.py` take any agent CLI through `--agent-cmd` or `DS_AGENT_CMD`; runs without a transcript are graded with `grade.py --allow-no-transcript` and reported as unverified isolation. In the eval's full arm, the skill is pointed to from a `CLAUDE.md` note, which another agent may not read; check that first when porting.
+Status by tool: in Claude Code the plugin validates, installs, and exposes the four original skills (`ds-stack:ds-mode`, `ds-doc`, `doc-tighten`, `cold-read`), and both evals ran there. `ds-plan` was added on 2026-11-11; the plugin still validates, but it hasn't been installed and run yet. Codex and Cursor have not been smoke-tested yet. The eval runner and `cold_read.py` take any agent CLI through `--agent-cmd` or `DS_AGENT_CMD`; runs without a transcript are graded with `grade.py --allow-no-transcript` and reported as unverified isolation. In the eval's full arm, the skill is pointed to from a `CLAUDE.md` note, which another agent may not read; check that first when porting.
 
 ## Results so far
 

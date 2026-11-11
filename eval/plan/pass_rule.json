@@ -1,0 +1,8 @@
+{
+  "_note": "Pre-registered before any plan run. Change only before a new run.",
+  "min_tasks": 10,
+  "runs_per_task": 3,
+  "turn1_margin": 0.2,
+  "turn2_margin": 0.2,
+  "max_words_ratio": 1.0
+}

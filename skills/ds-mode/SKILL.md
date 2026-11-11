@@ -19,7 +19,7 @@ A data scientist will review your readout, and should be able to check it in und
 
 This is a draft, to be replaced with the analyst's own first moves.
 
-1. Restate the question in one sentence and name the decision it feeds. Treat the requester's guess about the cause as one alternative, not the premise.
+1. Restate the question in one sentence and name the decision it feeds. Treat the requester's guess about the cause as one alternative, not the premise. If the analysis isn't routine (a new metric, a causal question with no randomized test, a costly decision), run the `ds-plan` skill first, if it is installed.
 2. Pin the metric before you query: numerator, denominator, filters, grain and source table. Take it from `metrics.json` in the overlay directory named by `$DS_OVERLAY_DIR` when the metric is there, and say so. If `$DS_OVERLAY_DIR` is unset or holds no `metrics.json`, there is none: never search the filesystem for one. When it isn't, write your definition into the readout and label it `[guess]`. Never invent a definition silently; a plausible number on the wrong definition is the most common wrong answer, and no check below catches it.
 3. Decide whether the question can be answered.
    - If two readings of it give materially different numbers and nothing settles which one is meant, ask before computing. When no one can answer, pick the reading the decision most likely needs, state it in the Answer, and put the other in the caveats.
@@ -106,5 +106,4 @@ When this readout grows into a document for other people (a readout, memo, plan 
 ## References
 
 - `references/review-checklist.md`: what the reviewer checks, in order. Read it before writing the readout; it is the test the readout faces.
-- `references/plan-critique.md`: an optional critique before a non-routine analysis. Not part of the method above.
 - `references/mistake-classes.md`: candidate mistake classes for the analyst's wrong-number archive. They become checks only after two real incidents.

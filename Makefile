@@ -1,4 +1,4 @@
-.PHONY: test fixtures hooks selftest verify eval grade lint-doc writing-eval writing-grade
+.PHONY: test fixtures hooks selftest verify eval grade lint-doc writing-eval writing-grade plan-eval plan-grade
 
 test:            ## unit tests (checks, parser, grader, guard, hook)
 	python3 -m pytest -q
@@ -29,3 +29,9 @@ writing-eval:    ## baseline vs ds-doc on the writing tasks (uses model credits)
 
 writing-grade:   ## make writing-grade RUN=eval/writing/results/<dir>
 	python3 eval/writing/grade_writing.py $(RUN)
+
+plan-eval:       ## baseline vs ds-plan on the plan tasks, two turns each (uses model credits)
+	python3 eval/plan/run_plan.py --runs 3 --model sonnet --parallel 6
+
+plan-grade:      ## make plan-grade RUN=eval/plan/results/<dir>
+	python3 eval/plan/grade_plan.py $(RUN)

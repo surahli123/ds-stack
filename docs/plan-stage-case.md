@@ -1,31 +1,23 @@
-# Plan-stage eval case: a framing disagreement (2026-11-11)
+# Plan-stage mistakes (2026-11)
 
-The first recorded plan-stage incident for the archive rule in `plan-critique.md`; one more wires plan-critique into the method. It came from a real framing session, reviewed adversarially afterwards, and its outcome is known.
+Two plan-stage mistakes from real work met the archive rule, so the plan critique became its own skill, `ds-plan`, which loads on planning requests instead of only inside ds-mode.
 
-## Task
+## 1. A framing disagreement (2026-10-30)
 
 A PM reads customer feedback as "CJK search quality is poor". The analyst's quality metric (keyword and AI search) says otherwise: one CJK language is clearly worse but small and concentrated in a few large accounts, while a larger, dispersed group of European languages sends little feedback. Asked: how should the analyst frame and research the disagreement?
 
-## What the reply missed
-
-The agent answered with no lookups and no questions. It got the framing right: split measurement, weighting and unit of analysis; account clustering; suppressed demand. It missed four things the plan-critique questions ask:
+The agent answered with no lookups and no questions. It got the framing right: split measurement, weighting and unit of analysis; account clustering; suppressed demand. It missed four things:
 - it never asked what decision was on the table;
-- its headline test validated the metric only on complained-about queries;
+- the first test it recommended validated the metric only on complained-about queries, though a later section proposed a stratified sample;
 - it assumed tenant data could be replayed and shown to raters;
 - it asked seven questions.
 
 The decision actually made matched none of the three outcomes its decision rule offered (Korean-specific work, a platform fix, neither): prioritize the top five languages, split by region.
 
-## Fixture
+This isn't an eval task yet. Graded by keyword over the whole plan, the reply passes items it shouldn't: "data access" in a prompt placeholder reads as naming access. It needs closing lines first, as p2 has.
 
-A task file and an overlay naming the metric and the judge's known bias. No warehouse is needed. Grade by script, not by a model:
+## 2. Tenant level for a user-randomized test (2026-11)
 
-| Item | Pass if the plan |
-|---|---|
-| Decision first | asks, or states as `[guess]`, which decision the work feeds, and lists scope options (which languages, which regions) |
-| Overlay used | names the overlay's metric and judge bias instead of hedging on them |
-| Control sample | validates the metric on a sample drawn independently of complaints |
-| Access | names data access or reproducibility as a gating step |
-| Size | asks at most three questions |
+The requester asked for a plan for a user-randomized test whose question was about 3P users. The agent recommended tenant-level analysis for more power, and defined 3P users by a tenant label. The requester pointed out that a "3P power" tenant also has users who never use 3P content. The agent didn't address it.
 
-The 2026-10-30 reply fails all five; on the first, it named a decision as fact and offered no scope options. Calibrate on plain prompting first, as for the analysis cases.
+The rules this added to ds-plan are questions 4 and 5 (unit and segment) and "When the requester objects". The eval task is `eval/plan/tasks/p2`: two turns, graded by script on the closing lines. Calibrate it on plain prompting before trusting a gain.
