@@ -126,6 +126,27 @@ def test_dates_interval_levels_and_names_are_not_numbers():
     assert vr.tags_in("x [q3, q4] [check:srm#2] [measured]") == ["q3", "q4", "check:srm#2"]
 
 
+def test_numbers_are_looked_up_in_what_their_tags_hold(capsys):
+    queries = [{"id": "q1", "status": "ok", "rows": [["2026-09-21", 0.304], ["2026-09-28", 0.283]], "row_count": 14}]
+    checks = [{"id": "mix_shift#1", "check": "mix_shift", "from": ["q1"], "details": {"delta_pp": -2.0968}}]
+    text = ("## Answer\nHeadline: -2.10 pp [check:mix_shift#1]\n"
+            "- Observed: CTR fell from 30.4% to 28.3% over 14 days [q1]\n"
+            "- Gap: 2.1 pp, interval 1.9 to 2.3 pp [q1]\n"
+            "- Threshold: 0.5 pp [given]\n")
+    problems, stats, _ = vr.verify(text, queries, checks)
+    assert problems == []
+    assert stats["unsourced"] == [(["2.1", "1.9", "2.3"], "- Gap: 2.1 pp, interval 1.9 to 2.3 pp [q1]")]
+    assert not vr.in_source("30.9", vr.values_in(queries[0]["rows"]))
+
+
+def test_unsourced_numbers_are_listed_but_do_not_fail(tmp_path, capsys):
+    (tmp_path / "q.log").write_text(json.dumps({"id": "q1", "status": "ok", "rows": [[0.304]]}))
+    (tmp_path / "r.md").write_text("## Answer\nHeadline: 30.4% [q1]\nIt rose 1.7 pp [q1]\n\n## Provenance\n- Reconciled: not done (none)\n")
+    assert vr.main([str(tmp_path / "r.md"), "--queries", str(tmp_path / "q.log"), "--checks", str(tmp_path / "none")]) == 0
+    out = capsys.readouterr().out
+    assert "1 not found in their source" in out and "not in its source (confirm, or log how it was computed): 1.7 in:" in out
+
+
 def test_stamp_writes_one_verified_line_at_the_end_of_provenance(tmp_path, capsys):
     (tmp_path / "q.log").write_text("\n".join(json.dumps(e) for e in QUERIES))
     (tmp_path / "c.log").write_text("\n".join(json.dumps(e) for e in CHECKS))

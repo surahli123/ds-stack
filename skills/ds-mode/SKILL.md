@@ -33,7 +33,7 @@ This is a draft, to be replaced with the analyst's own first moves.
 
 ## Queries
 
-Run every query as `python3 <dir of this SKILL.md>/tools/query.py "<SQL>" --as-of <last complete period>`. It enforces the safety envelope (scratch-only writes, one statement, aggregates only, a time cap), prints the result with an id such as `q3`, and logs the statement and result to `.ds-queries.log`. Don't query the data any other way. If a result had to be computed elsewhere, for example by a person, log it with `--pasted --sql ... --columns ... --rows ...` so it gets an id. On a live warehouse, the overlay's adapter takes the place of the SQLite default, with the same log.
+Run every query as `python3 <dir of this SKILL.md>/tools/query.py "<SQL>" --as-of <last complete period>`. It enforces the safety envelope (scratch-only writes, one statement, aggregates only, a time cap), prints the result with an id such as `q3`, and logs the statement and result to `.ds-queries.log`. Don't query the data any other way. If a result had to be computed elsewhere, for example by a person, log it with `--pasted --sql ... --columns ... --rows ...` so it gets an id. That includes a number you work out yourself, such as a difference or an interval: log them all in one `--pasted` call, with the formula as `--sql`, and tag them with its id. `verify_readout.py` lists any tagged number it can't find in its source. On a live warehouse, the overlay's adapter takes the place of the SQLite default, with the same log.
 
 ## Checks
 

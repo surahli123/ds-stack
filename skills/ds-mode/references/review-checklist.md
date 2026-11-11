@@ -8,6 +8,7 @@ Run `tools/verify_readout.py` on the readout and its logs before reading anythin
 
 - Does every number carry a tag, and does each tag resolve to a logged query `[q<n>]`, a logged check `[check:<name>#<n>]`, or the request `[given]`?
 - Does each tagged query compute what its sentence says (filter, period, grain)?
+- Is each number that `verify_readout.py` lists as not in its source right? Recompute it from the cited rows, or send it back.
 
 If this fails, send it back now. Nothing below means anything for a number nobody can trace.
 

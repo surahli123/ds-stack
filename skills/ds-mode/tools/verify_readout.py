@@ -11,12 +11,19 @@ In the Answer, "What it means" and "Why we believe it" sections:
 - every [check:<name>#<n>] is a logged check whose "from" names queries that ran.
 The Provenance section must have a "Reconciled:" line.
 
+It also looks for each tagged number in what its tags hold: the query's rows
+and row count, or the check's details and summary, as is or times 100, to the
+decimals shown. A number it can't find is listed for the reviewer to confirm,
+not failed: a difference or an interval worked out by hand is in no log until
+it is logged with query.py --pasted. Counts up to 10 are not looked up.
+
 Dates, a "95%" in front of "interval" or "CI", and digits inside names (v2,
 q3) don't count as numbers. Logs default to $DS_QUERIES_LOG / $DS_CHECKS_LOG,
 else the files in the current directory.
 
 Prints "verify_readout: pass (...)" or "verify_readout: fail" with one line per
-problem, then the [given] lines for the reviewer to confirm against the request.
+problem, then the [given] lines for the reviewer to confirm against the request,
+then the numbers not found in their source.
 With --stamp, a pass also writes "- Verified: <the pass line>" as the last line
 of Provenance, replacing an earlier one, so the readout needs no second run.
 Exit code: 0 pass, 1 fail, 3 usage error.
@@ -56,6 +63,26 @@ def numbers_in(line):
     return NUMBER.findall(body)
 
 
+def values_in(obj):
+    """Every number in a logged result: rows, details or summary text."""
+    if isinstance(obj, bool) or obj is None:
+        return []
+    if isinstance(obj, (int, float)):
+        return [float(obj)]
+    if isinstance(obj, str):
+        return [float(n.replace("−", "-").replace(",", "")) for n in NUMBER.findall(obj)]
+    if isinstance(obj, dict):
+        obj = list(obj.values())
+    return [v for item in obj for v in values_in(item)] if isinstance(obj, list) else []
+
+
+def in_source(number, values):
+    """True when the number, as written, rounds from a logged value or from 100 times one."""
+    x = abs(float(number.replace("−", "-").replace(",", "")))
+    tolerance = 0.5 * 10 ** -(len(number.split(".")[1]) if "." in number else 0) + 1e-9
+    return any(abs(x - abs(v)) <= tolerance or abs(x - abs(v) * 100) <= tolerance for v in values)
+
+
 def tags_in(line):
     found = []
     for group in TAGS.findall(line):
@@ -82,7 +109,9 @@ def verify(text, queries, checks):
     ran = {e["id"].lower() for e in queries if e.get("id") and e.get("status") == "ok"}
     tried = {e["id"].lower(): e.get("status") for e in queries if e.get("id")}
     logged_checks = {e["id"].lower(): e for e in checks if e.get("id")}
-    problems, given, stats = [], [], {"lines": 0, "numbers": 0, "queries": set(), "checks": set()}
+    results = {e["id"].lower(): e for e in queries if e.get("id") and e.get("status") == "ok"}
+    problems, given = [], []
+    stats = {"lines": 0, "numbers": 0, "queries": set(), "checks": set(), "unsourced": []}
     found = sections(text)
     if not any(name.lower().startswith("answer") for name, _ in found):
         problems.append("no Answer section")
@@ -119,6 +148,17 @@ def verify(text, queries, checks):
                         missing = [q for q in entry["from"] if q.lower() not in ran]
                         if missing:
                             problems.append(f"[{tag}] names queries that didn't run: {', '.join(missing)}")
+            if numbers and tags and "given" not in tags:
+                values = []
+                for tag in tags:
+                    if tag in results:
+                        values += values_in(results[tag].get("rows")) + values_in(results[tag].get("row_count"))
+                    elif tag.startswith("check:") and tag.split(":", 1)[1] in logged_checks:
+                        entry = logged_checks[tag.split(":", 1)[1]]
+                        values += values_in(entry.get("details")) + values_in(entry.get("summary"))
+                missing = [n for n in numbers if not (n.isdigit() and int(n) <= 10) and not in_source(n, values)]
+                if missing:
+                    stats["unsourced"].append((missing, line.strip()))
     return list(dict.fromkeys(problems)), stats, given
 
 
@@ -152,7 +192,8 @@ def main(argv=None):
         return 3
     problems, stats, given = verify(text, read_jsonl(args.queries), read_jsonl(args.checks))
     counts = (f"{stats['numbers']} numbers on {stats['lines']} lines; {len(stats['queries'])} queries, "
-              f"{len(stats['checks'])} checks, {len(given)} given")
+              f"{len(stats['checks'])} checks, {len(given)} given, "
+              f"{sum(len(m) for m, _ in stats['unsourced'])} not found in their source")
     if problems:
         print(f"verify_readout: fail ({counts})")
         for problem in problems:
@@ -166,6 +207,8 @@ def main(argv=None):
             print("  stamped: the Verified line is in Provenance; no need to run this again")
     for line in given:
         print(f"  given (confirm against the request): {line}")
+    for missing, line in stats["unsourced"]:
+        print(f"  not in its source (confirm, or log how it was computed): {', '.join(missing)} in: {line}")
     return 1 if problems else 0
 
 
