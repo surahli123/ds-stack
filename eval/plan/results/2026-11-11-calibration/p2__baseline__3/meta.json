@@ -1,0 +1,16 @@
+{
+  "task": "p2",
+  "arm": "baseline",
+  "run": 3,
+  "model": "sonnet",
+  "exit": [
+    0,
+    0
+  ],
+  "seconds": 28.0,
+  "cost_usd": 0.1299,
+  "turns": [
+    3,
+    1
+  ]
+}

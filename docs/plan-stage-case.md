@@ -21,3 +21,7 @@ This isn't an eval task yet. Graded by keyword over the whole plan, the reply pa
 The requester asked for a plan for a user-randomized test whose question was about 3P users. The agent recommended tenant-level analysis for more power, and defined 3P users by a tenant label. The requester pointed out that a "3P power" tenant also has users who never use 3P content. The agent didn't address it.
 
 The rules this added to ds-plan are questions 4 and 5 (unit and segment) and "When the requester objects". The eval task is `eval/plan/tasks/p2`: two turns, graded by script on the closing lines. Calibrate it on plain prompting before trusting a gain.
+
+### Calibration (2026-11-11)
+
+Plain prompting got p2 right in all three runs: user level, 3P users from each user's own pre-test sessions, tenants as strata, and a direct answer to the objection. So did ds-plan, with plans about 13% longer and runs about 15% dearer. The task is too easy, so it can't show a gain: the notes name a user-level 3P field and the pre-test logs, which hands over the answer. A harder version would hide the user-level field behind a join, have the requester propose tenant level, or bury the notes in a longer session, as in the real case. Results: `eval/plan/results/2026-11-11-calibration/`.
