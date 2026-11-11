@@ -205,14 +205,19 @@ def _append(path, make_entry):
     return entry
 
 
-def run_logged(conn, sql, params=(), *, as_of=None, log=None, scratch_prefix, max_rows=200, max_cell_chars=200,
+def _metric(metric):
+    """{"metric": name, "slice": slice} for a (name, slice) pair, else nothing."""
+    return {"metric": metric[0], "slice": metric[1] or "all"} if metric and metric[0] else {}
+
+
+def run_logged(conn, sql, params=(), *, as_of=None, metric=None, log=None, scratch_prefix, max_rows=200, max_cell_chars=200,
                max_result_chars=20_000, max_seconds=60.0):
     """Run one statement through the envelope and log it, whatever the outcome.
 
     Returns the log entry. Raises Blocked or the database error after logging it.
     """
     started = time.monotonic()
-    base = {"source": "runner", "sql": sql, "params": list(params), "as_of": as_of}
+    base = {"source": "runner", "sql": sql, "params": list(params), "as_of": as_of, **_metric(metric)}
     try:
         columns, rows = _execute(conn, sql, params, scratch_prefix, max_rows, max_cell_chars, max_result_chars, max_seconds)
     except Exception as err:
@@ -224,12 +229,12 @@ def run_logged(conn, sql, params=(), *, as_of=None, log=None, scratch_prefix, ma
                                            "row_count": len(rows), "columns": columns, "rows": [list(r) for r in rows]})
 
 
-def log_pasted(sql, columns, rows, *, as_of=None, log=None, max_rows=200, max_cell_chars=200, max_result_chars=20_000):
+def log_pasted(sql, columns, rows, *, as_of=None, metric=None, log=None, max_rows=200, max_cell_chars=200, max_result_chars=20_000):
     """Log a result computed outside the runner (for example, run by a person).
 
     The same size caps apply, so only aggregates enter the log. Returns the entry.
     """
-    base = {"source": "pasted", "sql": sql, "params": [], "as_of": as_of}
+    base = {"source": "pasted", "sql": sql, "params": [], "as_of": as_of, **_metric(metric)}
     rows = [list(row) for row in rows]
     try:
         _check_size(rows, max_rows, max_cell_chars, max_result_chars)

@@ -66,6 +66,27 @@ def test_query_cli_prints_the_id_and_logs_blocked_attempts(workdir, capsys):
     assert query.main(["SELECT 1", "--db", "missing.db"]) == 3
 
 
+def test_queries_record_the_metric_and_slice_they_compute(workdir, capsys):
+    assert query.main(["SELECT SUM(clicks) * 1.0 / SUM(searches) FROM events", "--metric", "ctr"]) == 0
+    assert query.main(["--pasted", "--sql", "x", "--columns", '["ctr"]', "--rows", "[[0.2]]", "--metric", "ctr", "--slice", "app"]) == 0
+    assert query.main(["SELECT 1"]) == 0
+    log = read_jsonl(workdir / ".ds-queries.log")
+    assert [(e.get("metric"), e.get("slice")) for e in log] == [("ctr", "all"), ("ctr", "app"), (None, None)]
+
+
+def test_one_metric_reported_with_two_values_is_listed(capsys):
+    base = {"status": "ok", "metric": "ctr", "slice": "all", "as_of": "2026-10-04"}
+    queries = [{**base, "id": "q1", "sql": "SELECT SUM(clicks) * 1.0 / SUM(searches) FROM s", "rows": [[0.304]]},
+               {**base, "id": "q2", "sql": "SELECT ... WHERE is_bot = 0", "rows": [[0.291]]},
+               {**base, "id": "q3", "sql": "SELECT week, ...", "rows": [["2026-09-28", 0.2912], ["2026-10-04", 0.304]]},
+               {**base, "id": "q4", "slice": "mobile", "rows": [[0.22]]}]
+    text = ("## Answer\nHeadline: CTR 30.4% [q1]\n- Without bots: 29.1% [q2]\n- Weekly: 29.1% then 30.4% [q3]\n"
+            "- Mobile: 22.0% [q4]\n\n## Provenance\n- Reconciled: not done (none)\n")
+    problems, stats, _ = vr.verify(text, queries, [])
+    assert problems == [] and [(c[3]["id"], c[4]["id"]) for c in stats["conflicts"]] == [("q1", "q2")]
+    assert vr.verify(text.replace("- Without bots: 29.1% [q2]\n", ""), queries, [])[1]["conflicts"] == []
+
+
 def test_checks_record_their_id_and_source_queries(workdir, capsys):
     spec = {"observed": [5000, 5000], "expected_ratio": [0.5, 0.5], "from": "q1"}
     checks_run.main(["srm", "--json", json.dumps(spec)])

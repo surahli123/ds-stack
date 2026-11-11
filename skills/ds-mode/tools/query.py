@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Run one SQL statement through the guarded runner and log it.
 
-    python3 tools/query.py "SELECT ..." [--as-of 2026-10-04] [--params '[...]']
+    python3 tools/query.py "SELECT ..." [--as-of 2026-10-04] [--params '[...]'] [--metric ctr [--slice mobile]]
     python3 tools/query.py --pasted --sql "<the SQL that was run>" \
         --columns '["week", "ctr"]' --rows '[["2026-09-21", 0.304]]' [--as-of ...]
 
@@ -9,7 +9,9 @@ Prints one JSON line with the query id (q1, q2, ...), columns and rows, and
 appends the statement and its result to .ds-queries.log (or $DS_QUERIES_LOG).
 Cite the id in the readout as [q<n>], and pass it to a check as "from": "q<n>".
 Use --pasted for a result computed outside this tool, such as SQL a person ran
-and pasted back: it gets an id and the same size caps.
+and pasted back: it gets an id and the same size caps. --metric names the
+metric a query computes and --slice the part of the data it covers (default
+all), so verify_readout.py can spot one metric reported with two values.
 
 This file is the reference adapter. It opens SQLite: --db, else $DS_WAREHOUSE,
 else ./warehouse.db. A warehouse adapter replaces connect() and keeps the rest,
@@ -65,6 +67,8 @@ def main(argv=None):
     parser.add_argument("--pasted", action="store_true", help="log a result computed outside this tool")
     parser.add_argument("--columns", help="with --pasted: JSON list of column names")
     parser.add_argument("--rows", help="with --pasted: JSON list of rows")
+    parser.add_argument("--metric", help="the metric this query computes, as metrics.json names it")
+    parser.add_argument("--slice", help="with --metric: the segment it covers, if not all the data")
     args = parser.parse_args(argv)
 
     sql = args.sql or args.statement
@@ -78,10 +82,11 @@ def main(argv=None):
                 print("--pasted needs --columns and --rows", file=sys.stderr)
                 return 3
             entry = gq.log_pasted(sql, json.loads(args.columns), json.loads(args.rows), as_of=args.as_of,
+                                  metric=(args.metric, args.slice),
                                   **limits(config, "max_rows", "max_cell_chars", "max_result_chars"))
         else:
             conn = connect(args)
-            entry = gq.run_logged(conn, sql, json.loads(args.params), as_of=args.as_of,
+            entry = gq.run_logged(conn, sql, json.loads(args.params), as_of=args.as_of, metric=(args.metric, args.slice),
                                   scratch_prefix=config["scratch_prefix"],
                                   **limits(config, "max_rows", "max_cell_chars", "max_result_chars", "max_seconds"))
     except ValueError as err:

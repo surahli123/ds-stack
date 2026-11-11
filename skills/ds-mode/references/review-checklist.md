@@ -16,6 +16,7 @@ If this fails, send it back now. Nothing below means anything for a number nobod
 
 - Does the Provenance definition (numerator, denominator, filters, grain, source table) match the source of truth, or is it labeled `[guess]`?
 - Does the reconciliation line tie the base number to a known figure, with any gap explained?
+- Does `verify_readout.py` list a metric reported with two values? Compare the two queries' definitions, and send it back unless the readout explains the gap.
 - If the metric is a proxy for what the decision cares about, does the readout say so?
 
 ## 3. Is it the question that was asked?

@@ -23,7 +23,8 @@ else the files in the current directory.
 
 Prints "verify_readout: pass (...)" or "verify_readout: fail" with one line per
 problem, then the [given] lines for the reviewer to confirm against the request,
-then the numbers not found in their source.
+then the numbers not found in their source, then any metric that two cited
+queries (same --metric, --slice and as-of) report with no rate value in common.
 With --stamp, a pass also writes "- Verified: <the pass line>" as the last line
 of Provenance, replacing an earlier one, so the readout needs no second run.
 Exit code: 0 pass, 1 fail, 3 usage error.
@@ -81,6 +82,27 @@ def in_source(number, values):
     x = abs(float(number.replace("−", "-").replace(",", "")))
     tolerance = 0.5 * 10 ** -(len(number.split(".")[1]) if "." in number else 0) + 1e-9
     return any(abs(x - abs(v)) <= tolerance or abs(x - abs(v) * 100) <= tolerance for v in values)
+
+
+def conflicts(cited, results):
+    """Cited queries that name the same metric, slice and period but share no rate value."""
+    groups = {}
+    for qid in sorted(cited):
+        entry = results.get(qid)
+        if entry and entry.get("metric"):
+            key = (entry["metric"].lower(), (entry.get("slice") or "all").lower(), entry.get("as_of"))
+            groups.setdefault(key, []).append(entry)
+    found = []
+    for (metric, part, as_of), entries in groups.items():
+        rates = {}
+        for entry in entries:
+            values = values_in(entry.get("rows"))
+            rates[entry["id"]] = [v for v in values if v != int(v)] or values
+        for i, a in enumerate(entries):
+            for b in entries[i + 1:]:
+                if not any(abs(x - y) <= 0.002 * max(abs(x), abs(y), 1e-9) for x in rates[a["id"]] for y in rates[b["id"]]):
+                    found.append((metric, part, as_of, a, b, rates))
+    return found
 
 
 def tags_in(line):
@@ -159,6 +181,7 @@ def verify(text, queries, checks):
                 missing = [n for n in numbers if not (n.isdigit() and int(n) <= 10) and not in_source(n, values)]
                 if missing:
                     stats["unsourced"].append((missing, line.strip()))
+    stats["conflicts"] = conflicts(stats["queries"], results)
     return list(dict.fromkeys(problems)), stats, given
 
 
@@ -193,7 +216,8 @@ def main(argv=None):
     problems, stats, given = verify(text, read_jsonl(args.queries), read_jsonl(args.checks))
     counts = (f"{stats['numbers']} numbers on {stats['lines']} lines; {len(stats['queries'])} queries, "
               f"{len(stats['checks'])} checks, {len(given)} given, "
-              f"{sum(len(m) for m, _ in stats['unsourced'])} not found in their source")
+              f"{sum(len(m) for m, _ in stats['unsourced'])} not found in their source"
+              + (f", {len(stats['conflicts'])} metric reported with two values" if stats["conflicts"] else ""))
     if problems:
         print(f"verify_readout: fail ({counts})")
         for problem in problems:
@@ -209,6 +233,11 @@ def main(argv=None):
         print(f"  given (confirm against the request): {line}")
     for missing, line in stats["unsourced"]:
         print(f"  not in its source (confirm, or log how it was computed): {', '.join(missing)} in: {line}")
+    for metric, part, as_of, a, b, rates in stats["conflicts"]:
+        shown = "; ".join(f"{e['id']} gives {', '.join(f'{v:g}' for v in rates[e['id']][:4])}" for e in (a, b))
+        print(f"  one metric, two values (confirm the definitions match): {metric} ({part}, through {as_of}): {shown}")
+        for e in (a, b):
+            print(f"    {e['id']}: {' '.join(e.get('sql', '').split())[:300]}")
     return 1 if problems else 0
 
 
