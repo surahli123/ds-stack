@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Check that every number in a ds-mode readout traces to a logged query or check.
 
-    python3 tools/verify_readout.py readout.md [--queries .ds-queries.log] [--checks .ds-checks.log]
+    python3 tools/verify_readout.py readout.md [--queries .ds-queries.log] [--checks .ds-checks.log] [--stamp]
 
 In the Answer, "What it means" and "Why we believe it" sections:
 - every line that states a number carries a tag: [q<n>] for a logged query,
@@ -17,6 +17,8 @@ else the files in the current directory.
 
 Prints "verify_readout: pass (...)" or "verify_readout: fail" with one line per
 problem, then the [given] lines for the reviewer to confirm against the request.
+With --stamp, a pass also writes "- Verified: <the pass line>" as the last line
+of Provenance, replacing an earlier one, so the readout needs no second run.
 Exit code: 0 pass, 1 fail, 3 usage error.
 """
 
@@ -34,6 +36,7 @@ DATE = re.compile(r"\b\d{4}-\d{2}(?:-\d{2})?\b|\b\d{4}-W\d{2}\b", re.I)
 CI_LEVEL = re.compile(r"\b(?:80|90|95|99)\s*[%％]\s*(?=(?:confidence\s+)?(?:interval|CI)\b|置信)", re.I)
 LIST_MARKER = re.compile(r"^\s*(?:[-*+]|\d+[.)])\s+")
 NUMBER = re.compile(r"(?<![A-Za-z_#\d.])[-+−]?\d+(?:[.,]\d+)*")
+VERIFIED = re.compile(r"^\s*[-*]\s*Verified\s*:.*\n?", re.I | re.M)
 CHECKED_SECTIONS = ("answer", "what it means", "why we believe")
 
 
@@ -119,12 +122,29 @@ def verify(text, queries, checks):
     return list(dict.fromkeys(problems)), stats, given
 
 
+def stamp(text, result):
+    """Return text with '- Verified: <result>' as the last line of Provenance."""
+    entry = f"- Verified: {result}\n"
+    heads = list(HEADING.finditer(text))
+    for i, head in enumerate(heads):
+        if head.group(1).strip().lower().startswith("provenance"):
+            end = heads[i + 1].start() if i + 1 < len(heads) else len(text)
+            block = VERIFIED.sub("", text[head.end():end]).rstrip("\n")
+            rest = text[end:]
+            return text[:head.end()] + block + "\n" + entry + ("\n" + rest if rest else "")
+    return text.rstrip("\n") + "\n\n## Provenance\n" + entry
+
+
 def main(argv=None):
     parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     parser.add_argument("readout", help="the readout file (use - for stdin)")
     parser.add_argument("--queries", default=os.environ.get("DS_QUERIES_LOG") or ".ds-queries.log")
     parser.add_argument("--checks", default=os.environ.get("DS_CHECKS_LOG") or ".ds-checks.log")
+    parser.add_argument("--stamp", action="store_true", help="on a pass, write the Verified line into the readout")
     args = parser.parse_args(argv)
+    if args.stamp and args.readout == "-":
+        print("verify_readout: --stamp needs a readout file, not stdin", file=sys.stderr)
+        return 3
     try:
         text = sys.stdin.read() if args.readout == "-" else open(args.readout).read()
     except OSError as err:
@@ -138,7 +158,12 @@ def main(argv=None):
         for problem in problems:
             print(f"  - {problem}")
     else:
-        print(f"verify_readout: pass ({counts})")
+        result = f"verify_readout: pass ({counts})"
+        print(result)
+        if args.stamp:
+            with open(args.readout, "w") as handle:
+                handle.write(stamp(text, result))
+            print("  stamped: the Verified line is in Provenance; no need to run this again")
     for line in given:
         print(f"  given (confirm against the request): {line}")
     return 1 if problems else 0

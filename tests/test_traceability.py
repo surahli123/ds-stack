@@ -126,6 +126,24 @@ def test_dates_interval_levels_and_names_are_not_numbers():
     assert vr.tags_in("x [q3, q4] [check:srm#2] [measured]") == ["q3", "q4", "check:srm#2"]
 
 
+def test_stamp_writes_one_verified_line_at_the_end_of_provenance(tmp_path, capsys):
+    (tmp_path / "q.log").write_text("\n".join(json.dumps(e) for e in QUERIES))
+    (tmp_path / "c.log").write_text("\n".join(json.dumps(e) for e in CHECKS))
+    args = ["--queries", str(tmp_path / "q.log"), "--checks", str(tmp_path / "c.log"), "--stamp"]
+    readout = tmp_path / "r.md"
+    readout.write_text(READOUT + "\n## Notes\nnone\n")
+    assert vr.main([str(readout), *args]) == 0
+    assert vr.main([str(readout), *args]) == 0
+    text = readout.read_text()
+    provenance = text.split("## Provenance")[1].split("## Notes")[0].strip().splitlines()
+    assert provenance[-1].startswith("- Verified: verify_readout: pass (")
+    assert text.count("Verified:") == 1 and text.endswith("## Notes\nnone\n")
+    readout.write_text(READOUT.replace(" [q1] [measured]", " [measured]"))
+    assert vr.main([str(readout), *args]) == 1
+    assert "Verified:" not in readout.read_text()
+    assert vr.main(["-", "--stamp"]) == 3
+
+
 def test_verify_cli_exit_codes(tmp_path, capsys):
     (tmp_path / "r.md").write_text(READOUT)
     (tmp_path / "q.log").write_text("\n".join(json.dumps(e) for e in QUERIES))

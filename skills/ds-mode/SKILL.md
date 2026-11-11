@@ -29,7 +29,7 @@ This is a draft, to be replaced with the analyst's own first moves.
    - When a rate moved, run `mix_shift` on the segments whose mix could have shifted (platform, country, traffic source). Use the finest grain that keeps about 100 units per cell on both sides, then rerun at one coarser grain. If the two disagree, report both.
    - For an experiment, run `srm` on the assignment counts before you read any lift.
 6. Rule each alternative in or out with evidence. Always consider mix-shift, seasonality and day of week, data completeness, logging or definition changes, and the requester's cause. The evidence names a check or a query result from this session. Label each conclusion measured, inferred or guess.
-7. Write the readout below to `readout.md`, run `python3 <dir of this SKILL.md>/tools/verify_readout.py readout.md`, and fix the readout until it passes. Then send the readout as your final reply.
+7. Write the readout below to `readout.md`, run `python3 <dir of this SKILL.md>/tools/verify_readout.py readout.md --stamp`, and fix the readout until it passes. A pass writes the Verified line into Provenance, so don't add it by hand or run the script again. Then send the readout as your final reply.
 
 ## Queries
 
@@ -87,8 +87,8 @@ Headline: <signed number> <unit> (<95% interval>) [q<n> | check:<name>#<n>]   or
 - Queries and checks: <where they are logged>
 ```
 
-- Every line in the Answer, What it means and Why we believe it sections that states a number carries a tag: `[q<n>]` for a logged query, `[check:<name>#<n>]` for a logged check, `[given]` for a number stated in the request, such as a threshold. One bracket can hold several: `[q3, q4]`. A number you can't tag doesn't belong in the readout.
-- In Provenance, the logs are `.ds-queries.log` and `.ds-checks.log`, and a last line `- Verified: <the verify_readout.py result line, exactly as printed>` shows the reviewer the trace check passed.
+- Every line in the Answer, What it means and Why we believe it sections that states a number carries a tag: `[q<n>]` for a logged query, `[check:<name>#<n>]` for a logged check, `[given]` for a number stated in the request, such as a threshold. One bracket can hold several: `[q3, q4]`. A number you can't tag doesn't belong in the readout. That includes the reason after `not identified`, `not computed` or `skipped`: describe the design in words (a full rollout, no holdout) and tag any measured number, such as an arm split.
+- In Provenance, the logs are `.ds-queries.log` and `.ds-checks.log`, and the last line `- Verified: <the verify_readout.py result line>`, which `--stamp` writes on a pass, shows the reviewer the trace check passed.
 - The interval is required. `mix_shift` reports one for the overall change (`delta_ci95_pp`). For an experiment lift, use a two-proportion interval. When no interval can be computed, write `(no interval: <reason>)`.
 - Use causal words ("caused", "drove", "because of") only for a randomized test or a design that identifies the cause. Otherwise say "coincided with" or "is associated with", and name what would confirm it.
 - The three estimate lines keep apart numbers that are easy to conflate:

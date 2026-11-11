@@ -10,7 +10,7 @@ Answer each question in a line or two. An answer of "looks fine" doesn't count: 
 
 1. What is the one assumption the plan leans on most, and what result would show it is wrong?
 2. What could explain the result other than your hypothesis, and which of those can the data separate?
-3. Is the metric a valid measure of what the decision cares about, or a proxy (engagement for satisfaction)?
+3. Is the metric a valid measure of what the decision cares about, or a proxy (engagement for satisfaction)? If you test that, is the test sample drawn independently of the outcome, or only from known failures?
 4. For a causal question: what did the treatment do, how are treated units identified (not from the outcome), and what is the counterfactual?
 5. Is the sample large enough for the smallest effect that matters?
 6. Do different populations (new and returning users, platforms) behave differently enough that pooling them could mislead?
@@ -25,7 +25,7 @@ Answer each question in a line or two. An answer of "looks fine" doesn't count: 
 ## Feasibility: can it be done with what exists?
 
 1. What is the one input everything depends on? Have you queried it for the period you need, or do you only think it exists?
-2. What else does the plan assume exists: a join key, a label, a baseline period, access?
+2. What else does the plan assume exists: a join key, a label, a baseline period, access? Can a result be reproduced for another user and date (permissions, personalization, index state)?
 3. What is the smallest version that still answers the question?
 4. Does the plan ask more than three questions? Cut it to the one the decision needs.
 
