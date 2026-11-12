@@ -1,0 +1,238 @@
+{
+  "verdict": {
+    "n_tasks": 1,
+    "min_required": 10,
+    "rule_outcome_if_n_were_enough": "FAIL",
+    "verdict": "INSUFFICIENT_N (smoke test, not a decision)"
+  },
+  "per_arm": {
+    "baseline": {
+      "runs": 3,
+      "plans_written": 3,
+      "turn1_score": 1.0,
+      "turn2_score": 1.0,
+      "mean_words": 794,
+      "contaminated": 0,
+      "cost_usd": 0.41
+    },
+    "full": {
+      "runs": 3,
+      "plans_written": 3,
+      "turn1_score": 1.0,
+      "turn2_score": 1.0,
+      "mean_words": 898,
+      "contaminated": 0,
+      "cost_usd": 0.47
+    }
+  },
+  "by_task": {
+    "p2": {
+      "baseline": {
+        "turn1": 1.0,
+        "turn2": 1.0,
+        "words": [
+          871,
+          790,
+          720
+        ]
+      },
+      "full": {
+        "turn1": 1.0,
+        "turn2": 1.0,
+        "words": [
+          775,
+          939,
+          979
+        ]
+      }
+    }
+  },
+  "runs": [
+    {
+      "task": "p2",
+      "arm": "baseline",
+      "run": 1,
+      "model": "sonnet",
+      "exit": [
+        0,
+        0
+      ],
+      "seconds": 33.0,
+      "cost_usd": 0.1445,
+      "turns": [
+        3,
+        1
+      ],
+      "plan": true,
+      "turn1": 1.0,
+      "turn1_got": [
+        "estimates at the user level",
+        "3P users by their own pre-test behavior",
+        "tenants only as a stratum or for clustering"
+      ],
+      "turn2": 1.0,
+      "turn2_got": [
+        "estimates at the user level",
+        "3P users by their own pre-test behavior",
+        "tenants only as a stratum or for clustering"
+      ],
+      "words": 871,
+      "contaminated": null
+    },
+    {
+      "task": "p2",
+      "arm": "baseline",
+      "run": 2,
+      "model": "sonnet",
+      "exit": [
+        0,
+        0
+      ],
+      "seconds": 31.7,
+      "cost_usd": 0.1368,
+      "turns": [
+        3,
+        1
+      ],
+      "plan": true,
+      "turn1": 1.0,
+      "turn1_got": [
+        "estimates at the user level",
+        "3P users by their own pre-test behavior",
+        "tenants only as a stratum or for clustering"
+      ],
+      "turn2": 1.0,
+      "turn2_got": [
+        "estimates at the user level",
+        "3P users by their own pre-test behavior",
+        "tenants only as a stratum or for clustering"
+      ],
+      "words": 790,
+      "contaminated": null
+    },
+    {
+      "task": "p2",
+      "arm": "baseline",
+      "run": 3,
+      "model": "sonnet",
+      "exit": [
+        0,
+        0
+      ],
+      "seconds": 28.0,
+      "cost_usd": 0.1299,
+      "turns": [
+        3,
+        1
+      ],
+      "plan": true,
+      "turn1": 1.0,
+      "turn1_got": [
+        "estimates at the user level",
+        "3P users by their own pre-test behavior",
+        "tenants only as a stratum or for clustering"
+      ],
+      "turn2": 1.0,
+      "turn2_got": [
+        "estimates at the user level",
+        "3P users by their own pre-test behavior",
+        "tenants only as a stratum or for clustering"
+      ],
+      "words": 720,
+      "contaminated": null
+    },
+    {
+      "task": "p2",
+      "arm": "full",
+      "run": 1,
+      "model": "sonnet",
+      "exit": [
+        0,
+        0
+      ],
+      "seconds": 27.9,
+      "cost_usd": 0.1488,
+      "turns": [
+        4,
+        1
+      ],
+      "plan": true,
+      "turn1": 1.0,
+      "turn1_got": [
+        "estimates at the user level",
+        "3P users by their own pre-test behavior",
+        "tenants only as a stratum or for clustering"
+      ],
+      "turn2": 1.0,
+      "turn2_got": [
+        "estimates at the user level",
+        "3P users by their own pre-test behavior",
+        "tenants only as a stratum or for clustering"
+      ],
+      "words": 775,
+      "contaminated": null
+    },
+    {
+      "task": "p2",
+      "arm": "full",
+      "run": 2,
+      "model": "sonnet",
+      "exit": [
+        0,
+        0
+      ],
+      "seconds": 37.9,
+      "cost_usd": 0.1585,
+      "turns": [
+        4,
+        1
+      ],
+      "plan": true,
+      "turn1": 1.0,
+      "turn1_got": [
+        "estimates at the user level",
+        "3P users by their own pre-test behavior",
+        "tenants only as a stratum or for clustering"
+      ],
+      "turn2": 1.0,
+      "turn2_got": [
+        "estimates at the user level",
+        "3P users by their own pre-test behavior",
+        "tenants only as a stratum or for clustering"
+      ],
+      "words": 939,
+      "contaminated": null
+    },
+    {
+      "task": "p2",
+      "arm": "full",
+      "run": 3,
+      "model": "sonnet",
+      "exit": [
+        0,
+        0
+      ],
+      "seconds": 34.0,
+      "cost_usd": 0.1622,
+      "turns": [
+        4,
+        1
+      ],
+      "plan": true,
+      "turn1": 1.0,
+      "turn1_got": [
+        "estimates at the user level",
+        "3P users by their own pre-test behavior",
+        "tenants only as a stratum or for clustering"
+      ],
+      "turn2": 1.0,
+      "turn2_got": [
+        "estimates at the user level",
+        "3P users by their own pre-test behavior",
+        "tenants only as a stratum or for clustering"
+      ],
+      "words": 979,
+      "contaminated": null
+    }
+  ]
+}

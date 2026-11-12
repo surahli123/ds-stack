@@ -24,6 +24,12 @@ The spine is written before the draft (ds-doc step 2):
     {"type": "readout", "reader": "the PM who owns the launch",
      "answer": "...", "decision": "...", "takeaways": ["...", "...", "..."]}
 
+Optional: "vocabulary" (the terms the reader knows; the default is a reader
+who knows the business but no data-science or engineering terms) and
+"misread" (the definition most likely to mislead the reader, graded like a
+takeaway). The full read also fails when the reader names a word they didn't
+understand or two statements that disagree. Chinese counts by Han bigrams.
+
 Grading is done here, not by the author: each key item is matched against the
 reader's answer lines by shared content words and numbers, and items that
 don't match are checked by a separate grader call (same agent) when it is available.
@@ -49,7 +55,15 @@ PROMPTS = os.path.join(os.path.dirname(HERE), "references", "reader-prompts.md")
 STOP = set("""a an the and or but if then of to in on at by for with from as is are was were be been this that these those it
 its we you your our they their not no can could should would will may might must do does did have has had into than so
 also just more most less about over under all any each some other which who what when where why how there here""".split())
-KEYS = {1: "answer", 2: "decision", 3: "number", 4: "caveat", 5: "lost", 6: "question"}
+KEYS = {1: "answer", 2: "decision", 3: "number", 4: "caveat", 5: "lost", 6: "question", 7: "words", 8: "clash"}
+HAN = re.compile(r"[\u3400-\u4dbf\u4e00-\u9fff\uf900-\ufaff]+")
+NONE = re.compile(r"^\W*(?:none|nothing|no|nowhere|n/a|无|没有|没)\W*$", re.I)
+VOCABULARY = "your business and its products, but not data-science or engineering terms"
+
+
+def length(text):
+    """Words, with Han characters at about 1.7 per word, as doc_lint counts them."""
+    return len(re.findall(r"[A-Za-z0-9]+", text)) + round(sum(len(run) for run in HAN.findall(text)) / 1.7)
 
 
 def load_spine(path):
@@ -60,7 +74,7 @@ def load_spine(path):
         raise ValueError(f"spine is missing {', '.join(missing)}")
     if not isinstance(spine["takeaways"], list) or len(spine["takeaways"]) != 3:
         raise ValueError("spine needs exactly three takeaways")
-    if len(spine["answer"].split()) > 30:
+    if length(spine["answer"]) > 30:
         raise ValueError("the spine's answer is over 30 words; tighten it before drafting")
     return spine
 
@@ -68,7 +82,8 @@ def load_spine(path):
 def prompts(doc, spine):
     with open(PROMPTS, encoding="utf-8") as handle:
         skim_prompt, full_prompt = re.findall(r"```\n(.*?)```", handle.read(), re.S)[:2]
-    fill = lambda p, text: p.replace("{role}", spine["reader"]).replace("{text}", text)  # noqa: E731
+    fill = lambda p, text: (p.replace("{role}", spine["reader"])  # noqa: E731
+                            .replace("{vocabulary}", spine.get("vocabulary") or VOCABULARY).replace("{text}", text))
     return {"skim": fill(skim_prompt, skim_view.skim(doc)), "full": fill(full_prompt, doc)}
 
 
@@ -121,7 +136,7 @@ def ask(prompt, model, agent_cmd=None):
 def answer_lines(reply):
     lines = {}
     for line in reply.splitlines():
-        match = re.match(r"^\s*\**\s*([1-6])[.)]\s*(.*)$", line)
+        match = re.match(r"^\s*\**\s*([1-8])[.)]\s*(.*)$", line)
         if match:
             lines[KEYS[int(match.group(1))]] = re.sub(r"^\**\s*\w+\s*:\**\s*", "", match.group(2)).strip()
     return lines
@@ -129,7 +144,8 @@ def answer_lines(reply):
 
 def tokens(text):
     words = re.findall(r"[a-z0-9][a-z0-9.%_-]*", text.lower().replace("−", "-"))
-    return {w.rstrip(".") for w in words if w not in STOP and (len(w) > 2 or any(c.isdigit() for c in w))}
+    bigrams = {run[i:i + 2] for run in HAN.findall(text) for i in range(max(len(run) - 1, 1))}
+    return {w.rstrip(".") for w in words if w not in STOP and (len(w) > 2 or any(c.isdigit() for c in w))} | bigrams
 
 
 def overlap(key, text):
@@ -163,6 +179,8 @@ def grade(spine, replies, model=None, agent_cmd=None):
              ("skim", "decision", spine["decision"], skim.get("decision", "") + " " + skim.get("answer", ""))]
     full_text = " ".join(full.get(k, "") for k in ("answer", "decision", "number", "caveat"))
     items += [("full", f"takeaway {n}", t, full_text) for n, t in enumerate(spine["takeaways"], 1)]
+    if spine.get("misread"):
+        items.append(("full", "misread", spine["misread"], full.get("caveat", "") + " " + full_text))
     results = []
     for mode, name, key, text in items:
         score = overlap(key, text)
@@ -175,9 +193,12 @@ def grade(spine, replies, model=None, agent_cmd=None):
                 r["got"], r["how"] = True, r["how"] + "; grader: same fact"
     skim_got = sum(r["got"] for r in results if r["pass"] == "skim")
     full_got = sum(r["got"] for r in results if r["pass"] == "full")
-    passed = skim_got == 2 and full_got == 3
-    return {"pass": passed, "skim": f"{skim_got}/2", "full": f"{full_got}/3", "items": results,
-            "lost": full.get("lost", ""), "question": full.get("question", "")}
+    full_need = sum(r["pass"] == "full" for r in results)
+    flagged = {k: full[k] for k in ("words", "clash") if full.get(k) and not NONE.match(full[k])}
+    passed = skim_got == 2 and full_got == full_need and not flagged
+    return {"pass": passed, "skim": f"{skim_got}/2", "full": f"{full_got}/{full_need}", "items": results,
+            "lost": full.get("lost", ""), "question": full.get("question", ""),
+            "unclear_words": flagged.get("words", ""), "clash": flagged.get("clash", "")}
 
 
 def main(argv=None):
@@ -230,6 +251,10 @@ def main(argv=None):
         print(f"{'got   ' if r['got'] else 'MISSED'} {r['pass']:4} {r['item']:10} key: {r['key'][:70]}")
     if result["lost"]:
         print(f"reader got lost: {result['lost']}")
+    if result["unclear_words"]:
+        print(f"FAILED reader didn't understand: {result['unclear_words']}")
+    if result["clash"]:
+        print(f"FAILED reader saw two statements disagree: {result['clash']}")
     print(f"cold-read: skim {result['skim']}, full {result['full']} - {'pass' if result['pass'] else 'fail'}")
     return 0 if result["pass"] else 1
 

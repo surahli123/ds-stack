@@ -29,6 +29,7 @@ for sub in ("skills/doc-tighten/tools", "skills/cold-read/tools", "eval"):
 
 import doc_lint  # noqa: E402
 import skim_view  # noqa: E402
+from cold_read import VOCABULARY  # noqa: E402
 from run_arms import PASSTHROUGH_ENV  # noqa: E402
 
 PROMPTS = os.path.join(ROOT, "skills", "cold-read", "references", "reader-prompts.md")
@@ -99,7 +100,8 @@ def grade_run(run_dir, model, prompts):
                   lint_rules=sorted({f.rule for f in findings}))
     skim_facts = [f for f in gold["facts"] if f["key"] in ("answer", "decision", "number")]
     for mode, text, facts in (("skim", skim_view.skim(doc), skim_facts), ("full", doc, gold["facts"])):
-        reply = ask_reader(prompts[mode].replace("{role}", gold["reader_role"]).replace("{text}", text), model)
+        prompt = prompts[mode].replace("{role}", gold["reader_role"]).replace("{vocabulary}", gold.get("vocabulary", VOCABULARY))
+        reply = ask_reader(prompt.replace("{text}", text), model)
         lines = answer_lines(reply)
         got = [f["name"] for f in facts if fact_found(f, lines)]
         result[mode] = round(len(got) / len(facts), 3)

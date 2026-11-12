@@ -21,6 +21,10 @@ The pass rule: at least 15 holdout fixtures, 3 runs each. The full arm beats bas
 
 `writing/` compares baseline with the ds-doc skills on documents written from raw notes (a readout, a memo, a handover). `run_writing.py` produces the docs. `grade_writing.py` has a fresh reader answer questions from a skim view and from the whole doc, graded by script against gold facts. Lint fails and word counts are reported but secondary. `writing/pass_rule.json` needs at least 10 tasks, 3 runs each, a skim margin of 0.2, a full-read margin of 0.0 and no lint fails in the full arm.
 
+## Plan eval
+
+`plan/` compares baseline with the ds-plan skill on planning requests. Each run has two turns in one session: the task, then an objection the requester raises (`followup.md`). Both turns end with fixed closing lines (`closing.md`, such as `Unit:` and `Segment:`), shown to every arm, and `grade_plan.py` grades those lines by script against gold. `plan/pass_rule.json` needs at least 10 tasks, 3 runs each, a margin of 0.2 on both turns, and full-arm plans no longer than baseline's. Task p2 is modeled on a real mistake: a user-randomized test analyzed by tenant "for power", with 3P users defined by a tenant label.
+
 ## Running it
 
 ```bash
@@ -28,6 +32,8 @@ make eval                                    # three arms x all fixtures x 3 run
 make grade RUN=eval/results/<dir>
 make writing-eval
 make writing-grade RUN=eval/writing/results/<dir>
+make plan-eval
+make plan-grade RUN=eval/plan/results/<dir>
 ```
 
 `run_arms.py` and `cold_read.py` call an agent CLI. The agent command is configurable; see `--help`. The writing-eval scripts also call an agent CLI.

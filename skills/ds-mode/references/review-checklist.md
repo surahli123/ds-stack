@@ -8,6 +8,7 @@ Run `tools/verify_readout.py` on the readout and its logs before reading anythin
 
 - Does every number carry a tag, and does each tag resolve to a logged query `[q<n>]`, a logged check `[check:<name>#<n>]`, or the request `[given]`?
 - Does each tagged query compute what its sentence says (filter, period, grain)?
+- Is each number that `verify_readout.py` lists as not in its source right? Recompute it from the cited rows, or send it back.
 
 If this fails, send it back now. Nothing below means anything for a number nobody can trace.
 
@@ -15,6 +16,7 @@ If this fails, send it back now. Nothing below means anything for a number nobod
 
 - Does the Provenance definition (numerator, denominator, filters, grain, source table) match the source of truth, or is it labeled `[guess]`?
 - Does the reconciliation line tie the base number to a known figure, with any gap explained?
+- Does `verify_readout.py` list a metric reported with two values? Compare the two queries' definitions, and send it back unless the readout explains the gap.
 - If the metric is a proxy for what the decision cares about, does the readout say so?
 
 ## 3. Is it the question that was asked?

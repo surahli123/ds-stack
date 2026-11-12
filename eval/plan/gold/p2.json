@@ -1,0 +1,87 @@
+{
+  "_note": "Modeled on a real plan-stage mistake (2026-11): the agent chose tenant-level analysis of a user-randomized test 'for power' and defined 3P users by the tenant label, then ignored the requester's objection. Details are invented.",
+  "items": [
+    {
+      "name": "estimates at the user level",
+      "line": "unit",
+      "any_of": [
+        "user"
+      ],
+      "none_of": [
+        "tenant-level",
+        "tenant level",
+        "per tenant",
+        "per-tenant",
+        "unit: tenant",
+        "tenants as the unit",
+        "aggregate to tenant",
+        "roll up to tenant"
+      ]
+    },
+    {
+      "name": "3P users by their own pre-test behavior",
+      "line": "segment",
+      "all_of": [
+        [
+          "used_3p_result",
+          "own",
+          "each user",
+          "user-level",
+          "per user",
+          "per-user",
+          "searched 3p",
+          "search 3p",
+          "used 3p",
+          "3p results",
+          "3p content",
+          "third-party content"
+        ],
+        [
+          "before",
+          "pre-",
+          "prior",
+          "june",
+          "july",
+          "august",
+          "baseline period",
+          "pre period",
+          "pre-period",
+          "history"
+        ]
+      ],
+      "none_of": [
+        "segment = '3p power'",
+        "segment='3p power'",
+        "tenant segment",
+        "by the tenant label",
+        "tenant's segment"
+      ]
+    },
+    {
+      "name": "tenants only as a stratum or for clustering",
+      "line": "tenants",
+      "any_of": [
+        "stratif",
+        "strata",
+        "stratum",
+        "cluster",
+        "block",
+        "covariate",
+        "fixed effect",
+        "control for",
+        "heterogeneity",
+        "secondary",
+        "not as the unit",
+        "not the unit"
+      ],
+      "none_of": [
+        "unit of analysis is the tenant",
+        "analyze at the tenant",
+        "analyse at the tenant",
+        "tenant-level analysis",
+        "aggregate to tenant",
+        "roll up to tenant"
+      ]
+    }
+  ]
+}

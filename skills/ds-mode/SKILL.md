@@ -19,7 +19,7 @@ A data scientist will review your readout, and should be able to check it in und
 
 This is a draft, to be replaced with the analyst's own first moves.
 
-1. Restate the question in one sentence and name the decision it feeds. Treat the requester's guess about the cause as one alternative, not the premise.
+1. Restate the question in one sentence and name the decision it feeds. Treat the requester's guess about the cause as one alternative, not the premise. If the analysis isn't routine (a new metric, a causal question with no randomized test, a costly decision), run the `ds-plan` skill first, if it is installed.
 2. Pin the metric before you query: numerator, denominator, filters, grain and source table. Take it from `metrics.json` in the overlay directory named by `$DS_OVERLAY_DIR` when the metric is there, and say so. If `$DS_OVERLAY_DIR` is unset or holds no `metrics.json`, there is none: never search the filesystem for one. When it isn't, write your definition into the readout and label it `[guess]`. Never invent a definition silently; a plausible number on the wrong definition is the most common wrong answer, and no check below catches it.
 3. Decide whether the question can be answered.
    - If two readings of it give materially different numbers and nothing settles which one is meant, ask before computing. When no one can answer, pick the reading the decision most likely needs, state it in the Answer, and put the other in the caveats.
@@ -29,7 +29,7 @@ This is a draft, to be replaced with the analyst's own first moves.
    - When a rate moved, run `mix_shift` on the segments whose mix could have shifted (platform, country, traffic source). Use the finest grain that keeps about 100 units per cell on both sides, then rerun at one coarser grain. If the two disagree, report both.
    - For an experiment, run `srm` on the assignment counts before you read any lift.
 6. Rule each alternative in or out with evidence, or say it is not ruled out. Always consider mix-shift, seasonality and day of week, data completeness, logging or definition changes, and the requester's cause. The evidence names a check or a query result from this session. Label each conclusion measured, inferred or guess.
-7. Write the readout below to `readout.md`, run `python3 <dir of this SKILL.md>/tools/verify_readout.py readout.md`, and fix the readout until it passes.
+7. Write the readout below to `readout.md`, run `python3 <dir of this SKILL.md>/tools/verify_readout.py readout.md --stamp`, and fix the readout until it passes. A pass writes the Verified line into Provenance, so don't add it by hand or run the script again.
 8. If ds-verify sits next to this skill (`<dir of this SKILL.md>/../ds-verify/tools/ds_verify.py`), save the person's question as `request.md`, word for word and without these instructions. Then run `python3 <that file> readout.md --request request.md`, adding `--db <file>` when the data isn't `./warehouse.db` or `$DS_WAREHOUSE`. Fix what each FAIL line names and run it again:
    - A FAIL about a number or a definition is fixed in the analysis, by rerunning the queries. Rewording the readout doesn't fix it.
    - Never clear a FAIL by deleting a number, abstaining, pasting a result, citing a different query, or editing a log or a check's output. Tag an untagged number instead: `[given]` for one stated in the request. The Headline cites the query or check that produced it.
@@ -39,7 +39,7 @@ This is a draft, to be replaced with the analyst's own first moves.
 
 ## Queries
 
-Run every query as `python3 <dir of this SKILL.md>/tools/query.py "<SQL>" --as-of <last complete period>`. It enforces the safety envelope (scratch-only writes, one statement, aggregates only, a time cap), prints the result with an id such as `q3`, and logs the statement and result to `.ds-queries.log`. Don't query the data any other way. If a result had to be computed elsewhere, for example by a person, log it with `--pasted --sql ... --columns ... --rows ...` so it gets an id. On a live warehouse, the overlay's adapter takes the place of the SQLite default, with the same log.
+Run every query as `python3 <dir of this SKILL.md>/tools/query.py "<SQL>" --as-of <last complete period>`. It enforces the safety envelope (scratch-only writes, one statement, aggregates only, a time cap), prints the result with an id such as `q3`, and logs the statement and result to `.ds-queries.log`. Don't query the data any other way. If a result had to be computed elsewhere, for example by a person, log it with `--pasted --sql ... --columns ... --rows ...` so it gets an id. That includes a number you work out yourself, such as a difference or an interval: log them all in one `--pasted` call, with the formula as `--sql`, and tag them with its id. `verify_readout.py` lists any tagged number it can't find in its source. When a query computes a metric, add `--metric <name>`, and `--slice <segment>` if it covers only part of the data, so the same check can spot one metric reported with two values. On a live warehouse, the overlay's adapter takes the place of the SQLite default, with the same log.
 
 ## Checks
 
@@ -94,8 +94,8 @@ Headline: <signed number> <unit> (<95% interval>) [q<n> | check:<name>#<n>]   or
 - Queries and checks: <where they are logged>
 ```
 
-- Every line in the Answer, What it means and Why we believe it sections that states a number carries a tag: `[q<n>]` for a logged query, `[check:<name>#<n>]` for a logged check, `[given]` for a number stated in the request, such as a threshold. One bracket can hold several: `[q3, q4]`. A number you can't tag doesn't belong in the readout.
-- In Provenance, the logs are `.ds-queries.log` and `.ds-checks.log`, and a last line `- Verified: <the verify_readout.py result line>; <ds-verify's first line, when it ran>`, each exactly as printed, shows the reviewer what passed.
+- Every line in the Answer, What it means and Why we believe it sections that states a number carries a tag: `[q<n>]` for a logged query, `[check:<name>#<n>]` for a logged check, `[given]` for a number stated in the request, such as a threshold. One bracket can hold several: `[q3, q4]`. A number you can't tag doesn't belong in the readout. That includes the reason after `not identified`, `not computed` or `skipped`: describe the design in words (a full rollout, no holdout) and tag any measured number, such as an arm split.
+- In Provenance, the logs are `.ds-queries.log` and `.ds-checks.log`, and a last line `- Verified: <the verify_readout.py result line>; <ds-verify's first line, when it ran>`, each exactly as printed, shows the reviewer what passed. `--stamp` writes the first part on a pass; add ds-verify's line after it.
 - The interval is required. `mix_shift` reports one for the overall change (`delta_ci95_pp`). For an experiment lift, use a two-proportion interval. When no interval can be computed, write `(no interval: <reason>)`.
 - Each alternative gets one of three verdicts. `ruled in` means the evidence shows it happened. `ruled out` means the evidence excludes it. An alternative the data can neither show nor exclude is `not ruled out`, followed by what would decide it. Never write `ruled in as possible` or `ruled in as unresolved`: a reader who skims sees `ruled in` and takes it as shown.
 - Use causal words ("caused", "drove", "because of") only for a randomized test or a design that identifies the cause. Otherwise say "coincided with" or "is associated with", and name what would confirm it.
@@ -114,5 +114,4 @@ When this readout grows into a document for other people (a readout, memo, plan 
 ## References
 
 - `references/review-checklist.md`: what the reviewer checks, in order. Read it before writing the readout; it is the test the readout faces.
-- `references/plan-critique.md`: an optional critique before a non-routine analysis. Not part of the method above.
 - `references/mistake-classes.md`: candidate mistake classes for the analyst's wrong-number archive. They become checks only after two real incidents.

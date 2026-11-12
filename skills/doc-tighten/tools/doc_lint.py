@@ -4,12 +4,14 @@
     python3 doc_lint.py doc.md --type readout|memo|plan|handover|reference|other [--json]
     python3 doc_lint.py doc.md --spine spine.json     # type comes from the spine
 
-Every rule traces to a failure counted in 119 agent-written docs (see
-rules.json next to this file). Rules marked "fail" exit 1; "warn" rules are
-for the author to judge. Exit 0 when nothing fails, 2 on a usage error.
+Every rule traces to a failure counted in 119 agent-written docs, or, for
+D15-D17, in one real Chinese readout (see rules.json next to this file). Rules
+marked "fail" exit 1; "warn" rules are for the author to judge. Exit 0 when
+nothing fails, 2 on a usage error. Han characters count toward length at
+about 1.7 per English word.
 
 This checks what a script can see: where the answer sits, emphasis, tables,
-log drift, clutter, length. Whether the doc makes sense to its reader is the
+log drift, clutter, length, repeated numbers, field names in prose. Whether the doc makes sense to its reader is the
 cold-read skill's job.
 """
 
@@ -21,7 +23,10 @@ import sys
 from dataclasses import asdict, dataclass
 
 HERE = os.path.dirname(os.path.abspath(__file__))
-ANSWER_LABELS = r"answer|summary|tl;?dr|bottom line|decision|recommendation|bluf|the ask|headline|verdict|result"
+# Han characters count toward length at about 1.7 per English word, a translation rule of thumb.
+HAN = re.compile(r"[㐀-䶿一-鿿豈-﫿]")
+HAN_PER_WORD = 1.7
+ANSWER_LABELS = r"answer|summary|tl;?dr|bottom line|decision|recommendation|bluf|the ask|headline|verdict|result|结论|答案|摘要|总结|建议|要点"
 HANDOVER_LABELS = ANSWER_LABELS + r"|status|state|next step|where things stand"
 EMPHASIS_CAPS = {"NOT", "ONLY", "MUST", "NEVER", "ALWAYS", "CRITICAL", "IMPORTANT", "NOTE", "WARNING",
                  "LOCKED", "DONE", "NO", "DO", "DON'T", "REQUIRED", "MANDATORY", "BLOCKED", "CANNOT", "ALL"}
@@ -34,7 +39,7 @@ STAT_SUPPORT = re.compile(r"(\bp\s*[<=>]|\bp-value|confidence interval|\b95% ci\
                           r"\bexperiment|\brandomi[sz]ed|\bholdout|\bcontrol group|difference-in-differences|\bregression discontinuity)", re.I)
 ANSWER_LIKE = re.compile(r"\b(keep|recommend\w*|should|don't|do not|approve\w*|roll(?:ing)? back|ship|stop|choose|cancel|launch|kill|"
                          r"adopt|retire|merge|blocked|failing|fails|broken|is live|shipped|works|done|decided)\b|"
-                         r"[-+\u2212]?\d+(?:\.\d+)?\s*(?:pp\b|%|percentage points?\b|x\b)", re.I)
+                         r"[-+\u2212]?\d+(?:\.\d+)?\s*(?:pp\b|%|percentage points?\b|x\b|\u4e2a?\u767e\u5206\u70b9)", re.I)
 METHOD_START = re.compile(r"^\W*(data sources?|method(?:ology)?|background|context|approach|scope|this (?:doc|document|note|page)|"
                           r"we (?:pulled|ran|looked|started)|i (?:ran|pulled|looked|started))\b", re.I)
 RESTATED_HEADING = re.compile(r"\b(restated|recap|again|in summary|to summari[sz]e)\b", re.I)
@@ -51,6 +56,12 @@ VERIFIED_BADGE = re.compile(r"\(verified\)|\u2713\s*verified|\u2705\s*verified|\
 ID_CODES = re.compile(r"(?<![\w/.-])[A-Z]{1,2}#?\d{1,3}(?:[-–]\d{1,3})?(?![\w%])")
 LOG_LINE = re.compile(r"\b(DONE|RESOLVED|FIXED|UPDATED?|SHIPPED|CLOSED|EXECUTED|RECONCILED|COMPLETED|MERGED)\b[^\n]{0,30}\d{4}-\d{2}-\d{2}|~~[^~]+~~")
 LOG_HEADING = re.compile(r"(execution record|changelog|change log|activity log|history|update log|progress log|what (?:actually )?happened)", re.I)
+NUMBER = re.compile(r"(?<![\w.#/-])\d+(?:[.,]\d+)*(?![\w-])")
+YEAR = re.compile(r"(?:19|20)\d\d")
+CI_LEVEL = re.compile(r"\b(?:80|90|95|99)\s*[%％]\s*(?=(?:confidence\s+)?(?:interval|CI)\b|置信)", re.I)
+FIELD_NAME = re.compile(r"(?<![\w./-])[a-z][a-z0-9]*(?:_[a-z0-9]+)+(?![\w/-])")
+UNCHECKED = re.compile(r"\b(?:not (?:checked|verified|looked at)|(?:did not|didn't|haven't|have not) (?:check|verify|look at)|unknown whether|"
+                       r"can't tell whether|cannot tell whether)\b|没有查看|没有检查|未检查|未核对|没有核实|未核实|不知道是否|无法确认是否|尚未确认", re.I)
 
 
 @dataclass
@@ -82,11 +93,11 @@ class Doc:
                 self.code.add(i)
         self.headings = [(i, len(m.group(1)), m.group(2).strip()) for i, line in enumerate(self.lines)
                          if i not in self.code for m in [re.match(r"^(#{1,6})\s+(.*)$", line)] if m]
-        appendix = next((i for i, _, t in self.headings if re.match(r"(appendix|annex)\b", t, re.I)), len(self.lines))
+        appendix = next((i for i, _, t in self.headings if re.match(r"(?:appendix|annex)\b|附录", t, re.I)), len(self.lines))
         self.body_end = appendix
 
     def appendix_word_count(self):
-        return sum(len(self.words(line)) for i, line in enumerate(self.lines[self.body_end:], self.body_end)
+        return sum(self.count(line) for i, line in enumerate(self.lines[self.body_end:], self.body_end)
                    if i not in self.code and not re.match(r"^#{1,6}\s", line))
 
     def prose_lines(self, end=None):
@@ -100,11 +111,16 @@ class Doc:
         text = re.sub(r"`[^`]*`", " x ", text)
         return re.findall(r"[A-Za-z0-9][A-Za-z0-9'%.\-]*", text)
 
+    def count(self, text):
+        """Length in English-word equivalents: Latin words plus Han characters / HAN_PER_WORD."""
+        han = len(HAN.findall(re.sub(r"`[^`]*`", " ", text)))
+        return len(self.words(text)) + round(han / HAN_PER_WORD)
+
     def body_word_count(self):
-        count = sum(len(self.words(line)) for _, line in self.prose_lines())
+        count = sum(self.count(line) for _, line in self.prose_lines())
         for i, line in enumerate(self.lines[:self.body_end]):
             if i not in self.code and line.lstrip().startswith("|") and not re.match(r"^\s*\|[\s:|-]+\|\s*$", line):
-                count += len(self.words(line))
+                count += self.count(line)
         return count
 
     def paragraph(self, index):
@@ -136,7 +152,7 @@ def answer_like_opening(doc):
             return None
         if ANSWER_LIKE.search(text):
             return i
-        seen += len(doc.words(line))
+        seen += doc.count(line)
         if seen > 60:
             return None
     return None
@@ -170,7 +186,7 @@ def check(text, doc_type="other", rules=None):
         if label_re.match(line):
             located = i
             break
-        seen += len(doc.words(line))
+        seen += doc.count(line)
         if seen > 150:
             break
     if located is None:
@@ -250,9 +266,9 @@ def check(text, doc_type="other", rules=None):
         if i in doc.code or not line.lstrip().startswith("|") or re.match(r"^\s*\|[\s:|-]+\|\s*$", line):
             continue
         cells = [c.strip() for c in line.strip().strip("|").split("|")]
-        long = [c for c in cells if len(doc.words(c)) > rules["D9"]["max_cell_words"]]
+        long = [c for c in cells if doc.count(c) > rules["D9"]["max_cell_words"]]
         if long:
-            add("D9", i, f"a table cell has {len(doc.words(long[0]))} words; move the prose out and keep the cell to a fact")
+            add("D9", i, f"a table cell has {doc.count(long[0])} words; move the prose out and keep the cell to a fact")
             break
     for i, line in enumerate(doc.lines):
         if i in doc.code or not line.lstrip().startswith("|"):
@@ -295,6 +311,37 @@ def check(text, doc_type="other", rules=None):
         hedges = HEDGES.findall(answer_text)
         if len(hedges) > 1:
             add("D14", located, f"{len(hedges)} hedges in the answer ({', '.join(hedges[:3])}); state it at the strength the evidence supports")
+
+    # D15 the same number stated again in another paragraph of the body. Headings, tables
+    # and the appendix may repeat it; years, small counts and confidence levels don't count.
+    numbers = {}
+    for i, line in prose:
+        start = i
+        while start > 0 and doc.lines[start - 1].strip():
+            start -= 1
+        for m in NUMBER.finditer(CI_LEVEL.sub(" ", re.sub(r"\[[^\]]*\]", " ", line))):
+            value = m.group(0)
+            if not YEAR.fullmatch(value) and not (value.isdigit() and int(value) <= 10):
+                numbers.setdefault(value, {}).setdefault(start, i)
+    repeated = {v: sorted(at.values()) for v, at in numbers.items() if len(at) > 1}
+    if len(repeated) >= rules["D15"]["min_repeated"]:
+        add("D15", min(at[1] for at in repeated.values()),
+            f"{len(repeated)} numbers stated more than once in the body ({', '.join(list(repeated)[:4])}); "
+            "state each once, where it belongs; a table or the appendix can hold it again")
+
+    # D16 code-style field names in the prose. Handovers and reference pages name code on purpose.
+    if doc_type not in ("handover", "reference"):
+        names = [(i, m.group(0)) for i, line in prose for m in FIELD_NAME.finditer(re.sub(r"\[[^\]]*\]", " ", line))]
+        if len(names) >= rules["D16"]["threshold"]:
+            examples = ", ".join(list(dict.fromkeys(n for _, n in names))[:3])
+            add("D16", names[0][0], f"{len(names)} code-style names in the prose, such as {examples}; "
+                                    "say what each one means, and keep field names for a table or the appendix")
+
+    # D17 statements that something wasn't checked, often left over from before the check ran.
+    unchecked = [i for i, line in prose if UNCHECKED.search(line)]
+    if unchecked:
+        add("D17", unchecked[0], f"{len(unchecked)} statement(s) that something wasn't checked; "
+                                 "confirm each still holds after the checks ran, or delete it")
 
     return found, words_total
 

@@ -66,6 +66,27 @@ def test_query_cli_prints_the_id_and_logs_blocked_attempts(workdir, capsys):
     assert query.main(["SELECT 1", "--db", "missing.db"]) == 3
 
 
+def test_queries_record_the_metric_and_slice_they_compute(workdir, capsys):
+    assert query.main(["SELECT SUM(clicks) * 1.0 / SUM(searches) FROM events", "--metric", "ctr"]) == 0
+    assert query.main(["--pasted", "--sql", "x", "--columns", '["ctr"]', "--rows", "[[0.2]]", "--metric", "ctr", "--slice", "app"]) == 0
+    assert query.main(["SELECT 1"]) == 0
+    log = read_jsonl(workdir / ".ds-queries.log")
+    assert [(e.get("metric"), e.get("slice")) for e in log] == [("ctr", "all"), ("ctr", "app"), (None, None)]
+
+
+def test_one_metric_reported_with_two_values_is_listed(capsys):
+    base = {"status": "ok", "metric": "ctr", "slice": "all", "as_of": "2026-10-04"}
+    queries = [{**base, "id": "q1", "sql": "SELECT SUM(clicks) * 1.0 / SUM(searches) FROM s", "rows": [[0.304]]},
+               {**base, "id": "q2", "sql": "SELECT ... WHERE is_bot = 0", "rows": [[0.291]]},
+               {**base, "id": "q3", "sql": "SELECT week, ...", "rows": [["2026-09-28", 0.2912], ["2026-10-04", 0.304]]},
+               {**base, "id": "q4", "slice": "mobile", "rows": [[0.22]]}]
+    text = ("## Answer\nHeadline: CTR 30.4% [q1]\n- Without bots: 29.1% [q2]\n- Weekly: 29.1% then 30.4% [q3]\n"
+            "- Mobile: 22.0% [q4]\n\n## Provenance\n- Reconciled: not done (none)\n")
+    problems, stats, _ = vr.verify(text, queries, [])
+    assert problems == [] and [(c[3]["id"], c[4]["id"]) for c in stats["conflicts"]] == [("q1", "q2")]
+    assert vr.verify(text.replace("- Without bots: 29.1% [q2]\n", ""), queries, [])[1]["conflicts"] == []
+
+
 def test_checks_record_their_id_and_source_queries(workdir, capsys):
     spec = {"observed": [5000, 5000], "expected_ratio": [0.5, 0.5], "from": "q1"}
     checks_run.main(["srm", "--json", json.dumps(spec)])
@@ -124,6 +145,45 @@ def test_dates_interval_levels_and_names_are_not_numbers():
     assert vr.numbers_in("ranker v2 from 2026-09-21 (95% interval) [q3]") == []
     assert vr.numbers_in("1. CTR fell 2.1 pp") == ["2.1"]
     assert vr.tags_in("x [q3, q4] [check:srm#2] [measured]") == ["q3", "q4", "check:srm#2"]
+
+
+def test_numbers_are_looked_up_in_what_their_tags_hold(capsys):
+    queries = [{"id": "q1", "status": "ok", "rows": [["2026-09-21", 0.304], ["2026-09-28", 0.283]], "row_count": 14}]
+    checks = [{"id": "mix_shift#1", "check": "mix_shift", "from": ["q1"], "details": {"delta_pp": -2.0968}}]
+    text = ("## Answer\nHeadline: -2.10 pp [check:mix_shift#1]\n"
+            "- Observed: CTR fell from 30.4% to 28.3% over 14 days [q1]\n"
+            "- Gap: 2.1 pp, interval 1.9 to 2.3 pp [q1]\n"
+            "- Threshold: 0.5 pp [given]\n")
+    problems, stats, _ = vr.verify(text, queries, checks)
+    assert problems == []
+    assert stats["unsourced"] == [(["2.1", "1.9", "2.3"], "- Gap: 2.1 pp, interval 1.9 to 2.3 pp [q1]")]
+    assert not vr.in_source("30.9", vr.values_in(queries[0]["rows"]))
+
+
+def test_unsourced_numbers_are_listed_but_do_not_fail(tmp_path, capsys):
+    (tmp_path / "q.log").write_text(json.dumps({"id": "q1", "status": "ok", "rows": [[0.304]]}))
+    (tmp_path / "r.md").write_text("## Answer\nHeadline: 30.4% [q1]\nIt rose 1.7 pp [q1]\n\n## Provenance\n- Reconciled: not done (none)\n")
+    assert vr.main([str(tmp_path / "r.md"), "--queries", str(tmp_path / "q.log"), "--checks", str(tmp_path / "none")]) == 0
+    out = capsys.readouterr().out
+    assert "1 not found in their source" in out and "not in its source (confirm, or log how it was computed): 1.7 in:" in out
+
+
+def test_stamp_writes_one_verified_line_at_the_end_of_provenance(tmp_path, capsys):
+    (tmp_path / "q.log").write_text("\n".join(json.dumps(e) for e in QUERIES))
+    (tmp_path / "c.log").write_text("\n".join(json.dumps(e) for e in CHECKS))
+    args = ["--queries", str(tmp_path / "q.log"), "--checks", str(tmp_path / "c.log"), "--stamp"]
+    readout = tmp_path / "r.md"
+    readout.write_text(READOUT + "\n## Notes\nnone\n")
+    assert vr.main([str(readout), *args]) == 0
+    assert vr.main([str(readout), *args]) == 0
+    text = readout.read_text()
+    provenance = text.split("## Provenance")[1].split("## Notes")[0].strip().splitlines()
+    assert provenance[-1].startswith("- Verified: verify_readout: pass (")
+    assert text.count("Verified:") == 1 and text.endswith("## Notes\nnone\n")
+    readout.write_text(READOUT.replace(" [q1] [measured]", " [measured]"))
+    assert vr.main([str(readout), *args]) == 1
+    assert "Verified:" not in readout.read_text()
+    assert vr.main(["-", "--stamp"]) == 3
 
 
 def test_verify_cli_exit_codes(tmp_path, capsys):

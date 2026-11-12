@@ -1,0 +1,1 @@
+We ran an A/B test of a new AI answer panel in our workplace search product. The PM wants to know whether it helps 3P users, the people who search content from third-party connectors, to decide whether to turn the panel on by default for them. My notes are in notes.md. Help me plan the analysis before I query anything.

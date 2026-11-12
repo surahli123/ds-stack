@@ -14,16 +14,17 @@ This repo holds only the generic core. Company facts live in a private overlay o
 
 | Skill | Fixes | Enforced by |
 |---|---|---|
+| `ds-plan` | Plans: the decision and its options, the unit and segment definitions, data access, a requester's objection | A fixed plan block, graded by script in `eval/plan/` |
 | `ds-mode` | Analyses: pins the metric, checks the data, decomposes a movement, rules alternatives in or out, writes a traceable readout | A logged query runner, four logged check scripts, and `verify_readout.py`, which fails any untraced number |
 | `ds-verify` | Checking a finished readout against its logs, its data and the team's metric definitions | `ds_verify.py`: replays every logged query on a copy of the data, plus six more checks |
 | `ds-interrogate` | A second opinion from a model of another family | `interrogate.py`: a reviewer CLI tries to break the readout with its own queries; only findings a rerun proves are kept |
 | `ds-ready` | Whether a work project gives ds-mode what it needs | `audit.py`: overlay, sources, AGENTS.md and past usage; gaps and questions for the metric owners |
 | `ds-retro` | Learning from finished analyses | `retro.py`: ds-verify failures and grader misses that repeat in 2+ runs, each with where the fix belongs and a fixture for the eval gate |
 | `ds-doc` | Doc structure and narrative: doc type, the spine (reader, decision, one-sentence answer, takeaways), answer-first drafting, DS claim rules | A step checklist; skipped steps stay visible |
-| `doc-tighten` | Format and concision: answer placement, bold, log drift, tables, clutter, length budget | `doc_lint.py`, 14 rules |
+| `doc-tighten` | Format and concision: answer placement, bold, log drift, tables, clutter, length budget | `doc_lint.py`, 17 rules |
 | `cold-read` | Whether the doc works: a fresh reader must recover the answer and decision from a skim, and every takeaway from a full read | `cold_read.py`: a fresh reader (`claude -p` by default, any agent CLI through `DS_AGENT_CMD`), graded by script against `spine.json` |
 
-Each lint rule is tied to a count from 119 agent-written docs, or to the DS editing guide in ai-writing-suite (`tools/rules.json`). On that corpus, 76 docs open with method or status before any answer, 64 lean on bold, 27 restate points in new words, and 13 turn into logs. The lint's answer-first rule flags 77 of the 119.
+Each lint rule is tied to a count from 119 agent-written docs, or to the DS editing guide in ai-writing-suite (`tools/rules.json`). The three newest (a number restated across paragraphs, field names in prose, a stale "not checked" line) come from one real Chinese readout and are provisional. Chinese text counts toward length at about 1.7 characters per English word; before that, the lint counted no Chinese at all. On that corpus, 76 docs open with method or status before any answer, 64 lean on bold, 27 restate points in new words, and 13 turn into logs. The lint's answer-first rule flags 77 of the 119.
 
 Word-level polish is not duplicated here. If ai-writing-suite is installed, `ds-doc` hands off to its `comms-polish` skill.
 
@@ -43,7 +44,7 @@ Three earlier tools (ds-brainstorm-agent, and ds-review and ds-trace in ds-produ
 | Recording what the agent did | ds-trace | the query log and readout tags, written by script rather than by the agent |
 | Verifying one result against a second source | ds-trace | the readout's `Reconciled:` line |
 | Mistake classes with detection rules | ds-brainstorm anti-patterns | `skills/ds-mode/references/mistake-classes.md`, to seed the wrong-number archive |
-| Methodology, decision and feasibility lenses | ds-brainstorm personas | `skills/ds-mode/references/plan-critique.md`, optional and not wired into the method |
+| Methodology, decision and feasibility lenses | ds-brainstorm personas | `skills/ds-plan/SKILL.md`, its own skill since two plan-stage mistakes in real work (`docs/plan-stage-case.md`) |
 | Lessons on judge noise and regression to the mean | autoresearch | `eval/README.md` |
 
 Dropped: scoring frameworks (uncalibrated), domain digests (stale, with invented entries tagged authoritative), the writer-judge loop (no gain beyond noise), report generation and stakeholder profiles.
@@ -59,7 +60,7 @@ codex plugin marketplace add surahli123/ds-stack && codex plugin add ds-stack
 
 For Cursor, the `.cursor-plugin/plugin.json` manifest points at `skills/`. To install a single skill instead, copy its folder from `skills/` into your tool's skills directory. The skills are plain SKILL.md files with standard-library Python tools.
 
-Status by tool: in Claude Code the plugin validates, installs, and exposes all four skills (`ds-stack:ds-mode`, `ds-doc`, `doc-tighten`, `cold-read`), and both evals ran there. In Codex, the acceptance matrix ran on 2026-11-02: Plumbing passes, Correctness and Value fail ([`docs/results.md`](docs/results.md)). Cursor has not been tested yet. The eval runner and `cold_read.py` take any agent CLI through `--agent-cmd` or `DS_AGENT_CMD`; runs without a transcript are graded with `grade.py --allow-no-transcript` and reported as unverified isolation. In the eval's full arm, the skill is pointed to from a `CLAUDE.md` note, which another agent may not read; check that first when porting.
+Status by tool: in Claude Code the plugin validates, installs, and exposes all four skills (`ds-stack:ds-mode`, `ds-doc`, `doc-tighten`, `cold-read`), and both evals ran there. `ds-plan` was added on 2026-11-11; the plugin still validates, but it hasn't been installed and run yet. In Codex, the acceptance matrix ran on 2026-11-02: Plumbing passes, Correctness and Value fail ([`docs/results.md`](docs/results.md)). Cursor has not been tested yet. The eval runner and `cold_read.py` take any agent CLI through `--agent-cmd` or `DS_AGENT_CMD`; runs without a transcript are graded with `grade.py --allow-no-transcript` and reported as unverified isolation. In the eval's full arm, the skill is pointed to from a `CLAUDE.md` note, which another agent may not read; check that first when porting.
 
 ## Results so far
 

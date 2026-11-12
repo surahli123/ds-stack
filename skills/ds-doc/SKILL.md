@@ -37,20 +37,25 @@ Write `spine.json` next to the doc before drafting. The lint reads the doc type 
 ```json
 {"type": "readout",
  "reader": "the PM who owns the launch and decides by Thursday",
+ "vocabulary": "the product and its metrics by name, but no statistics or field names",
  "answer": "One sentence of at most 30 words, with the number that matters.",
  "decision": "What the reader will decide or do after reading.",
+ "misread": "The definition most likely to make this reader misread the main number, and why.",
  "takeaways": ["Fact one, checkable.", "Fact two, checkable.", "Fact three, checkable."]}
 ```
+
+`vocabulary` says which terms the reader already knows; explain or cut every other one. `misread` is the one definition that changes how the reader should take the main number, such as a renewables share that excludes nuclear, which makes a nuclear-heavy country look worse. The first screen says it in one sentence, and the cold read checks that the reader caught it.
 
 Write the takeaways from the analysis, not from the draft, or the test can't fail. Then plan one heading per section, each stating that section's claim ("Mix explains the whole drop"), not its topic ("Analysis"). Run the skim test on the plan: the headings plus the first sentence of each section, read alone, must tell the whole story.
 
 ## 3. Draft in skeleton order
 
-- The first screen carries the answer, what it means for the decision, and any ask. Method, sources and provenance go last or into an appendix.
+- The first screen carries the answer, what it means for the decision, the misread, and any ask. Method, sources, field definitions, audit tables and how to rerun go last, under an Appendix heading (附录 in Chinese).
+- State each number once in the body, where it belongs. A table or the appendix may repeat it.
 - Each section opens with its claim, and the evidence follows. A section that only "provides context" gets merged or cut.
 - Link sections with the reason they follow each other ("so", "but", "because"), not with "Next, …".
 - Write the current state. History lives in git: no dated DONE lines, no strikethrough, no change log. If the doc's decision is already made or carried out, keep one status line at the top that says so, with the date, so no one re-decides it.
-- Call things by name. If a code like `B3` must stay, define it the first time it appears.
+- Call things by name. If a code like `B3` must stay, define it the first time it appears. Field names such as `share_2000` stay out of the body.
 
 ## 4. Hold DS claims to their evidence
 
