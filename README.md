@@ -16,6 +16,10 @@ This repo holds only the generic core. Company facts live in a private overlay o
 |---|---|---|
 | `ds-plan` | Plans: the decision and its options, the unit and segment definitions, data access, a requester's objection | A fixed plan block, graded by script in `eval/plan/` |
 | `ds-mode` | Analyses: pins the metric, checks the data, decomposes a movement, rules alternatives in or out, writes a traceable readout | A logged query runner, four logged check scripts, and `verify_readout.py`, which fails any untraced number |
+| `ds-verify` | Checking a finished readout against its logs, its data and the team's metric definitions | `ds_verify.py`: replays every logged query on a copy of the data, plus six more checks |
+| `ds-interrogate` | A second opinion from a model of another family | `interrogate.py`: a reviewer CLI tries to break the readout with its own queries; only findings a rerun proves are kept |
+| `ds-ready` | Whether a work project gives ds-mode what it needs | `audit.py`: overlay, sources, AGENTS.md and past usage; gaps and questions for the metric owners |
+| `ds-retro` | Learning from finished analyses | `retro.py`: ds-verify failures and grader misses that repeat in 2+ runs, each with where the fix belongs and a fixture for the eval gate |
 | `ds-doc` | Doc structure and narrative: doc type, the spine (reader, decision, one-sentence answer, takeaways), answer-first drafting, DS claim rules | A step checklist; skipped steps stay visible |
 | `doc-tighten` | Format and concision: answer placement, bold, log drift, tables, clutter, length budget | `doc_lint.py`, 17 rules |
 | `cold-read` | Whether the doc works: a fresh reader must recover the answer and decision from a skim, and every takeaway from a full read | `cold_read.py`: a fresh reader (`claude -p` by default, any agent CLI through `DS_AGENT_CMD`), graded by script against `spine.json` |
@@ -26,8 +30,8 @@ Word-level polish is not duplicated here. If ai-writing-suite is installed, `ds-
 
 ## Reviewing a readout
 
-1. Run `python3 skills/ds-mode/tools/verify_readout.py readout.md` in the analysis directory. It resolves every tag against `.ds-queries.log` and `.ds-checks.log` and lists the `[given]` numbers to confirm against the request.
-2. Read each cited query's SQL and stored result in `.ds-queries.log`, which holds the as-of period and the capped result rows, so nothing needs re-running.
+1. Run `python3 skills/ds-verify/tools/ds_verify.py readout.md --db <database> --request <request file>` in the analysis directory. It replays the logged queries on a copy of the data, resolves every tag, and lists the failures, the numbers to check by hand and the `[given]` numbers to confirm against the request.
+2. Read the cited SQL in `.ds-queries.log` for each number on the "check by hand" list.
 3. Work through `skills/ds-mode/references/review-checklist.md`. A failed item goes back to the analyst with its number.
 
 ## What came from the retired tools
@@ -56,7 +60,7 @@ codex plugin marketplace add surahli123/ds-stack && codex plugin add ds-stack
 
 For Cursor, the `.cursor-plugin/plugin.json` manifest points at `skills/`. To install a single skill instead, copy its folder from `skills/` into your tool's skills directory. The skills are plain SKILL.md files with standard-library Python tools.
 
-Status by tool: in Claude Code the plugin validates, installs, and exposes the four original skills (`ds-stack:ds-mode`, `ds-doc`, `doc-tighten`, `cold-read`), and both evals ran there. `ds-plan` was added on 2026-11-11; the plugin still validates, but it hasn't been installed and run yet. Codex and Cursor have not been smoke-tested yet. The eval runner and `cold_read.py` take any agent CLI through `--agent-cmd` or `DS_AGENT_CMD`; runs without a transcript are graded with `grade.py --allow-no-transcript` and reported as unverified isolation. In the eval's full arm, the skill is pointed to from a `CLAUDE.md` note, which another agent may not read; check that first when porting.
+Status by tool: in Claude Code the plugin validates, installs, and exposes all four skills (`ds-stack:ds-mode`, `ds-doc`, `doc-tighten`, `cold-read`), and both evals ran there. `ds-plan` was added on 2026-11-11; the plugin still validates, but it hasn't been installed and run yet. In Codex, the acceptance matrix ran on 2026-11-02: Plumbing passes, Correctness and Value fail ([`docs/results.md`](docs/results.md)). Cursor has not been tested yet. The eval runner and `cold_read.py` take any agent CLI through `--agent-cmd` or `DS_AGENT_CMD`; runs without a transcript are graded with `grade.py --allow-no-transcript` and reported as unverified isolation. In the eval's full arm, the skill is pointed to from a `CLAUDE.md` note, which another agent may not read; check that first when porting.
 
 ## Results so far
 

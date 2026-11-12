@@ -2,6 +2,60 @@
 
 What the evals, the real-case review and the research found, with numbers. The README keeps a summary.
 
+## Acceptance: Claude Code and Codex (2026-10-14, 2026-11-02)
+
+Claude ran its matrix in a cloud session on 2026-10-14 (Sonnet). dots ran the Codex matrix on the owner's machine on 2026-11-02: Codex 0.166.0, the owner's daily model at medium effort, commit b197e90. All 144 Codex runs executed on the first attempt, and the isolation probe passed.
+
+| Level | Claude, en | Claude, zh | Codex, en | Codex, zh |
+|---|---|---|---|---|
+| Plumbing | PASS, 24 of 24 | PASS, 24 of 24 | PASS, 24 of 24 | PASS, 24 of 24 |
+| Correctness | PASS, 8 of 8 | PASS, 8 of 8 | FAIL, 7 of 8 (f1) | FAIL, 6 of 8 (f1, f3) |
+| Value | PASS, plain missed 67% | PASS, plain missed 89% | FAIL, plain missed 22% | FAIL, plain missed 11% |
+
+Why Codex failed:
+
+- **f1 in English.** All 3 full runs had the right number (Adjusted −0.002 pp), but each called the ranker "ruled in as an unresolved possibility". The grader reads "ruled in" as shown, so it counted a false cause. ds-mode offered only two verdicts, and Codex wrote "ruled in" for an open alternative in at least 31 of its 48 full-arm readouts.
+- **f1 and f3 in Chinese, and f3 run 1 in English.** These 7 readouts headlined `can't tell` although Adjusted was computed: Codex abstained because the cause wasn't identified. ds-mode already said that is no reason to abstain.
+- **Value.** Plain Codex already gets f7 and f8 right, and only f6, the team's metric definition, separates the arms. The bar counts plain prompting's misses, so these fixtures can't show Codex's gain; changing them would restart the count.
+
+0.7.0 adds the verdict `not ruled out` and a ds-verify rule for the abstentions. A new Codex run will measure them.
+
+### ds-verify's held-out test
+
+The rule was pre-registered on 2026-11-01 (`eval/README.md`). ds-verify as of b197e90 ran on the 48 Codex full-arm runs:
+
+- It failed 9 of the 10 wrong runs. The bar was 2 of 3.
+- It failed 22 of the 38 right runs, all on `alternatives`. Read by hand, each is a "ruled in" that means "not excluded", which is a real fault in the readout under the rule. 7 right runs were unverified and 9 passed.
+- 7 of the 10 wrong runs were abstentions, and ds-verify had no rule for them: it failed 6 only for their wording. With 0.7.0's rule, 4 of the 7 also fail on `estimand`. That number is in-sample. The rule adds no failure to the Claude acceptance runs.
+
+### ds-verify, in-sample (before the Codex matrix)
+
+`eval/verify_eval.py` runs ds-verify on graded eval runs, without gold. The results below are in-sample: the rules were written after reading these runs and an adversarial review of them.
+
+- 68 Claude full-arm runs in the current readout format:
+  - It fails all 7 that the grader marks wrong: 5 ignored the overlay in the arm without the overlay step, 1 gave a percent level in pp, and 1 wrote no "ruled in/out" verdicts. None of the 7 is a wrong number caught by replay, because no run had one.
+  - Of the 61 marked right, 50 pass and 10 are unverified, for a pasted result or a Headline derived by hand.
+  - 1 fails. Its Headline gives a percent level in pp, a unit the grader let through.
+- All 381 runner queries replay to the logged rows.
+- 2 Codex validation runs: it fails both. The one marked right wrote "ruled in as unresolved possibilities".
+
+
+### ds-verify as ds-mode's last step (0.8.0, smoke test)
+
+Claude (Sonnet) ran 5 full-arm runs with ds-verify wired in: f1, f3 and f6 in English, and f1 and f3 in Chinese. These are the cases Codex missed. All 5 were graded right with clean isolation, at about $0.75 in total. In every run the agent ran ds-verify, ended at `ds-verify: pass` and put that line in Provenance. Two runs first failed on an untagged "100%" and fixed it. Every open alternative read `not ruled out`. This is a smoke test, not acceptance: the Codex rerun is the test that counts. Results: `eval/results/2026-11-02-wiring-smoke-{en,zh}/`.
+
+### ds-interrogate smoke test
+
+A Codex reviewer checked a Claude f1 readout twice, once with a planted error:
+
+- The planted error, a post-rollout mobile share of 45.1% where the data gives 55.1%, was found and proved by a replayed query.
+- Both runs also found two faults in the unchanged readout that the grader and ds-verify had passed. It says the change is −0.00 pp in all four cells; they range from −0.08 to +0.05 pp. It also uses the ±0.15 pp interval as a bound on v2's effect to reject a rollback, although ranker and week are fully confounded.
+- The report labelled the reviewer `gpt:-`, and the findings on the English readout came back in Chinese, from the owner's Codex settings. ds-interrogate now records the model the CLI ran, and the brief asks for the readout's language.
+
+dots' first push failed, because that shell had no git credentials ("could not read Username"; `gh` returned 401). The branches were pushed later, so the "NOT PUSHED" lines in the reports are out of date.
+
+Results: `eval/results/2026-11-02-0911-codex-{en,zh,report}/`, `eval/results/2026-11-02-interrogate-codex/`.
+
 ## Estimand and localization fixes (2026-10-14)
 
 A local Codex smoke run failed (report on branch `docs/local-f1-smoke-20261014`): its Chinese readout headlined the observed −2.10 pp total, and the grader read the "95" of "95% CI" as the estimate. Two root causes:

@@ -4,13 +4,15 @@ You need one folder and one line of config. Data comes through the tools you alr
 
 ## Set up (about 10 minutes)
 
-1. Copy `skills/ds-mode/` to a place outside every repo, for example `~/ds-skills/ds-mode/`. It runs on Python's standard library, so there is nothing to install. For test 1, also copy the two files in `eval/fixtures/f1/`.
+1. Copy `skills/ds-mode/`, `skills/ds-verify/`, `skills/ds-interrogate/` and `skills/ds-ready/` to a place outside every repo, for example `~/ds-skills/`. Keep them side by side: the later ones use ds-mode's tools. Both run on Python's standard library, so there is nothing to install. For test 1, also copy the two files in `eval/fixtures/f1/`.
 2. In the root of the project you work in (the SMA project, for example), create `AGENTS.md` with one line. Codex and Cursor both read it. Use the absolute path:
    ```
    For any data analysis request, read and follow /Users/<you>/ds-skills/ds-mode/SKILL.md
+   To check a finished readout, read and follow /Users/<you>/ds-skills/ds-verify/SKILL.md
+   For a second opinion from another model, read and follow /Users/<you>/ds-skills/ds-interrogate/SKILL.md
    ```
    To keep the file out of that project's git, add `AGENTS.md` to `.git/info/exclude`.
-3. Optional: write the definitions of 2-3 metrics you use often into `~/ds-overlay/metrics.json`, giving numerator, denominator, filters, grain and source for each, then `export DS_OVERLAY_DIR=~/ds-overlay`. Without it, ds-mode still runs and labels the definition `[guess]`.
+3. Optional: write the definitions of 2-3 metrics you use often into `~/ds-overlay/metrics.json`, giving numerator, denominator, filters, grain and source for each, then `export DS_OVERLAY_DIR=~/ds-overlay`. Without it, ds-mode still runs and labels the definition `[guess]`. Then run `python3 ~/ds-skills/ds-ready/tools/audit.py` in the project folder: it lists what is still missing and writes questions for the metric owners.
 
 ## Test 1: synthetic data (about 5 minutes, no company data)
 
@@ -25,7 +27,8 @@ Open Codex or Cursor in that directory and paste in the text of `task.md`. It pa
 
 - the readout's `Adjusted:` line is about 0 pp, `Causal effect:` says not identified, and mix shift (mobile's share rising) is ruled in;
 - `.ds-queries.log`, `.ds-checks.log` and `readout.md` appear in the directory;
-- `python3 ~/ds-skills/ds-mode/tools/verify_readout.py readout.md`, run by you, prints `pass`.
+- the readout's `- Verified:` line ends with `ds-verify: pass`, which shows ds-mode's last step ran it;
+- `python3 ~/ds-skills/ds-verify/tools/ds_verify.py readout.md --db warehouse.db --request task.md`, run by you, prints `ds-verify: pass` too.
 
 When it fails, the usual cause is a script path the agent can't resolve. Check that `AGENTS.md` uses an absolute path.
 

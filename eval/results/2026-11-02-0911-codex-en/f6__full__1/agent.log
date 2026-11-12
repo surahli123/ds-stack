@@ -1,0 +1,5 @@
+Public log extract: internal reasoning, telemetry and tool transcript omitted. Final response: result.md. Raw source retained locally; hashes in report manifest.
+[source line 5] model: gpt-6-astra
+[source line 7] approval: on-request
+[source line 8] sandbox: workspace-write [workdir, /tmp, $TMPDIR]
+[source line 9] reasoning effort: medium

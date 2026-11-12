@@ -1,0 +1,5 @@
+SKILLS: imagegen, openai-docs, skill-creator, skill-installer
+INSTRUCTIONS: NONE
+model: gpt-6-astra
+reasoning effort: medium
+PASS

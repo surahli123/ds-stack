@@ -28,8 +28,14 @@ This is a draft, to be replaced with the analyst's own first moves.
 5. Size, then decompose.
    - When a rate moved, run `mix_shift` on the segments whose mix could have shifted (platform, country, traffic source). Use the finest grain that keeps about 100 units per cell on both sides, then rerun at one coarser grain. If the two disagree, report both.
    - For an experiment, run `srm` on the assignment counts before you read any lift.
-6. Rule each alternative in or out with evidence. Always consider mix-shift, seasonality and day of week, data completeness, logging or definition changes, and the requester's cause. The evidence names a check or a query result from this session. Label each conclusion measured, inferred or guess.
-7. Write the readout below to `readout.md`, run `python3 <dir of this SKILL.md>/tools/verify_readout.py readout.md --stamp`, and fix the readout until it passes. A pass writes the Verified line into Provenance, so don't add it by hand or run the script again. Then send the readout as your final reply.
+6. Rule each alternative in or out with evidence, or say it is not ruled out. Always consider mix-shift, seasonality and day of week, data completeness, logging or definition changes, and the requester's cause. The evidence names a check or a query result from this session. Label each conclusion measured, inferred or guess.
+7. Write the readout below to `readout.md`, run `python3 <dir of this SKILL.md>/tools/verify_readout.py readout.md --stamp`, and fix the readout until it passes. A pass writes the Verified line into Provenance, so don't add it by hand or run the script again.
+8. If ds-verify sits next to this skill (`<dir of this SKILL.md>/../ds-verify/tools/ds_verify.py`), save the person's question as `request.md`, word for word and without these instructions. Then run `python3 <that file> readout.md --request request.md`, adding `--db <file>` when the data isn't `./warehouse.db` or `$DS_WAREHOUSE`. Fix what each FAIL line names and run it again:
+   - A FAIL about a number or a definition is fixed in the analysis, by rerunning the queries. Rewording the readout doesn't fix it.
+   - Never clear a FAIL by deleting a number, abstaining, pasting a result, citing a different query, or editing a log or a check's output. Tag an untagged number instead: `[given]` for one stated in the request. The Headline cites the query or check that produced it.
+   - If the same FAIL remains after two honest reruns and you believe the analysis is right, keep it, quote the FAIL line under Caveats, and send.
+
+   `unverified` is fine when the cause is outside your control, such as a result a person computed; its "Needs a human" list is for the reviewer. Then send the readout as your final reply.
 
 ## Queries
 
@@ -74,6 +80,7 @@ Headline: <signed number> <unit> (<95% interval>) [q<n> | check:<name>#<n>]   or
 ## Why we believe it
 - Alternatives considered:
   - <alternative>: ruled <in|out> by <evidence> [q<n> | check:<name>#<n>] [measured|inferred|guess]
+  - <alternative>: not ruled out; <what would decide it> [q<n> | check:<name>#<n>] [inferred|guess]
 - Checks run:
   - <check>: <pass|flag|fail|could not run|skipped> <one-line result or reason> [check:<name>#<n>]
 
@@ -88,15 +95,16 @@ Headline: <signed number> <unit> (<95% interval>) [q<n> | check:<name>#<n>]   or
 ```
 
 - Every line in the Answer, What it means and Why we believe it sections that states a number carries a tag: `[q<n>]` for a logged query, `[check:<name>#<n>]` for a logged check, `[given]` for a number stated in the request, such as a threshold. One bracket can hold several: `[q3, q4]`. A number you can't tag doesn't belong in the readout. That includes the reason after `not identified`, `not computed` or `skipped`: describe the design in words (a full rollout, no holdout) and tag any measured number, such as an arm split.
-- In Provenance, the logs are `.ds-queries.log` and `.ds-checks.log`, and the last line `- Verified: <the verify_readout.py result line>`, which `--stamp` writes on a pass, shows the reviewer the trace check passed.
+- In Provenance, the logs are `.ds-queries.log` and `.ds-checks.log`, and a last line `- Verified: <the verify_readout.py result line>; <ds-verify's first line, when it ran>`, each exactly as printed, shows the reviewer what passed. `--stamp` writes the first part on a pass; add ds-verify's line after it.
 - The interval is required. `mix_shift` reports one for the overall change (`delta_ci95_pp`). For an experiment lift, use a two-proportion interval. When no interval can be computed, write `(no interval: <reason>)`.
+- Each alternative gets one of three verdicts. `ruled in` means the evidence shows it happened. `ruled out` means the evidence excludes it. An alternative the data can neither show nor exclude is `not ruled out`, followed by what would decide it. Never write `ruled in as possible` or `ruled in as unresolved`: a reader who skims sees `ruled in` and takes it as shown.
 - Use causal words ("caused", "drove", "because of") only for a randomized test or a design that identifies the cause. Otherwise say "coincided with" or "is associated with", and name what would confirm it.
 - The three estimate lines keep apart numbers that are easy to conflate:
   - Observed is the raw number or change in the data.
   - Adjusted is a descriptive estimate that holds something fixed, such as the within-segment change from `mix_shift`. Say what it holds fixed. It is not a causal effect.
   - Causal effect is a number only for a randomized test or another design that identifies the cause. Otherwise write `not identified` and what would identify it. Never fill it with Adjusted, and never write 0 for an effect you couldn't identify.
 - The Headline gives the estimate that answers the question. For "how much of the change did the launch cause" after a 100% rollout, that is Adjusted, with its assumption in the sentence below (for example "if v2 didn't change the traffic mix"). An unidentified cause is not a reason to abstain. `can't tell` is for when the data can't support the number itself; then each estimate line may read `not computed (<reason>)`.
-- Keep the readout's fixed words in English exactly as shown: the section headings, `Headline:`, `Observed:`, `Adjusted:`, `Causal effect:`, `not identified`, `ruled in` and `ruled out`, check names and statuses, `can't tell`, and the unit `pp`. Scripts read them. Everything else can be in the reader's language.
+- Keep the readout's fixed words in English exactly as shown: the section headings, `Headline:`, `Observed:`, `Adjusted:`, `Causal effect:`, `not identified`, `ruled in`, `ruled out` and `not ruled out`, check names and statuses, `can't tell`, and the unit `pp`. Scripts read them. Everything else can be in the reader's language.
 - measured means computed from data in this session.
 - inferred means it follows from measured facts by reasoning.
 - guess means neither.

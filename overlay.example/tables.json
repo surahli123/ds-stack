@@ -1,0 +1,10 @@
+{
+  "search_daily": {
+    "grain": "one row per date, platform and country",
+    "keys": ["date", "platform", "country"],
+    "complete_when": "a day is complete when its row count reaches the trailing 3-week median for that weekday, usually by 06:00 UTC the next day",
+    "owner": "search analytics",
+    "pitfalls": ["Monday backfills rewrite the previous 3 days", "bot traffic is a separate traffic_type, not filtered out"],
+    "note": "example entry; replace with your tables"
+  }
+}

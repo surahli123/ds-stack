@@ -1,0 +1,6 @@
+Public metadata/error extract. Internal reasoning, telemetry and tool transcript omitted. Findings and SQL evidence retained in separate files. Raw source retained locally; hashes in manifest.
+[source line 2] exit 0 after 34s
+[source line 8] model: gpt-6-astra
+[source line 10] approval: never
+[source line 11] sandbox: workspace-write [workdir, /tmp, $TMPDIR] (network access enabled)
+[source line 12] reasoning effort: medium
