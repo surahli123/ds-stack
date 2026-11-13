@@ -1,4 +1,4 @@
-.PHONY: test fixtures hooks selftest verify eval grade lint-doc writing-eval writing-grade plan-eval plan-grade
+.PHONY: test fixtures hooks selftest verify eval grade lint-doc writing-eval writing-grade plan-eval plan-grade dialogue-eval
 
 test:            ## unit tests (checks, parser, grader, guard, hook)
 	python3 -m pytest -q
@@ -35,3 +35,6 @@ plan-eval:       ## baseline vs ds-plan on the plan tasks, two turns each (uses 
 
 plan-grade:      ## make plan-grade RUN=eval/plan/results/<dir>
 	python3 eval/plan/grade_plan.py $(RUN)
+
+dialogue-eval:   ## replay a development dialogue; requires explicit ARGS (uses model credits)
+	python3 eval/dialogue/run_dialogue.py $(ARGS)
