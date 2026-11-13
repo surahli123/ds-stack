@@ -113,3 +113,65 @@ def test_failed_read_is_not_routing_evidence():
         {'type':'user', 'message':{'content':[{'type':'tool_result','tool_use_id':'x','is_error':True,'content':'not found'}]}}
     ]
     assert runner.read_trace('\n'.join(json.dumps(e) for e in events), Path.cwd()) == []
+
+
+def test_cases_file_records_exact_input_and_hashes_outside_workspace(tmp_path, monkeypatch):
+    import hashlib
+    import sys
+
+    bindir = tmp_path / 'bin'; bindir.mkdir()
+    cli = bindir / 'claude'
+    cli.write_text(f'''#!{sys.executable}
+import json
+from pathlib import Path
+assert not list(Path('.').rglob('validation-cases.json'))
+assert not list(Path('.').rglob('validation-rubric.md'))
+print(json.dumps({{'type':'result', 'session_id':'s', 'result':'ok'}}))
+''')
+    cli.chmod(0o755)
+    monkeypatch.setenv('PATH', str(bindir))
+    case = {'id': 'external', 'entry': 'direct', 'turns': [{'origin': 'USER', 'text': 'A'}, {'origin': 'USER', 'text': 'B'}]}
+    case_file = tmp_path / 'validation-cases.json'
+    raw = json.dumps([case], ensure_ascii=False, indent=2).encode() + b'\n'
+    case_file.write_bytes(raw)
+    monkeypatch.setattr(sys, 'argv', ['run_dialogue.py', '--case', 'external', '--cases-file', str(case_file), '--arm', 'baseline', '--model', 'fake', '--out', str(tmp_path / 'out')])
+    assert runner.main() == 0
+    case_file.write_text('changed')
+    meta = json.loads((tmp_path / 'out/meta.json').read_text())
+    assert meta['case_input'] == case
+    canonical = json.dumps(case, ensure_ascii=False, sort_keys=True, separators=(',', ':')).encode('utf-8')
+    assert meta['case_input_sha256'] == hashlib.sha256(canonical).hexdigest()
+    assert meta['cases_file_sha256'] == hashlib.sha256(raw).hexdigest()
+
+
+def test_replay_pins_budget_and_effort_and_keeps_clean_config(tmp_path, monkeypatch):
+    import sys
+
+    bindir = tmp_path / 'bin'; bindir.mkdir()
+    cli = bindir / 'claude'
+    cli.write_text(f'''#!{sys.executable}
+import json, os, sys
+from pathlib import Path
+args = sys.argv[1:]
+assert os.environ['HOME'] != {str(tmp_path / 'login-home')!r}
+assert os.environ['CLAUDE_CONFIG_DIR'] != {str(tmp_path / 'login-config')!r}
+assert Path(os.environ['HOME']).is_dir()
+assert os.environ['HOME'] == os.environ['CLAUDE_CONFIG_DIR']
+assert '--safe-mode' not in args
+assert args[args.index('--max-budget-usd') + 1] == '0.35'
+assert args[args.index('--effort') + 1] == 'medium'
+assert Path('.claude/skills/ds-plan/SKILL.md').read_text() == 'run-specific plan'
+print(json.dumps({{'type':'result', 'session_id':'s', 'result':'ok'}}))
+''')
+    cli.chmod(0o755)
+    monkeypatch.setenv('PATH', str(bindir))
+    monkeypatch.setenv('HOME', str(tmp_path / 'login-home'))
+    monkeypatch.setenv('CLAUDE_CONFIG_DIR', str(tmp_path / 'login-config'))
+    source = tmp_path / 'source'
+    (source / 'ds-plan').mkdir(parents=True)
+    (source / 'ds-plan/SKILL.md').write_text('run-specific plan')
+    case = {'id':'safe', 'entry':'direct', 'turns':[{'text':'first'}, {'text':'finish'}]}
+    meta = runner.run_case(case, 'candidate', 'test', tmp_path / 'out', 10, source,
+                           turn_budget_usd=0.35, effort='medium')
+    assert meta['completed']
+    assert meta['turn_budget_usd'] == 0.35 and meta['effort'] == 'medium'

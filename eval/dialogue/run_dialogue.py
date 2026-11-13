@@ -89,7 +89,8 @@ def parse(raw):
     return session, reply, cost, usage, turns, error
 
 
-def run_case(case, arm, model, dest, timeout, source=None, source_version=None):
+def run_case(case, arm, model, dest, timeout, source=None, source_version=None, cases_file_sha256=None,
+             turn_budget_usd=0.5, effort=None):
     dest = Path(dest)
     dest.mkdir(parents=True, exist_ok=False)
     started = time.monotonic()
@@ -111,7 +112,10 @@ def run_case(case, arm, model, dest, timeout, source=None, source_version=None):
         for index, turn in enumerate(case['turns'], 1):
             prompt = turn['text']
             cmd = ['claude', '-p', prompt, '--model', model, '--output-format', 'stream-json', '--verbose',
-                   '--allowedTools', TOOLS, '--max-turns', '60']
+                   '--allowedTools', TOOLS,
+                   '--max-turns', '60', '--max-budget-usd', str(turn_budget_usd)]
+            if effort:
+                cmd += ['--effort', effort]
             if session:
                 cmd += ['--resume', session]
             turn_started = time.monotonic()
@@ -144,7 +148,12 @@ def run_case(case, arm, model, dest, timeout, source=None, source_version=None):
     model_turn_counts = [r['model_turns'] for r in records]
     usage_keys = set().union(*(u.keys() for u in usages if isinstance(u, dict)))
     total_usage = {key: sum(u[key] for u in usages) if all(isinstance(u, dict) and isinstance(u.get(key), (int, float)) for u in usages) else None for key in sorted(usage_keys)} if all(isinstance(u, dict) for u in usages) else None
-    meta = {'case': case['id'], 'arm': arm, 'model': model, 'entry': case['entry'],
+    case_bytes = json.dumps(case, ensure_ascii=False, sort_keys=True, separators=(',', ':')).encode('utf-8')
+    meta = {'case': case['id'], 'case_input': case,
+            'case_input_sha256': hashlib.sha256(case_bytes).hexdigest(),
+            'cases_file_sha256': cases_file_sha256,
+            'arm': arm, 'model': model, 'entry': case['entry'],
+            'turn_budget_usd': turn_budget_usd, 'effort': effort,
             'source_version': source_version, 'skill_hashes': hashes, 'turns': records,
             'completed': len(records) == len(case['turns']) and all(r['execution'] == 'ok' for r in records),
             'seconds': time.monotonic() - started,
@@ -160,15 +169,21 @@ def run_case(case, arm, model, dest, timeout, source=None, source_version=None):
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument('--case', required=True, help='case id in cases.json')
+    parser.add_argument('--case', required=True, help='case id in the selected cases file')
+    parser.add_argument('--cases-file', type=Path, default=HERE / 'cases.json', help='case set JSON (default: cases.json)')
     parser.add_argument('--arm', choices=('baseline', 'current', 'candidate'), required=True)
     parser.add_argument('--current-ref', help='explicit git commit or ref for current arm, resolved and recorded')
     parser.add_argument('--skill-source', type=Path, help='candidate directory containing ds-plan/ and ds-mode/')
     parser.add_argument('--model', required=True)
     parser.add_argument('--out', type=Path, required=True, help='new result directory')
     parser.add_argument('--timeout', type=int, default=900)
+    parser.add_argument('--turn-budget-usd', type=float, default=0.5, help='CLI API budget per user turn (default: 0.5)')
+    parser.add_argument('--effort', choices=('low', 'medium', 'high', 'xhigh', 'max'))
     args = parser.parse_args()
-    cases = json.loads((HERE / 'cases.json').read_text(encoding='utf-8'))
+    if not 0 < args.turn_budget_usd < float('inf'):
+        parser.error('--turn-budget-usd must be finite and positive')
+    case_file_bytes = args.cases_file.read_bytes()
+    cases = json.loads(case_file_bytes.decode('utf-8'))
     case = next((c for c in cases if c['id'] == args.case), None)
     if case is None:
         parser.error('unknown case')
@@ -187,7 +202,8 @@ def main():
         elif args.arm == 'candidate':
             source = args.skill_source.resolve()
             version = str(source)
-        meta = run_case(case, args.arm, args.model, args.out, args.timeout, source, version)
+        meta = run_case(case, args.arm, args.model, args.out, args.timeout, source, version,
+                        hashlib.sha256(case_file_bytes).hexdigest(), args.turn_budget_usd, args.effort)
     print(json.dumps({'completed': meta['completed'], 'routing': meta['routing'], 'out': str(args.out)}))
     return 0 if meta['completed'] else 2
 

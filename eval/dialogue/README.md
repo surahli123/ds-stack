@@ -31,3 +31,21 @@ For each judgment record turn number, exact assistant quote, user contribution a
 - Execution status, routing evidence, usage/cost/time, and the turns needed to reach a user-confirmed candidate; do not compare incomplete runs as completed dialogues.
 
 Calibration negative example: a final paragraph says "assignment was by company; target is the salesperson; dependency is unresolved," while the body groups people by login frequency and treats them as independently randomized. A reviewer should flag the body contradiction with quotations even though the closing paragraph looks correct. This is a manual calibration example, not a claim of automatic detection. Future untouched cases and predeclared judgments are required before making general efficacy or win-rate claims.
+
+## New transfer validation
+
+`validation-cases.json` contains two cases in library lending and municipal water use, with a mode-entry correction and a one-shot control. Apply `validation-rubric.md` before any live run. For example, add `--cases-file eval/dialogue/validation-cases.json --case library-renewals` to the appropriate command above (replace its existing `--case`). The default remains `cases.json`.
+
+Each CLI run records `case_input` (the selected parsed case), `case_input_sha256` (SHA-256 of UTF-8 JSON with sorted keys, no whitespace and unescaped non-ASCII characters), and `cases_file_sha256` (SHA-256 of the exact file bytes read). The snapshot and hashes permit identifying the input even if the source file changes. The selected case is passed turn by turn; the input file, later turns, and rubric are not copied into the model workspace. Output metadata and transcripts contain the case and should be kept outside that workspace.
+
+There is no automatic semantic assessment. Fixed replay cannot show that a question was useful or elicited a scripted fact; use the adaptive walkthrough with provenance to investigate that separately. These may be called new transfer validation cases after use, but are not an untouched independent test if prompts or skills are tuned on them. Two cases cannot establish general effectiveness.
+
+## Runtime and budget
+
+The clean HOME/config requires authentication through `ANTHROPIC_API_KEY` or `CLAUDE_CODE_OAUTH_TOKEN`, as permitted by the existing environment allowlist. A successful ordinary `claude auth status` is not proof that this isolated runtime can execute a model call. Authentication failures stop the conversation and are operational failures, not semantic outcomes. The runner never falls back to a personal session or copies credentials.
+
+`--turn-budget-usd` sets the CLI API budget for each user turn (default 0.5); a case with N turns has at most N such allowances. `--effort` pins an optional supported CLI effort. Both settings are recorded; raw cost estimates are not necessarily subscription charges. Use the same model, budget, effort and timeout across arms. A budget limit or runtime error leaves a run incomplete.
+
+```sh
+python3 eval/dialogue/run_dialogue.py --cases-file eval/dialogue/validation-cases.json --case library-renewals --arm current --current-ref COMMIT --model sonnet --effort medium --turn-budget-usd 0.35 --out /tmp/library-current
+```

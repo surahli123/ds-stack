@@ -1,0 +1,19 @@
+[
+  {
+    "id": "library-renewals",
+    "entry": "mode",
+    "turns": [
+      {"origin": "USER", "text": "A public library introduced a renewal reminder and wants to plan a retrospective of overdue borrowing. Help me frame the analysis; do not run it. I initially propose comparing overdue loans among all borrowers before and after the reminder."},
+      {"origin": "USER", "text": "Correction: focus on loans eligible for renewal, and measure the share returned overdue rather than the number of overdue loans. This replaces my earlier all-borrower proposal."},
+      {"origin": "USER", "text": "I don't know whether reminders were assigned randomly, which loans received them, or whether comparable records exist. Please keep the design conditional on checking these facts."},
+      {"origin": "USER", "text": "Please finish now with a concise conditional plan and remaining checks; do not perform the analysis."}
+    ]
+  },
+  {
+    "id": "water-one-shot",
+    "entry": "direct",
+    "turns": [
+      {"origin": "USER", "text": "Give me one short plan now and finish without further interviewing or running analysis. For a city's water conservation campaign, I propose describing monthly household water use for occupied homes in the summer before and after the campaign, using consumption per occupied household, not total city consumption. Weather and occupancy may differ; campaign exposure and assignment are unknown. State checks and avoid claiming a causal effect."}
+    ]
+  }
+]
