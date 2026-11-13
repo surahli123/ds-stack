@@ -4,7 +4,8 @@ Pass the row counts around a join. Fails when the right side has duplicate keys
 for a join meant to be many-to-one or one-to-one, when the left side has
 duplicate keys for a one-to-one join, when the join added rows, or
 when a left join lost rows. An inner join that drops rows passes with the drop
-reported, unless it exceeds `max_drop_fraction`.
+reported only after `dropped_with_other_key` is counted; a positive count is
+flagged, zero can pass, and `max_drop_fraction` can still fail.
 
 Row counts alone miss a fan-out that dropped rows cancel out. Pass
 `matched_left_rows` (left rows with at least one match) to catch it: a
@@ -96,5 +97,7 @@ def run(spec):
                                   f"{dropped} dropped rows carry another join key; join on it, or say why not, "
                                   "before reporting the join rate", details)
     if dropped and other_key is None:
-        note += "; say whether the dropped rows carry another key (a timestamp, a second id): pass 'dropped_with_other_key'"
+        return Result(NAME, FLAG, f"row counts consistent with a {relationship} {join} join, but whether the dropped "
+                                  "rows carry another usable key is unverified; count them and pass "
+                                  "'dropped_with_other_key' before reporting the join rate", details)
     return Result(NAME, PASS, f"row counts consistent with a {relationship} {join} join{note}", details)

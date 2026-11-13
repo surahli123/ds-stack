@@ -63,20 +63,31 @@ def sections(text):
     return [(parts[i].strip(), parts[i + 1]) for i in range(1, len(parts) - 1, 2)]
 
 
-def readout_sections(text):
-    """(name, body) for each section, as verify() reads them. Inside a checked section, a
-    heading that is not one of the readout's own (a sub-heading over a table, say) stays in
-    the body, so its lines are still checked. sections() splits on every heading."""
-    text = _clean(text)
-    starts = []
+def readout_headings(text):
+    """Section heading matches shared by verification and stamping, preserving offsets.
+
+    Within a checked section, only a readout heading at the same or a higher
+    level starts another section; deeper subheadings remain in its body.
+    """
+    heads = []
     for head in HEADING.finditer(text):
-        name = head.group(1).strip()
-        in_checked = starts and starts[-1][0].lower().startswith(CHECKED_SECTIONS)
-        if in_checked and not name.lower().startswith(READOUT_SECTIONS):
-            continue
-        starts.append((name, head.start(), head.end()))
-    ends = [start for _, start, _ in starts[1:]] + [len(text)]
-    return [(name, text[body:end]) for (name, _, body), end in zip(starts, ends)]
+        name = _clean(head.group(1)).strip().lower()
+        level = len(head.group(0)) - len(head.group(0).lstrip("#"))
+        in_checked = heads and _clean(heads[-1].group(1)).strip().lower().startswith(CHECKED_SECTIONS)
+        if in_checked:
+            parent_level = len(heads[-1].group(0)) - len(heads[-1].group(0).lstrip("#"))
+            if not name.startswith(READOUT_SECTIONS) or level > parent_level:
+                continue
+        heads.append(head)
+    return heads
+
+
+def readout_sections(text):
+    """(name, body) using readout boundaries; sections() splits on every heading."""
+    text = _clean(text)
+    heads = readout_headings(text)
+    ends = [head.start() for head in heads[1:]] + [len(text)]
+    return [(head.group(1).strip(), text[head.end():end]) for head, end in zip(heads, ends)]
 
 
 def numbers_in(line):
@@ -209,9 +220,9 @@ def verify(text, queries, checks):
 def stamp(text, result):
     """Return text with '- Verified: <result>' as the last line of Provenance."""
     entry = f"- Verified: {result}\n"
-    heads = list(HEADING.finditer(text))
+    heads = readout_headings(text)
     for i, head in enumerate(heads):
-        if head.group(1).strip().lower().startswith("provenance"):
+        if _clean(head.group(1)).strip().lower().startswith("provenance"):
             end = heads[i + 1].start() if i + 1 < len(heads) else len(text)
             block = VERIFIED.sub("", text[head.end():end]).rstrip("\n")
             rest = text[end:]

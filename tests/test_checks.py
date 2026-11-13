@@ -86,7 +86,8 @@ def test_fanout_fails_when_join_adds_rows():
 def test_fanout_flags_dropped_rows_that_carry_another_join_key():
     spec = {"left_rows": 1062, "joined_rows": 770, "join": "inner", "matched_left_rows": 770}
     plain = fanout.run(spec)
-    assert plain.status == PASS and "say whether the dropped rows carry another key" in plain.summary
+    assert plain.status == FLAG
+    assert "unverified" in plain.summary and "dropped_with_other_key" in plain.summary
     flagged = fanout.run({**spec, "dropped_with_other_key": 142})
     assert flagged.status == FLAG and "142 of the 292 dropped rows carry another join key" in flagged.summary
     assert flagged.details["dropped_with_other_key"] == 142
@@ -98,8 +99,10 @@ def test_fanout_fails_when_left_join_loses_rows():
     assert fanout.run({"left_rows": 1000, "joined_rows": 990, "join": "left"}).status == FAIL
 
 
-def test_fanout_inner_join_drop_passes_unless_over_limit():
-    assert fanout.run({"left_rows": 1000, "joined_rows": 990, "join": "inner"}).status == PASS
+def test_fanout_inner_join_drop_requires_a_count_and_still_enforces_drop_limit():
+    assert fanout.run({"left_rows": 1000, "joined_rows": 990, "join": "inner"}).status == FLAG
+    assert fanout.run({"left_rows": 1000, "joined_rows": 990, "join": "inner",
+                       "dropped_with_other_key": 0}).status == PASS
     assert fanout.run({"left_rows": 1000, "joined_rows": 900, "join": "inner", "max_drop_fraction": 0.05}).status == FAIL
 
 
