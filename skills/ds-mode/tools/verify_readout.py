@@ -16,6 +16,10 @@ and row count, or the check's details and summary, as is or times 100, to the
 decimals shown. A number it can't find is listed for the reviewer to confirm,
 not failed: a difference or an interval worked out by hand is in no log until
 it is logged with query.py --pasted. Counts up to 10 are not looked up.
+ds-verify's `sources` check is the one that refuses a Headline it can't find.
+
+A heading that is not one of the readout's own (a sub-heading over a table)
+does not end a checked section: the lines under it are still checked.
 
 Dates, a "95%" in front of "interval" or "CI", and digits inside names (v2,
 q3) don't count as numbers. Logs default to $DS_QUERIES_LOG / $DS_CHECKS_LOG,
@@ -46,6 +50,7 @@ LIST_MARKER = re.compile(r"^\s*(?:[-*+]|\d+[.)])\s+")
 NUMBER = re.compile(r"(?<![A-Za-z_#\d.])[-+−]?\d+(?:[.,]\d+)*")
 VERIFIED = re.compile(r"^\s*[-*]\s*Verified\s*:.*\n?", re.I | re.M)
 CHECKED_SECTIONS = ("answer", "what it means", "why we believe")
+READOUT_SECTIONS = CHECKED_SECTIONS + ("caveats", "provenance")
 
 
 def _clean(text):
@@ -56,6 +61,22 @@ def _clean(text):
 def sections(text):
     parts = HEADING.split(_clean(text))
     return [(parts[i].strip(), parts[i + 1]) for i in range(1, len(parts) - 1, 2)]
+
+
+def readout_sections(text):
+    """(name, body) for each section, as verify() reads them. Inside a checked section, a
+    heading that is not one of the readout's own (a sub-heading over a table, say) stays in
+    the body, so its lines are still checked. sections() splits on every heading."""
+    text = _clean(text)
+    starts = []
+    for head in HEADING.finditer(text):
+        name = head.group(1).strip()
+        in_checked = starts and starts[-1][0].lower().startswith(CHECKED_SECTIONS)
+        if in_checked and not name.lower().startswith(READOUT_SECTIONS):
+            continue
+        starts.append((name, head.start(), head.end()))
+    ends = [start for _, start, _ in starts[1:]] + [len(text)]
+    return [(name, text[body:end]) for (name, _, body), end in zip(starts, ends)]
 
 
 def numbers_in(line):
@@ -134,7 +155,7 @@ def verify(text, queries, checks):
     results = {e["id"].lower(): e for e in queries if e.get("id") and e.get("status") == "ok"}
     problems, given = [], []
     stats = {"lines": 0, "numbers": 0, "queries": set(), "checks": set(), "unsourced": []}
-    found = sections(text)
+    found = readout_sections(text)
     if not any(name.lower().startswith("answer") for name, _ in found):
         problems.append("no Answer section")
     for name, body in found:

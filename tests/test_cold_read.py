@@ -92,6 +92,16 @@ def test_spine_is_validated(tmp_path, bad):
         cold_read.load_spine(str(path))
 
 
+def test_a_spine_with_more_than_three_takeaways_is_graded_on_all_of_them(tmp_path):
+    five = {**SPINE, "takeaways": SPINE["takeaways"] + ["The drop began on 2026-09-28.", "Desktop CTR stayed at 31%."]}
+    path = tmp_path / "spine.json"
+    path.write_text(json.dumps(five))
+    spine = cold_read.load_spine(str(path))
+    result = cold_read.grade(spine, GOOD)
+    assert [r["item"] for r in result["items"] if r["pass"] == "full"] == [f"takeaway {n}" for n in range(1, 6)]
+    assert not result["pass"]
+
+
 def test_cli_without_claude_uses_prompts_then_replies(tmp_path):
     doc, spine, replies = tmp_path / "doc.md", tmp_path / "spine.json", tmp_path / "replies.json"
     doc.write_text("# Readout\n\n## Answer\nKeep ranker v2.\n")

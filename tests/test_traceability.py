@@ -168,6 +168,16 @@ def test_unsourced_numbers_are_listed_but_do_not_fail(tmp_path, capsys):
     assert "1 not found in their source" in out and "not in its source (confirm, or log how it was computed): 1.7 in:" in out
 
 
+def test_a_sub_heading_does_not_take_its_lines_out_of_a_checked_section():
+    queries = [{"id": "q1", "status": "ok", "rows": [[0.304]]}]
+    text = ("## Answer\nHeadline: 30.4% [q1]\n\n### Gap list\n| stale results | 96 of 169 |\n\n"
+            "## Caveats, and what would change the answer\n- 292 tickets did not join.\n\n"
+            "## Provenance\n- Reconciled: not done (none)\n\n## Appendix\nRaw counts: 1,062 tickets.\n")
+    problems, stats, _ = vr.verify(text, queries, [])
+    assert problems == ["untagged number in 'Answer': | stale results | 96 of 169 |"]
+    assert stats["numbers"] == 3
+
+
 def test_stamp_writes_one_verified_line_at_the_end_of_provenance(tmp_path, capsys):
     (tmp_path / "q.log").write_text("\n".join(json.dumps(e) for e in QUERIES))
     (tmp_path / "c.log").write_text("\n".join(json.dumps(e) for e in CHECKS))
