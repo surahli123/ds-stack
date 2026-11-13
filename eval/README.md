@@ -1,6 +1,6 @@
 # Eval
 
-Two evals ask whether ds-stack changes what an agent produces, compared with plain prompting. Scripts do the grading, so no model judges a number. Both run on synthetic tasks and report `INSUFFICIENT_N` until the pre-registered task counts are met. Results so far are in the top-level README.
+The analysis, writing and plan evals compare ds-stack with plain prompting on synthetic tasks. Their scripted grading reports `INSUFFICIENT_N` until the pre-registered task counts are met. Results so far are in the top-level README. The separate dialogue development set records multi-turn conversations for manual semantic review; it has no automatic quality verdict.
 
 ## Analysis eval
 
@@ -27,6 +27,8 @@ The pass rule: at least 15 holdout fixtures, 3 runs each. The full arm beats bas
 
 ## Running it
 
+For gradual brainstorming, [`dialogue/`](dialogue/README.md) replays explicit user contributions in the same session without requiring a finished plan on intermediate turns. It supports plain prompting, skills from a pinned current commit, and candidate skills from a specified directory. A distinct ds-mode entry case records successful skill reads to check routing. Review the full responses and correction history manually; scripted facts do not prove that the assistant asked useful questions. All included dialogue cases are development material, not holdout evidence.
+
 ```bash
 make eval                                    # three arms x all fixtures x 3 runs
 make grade RUN=eval/results/<dir>
@@ -34,6 +36,7 @@ make writing-eval
 make writing-grade RUN=eval/writing/results/<dir>
 make plan-eval
 make plan-grade RUN=eval/plan/results/<dir>
+make dialogue-eval ARGS='--case retro-3p --arm candidate --skill-source skills --model MODEL --out /tmp/dialogue-candidate'
 ```
 
 `run_arms.py` and `cold_read.py` call an agent CLI. The agent command is configurable; see `--help`. The writing-eval scripts also call an agent CLI.

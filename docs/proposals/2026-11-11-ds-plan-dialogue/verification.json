@@ -1,0 +1,20 @@
+{
+  "baseline_revision": "89cc668f0ba71014f12e1be04c6dc0862e497424",
+  "baseline_source_files_verified": 12,
+  "patch_check": "passed",
+  "patch_round_trip_matches_candidate": [
+    "skills/ds-plan/SKILL.md",
+    "skills/ds-mode/SKILL.md"
+  ],
+  "ds_mode_changed_lines": [
+    22
+  ],
+  "current_workspace_skill_hashes_unchanged": [
+    "skills/ds-mode/SKILL.md",
+    "skills/ds-mode/references/plan-critique.md",
+    "skills/ds-mode/references/review-checklist.md"
+  ],
+  "grader_probe": "four constructed inputs evaluated using the pinned score function; see grader-probe-results.json",
+  "model_behavior_experiments": "not run",
+  "canonical_skill_changes": "none"
+}

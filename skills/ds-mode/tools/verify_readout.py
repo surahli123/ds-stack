@@ -16,6 +16,10 @@ and row count, or the check's details and summary, as is or times 100, to the
 decimals shown. A number it can't find is listed for the reviewer to confirm,
 not failed: a difference or an interval worked out by hand is in no log until
 it is logged with query.py --pasted. Counts up to 10 are not looked up.
+ds-verify's `sources` check is the one that refuses a Headline it can't find.
+
+A heading that is not one of the readout's own (a sub-heading over a table)
+does not end a checked section: the lines under it are still checked.
 
 Dates, a "95%" in front of "interval" or "CI", and digits inside names (v2,
 q3) don't count as numbers. Logs default to $DS_QUERIES_LOG / $DS_CHECKS_LOG,
@@ -46,6 +50,7 @@ LIST_MARKER = re.compile(r"^\s*(?:[-*+]|\d+[.)])\s+")
 NUMBER = re.compile(r"(?<![A-Za-z_#\d.])[-+−]?\d+(?:[.,]\d+)*")
 VERIFIED = re.compile(r"^\s*[-*]\s*Verified\s*:.*\n?", re.I | re.M)
 CHECKED_SECTIONS = ("answer", "what it means", "why we believe")
+READOUT_SECTIONS = CHECKED_SECTIONS + ("caveats", "provenance")
 
 
 def _clean(text):
@@ -56,6 +61,33 @@ def _clean(text):
 def sections(text):
     parts = HEADING.split(_clean(text))
     return [(parts[i].strip(), parts[i + 1]) for i in range(1, len(parts) - 1, 2)]
+
+
+def readout_headings(text):
+    """Section heading matches shared by verification and stamping, preserving offsets.
+
+    Within a checked section, only a readout heading at the same or a higher
+    level starts another section; deeper subheadings remain in its body.
+    """
+    heads = []
+    for head in HEADING.finditer(text):
+        name = _clean(head.group(1)).strip().lower()
+        level = len(head.group(0)) - len(head.group(0).lstrip("#"))
+        in_checked = heads and _clean(heads[-1].group(1)).strip().lower().startswith(CHECKED_SECTIONS)
+        if in_checked:
+            parent_level = len(heads[-1].group(0)) - len(heads[-1].group(0).lstrip("#"))
+            if not name.startswith(READOUT_SECTIONS) or level > parent_level:
+                continue
+        heads.append(head)
+    return heads
+
+
+def readout_sections(text):
+    """(name, body) using readout boundaries; sections() splits on every heading."""
+    text = _clean(text)
+    heads = readout_headings(text)
+    ends = [head.start() for head in heads[1:]] + [len(text)]
+    return [(head.group(1).strip(), text[head.end():end]) for head, end in zip(heads, ends)]
 
 
 def numbers_in(line):
@@ -134,7 +166,7 @@ def verify(text, queries, checks):
     results = {e["id"].lower(): e for e in queries if e.get("id") and e.get("status") == "ok"}
     problems, given = [], []
     stats = {"lines": 0, "numbers": 0, "queries": set(), "checks": set(), "unsourced": []}
-    found = sections(text)
+    found = readout_sections(text)
     if not any(name.lower().startswith("answer") for name, _ in found):
         problems.append("no Answer section")
     for name, body in found:
@@ -188,9 +220,9 @@ def verify(text, queries, checks):
 def stamp(text, result):
     """Return text with '- Verified: <result>' as the last line of Provenance."""
     entry = f"- Verified: {result}\n"
-    heads = list(HEADING.finditer(text))
+    heads = readout_headings(text)
     for i, head in enumerate(heads):
-        if head.group(1).strip().lower().startswith("provenance"):
+        if _clean(head.group(1)).strip().lower().startswith("provenance"):
             end = heads[i + 1].start() if i + 1 < len(heads) else len(text)
             block = VERIFIED.sub("", text[head.end():end]).rstrip("\n")
             rest = text[end:]

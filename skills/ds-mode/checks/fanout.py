@@ -4,14 +4,19 @@ Pass the row counts around a join. Fails when the right side has duplicate keys
 for a join meant to be many-to-one or one-to-one, when the left side has
 duplicate keys for a one-to-one join, when the join added rows, or
 when a left join lost rows. An inner join that drops rows passes with the drop
-reported, unless it exceeds `max_drop_fraction`.
+reported only after `dropped_with_other_key` is counted; a positive count is
+flagged, zero can pass, and `max_drop_fraction` can still fail.
 
 Row counts alone miss a fan-out that dropped rows cancel out. Pass
 `matched_left_rows` (left rows with at least one match) to catch it: a
 many-to-one or one-to-one join can't return more rows than that.
+
+Row counts also can't tell whether dropped rows could have joined another way.
+Pass `dropped_with_other_key` (dropped rows that carry a second usable key, such
+as a timestamp when the id is missing): above zero, the check flags it.
 """
 
-from _common import COULD_NOT_RUN, FAIL, PASS, Result, SpecError, require
+from _common import COULD_NOT_RUN, FAIL, FLAG, PASS, Result, SpecError, require
 
 NAME = "fanout"
 RELATIONSHIPS = {"many_to_one", "one_to_one"}
@@ -44,6 +49,11 @@ def run(spec):
             if matched > left_rows:
                 raise SpecError("'matched_left_rows' can't exceed 'left_rows'")
         max_drop = spec.get("max_drop_fraction")
+        other_key = spec.get("dropped_with_other_key")
+        if other_key is not None:
+            other_key = require(spec, "dropped_with_other_key", int)
+            if other_key > max(left_rows - joined_rows, 0):
+                raise SpecError("'dropped_with_other_key' can't exceed the rows the join dropped")
     except (SpecError, TypeError, ValueError) as err:
         return Result(NAME, COULD_NOT_RUN, f"could not run: {err}")
 
@@ -81,4 +91,13 @@ def run(spec):
     if problems:
         return Result(NAME, FAIL, "; ".join(problems), details)
     note = f"; inner join dropped {dropped} rows" if dropped else ""
+    if dropped and other_key:
+        details["dropped_with_other_key"] = other_key
+        return Result(NAME, FLAG, f"row counts consistent with a {relationship} {join} join, but {other_key} of the "
+                                  f"{dropped} dropped rows carry another join key; join on it, or say why not, "
+                                  "before reporting the join rate", details)
+    if dropped and other_key is None:
+        return Result(NAME, FLAG, f"row counts consistent with a {relationship} {join} join, but whether the dropped "
+                                  "rows carry another usable key is unverified; count them and pass "
+                                  "'dropped_with_other_key' before reporting the join rate", details)
     return Result(NAME, PASS, f"row counts consistent with a {relationship} {join} join{note}", details)

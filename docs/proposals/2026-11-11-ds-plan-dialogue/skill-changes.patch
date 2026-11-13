@@ -1,0 +1,139 @@
+--- a/skills/ds-plan/SKILL.md
++++ b/skills/ds-plan/SKILL.md
+@@ -2,63 +2,86 @@
+ name: ds-plan
+ description: >-
+   Use when asked to plan, frame, scope or brainstorm an analysis, a research
+-  question or a metric, and before any non-routine analysis: a new metric, a
+-  causal question with no randomized test, a costly decision, a disagreement
+-  about what the data says, or a request you can't restate in one sentence.
+-  Checks the decision, the unit of analysis, the data and the scope before
+-  the first query, and ends with a short plan. Also runs on /ds-plan.
++  question or a metric, and before non-routine analysis. Discuss unsettled
++  definitions and comparisons with the requester, or review a clear brief in
++  one pass. Keep the research question, target population and experimental
++  design aligned, then produce a short plan. Also runs on /ds-plan.
+ ---
+ 
+ # ds-plan
+ 
+-A plan that answers the wrong decision, at the wrong unit, or with data nobody can reach is wrong however rigorous the rest is. Catch that before the first query, in one pass, in writing. No multi-round Socratic loop, no web search, no subagents.
++Help the requester reach an analysis that answers their question. A sound calculation at the wrong scope is still wrong. Choose the interaction the work needs; a checklist does not replace a discussion.
+ 
+-## Before answering
++## Choose the interaction
+ 
+-1. If `$DS_OVERLAY_DIR` is set and holds `metrics.json`, read it and name the metric, its grain and its pitfalls in the plan instead of hedging on them. Never search the filesystem for one.
+-2. If the decision or the metric is still unknown, ask at most two questions. When no one can answer, state the premise, label it `[guess]` and go on.
++- When the requester wants to explore an idea, define an unclear concept, or brainstorm together, work through the unresolved choices in dialogue. Do not immediately produce a finished plan.
++- When the question, population and comparison are clear and the requester wants a plan or critique, review them in one pass. Do not force an interview on a clear request.
++- When an analysis is already authorized, resolve the choices that could change its meaning, then continue with `ds-mode` if installed. Planning does not add a separate permission gate. A planning-only request ends with the plan.
+ 
+-## Questions
++## Keep the question aligned
+ 
+-Answer each in a line or two. "Looks fine" doesn't count: most plans have a gap, so name it. A question you can't answer is a finding: settle it before querying, or carry it into the plan's open questions. If an answer changes the plan, change the plan first.
++1. Carry forward the question and intended use, who the result is about, what has already been agreed, and what remains unknown. Use the conversation; do not ask for information already supplied. Keep this working context short and do not print or save a status template on every turn.
++2. Distinguish an unresolved choice from a missing fact. A choice about what “power”, “harm” or “success” means needs discussion. A randomization setting or log definition needs a source. If relevant, read `metrics.json` from `$DS_OVERLAY_DIR` when it is set and that file exists; never search the filesystem for one. A known metric does not settle an unknown population definition.
++3. Keep reported observations, causal hypotheses and design facts separate. A platform name does not establish the assignment unit. A retrospective analysis of a completed experiment can still use its original assignment and control; do not silently turn it into a new experiment or an observational before/after comparison.
++4. If a missing fact changes the proposed analysis, leave the dependent step conditional and name how to check it. Do not guess an important definition just to complete the plan. State any harmless working assumption explicitly.
+ 
+-Decision
+-1. What decision does this feed, who makes it, and what are the options, including scope (which segments, markets or items come first)? What would they do on each plausible answer?
+-2. What is the smallest change that would alter the decision?
+-3. Are the metrics the ones the decision-maker tracks? If not, how do they map?
++## Discuss one useful question at a time
+ 
+-Unit
+-4. Which unit was randomized or treated, and which unit does the question ask about: user, tenant or account, query, session? Estimate at the unit the question names, never coarser than the randomized one. Rolling a user-randomized test up to tenants doesn't buy power; it leaves fewer units. To use tenants, stratify by them in the user-level analysis, and cluster intervals by tenant only when tenants were treated whole.
+-5. How is each segment defined? Use the analysis unit's own attribute, measured before the test started. A tenant label put on users (a "power" tenant) also covers users without the trait: say how many, or use each user's own behavior.
++Answer the requester's current question first. Then, only if needed, ask one focused question whose answer changes the next choice. If its purpose is not obvious, explain why it matters. Do not require the requester to answer the checklist below.
+ 
+-Methodology
+-6. What is the one assumption the plan leans on most, and what result would show it is wrong?
+-7. What else could explain the result, and which of those can the data separate?
+-8. Is the metric a valid measure of what the decision cares about, or a proxy (engagement for satisfaction)? If you test that, is the test sample drawn independently of the outcome, or only from known failures?
+-9. For a causal question: what did the treatment do, how are treated units identified (not from the outcome), and what is the counterfactual?
+-10. Is the sample large enough for the smallest change that matters, counting the clustering from question 4?
+-11. Do populations differ enough (new and returning users, platforms) that pooling them could mislead?
++When a concept is unclear, offer a concrete candidate definition and its tradeoff, and help the requester decide whether it captures the intended users or outcome. When asked for mathematical notation, explain the current candidate before reopening other choices. Distinguish an observable proxy from the underlying need it may represent.
+ 
+-Feasibility
+-12. What is the one input everything depends on? Have you queried it for the period you need, or do you only think it exists?
+-13. What else does the plan assume: a join key, a label, a baseline period, access to the rows? Can a result be reproduced for another user and date (permissions, personalization, index state)?
+-14. What is the smallest version that still answers the decision?
++Surface a relevant blind spot and explain how it could change the answer. Do not expand into adjacent investigations unless they change the present question. If the requester cannot answer, narrow the choice, propose a reversible candidate, or defer a data-dependent check. Do not repeat the question in different words.
++
++Treat accepted choices as the current plan. Reopen one only when new evidence or a contradiction makes it necessary, and say what changed. Sparse data is a reason to inspect feasibility, not a reason by itself to discard the intended comparison.
++
++Follow the runtime's tool and delegation rules. Use external research for a specific methodological uncertainty or when requested, explain what it changes, and return to the question. Do not make research or delegation a mandatory step in every discussion.
+ 
+ ## When the requester objects
+ 
+-Answer the objection before anything else: say whether it holds, with evidence or the query that would settle it, and change the plan if it does. Don't restate the earlier argument.
++Address the substance before continuing. State what the objection changes, revise the affected definition or comparison, and discard downstream assumptions that no longer follow. If the objection does not change the plan, explain why or name the evidence that would settle it. Do not append an acknowledgement and continue the same argument unchanged.
+ 
+-## The plan
++## Review before writing the plan
+ 
+-Reply with this, short enough to read in two minutes:
++Use these questions to check the proposed analysis. Resolve relevant gaps; do not fill every field on every turn. A gap is a finding, not an invitation to invent an answer.
++
++Decision
++1. What question and intended use does this serve? If a decision is known, who makes it and what options could the result change? Understanding an incident or a tradeoff is also a valid purpose.
++2. Is there a smallest change that matters? If it has not been chosen, what can still be learned without it?
++3. Do the proposed metrics measure that purpose or a proxy? What does the proxy miss?
++
++Unit and population
++4. Who is the target population, how should its members be weighted, what does each outcome represent, and what was randomized or treated? Keep these roles distinct. Match the comparison and its uncertainty to the actual design; do not replace the research population merely because assignment happened at a different level. If a user can receive both arms, do not assume a fixed user T/C assignment.
++5. How is each segment defined? For causal subgroup comparisons, use characteristics determined before treatment. Do not substitute a tenant's label for a user's trait without establishing that it answers the question. Distinguish missing history from observed inactivity.
++
++Methodology
++6. What assumption does the plan depend on most, and what observation would challenge it?
++7. What else could explain the result, and which alternatives can the available data separate?
++8. Is validation sampled independently of the outcome, or only from known failures?
++9. What treatment and counterfactual identify a causal effect? For a completed experiment, which original assignment and concurrent control are available?
++10. What comparison answers the question, on which effect scale, with what uncertainty? Compare subgroup effects directly; a significant result in only one group does not establish a difference between groups.
++11. Could pooling populations or repeated observations hide a difference or misstate precision? If sample size or segment feasibility is unknown, name the check rather than declaring it sufficient or impossible.
++
++Feasibility
++12. Which input is essential, and has its availability been checked or only assumed?
++13. What keys, history, access and logging definitions are needed? Can the measurement be reproduced for another user or date when permissions or personalization matter?
++14. What is the smallest analysis that still answers the question? Separate checks needed to settle the plan from optional follow-ups.
++
++## Finish at the right point
++
++When the question, candidate population definition, comparison and outcome are clear enough to proceed, summarize the agreements and the remaining checks. Data access, sample size or the numerical value of a percentile can remain open checks; the researcher does not need to know those values to finish brainstorming. If a choice still changes the question itself, name that choice instead of presenting a settled plan.
++
++If asked whether brainstorming is finished, answer directly. Do not keep interviewing after the plan is ready, and do not treat a brief acknowledgement as agreement to a choice that was never stated. When asked to summarize now, produce the best current plan with its open points.
++
++Write the plan when requested or ready for handoff, short enough to read in two minutes:
+ 
+ ```
+-Decision: <the decision, who makes it, the options>
+-Unit: <the unit of analysis, and why it matches the decision>
+-First test: <the one analysis to run first>; it fails if <result>
+-Questions: <at most three, the ones the decision needs>
+-Open: <questions above you couldn't answer, and what the answer will say if they stay open>
+-Premises: <each one labeled measured, given or [guess]>
++Decision: <the question and intended use; decision and owner if known>
++Unit: <target population and outcome; assignment unit, or how to verify it>
++First test: <the first check or analysis, and what it would change>
++Questions: <at most three questions the analysis will answer, not another interview>
++Open: <unsettled choices and missing facts, separated; how each will be resolved>
++Premises: <given, measured, inferred or [guess], with the basis>
+ ```
+ 
+-When the plan feeds an analysis, follow the `ds-mode` skill next, if it is installed.
++These fields are for the handoff, not the format of every conversational reply. Update the plan when a correction changes it. Do not produce an experiment readout or claim measured results without data. When a written memo is requested, use `ds-doc` if installed.
+--- a/skills/ds-mode/SKILL.md
++++ b/skills/ds-mode/SKILL.md
+@@ -19,7 +19,7 @@
+ 
+ This is a draft, to be replaced with the analyst's own first moves.
+ 
+-1. Restate the question in one sentence and name the decision it feeds. Treat the requester's guess about the cause as one alternative, not the premise. If the analysis isn't routine (a new metric, a causal question with no randomized test, a costly decision), run the `ds-plan` skill first, if it is installed.
++1. Restate the question in one sentence and name the decision or investigation it feeds. Treat the requester's guess about the cause as one alternative, not the premise. If the question, population or comparison is unsettled, or the requester wants to brainstorm, use `ds-plan` first if installed; an existing randomized test does not settle those choices. For other non-routine work (a new metric, a causal question with no randomized test, a costly decision), use `ds-plan` for a brief review if installed. Reuse the agreed plan instead of repeating the interview. If `ds-plan` is unavailable, resolve choices that change the question before computing; keep missing design facts conditional and name how to verify them.
+ 2. Pin the metric before you query: numerator, denominator, filters, grain and source table. Take it from `metrics.json` in the overlay directory named by `$DS_OVERLAY_DIR` when the metric is there, and say so. If `$DS_OVERLAY_DIR` is unset or holds no `metrics.json`, there is none: never search the filesystem for one. When it isn't, write your definition into the readout and label it `[guess]`. Never invent a definition silently; a plausible number on the wrong definition is the most common wrong answer, and no check below catches it.
+ 3. Decide whether the question can be answered.
+    - If two readings of it give materially different numbers and nothing settles which one is meant, ask before computing. When no one can answer, pick the reading the decision most likely needs, state it in the Answer, and put the other in the caveats.

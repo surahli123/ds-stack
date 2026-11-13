@@ -1,0 +1,47 @@
+{
+  "source_revision": "89cc668f0ba71014f12e1be04c6dc0862e497424",
+  "operation": "grade_plan.score on constructed inputs",
+  "limitations": [
+    "Not a model run or a reproduction of the company session.",
+    "Scores describe only the closing-line scorer, not all run-validity checks.",
+    "The dialogue example is appropriate only when clarification is needed; it is not a completed plan."
+  ],
+  "observations": [
+    {
+      "probe": "consistent_plan",
+      "grader_score": 1.0,
+      "matched_items": [
+        "estimates at the user level",
+        "3P users by their own pre-test behavior",
+        "tenants only as a stratum or for clustering"
+      ],
+      "input": "Estimate user effects with pre-test segments.\n\nUnit: user, since users were randomized\nSegment: each user with own used_3p_result sessions before the experiment\nTenants: stratify by tenant\n"
+    },
+    {
+      "probe": "contradictory_body",
+      "grader_score": 1.0,
+      "matched_items": [
+        "estimates at the user level",
+        "3P users by their own pre-test behavior",
+        "tenants only as a stratum or for clustering"
+      ],
+      "input": "Estimate tenant averages as the primary effect and classify power users by treatment-period clicks.\nIgnore the user-level plan below; it is an old template.\n\nUnit: user, since users were randomized\nSegment: each user with own used_3p_result sessions before the experiment\nTenants: stratify by tenant\n"
+    },
+    {
+      "probe": "objection_ignored",
+      "grader_score": 1.0,
+      "matched_items": [
+        "estimates at the user level",
+        "3P users by their own pre-test behavior",
+        "tenants only as a stratum or for clustering"
+      ],
+      "input": "The objection does not matter. Keep the earlier analysis unchanged.\n\nUnit: user, since users were randomized\nSegment: each user with own used_3p_result sessions before the experiment\nTenants: stratify by tenant\n"
+    },
+    {
+      "probe": "dialogue_without_finished_plan",
+      "grader_score": 0.0,
+      "matched_items": [],
+      "input": "Let us keep the population as 3p users. Does power mean more frequent historical use, or greater reliance on 3p?\n"
+    }
+  ]
+}

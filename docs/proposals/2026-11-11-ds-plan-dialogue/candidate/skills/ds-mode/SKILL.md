@@ -1,0 +1,117 @@
+---
+name: ds-mode
+description: >-
+  Use for data analysis that produces a number someone will act on: a metric
+  moved, an experiment readout, a "did X cause Y" question, or a sizing.
+  Pins the metric definition first, runs mechanical checks on aggregates
+  before any number is reported, rules alternative explanations in or out
+  with evidence, and ends with a fixed readout in which every number traces to
+  a logged query or check. Also runs on /ds-mode.
+---
+
+# ds-mode
+
+You own the number and the inference. A number that passes every check but answers the wrong question, or tells the wrong story, is still wrong. A wrong number stated with confidence is worse than "can't tell".
+
+A data scientist will review your readout, and should be able to check it in under 10 minutes. So every number you report carries a tag that a script resolves to the logged query or check behind it.
+
+## Method
+
+This is a draft, to be replaced with the analyst's own first moves.
+
+1. Restate the question in one sentence and name the decision or investigation it feeds. Treat the requester's guess about the cause as one alternative, not the premise. If the question, population or comparison is unsettled, or the requester wants to brainstorm, use `ds-plan` first if installed; an existing randomized test does not settle those choices. For other non-routine work (a new metric, a causal question with no randomized test, a costly decision), use `ds-plan` for a brief review if installed. Reuse the agreed plan instead of repeating the interview. If `ds-plan` is unavailable, resolve choices that change the question before computing; keep missing design facts conditional and name how to verify them.
+2. Pin the metric before you query: numerator, denominator, filters, grain and source table. Take it from `metrics.json` in the overlay directory named by `$DS_OVERLAY_DIR` when the metric is there, and say so. If `$DS_OVERLAY_DIR` is unset or holds no `metrics.json`, there is none: never search the filesystem for one. When it isn't, write your definition into the readout and label it `[guess]`. Never invent a definition silently; a plausible number on the wrong definition is the most common wrong answer, and no check below catches it.
+3. Decide whether the question can be answered.
+   - If two readings of it give materially different numbers and nothing settles which one is meant, ask before computing. When no one can answer, pick the reading the decision most likely needs, state it in the Answer, and put the other in the caveats.
+   - If the data can't answer it (the metric isn't logged, the period hasn't landed), say so up front instead of computing a substitute.
+4. Check the data before the question. Make sure every period you use is complete (`completeness`). After any join, compare row counts before and after (`fanout`). When a dashboard or other trusted source shows the same metric, reconcile one number against it and record the result in Provenance.
+5. Size, then decompose.
+   - When a rate moved, run `mix_shift` on the segments whose mix could have shifted (platform, country, traffic source). Use the finest grain that keeps about 100 units per cell on both sides, then rerun at one coarser grain. If the two disagree, report both.
+   - For an experiment, run `srm` on the assignment counts before you read any lift.
+6. Rule each alternative in or out with evidence, or say it is not ruled out. Always consider mix-shift, seasonality and day of week, data completeness, logging or definition changes, and the requester's cause. The evidence names a check or a query result from this session. Label each conclusion measured, inferred or guess.
+7. Write the readout below to `readout.md`, run `python3 <dir of this SKILL.md>/tools/verify_readout.py readout.md --stamp`, and fix the readout until it passes. A pass writes the Verified line into Provenance, so don't add it by hand or run the script again.
+8. If ds-verify sits next to this skill (`<dir of this SKILL.md>/../ds-verify/tools/ds_verify.py`), save the person's question as `request.md`, word for word and without these instructions. Then run `python3 <that file> readout.md --request request.md`, adding `--db <file>` when the data isn't `./warehouse.db` or `$DS_WAREHOUSE`. Fix what each FAIL line names and run it again:
+   - A FAIL about a number or a definition is fixed in the analysis, by rerunning the queries. Rewording the readout doesn't fix it.
+   - Never clear a FAIL by deleting a number, abstaining, pasting a result, citing a different query, or editing a log or a check's output. Tag an untagged number instead: `[given]` for one stated in the request. The Headline cites the query or check that produced it.
+   - If the same FAIL remains after two honest reruns and you believe the analysis is right, keep it, quote the FAIL line under Caveats, and send.
+
+   `unverified` is fine when the cause is outside your control, such as a result a person computed; its "Needs a human" list is for the reviewer. Then send the readout as your final reply.
+
+## Queries
+
+Run every query as `python3 <dir of this SKILL.md>/tools/query.py "<SQL>" --as-of <last complete period>`. It enforces the safety envelope (scratch-only writes, one statement, aggregates only, a time cap), prints the result with an id such as `q3`, and logs the statement and result to `.ds-queries.log`. Don't query the data any other way. If a result had to be computed elsewhere, for example by a person, log it with `--pasted --sql ... --columns ... --rows ...` so it gets an id. That includes a number you work out yourself, such as a difference or an interval: log them all in one `--pasted` call, with the formula as `--sql`, and tag them with its id. `verify_readout.py` lists any tagged number it can't find in its source. When a query computes a metric, add `--metric <name>`, and `--slice <segment>` if it covers only part of the data, so the same check can spot one metric reported with two values. On a live warehouse, the overlay's adapter takes the place of the SQLite default, with the same log.
+
+## Checks
+
+Run each check as `python3 <dir of this SKILL.md>/checks/run.py <check> --json '<spec>'`. `--list` shows when to use each check and an example spec. Checks take aggregates you computed, never raw rows. Add `"from": "q<n>"` (or a list) to the spec, naming the queries the aggregates came from. Each check prints a JSON line with an id such as `mix_shift#1` and logs it to `.ds-checks.log`.
+
+| Check | Run it when |
+|---|---|
+| `completeness` | before reporting any period |
+| `fanout` | after any join |
+| `mix_shift` | a rate moved and segment mix could have changed |
+| `srm` | before reading any experiment lift |
+
+Statuses mean different things:
+
+- `pass`: nothing found.
+- `flag` is a finding, not a defect. From `mix_shift`, it means segment mix explains a real part of the move, so the Answer must say how much of the change is mix and how much is within-segment change.
+- `fail` is a data or query defect. It must change the answer, or the readout must show with evidence why it doesn't. If you can't resolve it, the headline is `can't tell`; say what is missing and what would settle it.
+- `could not run` because of how you called it (wrong spec, wrong grain): fix the call and rerun.
+- `could not run` because the data can't support the check at all (for example, `completeness` with no earlier periods): answer anyway, report the check as could not run, and put the gap in the caveats. Abstain only if that gap could plausibly change the answer.
+
+Report every check that applies, with its status. If you skip one, say why. Copy check output exactly; never edit it.
+
+## Readout
+
+Your final reply is exactly this format, written for the person who acts on it:
+
+```
+## Answer
+Headline: <signed number> <unit> (<95% interval>) [q<n> | check:<name>#<n>]   or   Headline: can't tell
+<one plain sentence: what happened and how big> [q<n> | check:<name>#<n>]
+- Observed: <signed number> <unit> (<95% interval>) [q<n> | check:<name>#<n>]
+- Adjusted: <signed number> <unit> (<95% interval>), holding <what> fixed [check:<name>#<n>]   or   Adjusted: not computed (<reason>)
+- Causal effect: <signed number> <unit> (<95% interval>), from <design> [q<n>]   or   Causal effect: not identified (<what would identify it>)
+
+## What it means for <the decision>
+<one or two sentences that compare the interval with the smallest change that would alter the decision> [q<n> | check:<name>#<n>] [given]
+
+## Why we believe it
+- Alternatives considered:
+  - <alternative>: ruled <in|out> by <evidence> [q<n> | check:<name>#<n>] [measured|inferred|guess]
+  - <alternative>: not ruled out; <what would decide it> [q<n> | check:<name>#<n>] [inferred|guess]
+- Checks run:
+  - <check>: <pass|flag|fail|could not run|skipped> <one-line result or reason> [check:<name>#<n>]
+
+## Caveats, and what would change the answer
+- <short list>
+
+## Provenance
+- Metric: <definition>, from <metrics.json | stated here [guess]>
+- Data: <tables or views>, through <last complete period>
+- Reconciled: <metric> vs <dashboard or source>, delta <x> [q<n>]   or   Reconciled: not done (<reason>)
+- Queries and checks: <where they are logged>
+```
+
+- Every line in the Answer, What it means and Why we believe it sections that states a number carries a tag: `[q<n>]` for a logged query, `[check:<name>#<n>]` for a logged check, `[given]` for a number stated in the request, such as a threshold. One bracket can hold several: `[q3, q4]`. A number you can't tag doesn't belong in the readout. That includes the reason after `not identified`, `not computed` or `skipped`: describe the design in words (a full rollout, no holdout) and tag any measured number, such as an arm split.
+- In Provenance, the logs are `.ds-queries.log` and `.ds-checks.log`, and a last line `- Verified: <the verify_readout.py result line>; <ds-verify's first line, when it ran>`, each exactly as printed, shows the reviewer what passed. `--stamp` writes the first part on a pass; add ds-verify's line after it.
+- The interval is required. `mix_shift` reports one for the overall change (`delta_ci95_pp`). For an experiment lift, use a two-proportion interval. When no interval can be computed, write `(no interval: <reason>)`.
+- Each alternative gets one of three verdicts. `ruled in` means the evidence shows it happened. `ruled out` means the evidence excludes it. An alternative the data can neither show nor exclude is `not ruled out`, followed by what would decide it. Never write `ruled in as possible` or `ruled in as unresolved`: a reader who skims sees `ruled in` and takes it as shown.
+- Use causal words ("caused", "drove", "because of") only for a randomized test or a design that identifies the cause. Otherwise say "coincided with" or "is associated with", and name what would confirm it.
+- The three estimate lines keep apart numbers that are easy to conflate:
+  - Observed is the raw number or change in the data.
+  - Adjusted is a descriptive estimate that holds something fixed, such as the within-segment change from `mix_shift`. Say what it holds fixed. It is not a causal effect.
+  - Causal effect is a number only for a randomized test or another design that identifies the cause. Otherwise write `not identified` and what would identify it. Never fill it with Adjusted, and never write 0 for an effect you couldn't identify.
+- The Headline gives the estimate that answers the question. For "how much of the change did the launch cause" after a 100% rollout, that is Adjusted, with its assumption in the sentence below (for example "if v2 didn't change the traffic mix"). An unidentified cause is not a reason to abstain. `can't tell` is for when the data can't support the number itself; then each estimate line may read `not computed (<reason>)`.
+- Keep the readout's fixed words in English exactly as shown: the section headings, `Headline:`, `Observed:`, `Adjusted:`, `Causal effect:`, `not identified`, `ruled in`, `ruled out` and `not ruled out`, check names and statuses, `can't tell`, and the unit `pp`. Scripts read them. Everything else can be in the reader's language.
+- measured means computed from data in this session.
+- inferred means it follows from measured facts by reasoning.
+- guess means neither.
+
+When this readout grows into a document for other people (a readout, memo, plan or handover), write it with the `ds-doc` skill, if it is installed.
+
+## References
+
+- `references/review-checklist.md`: what the reviewer checks, in order. Read it before writing the readout; it is the test the readout faces.
+- `references/mistake-classes.md`: candidate mistake classes for the analyst's wrong-number archive. They become checks only after two real incidents.

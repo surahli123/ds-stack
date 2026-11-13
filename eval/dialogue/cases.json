@@ -1,0 +1,41 @@
+[
+  {
+    "id": "retro-3p",
+    "entry": "direct",
+    "turns": [
+      {"origin":"USER", "text":"3p DAU declined after a relevance launch. Leads want to know whether power users were more affected. We don't have a definition of power yet. Help me think through a retrospective analysis; do not run an analysis."},
+      {"origin":"USER", "text":"For this discussion, 3p activity means a user's own clicks on 3p search results; exclude system or AI citations. Many users might have only one click."},
+      {"origin":"USER", "text":"Correction: we only want to understand 3p power. We have no existing definition. Please stay within that scope."},
+      {"origin":"USER", "text":"How can we express a historical click-frequency definition mathematically?"},
+      {"origin":"USER", "text":"I propose and accept using the historical P80 as a candidate power threshold. The exact threshold, ties and group sizes need data checks."},
+      {"origin":"USER", "text":"Some people first click 3p during the experiment. Include them in the retrospective without defining their pre-treatment status from experiment-period clicks."},
+      {"origin":"USER", "text":"The experiment has already ended. I don't know its assignment settings or whether the original control and assignment records are available."},
+      {"origin":"USER", "text":"Are we done brainstorming? Please summarize the plan, the decisions and the checks still needed. Do not perform the analysis."}
+    ]
+  },
+  {
+    "id": "company-correction",
+    "entry": "direct",
+    "turns": [
+      {"origin":"USER", "text":"A CRM feature was randomly assigned by company. We want to understand its effect on individual salespeople's activity. Help me plan the retrospective; don't run it."},
+      {"origin":"USER", "text":"I propose using pre-launch login frequency to describe power users, with the exact cutoff left for a data check."},
+      {"origin":"USER", "text":"Correction: by power I mean dependency on this workflow, not how often someone logs in. Login frequency is no longer my accepted definition. We don't have a validated dependency measure. How does that change the plan?"},
+      {"origin":"USER", "text":"Please finish with a conditional plan and distinguish unresolved choices from missing facts. We cannot assume a dependency measure or a particular company-level analysis without checking the data."}
+    ]
+  },
+  {
+    "id": "one-shot",
+    "entry": "direct",
+    "turns": [
+      {"origin":"USER", "text":"Give me one short retrospective plan now, without brainstorming or running analysis. Users were randomized within tenant on September 1. Compare user-level 3p search-result clicks during September between assigned arms, stratifying by tenant. Define the historical power candidate as users at or above the P80 of their own 3p search-result clicks in June–August; inspect ties and group sizes. Exclude system citations. Include users with zero historical clicks in the overall analysis. State checks for assignment and missing data."}
+    ]
+  },
+  {
+    "id": "mode-entry",
+    "entry": "mode",
+    "turns": [
+      {"origin":"USER", "text":"Our 3p search activity fell after a relevance launch. I want to understand whether high-use users were affected more. This is a retrospective planning discussion; don't run analysis. We have no power-user definition yet."},
+      {"origin":"USER", "text":"I propose historical P80 of users' own 3p result clicks as a candidate, excluding system citations. The experiment has ended, and assignment records need checking. Please summarize a conditional plan and remaining checks."}
+    ]
+  }
+]

@@ -1,0 +1,58 @@
+{
+  "review_date": "2026-11-11",
+  "repository": "surahli123/ds-stack",
+  "source_revision": "89cc668f0ba71014f12e1be04c6dc0862e497424",
+  "remote_verification": "git ls-remote origin refs/heads/main matched this revision before drafting",
+  "workspace_head": "6437623fc68447b674b42390b0c4c21eb34ab238",
+  "scope": "proposal only; source skills were not modified",
+  "files": [
+    {
+      "path": "skills/ds-plan/SKILL.md",
+      "sha256": "7fe0c89c3152f6a9114bb7ff637ab516965f53410d1478ac1087772958b7f47d"
+    },
+    {
+      "path": "skills/ds-mode/SKILL.md",
+      "sha256": "97dfe07cd42200406f6a0ee9b90909dad01c945826f21dc0eb27ed7297f866e0"
+    },
+    {
+      "path": "skills/doc-tighten/tools/doc_lint.py",
+      "sha256": "898dcafd71d0f13b152ccc6ed8650fdbca09b135c4684e4acc5cee3a8f6e0dab"
+    },
+    {
+      "path": "eval/plan/run_plan.py",
+      "sha256": "640bf32b19af6eabb9f1b8369bb22a6a59feb78421a828b6efcc8e439f69facb"
+    },
+    {
+      "path": "eval/plan/grade_plan.py",
+      "sha256": "ba1c7b273d9cbca852823b9baa60da2c5fdd9ba20dd4900f87b192bc1896700f"
+    },
+    {
+      "path": "eval/plan/gold/p2.json",
+      "sha256": "cad762e58a3b3072e1cf1c5a67a81c2db554724fedb7975086c891aa14ebca1b"
+    },
+    {
+      "path": "eval/plan/pass_rule.json",
+      "sha256": "b9faaaf2f59ece5ee3e3d06c5f5b88bb6c5d68e9323b736ba4e1f73443d1e639"
+    },
+    {
+      "path": "eval/plan/tasks/p2/notes.md",
+      "sha256": "9c9064ec8ae7ca8bb7adfdd9c13ebec88272f43b6e56540955da6ed3c98e3882"
+    },
+    {
+      "path": "eval/plan/results/2026-11-11-calibration/summary.md",
+      "sha256": "62bcfcaf301ed5e14664de9e92361607b28ff29257731bd4c5d8b5c2c36fdd7f"
+    },
+    {
+      "path": "tests/test_plan_eval.py",
+      "sha256": "b6d97af7505c1595e9ed40c4bc04785d8b0059a498b147fdc042abde6bfef336"
+    },
+    {
+      "path": "docs/plan-stage-case.md",
+      "sha256": "7b7fce14a82cd1cbfb7051ac4d70f61a81cb8aca1f76df8645dbe5a16af9ca6d"
+    },
+    {
+      "path": "skills/doc-tighten/tools/rules.json",
+      "sha256": "245c806bafb99428500f20241ac59a6415e1dbb2c97aebd12d4d743350556211"
+    }
+  ]
+}

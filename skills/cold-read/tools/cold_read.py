@@ -72,8 +72,8 @@ def load_spine(path):
     missing = [k for k in ("reader", "answer", "decision", "takeaways") if not spine.get(k)]
     if missing:
         raise ValueError(f"spine is missing {', '.join(missing)}")
-    if not isinstance(spine["takeaways"], list) or len(spine["takeaways"]) != 3:
-        raise ValueError("spine needs exactly three takeaways")
+    if not isinstance(spine["takeaways"], list) or len(spine["takeaways"]) < 3:
+        raise ValueError("spine needs at least three takeaways")
     if length(spine["answer"]) > 30:
         raise ValueError("the spine's answer is over 30 words; tighten it before drafting")
     return spine

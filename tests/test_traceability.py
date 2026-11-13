@@ -168,6 +168,37 @@ def test_unsourced_numbers_are_listed_but_do_not_fail(tmp_path, capsys):
     assert "1 not found in their source" in out and "not in its source (confirm, or log how it was computed): 1.7 in:" in out
 
 
+@pytest.mark.parametrize("subheading", ["Caveats by segment", "Provenance by segment"])
+def test_reserved_subheadings_stay_in_the_checked_section_and_sibling_sections_split(subheading):
+    queries = [{"id": "q1", "status": "ok", "rows": [[0.304]]}]
+    text = (f"## Answer\nHeadline: 30.4% [q1]\n\n### {subheading}\n| stale results | 96 of 169 |\n\n"
+            "## Caveats, and what would change the answer\n- 292 tickets did not join.\n\n"
+            "## Provenance\n- Reconciled: not done (none)\n\n## Appendix\nRaw counts: 1,062 tickets.\n")
+    problems, stats, _ = vr.verify(text, queries, [])
+    assert problems == ["untagged number in 'Answer': | stale results | 96 of 169 |"]
+    assert stats["numbers"] == 3
+    found = vr.readout_sections(text)
+    assert [name for name, _ in found] == [
+        "Answer", "Caveats, and what would change the answer", "Provenance", "Appendix"
+    ]
+    bodies = dict(found)
+    assert "292 tickets did not join" in bodies["Caveats, and what would change the answer"]
+    assert "Reconciled: not done" in bodies["Provenance"]
+    assert "Raw counts: 1,062 tickets" in bodies["Appendix"]
+
+
+@pytest.mark.parametrize("heading", ["## Provenance", "## **Provenance**"])
+def test_stamp_skips_provenance_named_subheadings_inside_answer(heading):
+    text = ("## Answer\nHeadline: 30.4% [q1]\n\n### Provenance by segment\nNo extra figures.\n\n"
+            f"## Caveats\nNone.\n\n{heading}\n- Reconciled: not done (none)\n\n## Appendix\nRaw notes.\n")
+    stamped = vr.stamp(text, "verify_readout: pass")
+    bodies = dict(vr.readout_sections(stamped))
+    assert "Verified:" not in bodies["Answer"]
+    assert bodies["Provenance"].strip().splitlines()[-1] == "- Verified: verify_readout: pass"
+    assert vr.stamp(stamped, "verify_readout: pass") == stamped
+    assert stamped.endswith("## Appendix\nRaw notes.\n")
+
+
 def test_stamp_writes_one_verified_line_at_the_end_of_provenance(tmp_path, capsys):
     (tmp_path / "q.log").write_text("\n".join(json.dumps(e) for e in QUERIES))
     (tmp_path / "c.log").write_text("\n".join(json.dumps(e) for e in CHECKS))
