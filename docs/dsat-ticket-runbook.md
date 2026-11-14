@@ -16,13 +16,13 @@ The output is a gap list. It is not a quality trend, not a failure rate, and not
 
 - **Data stays inside the company environment.** The only place to show ticket content is this session with the person. Don't copy ticket text, queries, document titles, tenant names or user names into any commit, pull request, issue, other chat, web search or outside tool.
 - **Models must be approved for this data.** That covers your own model endpoint and any reader or reviewer model a skill calls. If you are not sure, ask before reading a ticket.
-- **Work from the output directory.** `cd` into the directory the person named. It must be outside any git repository. Set `DS_QUERIES_LOG` and `DS_CHECKS_LOG` to files in it, and `TMPDIR` to a folder in it. Never `git add` anything produced here. Every output file holds customer text: say so in its first line.
+- **Work from the output directory.** `cd` into the directory the person named. It must be outside any git repository. Set `DS_QUERIES_LOG` and `DS_CHECKS_LOG` to files in it, and `TMPDIR` to a folder in it. Never `git add` anything produced here. The outputs hold customer text: say so in a `README.md` in the output directory, not inside the output files.
 - **Read-only on every data source.** The one exception is `ds-mode`'s own scratch tables under its scratch prefix, and only if the person confirms the warehouse allows them. Change nothing in the ticket system.
 - **Read every ticket for the month**, by ticket created time. Don't sample.
 - **Use only what a ticket carries and what the log records.**
 - **Don't invent a definition.** If `metrics.json` exists in `$DS_OVERLAY_DIR`, it is the definition; if it disagrees with what the person says, stop and ask. Otherwise take each definition from the person and record "confirmed by <person>, <date>" beside it in `analysis_plan.md`.
 - **Plan before work.** Show the plan from step 0 and wait for the person's go before step 1. Reading a few tickets and one log lookup to build the plan's examples is allowed before the go.
-- **Stop conditions are defaults.** The numbers in them ("about 2,000", "a third", "about 50%") were chosen by this runbook's author, not by the team. When one is met, stop and ask the person whether to continue; they may override it.
+- **Stop conditions are defaults.** The numbers in this runbook ("about 2,000", "a third", "about 50%", "10 points", "about 30 labels") were chosen by this runbook's author, not by the team. When one is met, stop and ask the person whether to continue; they may override it.
 - **Failures.** If a step fails, retry once, then stop and report what failed, with the output. Inside `ds-mode`, its own rerun rule applies to its verification step.
 
 ## What you need from the person
@@ -50,7 +50,7 @@ Read all tickets first without labelling. Derive the categories from what users 
 - Keep a category for tickets that are not about search quality (a UI request, a login problem) and one for feedback too vague to classify. Don't force these into a failure type. Every other category is in scope.
 - Use the attached query and results as evidence, not only the text. Example: the feedback says the first result is the old version, and the attached first result was last modified two years ago. Label: outdated content.
 - Write `ticket_labels.csv` (ticket id, category, one-line reason) and `ticket_categories.md` (each category, its definition, its count, and two or three verbatim tickets, no more).
-- Ask the person to check about 30 labels picked at random, and report how many they agree with. The labels are one agent's reading, not a reviewed truth; say so wherever they are used.
+- Ask the person to check about 30 labels picked at random, and report how many they agree with. Continue while they check, and report the result with the gap list. The labels are one agent's reading, not a reviewed truth; say so wherever they are used.
 
 This step is reading text. `ds-mode` runs aggregate queries only, so do this step outside it, and say in the output that it was done by reading, by which model, and that it has no query log.
 
@@ -58,12 +58,12 @@ Stop if more than about a third of tickets land in "too vague": the categories w
 
 ### 2. Join each ticket to its search and read what each metric scored
 
-- Join by the attached query id. For tickets without a usable id, try tenant plus the time of the attached search (not the ticket's created time), inside the window the person chose, and require the query text to match where the log holds it. Accept a match only when exactly one log row fits.
+- Join by the attached query id. For tickets without a usable id, try tenant plus the time of the attached search (not the ticket's created time), inside the window the person chose, and require the query text to match where the log holds it. Accept a match only when exactly one log row fits. This match is per ticket, which the query runner will not return; if it blocks you, ask the person to run the match and paste the result, and log it with `--pasted`.
 - Report the join rate for each method and in total, and the join rate per category. If one category's join rate is more than 10 points below the total, say so: its results rest on fewer tickets.
-- List the tickets that did not join and why (no id, id not in the log, time outside the log). Exclude them from everything below, and say how many.
+- Count the tickets that did not join, by reason (no id, id not in the log, time outside the log). Exclude them from everything below, and say how many.
 - For each category and each metric, report: joined tickets, how many the metric scored a success, and that share with an interval. The share is the miss rate.
 
-How to run it: the labels are in a local file and the log is in the warehouse. Pass each category's ticket ids to the query as an inline id list, and keep every result aggregated to one row per category. The query runner returns at most 200 rows and refuses row-level output, so a per-ticket result will be blocked.
+How to run it: the labels are in a local file and the log is in the warehouse. Pass each category's attached query ids to the query as an inline id list, and keep every result aggregated to one row per category. The query runner returns at most 200 rows and refuses row-level output, so a per-ticket result will be blocked.
 
 Example of one miss: the user long-clicked the outdated first result and read it, so the click metric gave the search a high score. The user then opened a ticket. The metric said success; the user said failure.
 
@@ -105,7 +105,7 @@ Optional, only if the person asks: tickets per 1,000 searches by tenant tier or 
 
 - Step 0: if `ds-plan` is installed, use it to write the plan, then add the worked example per step that this runbook asks for. This runbook's wait-for-go is stricter than `ds-plan`'s own flow; the runbook wins.
 - Step 1: outside the skills, as above.
-- Steps 2 to 4: use `ds-mode` and follow its `SKILL.md`, within the rules above. Its readout needs one Headline number: use the composite metric's miss rate among joined in-scope tickets, with its interval. Put the gap list as tagged lines under Answer, one tag per number. Note in the output anywhere the format did not fit.
+- Steps 2 to 4: use `ds-mode` and follow its `SKILL.md`, within the rules above. Its readout needs one Headline number: use the composite metric's miss rate among joined in-scope tickets, with its interval; when there is no composite, use the metric the person names. Put the gap list as tagged lines under Answer, one tag per number. Note in the output anywhere the format did not fit.
 - Check the readout with `ds-verify` if it is installed. It copies the database to a temporary directory, so keep `TMPDIR` inside the output directory, and skip it if the warehouse cannot be copied. Either way, verify by hand at least three numbers in the readout against the logged query results. A tag proves a query ran, not that the number came from it.
 - Write-up, if the person wants one: `ds-doc`, then `doc-tighten`. `cold-read` sends the document to a reader model: run it only if the document holds no verbatim ticket text and the person confirms the reader model is approved. Otherwise use its `--prompts-only` path or skip it.
 - If the skills are not installed, the four steps still stand. Log every query and its result in a file so each number can be traced.
