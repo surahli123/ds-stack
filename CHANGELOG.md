@@ -2,6 +2,11 @@
 
 Each version is the one in the plugin manifests (`.claude-plugin/`, `.codex-plugin/`, `.cursor-plugin/`). Change the version in all of them, and add its section here, in the same pull request; `tests/test_packaging.py` checks both.
 
+## 0.9.0 (2026-11-17)
+
+- New skill `ds-step`, for projects that span several sessions or agents. A state file, `DS-STATE.md`, holds the project's aim and success bar, a task card for the current step, frozen files, closed questions and a parking lot. `step.py start` refuses a card with an empty field, more than five in-scope items or no time box, and refuses a second step while one is open. `step.py run` refuses a run that names no decision and no result that would change it. It also refuses while the last run has no verdict, and refuses a third run after two inconclusive ones on the same decision. It writes the full output to a file and prints only the summary lines. The rules come from the retro of an intent-labeling pilot (2026-11-09 to 11-17) and from pstack, Matt Pocock's skills and Anthropic's Claude Code docs (`docs/drift-research.md`).
+- The plugin ships its first Claude Code hooks (`hooks/hooks.json`). Both do nothing without a `DS-STATE.md`. SessionStart puts the project brief in the agent's context. PreToolUse blocks an edit or shell write that changes or drops a closed answer, rewrites a running step's card, or touches a frozen file while a step runs. Both were checked in a live `claude -p` session: the agent quoted the brief without reading a file, and its edit of a closed answer was denied.
+
 ## 0.8.0 (2026-11-02)
 
 - ds-mode runs ds-verify as its last step when ds-verify sits next to it, as in a plugin install. It saves the question as `request.md`, fixes every failure (in the analysis when it is about a number or a definition), and adds ds-verify's first line to Provenance. The eval's full arm now carries ds-verify beside ds-mode.

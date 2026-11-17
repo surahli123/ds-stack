@@ -19,12 +19,15 @@ This repo holds only the generic core. Company facts live in a private overlay o
 | `ds-verify` | Checking a finished readout against its logs, its data and the team's metric definitions | `ds_verify.py`: replays every logged query on a copy of the data, plus six more checks |
 | `ds-interrogate` | A second opinion from a model of another family | `interrogate.py`: a reviewer CLI tries to break the readout with its own queries; only findings a rerun proves are kept |
 | `ds-ready` | Whether a work project gives ds-mode what it needs | `audit.py`: overlay, sources, AGENTS.md and past usage; gaps and questions for the metric owners |
+| `ds-step` | Drift in projects that span sessions or agents: runs that change no decision, tuning on noise, instructions rewritten mid-run, settled questions reopened, conversations kept alive for days | `step.py`: a task card and state file (`DS-STATE.md`), a run gate that wants the decision each run changes and stops after two inconclusive runs, summary-only output; in Claude Code, hooks that load the brief at session start and block edits to closed answers and frozen instructions |
 | `ds-retro` | Learning from finished analyses | `retro.py`: ds-verify failures and grader misses that repeat in 2+ runs, each with where the fix belongs and a fixture for the eval gate |
 | `ds-doc` | Doc structure and narrative: doc type, the spine (reader, decision, one-sentence answer, takeaways), answer-first drafting, DS claim rules | A step checklist; skipped steps stay visible |
 | `doc-tighten` | Format and concision: answer placement, bold, log drift, tables, clutter, length budget | `doc_lint.py`, 17 rules |
 | `cold-read` | Whether the doc works: a fresh reader must recover the answer and decision from a skim, and every takeaway from a full read | `cold_read.py`: a fresh reader (`claude -p` by default, any agent CLI through `DS_AGENT_CMD`), graded by script against `spine.json` |
 
 Each lint rule is tied to a count from 119 agent-written docs, or to the DS editing guide in ai-writing-suite (`tools/rules.json`). The three newest (a number restated across paragraphs, field names in prose, a stale "not checked" line) come from one real Chinese readout and are provisional. Chinese text counts toward length at about 1.7 characters per English word; before that, the lint counted no Chinese at all. On that corpus, 76 docs open with method or status before any answer, 64 lean on bold, 27 restate points in new words, and 13 turn into logs. The lint's answer-first rule flags 77 of the 119.
+
+Why `ds-step` looks the way it does, and what it took and left from pstack, Matt Pocock's skills and Anthropic's docs: [`docs/drift-research.md`](docs/drift-research.md).
 
 Word-level polish is not duplicated here. If ai-writing-suite is installed, `ds-doc` hands off to its `comms-polish` skill.
 
