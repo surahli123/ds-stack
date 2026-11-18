@@ -63,7 +63,7 @@ Fit:
 - Taken:
   - one item per session;
   - a low-resolution brief;
-  - each decision recorded in one place (a Closed entry);
+  - each decision recorded in one place, its event in the log;
   - a parking lot apart from that record;
   - a PreToolUse hook as the hard stop.
 - Left out: the issue-tracker map. A ds-stack project usually lives in one repo, and an event log on main can't split across planners.
@@ -91,19 +91,19 @@ Evidence, all qualitative except the cost figures:
 
 Fit:
 
-- Taken: the hooks, one item per session, the fixed start routine and output filtering. State is now a JSON event log, with Markdown only as the rendered view.
+- Taken: the hooks, one item per session, the fixed start routine and output filtering. State is now a JSON event log, with Markdown only as a derived view.
 - Left out: a Stop hook that keeps the agent working. Our agents did too much, not too little.
 
 ## What changed
 
 | Change | Failure it targets | Enforced by |
 |---|---|---|
-| Card, frozen files, closed questions and parking lot in an append-only event log rendered as `DS-STATE.md`; start-time hashes of the card and frozen files | Instructions rewritten mid-run, off-path work | `brief`, `run` and `end` refuse on any changed hash or hand-edited view, whatever wrote it |
+| Card, frozen files, decisions and parking lot in an append-only, merge-safe event log; start-time hashes of the card and frozen files | Instructions rewritten mid-run, off-path work, decisions stranded on branches | `run` and `end` refuse on any changed hash, whatever wrote it |
 | Run gate keyed to decision ids; a conclusive verdict closes the decision; two runs in a step that changed nothing block a third | Tuning on noise | `run`. The replay test mixes verdicts and rewords the decisions, and is stopped at run 3 |
 | Output streamed to `.ds-step/runs/R<n>.log`, with only summary lines printed | Rows read into context | `run` |
 | SessionStart brief and session stamp; PreToolUse deny on file edits to state and frozen files | Losing the aim after compaction; a second step in one session | `hooks/hooks.json`, which does nothing without `.ds-step/` |
 
-`tests/test_ds_step.py` has 19 cases.
+`tests/test_ds_step.py` has 24 cases.
 
 Not addressed:
 

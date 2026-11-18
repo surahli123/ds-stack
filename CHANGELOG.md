@@ -4,13 +4,15 @@ Each version is the one in the plugin manifests (`.claude-plugin/`, `.codex-plug
 
 ## 0.9.0 (2026-11-18)
 
-- New skill `ds-step`, for projects that span several sessions or agents. State is an append-only event log, `.ds-step/events.jsonl`, rendered as `DS-STATE.md`. It holds the aim and success bar, a task card, frozen files, open decisions, closed questions and a parking lot.
-  - `start` hashes the card and the frozen files. `brief`, `run` and `end` refuse when either changed, or when `DS-STATE.md` differs from the log, by any route: another session, another harness, a shell command or a `git pull`.
-  - `run` needs an open decision id and an `--if` line, and waits for the last run's verdict. A conclusive verdict closes the decision. After two runs in a step that changed nothing, it refuses a third until `--new-design` says what changed.
-  - Runs are serialized by a lock. Output streams to a log file, and only summary lines are printed. Failed launches and killed runs are recorded.
-  - `end` clears the card, and `start` refuses in a session that already ended a step.
-- The plugin ships its first Claude Code hooks (`hooks/hooks.json`). Both do nothing without a `.ds-step/` folder. SessionStart puts the brief in context, says that discussion and review need no step, and stamps the session id. PreToolUse denies file-tool edits (Write, Edit, MultiEdit, NotebookEdit) to the state files, and to frozen files while a step runs. It doesn't judge shell commands; the start-time hashes catch those.
-- The rules come from the retro of an intent-labeling pilot (2026-11-09 to 11-17) and from pstack, Matt Pocock's skills and Anthropic's Claude Code docs (`docs/drift-research.md`). The first version was revised after review on PR #32.
+- New skill `ds-step`, for projects that span several sessions or agents. Its state is an append-only event log, `.ds-step/events.jsonl`. Ids are merge-safe and git's union driver merges the file across branches. `DS-STATE.md` is a derived, gitignored view. The log holds the aim and success bar, a task card, frozen files, decisions (open or settled) and a parking lot.
+  - `start` hashes the card and the frozen files. `run` and `end` refuse when either changed, by any route, and the brief shows the change as a warning.
+  - `run` needs an open decision id and an `--if` line, and waits for the last run's verdict. A conclusive verdict settles the decision. After two runs in a step that changed nothing, a third is refused until `--new-design` says what changed.
+  - Runs are serialized by a lock where the OS has one. Output streams to a log file, and only summary lines are printed. `verdict` waits for the run to finish. Failed launches, and unjudged runs in an abandoned step, are recorded.
+  - `end` clears the card, and `start` refuses in a session that already started or ended a step. The brief is capped at about 2,000 characters.
+- The plugin ships its first Claude Code hooks (`hooks/hooks.json`). Both do nothing without a `.ds-step/` folder, which they find by walking up from the edited file, the session's cwd or the project dir.
+  - SessionStart puts the brief in context, says that discussion and review need no step, and stamps the session id.
+  - PreToolUse denies file-tool edits (Write, Edit, MultiEdit, NotebookEdit) to the state files, and to frozen files while a step runs. It doesn't judge shell commands; the start-time hashes catch those.
+- The rules come from the retro of an intent-labeling pilot (2026-11-09 to 11-17) and from pstack, Matt Pocock's skills and Anthropic's Claude Code docs (`docs/drift-research.md`). Three rounds of review on PR #32 shaped this version.
 
 ## 0.8.0 (2026-11-02)
 

@@ -1,9 +1,9 @@
 {
-  "description": "ds-step: inject the project brief at session start; deny file-tool edits to DS-STATE.md, .ds-step/ and frozen files. Inactive without a .ds-step/ folder.",
+  "description": "ds-step: inject the project brief at session start; deny file-tool edits to .ds-step/, DS-STATE.md and frozen files. Inactive without a .ds-step/ folder.",
   "hooks": {
     "SessionStart": [
       {
-        "matcher": "startup|resume|clear|compact",
+        "matcher": "startup|resume|clear|compact|fork",
         "hooks": [
           {"type": "command", "command": "python3 \"${CLAUDE_PLUGIN_ROOT}/hooks/ds_step_hook.py\" session-start"}
         ]
