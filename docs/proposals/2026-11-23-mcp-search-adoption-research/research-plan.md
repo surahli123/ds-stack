@@ -15,7 +15,7 @@ Our team studies usage and quality of the existing MCP search tool. From them we
 | Usage: account classification, tenant and client segmentation, usage concentration, qualitative profiling of automation accounts | Build the agentic search and evaluate its quality (product) |
 | Quality: where light search is not enough, covering search, fetch and structured queries | Write, finalise and evaluate the effect of the tool description (product) |
 | Latent demand: size and distribution, expressed as intervals | Tier-selection experiments: which tier Codex and Claude Code pick under different wordings (product) |
-| Adoption, demand side: funnel, features of who benefits, target population, barriers, qualitative research | Architecture, schema compatibility, downgrade, kill switch, on-call, guardrails (engineering) |
+| Adoption, demand side: funnel, features of who benefits, target population, barriers, qualitative research | Architecture, schema compatibility, fallback, kill switch, on-call, guardrails (engineering) |
 | Value: definitions at the person and tenant level, baseline, post-launch readings | Go/no-go and tool description revisions (product) |
 
 Removed from v1 entirely, and not kept in a smaller form: v1's WL3 (tool description harness, capture lab, candidate variants); the part of v1's WL4 on the causal effect of the tool description and on exposure inference; the sync-versus-async decision, the tool description freeze date, the V_launch selection rule, the decision mapping from sizing to tool description direction, and the guardrail parameters.
@@ -106,7 +106,7 @@ Demand that is already met (dependent, fanout, cross-tool) and possibly unmet de
 | T5 (after launch) | At least 1 actual agentic execution in the week | T4 |
 | T6 | Used again within 14 days of the first agentic use | T5 |
 
-We report by class, tenant and client. We report T5 and T6 additionally by pre-launch need stratum. "Did not use" is decomposed into these cases: the agent never requested agentic; it requested agentic, but the request was downgraded, timed out or cancelled; the tenant is not enabled; the client cannot see the new parameter. The last two rely on information from product and engineering. Conclusions from internal beta-testing employees are labelled separately and are **not extrapolated to customers**.
+We report by class, tenant and client. We report T5 and T6 additionally by pre-launch need stratum. "Did not use" is decomposed into these cases: the agent never requested agentic; it requested agentic, but the request fell back to light, timed out or was cancelled; the tenant is not enabled; the client cannot see the new parameter. The last two rely on information from product and engineering. Conclusions from internal beta-testing employees are labelled separately and are **not extrapolated to customers**.
 
 ### 4.5 Value
 

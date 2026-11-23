@@ -73,7 +73,7 @@ The items below mainly serve the product team's evaluation of the tool descripti
 | Description change log | Identifier of each version, the time it took effect, summary of the change | table | Maintained by the product team | Split readings into windows before and after each change. No attribution | A (start recording now) |
 | `desc_version` | Version of the tool description the client had at the time of the tool call (the client may have cached an older version) | string | Entry | Same as above | B |
 | `effort_requested` | Tier passed in by the caller; empty if none was passed | light / agentic / null | Entry | R4: whether the agent ever requested agentic | B |
-| `effort_executed`, `downgrade_reason` | Tier actually executed; reason for the downgrade | enum, string | Backend | R4: why a request did not take effect | B |
+| `effort_executed`, `fallback_reason` | Tier actually executed; reason for falling back to the light tier | enum, string | Backend | R4: why a request did not take effect | B |
 
 **Out of scope**: tools/list delivery and exposure records, schema compatibility fingerprints, IP/ASN/TLS fingerprints, parameters self-reported by the caller, shadow comparison queries, and citation click-throughs. If the product team needs any of these for its own evaluation, please align with them directly.
 
