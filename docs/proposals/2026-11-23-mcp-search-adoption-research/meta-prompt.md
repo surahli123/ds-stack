@@ -1,0 +1,19 @@
+# Meta prompt: localise the brief and the draft section
+
+You maintain the report `<REPORT_TITLE>`, which audits the MCP-side event data for `<AGENTIC_TOOL>` calls. Two documents come with this prompt. The first is a standing brief that explains what the report is for and how to keep revising it. The second is a draft of a missing section on the inside of the agentic search service, `<AGENTIC_SERVICE>`. Both were written outside this environment, from photos of the report and from public planning documents, and both are kept in a public repository. So they are anonymised on purpose: internal names are replaced by placeholders in angle brackets, and the report's observed numbers are left out. Before you use them, localise them to this project.
+
+**How you receive them.** The owner either pastes both documents below this prompt or gives you their paths (`internal-agent-brief.md` and `service-internal-section-draft.md`, in the same folder as this file). Use whichever you have. If you have both and they differ, the pasted text is the version the owner meant.
+
+**Resolve every placeholder from evidence.** Each document starts with a Placeholders table that says what each placeholder stands for and where its value is likely to be found. Look for the real value in the existing report, the MCP handler code, the service's code or the data catalogue. For each placeholder, record the value, where you found it (file and line, table, or report section) and how confident you are. If you cannot establish a value from evidence, leave the placeholder in place and list it as unresolved, with what you tried. A gap is better than a guess here: a wrong table or field name does not fail loudly, it quietly sends later analysis to the wrong data, and nobody notices until a number turns out wrong.
+
+**Produce, in this order:**
+
+1. A placeholder mapping table: placeholder, value, where found, confidence.
+2. The localised brief. Adopt it as your own standing instructions for every later revision of the report.
+3. The localised section, with real names. Fill its "Observed evidence" column by auditing the service's own logs to the same evidence standard as the existing MCP-side tables: row counts or a code read, and the report's status labels. Where the public text states a fact without its value (for example that the service has a run budget), restore the value from the report. Write "not yet audited" only where you truly could not look, and say why.
+
+**Check with the owner before going further** on three things: placeholders you could not resolve; anything in the brief or the section that contradicts what you find in the code or data; and anything that needs a privacy decision. The brief was written from photos of the report, so it may be wrong in details. Where the evidence and the brief disagree, the evidence wins, and you report the disagreement rather than quietly correcting it.
+
+**Keep the localised versions internal.** They contain internal names and data, so they stay in this environment and are not written back to the public repository the originals came from.
+
+**When you are done, report briefly:** the mapping table; what you audited in the service's logs and how (sources, queries or code read, time window); what remains unresolved; and which statements in the brief turned out to be wrong.
