@@ -10,9 +10,11 @@
 
 The research studies usage and quality of search through the MCP server. It infers latent demand for the agentic tier that launches in January 2027, and looks at what drives adoption and user value. Callers are users' agents, which decide by themselves whether to call a tool and which tier to request. We cannot see query text. The service also serves a CLI entry point; for now we look at MCP traffic only. The future light tier is the current search tool.
 
+The "Unlocks" columns use the labels below and, in Table 1, the trace uses (a)–(d) listed under it.
+
 | Label | Research question | Mainly depends on |
 |---|---|---|
-| **R1 Usage** | Who uses the MCP server, and how: by account type (interactive human, human-started long-running task, unattended pipeline), tenant and client. How concentrated usage is, and what the automation accounts behind most calls are doing | Table 2 |
+| **R1 Usage** | Who uses the MCP server, and how: by account type (interactive human, human-started long-running task, unattended pipeline), tenant and client. How concentrated usage is, and what the automation accounts that make more than half of all tool calls are doing | Table 2 |
 | **R2 Quality** | Where current search falls short, across every tool. Without query text, separate retries after a retrieval failure, caller style and genuine multi-step needs | Table 2. Table 1 adds where agentic requests fail |
 | **R3 Latent demand** | How many people and tenants need more complex search, and in which scenarios | Table 2. Table 1 adds realised complexity after launch |
 | **R4 Adoption** | Tenant and person funnels (enable MCP → connect account → active → use search → use agentic). Who does not use it, and why | Both: funnel and requested tier in Table 2; executed tier, fallback and failure in Table 1 |
