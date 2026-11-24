@@ -1,140 +1,191 @@
-# MCP Server Instrumentation Requirements
+# Agentic Search Service Instrumentation Requirements
 
-> From: the MCP search research team. Date: 2026-11-23. Audience: the engineering team.
+> From: the MCP search research team. Date: 2026-11-24. Audience: the engineering team.
 >
-> This is a **requirements list, not a gap list**. We do not currently know which fields the existing logs have, so many fields in the tables below may already exist. Please go through the tables row by row and mark each one "Exists / Partial / Missing" (question 1 in section 5). We will then work out the gap list together.
+> This version replaces the 2026-11-23 version, which put every field at the MCP server entry point. It specifies logging inside the **agentic search service**. MCP-side data is owned by the MCP team; we only list what we assume it holds (Table 2).
 >
-> The thresholds and parameters in this document (number of cache entries, TTLs, coverage rates, error tolerances) are **suggested values**. You can adjust them to fit the implementation. We only say what we need and why. We do not prescribe how to implement it.
+> This is a **requirements list, not a gap list**. We do not know which fields the service already records. Please mark each row of Table 1 "exists / partly / does not exist". Thresholds, parameters, field names and enum values are **suggested values**. We say what we need and why, not how to implement it.
 
-## 1. What this instrumentation is for, and why there is a timing requirement
+## 1. Purpose
 
-The research team is answering five questions. The "Unlocks" column in the tables below uses these labels.
+The research studies usage and quality of search through the MCP server. It infers latent demand for the agentic tier that launches in January 2027, and looks at what drives adoption and user value. Callers are users' agents, which decide by themselves whether to call a tool and which tier to request. We cannot see query text. The service also serves a CLI entry point; for now we look at MCP traffic only. The future light tier is the current search tool.
 
-- **R1 Usage**: Who uses the MCP server, and how. Segment by account type (interactive human, human-started long-running task, unattended pipeline), tenant and client, and look at how concentrated usage is. Find out what the automation accounts that make more than half of all tool calls are doing.
-- **R2 Quality**: Where the current search falls short. We cannot see query text, so we need to tell apart three things: retries after a retrieval failure, the caller's own calling style, and genuine multi-step needs. This covers every tool on the server (search, fetch, structured query and so on).
-- **R3 Latent demand**: How many people and tenants need more complex search, and in which scenarios.
-- **R4 Adoption**: Funnels at tenant level and person level (enable MCP → connect account → active → use search → use the agentic tier after the January launch). Also, who is not using it, and why not.
-- **R5 Value**: Person-level metrics such as time spent searching and repeated searches. We build a baseline before launch and compare against it after launch.
+| Label | Research question | Mainly depends on |
+|---|---|---|
+| **R1 Usage** | Who uses the MCP server, and how: by account type (interactive human, human-started long-running task, unattended pipeline), tenant and client. How concentrated usage is, and what the automation accounts behind most calls are doing | Table 2 |
+| **R2 Quality** | Where current search falls short, across every tool. Without query text, separate retries after a retrieval failure, caller style and genuine multi-step needs | Table 2. Table 1 adds where agentic requests fail |
+| **R3 Latent demand** | How many people and tenants need more complex search, and in which scenarios | Table 2. Table 1 adds realised complexity after launch |
+| **R4 Adoption** | Tenant and person funnels (enable MCP → connect account → active → use search → use agentic). Who does not use it, and why | Both: funnel and requested tier in Table 2; executed tier, fallback and failure in Table 1 |
+| **R5 Value** | Person-level time spent searching and repeated searches, against a pre-launch baseline | Both: baseline in Table 2; agentic requests in Table 1 |
 
-**Timing requirement**: Post-launch readings will be compared with the pre-launch baseline. The baseline needs at least 3 clean weeks (suggested value; excludes the year-end holidays). Derived query features can only be computed from the query text while the request is being handled. The text is not stored. So **any period we fail to capture cannot be recomputed later**. Assuming a launch in mid-January, priority A fields need to be in production around the first week of December. Once the launch date is fixed, we will give you the exact latest date. If the fields go live later than that, the post-launch value analysis can only be descriptive.
+## 2. Logging boundary
 
-**Priority**
+Request path (MCP only; the CLI path is out of scope): `caller agent → MCP server → agentic search service → retrieval backend`
 
-- **A**: Must be in place before launch. The sooner the better, because it affects the baseline.
-- **B**: Must be in place at launch (related to the agentic tier; there are no values before launch; the fields can be created in advance).
-- **C**: Can be added later.
+**Rule.** Each field has exactly one system of record: the layer that is the only one able to see the information. Where both layers see it, one is named as the record and the other only passes the join ID through (plus tenant and user identifiers, for joining). Latency and status mean different things at each layer, so each layer has its own field (section 6).
 
-## 2. Requirements tables
+What each layer alone can see (our understanding; please correct it):
 
-Meaning of "Produced at": **Entry** = the MCP request entry point; **Backend** = the retrieval backend; **Auth** = the handshake or authentication layer; **Admin** = the admin console or account system; **Offline** = derived offline on the research side. A "stream" is the sequence of calls from the same (tenant, user, client).
+| Layer | Only this layer can see | Here |
+|---|---|---|
+| Caller agent | Why it called, which tier it chose and why, the user's instructions, its model | Not observable |
+| MCP server | Caller identity; every tool call, including the current search tool; the sequence of calls on a stream; requested tier; tool description version; latency as the caller experiences it; client cancellation and timeout | Table 2 (MCP team) |
+| Agentic search service | Executed tier and fallback reason; each internal step; documents retrieved, read and cited; stop reason; internal latency and failures; cost; versions | Table 1 (the ask) |
+| Retrieval backend | Candidates and scores of each retrieval | Through the service's step records |
 
-### 2.1 This team's requirements
+A "stream" is the sequence of calls from the same (tenant, user, client).
 
-| Group | Field | Definition | Type / values | Produced at | Unlocks | Priority |
-|---|---|---|---|---|---|---|
-| Call | `request_id` | Unique ID of each tool call | string | Entry | Correlation, deduplication | A |
-| | `tool_name` | Name of the tool that was called. **Log every tool on the server** (search, fetch, structured query and so on), not only search | string | Entry | R1, R2 (cross-tool call chains) | A |
-| | `session_id` | Session identifier from the session trace | string | Entry (trace) | R2 (supporting signal for task segmentation) | A (ships with the trace) |
-| Identity and segmentation | `tenant_id`, `user_id` | The tenant; a stable user identifier | string | Auth | All | A |
-| | `auth_type` | Authentication method: OAuth user authorisation / API key or PAT / service account / client credentials / other | enum | Auth | R1 (identifying unattended-pipeline accounts) | A |
-| | `credential_id` | Identifier of the credential or OAuth client used for this tool call. Used to tell apart different agents or scripts under the same user | string (may be hashed) | Auth | R1 | A |
-| | `grant_type` | Grant type of the access token | enum | Auth | R1 (strongest evidence for an unattended pipeline) | A; lowered to C if it needs changes to the auth service |
-| | `client_name`, `client_version` | Name and version that the MCP client reports about itself in clientInfo. With the older protocol they are sent at handshake and must be attached to every tool call. With the newer protocol they are in `_meta` on every request | string | Auth (handshake) | R1, R2 (stratifying by caller) | A |
-| | `user_agent` | HTTP User-Agent | string | Entry | R1 | A |
-| Time and status | `ts_start`, `ts_end`, `latency_ms` | The time the request was received; the time the last byte was sent; server-side processing time | timestamp (ms, UTC), int | Entry | R2 (segmentation), R5 (time spent searching) | A |
-| | `status` | ok / error / timeout / cancelled (cancelled by the client, or client disconnected) | enum | Entry | R2 (resends after an error are not counted as behaviour), R4 | A |
-| | `err_code` | Error code | string | Entry | R2, R4 | A |
-| Results | `n_results` | Number of results returned | int | Backend | R2 (zero results), R5 | A |
-| | `top_score` | Relevance score of the top-ranked result | float | Backend | R2 (separating retrieval failure from multi-step need), R5 (convergence) | A |
-| | `result_docs` | Stable internal identifiers of the returned documents: `[(doc_id, rank, source)]` | array | Backend | R2, R3 (result overlap between adjacent calls), R5 (revisits across days) | A (if the backend can supply it now); otherwise added later, once the trace includes URLs |
-| | `acl_filtered_n` | Number of candidates filtered out because of permissions | int | Backend | R2 (separating no content, no permission and weak retrieval) | C |
-| Derived query features (computed at write time, see section 3) | `q_chars`, `q_toks` | Number of characters and number of tokens in the query | int | Entry | R2, R3 | A |
-| | `query_hash` | `HMAC(K_tenant, normalize(q))` | string | Entry | R1 (templated calls), R2 (exact repeats) | A, needs approval |
-| | `emb_cos_prev`, `emb_cos_max5`, `emb_cos_max5_lag`, `emb_ver` | Embedding cosine similarity between this query and the previous query on the same stream; the highest cosine between this query and each of the last 5 queries on the same stream; how many queries back that highest match is (1 = the previous query); the embedding model version. Cosines are quantised to 0.01. The lag separates an immediate rewrite from a return to an earlier need after unrelated calls, which happens when a caller runs calls in parallel or interleaves tasks. Only computed for tools that take a query parameter | float, float, int, string | Entry | R2, R3 (retry or new need) | A, needs approval |
-| | `intent_coarse`, `intent_conf`, `multihop_score`, `intent_ver` | Coarse task type (6–9 classes; the research team provides the class list, which describes the type of task, not the topic); confidence; probability that the query needs multiple steps; classifier version | enum, float, string | Entry | R3 (complex intent), R4 | A, needs approval |
-| | `ctar` | Of the words in this query that are new, the share that appear in the titles or snippets of the results returned by the previous call on the same stream | float | Entry + Backend | R3 (direct evidence of multi-step dependency) | A, needs approval; if it is not approved, it is not built |
-| Tier and cost | `internal_steps`, `parent_call_id` | Number of sub-searches inside an agentic tool call; the top-level tool call that a sub-search belongs to | int, string | Backend | R5 (convert to equivalent call counts so that before and after are comparable) | B |
-| | `cost_units` | Cost units of each tool call. Engineering defines how it is measured. It must be comparable between the light tier and the agentic tier | float | Backend | R1 (concentration by cost), R4 (cost barriers) | A |
-| Versions | `backend_version`, `ranker_version` | Retrieval backend version and ranker version used for each tool call | string | Backend | R5 (ruling out changes made at the same time) | A |
-| | Backend change log | Every change to the retrieval backend, ranking, index and timeout configuration: time, version, summary | table | Maintained by engineering | R5 | A (start recording now) |
-| Funnel | Tenant enablement events | The time a tenant enables or disables MCP | event | Admin | R4 | A |
-| | Account connection events | The time an account completes or revokes MCP authorisation, with the client and `auth_type` | event | Auth | R4 | A |
-| | First call | The time of an account's first call to any tool and of its first call to search | timestamp | Offline; must be persisted if the log retention period is too short | R4 | A |
-| | Tenant size snapshot | Number of valid accounts or seats per tenant, weekly | table | Admin | R4 (funnel denominator) | A |
-| | Agentic enablement status | Whether the tenant has the agentic tier enabled (if it needs to be enabled separately), and when | event | Admin | R4 | B |
-| Offline derived | `zero_res`, `rep_lag`, step, episode, call chain type | The research side computes these from the fields above. They need no instrumentation. They are listed only to show the dependencies | — | Offline | R2, R3 | — |
+**Assumptions** (questions in section 10): (1) light-tier requests do not pass through the service; they are served by the existing search path and are visible only on the MCP side, which in principle holds all existing search behaviour data (Q1); (2) the service holds the original query text and its embedding at request time (Q7); (3) every agentic request reaches the service, and any fallback is decided and logged there (Q6); (4) the MCP side holds the group 1 items of Table 2.
 
-### 2.2 Items to be provided by, or shared with, the product team
+## 3. Table 1: required from the agentic search service
 
-The items below mainly serve the product team's evaluation of the tool description and tier selection. This team uses them only to interpret changes in usage (splitting the data into windows before and after a change, and breaking down why people are not using the tool). We do not evaluate the description itself.
+This is the ask. Log every request whatever its entry surface; we filter to `mcp` in analysis. The prefix `svc_` marks fields whose MCP-side counterpart means something different.
 
-| Field | Definition | Type / values | Produced at | How this team uses it | Priority |
+**Priority** (redefined for the new timing, section 7). Nothing here can be backfilled: the trace cannot be rebuilt and no text is stored.
+
+- **A**: Recorded in the internal beta from now on, and complete on launch day. We need beta data to run the acceptance checks and build the offline measures before customer traffic.
+- **B**: Complete on launch day. Beta data helps but is not required.
+- **C**: Can be added after launch. Analyses that need it start when it lands.
+
+| Group | Field | Definition | Type / values | Unlocks | Priority |
 |---|---|---|---|---|---|
-| Description change log | Identifier of each version, the time it took effect, summary of the change | table | Maintained by the product team | Split readings into windows before and after each change. No attribution | A (start recording now) |
-| `desc_version` | Version of the tool description the client had at the time of the tool call (the client may have cached an older version) | string | Entry | Same as above | B |
-| `effort_requested` | Tier passed in by the caller; empty if none was passed | light / agentic / null | Entry | R4: whether the agent ever requested agentic | B |
-| `effort_executed`, `fallback_reason` | Tier actually executed; reason for falling back to the light tier | enum, string | Backend | R4: why a request did not take effect | B |
+| Request | `svc_request_id` | The service's own request ID | string | Correlation, deduplication | A |
+| | Join ID (name to be confirmed, J1) | The existing ID linking this request to its MCP call | string | Every join with Table 2 | A |
+| | `entry_surface` | `mcp` / `cli` / `other` | enum | Isolating MCP traffic | A |
+| | `tenant_id`, `user_id` | Passed through unchanged from the MCP call, for joining. The MCP side is the record | string | Joins | A |
+| | `svc_ts_start`, `svc_ts_end`, `svc_latency_ms` | Request received; last byte sent; total time in the service | timestamp (ms, UTC), int | R4 (latency barrier), R5 (`W_ud`) | A |
+| | `svc_ttfb_ms` | Time to the first byte of the response | int | R4, (d) | B |
+| | `svc_status`, `svc_err_code` | `ok` / `error` / `timeout` (own time limit or downstream timeout) / `cancelled` (cancellation received from upstream) / `rejected` (refused before execution); error code, naming the failing component where known | enum, string | R2, R4 (failure as a reason for not using) | A |
+| | `effort_executed`, `fallback_reason` | Tier actually run: `agentic` / `light`. Why it fell back to light; null if it did not. Reasons must separate enablement, quota or cost, capacity, time limit and internal error | enum, enum | R4 ("requested, but fell back") | A |
+| | `cost_units` | Defined by engineering; comparable with a current search call (M9) | float | R1, R4 (cost barrier), R5 (`equiv_calls_ud`) | B |
+| Step (one record per internal step) | `step_idx`, `step_start_ms`, `step_latency_ms`, `step_status` | Order; start offset from `svc_ts_start` (steps may run in parallel); duration; outcome (`svc_status` enum) | int, int, int, enum | (b), (c), (d) | A |
+| | `step_type` | `subquery_retrieval` / `doc_read` / `rerank` / `synthesis` / other | enum | (b), (c), (d) | A |
+| | `step_n_results`, `step_top_score` | Result count and top score of a retrieval step | int, float | R2 (weak retrieval inside agentic), (c) | A |
+| | `step_docs` | Documents retrieved or read: `[(doc_id, rank, source)]`. Internal doc_id, not URL | array | (a), (b); R5 (`refind_xday`) | A, needs approval |
+| | `step_acl_filtered_n` | Candidates removed by permission filtering | int | R2 (no content or no permission) | C |
+| | `subq_chars`, `subq_toks`, `subq_cos_orig` | For a generated sub-query: length, and embedding cosine to the original query (quantised to 0.01). No text | int, int, float | (b) | C, needs approval |
+| Summary (per request) | `n_steps`, `n_subqueries`, `n_iterations` | Steps; generated sub-queries; rounds in which the service decided to search again | int | (b); R3, R5 (`equiv_calls_ud`) | A |
+| | `n_sources`, `n_docs_read` | Distinct sources; distinct documents read | int | (b) | A |
+| | `stop_reason` | `answered` / `budget_exhausted` / `timeout` / `no_results` / `cancelled` | enum | (c); R2, R4 | A |
+| Output | `answer_chars`, `answer_toks` | Answer length. No text | int | R5 | B, needs approval |
+| | `n_citations`, `cited_docs` | Citation count; `[(doc_id, source)]` cited | int, array | (a); R5 | A, needs approval |
+| | `answer_flag` | `ok` / `low_confidence` / `no_answer` | enum | R2, R5 | B |
+| Query features (assumption 2) | `q_chars`, `q_toks` | Characters and tokens in the original query | int | R2, R3 | A, needs approval |
+| | `query_hash` | `HMAC(K_tenant, normalize(q))`. Same key and normalisation as on current search calls (M8) | string | R1 (templated calls), R2 (exact repeats across tiers) | B, needs approval |
+| | `intent_coarse`, `intent_conf`, `multihop_score`, `intent_ver` | As agreed before: coarse task type (6–9 classes from the research team; type of task, not topic); confidence; probability that the query needs multiple steps; classifier version | enum, float, float, string | R3, R4 | C, needs approval |
+| Versions | `svc_version`, `model_version` | Service version; version of the model used inside the service | string | R5 (concurrent changes) | A |
+| | `ranker_version`, `index_version` | Ranker and index versions used | string | R5 | A |
+| | Service change log | Every change to the service, model, ranking, index, budgets and time limits: time, version, summary | table | R5 | A (start now) |
+| Offline (not logged) | (a)–(d) below | Computed by the research team; listed only to show dependencies | — | R3, R4, R5 | — |
 
-**Out of scope**: tools/list delivery and exposure records, schema compatibility fingerprints, IP/ASN/TLS fingerprints, parameters self-reported by the caller, shadow comparison queries, and citation click-throughs. If the product team needs any of these for its own evaluation, please align with them directly.
+**Why the step trace matters.** Request totals show that an agentic request happened; the trace shows what it did and whether it was needed. The research team computes, offline and not logged: (a) whether an agentic request was needed: if every cited document already appeared in the first retrieval step, the light tier would probably have been enough; (b) realised complexity: how many steps and sources were used; (c) where failures happen; (d) where latency goes.
 
-## 3. Privacy
+## 4. Table 2: assumed to exist on the MCP side (owned by the MCP team)
 
-**Do not store query text or embeddings.** Do not write them to logs, temporary tables or backups. How each derived feature is computed:
+Dependencies to confirm, not requirements. Existing search behaviour data is, in principle, all held by the MCP team. We assume the following already exist; please confirm each as exists / partly / does not exist. [`mcp-data-checklist.md`](mcp-data-checklist.md) lists the same rows, with what each is for and what we lose without it. Names are those of the previous version.
+
+The plan's pre-launch baseline of current search behaviour depends on this table (section 7). This is a dependency risk, which the research team will raise with the MCP team separately.
+
+| ID | Item (previous field names) | Unlocks | Exists / partly / does not exist |
+|---|---|---|---|
+| | **Group 1: needed for any pre-launch analysis** | | |
+| M1 | Tenant and user (`tenant_id`, `user_id`). The record for both | All | |
+| M2 | Every tool call on the server (`request_id`, `tool_name`) | R1, R2 | |
+| M3 | Time as the caller experiences it (`ts_start`, `ts_end`, `latency_ms`) | R2, R5 | |
+| M4 | Caller identity (`client_name`, `client_version`, `user_agent`, `auth_type`, `credential_id`, `grant_type`) | R1, R2 | |
+| M5 | Status with client cancellation and timeout (`status`, `err_code`) | R2, R4 | |
+| M6 | Join ID shared with the service (J1) | R4, R5 | |
+| | **Group 2: needed for the finer analysis** | | |
+| M7 | Stream-level query similarity (`emb_cos_prev`, `emb_cos_max5`, `emb_cos_max5_lag`, `emb_ver`; `ctar` if approved) | R2, R3, R5 | |
+| M8 | Query features of current search calls (`q_chars`, `q_toks`, `query_hash`, `intent_*`; as Table 1) | R2, R3, R4 | |
+| M9 | Results of current search calls (`n_results`, `top_score`, `cost_units`, backend and ranker version) | R1, R2, R5 | |
+| M10 | Funnel events: tenant enablement, account connection, tenant size, agentic enablement | R4 | |
+| M11 | Requested tier (`effort_requested`: `light` / `agentic` / null) | R4 | |
+| M12 | Returned document identifiers (`result_docs`) | R2, R3, R5 | |
+| M13 | Tool description version (`desc_version`; change log kept by product) | R4, R5 | |
+| M14 | Session identifier (`session_id`) | R2 | |
+
+`emb_cos_max5` is the highest cosine over the last 5 queries on the same stream; `emb_cos_max5_lag` says how many queries back that match is (1 = the previous query).
+
+**Why M7 is here, not in Table 1.** These features compare a query with earlier queries on the same stream, which spans every tool and both tiers. The service sees only requests sent to it, so it would compare an agentic query only with earlier agentic queries and miss the current search calls in between. Even if light-tier requests pass through the service (Q1), it does not see other tools, nor, as far as we know, the client that defines the stream. So M7 belongs to the layer that sees the whole stream: the MCP side.
+
+## 5. Table 3: join contract
+
+| ID | Item | What we need | Please confirm |
+|---|---|---|---|
+| J1 | Join ID | The existing ID linking an MCP call to its service request, on both sides, for every request: retries, fallbacks, timeouts, cancellations and errors included | Field name on each side; coverage; whether one MCP call can map to several service requests, and how retries are marked |
+| J2 | Tenant and user | The service carries `tenant_id` and `user_id` exactly as on the MCP call, not re-mapped or hashed differently | That values match on joined pairs |
+| J3 | Clock alignment | UTC in ms from synchronised clocks, so MCP latency minus service latency is the time outside the service. Suggested skew ≤50 ms | Clock source and expected skew |
+
+## 6. Fields that are easy to confuse
+
+| Field | Record owner | Reason |
+|---|---|---|
+| Requested tier | MCP side (M11) | Only the MCP server sees what the agent asked for, including requests that never reach the service |
+| Executed tier, `fallback_reason` | Service | Only the service knows what it ran and why it fell back (assumption 3) |
+| Latency | Both, different fields | MCP `latency_ms` (M3) is the total the caller experienced. `svc_latency_ms`, `svc_ttfb_ms` and step latencies are the internal breakdown |
+| Status | Both, different fields | MCP `status` (M5) records client cancellation and timeout. `svc_status` records internal failure, the service's own time limit and cancellations it received. The status criterion applies to each side for its own meaning |
+| `tenant_id`, `user_id` | MCP side (M1) | The MCP server authenticates the caller. The service passes them through (J2) |
+| Derived query features | Agentic requests: service. Stream similarity: MCP side (M7). Current search calls: open (M8) | Assumption 2: the service holds the query text and embedding. Open question (Q1, Q7): if light-tier requests skip the service, features of current search calls can only come from the MCP side, and the baseline depends on them |
+
+## 7. Timing
+
+- **Table 1 has no pre-launch baseline.** The service has no customer traffic before launch, so its fields must be complete on launch day: a request not logged with its trace cannot be reconstructed. They should be recorded in the internal beta from now on, to run the acceptance checks, calibrate (a)–(d) and fix problems before customer traffic. Beta readings are labelled internal and not extrapolated to customers. Suggested latest date for priority A: 3 weeks before launch, not counting the year-end holidays.
+- **The pre-launch baseline is about current search behaviour (Table 2).** Post-launch readings are compared with at least 3 clean weeks (suggested; excludes the year-end holidays). Derived features of current search calls (M7, M8) can only be computed while the request is handled. **A period not captured cannot be recomputed.** For a mid-January launch, they need to be in place around the first week of December. If they come later or do not exist, the pre-launch demand estimate stays coarse and post-launch value can only be read descriptively.
+
+## 8. Privacy
+
+**Do not store query text, generated sub-query text, answer text, or embeddings of any of them**, in logs, traces, temporary tables or backups. If existing service traces contain such text, the research copy must exclude it.
 
 | Feature | How to compute it without storing the text |
 |---|---|
-| Length | Count at request time and store only the integer |
-| `query_hash` | A keyed HMAC. Each tenant has its own key, stored apart from the data and not accessible to analysts. Rotate the keys regularly (suggested: every quarter). Do not hash per token |
-| `emb_cos_*` | Reuse the query embedding that retrieval has already computed. For each stream, keep only the last 5 in memory (suggested TTL: 60 minutes). Store only the quantised cosine |
-| `intent_*` | Classify at request time. Store only the label and the confidence. Classifier training does not use production query text |
-| `ctar` | Briefly cache the set of words from the titles and snippets of the previous results (store them as term-level HMACs; suggested TTL: 10 minutes). Store only the ratio |
-| `result_docs` | Store the internal doc_id, not the URL (URL paths often contain titles). If URLs are needed, manage them as a controlled field |
-
-**Known risks and mitigations**
+| Lengths (query, sub-query, answer) | Count at request time; store only the integer |
+| `query_hash` | Keyed HMAC, one key per tenant, stored apart from the data and not accessible to analysts. Rotate keys (suggested: every quarter). No per-token hashes. Same key and normalisation wherever computed |
+| `subq_cos_orig` | Reuse the embeddings retrieval already computes. Store only the quantised cosine |
+| `intent_*` | Classify at request time; store only label and confidence. Training does not use production query text |
+| `step_docs`, `cited_docs` | Internal doc_id, not URL or title |
+| `emb_cos_*`, `ctar` (M7) | As agreed before: last 5 embeddings per stream in memory only (suggested TTL: 60 minutes), store only the quantised cosine; `ctar` caches result terms as term-level HMACs (suggested TTL: 10 minutes), stores only the ratio |
 
 | Risk | Mitigation |
 |---|---|
-| An unkeyed hash can be reversed by a dictionary attack on low-entropy queries | Use a keyed HMAC, with the key stored apart from the data |
-| Using the same key across tenants allows cross-tenant linkage | One key per tenant |
-| Per-token hashes can be reversed using word-frequency and co-occurrence statistics | Do not do it |
-| Embeddings can be inverted to recover the original text | Do not write them to disk. Store only the scalar cosine |
-| A stable user ID plus doc_id plus a time series is still personal behaviour data, and there is a risk of re-identification | Restrict access and retention. In external reports, suppress cells with fewer than 10 people |
-| Account-level behaviour profiles carry a risk of employee monitoring | Use them only within the research. Do not provide them to tenant administrators |
+| Unkeyed hashes of low-entropy queries can be reversed by dictionary attack | Keyed HMAC, key stored apart |
+| One key across tenants allows cross-tenant linkage | One key per tenant |
+| Per-token hashes can be reversed from word statistics | Do not do it |
+| Embeddings of query, sub-queries or answer can be inverted | Never write them to disk; store only cosines |
+| User ID plus documents retrieved, read and cited over time is personal behaviour data; the trace adds detail | Restrict access and retention. Suppress cells under 10 people in external reports |
+| Account-level profiles risk employee monitoring | Research use only; not given to tenant administrators |
 
-**Items that need privacy approval**: reading the query in memory during the request to compute derived features (length is the lowest risk and can be approved first, on its own); writing `query_hash` to disk; the short-lived embedding cache; `ctar` reading result text; writing `result_docs` and URLs to disk; account-level profiling of automation accounts.
+**Needs privacy approval**: reading the query, sub-queries and answer in memory to compute features (lengths are lowest risk and can be approved first, alone); writing `query_hash`; `intent_*`; `subq_cos_orig`; writing `step_docs` and `cited_docs`; M7 and M8 wherever computed, including the embedding cache and `ctar` reading result text; profiling automation accounts.
 
-## 4. Acceptance criteria for priority A fields
+## 9. Acceptance criteria for Table 1 fields needed at launch
 
-A field counts as done once it meets the criteria below for 7 consecutive days in production. All values are suggested and open to discussion.
+Covers priority A and B. Done once met for 7 consecutive days in the internal beta; join rate and cost reconciliation are rechecked in the first week after launch. All values are suggested.
 
 | Field | Acceptance criteria |
 |---|---|
-| `request_id` | Unique. Duplicate rate is 0 |
-| `tool_name` | Covers 100% of tool calls. Values match the server's current tool list. Every tool that has traffic appears |
-| `session_id` | Non-null on all tool calls once the trace is live. Tool calls in the same session belong to the same user |
-| `tenant_id`, `user_id` | Non-null rate 100%. Join rate with the account system ≥99% |
-| `auth_type`, `credential_id`, `grant_type` | Non-null rate ≥99%. The same `credential_id` does not appear in more than one tenant. The `auth_type` distribution matches the statistics of the auth system |
-| `client_name`, `client_version`, `user_agent` | Non-null whenever the client sent clientInfo. Null values are counted separately and their share is reported. Spot-check 100 tool calls against the user agent and find no contradictions |
-| `ts_start`, `ts_end`, `latency_ms` | `ts_end ≥ ts_start`. `latency_ms` matches the difference between the two (error ≤50 ms). All times in UTC |
-| `status`, `err_code` | `status` is non-null for 100% of calls and every value is one of the defined enum values. A test call that times out and a test call that the client cancels are each logged, as `timeout` and `cancelled`, not as `error` and not dropped. The daily error rate and timeout rate match the existing monitoring (difference ≤1pp) |
-| `n_results`, `top_score` | Non-null rate 100% for search-type tools. `top_score` is null when `n_results=0`. State whether scores are comparable between queries |
-| `result_docs` | The doc_id can be joined to the index. The same document keeps the same ID across days. The number of entries equals `n_results` |
-| `q_chars`, `q_toks` | Non-null rate 100% for tools that take a query parameter |
-| `query_hash` | On a test set: queries that are identical after normalisation have the same hash within a tenant and different hashes across tenants. The analysis side cannot get the key |
-| `emb_cos_*` | On test sequences: repeated queries score ≥0.99, and unrelated queries score clearly lower. `emb_cos_max5` is never lower than `emb_cos_prev`. In a test sequence that returns to an earlier query after unrelated ones, `emb_cos_max5_lag` points to that earlier query. After the cache expires the value is null, not 0. `emb_ver` is non-null |
-| `intent_*` | Non-null rate ≥99%. On the synthetic test set provided by the research team, agreement with the annotated labels reaches a value that both teams agree on |
-| `ctar` | On test sequences: greater than 0 when the next query uses words from the previous results, and close to 0 when it is unrelated |
-| `cost_units` | Daily per-tenant totals reconcile with the billing or resource-usage figures (error ≤1%) |
-| Version fields and backend change log | The times at which the version fields switch match the change log |
-| Funnel events and snapshots | The number of enabled tenants and connected accounts matches the current state in the admin console. State the earliest date the data can be traced back to |
-| Description change log (product) | Every change has an effective time. After launch, it matches the time `desc_version` switches |
+| `svc_request_id` | Unique; duplicate rate 0 |
+| Join ID | Non-null on 100% of `mcp` requests, including retries, fallbacks, timeouts, cancellations and errors. ≥99% join to an MCP call; unjoined requests are counted and reported |
+| `entry_surface` | Non-null 100%. Test requests via MCP and via the CLI are labelled correctly |
+| `tenant_id`, `user_id` | Non-null 100%. Equal to MCP-side values on all joined pairs |
+| Timings | `svc_ts_end ≥ svc_ts_start`; `svc_latency_ms` matches the difference (≤50 ms); `svc_ttfb_ms ≤ svc_latency_ms`; UTC. On joined pairs the service interval lies inside the MCP interval, within J3 |
+| `svc_status`, `svc_err_code` | `svc_status` non-null on every request; values only from the defined enum. A test request that hits the service's time limit is logged as `timeout`, and one the client cancels as `cancelled`; neither as `error`, neither dropped. `svc_err_code` non-null when status is not `ok`. The same criterion applies to MCP-side `status` (M5), raised with the MCP team |
+| `effort_executed`, `fallback_reason` | `effort_executed` non-null. `fallback_reason` non-null exactly when agentic was requested and light was run. Each fallback cause, forced in a test, gets its own reason |
+| `cost_units` | Daily per-tenant totals reconcile with billing or resource usage (≤1%). Ratio to a current search call stated |
+| Step records | ≥1 per executed request; `n_steps` equals their count; `step_idx` unique per request; each step inside the request interval; enum values valid |
+| `step_n_results`, `step_top_score`, `step_docs` | Non-null for retrieval steps; score null when `step_n_results = 0`; `step_docs` has `step_n_results` entries; doc_id joins to the index and is stable across days. State whether scores compare across requests |
+| Summary fields | Match values recomputed from steps. `stop_reason` non-null; forced tests (budget, timeout, no results, cancel) each get the matching value |
+| Output fields | `n_citations` = length of `cited_docs`; every cited doc_id appears in some `step_docs`; a no-answer test gets `no_answer`; `answer_chars` non-null when `svc_status = ok` |
+| `q_chars`, `q_toks`, `query_hash` | Non-null 100%. On a test set, normalised-identical queries share a hash within a tenant, differ across tenants, and match current search calls if M8 exists. Analysts cannot get the key |
+| Versions, change log | Non-null; version switches match the change log |
 
-## 5. Questions for the engineering team
+## 10. Questions for engineering
 
-1. Which fields do the existing logs have, and how long are they retained? Please mark each row of the tables in 2.1 and 2.2 as "Exists / Partial / Missing".
-2. Which fields can be backfilled? For fields that can be recomputed from the existing logs (for example tool name, time, identity, client), how far back can you go? Derived query features cannot be backfilled, because the text was not stored. Please confirm this.
-3. Can the retrieval backend now write `doc_id`, rank, source and `top_score` to the log of every tool call? Are scores comparable between queries?
-4. What can the auth layer provide? Which authentication methods exist today? Can the tool call log carry `auth_type`, `credential_id` and `grant_type`? Are clientInfo and the user agent already recorded?
-5. When will the session trace be available? Who generates the session, and when is a session cut off? When will URLs of returned documents be added?
-6. Are tenant MCP enablement and account connections already recorded as events? Can they be traced back? Does the agentic tier need to be enabled separately for each tenant?
-7. Who owns this instrumentation, and what is the schedule? Who submits the privacy approval?
+1. **Light tier.** Do light-tier requests pass through the agentic search service at all, or only through the existing search path, visible in MCP-side or existing search logs? We assume the latter. This decides where M7–M9 and M12 come from.
+2. **Join ID.** What is its field name on each side? Is it on every request on both sides, retries and fallbacks included? Can one MCP call map to several service requests?
+3. **Table 2.** Which rows exist today, and for how long are they kept? If you cannot say, who can? (The checklist goes to the MCP team as well.)
+4. **Entry surface.** Can the service tell CLI from MCP requests today, and from which field?
+5. **Step trace.** Is the internal step trace already recorded in any form (tracing, debug logs)? Which Table 1 fields does it cover, how long is it kept, and does it hold text that must be excluded?
+6. **Fallback.** Is every fallback decided inside the service, or can the MCP server reject or fall back first (for example for a tenant not enabled)?
+7. **Query text.** Does the service receive the query text and embed it at request time? Does it embed sub-queries?
+8. **Cost.** How are `cost_units` defined, relative to a current search call?
+9. **Ownership.** Who owns Table 1 logging, and on what schedule? Who keeps the service change log? Who submits the privacy approval?
