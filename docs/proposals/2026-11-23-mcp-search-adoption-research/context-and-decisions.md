@@ -4,13 +4,46 @@ This is a summary of the discussion between the project owner (the search data s
 
 It sits in a public repository, so it uses the same placeholders as the other files and gives no internal names or observed numbers. Resolve the placeholders by following `meta-prompt.md`.
 
+## The anchor, in five lines
+
+If you read nothing else, hold on to these.
+
+1. The subject is the inside of the agentic search service: its sub-searches and the logic that connects them. The MCP entry side belongs to the MCP team.
+2. The question is which types of task truly need agentic search. Findings are about task types, not tenants or users.
+3. The owner does research. The owner does not build the service, write the tool description or evaluate description changes.
+4. Need is judged by what later rounds contributed, never by how many steps were run.
+5. Do the work and report. Do not reopen what is settled below, and do not redo what has already been answered.
+
 ## How to use this file
+
+This file can be used on its own. Paste it at the start of any session on this work, with or without the other documents, and reread it before you deliver anything.
 
 Treat the section "Settled" as decided. Work within it. If evidence in the code or data shows that a settled point is wrong, do not open a discussion about it: finish the work, and state the evidence once in your final report.
 
 Treat the section "Tried and dropped" as closed. Do not propose those ideas again unless the owner asks.
 
 The section "Still open" lists the only questions worth raising. Some are for you to investigate; some are for the owner or other teams and are listed so that you leave them alone.
+
+**Keep a living copy.** This public file was written before any internal investigation and is not updated with internal findings. Keep a localised copy in the internal environment and maintain it as the decision log for this work:
+
+- When an open question has been answered, by you in earlier work or by the owner, move it to "Settled" with the answer, the evidence and the date. Check your earlier output and the report's history before you investigate anything in "Still open"; if it is already answered there, record the answer and do not redo the work.
+- When the owner decides something new, add it to "Settled" in one or two lines, with the reason if one was given.
+- When an idea is rejected, add it to "Tried and dropped" with the reason.
+- Where the living copy and this public file differ, the living copy is right.
+
+## Signs that you are drifting
+
+Each of these has already happened once in this project. If you notice one, stop and return to the anchor.
+
+- You are analysing tool-call health on the MCP side: failure categories, latency percentiles by outcome, traffic by day, client or region breakdowns. That is the MCP data scientist's work. Record what exists, pass it on, and return to the service.
+- You are adding a field that serves no named research question.
+- You are treating a count of steps, rounds or sources as a sign that a request needed agentic search.
+- You are proposing wording for the tool description, an experiment on description versions, or a way to measure the effect of a description change.
+- You are drawing conclusions about which tenants or users to target.
+- You are asking the owner about something under "Settled", or offering the owner a choice between options that "Settled" or "Tried and dropped" already decides.
+- You are investigating a question that your own earlier work has answered.
+- You have stopped to discuss when you could have chosen the reading that fits the settled points, noted it in one line, and carried on.
+- Your output is mostly caveats, appendix references and statements that things are proposals, and an engineer could not act on it quickly.
 
 ## The project in one paragraph
 
