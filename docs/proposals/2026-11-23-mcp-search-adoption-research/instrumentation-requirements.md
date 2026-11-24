@@ -62,6 +62,8 @@ This is the ask. Log every request whatever its entry surface; we filter to `mcp
 | | `cost_units` | Defined by engineering; comparable with a current search call (M9) | float | R1, R4 (cost barrier), R5 (`equiv_calls_ud`) | B |
 | Step (one record per internal step) | `step_idx`, `step_start_ms`, `step_latency_ms`, `step_status` | Order; start offset from `svc_ts_start` (steps may run in parallel); duration; outcome (`svc_status` enum) | int, int, int, enum | (b), (c), (d) | A |
 | | `step_type` | `subquery_retrieval` / `doc_read` / `rerank` / `synthesis` / other | enum | (b), (c), (d) | A |
+| | `iteration_idx` | The round this step belongs to. Steps in one round may run in parallel, so `step_idx` alone cannot group them | int | (a), (b) | A |
+| | `query_origin` | For a retrieval step, how its query was produced: `original` / `rewrite` / `decomposition` / `followup`. No text | enum | (a), (b) | A |
 | | `step_n_results`, `step_top_score` | Result count and top score of a retrieval step | int, float | R2 (weak retrieval inside agentic), (c) | A |
 | | `step_docs` | Documents retrieved or read: `[(doc_id, rank, source)]`. Internal doc_id, not URL | array | (a), (b); R5 (`refind_xday`) | A, needs approval |
 | | `step_acl_filtered_n` | Candidates removed by permission filtering | int | R2 (no content or no permission) | C |
@@ -72,6 +74,7 @@ This is the ask. Log every request whatever its entry surface; we filter to `mcp
 | Output | `answer_chars`, `answer_toks` | Answer length. No text | int | R5 | B, needs approval |
 | | `n_citations`, `cited_docs` | Citation count; `[(doc_id, source)]` cited | int, array | (a); R5 | A, needs approval |
 | | `answer_flag` | `ok` / `low_confidence` / `no_answer` | enum | R2, R5 | B |
+| Shadow light retrieval (see note below) | `light_shadow_docs`, `light_shadow_k`, `light_shadow_ver` | One ordinary light-tier retrieval on the original query, run while the agentic request is served: `[(doc_id, rank)]` of the top k, the k used, and the retrieval configuration version. No text | array, int, string | (a) | B, needs approval; cost to be weighed by engineering |
 | Query features (assumption 2) | `q_chars`, `q_toks` | Characters and tokens in the original query | int | R2, R3 | A, needs approval |
 | | `query_hash` | `HMAC(K_tenant, normalize(q))`. Same key and normalisation as on current search calls (M8) | string | R1 (templated calls), R2 (exact repeats across tiers) | B, needs approval |
 | | `intent_coarse`, `intent_conf`, `multihop_score`, `intent_ver` | As agreed before: coarse task type (6–9 classes from the research team; type of task, not topic); confidence; probability that the query needs multiple steps; classifier version | enum, float, float, string | R3, R4 | C, needs approval |
@@ -80,7 +83,11 @@ This is the ask. Log every request whatever its entry surface; we filter to `mcp
 | | Service change log | Every change to the service, model, ranking, index, budgets and time limits: time, version, summary | table | R5 | A (start now) |
 | Offline (not logged) | (a)–(d) below | Computed by the research team; listed only to show dependencies | — | R3, R4, R5 | — |
 
-**Why the step trace matters.** Request totals show that an agentic request happened; the trace shows what it did and whether it was needed. The research team computes, offline and not logged: (a) whether an agentic request was needed: if every cited document already appeared in the first retrieval step, the light tier would probably have been enough; (b) realised complexity: how many steps and sources were used; (c) where failures happen; (d) where latency goes.
+**Why the step trace matters.** Request totals show that an agentic request happened; the trace shows what it did and whether it was needed. The research team computes, offline and not logged: (a) whether an agentic request was needed, judged by what the later rounds contributed and not by how much work was done: if every cited document is already in the shadow light retrieval, the light tier would probably have been enough; otherwise we look at the round in which each cited document first appeared, and at whether sub-queries retrieved different documents (a decomposition) or mostly the same ones (a rewrite); (b) realised complexity: how many steps and sources were used; (c) where failures happen; (d) where latency goes.
+
+**Step counts are not evidence of need.** If the service runs a similar number of rounds for every request, or stops at a budget cap, the count describes the service and not the request. This is why `iteration_idx`, `query_origin` and the shadow light retrieval are asked for: they let us measure contribution.
+
+**Note on the shadow light retrieval.** It is the most direct evidence for (a), and it cannot be produced later, because no query text is stored to replay. It costs one extra retrieval per agentic request, so engineering should weigh it; logging it for a sampled share of requests is enough for the research, as long as the sampling rate is recorded. Without it we fall back to whether the cited documents all appeared in the first round. That fallback overstates how often the light tier would have been enough if the first round is stronger than a light-tier retrieval (question 11).
 
 ## 4. Table 2: assumed to exist on the MCP side (owned by the MCP team)
 
@@ -145,7 +152,7 @@ The plan's pre-launch baseline of current search behaviour depends on this table
 | `query_hash` | Keyed HMAC, one key per tenant, stored apart from the data and not accessible to analysts. Rotate keys (suggested: every quarter). No per-token hashes. Same key and normalisation wherever computed |
 | `subq_cos_orig` | Reuse the embeddings retrieval already computes. Store only the quantised cosine |
 | `intent_*` | Classify at request time; store only label and confidence. Training does not use production query text |
-| `step_docs`, `cited_docs` | Internal doc_id, not URL or title |
+| `step_docs`, `cited_docs`, `light_shadow_docs` | Internal doc_id, not URL or title |
 | `emb_cos_*`, `ctar` (M7) | As agreed before: last 5 embeddings per stream in memory only (suggested TTL: 60 minutes), store only the quantised cosine; `ctar` caches result terms as term-level HMACs (suggested TTL: 10 minutes), stores only the ratio |
 
 | Risk | Mitigation |
@@ -157,7 +164,7 @@ The plan's pre-launch baseline of current search behaviour depends on this table
 | User ID plus documents retrieved, read and cited over time is personal behaviour data; the trace adds detail | Restrict access and retention. Suppress cells under 10 people in external reports |
 | Account-level profiles risk employee monitoring | Research use only; not given to tenant administrators |
 
-**Needs privacy approval**: reading the query, sub-queries and answer in memory to compute features (lengths are lowest risk and can be approved first, alone); writing `query_hash`; `intent_*`; `subq_cos_orig`; writing `step_docs` and `cited_docs`; M7 and M8 wherever computed, including the embedding cache and `ctar` reading result text; profiling automation accounts.
+**Needs privacy approval**: reading the query, sub-queries and answer in memory to compute features (lengths are lowest risk and can be approved first, alone); writing `query_hash`; `intent_*`; `subq_cos_orig`; writing `step_docs`, `cited_docs` and `light_shadow_docs`; M7 and M8 wherever computed, including the embedding cache and `ctar` reading result text; profiling automation accounts.
 
 ## 9. Acceptance criteria for Table 1 fields needed at launch
 
@@ -173,7 +180,8 @@ Covers priority A and B. Done once met for 7 consecutive days in the internal be
 | `svc_status`, `svc_err_code` | `svc_status` non-null on every request; values only from the defined enum. A test request that hits the service's time limit is logged as `timeout`, and one the client cancels as `cancelled`; neither as `error`, neither dropped. `svc_err_code` non-null when status is not `ok`. The same criterion applies to MCP-side `status` (M5), raised with the MCP team |
 | `effort_executed`, `fallback_reason` | `effort_executed` non-null. `fallback_reason` non-null exactly when agentic was requested and light was run. Each fallback cause, forced in a test, gets its own reason |
 | `cost_units` | Daily per-tenant totals reconcile with billing or resource usage (≤1%). Ratio to a current search call stated |
-| Step records | ≥1 per executed request; `n_steps` equals their count; `step_idx` unique per request; each step inside the request interval; enum values valid |
+| Step records | ≥1 per executed request; `n_steps` equals their count; `step_idx` unique per request; each step inside the request interval; enum values valid. `iteration_idx` non-null, and `n_iterations` matches the number of distinct values. `query_origin` non-null for every retrieval step |
+| Shadow light retrieval (if built) | `light_shadow_docs` has at most `light_shadow_k` entries; doc_id joins to the index; `light_shadow_ver` matches the configuration the light tier uses. The sampling rate is stated |
 | `step_n_results`, `step_top_score`, `step_docs` | Non-null for retrieval steps; score null when `step_n_results = 0`; `step_docs` has `step_n_results` entries; doc_id joins to the index and is stable across days. State whether scores compare across requests |
 | Summary fields | Match values recomputed from steps. `stop_reason` non-null; forced tests (budget, timeout, no results, cancel) each get the matching value |
 | Output fields | `n_citations` = length of `cited_docs`; every cited doc_id appears in some `step_docs`; a no-answer test gets `no_answer`; `answer_chars` non-null when `svc_status = ok` |
@@ -191,3 +199,5 @@ Covers priority A and B. Done once met for 7 consecutive days in the internal be
 7. **Query text.** Does the service receive the query text and embed it at request time? Does it embed sub-queries?
 8. **Cost.** How are `cost_units` defined, relative to a current search call?
 9. **Ownership.** Who owns Table 1 logging, and on what schedule? Who keeps the service change log? Who submits the privacy approval?
+10. **Number of rounds.** Is the number of rounds fixed, decided by the model, or a mix? What are the caps, what is the stop condition, and are changes to them recorded in the change log?
+11. **First round and the light tier.** Does the first retrieval step use the original query? Does it use the same backend, ranker and k as the light tier? Can a shadow light retrieval be run per request or on a sample, and at what cost?
